@@ -18,7 +18,7 @@
 /// TO DO: list the other functions
 /// </summary>
 
-namespace AuxMethods {    
+namespace AuxMethods {
 
 std::string replacer(const std::string& i_s, const std::string& i_r);
 

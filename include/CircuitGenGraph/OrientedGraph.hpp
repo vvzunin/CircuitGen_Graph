@@ -10,9 +10,9 @@
 #include <unordered_set>
 #include <vector>
 
+#include <CircuitGenGraph/DefaultSettings.hpp>
 #include <CircuitGenGraph/enums.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
-#include <CircuitGenGraph/DefaultSettings.hpp>
 
 // TODO: Добавить проверку на имена файлов при доблении новых вершин
 
@@ -499,5 +499,6 @@ private:
   // used for quick edges of gate type count;
   std::map<Gates, std::map<Gates, size_t>> d_edgesGatesCount;
 
-  std::shared_ptr<DefaultSettings> d_settings = DefaultSettings::getInstance("OrientedGraph");
+  std::shared_ptr<DefaultSettings>         d_settings =
+      DefaultSettings::getInstance("OrientedGraph");
 };

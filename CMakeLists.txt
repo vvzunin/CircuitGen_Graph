@@ -45,6 +45,8 @@ endif()
 
 add_library(CircuitGenGraph::CircuitGenGraph ALIAS ${PROJECT_NAME})
 
+include(GNUInstallDirs)
+
 target_include_directories(${PROJECT_NAME}
     PRIVATE
 
@@ -70,16 +72,6 @@ set_target_properties(
     OUTPUT_NAME ${PROJECT_NAME})
 
 include(cmake/utils.cmake)
-include(GNUInstallDirs)
-
-foreach(header ${PUBLIC_HEADERS})
-    file(RELATIVE_PATH header_file_path "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}" "${header}")
-    get_filename_component(header_directory_path "${header_file_path}" DIRECTORY)
-    install(
-        FILES ${header}
-        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${header_directory_path}"
-    )
-endforeach()
 
 install(TARGETS ${PROJECT_NAME}
     EXPORT "${PROJECT_NAME}Targets"
@@ -97,7 +89,6 @@ install(TARGETS ${PROJECT_NAME}
 # generate and install export file
 install(EXPORT "${PROJECT_NAME}Targets"
     FILE "${PROJECT_NAME}Targets.cmake"
-    NAMESPACE ${namespace}::
     DESTINATION cmake
 )
 
@@ -112,7 +103,7 @@ include(CMakePackageConfigHelpers)
 # generate the version file for the config file
 write_basic_package_version_file(
     "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
-    VERSION "${version}"
+    VERSION ${PROJECT_VERSION}
     COMPATIBILITY AnyNewerVersion
 )
 
@@ -130,7 +121,7 @@ install(FILES
 )
 
 if(PROJECT_IS_TOP_LEVEL)
-    option(BUILD_EXAMPLES "Build examples tree." "${CircuitGenGraphLib_DEVELOPER_MODE}")
+    option(BUILD_EXAMPLES "Build examples tree." "${CircuitGenGraph_DEVELOPER_MODE}")
 
     if(BUILD_EXAMPLES)
         add_subdirectory(examples)
@@ -138,12 +129,12 @@ if(PROJECT_IS_TOP_LEVEL)
 endif()
 
 # ---- Developer mode ----
-if(NOT CircuitGenGraphLib_DEVELOPER_MODE)
+if(NOT CircuitGenGraph_DEVELOPER_MODE)
     return()
 elseif(NOT PROJECT_IS_TOP_LEVEL)
     message(
         AUTHOR_WARNING
-        "Developer mode is intended for developers of CircuitGenGraphLib"
+        "Developer mode is intended for developers of CircuitGenGraph"
     )
 endif()
 

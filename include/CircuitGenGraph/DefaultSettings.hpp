@@ -59,8 +59,8 @@ protected:
   DefaultSettings(const std::string& i_path) : d_path(i_path) {}
 
 public:
-  DefaultSettings(DefaultSettings& other)                                   = delete;
-  void                             operator=(const DefaultSettings&) = delete;
+  DefaultSettings(DefaultSettings& other) = delete;
+  void operator=(const DefaultSettings&)  = delete;
 
   /// @brief getInstance Gets a single instance of the DefaultSettings class
   /// The method provides creation and receipt of a single instance of the
@@ -72,7 +72,8 @@ public:
   /// @return std::shared_ptr<DefaultSettings> A pointer to a single instance of
   /// the DefaultSettings class
   /// @code
-  /// // Creating a single instance of the DefaultSettings class, if it hasn't been
+  /// // Creating a single instance of the DefaultSettings class, if it hasn't
+  /// been
   /// // created yet, and we get a pointer to it
   /// std::shared_ptr<DefaultSettings>        settingsInstance =
   /// DefaultSettings::getInstance("/path/to/settings");
@@ -82,7 +83,8 @@ public:
   /// std::cout << "Dataset path: " << datasetPath << std::endl;
   /// @endcode
 
-  static std::shared_ptr<DefaultSettings> getInstance(const std::string& i_value);
+  static std::shared_ptr<DefaultSettings> getInstance(const std::string& i_value
+  );
 
   /// @brief loadSettings Downloads settings from a file
   /// The method loads the settings from a file with the name specified in
@@ -90,12 +92,12 @@ public:
   /// settings values from it and updates the corresponding data members of
   /// the class
 
-  void                             loadSettings();
+  void                                    loadSettings();
 
   /// @brief getInstanceName Gets the name of the current instance of settings
   /// @return std::string Name of the current instance of settings
 
-  std::string                      getInstanceName() const;
+  std::string                             getInstanceName() const;
 
   /// @brief getLogicOperation Gets information about a logical operation by
   /// its name
@@ -119,13 +121,13 @@ public:
   /// @throws std::out_of_range If the passed operation name does not exist
   /// in the list of logical operations
 
-  std::pair<std::string, int32_t>  getLogicOperation(const std::string& i_op);
+  std::pair<std::string, int32_t> getLogicOperation(const std::string& i_op);
 
   /// @brief getLogicOperationsKeys Returns the keys of logical operations
   /// @return std::vector<Gates> A vector containing the keys of logical
   /// operations
 
-  std::vector<Gates>               getLogicOperationsKeys();
+  std::vector<Gates>              getLogicOperationsKeys();
 
   /// @brief getLogicOperationsWithGates Returns logical operations along with
   /// information about the presence of a single input
@@ -284,10 +286,9 @@ public:
   std::string              parseVertexToString(VertexTypes vertex) const;
 
 private:
-
-  std::string                      d_name;
-  static std::shared_ptr<DefaultSettings> d_singleton;
-  std::string                      d_path;
+  std::string                                            d_name;
+  static std::shared_ptr<DefaultSettings>                d_singleton;
+  std::string                                            d_path;
   std::map<std::string, std::pair<std::string, int32_t>> d_logicOperations = {
       {"input", {"", 10}},
       {"output", {"=", 0}},

@@ -39,7 +39,7 @@ message(${NEW_SOURCES})
 # Test GraphVertexConstantTests
 add_executable(CircuitGenGraph_test_GraphVertexConstantTests src/GraphVertexConstantTests.cpp ${NEW_SOURCES})
 
-target_link_libraries(CircuitGenGraph_test_GraphVertexConstantTests PRIVATE GTest::gtest_main ${EXTERNAL_LIBS})
+target_link_libraries(CircuitGenGraph_test_GraphVertexConstantTests PRIVATE GTest::gtest_main )
 target_compile_features(CircuitGenGraph_test_GraphVertexConstantTests PRIVATE cxx_std_17)
 target_include_directories(
   CircuitGenGraph_test_GraphVertexConstantTests ${warning_guard}
@@ -51,7 +51,7 @@ add_test(NAME GraphVertexConstantTests COMMAND CircuitGenGraph_test_GraphVertexC
 # Test GraphVertexGatesTests
 add_executable(CircuitGenGraph_test_GraphVertexGatesTests src/GraphVertexGatesTests.cpp ${NEW_SOURCES})
 
-target_link_libraries(CircuitGenGraph_test_GraphVertexGatesTests PRIVATE GTest::gtest_main ${EXTERNAL_LIBS})
+target_link_libraries(CircuitGenGraph_test_GraphVertexGatesTests PRIVATE GTest::gtest_main )
 target_compile_features(CircuitGenGraph_test_GraphVertexGatesTests PRIVATE cxx_std_17)
 target_include_directories(
  CircuitGenGraph_test_GraphVertexGatesTests ${warning_guard}
@@ -63,7 +63,7 @@ add_test(NAME GraphVertexGatesTests COMMAND CircuitGenGraph_test_GraphVertexGate
 # Test GraphVertexInputTests
 add_executable(CircuitGenGraph_test_GraphVertexInputTests src/GraphVertexInputTests.cpp ${NEW_SOURCES})
 
-target_link_libraries(CircuitGenGraph_test_GraphVertexInputTests PRIVATE GTest::gtest_main ${EXTERNAL_LIBS})
+target_link_libraries(CircuitGenGraph_test_GraphVertexInputTests PRIVATE GTest::gtest_main )
 target_compile_features(CircuitGenGraph_test_GraphVertexInputTests PRIVATE cxx_std_17)
 target_include_directories(
  CircuitGenGraph_test_GraphVertexInputTests ${warning_guard}
@@ -75,7 +75,7 @@ add_test(NAME GraphVertexInputTests COMMAND CircuitGenGraph_test_GraphVertexInpu
 # Test GraphVertexOutputTests
 add_executable(CircuitGenGraph_test_GraphVertexOutputTests src/GraphVertexOutputTests.cpp ${NEW_SOURCES})
 
-target_link_libraries(CircuitGenGraph_test_GraphVertexOutputTests PRIVATE GTest::gtest_main ${EXTERNAL_LIBS})
+target_link_libraries(CircuitGenGraph_test_GraphVertexOutputTests PRIVATE GTest::gtest_main )
 target_compile_features(CircuitGenGraph_test_GraphVertexOutputTests PRIVATE cxx_std_17)
 target_include_directories(
   CircuitGenGraph_test_GraphVertexOutputTests ${warning_guard}
@@ -87,7 +87,7 @@ add_test(NAME GraphVertexOutputTests COMMAND CircuitGenGraph_test_GraphVertexOut
 # Test GraphVertexSubGraphTests
 add_executable(CircuitGenGraph_test_GraphVertexSubGraphTests src/GraphVertexSubGraphTests.cpp ${NEW_SOURCES})
 
-target_link_libraries(CircuitGenGraph_test_GraphVertexSubGraphTests PRIVATE GTest::gtest_main ${EXTERNAL_LIBS})
+target_link_libraries(CircuitGenGraph_test_GraphVertexSubGraphTests PRIVATE GTest::gtest_main )
 target_compile_features(CircuitGenGraph_test_GraphVertexSubGraphTests PRIVATE cxx_std_17)
 target_include_directories(
   CircuitGenGraph_test_GraphVertexSubGraphTests ${warning_guard}
@@ -100,7 +100,7 @@ add_test(NAME GraphVertexSubGraphTests COMMAND CircuitGenGraph_test_GraphVertexS
 # Test OrientedGrahTests
 add_executable(CircuitGenGraph_test_OrientedGraphTests src/OrientedGraphTests.cpp ${NEW_SOURCES})
 
-target_link_libraries(CircuitGenGraph_test_OrientedGraphTests PRIVATE GTest::gtest_main ${EXTERNAL_LIBS})
+target_link_libraries(CircuitGenGraph_test_OrientedGraphTests PRIVATE GTest::gtest_main )
 target_compile_features(CircuitGenGraph_test_OrientedGraphTests PRIVATE cxx_std_17)
 target_include_directories(
   CircuitGenGraph_test_OrientedGraphTests ${warning_guard}

@@ -6,10 +6,9 @@
 #include <string>
 #include <vector>
 
+#include <CircuitGenGraph/DefaultSettings.hpp>
 #include <CircuitGenGraph/enums.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
-
-#include <CircuitGenGraph/DefaultSettings.hpp>
 
 class OrientedGraph;  // Проблема циклического определения
 
@@ -472,16 +471,16 @@ public:
   virtual bool           isSubgraphBuffer() const { return false; }
 
 protected:
-  GraphPtrWeak               d_baseGraph;
+  GraphPtrWeak                     d_baseGraph;
 
-  std::string                d_name;
-  char                       d_value;
-  uint32_t                   d_level;
+  std::string                      d_name;
+  char                             d_value;
+  uint32_t                         d_level;
 
-  std::vector<VertexPtrWeak> d_inConnections;
-  std::vector<VertexPtr>     d_outConnections;
+  std::vector<VertexPtrWeak>       d_inConnections;
+  std::vector<VertexPtr>           d_outConnections;
 
-  std::shared_ptr<DefaultSettings>  d_settings =
+  std::shared_ptr<DefaultSettings> d_settings =
       DefaultSettings::getInstance("GraphVertexBase");
 
 private:
