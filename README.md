@@ -1,32 +1,28 @@
 # Генератор комбинационных схем
 
-![License: MIT](https://img.shields.io/github/license/vvzunin/CircuitGen_Generator)
-![GitHub forks](https://img.shields.io/github/forks/vvzunin/CircuitGen_Generator)
-![GitHub Repo stars](https://img.shields.io/github/stars/vvzunin/CircuitGen_Generator)
-![GitHub watchers](https://img.shields.io/github/watchers/vvzunin/CircuitGen_Generator)
+![License: MIT](https://img.shields.io/github/license/vvzunin/CircuitGen_Graph)
+![GitHub forks](https://img.shields.io/github/forks/vvzunin/CircuitGen_Graph)
+![GitHub Repo stars](https://img.shields.io/github/stars/vvzunin/CircuitGen_Graph)
+![GitHub watchers](https://img.shields.io/github/watchers/vvzunin/CircuitGen_Graph)
 
-![GitHub CI](https://github.com/vvzunin/CircuitGen_Generator/actions/workflows/ci.yml/badge.svg)
-[![codecov](https://codecov.io/gh/vvzunin/CircuitGen_Generator/graph/badge.svg?token=U88U82QFX8)](https://codecov.io/gh/vvzunin/CircuitGen_Generator)
-![GitHub Release](https://img.shields.io/github/v/release/vvzunin/CircuitGen_Generator)
-![GitHub Release Date](https://img.shields.io/github/release-date/vvzunin/CircuitGen_Generator)
+![GitHub CI](https://github.com/vvzunin/CircuitGen_Graph/actions/workflows/ci.yml/badge.svg)
+[![codecov](https://codecov.io/gh/vvzunin/CircuitGen_Graph/graph/badge.svg?token=U88U82QFX8)](https://codecov.io/gh/vvzunin/CircuitGen_Graph)
+![GitHub Release](https://img.shields.io/github/v/release/vvzunin/CircuitGen_Graph)
+![GitHub Release Date](https://img.shields.io/github/release-date/vvzunin/CircuitGen_Graph)
 
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/vvzunin/CircuitGen_Generator)
-![GitHub commits since latest release](https://img.shields.io/github/commits-since/vvzunin/CircuitGen_Generator/latest)
-![GitHub last commit](https://img.shields.io/github/last-commit/vvzunin/CircuitGen_Generator)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/vvzunin/CircuitGen_Graph)
+![GitHub commits since latest release](https://img.shields.io/github/commits-since/vvzunin/CircuitGen_Graph/latest)
+![GitHub last commit](https://img.shields.io/github/last-commit/vvzunin/CircuitGen_Graph)
 
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/vvzunin/CircuitGen_Generator)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr/vvzunin/CircuitGen_Generator)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/vvzunin/CircuitGen_Graph)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr/vvzunin/CircuitGen_Graph)
 
 ![Alt](https://repobeats.axiom.co/api/embed/22944c53bda053bd3f0899dc855632dc9b8c38c2.svg "Repobeats analytics image")
 
 <font size="5">**Оглавление:**</font>
 <a name="content_rus"></a> 
 - [Правила именования переменных](#hacking)
-- [Добавление нового генератора](#generator_add_rus)
 - [Сборка программы](#generator_build_rus)
-- [Запуск генерации комбинационных схем из командной строки](#generator_run_one_json_rus)
-- [JSON файлы](#JSON_files)
-- [Описание префикса папок генерации](#prefix)
 - [Лицензия](#license)
 
 > [!IMPORTANT]  
@@ -44,48 +40,16 @@
 
 [&#8593; Contents](#content_rus)
 
-## Добавление нового генератора
-<a name="generator_add_rus"></a> 
-
-Процесс добавления нового генератора описан в отдельном [файле](NewGenerator.md).
-
-[&#8593; Contents](#content_rus)
-
 ## Сборка программы
 <a name="generator_build_rus"></a> 
 
 Для сборки программы необходимо выполнить следующие команды из начальной директории:
 ```
-chmod +x buildGenerator.sh
-./buildGenerator.sh
+chmod +x buildGraph.sh
+./buildGraph.sh
 ```
 
 Подробная схема сборка описана [здесь](BUILDING.md).
-
-[&#8593; Contents](#content_rus)
-
-## Запуск генерации комбинационных схем из командной строки
-<a name="generator_run_one_json_rus"></a>
-Для проведения генерации из командной строки необходимо подготовить JSON файл с описанием параметров генерации, а после выполнить следующую команду:
-```
-build/CircuitGenGraph --json_path <path_to_json>
-```
-
-[&#8593; Contents](#content_rus)
-
-## JSON файлы
-<a name="JSON_files"></a>
-Для генерации комбинационных схем с использованием командной строки необходимо создать JSON файл.
-
-Подробное описание структуры файлов представлено [здесь](json.md).
-
-[&#8593; Contents](#content_rus)
-
-## Описание префикса папок генерации
-<a name="prefix"></a>
-Каждый генератор по окончании работы создает папки с уникальным для данного генератора префиксом.
-
-Подробное описание префиксов папок представлено [здесь](GeneratorsPrefixes.md).
 
 [&#8593; Contents](#content_rus)
 

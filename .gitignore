@@ -10,5 +10,3 @@ build/
 cmake-build-*/
 CMakeLists.txt.user
 CMakeUserPresets.json
-dataset/
-settings.json

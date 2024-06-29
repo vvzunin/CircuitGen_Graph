@@ -54,11 +54,11 @@ cmake --install build --config Release
 Пример подгрузки библиотеки:
 ```cmake
 FetchContent_Declare(
-  CircuitGen_Generator
-  GIT_REPOSITORY https://github.com/vvzunin/CircuitGen_Generator
-  GIT_TAG v1.0.0-alpha
+  CircuitGen_Graph
+  GIT_REPOSITORY https://github.com/vvzunin/CircuitGen_Graph
+  GIT_TAG v1.0.0
 )
-FetchContent_MakeAvailable(CircuitGen_Generator)
+FetchContent_MakeAvailable(CircuitGen_Graph)
 ```
 
 > [!CAUTION]
@@ -74,20 +74,41 @@ target_link_libraries(
 ```
 
 ### Дальнейшее использование
-После подключения библиотеки для использования доступны три различные функции. Для их использования требуется подключить хедер CircuitGenGraph.hpp
+После подключения библиотеки для использования доступны следующие типы данных:
+* GraphVertexBase
+* GraphVertexInput
+* GraphVertexOutput
+* GraphVertexGate
+* GraphVertexConstant
+* GraphVertexSubGraph
+* OrientedGraph
+
+Основным классом является граф, он же OrientedGraph. Для его подключения требуется указать данный хедер в подключении всех заголовочных файлов:
 
 ```
-#include <CircuitGenGraph/CircuitGenGraph.hpp>
+#include <CircuitGenGraph/OrientedGraph.hpp>
 ```
 
-#### runGenerationFromJson
-На вход получает путь до json файла. Не возвращает ничего
-#### runGenerationFromJsonForGraph
-Аналогично, получает на вход путь до файла json. В отличие от предыдущей функции, возвращает следующую структуру:
-`std::vector<std::pair<std::string, std::vector<GraphPtr>>>`. Для `std::pair<std::string, std::vector<GraphPtr>>` существует псевдоним ResultGraph. 
-Первым значением в паре является путь до папки, где находятся сгенерированные verilog-файлы. Второе значение пары, вектор, содержит ссылки на графы, сгенерированные по данному пути.
-#### runGenerationFromJsonForPath
-Аналогично, получает на вход путь до файла json. Возвращает `std::vector<std::pair<std::string, std::vector<std::string>>>`. В отличие от предыдущей функции, вместо графов возвращаются их имена, используемые как имена папок с созданными Verilog-файлами соответствующих графов, а также в качестве имен файлов. 
+Для работы же с вершинами графа вам потребуются следующие хедеры:
+
+```
+#include <CircuitGenGraph/GraphVertexBase.hpp>
+#include <CircuitGenGraph/GraphVertex.hpp>
+```
+
+Различные полезные функции находятся в хедере:
+
+```
+#include <CircuitGenGraph/DefaultAuxilaryMethods.hpp>
+```
+
+Где они все находятся в namespace `AuxMethods`. Также есть экспортный хедер:
+
+```
+#include <CircuitGenGraph/DefaultSettings.hpp>
+```
+
+В котором находятся нумераторы для типов логических элементов, а также нумераторы с основными типами вершин (`input`, `output` и так далее) и некоторое количество полезных функций для работы с данными нумераторами, более подробное описание функций которых находится в документации, генерируемой с помощью __Doxygen__.
 
 ### Note to packagers
 
