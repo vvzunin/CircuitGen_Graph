@@ -5,7 +5,6 @@ add_custom_target(
     COMMAND CircuitGenGraph_exe
     VERBATIM
 )
-add_dependencies(run-exe CircuitGenGraph_exe)
 
 option(BUILD_MCSS_DOCS "Build documentation using Doxygen and m.css" OFF)
 if(BUILD_MCSS_DOCS)
