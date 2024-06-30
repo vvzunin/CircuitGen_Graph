@@ -45,7 +45,21 @@ endif()
 
 add_library(CircuitGenGraph::CircuitGenGraph ALIAS ${PROJECT_NAME})
 
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+
 include(GNUInstallDirs)
+
+target_include_directories(
+    ${PROJECT_NAME} ${warning_guard}
+    PUBLIC
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
+)
+
+target_include_directories(
+    ${PROJECT_NAME} SYSTEM
+    PUBLIC
+    "\$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
+)
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE
@@ -56,12 +70,17 @@ target_include_directories(${PROJECT_NAME}
 
     # where top-level project will look for the library's public headers
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
 
     # where external projects will look for the library's public headers
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+target_include_directories(
+    ${PROJECT_NAME} ${warning_guard}
+    PUBLIC
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
+)
 
 include_directories("${CMAKE_SOURCE_DIR}/include")
 foreach(header ${PUBLIC_HEADERS})
