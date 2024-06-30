@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <CircuitGenGraph/GraphVertex.hpp>
+#include <GraphVertex.hpp>
 
 GraphVertexGates::GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph) :
   GraphVertexBase(VertexTypes::gate, i_baseGraph) {

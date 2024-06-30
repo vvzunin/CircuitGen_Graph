@@ -1,4 +1,4 @@
-#include <CircuitGenGraph/GraphVertex.hpp>
+#include <GraphVertex.hpp>
 
 GraphVertexOutput::GraphVertexOutput(GraphPtr i_baseGraph) :
   GraphVertexBase(VertexTypes::output, i_baseGraph) {}

@@ -86,26 +86,26 @@ target_link_libraries(
 Основным классом является граф, он же OrientedGraph. Для его подключения требуется указать данный хедер в подключении всех заголовочных файлов:
 
 ```
-#include <CircuitGenGraph/OrientedGraph.hpp>
+#include <OrientedGraph.hpp>
 ```
 
 Для работы же с вершинами графа вам потребуются следующие хедеры:
 
 ```
-#include <CircuitGenGraph/GraphVertexBase.hpp>
-#include <CircuitGenGraph/GraphVertex.hpp>
+#include <GraphVertexBase.hpp>
+#include <GraphVertex.hpp>
 ```
 
 Различные полезные функции находятся в хедере:
 
 ```
-#include <CircuitGenGraph/DefaultAuxilaryMethods.hpp>
+#include <DefaultAuxilaryMethods.hpp>
 ```
 
 Где они все находятся в namespace `AuxMethods`. Также есть экспортный хедер:
 
 ```
-#include <CircuitGenGraph/DefaultSettings.hpp>
+#include <DefaultSettings.hpp>
 ```
 
 В котором находятся нумераторы для типов логических элементов, а также нумераторы с основными типами вершин (`input`, `output` и так далее) и некоторое количество полезных функций для работы с данными нумераторами, более подробное описание функций которых находится в документации, генерируемой с помощью __Doxygen__.

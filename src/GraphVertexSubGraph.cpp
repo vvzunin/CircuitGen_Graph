@@ -3,7 +3,7 @@
 #include <stack>
 #include <unordered_set>
 
-#include <CircuitGenGraph/GraphVertex.hpp>
+#include <GraphVertex.hpp>
 
 GraphVertexSubGraph::GraphVertexSubGraph(
     GraphPtr i_subGraph,

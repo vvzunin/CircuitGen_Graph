@@ -10,9 +10,9 @@
 #include <unordered_set>
 #include <vector>
 
-#include <CircuitGenGraph/DefaultSettings.hpp>
-#include <CircuitGenGraph/enums.hpp>
-#include <CircuitGenGraph/GraphVertexBase.hpp>
+#include <DefaultSettings.hpp>
+#include <enums.hpp>
+#include <GraphVertexBase.hpp>
 
 // TODO: Добавить проверку на имена файлов при доблении новых вершин
 

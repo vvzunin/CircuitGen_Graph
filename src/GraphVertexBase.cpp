@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-#include <CircuitGenGraph/GraphVertexBase.hpp>
+#include <GraphVertexBase.hpp>
 
 std::atomic_uint64_t GraphVertexBase::d_count = 0;
 

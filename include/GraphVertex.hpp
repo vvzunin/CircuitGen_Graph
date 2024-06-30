@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-#include <CircuitGenGraph/GraphVertexBase.hpp>
+#include <GraphVertexBase.hpp>
 
 /// @file GraphVertex.hpp
 /// TODO: Maybe Description some virtual methods for Graph's classes,

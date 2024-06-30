@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include <CircuitGenGraph/OrientedGraph.hpp>
+#include <OrientedGraph.hpp>
 #include <gtest/gtest.h>
 /*
   Need to add toVerilogTest, setCurrentParentTest,

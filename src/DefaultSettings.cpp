@@ -4,7 +4,7 @@
 #include <iostream>
 #include <memory>
 
-#include <CircuitGenGraph/DefaultSettings.hpp>
+#include <DefaultSettings.hpp>
 
 std::shared_ptr<DefaultSettings> DefaultSettings::d_singleton = nullptr;
 

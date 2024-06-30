@@ -7,11 +7,11 @@
 #include <string>
 #include <vector>
 
-#include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
-#include <CircuitGenGraph/GraphMLTemplates.hpp>
-#include <CircuitGenGraph/GraphVertex.hpp>
-#include <CircuitGenGraph/GraphVertexBase.hpp>
-#include <CircuitGenGraph/OrientedGraph.hpp>
+#include <DefaultAuxiliaryMethods.hpp>
+#include <GraphMLTemplates.hpp>
+#include <GraphVertex.hpp>
+#include <GraphVertexBase.hpp>
+#include <OrientedGraph.hpp>
 
 std::atomic_size_t OrientedGraph::d_countGraph            = 0;
 std::atomic_size_t OrientedGraph::d_countNewGraphInstance = 0;

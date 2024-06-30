@@ -6,9 +6,9 @@
 #include <string>
 #include <vector>
 
-#include <CircuitGenGraph/DefaultSettings.hpp>
-#include <CircuitGenGraph/enums.hpp>
-#include <CircuitGenGraph/OrientedGraph.hpp>
+#include <DefaultSettings.hpp>
+#include <enums.hpp>
+#include <OrientedGraph.hpp>
 
 class OrientedGraph;  // Проблема циклического определения
 

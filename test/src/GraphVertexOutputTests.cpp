@@ -1,5 +1,5 @@
-#include <CircuitGenGraph/GraphVertex.hpp>
-#include <CircuitGenGraph/OrientedGraph.hpp>
+#include <GraphVertex.hpp>
+#include <OrientedGraph.hpp>
 #include <gtest/gtest.h>
 
 /*

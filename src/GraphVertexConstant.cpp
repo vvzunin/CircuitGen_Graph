@@ -1,6 +1,6 @@
 #include <memory>
 
-#include <CircuitGenGraph/GraphVertex.hpp>
+#include <GraphVertex.hpp>
 
 GraphVertexConstant::GraphVertexConstant(char i_const, GraphPtr i_baseGraph) :
   GraphVertexInput(i_baseGraph, VertexTypes::constant) {
