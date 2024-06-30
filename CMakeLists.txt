@@ -64,13 +64,21 @@ target_include_directories(${PROJECT_NAME}
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
 include_directories("${CMAKE_SOURCE_DIR}/include")
+foreach(header ${PUBLIC_HEADERS})
+    file(RELATIVE_PATH header_file_path "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}" "${header}")
+    get_filename_component(header_directory_path "${header_file_path}" DIRECTORY)
+    install(
+        FILES ${header}
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${header_directory_path}"
+    )
+endforeach()
+
 set_target_properties(
     ${PROJECT_NAME} PROPERTIES 
     VERSION ${PROJECT_VERSION}
     SOVERSION ${PROJECT_VERSION_MAJOR}
     EXPORT_NAME ${PROJECT_NAME}
-    OUTPUT_NAME ${PROJECT_NAME}
-    PUBLIC_HEADER ${PUBLIC_HEADERS})
+    OUTPUT_NAME ${PROJECT_NAME})
 
 include(cmake/utils.cmake)
 
