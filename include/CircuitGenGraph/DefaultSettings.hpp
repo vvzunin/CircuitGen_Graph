@@ -314,8 +314,7 @@ private:
       {"not", Gates::GateNot},
       {"buf", Gates::GateBuf},
       {"xor", Gates::GateXor},
-      {"xnor", Gates::GateXnor}
-  };
+      {"xnor", Gates::GateXnor}};
 
   std::map<Gates, std::string> gateToString = {
       {Gates::GateAnd, "and"},
@@ -326,8 +325,7 @@ private:
       {Gates::GateBuf, "buf"},
       {Gates::GateXor, "xor"},
       {Gates::GateXnor, "xnor"},
-      {Gates::GateDefault, "ERROR"}
-  };
+      {Gates::GateDefault, "ERROR"}};
 
   std::vector<Gates> d_logicElements = {
       Gates::GateAnd,
@@ -337,16 +335,14 @@ private:
       Gates::GateXor,
       Gates::GateXnor,
       Gates::GateNot,
-      Gates::GateBuf
-  };
+      Gates::GateBuf};
 
   std::map<VertexTypes, std::string> vertexToString = {
       {VertexTypes::input, "input"},
       {VertexTypes::output, "output"},
       {VertexTypes::constant, "const"},
       {VertexTypes::subGraph, "subGraph"},
-      {VertexTypes::gate, "g"}
-  };
+      {VertexTypes::gate, "g"}};
 
   std::map<int32_t, std::vector<std::string>> d_operationsToHierarchy;
   std::map<std::string, std::string>          d_operationsToName;
