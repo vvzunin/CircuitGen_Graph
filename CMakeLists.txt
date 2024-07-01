@@ -15,15 +15,26 @@ include(cmake/variables.cmake)
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
-
-file(GLOB_RECURSE SOURCES 
-    RELATIVE 
-    ${CMAKE_SOURCE_DIR} "src/**.cpp" "src/**.hpp"
+set(SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexBase.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexConstant.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexGates.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexInput.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexOutput.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexSubGraph.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/OrientedGraph.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultSettings.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultAuxiliaryMethods.cpp
 )
 
-file(GLOB_RECURSE PUBLIC_HEADERS 
-    RELATIVE 
-    ${CMAKE_SOURCE_DIR} "/include/*.hpp"
+set(PUBLIC_HEADERS
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/enums.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertex.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertexBase.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/OrientedGraph.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/DefaultSettings.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/DefaultAuxiliaryMethods.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
 )
 
 if(BUILD_SHARED_LIBS)
