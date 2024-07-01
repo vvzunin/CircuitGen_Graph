@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <tuple>
 
 /// @file AuxiliaryMethods.hpp
 /// TODO: ToEnum
