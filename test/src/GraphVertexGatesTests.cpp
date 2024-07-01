@@ -1,4 +1,4 @@
-#include <GraphVertex.hpp>
+#include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
 
 /*

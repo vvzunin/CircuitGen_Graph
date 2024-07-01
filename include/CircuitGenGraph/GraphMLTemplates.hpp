@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include <DefaultSettings.hpp>
+#include <CircuitGenGraph/DefaultSettings.hpp>
 
 namespace ClassicGraphML {
 const char* mainTemplate     = R"(<?xml version="1.0" encoding="UTF-8"?>

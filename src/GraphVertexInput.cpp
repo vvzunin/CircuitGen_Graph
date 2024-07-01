@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <GraphVertex.hpp>
+#include <CircuitGenGraph/GraphVertex.hpp>
 
 GraphVertexInput::GraphVertexInput(
     GraphPtr          i_baseGraph,

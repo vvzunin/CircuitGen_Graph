@@ -1,4 +1,4 @@
-#include <DefaultAuxiliaryMethods.hpp>
+#include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
 
 std::string
     AuxMethods::replacer(const std::string& i_s, const std::string& i_r) {

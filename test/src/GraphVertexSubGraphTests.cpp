@@ -2,7 +2,7 @@
 #include <fstream>
 #include <string>
 
-#include <GraphVertex.hpp>
+#include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
 
 std::string loadStringFile(const std::filesystem::path& p) {
