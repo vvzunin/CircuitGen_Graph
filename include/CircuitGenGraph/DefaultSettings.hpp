@@ -92,12 +92,12 @@ public:
   /// settings values from it and updates the corresponding data members of
   /// the class
 
-  void                                    loadSettings();
+  virtual void                            loadSettings();
 
   /// @brief getInstanceName Gets the name of the current instance of settings
   /// @return std::string Name of the current instance of settings
 
-  std::string                             getInstanceName() const;
+  virtual std::string                     getInstanceName() const;
 
   /// @brief getLogicOperation Gets information about a logical operation by
   /// its name
@@ -121,13 +121,15 @@ public:
   /// @throws std::out_of_range If the passed operation name does not exist
   /// in the list of logical operations
 
-  std::pair<std::string, int32_t> getLogicOperation(const std::string& i_op);
+  virtual std::pair<std::string, int32_t> getLogicOperation(
+      const std::string& i_op
+  );
 
   /// @brief getLogicOperationsKeys Returns the keys of logical operations
   /// @return std::vector<Gates> A vector containing the keys of logical
   /// operations
 
-  std::vector<Gates>              getLogicOperationsKeys();
+  virtual std::vector<Gates> getLogicOperationsKeys();
 
   /// @brief getLogicOperationsWithGates Returns logical operations along with
   /// information about the presence of a single input
@@ -167,8 +169,8 @@ public:
   /// }
   /// @endcode
 
-  std::pair<std::vector<bool>, std::vector<Gates>> getLogicOperationsWithGates(
-  );
+  virtual std::pair<std::vector<bool>, std::vector<Gates>>
+                      getLogicOperationsWithGates();
 
   /// @brief fromOperationsToName Converts the operation to its name
   /// @param i_op a string representing the operation
@@ -191,7 +193,7 @@ public:
   /// @throw std::out_of_range If the passed operation does not exist in the
   /// list of operations
 
-  std::string fromOperationsToName(const std::string& i_op) const;
+  virtual std::string fromOperationsToName(const std::string& i_op) const;
 
   /// @brief getLogicOperations all logical operations
   /// The method returns a dictionary containing all logical operations
@@ -203,8 +205,8 @@ public:
   /// @return std::map<std::string, std::pair<std::string, int32_t>> Dictionary
   /// with logical operations
 
-  std::map<std::string, std::pair<std::string, int32_t>> getLogicOperations(
-  ) const;
+  virtual std::map<std::string, std::pair<std::string, int32_t>>
+                           getLogicOperations() const;
 
   /// @brief fromOperationsToHierarchy Converts an operation key to its
   /// corresponding hierarchy
@@ -244,7 +246,7 @@ public:
   /// std::cout << "Enum value of 'and': " << gate << std::endl;
   /// @endcode
 
-  Gates                    parseStringToGate(std::string i_gate) const;
+  virtual Gates            parseStringToGate(std::string i_gate) const;
 
   /// @brief parseGateToString Converts an enum value of a gate to its
   /// corresponding string representation
@@ -265,7 +267,7 @@ public:
   /// representation of Gates::GateAnd: " << gateString << std::endl;
   /// @endcode
 
-  std::string              parseGateToString(Gates gate) const;
+  virtual std::string      parseGateToString(Gates gate) const;
 
   /// @brief parseVertexToString Converts an enum value of a vertex type to its
   /// corresponding string representation
@@ -283,7 +285,7 @@ public:
   /// std::endl;
   /// @endcode
 
-  std::string              parseVertexToString(VertexTypes vertex) const;
+  virtual std::string      parseVertexToString(VertexTypes vertex) const;
 
 private:
   std::string                                            d_name;
@@ -312,7 +314,8 @@ private:
       {"not", Gates::GateNot},
       {"buf", Gates::GateBuf},
       {"xor", Gates::GateXor},
-      {"xnor", Gates::GateXnor}};
+      {"xnor", Gates::GateXnor}
+  };
 
   std::map<Gates, std::string> gateToString = {
       {Gates::GateAnd, "and"},
@@ -323,7 +326,8 @@ private:
       {Gates::GateBuf, "buf"},
       {Gates::GateXor, "xor"},
       {Gates::GateXnor, "xnor"},
-      {Gates::GateDefault, "ERROR"}};
+      {Gates::GateDefault, "ERROR"}
+  };
 
   std::vector<Gates> d_logicElements = {
       Gates::GateAnd,
@@ -333,14 +337,16 @@ private:
       Gates::GateXor,
       Gates::GateXnor,
       Gates::GateNot,
-      Gates::GateBuf};
+      Gates::GateBuf
+  };
 
   std::map<VertexTypes, std::string> vertexToString = {
       {VertexTypes::input, "input"},
       {VertexTypes::output, "output"},
       {VertexTypes::constant, "const"},
       {VertexTypes::subGraph, "subGraph"},
-      {VertexTypes::gate, "g"}};
+      {VertexTypes::gate, "g"}
+  };
 
   std::map<int32_t, std::vector<std::string>> d_operationsToHierarchy;
   std::map<std::string, std::string>          d_operationsToName;
