@@ -1,11 +1,5 @@
 include(cmake/folders.cmake)
 
-add_custom_target(
-    run-exe
-    COMMAND CircuitGenGraph_exe
-    VERBATIM
-)
-
 option(BUILD_MCSS_DOCS "Build documentation using Doxygen and m.css" OFF)
 if(BUILD_MCSS_DOCS)
   include(cmake/docs.cmake)

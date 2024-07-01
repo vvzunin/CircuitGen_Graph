@@ -1,8 +1,3 @@
-install(
-    TARGETS CircuitGenGraph_exe
-    RUNTIME COMPONENT CircuitGenGraph_Runtime
-)
-
 if(PROJECT_IS_TOP_LEVEL)
   set(
       CMAKE_INSTALL_INCLUDEDIR "include/CircuitGenGraph-${PROJECT_VERSION}"
@@ -26,7 +21,7 @@ install(
 )
 
 install(
-    TARGETS CircuitGenGraph_lib
+    TARGETS CircuitGenGraph
     EXPORT CircuitGenGraphTargets
     RUNTIME #
     COMPONENT CircuitGenGraph_Runtime
@@ -51,13 +46,6 @@ set(
 )
 set_property(CACHE CircuitGenGraph_INSTALL_CMAKEDIR PROPERTY TYPE PATH)
 mark_as_advanced(CircuitGenGraph_INSTALL_CMAKEDIR)
-
-install(
-    FILES cmake/install-config.cmake
-    DESTINATION "${CircuitGenGraph_INSTALL_CMAKEDIR}"
-    RENAME "${package}Config.cmake"
-    COMPONENT CircuitGenGraph_Development
-)
 
 install(
     FILES "${PROJECT_BINARY_DIR}/${package}ConfigVersion.cmake"

@@ -70,34 +70,20 @@ target_include_directories(${PROJECT_NAME}
 
     # where top-level project will look for the library's public headers
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
 
     # where external projects will look for the library's public headers
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-target_include_directories(
-    ${PROJECT_NAME} ${warning_guard}
-    PUBLIC
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
-)
-
-include_directories("${CMAKE_SOURCE_DIR}/include")
-foreach(header ${PUBLIC_HEADERS})
-    file(RELATIVE_PATH header_file_path "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}" "${header}")
-    get_filename_component(header_directory_path "${header_file_path}" DIRECTORY)
-    install(
-        FILES ${header}
-        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${header_directory_path}"
-    )
-endforeach()
+include_directories(${CMAKE_SOURCE_DIR}/include)
 
 set_target_properties(
     ${PROJECT_NAME} PROPERTIES 
     VERSION ${PROJECT_VERSION}
     SOVERSION ${PROJECT_VERSION_MAJOR}
     EXPORT_NAME ${PROJECT_NAME}
-    OUTPUT_NAME ${PROJECT_NAME})
+    OUTPUT_NAME ${PROJECT_NAME}
+    PUBLIC_HEADER ${PUBLIC_HEADERS})
 
 include(cmake/utils.cmake)
 
