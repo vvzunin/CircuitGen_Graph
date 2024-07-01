@@ -31,7 +31,6 @@
 Сборка и запуск производятся из операционной системы Linux.
 
 Программа запускалась на Ubuntu 22.04 с использованием WSL (Windows Subsystem for Linux).
-Руководство разработчика доступно по [ссылке](https://drive.google.com/file/d/1eKWMpF0Ig5r5ZI81dJjRoibctzezNE-D/view?usp=sharing).
 
 ## Режим разработчика
 <a name="hacking"></a> 
