@@ -17,7 +17,7 @@
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/vvzunin/CircuitGen_Graph)
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr/vvzunin/CircuitGen_Graph)
 
-![Alt](https://repobeats.axiom.co/api/embed/22944c53bda053bd3f0899dc855632dc9b8c38c2.svg "Repobeats analytics image")
+![Alt](https://repobeats.axiom.co/api/embed/96480623d3ed662877d25bdc40716dbc9d20ec95.svg "Repobeats analytics image")
 
 <font size="5">**Оглавление:**</font>
 <a name="content_rus"></a> 
