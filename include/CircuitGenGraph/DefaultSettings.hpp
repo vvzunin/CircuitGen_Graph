@@ -11,12 +11,12 @@
 /// @brief VertexTypes
 /// Enumeration of vertex types
 
-enum VertexTypes {  ///  input vertex
-  input,            ///  output vertex
-  output,           /// constant vertex
-  constant,         /// vertex representing a logical element
-  gate,             /// subgraph that makes up the vertex
-  subGraph
+enum VertexTypes {  
+  input,            ///  input vertex
+  output,           ///  output vertex
+  constant,         /// constant vertex
+  gate,             /// vertex representing a logical element
+  subGraph          /// subgraph that makes up the vertex
 };
 
 /// @brief Gates
@@ -342,7 +342,7 @@ private:
       {VertexTypes::output, "output"},
       {VertexTypes::constant, "const"},
       {VertexTypes::subGraph, "subGraph"},
-      {VertexTypes::gate, "g"}};
+      {VertexTypes::gate, "gate"}};
 
   std::map<int32_t, std::vector<std::string>> d_operationsToHierarchy;
   std::map<std::string, std::string>          d_operationsToName;

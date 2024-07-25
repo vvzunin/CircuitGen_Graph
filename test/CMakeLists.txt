@@ -30,80 +30,116 @@ enable_testing()
 # ---- Tests ----
 
 # Test GraphVertexConstantTests
-add_executable(CircuitGenGraph_test_GraphVertexConstantTests src/GraphVertexConstantTests.cpp)
+add_executable(
+  CircuitGenGraph_test_GraphVertexConstantTests 
+  src/GraphVertexConstantTests.cpp
+  ../external/easylogging++.cc
+)
 
 target_link_libraries(CircuitGenGraph_test_GraphVertexConstantTests PRIVATE GTest::gtest_main)
 target_link_libraries(CircuitGenGraph_test_GraphVertexConstantTests PRIVATE CircuitGenGraph::CircuitGenGraph)
 
 target_include_directories(
   CircuitGenGraph_test_GraphVertexConstantTests ${warning_guard}
-    PUBLIC
+  PUBLIC
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../src>"
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../external>"
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>"
 )
 add_test(NAME GraphVertexConstantTests COMMAND CircuitGenGraph_test_GraphVertexConstantTests)
 
 # Test GraphVertexGatesTests
-add_executable(CircuitGenGraph_test_GraphVertexGatesTests src/GraphVertexGatesTests.cpp)
+add_executable(
+  CircuitGenGraph_test_GraphVertexGatesTests
+  src/GraphVertexGatesTests.cpp
+  ../external/easylogging++.cc
+)
 
 target_link_libraries(CircuitGenGraph_test_GraphVertexGatesTests PRIVATE GTest::gtest_main )
 target_link_libraries(CircuitGenGraph_test_GraphVertexGatesTests PRIVATE CircuitGenGraph::CircuitGenGraph)
 
 target_include_directories(
- CircuitGenGraph_test_GraphVertexGatesTests ${warning_guard}
-   PUBLIC
-   "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../src>"
+  CircuitGenGraph_test_GraphVertexGatesTests ${warning_guard}
+  PUBLIC
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../src>"
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../external>"
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>"
 )
 add_test(NAME GraphVertexGatesTests COMMAND CircuitGenGraph_test_GraphVertexGatesTests)
 
 # Test GraphVertexInputTests
-add_executable(CircuitGenGraph_test_GraphVertexInputTests src/GraphVertexInputTests.cpp)
+add_executable(
+  CircuitGenGraph_test_GraphVertexInputTests
+  src/GraphVertexInputTests.cpp
+  ../external/easylogging++.cc
+)
 
 target_link_libraries(CircuitGenGraph_test_GraphVertexInputTests PRIVATE GTest::gtest_main )
 target_link_libraries(CircuitGenGraph_test_GraphVertexInputTests PRIVATE CircuitGenGraph::CircuitGenGraph)
 
 target_include_directories(
- CircuitGenGraph_test_GraphVertexInputTests ${warning_guard}
-   PUBLIC
-   "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../src>"
+  CircuitGenGraph_test_GraphVertexInputTests ${warning_guard}
+  PUBLIC
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../src>"
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../external>"
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>"
 )
 add_test(NAME GraphVertexInputTests COMMAND CircuitGenGraph_test_GraphVertexInputTests)
 
 # Test GraphVertexOutputTests
-add_executable(CircuitGenGraph_test_GraphVertexOutputTests src/GraphVertexOutputTests.cpp)
+add_executable(
+  CircuitGenGraph_test_GraphVertexOutputTests
+  src/GraphVertexOutputTests.cpp
+  ../external/easylogging++.cc
+)
 
 target_link_libraries(CircuitGenGraph_test_GraphVertexOutputTests PRIVATE GTest::gtest_main )
 target_link_libraries(CircuitGenGraph_test_GraphVertexOutputTests PRIVATE CircuitGenGraph::CircuitGenGraph)
 
 target_include_directories(
   CircuitGenGraph_test_GraphVertexOutputTests ${warning_guard}
-    PUBLIC
+  PUBLIC
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../src>"
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../external>"
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>"
 )
 add_test(NAME GraphVertexOutputTests COMMAND CircuitGenGraph_test_GraphVertexOutputTests)
 
 # Test GraphVertexSubGraphTests
-add_executable(CircuitGenGraph_test_GraphVertexSubGraphTests src/GraphVertexSubGraphTests.cpp)
+add_executable(
+  CircuitGenGraph_test_GraphVertexSubGraphTests
+  src/GraphVertexSubGraphTests.cpp
+  ../external/easylogging++.cc
+)
 
 target_link_libraries(CircuitGenGraph_test_GraphVertexSubGraphTests PRIVATE GTest::gtest_main )
 target_link_libraries(CircuitGenGraph_test_GraphVertexSubGraphTests PRIVATE CircuitGenGraph::CircuitGenGraph)
 
 target_include_directories(
   CircuitGenGraph_test_GraphVertexSubGraphTests ${warning_guard}
-    PUBLIC
+  PUBLIC
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../src>"
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../external>"
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>"
 )
 add_test(NAME GraphVertexSubGraphTests COMMAND CircuitGenGraph_test_GraphVertexSubGraphTests)
 
 
 # Test OrientedGrahTests
-add_executable(CircuitGenGraph_test_OrientedGraphTests src/OrientedGraphTests.cpp)
+add_executable(
+  CircuitGenGraph_test_OrientedGraphTests
+  src/OrientedGraphTests.cpp
+  ../external/easylogging++.cc
+)
 
 target_link_libraries(CircuitGenGraph_test_OrientedGraphTests PRIVATE GTest::gtest_main )
 target_link_libraries(CircuitGenGraph_test_OrientedGraphTests PRIVATE CircuitGenGraph::CircuitGenGraph)
 
 target_include_directories(
   CircuitGenGraph_test_OrientedGraphTests ${warning_guard}
-    PUBLIC
+  PUBLIC
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../src>"
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../external>"
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>"
 )
 add_test(NAME OrientedGraphTests COMMAND CircuitGenGraph_test_OrientedGraphTests)

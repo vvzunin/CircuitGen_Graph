@@ -51,3 +51,12 @@ void GraphVertexInput::updateLevel() {
     }
   }
 }
+
+void GraphVertexInput::log(el::base::type::ostream_t& os) const {
+  GraphPtr gr = d_baseGraph.lock();
+  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";
+  os << "Vertex Type: " << d_settings->parseVertexToString(VertexTypes::input) << "\n";
+  os << "Vertex Value: " << d_value << "\n";
+  os << "Vertex Level: " << 0 << "\n";
+  os << "Vertex Hash: " << "NuN" << "\n";
+}

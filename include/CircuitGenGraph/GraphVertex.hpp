@@ -9,6 +9,8 @@
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
+#include "easylogging++.h"
+
 /// @file GraphVertex.hpp
 /// TODO: Maybe Description some virtual methods for Graph's classes,
 /// such as GraphVertexGates
@@ -64,6 +66,10 @@ public:
 
   virtual void updateLevel();
 
+  /// @brief log Used for easylogging++
+  /// @param os Stream for easylogging
+  void log(el::base::type::ostream_t& os) const;
+
 protected:
   GraphVertexInput(VertexTypes i_type);
 
@@ -95,6 +101,10 @@ public:
   /// TO DO:
 
   std::string  getInstance();
+
+  /// @brief log Used for easylogging++
+  /// @param os Stream for easylogging
+  void log(el::base::type::ostream_t& os) const;
 
 private:
 };
@@ -155,6 +165,10 @@ public:
   std::vector<VertexPtr> getOuterInputsByOutputBuffer(VertexPtr i_outputBuffer
   ) const;
 
+  /// @brief log Used for easylogging++
+  /// @param os Stream for easylogging
+  void log(el::base::type::ostream_t& os) const;
+
 private:
   GraphPtr    d_subGraph;
   std::string hashed;
@@ -189,6 +203,10 @@ public:
   /// vertex to one higher than the highest level
 
   virtual void updateLevel();
+
+  /// @brief log Used for easylogging++
+  /// @param os Stream for easylogging
+  void log(el::base::type::ostream_t& os) const;
 
 private:
 };
@@ -258,6 +276,10 @@ public:
   std::string  toVerilog();
 
   bool         isSubgraphBuffer() const override;
+
+  /// @brief log Used for easylogging++
+  /// @param os Stream for easylogging
+  void log(el::base::type::ostream_t& os) const;
 
 private:
   Gates       d_gate;

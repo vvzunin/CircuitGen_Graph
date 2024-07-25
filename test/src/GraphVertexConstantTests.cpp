@@ -1,8 +1,11 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
+#include "easylogging++Init.hpp"
 
-TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrs) {
+TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrsDefName) {
+  initLogging("TestConstructorWithoutIName", "WithoutDefaultInputParametrsDefName");
   GraphVertexConstant constant('z');
+  LOG(INFO) << constant;
   std::string         graphNum = std::to_string(0);
   EXPECT_EQ(constant.getType(), VertexTypes::constant);
   EXPECT_EQ(constant.getTypeName(), "const");
@@ -13,7 +16,8 @@ TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrs) {
   EXPECT_EQ(constant.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithoutIName, WithDefaultInputParametrs) {
+TEST(TestConstructorWithoutIName, WithDefaultInputParametrsDefName) {
+  initLogging("TestConstructorWithoutIName", "WithDefaultInputParametrsDefName");
   GraphPtr            graphPtr = std::make_shared<OrientedGraph>();
 
   std::string         graphNum = std::to_string(1);
@@ -28,6 +32,7 @@ TEST(TestConstructorWithoutIName, WithDefaultInputParametrs) {
 }
 
 TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
+  initLogging("TestConstructorWithIName", "WithoutDefaultInputParametrs");
   GraphVertexConstant constant('z', "Anything");
   EXPECT_EQ(constant.getType(), VertexTypes::constant);
   EXPECT_EQ(constant.getTypeName(), "const");
@@ -39,6 +44,7 @@ TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
 }
 
 TEST(TestConstructorWithIName, WithDefaultInputParametrs) {
+  initLogging("TestConstructorWithIName", "WithDefaultInputParametrs");
   GraphPtr            graphPtr = std::make_shared<OrientedGraph>();
 
   GraphVertexConstant constant('z', "Anything", graphPtr);
@@ -55,12 +61,14 @@ TEST(TestConstructorWithIName, WithDefaultInputParametrs) {
 
 // it returns 0 does it correct?
 TEST(TestUpdateLevel, CorrectUpdate) {
+  initLogging("TestUpdateLevel", "CorrectUpdate");
   GraphVertexConstant constant1('z');
   constant1.updateLevel();
   EXPECT_EQ(constant1.getLevel(), 0);
 }
 
 TEST(TestGetInstance, ReturnCorrectInstance) {
+  initLogging("TestGetInstance", "ReturnCorrectInstance");
   GraphVertexConstant constant1('z', "Anything");
   EXPECT_EQ(constant1.getInstance(), "wire Anything;");
 }
@@ -68,12 +76,14 @@ TEST(TestGetInstance, ReturnCorrectInstance) {
 // -------------------------------------
 
 TEST(TestSetName, InputCorrectName) {
+  initLogging("TestSetName", "InputCorrectName");
   GraphVertexConstant constant('z');
   constant.setName("Anything");
   EXPECT_EQ(constant.getName(), "Anything");
 }
 
-TEST(TestAddVertexToInConnections, AddConnections) {
+TEST(TestAddVertexToInConnections, AddConnections1) {
+  initLogging("TestAddVertexToInConnections", "AddConnections1");
   GraphVertexConstant constant1('z');
   EXPECT_EQ(constant1.getInConnections().size(), 0);
 
@@ -90,7 +100,8 @@ TEST(TestAddVertexToInConnections, AddConnections) {
   EXPECT_EQ(constant1.getInConnections()[2].lock(), ptr2);
 }
 
-TEST(TestAddVertexToOutConnections, AddConnections) {
+TEST(TestAddVertexToOutConnections, AddConnections2) {
+  initLogging("TestAddVertexToOutConnections", "AddConnections2");
   GraphVertexConstant constant1('z');
   EXPECT_EQ(constant1.getOutConnections().size(), 0);
 
@@ -107,6 +118,7 @@ TEST(TestAddVertexToOutConnections, AddConnections) {
 }
 
 TEST(TestCalculateHash, SameHashWhenEqualInputs) {
+  initLogging("TestCalculateHash", "SameHashWhenEqualInputs");
   GraphVertexConstant constant1('z');
   GraphVertexConstant constant2('z');
   EXPECT_EQ(constant1.calculateHash(), constant2.calculateHash());
@@ -120,6 +132,7 @@ TEST(TestCalculateHash, SameHashWhenEqualInputs) {
 }
 
 TEST(TestRemoveVertexToInConnections, RemoveConnections) {
+  initLogging("TestRemoveVertexToInConnections", "RemoveConnections");
   VertexPtr vertexPtr1 = std::make_shared<GraphVertexConstant>('z');
   EXPECT_EQ(vertexPtr1->removeVertexToInConnections(vertexPtr1), false);
   vertexPtr1->addVertexToInConnections(std::make_shared<GraphVertexConstant>('z'

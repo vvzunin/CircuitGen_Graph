@@ -5,6 +5,8 @@
 
 #include <CircuitGenGraph/OrientedGraph.hpp>
 #include <gtest/gtest.h>
+#include "easylogging++Init.hpp"
+
 /*
   Need to add toVerilogTest, setCurrentParentTest,
     resetCountersTest, getGraphInstanceTest
@@ -21,6 +23,7 @@
 
 // Test is on top because it needs to contain the graph_0
 TEST(TestSetNameAndGetName, ReturnCorrectName) {
+  initLogging("TestSetNameAndGetName", "ReturnCorrectName");
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
 

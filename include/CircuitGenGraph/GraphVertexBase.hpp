@@ -10,6 +10,8 @@
 #include <CircuitGenGraph/enums.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
+#include "easylogging++.h"
+
 class OrientedGraph;  // Проблема циклического определения
 
 #define GraphPtr      std::shared_ptr<OrientedGraph>
@@ -80,7 +82,7 @@ std::string vertexTypeToComment(VertexTypes i_type);
 /// Represented by the uint_fast64_t type
 /// @param hashed A string containing the calculated hash value for the vertex
 
-class GraphVertexBase {
+class GraphVertexBase : public el::Loggable {
 public:
   /// @brief GraphVertexBase
   /// Constructs a GraphVertexBase object with the specified vertex type and
@@ -469,6 +471,10 @@ public:
   virtual std::string    toVerilog();
 
   virtual bool           isSubgraphBuffer() const { return false; }
+
+  /// @brief log Used for easylogging++
+  /// @param os Stream for easylogging
+  void log(el::base::type::ostream_t& os) const;
 
 protected:
   GraphPtrWeak                     d_baseGraph;

@@ -13,6 +13,8 @@
 #include <CircuitGenGraph/enums.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
+#include "easylogging++.h"
+
 // TODO: Добавить проверку на имена файлов при доблении новых вершин
 
 class GraphVertexBase;  // Проблема циклического определения
@@ -65,7 +67,7 @@ class GraphVertexBase;  // Проблема циклического опред�
 /// the inner map maps gate types to the count of edges between them.
 /// @param d_settings Shared pointer to DefaultSettings instance
 
-class OrientedGraph : public std::enable_shared_from_this<OrientedGraph> {
+class OrientedGraph : public std::enable_shared_from_this<OrientedGraph>, public el::Loggable {
 public:
   // friend class Circuit;
   OrientedGraph(const std::string& i_name = "");
@@ -370,7 +372,6 @@ public:
   std::string getGraphInstance();
   std::pair<bool, std::string>
               toVerilog(std::string i_path, std::string i_filename = "");
-  // toAdjencyMatrix
 
   /// @brief toGraphML Writes the graph structure in GraphML format to the
   /// specified output stream
@@ -436,6 +437,10 @@ public:
   bool     isConnected(bool i_recalculate = false);
 
   GraphPtr unrollGraph() const;
+
+  /// @brief log Used for easylogging++
+  /// @param os Stream for easylogging
+  void log(el::base::type::ostream_t& os) const;
 
 private:
   static std::atomic_size_t d_countNewGraphInstance;

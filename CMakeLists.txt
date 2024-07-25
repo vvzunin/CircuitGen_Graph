@@ -4,7 +4,7 @@ include(cmake/prelude.cmake)
 
 project(
   CircuitGenGraph
-  VERSION 1.0.0
+  VERSION 1.0.1
   DESCRIPTION "Graph for circuits dataset generation"
   HOMEPAGE_URL "https://github.com/vvzunin/CircuitGen_Graph"
   LANGUAGES CXX
@@ -25,6 +25,7 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/OrientedGraph.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultSettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultAuxiliaryMethods.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/easylogging++.cc
 )
 
 set(PUBLIC_HEADERS
@@ -66,6 +67,7 @@ target_include_directories(${PROJECT_NAME}
 
     # where the library itself will look for its internal headers
     ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/external
     PUBLIC
 
     # where top-level project will look for the library's public headers
