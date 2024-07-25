@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
+#include "easylogging++.h"
 
 GraphVertexInput::GraphVertexInput(
     GraphPtr          i_baseGraph,
