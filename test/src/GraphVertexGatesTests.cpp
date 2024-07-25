@@ -1,5 +1,6 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
+
 #include "easylogging++Init.hpp"
 
 /*

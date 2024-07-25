@@ -68,7 +68,7 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  void log(el::base::type::ostream_t& os) const;
+  void         log(el::base::type::ostream_t& os) const;
 
 protected:
   GraphVertexInput(VertexTypes i_type);
@@ -104,7 +104,7 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  void log(el::base::type::ostream_t& os) const;
+  void         log(el::base::type::ostream_t& os) const;
 
 private:
 };
@@ -167,7 +167,7 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  void log(el::base::type::ostream_t& os) const;
+  void                   log(el::base::type::ostream_t& os) const;
 
 private:
   GraphPtr    d_subGraph;
@@ -206,7 +206,7 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  void log(el::base::type::ostream_t& os) const;
+  void         log(el::base::type::ostream_t& os) const;
 
 private:
 };
@@ -279,7 +279,7 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  void log(el::base::type::ostream_t& os) const;
+  void         log(el::base::type::ostream_t& os) const;
 
 private:
   Gates       d_gate;

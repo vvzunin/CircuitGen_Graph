@@ -11,12 +11,12 @@
 /// @brief VertexTypes
 /// Enumeration of vertex types
 
-enum VertexTypes {  
-  input,            ///  input vertex
-  output,           ///  output vertex
-  constant,         /// constant vertex
-  gate,             /// vertex representing a logical element
-  subGraph          /// subgraph that makes up the vertex
+enum VertexTypes {
+  input,     ///  input vertex
+  output,    ///  output vertex
+  constant,  /// constant vertex
+  gate,      /// vertex representing a logical element
+  subGraph   /// subgraph that makes up the vertex
 };
 
 /// @brief Gates

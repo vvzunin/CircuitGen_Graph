@@ -1,12 +1,15 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
+
 #include "easylogging++Init.hpp"
 
 TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrsDefName) {
-  initLogging("TestConstructorWithoutIName", "WithoutDefaultInputParametrsDefName");
+  initLogging(
+      "TestConstructorWithoutIName", "WithoutDefaultInputParametrsDefName"
+  );
   GraphVertexConstant constant('z');
   LOG(INFO) << constant;
-  std::string         graphNum = std::to_string(0);
+  std::string graphNum = std::to_string(0);
   EXPECT_EQ(constant.getType(), VertexTypes::constant);
   EXPECT_EQ(constant.getTypeName(), "const");
   EXPECT_EQ(constant.getName(), "const_" + graphNum);
@@ -17,7 +20,9 @@ TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrsDefName) {
 }
 
 TEST(TestConstructorWithoutIName, WithDefaultInputParametrsDefName) {
-  initLogging("TestConstructorWithoutIName", "WithDefaultInputParametrsDefName");
+  initLogging(
+      "TestConstructorWithoutIName", "WithDefaultInputParametrsDefName"
+  );
   GraphPtr            graphPtr = std::make_shared<OrientedGraph>();
 
   std::string         graphNum = std::to_string(1);

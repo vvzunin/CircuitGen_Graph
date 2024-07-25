@@ -67,7 +67,9 @@ class GraphVertexBase;  // Проблема циклического опред�
 /// the inner map maps gate types to the count of edges between them.
 /// @param d_settings Shared pointer to DefaultSettings instance
 
-class OrientedGraph : public std::enable_shared_from_this<OrientedGraph>, public el::Loggable {
+class OrientedGraph :
+  public std::enable_shared_from_this<OrientedGraph>,
+  public el::Loggable {
 public:
   // friend class Circuit;
   OrientedGraph(const std::string& i_name = "");
@@ -440,7 +442,7 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  void log(el::base::type::ostream_t& os) const;
+  void     log(el::base::type::ostream_t& os) const;
 
 private:
   static std::atomic_size_t d_countNewGraphInstance;
