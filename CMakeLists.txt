@@ -25,7 +25,7 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/OrientedGraph.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultSettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultAuxiliaryMethods.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/easylogging++.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/easyloggingpp/easylogging++.cc
 )
 
 set(PUBLIC_HEADERS
@@ -67,7 +67,7 @@ target_include_directories(${PROJECT_NAME}
 
     # where the library itself will look for its internal headers
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/external
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/easyloggingpp
     PUBLIC
 
     # where top-level project will look for the library's public headers
