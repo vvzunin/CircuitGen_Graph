@@ -64,11 +64,11 @@ public:
   /// @brief updateLevel It is designed to update the level of the current
   /// vertex in a directed graph based on the levels of its input connections
 
-  virtual void updateLevel();
+  virtual void updateLevel() override;
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  void         log(el::base::type::ostream_t& os) const;
+  void         log(el::base::type::ostream_t& os) const override;
 
 protected:
   GraphVertexInput(VertexTypes i_type);
@@ -94,7 +94,7 @@ public:
   /// @brief updateLevel updates the level of the current vertex in the graph
   /// based on the levels of its incoming connections
 
-  virtual void updateLevel();
+  virtual void updateLevel() override;
   std::string  toVerilog() override;
 
   /// @brief getInstance
@@ -104,7 +104,7 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  void         log(el::base::type::ostream_t& os) const;
+  void         log(el::base::type::ostream_t& os) const override;
 
 private:
 };
@@ -156,7 +156,7 @@ public:
   /// @return
   std::string getInstance() override;
 
-  std::string calculateHash(bool recalculate = false);
+  std::string calculateHash(bool recalculate = false) override;
 
   void        setSubGraph(GraphPtr i_subGraph);
   GraphPtr    getSubGraph() const;
@@ -167,7 +167,7 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  void                   log(el::base::type::ostream_t& os) const;
+  void                   log(el::base::type::ostream_t& os) const override;
 
 private:
   GraphPtr    d_subGraph;
@@ -202,11 +202,11 @@ public:
   /// vertices to which it is connected, and sets the level of the current
   /// vertex to one higher than the highest level
 
-  virtual void updateLevel();
+  virtual void updateLevel() override;
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  void         log(el::base::type::ostream_t& os) const;
+  void         log(el::base::type::ostream_t& os) const override;
 
 private:
 };
@@ -245,7 +245,7 @@ public:
   /// @endcode
   /// @return The calculated hash value as a string
 
-  std::string  calculateHash(bool recalculate = false);
+  std::string  calculateHash(bool recalculate = false) override;
 
   /// @brief getVerilogString
   /// Gets a string in Verilog format representing the current vertex
@@ -279,7 +279,7 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  void         log(el::base::type::ostream_t& os) const;
+  void         log(el::base::type::ostream_t& os) const override;
 
 private:
   Gates       d_gate;

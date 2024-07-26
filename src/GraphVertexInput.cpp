@@ -16,6 +16,8 @@ GraphVertexInput::GraphVertexInput(
 ) :
   GraphVertexBase(i_type, i_name, i_baseGraph) {}
 
+
+// TODO: Он здесь нужен?
 char GraphVertexInput::updateValue() {
   if (d_inConnections.size() > 0) {
     if (!d_baseGraph.lock()) {

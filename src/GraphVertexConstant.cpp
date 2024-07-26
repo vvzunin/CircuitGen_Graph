@@ -1,6 +1,7 @@
 #include <memory>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
+#include "easylogging++.h"
 
 GraphVertexConstant::GraphVertexConstant(char i_const, GraphPtr i_baseGraph) :
   GraphVertexInput(i_baseGraph, VertexTypes::constant) {
