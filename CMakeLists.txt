@@ -78,6 +78,7 @@ target_include_directories(${PROJECT_NAME}
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/external/easyloggingpp)
 
 set_target_properties(
     ${PROJECT_NAME} PROPERTIES 
