@@ -32,6 +32,11 @@
 
 Программа запускалась на Ubuntu 22.04 с использованием WSL (Windows Subsystem for Linux).
 
+> [!IMPORTANT]  
+> В проект добавлена система логирования. Для корректной работы библиотеки необходимо инициализировать библиотеку командой:
+> #include "easylogging++.h"
+> INITIALIZE_EASYLOGGINGPP
+
 ## Режим разработчика
 <a name="hacking"></a> 
 
