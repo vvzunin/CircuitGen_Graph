@@ -59,7 +59,7 @@ public:
   /// @endcode
   /// @throws std::invalid_argument if any input connection is invalid
 
-  virtual char updateValue();
+  virtual char updateValue() override;
 
   /// @brief updateLevel It is designed to update the level of the current
   /// vertex in a directed graph based on the levels of its input connections
@@ -194,7 +194,7 @@ public:
   /// updating based on the values of its incoming connections and the type of
   /// logical element (or "gate").
 
-  virtual char updateValue();
+  virtual char updateValue() override;
 
   /// @brief updateLevel updates the level of the current vertex in the graph
   /// based on the levels of its incoming connections. If a vertex has incoming
@@ -233,7 +233,7 @@ public:
   /// @throws std::invalid_argument if any of the input connections point
   /// to a nullptr
 
-  virtual char updateValue();
+  virtual char updateValue() override;
 
   /// @brief calculateHash
   /// Calculates the hash value of the vertex
@@ -273,7 +273,7 @@ public:
   /// @return A Verilog format string for the current vertex
   /// @throws std::invalid_argument if any input connection is invalid
 
-  std::string  toVerilog();
+  std::string  toVerilog() override;
 
   bool         isSubgraphBuffer() const override;
 
