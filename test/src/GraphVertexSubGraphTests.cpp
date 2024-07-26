@@ -5,6 +5,8 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
 
+#include "easylogging++Init.hpp"
+
 std::string loadStringFile(const std::filesystem::path& p) {
   std::string   str;
   std::ifstream file;

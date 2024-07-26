@@ -1,6 +1,8 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
 
+#include "easylogging++Init.hpp"
+
 /*
   Need to add another UpdateValueTest
   Need to remake RemoveVertexToOutConnections
@@ -10,8 +12,8 @@ TEST(TestConstructorWithoutIName, WithoutDefaultGatesParametrs) {
   GraphVertexGates gate(Gates::GateAnd);
   std::string      graphNum = std::to_string(0);
   EXPECT_EQ(gate.getType(), VertexTypes::gate);
-  EXPECT_EQ(gate.getTypeName(), "g");
-  EXPECT_EQ(gate.getName(), "g_" + graphNum);
+  EXPECT_EQ(gate.getTypeName(), "gate");
+  EXPECT_EQ(gate.getName(), "gate_" + graphNum);
   EXPECT_EQ(gate.getLevel(), 0);
   EXPECT_EQ(gate.getValue(), 'x');
   EXPECT_EQ(gate.getBaseGraph().lock(), nullptr);
@@ -23,8 +25,8 @@ TEST(TestConstructorWithoutIName, WithDefaultGatesParametrs) {
   std::string      graphNum = std::to_string(1);
   GraphVertexGates gate(Gates::GateAnd, graphPtr);
   EXPECT_EQ(gate.getType(), VertexTypes::gate);
-  EXPECT_EQ(gate.getTypeName(), "g");
-  EXPECT_EQ(gate.getName(), "g_" + graphNum);
+  EXPECT_EQ(gate.getTypeName(), "gate");
+  EXPECT_EQ(gate.getName(), "gate_" + graphNum);
   EXPECT_EQ(gate.getLevel(), 0);
   EXPECT_EQ(gate.getValue(), 'x');
   EXPECT_EQ(gate.getBaseGraph().lock(), graphPtr);
@@ -35,7 +37,7 @@ TEST(TestConstructorWithIName, WithoutDefaultGatesParametrs) {
   GraphVertexGates gate(Gates::GateAnd, "Anything");
   EXPECT_EQ(gate.getBaseGraph().lock(), nullptr);
   EXPECT_EQ(gate.getType(), VertexTypes::gate);
-  EXPECT_EQ(gate.getTypeName(), "g");
+  EXPECT_EQ(gate.getTypeName(), "gate");
   EXPECT_EQ(gate.getName(), "Anything");
   EXPECT_EQ(gate.getLevel(), 0);
   EXPECT_EQ(gate.getValue(), 'x');
@@ -48,7 +50,7 @@ TEST(TestConstructorWithIName, WithDefaultGatesParametrs) {
   std::string      graphNum = std::to_string(1);
   GraphVertexGates gate(Gates::GateAnd, "Anything", graphPtr);
   EXPECT_EQ(gate.getType(), VertexTypes::gate);
-  EXPECT_EQ(gate.getTypeName(), "g");
+  EXPECT_EQ(gate.getTypeName(), "gate");
   EXPECT_EQ(gate.getName(), "Anything");
   EXPECT_EQ(gate.getLevel(), 0);
   EXPECT_EQ(gate.getValue(), 'x');

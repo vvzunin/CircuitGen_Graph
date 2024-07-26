@@ -2,6 +2,8 @@
 #include <CircuitGenGraph/OrientedGraph.hpp>
 #include <gtest/gtest.h>
 
+#include "easylogging++Init.hpp"
+
 /*
   Need to remake RemoveVertexToOutConnections
 */

@@ -12,6 +12,7 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
+#include "easylogging++.h"
 
 std::atomic_size_t OrientedGraph::d_countGraph            = 0;
 std::atomic_size_t OrientedGraph::d_countNewGraphInstance = 0;
@@ -997,5 +998,37 @@ void OrientedGraph::dfs(
         }
       }
     }
+  }
+}
+
+void OrientedGraph::log(el::base::type::ostream_t& os) const {
+  os << "\n";
+  os << "Graph Name: " << d_name << "\n";
+  os << "Graph ID: " << d_graphID << "\n";
+  os << "Number of Edges: " << d_edgesCount << "\n";
+  os << "Need Level Update: " << (d_needLevelUpdate ? "Yes" : "No") << "\n";
+  os << "Already Parsed: " << (d_alreadyParsed ? "Yes" : "No") << "\n";
+  if (!d_hashed.empty()) {
+      os << "Hashed: " << d_hashed << "\n";
+  }
+
+  os << "Number of Subgraphs: " << d_subGraphs.size() << "\n";
+  os << "Stored Vertex Types and Counts:\n";
+  for (const auto& pair : d_vertexes) {
+      os << "\t" << d_settings->parseVertexToString(pair.first)
+          << "\t:\t" << pair.second.size() << "\n";
+  }
+  os << "Gate Types and Counts:\n";
+  for (const auto& pair : d_gatesCount) {
+      os << "\t" << d_settings->parseGateToString(pair.first)
+          << "\t:\t" << pair.second << "\n";
+  }
+  os << "Edges Between Gates Counts:\n";
+  for (const auto& outer_pair : d_edgesGatesCount) {
+      for (const auto& inner_pair : outer_pair.second) {
+          os << "\t" << d_settings->parseGateToString(outer_pair.first)
+              << "\t->" << d_settings->parseGateToString(inner_pair.first)
+              << "\t:\t" << inner_pair.second << "\n";
+      }
   }
 }

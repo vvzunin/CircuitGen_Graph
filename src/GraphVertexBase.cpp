@@ -3,6 +3,7 @@
 #include <string>
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
+#include "easylogging++.h"
 
 std::atomic_uint64_t GraphVertexBase::d_count = 0;
 
@@ -231,4 +232,13 @@ std::string GraphVertexBase::toVerilog() {
     }
   }
   return "";
+}
+
+void GraphVertexBase::log(el::base::type::ostream_t& os) const {
+  GraphPtr gr = d_baseGraph.lock();
+  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";
+  os << "Vertex Type: " << d_settings->parseVertexToString(d_type) << "\n";
+  os << "Vertex Value: " << d_value << "\n";
+  os << "Vertex Level: " << d_level << "\n";
+  os << "Vertex Hash: " << hashed << "\n";
 }

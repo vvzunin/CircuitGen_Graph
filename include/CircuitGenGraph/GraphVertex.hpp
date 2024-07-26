@@ -9,6 +9,8 @@
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
+#include "easylogging++.h"
+
 /// @file GraphVertex.hpp
 /// TODO: Maybe Description some virtual methods for Graph's classes,
 /// such as GraphVertexGates
@@ -57,12 +59,16 @@ public:
   /// @endcode
   /// @throws std::invalid_argument if any input connection is invalid
 
-  virtual char updateValue();
+  virtual char updateValue() override;
 
   /// @brief updateLevel It is designed to update the level of the current
   /// vertex in a directed graph based on the levels of its input connections
 
-  virtual void updateLevel();
+  virtual void updateLevel() override;
+
+  /// @brief log Used for easylogging++
+  /// @param os Stream for easylogging
+  void         log(el::base::type::ostream_t& os) const override;
 
 protected:
   GraphVertexInput(VertexTypes i_type);
@@ -88,13 +94,17 @@ public:
   /// @brief updateLevel updates the level of the current vertex in the graph
   /// based on the levels of its incoming connections
 
-  virtual void updateLevel();
+  virtual void updateLevel() override;
   std::string  toVerilog() override;
 
   /// @brief getInstance
   /// TO DO:
 
   std::string  getInstance();
+
+  /// @brief log Used for easylogging++
+  /// @param os Stream for easylogging
+  void         log(el::base::type::ostream_t& os) const override;
 
 private:
 };
@@ -146,7 +156,7 @@ public:
   /// @return
   std::string getInstance() override;
 
-  std::string calculateHash(bool recalculate = false);
+  std::string calculateHash(bool recalculate = false) override;
 
   void        setSubGraph(GraphPtr i_subGraph);
   GraphPtr    getSubGraph() const;
@@ -154,6 +164,10 @@ public:
   ) const;
   std::vector<VertexPtr> getOuterInputsByOutputBuffer(VertexPtr i_outputBuffer
   ) const;
+
+  /// @brief log Used for easylogging++
+  /// @param os Stream for easylogging
+  void                   log(el::base::type::ostream_t& os) const override;
 
 private:
   GraphPtr    d_subGraph;
@@ -180,7 +194,7 @@ public:
   /// updating based on the values of its incoming connections and the type of
   /// logical element (or "gate").
 
-  virtual char updateValue();
+  virtual char updateValue() override;
 
   /// @brief updateLevel updates the level of the current vertex in the graph
   /// based on the levels of its incoming connections. If a vertex has incoming
@@ -188,7 +202,11 @@ public:
   /// vertices to which it is connected, and sets the level of the current
   /// vertex to one higher than the highest level
 
-  virtual void updateLevel();
+  virtual void updateLevel() override;
+
+  /// @brief log Used for easylogging++
+  /// @param os Stream for easylogging
+  void         log(el::base::type::ostream_t& os) const override;
 
 private:
 };
@@ -215,7 +233,7 @@ public:
   /// @throws std::invalid_argument if any of the input connections point
   /// to a nullptr
 
-  virtual char updateValue();
+  virtual char updateValue() override;
 
   /// @brief calculateHash
   /// Calculates the hash value of the vertex
@@ -227,7 +245,7 @@ public:
   /// @endcode
   /// @return The calculated hash value as a string
 
-  std::string  calculateHash(bool recalculate = false);
+  std::string  calculateHash(bool recalculate = false) override;
 
   /// @brief getVerilogString
   /// Gets a string in Verilog format representing the current vertex
@@ -255,9 +273,13 @@ public:
   /// @return A Verilog format string for the current vertex
   /// @throws std::invalid_argument if any input connection is invalid
 
-  std::string  toVerilog();
+  std::string  toVerilog() override;
 
   bool         isSubgraphBuffer() const override;
+
+  /// @brief log Used for easylogging++
+  /// @param os Stream for easylogging
+  void         log(el::base::type::ostream_t& os) const override;
 
 private:
   Gates       d_gate;

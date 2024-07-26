@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
+#include "easylogging++.h"
 
 GraphVertexGates::GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph) :
   GraphVertexBase(VertexTypes::gate, i_baseGraph) {
@@ -191,4 +192,13 @@ bool GraphVertexGates::isSubgraphBuffer() const {
     return false;
   }
   return d_inConnections[0].lock()->getType() == VertexTypes::subGraph;
+}
+
+void GraphVertexGates::log(el::base::type::ostream_t& os) const {
+  GraphPtr gr = d_baseGraph.lock();
+  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";
+  os << "Vertex Type: " << d_settings->parseVertexToString(VertexTypes::gate) << "(" + d_settings->parseGateToString(d_gate) + ")"<< "\n";
+  os << "Vertex Value: " << d_value << "\n";
+  os << "Vertex Level: " << d_level << "\n";
+  os << "Vertex Hash: " << hashed << "\n";
 }

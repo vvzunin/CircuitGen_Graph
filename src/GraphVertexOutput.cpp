@@ -1,4 +1,5 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
+#include "easylogging++.h"
 
 GraphVertexOutput::GraphVertexOutput(GraphPtr i_baseGraph) :
   GraphVertexBase(VertexTypes::output, i_baseGraph) {}
@@ -37,4 +38,13 @@ void GraphVertexOutput::updateLevel() {
       throw std::invalid_argument("Dead pointer!");
     }
   }
+}
+
+void GraphVertexOutput::log(el::base::type::ostream_t& os) const {
+  GraphPtr gr = d_baseGraph.lock();
+  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";
+  os << "Vertex Type: " << d_settings->parseVertexToString(VertexTypes::output) << "\n";
+  os << "Vertex Value: " << d_value << "\n";
+  os << "Vertex Level: " << d_level << "\n";
+  os << "Vertex Hash: " << "NuN" << "\n";
 }

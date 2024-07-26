@@ -4,6 +4,7 @@
 #include <unordered_set>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
+#include "easylogging++.h"
 
 GraphVertexSubGraph::GraphVertexSubGraph(
     GraphPtr i_subGraph,
@@ -199,4 +200,12 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
     }
   }
   return inputs;
+}
+
+void GraphVertexSubGraph::log(el::base::type::ostream_t& os) const {
+  GraphPtr gr = d_baseGraph.lock();
+  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";
+  os << "Vertex Type: " << d_settings->parseVertexToString(VertexTypes::subGraph) << "\n";
+  d_subGraph->log(os);
+  os << "Vertex Hash: " << hashed << "\n";
 }

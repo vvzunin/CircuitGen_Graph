@@ -1,6 +1,7 @@
 #include <memory>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
+#include "easylogging++.h"
 
 GraphVertexConstant::GraphVertexConstant(char i_const, GraphPtr i_baseGraph) :
   GraphVertexInput(i_baseGraph, VertexTypes::constant) {
@@ -25,4 +26,13 @@ std::string GraphVertexConstant::getInstance() {
 
 std::string GraphVertexConstant::toVerilog() {
   return "assign " + d_name + " = 1'b" + d_value + ";";
+}
+
+void GraphVertexConstant::log(el::base::type::ostream_t& os) const {
+  GraphPtr gr = d_baseGraph.lock();
+  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";
+  os << "Vertex Type: " << d_settings->parseVertexToString(VertexTypes::constant) << "\n";
+  os << "Vertex Value: " << d_value << "\n";
+  os << "Vertex Level: " << 0 << "\n";
+  os << "Vertex Hash: " << "NuN" << "\n";
 }
