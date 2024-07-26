@@ -785,8 +785,8 @@ std::string OrientedGraph::toGraphMLOpenABCD() const {
             }
             edges += format(
                 edgeTemplate,
-                nodeNames.at(actualName),
                 nodeNames.at(currentName),
+                nodeNames.at(actualName),
                 current.second
             );
             inverted += current.second;
