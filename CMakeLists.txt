@@ -4,7 +4,7 @@ include(cmake/prelude.cmake)
 
 project(
   CircuitGenGraph
-  VERSION 1.0.1
+  VERSION 1.1.0
   DESCRIPTION "Graph for circuits dataset generation"
   HOMEPAGE_URL "https://github.com/vvzunin/CircuitGen_Graph"
   LANGUAGES CXX
