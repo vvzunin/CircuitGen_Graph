@@ -93,20 +93,24 @@
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#a68af7628ac372af632581f3a489e870e" class="m-doc">updateValue</a>(</span><span class="m-doc-wrap">) -&gt; char <span class="m-label m-flat m-warning">virtual</span></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#aab0db1e3d385c86d36c5067440478b9c" class="m-doc">updateValue</a>(</span><span class="m-doc-wrap">) -&gt; char <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd>updateValue updates the value of the current vertex of the graph based on the values of its incoming connections and the type of logical element (or &quot;gate&quot;). Depending on the type of gate and the values of the incoming links, the method uses the truth tables to perform the corresponding logical operation and sets a new value for the current vertex</dd>
-            <dt id="aac5e4e2c2b661cf879acacc9d38d5b62">
-              <span class="m-doc-wrap-bumper">void <a href="#aac5e4e2c2b661cf879acacc9d38d5b62" class="m-doc-self">updateLevel</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
+            <dt id="a2bae64a9f67b05449aa32872ee7f4750">
+              <span class="m-doc-wrap-bumper">void <a href="#a2bae64a9f67b05449aa32872ee7f4750" class="m-doc-self">updateLevel</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd>updateLevel updates the level of the current vertex in the graph based on the levels of its incoming connections. If a vertex has incoming connections, the method determines the highest level among all the vertices to which it is connected, and sets the level of the current vertex to one higher than the highest level</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#abad211ad0816ac5f134618a56995c6b0" class="m-doc">log</a>(</span><span class="m-doc-wrap">el::base::type::ostream_t&amp; os) const <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd>log Used for easylogging++</dd>
           </dl>
         </section>
         <section>
           <h2>Function documentation</h2>
-          <section class="m-doc-details" id="a68af7628ac372af632581f3a489e870e"><div>
+          <section class="m-doc-details" id="aab0db1e3d385c86d36c5067440478b9c"><div>
             <h3>
-              <span class="m-doc-wrap-bumper">char GraphVertexOutput::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a68af7628ac372af632581f3a489e870e" class="m-doc-self">updateValue</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">virtual</span></span></span>
+              <span class="m-doc-wrap-bumper">char GraphVertexOutput::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aab0db1e3d385c86d36c5067440478b9c" class="m-doc-self">updateValue</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
             </h3>
             <p>updateValue updates the value of the current vertex of the graph based on the values of its incoming connections and the type of logical element (or &quot;gate&quot;). Depending on the type of gate and the values of the incoming links, the method uses the truth tables to perform the corresponding logical operation and sets a new value for the current vertex</p>
             <table class="m-table m-fullwidth m-flat">
@@ -116,6 +120,23 @@
                   <td>A char that represents the new value of the current vertex after updating based on the values of its incoming connections and the type of logical element (or &quot;gate&quot;).</td>
                 </tr>
               </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="abad211ad0816ac5f134618a56995c6b0"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void GraphVertexOutput::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#abad211ad0816ac5f134618a56995c6b0" class="m-doc-self">log</a>(</span><span class="m-doc-wrap">el::base::type::ostream_t&amp; os) const <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <p>log Used for easylogging++</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">os</td>
+                  <td>Stream for easylogging</td>
+                </tr>
+              </tbody>
             </table>
           </div></section>
         </section>

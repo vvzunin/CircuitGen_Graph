@@ -94,8 +94,8 @@
         <section id="pub-methods">
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt id="af4cb892fd50759407da39a96c045e7d1">
-              <span class="m-doc-wrap-bumper">void <a href="#af4cb892fd50759407da39a96c045e7d1" class="m-doc-self">updateLevel</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
+            <dt id="a7280fb99d5055a0094356354df40dd24">
+              <span class="m-doc-wrap-bumper">void <a href="#a7280fb99d5055a0094356354df40dd24" class="m-doc-self">updateLevel</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd>updateLevel updates the level of the current vertex in the graph based on the levels of its incoming connections</dd>
             <dt>
@@ -106,6 +106,10 @@
               <span class="m-doc-wrap-bumper">auto <a href="#afb5a7f4d443efca31a804ed2f31e648c" class="m-doc-self">getInstance</a>(</span><span class="m-doc-wrap">) -&gt; std::string <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd>getInstance TO DO:</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a77552c7ef2f40f486c7a206de2f0f3f2" class="m-doc">log</a>(</span><span class="m-doc-wrap">el::base::type::ostream_t&amp; os) const <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd>log Used for easylogging++</dd>
           </dl>
         </section>
         <section>
@@ -133,6 +137,23 @@
 <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Generated Verilog code:</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">verilogCode</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span></pre></td>
                 </tr>
               </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a77552c7ef2f40f486c7a206de2f0f3f2"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void GraphVertexConstant::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a77552c7ef2f40f486c7a206de2f0f3f2" class="m-doc-self">log</a>(</span><span class="m-doc-wrap">el::base::type::ostream_t&amp; os) const <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <p>log Used for easylogging++</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">os</td>
+                  <td>Stream for easylogging</td>
+                </tr>
+              </tbody>
             </table>
           </div></section>
         </section>

@@ -109,13 +109,17 @@
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#af27b2c9067b9861882544ff172036be3" class="m-doc">updateValue</a>(</span><span class="m-doc-wrap">) -&gt; char <span class="m-label m-flat m-warning">virtual</span></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a1568152317d12a0b9b777235dfa56591" class="m-doc">updateValue</a>(</span><span class="m-doc-wrap">) -&gt; char <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd>updateValue A virtual function for updating the vertex value. The implementation is provided in derived classes</dd>
-            <dt id="a2fc1f6fbcf74f8670531d00173bc363c">
-              <span class="m-doc-wrap-bumper">void <a href="#a2fc1f6fbcf74f8670531d00173bc363c" class="m-doc-self">updateLevel</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">virtual</span></span>
+            <dt id="af840d32c1a17b049785b28f5f2f46a00">
+              <span class="m-doc-wrap-bumper">void <a href="#af840d32c1a17b049785b28f5f2f46a00" class="m-doc-self">updateLevel</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd>updateLevel It is designed to update the level of the current vertex in a directed graph based on the levels of its input connections</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ad3c859c10d273b7c74bc887687e0b85d" class="m-doc">log</a>(</span><span class="m-doc-wrap">el::base::type::ostream_t&amp; os) const <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd>log Used for easylogging++</dd>
           </dl>
         </section>
         <section>
@@ -169,9 +173,9 @@
               </tbody>
             </table>
           </div></section>
-          <section class="m-doc-details" id="af27b2c9067b9861882544ff172036be3"><div>
+          <section class="m-doc-details" id="a1568152317d12a0b9b777235dfa56591"><div>
             <h3>
-              <span class="m-doc-wrap-bumper">char GraphVertexInput::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#af27b2c9067b9861882544ff172036be3" class="m-doc-self">updateValue</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">virtual</span></span></span>
+              <span class="m-doc-wrap-bumper">char GraphVertexInput::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a1568152317d12a0b9b777235dfa56591" class="m-doc-self">updateValue</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
             </h3>
             <p>updateValue A virtual function for updating the vertex value. The implementation is provided in derived classes</p>
             <table class="m-table m-fullwidth m-flat">
@@ -188,6 +192,23 @@
                 <tr>
                   <td>std::invalid_argument</td>
                   <td>if any input connection is invalid</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ad3c859c10d273b7c74bc887687e0b85d"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void GraphVertexInput::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ad3c859c10d273b7c74bc887687e0b85d" class="m-doc-self">log</a>(</span><span class="m-doc-wrap">el::base::type::ostream_t&amp; os) const <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <p>log Used for easylogging++</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">os</td>
+                  <td>Stream for easylogging</td>
                 </tr>
               </tbody>
             </table>
