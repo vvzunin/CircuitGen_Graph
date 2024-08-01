@@ -28,7 +28,7 @@ add_link_options(-fsanitize=address)
 enable_testing()
 
 configure_file(
-  ../external/easyloggingpp/easylogging++.conf
+  ../easylogging++.conf
   easylogging++.conf
   COPYONLY)
 
@@ -38,7 +38,6 @@ configure_file(
 add_executable(
   CircuitGenGraph_test_GraphVertexConstantTests 
   src/GraphVertexConstantTests.cpp
-  ../external/easyloggingpp/easylogging++.cc
 )
 
 target_link_libraries(CircuitGenGraph_test_GraphVertexConstantTests PRIVATE GTest::gtest_main)
@@ -48,7 +47,6 @@ target_include_directories(
   CircuitGenGraph_test_GraphVertexConstantTests ${warning_guard}
   PUBLIC
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../src>"
-    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../external/easyloggingpp>"
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>"
 )
 add_test(NAME GraphVertexConstantTests COMMAND CircuitGenGraph_test_GraphVertexConstantTests)
@@ -57,7 +55,6 @@ add_test(NAME GraphVertexConstantTests COMMAND CircuitGenGraph_test_GraphVertexC
 add_executable(
   CircuitGenGraph_test_GraphVertexGatesTests
   src/GraphVertexGatesTests.cpp
-  ../external/easyloggingpp/easylogging++.cc
 )
 
 target_link_libraries(CircuitGenGraph_test_GraphVertexGatesTests PRIVATE GTest::gtest_main )
@@ -67,7 +64,6 @@ target_include_directories(
   CircuitGenGraph_test_GraphVertexGatesTests ${warning_guard}
   PUBLIC
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../src>"
-    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../external/easyloggingpp>"
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>"
 )
 add_test(NAME GraphVertexGatesTests COMMAND CircuitGenGraph_test_GraphVertexGatesTests)
@@ -76,7 +72,6 @@ add_test(NAME GraphVertexGatesTests COMMAND CircuitGenGraph_test_GraphVertexGate
 add_executable(
   CircuitGenGraph_test_GraphVertexInputTests
   src/GraphVertexInputTests.cpp
-  ../external/easyloggingpp/easylogging++.cc
 )
 
 target_link_libraries(CircuitGenGraph_test_GraphVertexInputTests PRIVATE GTest::gtest_main )
@@ -86,7 +81,6 @@ target_include_directories(
   CircuitGenGraph_test_GraphVertexInputTests ${warning_guard}
   PUBLIC
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../src>"
-    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../external/easyloggingpp>"
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>"
 )
 add_test(NAME GraphVertexInputTests COMMAND CircuitGenGraph_test_GraphVertexInputTests)
@@ -95,7 +89,6 @@ add_test(NAME GraphVertexInputTests COMMAND CircuitGenGraph_test_GraphVertexInpu
 add_executable(
   CircuitGenGraph_test_GraphVertexOutputTests
   src/GraphVertexOutputTests.cpp
-  ../external/easyloggingpp/easylogging++.cc
 )
 
 target_link_libraries(CircuitGenGraph_test_GraphVertexOutputTests PRIVATE GTest::gtest_main )
@@ -105,7 +98,6 @@ target_include_directories(
   CircuitGenGraph_test_GraphVertexOutputTests ${warning_guard}
   PUBLIC
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../src>"
-    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../external/easyloggingpp>"
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>"
 )
 add_test(NAME GraphVertexOutputTests COMMAND CircuitGenGraph_test_GraphVertexOutputTests)
@@ -114,7 +106,6 @@ add_test(NAME GraphVertexOutputTests COMMAND CircuitGenGraph_test_GraphVertexOut
 add_executable(
   CircuitGenGraph_test_GraphVertexSubGraphTests
   src/GraphVertexSubGraphTests.cpp
-  ../external/easyloggingpp/easylogging++.cc
 )
 
 target_link_libraries(CircuitGenGraph_test_GraphVertexSubGraphTests PRIVATE GTest::gtest_main )
@@ -124,7 +115,6 @@ target_include_directories(
   CircuitGenGraph_test_GraphVertexSubGraphTests ${warning_guard}
   PUBLIC
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../src>"
-    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../external/easyloggingpp>"
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>"
 )
 add_test(NAME GraphVertexSubGraphTests COMMAND CircuitGenGraph_test_GraphVertexSubGraphTests)
@@ -134,7 +124,6 @@ add_test(NAME GraphVertexSubGraphTests COMMAND CircuitGenGraph_test_GraphVertexS
 add_executable(
   CircuitGenGraph_test_OrientedGraphTests
   src/OrientedGraphTests.cpp
-  ../external/easyloggingpp/easylogging++.cc
 )
 
 target_link_libraries(CircuitGenGraph_test_OrientedGraphTests PRIVATE GTest::gtest_main )
@@ -144,7 +133,6 @@ target_include_directories(
   CircuitGenGraph_test_OrientedGraphTests ${warning_guard}
   PUBLIC
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../src>"
-    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../external/easyloggingpp>"
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>"
 )
 add_test(NAME OrientedGraphTests COMMAND CircuitGenGraph_test_OrientedGraphTests)

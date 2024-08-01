@@ -3,7 +3,7 @@
 #include <string>
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
-#include "easylogging++.h"
+#include "logger/easylogging++.h"
 
 std::atomic_uint64_t GraphVertexBase::d_count = 0;
 

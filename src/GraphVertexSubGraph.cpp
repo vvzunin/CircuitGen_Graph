@@ -4,7 +4,7 @@
 #include <unordered_set>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
-#include "easylogging++.h"
+#include "logger/easylogging++.h"
 
 GraphVertexSubGraph::GraphVertexSubGraph(
     GraphPtr i_subGraph,

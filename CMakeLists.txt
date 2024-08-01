@@ -10,6 +10,9 @@ project(
   LANGUAGES CXX
 )
 
+include(ExternalProject)
+include(FetchContent)
+
 include(cmake/project-is-top-level.cmake)
 include(cmake/variables.cmake)
 
@@ -25,8 +28,8 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/OrientedGraph.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultSettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultAuxiliaryMethods.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/easyloggingpp/easylogging++.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/easyloggingpp/easylogging++.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/logger/easylogging++.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/logger/easylogging++.h
 )
 
 set(PUBLIC_HEADERS
@@ -53,16 +56,12 @@ include(GNUInstallDirs)
 
 target_include_directories(
     ${PROJECT_NAME} ${warning_guard}
-    PRIVATE
-    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/external/easyloggingpp>"
     PUBLIC
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
 )
 
 target_include_directories(
     ${PROJECT_NAME} SYSTEM
-    PRIVATE
-    "\$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/external/easyloggingpp>"
     PUBLIC
     "\$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
 )
@@ -72,7 +71,6 @@ target_include_directories(${PROJECT_NAME}
 
     # where the library itself will look for its internal headers
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/easyloggingpp
     PUBLIC
 
     # where top-level project will look for the library's public headers
@@ -83,7 +81,6 @@ target_include_directories(${PROJECT_NAME}
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
-include_directories(${CMAKE_SOURCE_DIR}/external/easyloggingpp)
 
 set_target_properties(
     ${PROJECT_NAME} PROPERTIES 
