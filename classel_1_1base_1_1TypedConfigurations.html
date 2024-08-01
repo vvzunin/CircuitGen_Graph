@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>el::base::TypedConfigurations class | CircuitGenGraph</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
+  <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
+  <link rel="icon" href="favicon-dark.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#22272e" />
+</head>
+<body>
+<header><nav id="navigation">
+  <div class="m-container">
+    <div class="m-row">
+      <a href="index.html" id="m-navbar-brand" class="m-col-t-8 m-col-m-none m-left-m">CircuitGenGraph</a>
+      <div class="m-col-t-4 m-hide-m m-text-right m-nopadr">
+        <a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+          <path id="m-doc-search-icon-path" d="m6 0c-3.31 0-6 2.69-6 6 0 3.31 2.69 6 6 6 1.49 0 2.85-0.541 3.89-1.44-0.0164 0.338 0.147 0.759 0.5 1.15l3.22 3.79c0.552 0.614 1.45 0.665 2 0.115 0.55-0.55 0.499-1.45-0.115-2l-3.79-3.22c-0.392-0.353-0.812-0.515-1.15-0.5 0.895-1.05 1.44-2.41 1.44-3.89 0-3.31-2.69-6-6-6zm0 1.56a4.44 4.44 0 0 1 4.44 4.44 4.44 4.44 0 0 1-4.44 4.44 4.44 4.44 0 0 1-4.44-4.44 4.44 4.44 0 0 1 4.44-4.44z"/>
+        </svg></a>
+        <a id="m-navbar-show" href="#navigation" title="Show navigation"></a>
+        <a id="m-navbar-hide" href="#" title="Hide navigation"></a>
+      </div>
+      <div id="m-navbar-collapse" class="m-col-t-12 m-show-m m-col-m-none m-right-m">
+        <div class="m-row">
+          <ol class="m-col-t-6 m-col-m-none">
+            <li>
+              <a href="pages.html">Pages</a>
+              <ol>
+                <li><a href="about.html">About</a></li>
+              </ol>
+            </li>
+            <li><a href="namespaces.html">Namespaces</a></li>
+          </ol>
+          <ol class="m-col-t-6 m-col-m-none" start="3">
+            <li><a href="annotated.html">Classes</a></li>
+            <li><a href="files.html">Files</a></li>
+            <li class="m-show-m"><a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+              <use href="#m-doc-search-icon-path" />
+            </svg></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav></header>
+<main><article>
+  <div class="m-container m-container-inflatable">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <h1>
+          <span class="m-breadcrumb"><a href="namespaceel.html">el</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespaceel_1_1base.html">base</a>::<wbr/></span>TypedConfigurations <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="easylogging_09_09_8h.html">&lt;easylogging++.h&gt;</a></div>
+        </h1>
+        <p><a href="classel_1_1Configurations.html" class="m-doc">Configurations</a> with data types.</p>
+        <div class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#base-classes">Base classes</a></li>
+                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
+                <li><a href="#pub-methods">Public functions</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+<p>@detail <a href="classel_1_1Configurations.html" class="m-doc">el::<wbr />Configurations</a> have string based values. This is whats used internally in order to read correct configurations. This is to perform faster while writing logs using correct configurations.</p><p>This is thread safe and final class containing non-virtual destructor (means nothing should inherit this class)</p>
+        <section id="base-classes">
+          <h2><a href="#base-classes">Base classes</a></h2>
+          <dl class="m-doc">
+            <dt>
+              class <a href="classel_1_1base_1_1threading_1_1ThreadSafe.html" class="m-doc">ThreadSafe</a>
+            </dt>
+            <dd>Base of thread safe class, this class is inheritable-only.</dd>
+          </dl>
+        </section>
+        <section id="typeless-methods">
+          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#a5a6139bac3a6d2bf4be8916be240fe8a" class="m-doc">TypedConfigurations</a>(</span><span class="m-doc-wrap"><a href="classel_1_1Configurations.html" class="m-doc">Configurations</a>* configurations,
+              <a href="namespaceel_1_1base.html#aff0a4f2494ed737ffa5e45c9abb57e97" class="m-doc">LogStreamsReferenceMapPtr</a> logStreamsReference)</span>
+            </dt>
+            <dd>Constructor to initialize (construct) the object off <a href="classel_1_1Configurations.html" class="m-doc">el::<wbr />Configurations</a>.</dd>
+            <dt id="ae7b346e5d32305d4957bc6c564409090">
+              <span class="m-doc-wrap-bumper"><a href="#ae7b346e5d32305d4957bc6c564409090" class="m-doc-self">TypedConfigurations</a>(</span><span class="m-doc-wrap">const <a href="classel_1_1base_1_1TypedConfigurations.html" class="m-doc">TypedConfigurations</a>&amp; other)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a43106121731b69829ad9f6d6035b1e0b">
+              <span class="m-doc-wrap-bumper"><a href="#a43106121731b69829ad9f6d6035b1e0b" class="m-doc-self">~TypedConfigurations</a>(</span><span class="m-doc-wrap">void) <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pub-methods">
+          <h2><a href="#pub-methods">Public functions</a></h2>
+          <dl class="m-doc">
+            <dt id="a52bd4cc5e6684bc40391c096a8df3c2d">
+              <span class="m-doc-wrap-bumper">auto <a href="#a52bd4cc5e6684bc40391c096a8df3c2d" class="m-doc-self">configurations</a>(</span><span class="m-doc-wrap">void) const -&gt; const <a href="classel_1_1Configurations.html" class="m-doc">Configurations</a>*</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a924b35df988103c737907cc7993c3c1c">
+              <span class="m-doc-wrap-bumper">auto <a href="#a924b35df988103c737907cc7993c3c1c" class="m-doc-self">enabled</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level) -&gt; bool</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a20b9a1bd152cad3b72b558f97de3876b">
+              <span class="m-doc-wrap-bumper">auto <a href="#a20b9a1bd152cad3b72b558f97de3876b" class="m-doc-self">toFile</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level) -&gt; bool</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a6e989a8496b9e08e6e8c9ac4d3fe5b1e">
+              <span class="m-doc-wrap-bumper">auto <a href="#a6e989a8496b9e08e6e8c9ac4d3fe5b1e" class="m-doc-self">filename</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level) -&gt; const std::string&amp;</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="aeaa7bf7448319bc41e4e226124288c7e">
+              <span class="m-doc-wrap-bumper">auto <a href="#aeaa7bf7448319bc41e4e226124288c7e" class="m-doc-self">toStandardOutput</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level) -&gt; bool</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a05b8ea32f63c3246a68dbc9085b7e847">
+              <span class="m-doc-wrap-bumper">auto <a href="#a05b8ea32f63c3246a68dbc9085b7e847" class="m-doc-self">logFormat</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level) -&gt; const <a href="classel_1_1base_1_1LogFormat.html" class="m-doc">base::<wbr />LogFormat</a>&amp;</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a674125948caf78b836a5b4f38561c8cc">
+              <span class="m-doc-wrap-bumper">auto <a href="#a674125948caf78b836a5b4f38561c8cc" class="m-doc-self">subsecondPrecision</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level = <a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36a4cc6684df7b4a92b1dec6fce3264fac8" class="m-doc">Level::<wbr />Global</a>) -&gt; const <a href="classel_1_1base_1_1SubsecondPrecision.html" class="m-doc">base::<wbr />SubsecondPrecision</a>&amp;</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="afd65ea428144f620d8514073341db670">
+              <span class="m-doc-wrap-bumper">auto <a href="#afd65ea428144f620d8514073341db670" class="m-doc-self">millisecondsWidth</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level = <a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36a4cc6684df7b4a92b1dec6fce3264fac8" class="m-doc">Level::<wbr />Global</a>) -&gt; const <a href="namespaceel_1_1base.html#abbc234f4907eccec2673dfc6efaa5925" class="m-doc">base::<wbr />MillisecondsWidth</a>&amp;</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a0cef785df86dbfe17a27c5b78ed3e5da">
+              <span class="m-doc-wrap-bumper">auto <a href="#a0cef785df86dbfe17a27c5b78ed3e5da" class="m-doc-self">performanceTracking</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level = <a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36a4cc6684df7b4a92b1dec6fce3264fac8" class="m-doc">Level::<wbr />Global</a>) -&gt; bool</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="af39c020c90e67b5f817f318fcb11e611">
+              <span class="m-doc-wrap-bumper">auto <a href="#af39c020c90e67b5f817f318fcb11e611" class="m-doc-self">fileStream</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level) -&gt; <a href="namespaceel_1_1base_1_1type.html#a620c830ead75d26b45c060c211ee2685" class="m-doc">base::<wbr />type::<wbr />fstream_t</a>*</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="aa48c0568be8fd177f1d463b1e7831f75">
+              <span class="m-doc-wrap-bumper">auto <a href="#aa48c0568be8fd177f1d463b1e7831f75" class="m-doc-self">maxLogFileSize</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level) -&gt; std::size_t</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ae8710257d7f8bc20c2183a3a4404ebaf">
+              <span class="m-doc-wrap-bumper">auto <a href="#ae8710257d7f8bc20c2183a3a4404ebaf" class="m-doc-self">logFlushThreshold</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level) -&gt; std::size_t</span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a5a6139bac3a6d2bf4be8916be240fe8a"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"> el::<wbr />base::<wbr />TypedConfigurations::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a5a6139bac3a6d2bf4be8916be240fe8a" class="m-doc-self">TypedConfigurations</a>(</span><span class="m-doc-wrap"><a href="classel_1_1Configurations.html" class="m-doc">Configurations</a>* configurations,
+              <a href="namespaceel_1_1base.html#aff0a4f2494ed737ffa5e45c9abb57e97" class="m-doc">LogStreamsReferenceMapPtr</a> logStreamsReference)</span></span>
+            </h3>
+            <p>Constructor to initialize (construct) the object off <a href="classel_1_1Configurations.html" class="m-doc">el::<wbr />Configurations</a>.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">configurations</td>
+                  <td><a href="classel_1_1Configurations.html" class="m-doc">Configurations</a> pointer/reference to base this typed configurations off.</td>
+                </tr>
+                <tr>
+                  <td>logStreamsReference</td>
+                  <td>Use ELPP-&gt;registeredLoggers()-&gt;logStreamsReference()</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+        </section>
+      </div>
+    </div>
+  </div>
+</article></main>
+<div class="m-doc-search" id="search">
+  <a href="#!" onclick="return hideSearch()"></a>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-m-8 m-push-m-2">
+        <div class="m-doc-search-header m-text m-small">
+          <div><span class="m-label m-default">Tab</span> / <span class="m-label m-default">T</span> to search, <span class="m-label m-default">Esc</span> to close</div>
+          <div id="search-symbolcount">&hellip;</div>
+        </div>
+        <div class="m-doc-search-content">
+          <form>
+            <input type="search" name="q" id="search-input" placeholder="Loading &hellip;" disabled="disabled" autofocus="autofocus" autocomplete="off" spellcheck="false" />
+          </form>
+          <noscript class="m-text m-danger m-text-center">Unlike everything else in the docs, the search functionality <em>requires</em> JavaScript.</noscript>
+          <div id="search-help" class="m-text m-dim m-text-center">
+            <p class="m-noindent">Search for symbols, directories, files, pages or
+            modules. You can omit any prefix from the symbol or file path; adding a
+            <code>:</code> or <code>/</code> suffix lists all members of given symbol or
+            directory.</p>
+            <p class="m-noindent">Use <span class="m-label m-dim">&darr;</span>
+            / <span class="m-label m-dim">&uarr;</span> to navigate through the list,
+            <span class="m-label m-dim">Enter</span> to go.
+            <span class="m-label m-dim">Tab</span> autocompletes common prefix, you can
+            copy a link to the result using <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">L</span> while <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">M</span> produces a Markdown link.</p>
+          </div>
+          <div id="search-notfound" class="m-text m-warning m-text-center">Sorry, nothing was found.</div>
+          <ul id="search-results"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="search-v1.js"></script>
+<script src="searchdata-v1.js" async="async"></script>
+<footer><nav>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <p>CircuitGenGraph. Created with <a href="https://doxygen.org/">Doxygen</a> 1.9.1 and <a href="https://mcss.mosra.cz/">m.css</a>.</p>
+      </div>
+    </div>
+  </div>
+</nav></footer>
+</body>
+</html>

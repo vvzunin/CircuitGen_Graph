@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>el::base::utils::AbstractRegistry class | CircuitGenGraph</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
+  <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
+  <link rel="icon" href="favicon-dark.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#22272e" />
+</head>
+<body>
+<header><nav id="navigation">
+  <div class="m-container">
+    <div class="m-row">
+      <a href="index.html" id="m-navbar-brand" class="m-col-t-8 m-col-m-none m-left-m">CircuitGenGraph</a>
+      <div class="m-col-t-4 m-hide-m m-text-right m-nopadr">
+        <a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+          <path id="m-doc-search-icon-path" d="m6 0c-3.31 0-6 2.69-6 6 0 3.31 2.69 6 6 6 1.49 0 2.85-0.541 3.89-1.44-0.0164 0.338 0.147 0.759 0.5 1.15l3.22 3.79c0.552 0.614 1.45 0.665 2 0.115 0.55-0.55 0.499-1.45-0.115-2l-3.79-3.22c-0.392-0.353-0.812-0.515-1.15-0.5 0.895-1.05 1.44-2.41 1.44-3.89 0-3.31-2.69-6-6-6zm0 1.56a4.44 4.44 0 0 1 4.44 4.44 4.44 4.44 0 0 1-4.44 4.44 4.44 4.44 0 0 1-4.44-4.44 4.44 4.44 0 0 1 4.44-4.44z"/>
+        </svg></a>
+        <a id="m-navbar-show" href="#navigation" title="Show navigation"></a>
+        <a id="m-navbar-hide" href="#" title="Hide navigation"></a>
+      </div>
+      <div id="m-navbar-collapse" class="m-col-t-12 m-show-m m-col-m-none m-right-m">
+        <div class="m-row">
+          <ol class="m-col-t-6 m-col-m-none">
+            <li>
+              <a href="pages.html">Pages</a>
+              <ol>
+                <li><a href="about.html">About</a></li>
+              </ol>
+            </li>
+            <li><a href="namespaces.html">Namespaces</a></li>
+          </ol>
+          <ol class="m-col-t-6 m-col-m-none" start="3">
+            <li><a href="annotated.html">Classes</a></li>
+            <li><a href="files.html">Files</a></li>
+            <li class="m-show-m"><a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+              <use href="#m-doc-search-icon-path" />
+            </svg></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav></header>
+<main><article>
+  <div class="m-container m-container-inflatable">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <h1>
+          <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="easylogging_09_09_8h.html">&lt;easylogging++.h&gt;</a></div>
+          <div class="m-doc-template">template&lt;typename T_Ptr, typename Container&gt;</div>
+          <span class="m-breadcrumb"><a href="namespaceel.html">el</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespaceel_1_1base.html">base</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespaceel_1_1base_1_1utils.html">utils</a>::<wbr/></span>AbstractRegistry <span class="m-thin">class</span>
+        </h1>
+        <p>Abstract registry (aka repository) that provides basic interface for pointer repository specified by T_Ptr type.</p>
+        <div class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#base-classes">Base classes</a></li>
+                <li><a href="#derived-classes">Derived classes</a></li>
+                <li><a href="#pub-types">Public types</a></li>
+                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
+                <li><a href="#pub-methods">Public functions</a></li>
+                <li><a href="#pro-methods">Protected functions</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+<p>@detail Most of the functions are virtual final methods but anything implementing this abstract class should implement <a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html#a19223bc1fea48dbe6b47b4879aa4672f" class="m-doc">unregisterAll()</a> and <a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html#aaf42dab7089a9b1198e2920983ca82bb" class="m-doc">deepCopy(const AbstractRegistry&lt;T_<wbr />Ptr, Container&gt;&amp;)</a> and write registerNew() method according to container and few more methods; get() to find element, unregister() to unregister single entry. Please note that this is thread-unsafe and should also implement thread-safety mechanisms in implementation.</p>
+        <section id="base-classes">
+          <h2><a href="#base-classes">Base classes</a></h2>
+          <dl class="m-doc">
+            <dt>
+              class <a href="classel_1_1base_1_1threading_1_1ThreadSafe.html" class="m-doc">el::base::threading::ThreadSafe</a>
+            </dt>
+            <dd>Base of thread safe class, this class is inheritable-only.</dd>
+          </dl>
+        </section>
+        <section id="derived-classes">
+          <h2><a href="#derived-classes">Derived classes</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <div class="m-doc-template">template&lt;typename T_Ptr, typename T_Key = const char*&gt;</div>
+              class <a href="classel_1_1base_1_1utils_1_1Registry.html" class="m-doc">Registry</a>
+            </dt>
+            <dd>A pointer registry mechanism to manage memory and provide search functionalities. (non-predicate version)</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;typename T_Ptr, typename Pred&gt;</div>
+              class <a href="classel_1_1base_1_1utils_1_1RegistryWithPred.html" class="m-doc">RegistryWithPred</a>
+            </dt>
+            <dd>A pointer registry mechanism to manage memory and provide search functionalities. (predicate version)</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;typename T_Ptr, typename Pred&gt;</div>
+              class <a href="classel_1_1base_1_1utils_1_1RegistryWithPred.html" class="m-doc">RegistryWithPred</a>
+            </dt>
+            <dd>A pointer registry mechanism to manage memory and provide search functionalities. (predicate version)</dd>
+          </dl>
+        </section>
+        <section id="pub-types">
+          <h2><a href="#pub-types">Public types</a></h2>
+          <dl class="m-doc">
+            <dt id="a58d0536c748633afd3f7c237b63a9a7c">
+              using <a href="#a58d0536c748633afd3f7c237b63a9a7c" class="m-doc-self">iterator</a> = Container::iterator
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a3bbf19b112c067cb1a02a82b003cc7e2">
+              using <a href="#a3bbf19b112c067cb1a02a82b003cc7e2" class="m-doc-self">const_iterator</a> = Container::const_iterator
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="typeless-methods">
+          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
+          <dl class="m-doc">
+            <dt id="afe13c67ebd1ed1aa72845926894dffa2">
+              <span class="m-doc-wrap-bumper"><a href="#afe13c67ebd1ed1aa72845926894dffa2" class="m-doc-self">AbstractRegistry</a>(</span><span class="m-doc-wrap">void)</span>
+            </dt>
+            <dd>Default constructor.</dd>
+            <dt id="a9f468010439d491e90419f9334afcdba">
+              <span class="m-doc-wrap-bumper"><a href="#a9f468010439d491e90419f9334afcdba" class="m-doc-self">AbstractRegistry</a>(</span><span class="m-doc-wrap"><a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html" class="m-doc">AbstractRegistry</a>&amp;&amp; sr)</span>
+            </dt>
+            <dd>Move constructor that is useful for base classes.</dd>
+            <dt id="a6ee2c4166629bb16515cc00b738dee65">
+              <span class="m-doc-wrap-bumper"><a href="#a6ee2c4166629bb16515cc00b738dee65" class="m-doc-self">~AbstractRegistry</a>(</span><span class="m-doc-wrap">void) <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pub-methods">
+          <h2><a href="#pub-methods">Public functions</a></h2>
+          <dl class="m-doc">
+            <dt id="ac3e648dc0caa8914f8604650f00bc94b">
+              <span class="m-doc-wrap-bumper">auto <a href="#ac3e648dc0caa8914f8604650f00bc94b" class="m-doc-self">operator==</a>(</span><span class="m-doc-wrap">const <a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html" class="m-doc">AbstractRegistry</a>&lt;T_Ptr, Container&gt;&amp; other) -&gt; bool</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a35de8807521651c85acb26532a2623e1">
+              <span class="m-doc-wrap-bumper">auto <a href="#a35de8807521651c85acb26532a2623e1" class="m-doc-self">operator!=</a>(</span><span class="m-doc-wrap">const <a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html" class="m-doc">AbstractRegistry</a>&lt;T_Ptr, Container&gt;&amp; other) -&gt; bool</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a5727a3cadeee6a2b10d8f46fb91956e7">
+              <span class="m-doc-wrap-bumper">auto <a href="#a5727a3cadeee6a2b10d8f46fb91956e7" class="m-doc-self">operator=</a>(</span><span class="m-doc-wrap"><a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html" class="m-doc">AbstractRegistry</a>&amp;&amp; sr) -&gt; <a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html" class="m-doc">AbstractRegistry</a>&amp;</span>
+            </dt>
+            <dd>Assignment move operator.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a4ad971b1dddff996d327452d852e55b2" class="m-doc">begin</a>(</span><span class="m-doc-wrap">void) ELPP_FINAL -&gt; <a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html#a58d0536c748633afd3f7c237b63a9a7c" class="m-doc">iterator</a> <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a67c40207c171f23ad50a71db819e84f9" class="m-doc">end</a>(</span><span class="m-doc-wrap">void) ELPP_FINAL -&gt; <a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html#a58d0536c748633afd3f7c237b63a9a7c" class="m-doc">iterator</a> <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a37f743184e808d7c0028e21e0d0898bb" class="m-doc">cbegin</a>(</span><span class="m-doc-wrap">void) const ELPP_FINAL -&gt; <a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html#a3bbf19b112c067cb1a02a82b003cc7e2" class="m-doc">const_<wbr />iterator</a> <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ad3ee081b4b25c5d77f971f949bdb9158" class="m-doc">cend</a>(</span><span class="m-doc-wrap">void) const ELPP_FINAL -&gt; <a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html#a3bbf19b112c067cb1a02a82b003cc7e2" class="m-doc">const_<wbr />iterator</a> <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a43ff6484b778c298416c482c07a4df3f" class="m-doc">empty</a>(</span><span class="m-doc-wrap">void) const ELPP_FINAL -&gt; bool <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a58a7b8ea964bdf6008701dcfb6609ca5" class="m-doc">size</a>(</span><span class="m-doc-wrap">void) const ELPP_FINAL -&gt; std::size_t <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd></dd>
+            <dt id="a072859d3728a75f910c2898f62fd12da">
+              <span class="m-doc-wrap-bumper">auto <a href="#a072859d3728a75f910c2898f62fd12da" class="m-doc-self">list</a>(</span><span class="m-doc-wrap">void) ELPP_FINAL -&gt; Container&amp; <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd>Returns underlying container by reference.</dd>
+            <dt id="a1c3da2af9177cbfae6f10b9e5dbe615c">
+              <span class="m-doc-wrap-bumper">auto <a href="#a1c3da2af9177cbfae6f10b9e5dbe615c" class="m-doc-self">list</a>(</span><span class="m-doc-wrap">void) const ELPP_FINAL -&gt; const Container&amp; <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd>Returns underlying container by constant reference.</dd>
+            <dt id="a19223bc1fea48dbe6b47b4879aa4672f">
+              <span class="m-doc-wrap-bumper">void <a href="#a19223bc1fea48dbe6b47b4879aa4672f" class="m-doc-self">unregisterAll</a>(</span><span class="m-doc-wrap">void) <span class="m-label m-flat m-warning">pure virtual</span></span>
+            </dt>
+            <dd>Unregisters all the pointers from current repository.</dd>
+          </dl>
+        </section>
+        <section id="pro-methods">
+          <h2><a href="#pro-methods">Protected functions</a></h2>
+          <dl class="m-doc">
+            <dt id="aaf42dab7089a9b1198e2920983ca82bb">
+              <span class="m-doc-wrap-bumper">void <a href="#aaf42dab7089a9b1198e2920983ca82bb" class="m-doc-self">deepCopy</a>(</span><span class="m-doc-wrap">const <a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html" class="m-doc">AbstractRegistry</a>&lt;T_Ptr, Container&gt;&amp;) <span class="m-label m-flat m-warning">pure virtual</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a529677fb42e78d03c36cdea49f8877c9">
+              <span class="m-doc-wrap-bumper">void <a href="#a529677fb42e78d03c36cdea49f8877c9" class="m-doc-self">reinitDeepCopy</a>(</span><span class="m-doc-wrap">const <a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html" class="m-doc">AbstractRegistry</a>&lt;T_Ptr, Container&gt;&amp; sr)</span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a4ad971b1dddff996d327452d852e55b2"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename T_Ptr, typename Container&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html#a58d0536c748633afd3f7c237b63a9a7c" class="m-doc">iterator</a> el::<wbr />base::<wbr />utils::<wbr />AbstractRegistry&lt;T_Ptr, Container&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a4ad971b1dddff996d327452d852e55b2" class="m-doc-self">begin</a>(</span><span class="m-doc-wrap">void) ELPP_FINAL <span class="m-label m-warning">virtual</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>Iterator pointer from start of repository</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a67c40207c171f23ad50a71db819e84f9"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename T_Ptr, typename Container&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html#a58d0536c748633afd3f7c237b63a9a7c" class="m-doc">iterator</a> el::<wbr />base::<wbr />utils::<wbr />AbstractRegistry&lt;T_Ptr, Container&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a67c40207c171f23ad50a71db819e84f9" class="m-doc-self">end</a>(</span><span class="m-doc-wrap">void) ELPP_FINAL <span class="m-label m-warning">virtual</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>Iterator pointer from end of repository</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a37f743184e808d7c0028e21e0d0898bb"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename T_Ptr, typename Container&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html#a3bbf19b112c067cb1a02a82b003cc7e2" class="m-doc">const_<wbr />iterator</a> el::<wbr />base::<wbr />utils::<wbr />AbstractRegistry&lt;T_Ptr, Container&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a37f743184e808d7c0028e21e0d0898bb" class="m-doc-self">cbegin</a>(</span><span class="m-doc-wrap">void) const ELPP_FINAL <span class="m-label m-warning">virtual</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>Constant iterator pointer from start of repository</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ad3ee081b4b25c5d77f971f949bdb9158"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename T_Ptr, typename Container&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a href="classel_1_1base_1_1utils_1_1AbstractRegistry.html#a3bbf19b112c067cb1a02a82b003cc7e2" class="m-doc">const_<wbr />iterator</a> el::<wbr />base::<wbr />utils::<wbr />AbstractRegistry&lt;T_Ptr, Container&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ad3ee081b4b25c5d77f971f949bdb9158" class="m-doc-self">cend</a>(</span><span class="m-doc-wrap">void) const ELPP_FINAL <span class="m-label m-warning">virtual</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>End of repository</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a43ff6484b778c298416c482c07a4df3f"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename T_Ptr, typename Container&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">bool el::<wbr />base::<wbr />utils::<wbr />AbstractRegistry&lt;T_Ptr, Container&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a43ff6484b778c298416c482c07a4df3f" class="m-doc-self">empty</a>(</span><span class="m-doc-wrap">void) const ELPP_FINAL <span class="m-label m-warning">virtual</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>Whether or not repository is empty</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a58a7b8ea964bdf6008701dcfb6609ca5"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename T_Ptr, typename Container&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">std::size_t el::<wbr />base::<wbr />utils::<wbr />AbstractRegistry&lt;T_Ptr, Container&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a58a7b8ea964bdf6008701dcfb6609ca5" class="m-doc-self">size</a>(</span><span class="m-doc-wrap">void) const ELPP_FINAL <span class="m-label m-warning">virtual</span></span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>Size of repository</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+        </section>
+      </div>
+    </div>
+  </div>
+</article></main>
+<div class="m-doc-search" id="search">
+  <a href="#!" onclick="return hideSearch()"></a>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-m-8 m-push-m-2">
+        <div class="m-doc-search-header m-text m-small">
+          <div><span class="m-label m-default">Tab</span> / <span class="m-label m-default">T</span> to search, <span class="m-label m-default">Esc</span> to close</div>
+          <div id="search-symbolcount">&hellip;</div>
+        </div>
+        <div class="m-doc-search-content">
+          <form>
+            <input type="search" name="q" id="search-input" placeholder="Loading &hellip;" disabled="disabled" autofocus="autofocus" autocomplete="off" spellcheck="false" />
+          </form>
+          <noscript class="m-text m-danger m-text-center">Unlike everything else in the docs, the search functionality <em>requires</em> JavaScript.</noscript>
+          <div id="search-help" class="m-text m-dim m-text-center">
+            <p class="m-noindent">Search for symbols, directories, files, pages or
+            modules. You can omit any prefix from the symbol or file path; adding a
+            <code>:</code> or <code>/</code> suffix lists all members of given symbol or
+            directory.</p>
+            <p class="m-noindent">Use <span class="m-label m-dim">&darr;</span>
+            / <span class="m-label m-dim">&uarr;</span> to navigate through the list,
+            <span class="m-label m-dim">Enter</span> to go.
+            <span class="m-label m-dim">Tab</span> autocompletes common prefix, you can
+            copy a link to the result using <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">L</span> while <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">M</span> produces a Markdown link.</p>
+          </div>
+          <div id="search-notfound" class="m-text m-warning m-text-center">Sorry, nothing was found.</div>
+          <ul id="search-results"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="search-v1.js"></script>
+<script src="searchdata-v1.js" async="async"></script>
+<footer><nav>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <p>CircuitGenGraph. Created with <a href="https://doxygen.org/">Doxygen</a> 1.9.1 and <a href="https://mcss.mosra.cz/">m.css</a>.</p>
+      </div>
+    </div>
+  </div>
+</nav></footer>
+</body>
+</html>

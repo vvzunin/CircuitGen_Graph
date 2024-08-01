@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>el::Configurations class | CircuitGenGraph</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
+  <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
+  <link rel="icon" href="favicon-dark.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#22272e" />
+</head>
+<body>
+<header><nav id="navigation">
+  <div class="m-container">
+    <div class="m-row">
+      <a href="index.html" id="m-navbar-brand" class="m-col-t-8 m-col-m-none m-left-m">CircuitGenGraph</a>
+      <div class="m-col-t-4 m-hide-m m-text-right m-nopadr">
+        <a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+          <path id="m-doc-search-icon-path" d="m6 0c-3.31 0-6 2.69-6 6 0 3.31 2.69 6 6 6 1.49 0 2.85-0.541 3.89-1.44-0.0164 0.338 0.147 0.759 0.5 1.15l3.22 3.79c0.552 0.614 1.45 0.665 2 0.115 0.55-0.55 0.499-1.45-0.115-2l-3.79-3.22c-0.392-0.353-0.812-0.515-1.15-0.5 0.895-1.05 1.44-2.41 1.44-3.89 0-3.31-2.69-6-6-6zm0 1.56a4.44 4.44 0 0 1 4.44 4.44 4.44 4.44 0 0 1-4.44 4.44 4.44 4.44 0 0 1-4.44-4.44 4.44 4.44 0 0 1 4.44-4.44z"/>
+        </svg></a>
+        <a id="m-navbar-show" href="#navigation" title="Show navigation"></a>
+        <a id="m-navbar-hide" href="#" title="Hide navigation"></a>
+      </div>
+      <div id="m-navbar-collapse" class="m-col-t-12 m-show-m m-col-m-none m-right-m">
+        <div class="m-row">
+          <ol class="m-col-t-6 m-col-m-none">
+            <li>
+              <a href="pages.html">Pages</a>
+              <ol>
+                <li><a href="about.html">About</a></li>
+              </ol>
+            </li>
+            <li><a href="namespaces.html">Namespaces</a></li>
+          </ol>
+          <ol class="m-col-t-6 m-col-m-none" start="3">
+            <li><a href="annotated.html">Classes</a></li>
+            <li><a href="files.html">Files</a></li>
+            <li class="m-show-m"><a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+              <use href="#m-doc-search-icon-path" />
+            </svg></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav></header>
+<main><article>
+  <div class="m-container m-container-inflatable">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <h1>
+          <span class="m-breadcrumb"><a href="namespaceel.html">el</a>::<wbr/></span>Configurations <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="easylogging_09_09_8h.html">&lt;easylogging++.h&gt;</a></div>
+        </h1>
+        <p>Thread-safe <a href="classel_1_1Configuration.html" class="m-doc">Configuration</a> repository.</p>
+        <div class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#base-classes">Base classes</a></li>
+                <li><a href="#pub-types">Public types</a></li>
+                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
+                <li><a href="#pub-methods">Public functions</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+<p>@detail This repository represents configurations for all the levels and configuration type mapped to a value.</p>
+        <section id="base-classes">
+          <h2><a href="#base-classes">Base classes</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <div class="m-doc-template">template&lt;typename T_Ptr, typename Pred&gt;</div>
+              class <a href="classel_1_1base_1_1utils_1_1RegistryWithPred.html" class="m-doc">RegistryWithPred&lt;Configuration, Configuration::Predicate&gt;</a>
+            </dt>
+            <dd>A pointer registry mechanism to manage memory and provide search functionalities. (predicate version)</dd>
+          </dl>
+        </section>
+        <section id="pub-types">
+          <h2><a href="#pub-types">Public types</a></h2>
+          <dl class="m-doc">
+            <dt>
+              class <a href="classel_1_1Configurations_1_1Parser.html" class="m-doc">Parser</a>
+            </dt>
+            <dd><a href="classel_1_1Configurations_1_1Parser.html" class="m-doc">Parser</a> used internally to parse configurations from file or text.</dd>
+          </dl>
+        </section>
+        <section id="typeless-methods">
+          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
+          <dl class="m-doc">
+            <dt id="ae299dd1b60a1df9c013cc23029242a77">
+              <span class="m-doc-wrap-bumper"><a href="#ae299dd1b60a1df9c013cc23029242a77" class="m-doc-self">Configurations</a>(</span><span class="m-doc-wrap">void)</span>
+            </dt>
+            <dd>Default constructor with empty repository.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper"><a href="#ae341bd647734d1180a5a138222d2f1ea" class="m-doc">Configurations</a>(</span><span class="m-doc-wrap">const std::string&amp; configurationFile,
+              bool useDefaultsForRemaining = true,
+              <a href="classel_1_1Configurations.html" class="m-doc">Configurations</a>* base = nullptr)</span>
+            </dt>
+            <dd>Constructor used to set configurations using configuration file.</dd>
+            <dt id="aed56020af78d32cb4d3e4ac73abf3349">
+              <span class="m-doc-wrap-bumper"><a href="#aed56020af78d32cb4d3e4ac73abf3349" class="m-doc-self">~Configurations</a>(</span><span class="m-doc-wrap">void) <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pub-methods">
+          <h2><a href="#pub-methods">Public functions</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#aaa098126d64a5ee04a3944b1a65dcdca" class="m-doc">parseFromFile</a>(</span><span class="m-doc-wrap">const std::string&amp; configurationFile,
+              <a href="classel_1_1Configurations.html" class="m-doc">Configurations</a>* base = nullptr) -&gt; bool</span>
+            </dt>
+            <dd>Parses configuration from file.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#af262a41dff665a11889261137b62af4a" class="m-doc">parseFromText</a>(</span><span class="m-doc-wrap">const std::string&amp; configurationsString,
+              <a href="classel_1_1Configurations.html" class="m-doc">Configurations</a>* base = nullptr) -&gt; bool</span>
+            </dt>
+            <dd>Parse configurations from configuration string.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a4c6db218908b39d23cc09b1a16a18e83" class="m-doc">setFromBase</a>(</span><span class="m-doc-wrap"><a href="classel_1_1Configurations.html" class="m-doc">Configurations</a>* base)</span>
+            </dt>
+            <dd>Sets configuration based-off an existing configurations.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a1e812370f896b6429bf46b31fcd4e3e0" class="m-doc">hasConfiguration</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124" class="m-doc">ConfigurationType</a> configurationType) -&gt; bool</span>
+            </dt>
+            <dd>Determines whether or not specified configuration type exists in the repository.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a5313557efac3b0c78f973a5a1d685277" class="m-doc">hasConfiguration</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level,
+              <a href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124" class="m-doc">ConfigurationType</a> configurationType) -&gt; bool</span>
+            </dt>
+            <dd>Determines whether or not specified configuration type exists for specified level.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a332717de96efc851a202b7afcc5e395c" class="m-doc">set</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level,
+              <a href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124" class="m-doc">ConfigurationType</a> configurationType,
+              const std::string&amp; value)</span>
+            </dt>
+            <dd>Sets value of configuration for specified level.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a0ab07520b9409fe9f2c16a705d6936f1" class="m-doc">set</a>(</span><span class="m-doc-wrap"><a href="classel_1_1Configuration.html" class="m-doc">Configuration</a>* conf)</span>
+            </dt>
+            <dd>Sets single configuration based on other single configuration.</dd>
+            <dt id="a6da4bc9bd6a14dc44feaf25163e998ca">
+              <span class="m-doc-wrap-bumper">auto <a href="#a6da4bc9bd6a14dc44feaf25163e998ca" class="m-doc-self">get</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level,
+              <a href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124" class="m-doc">ConfigurationType</a> configurationType) -&gt; <a href="classel_1_1Configuration.html" class="m-doc">Configuration</a>*</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#a56c82c15ea39cc230a5c85ec2c41cbfd" class="m-doc">setGlobally</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124" class="m-doc">ConfigurationType</a> configurationType,
+              const std::string&amp; value)</span>
+            </dt>
+            <dd>Sets configuration for all levels.</dd>
+            <dt id="a2a13be6154439286a68d2eccf8417edf">
+              <span class="m-doc-wrap-bumper">void <a href="#a2a13be6154439286a68d2eccf8417edf" class="m-doc-self">clear</a>(</span><span class="m-doc-wrap">void)</span>
+            </dt>
+            <dd>Clears repository so that all the configurations are unset.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a65c89530cf6276fa91c02b00be76b3db" class="m-doc">configurationFile</a>(</span><span class="m-doc-wrap">void) const -&gt; const std::string&amp;</span>
+            </dt>
+            <dd>Gets configuration file used in parsing this configurations.</dd>
+            <dt id="ab34fa2ed4ac77f47b41e464c2d186239">
+              <span class="m-doc-wrap-bumper">void <a href="#ab34fa2ed4ac77f47b41e464c2d186239" class="m-doc-self">setToDefault</a>(</span><span class="m-doc-wrap">void)</span>
+            </dt>
+            <dd>Sets configurations to &quot;factory based&quot; configurations.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ad89b7d2dd750e4d1b3deff800e278fdb" class="m-doc">setRemainingToDefault</a>(</span><span class="m-doc-wrap">void)</span>
+            </dt>
+            <dd>Lets you set the remaining configurations to default.</dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="ae341bd647734d1180a5a138222d2f1ea"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper"> el::<wbr />Configurations::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ae341bd647734d1180a5a138222d2f1ea" class="m-doc-self">Configurations</a>(</span><span class="m-doc-wrap">const std::string&amp; configurationFile,
+              bool useDefaultsForRemaining = true,
+              <a href="classel_1_1Configurations.html" class="m-doc">Configurations</a>* base = nullptr)</span></span>
+            </h3>
+            <p>Constructor used to set configurations using configuration file.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">configurationFile</td>
+                  <td>Full path to configuration file</td>
+                </tr>
+                <tr>
+                  <td>useDefaultsForRemaining</td>
+                  <td>Lets you set the remaining configurations to default.</td>
+                </tr>
+                <tr>
+                  <td>base</td>
+                  <td>If provided, this configuration will be based off existing repository that this argument is pointing to.</td>
+                </tr>
+              </tbody>
+            </table>
+<aside class="m-note m-default"><h4>See also</h4><p><a href="classel_1_1Configurations.html#aaa098126d64a5ee04a3944b1a65dcdca" class="m-doc">parseFromFile(const std::<wbr />string&amp;, Configurations* base)</a></p><p><a href="classel_1_1Configurations.html#ad89b7d2dd750e4d1b3deff800e278fdb" class="m-doc">setRemainingToDefault()</a></p></aside>
+          </div></section>
+          <section class="m-doc-details" id="aaa098126d64a5ee04a3944b1a65dcdca"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">bool el::<wbr />Configurations::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aaa098126d64a5ee04a3944b1a65dcdca" class="m-doc-self">parseFromFile</a>(</span><span class="m-doc-wrap">const std::string&amp; configurationFile,
+              <a href="classel_1_1Configurations.html" class="m-doc">Configurations</a>* base = nullptr)</span></span>
+            </h3>
+            <p>Parses configuration from file.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">configurationFile</td>
+                  <td>Full path to configuration file</td>
+                </tr>
+                <tr>
+                  <td>base</td>
+                  <td><a href="classel_1_1Configurations.html" class="m-doc">Configurations</a> to base new configuration repository off. This value is used when you want to use existing <a href="classel_1_1Configurations.html" class="m-doc">Configurations</a> to base all the values and then set rest of configuration via configuration file.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>True if successfully parsed, false otherwise. You may define &#x27;ELPP_DEBUG_ASSERT_FAILURE&#x27; to make sure you do not proceed without successful parse.</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="af262a41dff665a11889261137b62af4a"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">bool el::<wbr />Configurations::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#af262a41dff665a11889261137b62af4a" class="m-doc-self">parseFromText</a>(</span><span class="m-doc-wrap">const std::string&amp; configurationsString,
+              <a href="classel_1_1Configurations.html" class="m-doc">Configurations</a>* base = nullptr)</span></span>
+            </h3>
+            <p>Parse configurations from configuration string.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">configurationsString</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>base</td>
+                  <td><a href="classel_1_1Configurations.html" class="m-doc">Configurations</a> to base new configuration repository off. This value is used when you want to use existing <a href="classel_1_1Configurations.html" class="m-doc">Configurations</a> to base all the values and then set rest of configuration via configuration text.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>True if successfully parsed, false otherwise. You may define &#x27;ELPP_DEBUG_ASSERT_FAILURE&#x27; to make sure you do not proceed without successful parse.</td>
+                </tr>
+              </tfoot>
+            </table>
+<p>@detail This configuration string has same syntax as configuration file contents. Make sure all the necessary new line characters are provided.</p>
+          </div></section>
+          <section class="m-doc-details" id="a4c6db218908b39d23cc09b1a16a18e83"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void el::<wbr />Configurations::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a4c6db218908b39d23cc09b1a16a18e83" class="m-doc-self">setFromBase</a>(</span><span class="m-doc-wrap"><a href="classel_1_1Configurations.html" class="m-doc">Configurations</a>* base)</span></span>
+            </h3>
+            <p>Sets configuration based-off an existing configurations.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">base</td>
+                  <td>Pointer to existing configurations.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a1e812370f896b6429bf46b31fcd4e3e0"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">bool el::<wbr />Configurations::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a1e812370f896b6429bf46b31fcd4e3e0" class="m-doc-self">hasConfiguration</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124" class="m-doc">ConfigurationType</a> configurationType)</span></span>
+            </h3>
+            <p>Determines whether or not specified configuration type exists in the repository.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">configurationType</td>
+                  <td>Type of configuration to check existence for.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>@detail Returns as soon as first level is found.</p>
+          </div></section>
+          <section class="m-doc-details" id="a5313557efac3b0c78f973a5a1d685277"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">bool el::<wbr />Configurations::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a5313557efac3b0c78f973a5a1d685277" class="m-doc-self">hasConfiguration</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level,
+              <a href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124" class="m-doc">ConfigurationType</a> configurationType)</span></span>
+            </h3>
+            <p>Determines whether or not specified configuration type exists for specified level.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">level</td>
+                  <td>Level to check</td>
+                </tr>
+                <tr>
+                  <td>configurationType</td>
+                  <td>Type of configuration to check existence for.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a332717de96efc851a202b7afcc5e395c"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void el::<wbr />Configurations::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a332717de96efc851a202b7afcc5e395c" class="m-doc-self">set</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level,
+              <a href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124" class="m-doc">ConfigurationType</a> configurationType,
+              const std::string&amp; value)</span></span>
+            </h3>
+            <p>Sets value of configuration for specified level.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">level</td>
+                  <td>Level to set configuration for (<a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">el::<wbr />Level</a>).</td>
+                </tr>
+                <tr>
+                  <td>configurationType</td>
+                  <td>Type of configuration (<a href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124" class="m-doc">el::<wbr />ConfigurationType</a>)</td>
+                </tr>
+                <tr>
+                  <td>value</td>
+                  <td>A string based value. Regardless of what the data type of configuration is, it will always be string from users&#x27; point of view. This is then parsed later to be used internally.</td>
+                </tr>
+              </tbody>
+            </table>
+<p>@detail Any existing configuration for specified level will be replaced. Also note that configuration types <a href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124a945b6ef21f66457079a6ab7b6c3459f9" class="m-doc">ConfigurationType::<wbr />SubsecondPrecision</a> and <a href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124abe9e43d200c5698cb8519daed7035874" class="m-doc">ConfigurationType::<wbr />PerformanceTracking</a> will be ignored if not set for <a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36a4cc6684df7b4a92b1dec6fce3264fac8" class="m-doc">Level::<wbr />Global</a> because these configurations are not dependant on level.</p><aside class="m-note m-default"><h4>See also</h4><p><a href="classel_1_1Configuration.html#a04755de11422d7570869433ea157b705" class="m-doc">Configuration::<wbr />setValue(const std::<wbr />string&amp; value)</a></p><p><a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">el::<wbr />Level</a></p><p><a href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124" class="m-doc">el::<wbr />ConfigurationType</a></p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a0ab07520b9409fe9f2c16a705d6936f1"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void el::<wbr />Configurations::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a0ab07520b9409fe9f2c16a705d6936f1" class="m-doc-self">set</a>(</span><span class="m-doc-wrap"><a href="classel_1_1Configuration.html" class="m-doc">Configuration</a>* conf)</span></span>
+            </h3>
+            <p>Sets single configuration based on other single configuration.</p>
+<aside class="m-note m-default"><h4>See also</h4><p><a href="classel_1_1Configurations.html#a332717de96efc851a202b7afcc5e395c" class="m-doc">set(Level level, ConfigurationType configurationType, const std::<wbr />string&amp; value)</a></p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a56c82c15ea39cc230a5c85ec2c41cbfd"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void el::<wbr />Configurations::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a56c82c15ea39cc230a5c85ec2c41cbfd" class="m-doc-self">setGlobally</a>(</span><span class="m-doc-wrap"><a href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124" class="m-doc">ConfigurationType</a> configurationType,
+              const std::string&amp; value)</span></span>
+            </h3>
+            <p>Sets configuration for all levels.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">configurationType</td>
+                  <td>Type of configuration</td>
+                </tr>
+                <tr>
+                  <td>value</td>
+                  <td>String based value</td>
+                </tr>
+              </tbody>
+            </table>
+<aside class="m-note m-default"><h4>See also</h4><p><a href="classel_1_1Configurations.html#a332717de96efc851a202b7afcc5e395c" class="m-doc">Configurations::<wbr />set(Level level, ConfigurationType configurationType, const std::<wbr />string&amp; value)</a></p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a65c89530cf6276fa91c02b00be76b3db"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">const std::string&amp; el::<wbr />Configurations::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a65c89530cf6276fa91c02b00be76b3db" class="m-doc-self">configurationFile</a>(</span><span class="m-doc-wrap">void) const</span></span>
+            </h3>
+            <p>Gets configuration file used in parsing this configurations.</p>
+<p>@detail If this repository was set manually or by text this returns empty string.</p>
+          </div></section>
+          <section class="m-doc-details" id="ad89b7d2dd750e4d1b3deff800e278fdb"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void el::<wbr />Configurations::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ad89b7d2dd750e4d1b3deff800e278fdb" class="m-doc-self">setRemainingToDefault</a>(</span><span class="m-doc-wrap">void)</span></span>
+            </h3>
+            <p>Lets you set the remaining configurations to default.</p>
+<p>@detail By remaining, it means that the level/type a configuration does not exist for. This function is useful when you want to minimize chances of failures, e.g, if you have a configuration file that sets configuration for all the configurations except for Enabled or not, we use this so that ENABLED is set to default i.e, true. If you dont do this explicitly (either by calling this function or by using second param in Constructor and try to access a value, an error is thrown</p>
+          </div></section>
+        </section>
+      </div>
+    </div>
+  </div>
+</article></main>
+<div class="m-doc-search" id="search">
+  <a href="#!" onclick="return hideSearch()"></a>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-m-8 m-push-m-2">
+        <div class="m-doc-search-header m-text m-small">
+          <div><span class="m-label m-default">Tab</span> / <span class="m-label m-default">T</span> to search, <span class="m-label m-default">Esc</span> to close</div>
+          <div id="search-symbolcount">&hellip;</div>
+        </div>
+        <div class="m-doc-search-content">
+          <form>
+            <input type="search" name="q" id="search-input" placeholder="Loading &hellip;" disabled="disabled" autofocus="autofocus" autocomplete="off" spellcheck="false" />
+          </form>
+          <noscript class="m-text m-danger m-text-center">Unlike everything else in the docs, the search functionality <em>requires</em> JavaScript.</noscript>
+          <div id="search-help" class="m-text m-dim m-text-center">
+            <p class="m-noindent">Search for symbols, directories, files, pages or
+            modules. You can omit any prefix from the symbol or file path; adding a
+            <code>:</code> or <code>/</code> suffix lists all members of given symbol or
+            directory.</p>
+            <p class="m-noindent">Use <span class="m-label m-dim">&darr;</span>
+            / <span class="m-label m-dim">&uarr;</span> to navigate through the list,
+            <span class="m-label m-dim">Enter</span> to go.
+            <span class="m-label m-dim">Tab</span> autocompletes common prefix, you can
+            copy a link to the result using <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">L</span> while <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">M</span> produces a Markdown link.</p>
+          </div>
+          <div id="search-notfound" class="m-text m-warning m-text-center">Sorry, nothing was found.</div>
+          <ul id="search-results"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="search-v1.js"></script>
+<script src="searchdata-v1.js" async="async"></script>
+<footer><nav>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <p>CircuitGenGraph. Created with <a href="https://doxygen.org/">Doxygen</a> 1.9.1 and <a href="https://mcss.mosra.cz/">m.css</a>.</p>
+      </div>
+    </div>
+  </div>
+</nav></footer>
+</body>
+</html>

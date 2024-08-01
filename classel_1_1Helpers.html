@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>el::Helpers class | CircuitGenGraph</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
+  <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
+  <link rel="icon" href="favicon-dark.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#22272e" />
+</head>
+<body>
+<header><nav id="navigation">
+  <div class="m-container">
+    <div class="m-row">
+      <a href="index.html" id="m-navbar-brand" class="m-col-t-8 m-col-m-none m-left-m">CircuitGenGraph</a>
+      <div class="m-col-t-4 m-hide-m m-text-right m-nopadr">
+        <a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+          <path id="m-doc-search-icon-path" d="m6 0c-3.31 0-6 2.69-6 6 0 3.31 2.69 6 6 6 1.49 0 2.85-0.541 3.89-1.44-0.0164 0.338 0.147 0.759 0.5 1.15l3.22 3.79c0.552 0.614 1.45 0.665 2 0.115 0.55-0.55 0.499-1.45-0.115-2l-3.79-3.22c-0.392-0.353-0.812-0.515-1.15-0.5 0.895-1.05 1.44-2.41 1.44-3.89 0-3.31-2.69-6-6-6zm0 1.56a4.44 4.44 0 0 1 4.44 4.44 4.44 4.44 0 0 1-4.44 4.44 4.44 4.44 0 0 1-4.44-4.44 4.44 4.44 0 0 1 4.44-4.44z"/>
+        </svg></a>
+        <a id="m-navbar-show" href="#navigation" title="Show navigation"></a>
+        <a id="m-navbar-hide" href="#" title="Hide navigation"></a>
+      </div>
+      <div id="m-navbar-collapse" class="m-col-t-12 m-show-m m-col-m-none m-right-m">
+        <div class="m-row">
+          <ol class="m-col-t-6 m-col-m-none">
+            <li>
+              <a href="pages.html">Pages</a>
+              <ol>
+                <li><a href="about.html">About</a></li>
+              </ol>
+            </li>
+            <li><a href="namespaces.html">Namespaces</a></li>
+          </ol>
+          <ol class="m-col-t-6 m-col-m-none" start="3">
+            <li><a href="annotated.html">Classes</a></li>
+            <li><a href="files.html">Files</a></li>
+            <li class="m-show-m"><a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+              <use href="#m-doc-search-icon-path" />
+            </svg></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav></header>
+<main><article>
+  <div class="m-container m-container-inflatable">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <h1>
+          <span class="m-breadcrumb"><a href="namespaceel.html">el</a>::<wbr/></span>Helpers <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="easylogging_09_09_8h.html">&lt;easylogging++.h&gt;</a></div>
+        </h1>
+        <p>Static helpers for developers.</p>
+        <div class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#pub-static-methods">Public static functions</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <section id="pub-static-methods">
+          <h2><a href="#pub-static-methods">Public static functions</a></h2>
+          <dl class="m-doc">
+            <dt id="af78fd39725281e3dddd7c0fbdc14f11f">
+              <span class="m-doc-wrap-bumper">static void <a href="#af78fd39725281e3dddd7c0fbdc14f11f" class="m-doc-self">setStorage</a>(</span><span class="m-doc-wrap"><a href="namespaceel_1_1base_1_1type.html#a3c34822c3825018aca1526f2289b7976" class="m-doc">base::<wbr />type::<wbr />StoragePointer</a> storage)</span>
+            </dt>
+            <dd>Shares logging repository (<a href="classel_1_1base_1_1Storage.html" class="m-doc">base::<wbr />Storage</a>)</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a13a5365de36b3af27660cf9b358829d3" class="m-doc">storage</a>(</span><span class="m-doc-wrap">) -&gt; <a href="namespaceel_1_1base_1_1type.html#a3c34822c3825018aca1526f2289b7976" class="m-doc">base::<wbr />type::<wbr />StoragePointer</a></span>
+            </dt>
+            <dd></dd>
+            <dt id="a68748f618a0c2840b96dc12532b09bf0">
+              <span class="m-doc-wrap-bumper">static void <a href="#a68748f618a0c2840b96dc12532b09bf0" class="m-doc-self">setArgs</a>(</span><span class="m-doc-wrap">int argc,
+              char** argv)</span>
+            </dt>
+            <dd>Sets application arguments and figures out whats active for logging and whats not.</dd>
+            <dt id="afac7a023e2c13a62d0295cf0239eb848">
+              <span class="m-doc-wrap-bumper">static void <a href="#afac7a023e2c13a62d0295cf0239eb848" class="m-doc-self">setArgs</a>(</span><span class="m-doc-wrap">int argc,
+              const char** argv)</span>
+            </dt>
+            <dd>Sets application arguments and figures out whats active for logging and whats not.</dd>
+            <dt id="a315250270334214c2749398feba08863">
+              <span class="m-doc-wrap-bumper">static void <a href="#a315250270334214c2749398feba08863" class="m-doc-self">setThreadName</a>(</span><span class="m-doc-wrap">const std::string&amp; name)</span>
+            </dt>
+            <dd>Sets thread name for current thread. Requires std::thread.</dd>
+            <dt id="ae19cb3baa6d8081a9e922736a384f70b">
+              <span class="m-doc-wrap-bumper">static auto <a href="#ae19cb3baa6d8081a9e922736a384f70b" class="m-doc-self">getThreadName</a>(</span><span class="m-doc-wrap">) -&gt; std::string</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a5fd7ad6d636c28d2e706203d0c43cf8c">
+              <span class="m-doc-wrap-bumper">static void <a href="#a5fd7ad6d636c28d2e706203d0c43cf8c" class="m-doc-self">installPreRollOutCallback</a>(</span><span class="m-doc-wrap">const <a href="namespaceel.html#aeb764b890a6f3cd41d2726bcd4e9c0cf" class="m-doc">PreRollOutCallback</a>&amp; callback)</span>
+            </dt>
+            <dd>Installs pre rollout callback, this callback is triggered when log file is about to be rolled out (can be useful for backing up)</dd>
+            <dt id="ab829e5ed1b43bf965f5c288bc0280376">
+              <span class="m-doc-wrap-bumper">static void <a href="#ab829e5ed1b43bf965f5c288bc0280376" class="m-doc-self">uninstallPreRollOutCallback</a>(</span><span class="m-doc-wrap">void)</span>
+            </dt>
+            <dd>Uninstalls pre rollout callback.</dd>
+            <dt id="a3f3e84057567a8ac568a35899318544a">
+              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a3f3e84057567a8ac568a35899318544a" class="m-doc-self">installLogDispatchCallback</a>(</span><span class="m-doc-wrap">const std::string&amp; id) -&gt; bool</span>
+            </dt>
+            <dd>Installs post log dispatch callback, this callback is triggered when log is dispatched.</dd>
+            <dt id="ac94b44cc8d399a5842703126478300d7">
+              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              <span class="m-doc-wrap-bumper">static void <a href="#ac94b44cc8d399a5842703126478300d7" class="m-doc-self">uninstallLogDispatchCallback</a>(</span><span class="m-doc-wrap">const std::string&amp; id)</span>
+            </dt>
+            <dd>Uninstalls log dispatch callback.</dd>
+            <dt id="aa01d59ca141bc75c4fdd78a34234611b">
+              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              <span class="m-doc-wrap-bumper">static auto <a href="#aa01d59ca141bc75c4fdd78a34234611b" class="m-doc-self">logDispatchCallback</a>(</span><span class="m-doc-wrap">const std::string&amp; id) -&gt; T*</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a8b032e32cd042ddc4fef4e814bad1082">
+              <div class="m-doc-template">template&lt;typename T&gt;</div>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a8b032e32cd042ddc4fef4e814bad1082" class="m-doc-self">convertTemplateToStdString</a>(</span><span class="m-doc-wrap">const T&amp; templ) -&gt; std::string</span>
+            </dt>
+            <dd>Converts template to std::string - useful for loggable classes to log containers within log(std::ostream&amp;) const.</dd>
+            <dt id="a83bab44f77a4961f8f5231e7ce9917bb">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a83bab44f77a4961f8f5231e7ce9917bb" class="m-doc-self">commandLineArgs</a>(</span><span class="m-doc-wrap">void) -&gt; const <a href="classel_1_1base_1_1utils_1_1CommandLineArgs.html" class="m-doc">el::<wbr />base::<wbr />utils::<wbr />CommandLineArgs</a>*</span>
+            </dt>
+            <dd>Returns command line arguments (pointer) provided to easylogging++.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static void <a href="#afb5fb896f3222fb8c628a51a05d72c32" class="m-doc">reserveCustomFormatSpecifiers</a>(</span><span class="m-doc-wrap">std::size_t size)</span>
+            </dt>
+            <dd>Reserve space for custom format specifiers for performance.</dd>
+            <dt id="aa6de15a09db4f2a6763a6652c0ea12b1">
+              <span class="m-doc-wrap-bumper">static void <a href="#aa6de15a09db4f2a6763a6652c0ea12b1" class="m-doc-self">installCustomFormatSpecifier</a>(</span><span class="m-doc-wrap">const <a href="classel_1_1CustomFormatSpecifier.html" class="m-doc">CustomFormatSpecifier</a>&amp; customFormatSpecifier)</span>
+            </dt>
+            <dd>Installs user defined format specifier and handler.</dd>
+            <dt id="a23ec73819c25758d604d149ad0c6b73f">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a23ec73819c25758d604d149ad0c6b73f" class="m-doc-self">uninstallCustomFormatSpecifier</a>(</span><span class="m-doc-wrap">const char* formatSpecifier) -&gt; bool</span>
+            </dt>
+            <dd>Uninstalls user defined format specifier and handler.</dd>
+            <dt id="a154ce041890564d1ae5f87184e24f13d">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a154ce041890564d1ae5f87184e24f13d" class="m-doc-self">hasCustomFormatSpecifier</a>(</span><span class="m-doc-wrap">const char* formatSpecifier) -&gt; bool</span>
+            </dt>
+            <dd>Returns true if custom format specifier is installed.</dd>
+            <dt id="aea3fcde8a07e6f7278574e9563d8ab6b">
+              <span class="m-doc-wrap-bumper">static void <a href="#aea3fcde8a07e6f7278574e9563d8ab6b" class="m-doc-self">validateFileRolling</a>(</span><span class="m-doc-wrap"><a href="classel_1_1Logger.html" class="m-doc">Logger</a>* logger,
+              <a href="namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36" class="m-doc">Level</a> level)</span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a13a5365de36b3af27660cf9b358829d3"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">static <a href="namespaceel_1_1base_1_1type.html#a3c34822c3825018aca1526f2289b7976" class="m-doc">base::<wbr />type::<wbr />StoragePointer</a> el::<wbr />Helpers::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a13a5365de36b3af27660cf9b358829d3" class="m-doc-self">storage</a>(</span><span class="m-doc-wrap">)</span></span>
+            </h3>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>Main storage repository</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="afb5fb896f3222fb8c628a51a05d72c32"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">static void el::<wbr />Helpers::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#afb5fb896f3222fb8c628a51a05d72c32" class="m-doc-self">reserveCustomFormatSpecifiers</a>(</span><span class="m-doc-wrap">std::size_t size)</span></span>
+            </h3>
+            <p>Reserve space for custom format specifiers for performance.</p>
+<aside class="m-note m-default"><h4>See also</h4><p>std::vector::reserve</p></aside>
+          </div></section>
+        </section>
+      </div>
+    </div>
+  </div>
+</article></main>
+<div class="m-doc-search" id="search">
+  <a href="#!" onclick="return hideSearch()"></a>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-m-8 m-push-m-2">
+        <div class="m-doc-search-header m-text m-small">
+          <div><span class="m-label m-default">Tab</span> / <span class="m-label m-default">T</span> to search, <span class="m-label m-default">Esc</span> to close</div>
+          <div id="search-symbolcount">&hellip;</div>
+        </div>
+        <div class="m-doc-search-content">
+          <form>
+            <input type="search" name="q" id="search-input" placeholder="Loading &hellip;" disabled="disabled" autofocus="autofocus" autocomplete="off" spellcheck="false" />
+          </form>
+          <noscript class="m-text m-danger m-text-center">Unlike everything else in the docs, the search functionality <em>requires</em> JavaScript.</noscript>
+          <div id="search-help" class="m-text m-dim m-text-center">
+            <p class="m-noindent">Search for symbols, directories, files, pages or
+            modules. You can omit any prefix from the symbol or file path; adding a
+            <code>:</code> or <code>/</code> suffix lists all members of given symbol or
+            directory.</p>
+            <p class="m-noindent">Use <span class="m-label m-dim">&darr;</span>
+            / <span class="m-label m-dim">&uarr;</span> to navigate through the list,
+            <span class="m-label m-dim">Enter</span> to go.
+            <span class="m-label m-dim">Tab</span> autocompletes common prefix, you can
+            copy a link to the result using <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">L</span> while <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">M</span> produces a Markdown link.</p>
+          </div>
+          <div id="search-notfound" class="m-text m-warning m-text-center">Sorry, nothing was found.</div>
+          <ul id="search-results"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="search-v1.js"></script>
+<script src="searchdata-v1.js" async="async"></script>
+<footer><nav>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <p>CircuitGenGraph. Created with <a href="https://doxygen.org/">Doxygen</a> 1.9.1 and <a href="https://mcss.mosra.cz/">m.css</a>.</p>
+      </div>
+    </div>
+  </div>
+</nav></footer>
+</body>
+</html>

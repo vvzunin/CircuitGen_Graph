@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>el::base::utils::Str class | CircuitGenGraph</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
+  <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
+  <link rel="icon" href="favicon-dark.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#22272e" />
+</head>
+<body>
+<header><nav id="navigation">
+  <div class="m-container">
+    <div class="m-row">
+      <a href="index.html" id="m-navbar-brand" class="m-col-t-8 m-col-m-none m-left-m">CircuitGenGraph</a>
+      <div class="m-col-t-4 m-hide-m m-text-right m-nopadr">
+        <a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+          <path id="m-doc-search-icon-path" d="m6 0c-3.31 0-6 2.69-6 6 0 3.31 2.69 6 6 6 1.49 0 2.85-0.541 3.89-1.44-0.0164 0.338 0.147 0.759 0.5 1.15l3.22 3.79c0.552 0.614 1.45 0.665 2 0.115 0.55-0.55 0.499-1.45-0.115-2l-3.79-3.22c-0.392-0.353-0.812-0.515-1.15-0.5 0.895-1.05 1.44-2.41 1.44-3.89 0-3.31-2.69-6-6-6zm0 1.56a4.44 4.44 0 0 1 4.44 4.44 4.44 4.44 0 0 1-4.44 4.44 4.44 4.44 0 0 1-4.44-4.44 4.44 4.44 0 0 1 4.44-4.44z"/>
+        </svg></a>
+        <a id="m-navbar-show" href="#navigation" title="Show navigation"></a>
+        <a id="m-navbar-hide" href="#" title="Hide navigation"></a>
+      </div>
+      <div id="m-navbar-collapse" class="m-col-t-12 m-show-m m-col-m-none m-right-m">
+        <div class="m-row">
+          <ol class="m-col-t-6 m-col-m-none">
+            <li>
+              <a href="pages.html">Pages</a>
+              <ol>
+                <li><a href="about.html">About</a></li>
+              </ol>
+            </li>
+            <li><a href="namespaces.html">Namespaces</a></li>
+          </ol>
+          <ol class="m-col-t-6 m-col-m-none" start="3">
+            <li><a href="annotated.html">Classes</a></li>
+            <li><a href="files.html">Files</a></li>
+            <li class="m-show-m"><a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+              <use href="#m-doc-search-icon-path" />
+            </svg></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav></header>
+<main><article>
+  <div class="m-container m-container-inflatable">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <h1>
+          <span class="m-breadcrumb"><a href="namespaceel.html">el</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespaceel_1_1base.html">base</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespaceel_1_1base_1_1utils.html">utils</a>::<wbr/></span>Str <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="easylogging_09_09_8h.html">&lt;easylogging++.h&gt;</a></div>
+        </h1>
+        <p>String utilities helper class used internally. You should not use it.</p>
+        <div class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#pub-static-methods">Public static functions</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <section id="pub-static-methods">
+          <h2><a href="#pub-static-methods">Public static functions</a></h2>
+          <dl class="m-doc">
+            <dt id="a4caae91dfe0310d9f182bd9b7e99103c">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a4caae91dfe0310d9f182bd9b7e99103c" class="m-doc-self">isDigit</a>(</span><span class="m-doc-wrap">char c) -&gt; bool</span>
+            </dt>
+            <dd>Checks if character is digit. Dont use libc implementation of it to prevent locale issues.</dd>
+            <dt id="a0f96b488eca9772e204f8b5feddd9a90">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a0f96b488eca9772e204f8b5feddd9a90" class="m-doc-self">wildCardMatch</a>(</span><span class="m-doc-wrap">const char* str,
+              const char* pattern) -&gt; bool</span>
+            </dt>
+            <dd>Matches wildcards, &#x27;*&#x27; and &#x27;?&#x27; only supported.</dd>
+            <dt id="adf34c645138317e324701a2f409d7c93">
+              <span class="m-doc-wrap-bumper">static auto <a href="#adf34c645138317e324701a2f409d7c93" class="m-doc-self">ltrim</a>(</span><span class="m-doc-wrap">std::string&amp; str) -&gt; std::string&amp;</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a2192df38f98b1d9547ff0e339e33f486">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a2192df38f98b1d9547ff0e339e33f486" class="m-doc-self">rtrim</a>(</span><span class="m-doc-wrap">std::string&amp; str) -&gt; std::string&amp;</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a2f1d427fb0893861961dee5c79d05e10">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a2f1d427fb0893861961dee5c79d05e10" class="m-doc-self">trim</a>(</span><span class="m-doc-wrap">std::string&amp; str) -&gt; std::string&amp;</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a87b8a192300657c907b0678a8d715da2" class="m-doc">startsWith</a>(</span><span class="m-doc-wrap">const std::string&amp; str,
+              const std::string&amp; start) -&gt; bool</span>
+            </dt>
+            <dd>Determines whether or not str starts with specified string.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a8116fdf0f0308f78a42989da9df52377" class="m-doc">endsWith</a>(</span><span class="m-doc-wrap">const std::string&amp; str,
+              const std::string&amp; end) -&gt; bool</span>
+            </dt>
+            <dd>Determines whether or not str ends with specified string.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#ab24bb11d2b5eb8ede4296d70b510f726" class="m-doc">replaceAll</a>(</span><span class="m-doc-wrap">std::string&amp; str,
+              char replaceWhat,
+              char replaceWith) -&gt; std::string&amp;</span>
+            </dt>
+            <dd>Replaces all instances of replaceWhat with &#x27;replaceWith&#x27;. Original variable is changed for performance.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a5f424d54390059c0a6a6f81a74ee846b" class="m-doc">replaceAll</a>(</span><span class="m-doc-wrap">std::string&amp; str,
+              const std::string&amp; replaceWhat,
+              const std::string&amp; replaceWith) -&gt; std::string&amp;</span>
+            </dt>
+            <dd>Replaces all instances of &#x27;replaceWhat&#x27; with &#x27;replaceWith&#x27;. (String version) Replaces in place.</dd>
+            <dt id="a0f271d7da2bb3c1f2fa062219c0e0ba2">
+              <span class="m-doc-wrap-bumper">static void <a href="#a0f271d7da2bb3c1f2fa062219c0e0ba2" class="m-doc-self">replaceFirstWithEscape</a>(</span><span class="m-doc-wrap"><a href="namespaceel_1_1base_1_1type.html#a67e406cd213c231f1d135b5a4eda64b5" class="m-doc">base::<wbr />type::<wbr />string_t</a>&amp; str,
+              const <a href="namespaceel_1_1base_1_1type.html#a67e406cd213c231f1d135b5a4eda64b5" class="m-doc">base::<wbr />type::<wbr />string_t</a>&amp; replaceWhat,
+              const <a href="namespaceel_1_1base_1_1type.html#a67e406cd213c231f1d135b5a4eda64b5" class="m-doc">base::<wbr />type::<wbr />string_t</a>&amp; replaceWith)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#ae2a0878bab54634c297414677b526f28" class="m-doc">toUpper</a>(</span><span class="m-doc-wrap">std::string&amp; str) -&gt; std::string&amp;</span>
+            </dt>
+            <dd>Converts string to uppercase.</dd>
+            <dt id="a0e0bfe8f8e35d54f7009bc0891b0b262">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a0e0bfe8f8e35d54f7009bc0891b0b262" class="m-doc-self">cStringEq</a>(</span><span class="m-doc-wrap">const char* s1,
+              const char* s2) -&gt; bool</span>
+            </dt>
+            <dd>Compares cstring equality - uses strcmp.</dd>
+            <dt id="a7e47930ab4ebdcb0b50aa34fe992793f">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a7e47930ab4ebdcb0b50aa34fe992793f" class="m-doc-self">cStringCaseEq</a>(</span><span class="m-doc-wrap">const char* s1,
+              const char* s2) -&gt; bool</span>
+            </dt>
+            <dd>Compares cstring equality (case-insensitive) - uses toupper(char) Dont use strcasecmp because of CRT (VC++)</dd>
+            <dt id="a1b4b61f9018c964cdf581e641c464947">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a1b4b61f9018c964cdf581e641c464947" class="m-doc-self">contains</a>(</span><span class="m-doc-wrap">const char* str,
+              char c) -&gt; bool</span>
+            </dt>
+            <dd>Returns true if c exist in str.</dd>
+            <dt id="a42c64659443d9e4144d5382007315896">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a42c64659443d9e4144d5382007315896" class="m-doc-self">convertAndAddToBuff</a>(</span><span class="m-doc-wrap">std::size_t n,
+              int len,
+              char* buf,
+              const char* bufLim,
+              bool zeroPadded = true) -&gt; char*</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="aa327f63f50daa9058b9c26b949725044">
+              <span class="m-doc-wrap-bumper">static auto <a href="#aa327f63f50daa9058b9c26b949725044" class="m-doc-self">addToBuff</a>(</span><span class="m-doc-wrap">const char* str,
+              char* buf,
+              const char* bufLim) -&gt; char*</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ae86543e5648f991b8d47d4ea0840402e">
+              <span class="m-doc-wrap-bumper">static auto <a href="#ae86543e5648f991b8d47d4ea0840402e" class="m-doc-self">clearBuff</a>(</span><span class="m-doc-wrap">char buff[],
+              std::size_t lim) -&gt; char*</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a6672f1ba9c6fbb54240d1981b87c064f">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a6672f1ba9c6fbb54240d1981b87c064f" class="m-doc-self">wcharPtrToCharPtr</a>(</span><span class="m-doc-wrap">const wchar_t* line) -&gt; char*</span>
+            </dt>
+            <dd>Converts wchar* to char* NOTE: Need to free return value after use!</dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a87b8a192300657c907b0678a8d715da2"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">static bool el::<wbr />base::<wbr />utils::<wbr />Str::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a87b8a192300657c907b0678a8d715da2" class="m-doc-self">startsWith</a>(</span><span class="m-doc-wrap">const std::string&amp; str,
+              const std::string&amp; start)</span></span>
+            </h3>
+            <p>Determines whether or not str starts with specified string.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">str</td>
+                  <td>String to check</td>
+                </tr>
+                <tr>
+                  <td>start</td>
+                  <td>String to check against</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>Returns true if starts with specified string, false otherwise</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a8116fdf0f0308f78a42989da9df52377"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">static bool el::<wbr />base::<wbr />utils::<wbr />Str::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a8116fdf0f0308f78a42989da9df52377" class="m-doc-self">endsWith</a>(</span><span class="m-doc-wrap">const std::string&amp; str,
+              const std::string&amp; end)</span></span>
+            </h3>
+            <p>Determines whether or not str ends with specified string.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">str</td>
+                  <td>String to check</td>
+                </tr>
+                <tr>
+                  <td>end</td>
+                  <td>String to check against</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>Returns true if ends with specified string, false otherwise</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ab24bb11d2b5eb8ede4296d70b510f726"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">static std::string&amp; el::<wbr />base::<wbr />utils::<wbr />Str::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab24bb11d2b5eb8ede4296d70b510f726" class="m-doc-self">replaceAll</a>(</span><span class="m-doc-wrap">std::string&amp; str,
+              char replaceWhat,
+              char replaceWith)</span></span>
+            </h3>
+            <p>Replaces all instances of replaceWhat with &#x27;replaceWith&#x27;. Original variable is changed for performance.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">str&nbsp;<span class="m-label m-flat m-danger">in/out</span></td>
+                  <td>String to replace from</td>
+                </tr>
+                <tr>
+                  <td>replaceWhat</td>
+                  <td>Character to replace</td>
+                </tr>
+                <tr>
+                  <td>replaceWith</td>
+                  <td>Character to replace with</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>Modified version of str</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a5f424d54390059c0a6a6f81a74ee846b"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">static std::string&amp; el::<wbr />base::<wbr />utils::<wbr />Str::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a5f424d54390059c0a6a6f81a74ee846b" class="m-doc-self">replaceAll</a>(</span><span class="m-doc-wrap">std::string&amp; str,
+              const std::string&amp; replaceWhat,
+              const std::string&amp; replaceWith)</span></span>
+            </h3>
+            <p>Replaces all instances of &#x27;replaceWhat&#x27; with &#x27;replaceWith&#x27;. (String version) Replaces in place.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">str</td>
+                  <td>String to replace from</td>
+                </tr>
+                <tr>
+                  <td>replaceWhat</td>
+                  <td>Character to replace</td>
+                </tr>
+                <tr>
+                  <td>replaceWith</td>
+                  <td>Character to replace with</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>Modified (original) str</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ae2a0878bab54634c297414677b526f28"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">static std::string&amp; el::<wbr />base::<wbr />utils::<wbr />Str::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ae2a0878bab54634c297414677b526f28" class="m-doc-self">toUpper</a>(</span><span class="m-doc-wrap">std::string&amp; str)</span></span>
+            </h3>
+            <p>Converts string to uppercase.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">str</td>
+                  <td>String to convert</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>Uppercase string</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+        </section>
+      </div>
+    </div>
+  </div>
+</article></main>
+<div class="m-doc-search" id="search">
+  <a href="#!" onclick="return hideSearch()"></a>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-m-8 m-push-m-2">
+        <div class="m-doc-search-header m-text m-small">
+          <div><span class="m-label m-default">Tab</span> / <span class="m-label m-default">T</span> to search, <span class="m-label m-default">Esc</span> to close</div>
+          <div id="search-symbolcount">&hellip;</div>
+        </div>
+        <div class="m-doc-search-content">
+          <form>
+            <input type="search" name="q" id="search-input" placeholder="Loading &hellip;" disabled="disabled" autofocus="autofocus" autocomplete="off" spellcheck="false" />
+          </form>
+          <noscript class="m-text m-danger m-text-center">Unlike everything else in the docs, the search functionality <em>requires</em> JavaScript.</noscript>
+          <div id="search-help" class="m-text m-dim m-text-center">
+            <p class="m-noindent">Search for symbols, directories, files, pages or
+            modules. You can omit any prefix from the symbol or file path; adding a
+            <code>:</code> or <code>/</code> suffix lists all members of given symbol or
+            directory.</p>
+            <p class="m-noindent">Use <span class="m-label m-dim">&darr;</span>
+            / <span class="m-label m-dim">&uarr;</span> to navigate through the list,
+            <span class="m-label m-dim">Enter</span> to go.
+            <span class="m-label m-dim">Tab</span> autocompletes common prefix, you can
+            copy a link to the result using <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">L</span> while <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">M</span> produces a Markdown link.</p>
+          </div>
+          <div id="search-notfound" class="m-text m-warning m-text-center">Sorry, nothing was found.</div>
+          <ul id="search-results"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="search-v1.js"></script>
+<script src="searchdata-v1.js" async="async"></script>
+<footer><nav>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <p>CircuitGenGraph. Created with <a href="https://doxygen.org/">Doxygen</a> 1.9.1 and <a href="https://mcss.mosra.cz/">m.css</a>.</p>
+      </div>
+    </div>
+  </div>
+</nav></footer>
+</body>
+</html>

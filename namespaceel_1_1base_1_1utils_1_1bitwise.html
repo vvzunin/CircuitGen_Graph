@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>src/ directory | CircuitGenGraph</title>
+  <title>el::base::utils::bitwise namespace | CircuitGenGraph</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -49,48 +49,42 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          src<span class="m-breadcrumb">/</span> <span class="m-thin">directory</span>
+          <span class="m-breadcrumb"><a href="namespaceel.html">el</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespaceel_1_1base.html">base</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespaceel_1_1base_1_1utils.html">utils</a>::<wbr/></span>bitwise <span class="m-thin">namespace</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="easylogging_09_09_8h.html">&lt;src/logger/easylogging++.h&gt;</a></div>
         </h1>
-        <p><span></span></p>
+        <p>Bitwise operations for C++11 strong enum class. This casts e into Flag_T and returns value after bitwise operation Use these function as.</p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
             <li>
               Reference
               <ul>
-                <li><a href="#subdirs">Directories</a></li>
-                <li><a href="#files">Files</a></li>
+                <li><a href="#func-members">Functions</a></li>
               </ul>
             </li>
           </ul>
         </div>
-        <section id="subdirs">
-          <h2><a href="#subdirs">Directories</a></h2>
+<pre>flag = bitwise::Or&lt;MyEnum&gt;(MyEnum::val1, flag);</pre>
+        <section id="func-members">
+          <h2><a href="#func-members">Functions</a></h2>
           <dl class="m-doc">
-            <dt>directory <a href="dir_ffde1fbcaa8d6b0d34e29c3bddf7a801.html" class="m-doc">logger</a>/</dt>
+            <dt id="a8edf6ff6bbfeb66f3b0071f443462e74">
+              <div class="m-doc-template">template&lt;typename Enum&gt;</div>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a8edf6ff6bbfeb66f3b0071f443462e74" class="m-doc-self">And</a>(</span><span class="m-doc-wrap">Enum e,
+              <a href="namespaceel_1_1base_1_1type.html#aa7dbdfaaff779b8e3d338e1b31707098" class="m-doc">base::<wbr />type::<wbr />EnumType</a> flag) -&gt; <a href="namespaceel_1_1base_1_1type.html#aa7dbdfaaff779b8e3d338e1b31707098" class="m-doc">base::<wbr />type::<wbr />EnumType</a></span>
+            </dt>
             <dd><span></span></dd>
-          </dl>
-        </section>
-        <section id="files">
-          <h2><a href="#files">Files</a></h2>
-          <dl class="m-doc">
-            <dt>file <a href="DefaultAuxiliaryMethods_8cpp.html" class="m-doc">DefaultAuxiliaryMethods.cpp</a></dt>
+            <dt id="aa7c5c01947028de25e99f9465a12c035">
+              <div class="m-doc-template">template&lt;typename Enum&gt;</div>
+              <span class="m-doc-wrap-bumper">static auto <a href="#aa7c5c01947028de25e99f9465a12c035" class="m-doc-self">Not</a>(</span><span class="m-doc-wrap">Enum e,
+              <a href="namespaceel_1_1base_1_1type.html#aa7dbdfaaff779b8e3d338e1b31707098" class="m-doc">base::<wbr />type::<wbr />EnumType</a> flag) -&gt; <a href="namespaceel_1_1base_1_1type.html#aa7dbdfaaff779b8e3d338e1b31707098" class="m-doc">base::<wbr />type::<wbr />EnumType</a></span>
+            </dt>
             <dd><span></span></dd>
-            <dt>file <a href="DefaultSettings_8cpp.html" class="m-doc">DefaultSettings.cpp</a></dt>
-            <dd><span></span></dd>
-            <dt>file <a href="GraphVertexBase_8cpp.html" class="m-doc">GraphVertexBase.cpp</a></dt>
-            <dd><span></span></dd>
-            <dt>file <a href="GraphVertexConstant_8cpp.html" class="m-doc">GraphVertexConstant.cpp</a></dt>
-            <dd><span></span></dd>
-            <dt>file <a href="GraphVertexGates_8cpp.html" class="m-doc">GraphVertexGates.cpp</a></dt>
-            <dd><span></span></dd>
-            <dt>file <a href="GraphVertexInput_8cpp.html" class="m-doc">GraphVertexInput.cpp</a></dt>
-            <dd><span></span></dd>
-            <dt>file <a href="GraphVertexOutput_8cpp.html" class="m-doc">GraphVertexOutput.cpp</a></dt>
-            <dd><span></span></dd>
-            <dt>file <a href="GraphVertexSubGraph_8cpp.html" class="m-doc">GraphVertexSubGraph.cpp</a></dt>
-            <dd><span></span></dd>
-            <dt>file <a href="OrientedGraph_8cpp.html" class="m-doc">OrientedGraph.cpp</a></dt>
+            <dt id="a48ff40b58620c4acc720d90c5535bc4f">
+              <div class="m-doc-template">template&lt;typename Enum&gt;</div>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a48ff40b58620c4acc720d90c5535bc4f" class="m-doc-self">Or</a>(</span><span class="m-doc-wrap">Enum e,
+              <a href="namespaceel_1_1base_1_1type.html#aa7dbdfaaff779b8e3d338e1b31707098" class="m-doc">base::<wbr />type::<wbr />EnumType</a> flag) -&gt; <a href="namespaceel_1_1base_1_1type.html#aa7dbdfaaff779b8e3d338e1b31707098" class="m-doc">base::<wbr />type::<wbr />EnumType</a></span>
+            </dt>
             <dd><span></span></dd>
           </dl>
         </section>

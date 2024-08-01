@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>GraphVertexOutput class | CircuitGenGraph</title>
+  <title>el::base::utils::File class | CircuitGenGraph</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -49,92 +49,90 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          GraphVertexOutput <span class="m-thin">class</span>
-          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="GraphVertex_8hpp.html">&lt;GraphVertex.hpp&gt;</a></div>
+          <span class="m-breadcrumb"><a href="namespaceel.html">el</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespaceel_1_1base.html">base</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespaceel_1_1base_1_1utils.html">utils</a>::<wbr/></span>File <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="easylogging_09_09_8h.html">&lt;easylogging++.h&gt;</a></div>
         </h1>
+        <p><span></span></p>
         <div class="m-block m-default">
           <h3>Contents</h3>
           <ul>
             <li>
               Reference
               <ul>
-                <li><a href="#base-classes">Base classes</a></li>
-                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
-                <li><a href="#pub-methods">Public functions</a></li>
+                <li><a href="#pub-static-methods">Public static functions</a></li>
               </ul>
             </li>
           </ul>
         </div>
-<p>class <a href="classGraphVertexOutput.html" class="m-doc">GraphVertexOutput</a> It is a vertex of the graph, specially designed for data output. It inherits from the <a href="classGraphVertexBase.html" class="m-doc">GraphVertexBase</a> class and adds additional functionality related to data output</p>
-        <section id="base-classes">
-          <h2><a href="#base-classes">Base classes</a></h2>
+        <section id="pub-static-methods">
+          <h2><a href="#pub-static-methods">Public static functions</a></h2>
           <dl class="m-doc">
             <dt>
-              class <a href="classGraphVertexBase.html" class="m-doc">GraphVertexBase</a>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a0fabd4453ec4df237bbc9cca63bf6f13" class="m-doc">newFileStream</a>(</span><span class="m-doc-wrap">const std::string&amp; filename) -&gt; <a href="namespaceel_1_1base_1_1type.html#a620c830ead75d26b45c060c211ee2685" class="m-doc">base::<wbr />type::<wbr />fstream_t</a>*</span>
             </dt>
-            <dd></dd>
-          </dl>
-        </section>
-        <section id="typeless-methods">
-          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
-          <dl class="m-doc">
-            <dt id="ae4c5e57dbbb1a3c0d5156dd3226430c0">
-              <span class="m-doc-wrap-bumper"><a href="#ae4c5e57dbbb1a3c0d5156dd3226430c0" class="m-doc-self">GraphVertexOutput</a>(</span><span class="m-doc-wrap"><a href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9" class="m-doc">GraphPtr</a> i_baseGraph = nullptr)</span>
+            <dd>Creates new out file stream for specified filename.</dd>
+            <dt id="a9d6a7a5203667fffcbba62fc9ddd40c4">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a9d6a7a5203667fffcbba62fc9ddd40c4" class="m-doc-self">getSizeOfFile</a>(</span><span class="m-doc-wrap"><a href="namespaceel_1_1base_1_1type.html#a620c830ead75d26b45c060c211ee2685" class="m-doc">base::<wbr />type::<wbr />fstream_t</a>* fs) -&gt; std::size_t</span>
             </dt>
-            <dd><span></span></dd>
-            <dt id="a13f5e5b7a515f779fffe667741d1e3ae">
-              <span class="m-doc-wrap-bumper"><a href="#a13f5e5b7a515f779fffe667741d1e3ae" class="m-doc-self">GraphVertexOutput</a>(</span><span class="m-doc-wrap">const std::string i_name,
-              <a href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9" class="m-doc">GraphPtr</a> i_baseGraph = nullptr)</span>
+            <dd>Gets size of file provided in stream.</dd>
+            <dt id="a43ffda98fdd01d23af20459fa1a65cac">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a43ffda98fdd01d23af20459fa1a65cac" class="m-doc-self">pathExists</a>(</span><span class="m-doc-wrap">const char* path,
+              bool considerFile = false) -&gt; bool</span>
             </dt>
-            <dd><span></span></dd>
-          </dl>
-        </section>
-        <section id="pub-methods">
-          <h2><a href="#pub-methods">Public functions</a></h2>
-          <dl class="m-doc">
+            <dd>Determines whether or not provided path exist in current file system.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#aab0db1e3d385c86d36c5067440478b9c" class="m-doc">updateValue</a>(</span><span class="m-doc-wrap">) -&gt; char <span class="m-label m-flat m-warning">override</span></span>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a9a8445ed13931bbdeedc9bcee6b1370e" class="m-doc">createPath</a>(</span><span class="m-doc-wrap">const std::string&amp; path) -&gt; bool</span>
             </dt>
-            <dd>updateValue updates the value of the current vertex of the graph based on the values of its incoming connections and the type of logical element (or &quot;gate&quot;). Depending on the type of gate and the values of the incoming links, the method uses the truth tables to perform the corresponding logical operation and sets a new value for the current vertex</dd>
-            <dt id="a2bae64a9f67b05449aa32872ee7f4750">
-              <span class="m-doc-wrap-bumper">void <a href="#a2bae64a9f67b05449aa32872ee7f4750" class="m-doc-self">updateLevel</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
+            <dd>Creates specified path on file system.</dd>
+            <dt id="a3fc5b574bfa3d6c30165fd0e52958d69">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a3fc5b574bfa3d6c30165fd0e52958d69" class="m-doc-self">extractPathFromFilename</a>(</span><span class="m-doc-wrap">const std::string&amp; fullPath,
+              const char* separator = base::consts::kFilePathSeparator) -&gt; std::string</span>
             </dt>
-            <dd>updateLevel updates the level of the current vertex in the graph based on the levels of its incoming connections. If a vertex has incoming connections, the method determines the highest level among all the vertices to which it is connected, and sets the level of the current vertex to one higher than the highest level</dd>
-            <dt>
-              <span class="m-doc-wrap-bumper">void <a href="#abad211ad0816ac5f134618a56995c6b0" class="m-doc">log</a>(</span><span class="m-doc-wrap"><a href="namespaceel_1_1base_1_1type.html#a74ea109bf34d1c44926837fb0830f445" class="m-doc">el::<wbr />base::<wbr />type::<wbr />ostream_t</a>&amp; os) const <span class="m-label m-flat m-warning">override</span></span>
+            <dd>Extracts path of filename with leading slash.</dd>
+            <dt id="a294f6e18eb32d1c3e9c6a654ae970b5d">
+              <span class="m-doc-wrap-bumper">static void <a href="#a294f6e18eb32d1c3e9c6a654ae970b5d" class="m-doc-self">buildStrippedFilename</a>(</span><span class="m-doc-wrap">const char* filename,
+              char buff[],
+              std::size_t limit = base::consts::kSourceFilenameMaxLength)</span>
             </dt>
-            <dd>log Used for easylogging++</dd>
+            <dd>builds stripped filename and puts it in buff</dd>
+            <dt id="a7961c056782c9260ef5371ff59fe48e0">
+              <span class="m-doc-wrap-bumper">static void <a href="#a7961c056782c9260ef5371ff59fe48e0" class="m-doc-self">buildBaseFilename</a>(</span><span class="m-doc-wrap">const std::string&amp; fullPath,
+              char buff[],
+              std::size_t limit = base::consts::kSourceFilenameMaxLength,
+              const char* separator = base::consts::kFilePathSeparator)</span>
+            </dt>
+            <dd>builds base filename and puts it in buff</dd>
           </dl>
         </section>
         <section>
           <h2>Function documentation</h2>
-          <section class="m-doc-details" id="aab0db1e3d385c86d36c5067440478b9c"><div>
+          <section class="m-doc-details" id="a0fabd4453ec4df237bbc9cca63bf6f13"><div>
             <h3>
-              <span class="m-doc-wrap-bumper">char GraphVertexOutput::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aab0db1e3d385c86d36c5067440478b9c" class="m-doc-self">updateValue</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+              <span class="m-doc-wrap-bumper">static <a href="namespaceel_1_1base_1_1type.html#a620c830ead75d26b45c060c211ee2685" class="m-doc">base::<wbr />type::<wbr />fstream_t</a>* el::<wbr />base::<wbr />utils::<wbr />File::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a0fabd4453ec4df237bbc9cca63bf6f13" class="m-doc-self">newFileStream</a>(</span><span class="m-doc-wrap">const std::string&amp; filename)</span></span>
             </h3>
-            <p>updateValue updates the value of the current vertex of the graph based on the values of its incoming connections and the type of logical element (or &quot;gate&quot;). Depending on the type of gate and the values of the incoming links, the method uses the truth tables to perform the corresponding logical operation and sets a new value for the current vertex</p>
+            <p>Creates new out file stream for specified filename.</p>
             <table class="m-table m-fullwidth m-flat">
               <tfoot>
                 <tr>
                   <th style="width: 1%">Returns</th>
-                  <td>A char that represents the new value of the current vertex after updating based on the values of its incoming connections and the type of logical element (or &quot;gate&quot;).</td>
+                  <td>Pointer to newly created fstream or nullptr</td>
                 </tr>
               </tfoot>
             </table>
           </div></section>
-          <section class="m-doc-details" id="abad211ad0816ac5f134618a56995c6b0"><div>
+          <section class="m-doc-details" id="a9a8445ed13931bbdeedc9bcee6b1370e"><div>
             <h3>
-              <span class="m-doc-wrap-bumper">void GraphVertexOutput::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#abad211ad0816ac5f134618a56995c6b0" class="m-doc-self">log</a>(</span><span class="m-doc-wrap"><a href="namespaceel_1_1base_1_1type.html#a74ea109bf34d1c44926837fb0830f445" class="m-doc">el::<wbr />base::<wbr />type::<wbr />ostream_t</a>&amp; os) const <span class="m-label m-warning">override</span></span></span>
+              <span class="m-doc-wrap-bumper">static bool el::<wbr />base::<wbr />utils::<wbr />File::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a9a8445ed13931bbdeedc9bcee6b1370e" class="m-doc-self">createPath</a>(</span><span class="m-doc-wrap">const std::string&amp; path)</span></span>
             </h3>
-            <p>log Used for easylogging++</p>
+            <p>Creates specified path on file system.</p>
             <table class="m-table m-fullwidth m-flat">
               <thead>
                 <tr><th colspan="2">Parameters</th></tr>
               </thead>
               <tbody>
                 <tr>
-                  <td style="width: 1%">os</td>
-                  <td>Stream for easylogging</td>
+                  <td style="width: 1%">path</td>
+                  <td>Path to create.</td>
                 </tr>
               </tbody>
             </table>
