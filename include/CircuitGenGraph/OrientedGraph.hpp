@@ -436,13 +436,13 @@ public:
 
   std::map<Gates, std::map<Gates, size_t>> getEdgesGatesCount() const;
 
-  bool     isConnected(bool i_recalculate = false);
+  bool         isConnected(bool i_recalculate = false);
 
-  GraphPtr unrollGraph() const;
+  GraphPtr     unrollGraph() const;
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  void     log(el::base::type::ostream_t& os) const;
+  virtual void log(el::base::type::ostream_t& os) const;
 
 private:
   static std::atomic_size_t d_countNewGraphInstance;

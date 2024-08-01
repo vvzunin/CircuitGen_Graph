@@ -1008,27 +1008,56 @@ void OrientedGraph::log(el::base::type::ostream_t& os) const {
   os << "Number of Edges: " << d_edgesCount << "\n";
   os << "Need Level Update: " << (d_needLevelUpdate ? "Yes" : "No") << "\n";
   os << "Already Parsed: " << (d_alreadyParsed ? "Yes" : "No") << "\n";
-  if (!d_hashed.empty()) {
-      os << "Hashed: " << d_hashed << "\n";
-  }
+  os << "Graph hash: " << d_hashed << "\n";
 
+  bool flag = true;
   os << "Number of Subgraphs: " << d_subGraphs.size() << "\n";
-  os << "Stored Vertex Types and Counts:\n";
+  os << "baseSize: " << this->baseSize() << std::endl;
+  os << "fullSize: " << this->fullSize() << std::endl;
+  os << "Stored Vertex Types and Counts:";
   for (const auto& pair : d_vertexes) {
-      os << "\t" << d_settings->parseVertexToString(pair.first)
-          << "\t:\t" << pair.second.size() << "\n";
+    if (pair.second.size() != 0) {
+      flag = false;
+      os << "\n\t"      << d_settings->parseVertexToString(pair.first);
+      if (pair.first == VertexTypes::subGraph)
+        os << "\t:\t"   << pair.second.size();
+      else
+        os << "\t\t:\t" << pair.second.size();
+    }
   }
-  os << "Gate Types and Counts:\n";
+  if (flag)
+    os << " None";
+  os << std::endl;
+
+  flag = true;
+  os << "Gate Types and Counts:";
   for (const auto& pair : d_gatesCount) {
-      os << "\t" << d_settings->parseGateToString(pair.first)
-          << "\t:\t" << pair.second << "\n";
+    if (pair.second != 0) {
+      flag = false;
+      os << "\n\t"  << d_settings->parseGateToString(pair.first)
+         << "\t:\t" << pair.second;
+    }
   }
-  os << "Edges Between Gates Counts:\n";
+  if (flag)
+    os << " None";
+  os << std::endl;
+
+  flag = true;
+  os << "Edges Between Gates Counts:";
   for (const auto& outer_pair : d_edgesGatesCount) {
-      for (const auto& inner_pair : outer_pair.second) {
-          os << "\t" << d_settings->parseGateToString(outer_pair.first)
-              << "\t->" << d_settings->parseGateToString(inner_pair.first)
-              << "\t:\t" << inner_pair.second << "\n";
+    for (const auto& inner_pair : outer_pair.second) {
+      if (inner_pair.second != 0) {
+        flag = false;
+        os << "\n\t"  << d_settings->parseGateToString(outer_pair.first)
+           << "\t-> " << d_settings->parseGateToString(inner_pair.first)
+           << "\t:\t" << inner_pair.second;
       }
+    }
   }
+  if (flag)
+    os << " None";
+  os << "\n\n";
+  for (const auto& subGraph : d_vertexes.at(VertexTypes::subGraph)) {
+    os << *subGraph;
+  } 
 }

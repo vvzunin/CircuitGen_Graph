@@ -206,6 +206,6 @@ void GraphVertexSubGraph::log(el::base::type::ostream_t& os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";
   os << "Vertex Type: " << d_settings->parseVertexToString(VertexTypes::subGraph) << "\n";
-  d_subGraph->log(os);
-  os << "Vertex Hash: " << hashed << "\n";
+  os << "Vertex Hash: " << hashed;
+  os << *d_subGraph;
 }

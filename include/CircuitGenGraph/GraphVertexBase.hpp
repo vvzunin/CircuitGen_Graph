@@ -474,7 +474,7 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  void                   log(el::base::type::ostream_t& os) const;
+  virtual void           log(el::base::type::ostream_t& os) const;
 
 protected:
   GraphPtrWeak                     d_baseGraph;

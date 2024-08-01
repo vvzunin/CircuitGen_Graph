@@ -43,6 +43,7 @@ TEST(TestSetNameAndGetName, ReturnCorrectName) {
 }
 
 TEST(TestBaseSizeAndFullSizeAndSumFullSize, ReturnCorrectSize) {
+  initLogging("TestBaseSizeAndFullSizeAndSumFullSize", "ReturnCorrectSize");
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
   EXPECT_EQ(graphPtr->baseSize(), 0);
   EXPECT_EQ(graphPtr->fullSize(), 0);
@@ -106,6 +107,7 @@ TEST(TestBaseSizeAndFullSizeAndSumFullSize, ReturnCorrectSize) {
   EXPECT_EQ(graphPtr->fullSize(), 20);
   // Does sumFullSize() return sum from subGraphs too
   // EXPECT_EQ(graph.sumFullSize(), 32);
+  LOG(INFO) << *graphPtr << std::endl;
 }
 
 TEST(TestIsEmptyAndIsEmptyFull, ReturnCorrectSize) {
