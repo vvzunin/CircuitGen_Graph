@@ -13,7 +13,7 @@
 #include <CircuitGenGraph/enums.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
-#include "logger/easylogging++.h"
+#include <easylogging++.h>
 
 // TODO: Добавить проверку на имена файлов при доблении новых вершин
 

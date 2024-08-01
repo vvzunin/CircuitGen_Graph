@@ -1,5 +1,5 @@
 #include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
-#include "logger/easylogging++.h"
+#include <easylogging++.h>
 
 std::string
     AuxMethods::replacer(const std::string& i_s, const std::string& i_r) {

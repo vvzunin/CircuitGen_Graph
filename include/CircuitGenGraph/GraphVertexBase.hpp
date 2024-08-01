@@ -10,7 +10,7 @@
 #include <CircuitGenGraph/enums.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
-#include "logger/easylogging++.h"
+#include <easylogging++.h>
 
 class OrientedGraph;  // Проблема циклического определения
 

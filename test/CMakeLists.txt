@@ -30,7 +30,8 @@ enable_testing()
 configure_file(
   ../easylogging++.conf
   easylogging++.conf
-  COPYONLY)
+  COPYONLY
+)
 
 # ---- Tests ----
 

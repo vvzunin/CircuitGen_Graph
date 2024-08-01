@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
-#include "logger/easylogging++.h"
+#include <easylogging++.h>
 
 GraphVertexGates::GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph) :
   GraphVertexBase(VertexTypes::gate, i_baseGraph) {

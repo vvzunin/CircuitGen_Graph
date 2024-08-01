@@ -29,7 +29,6 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultSettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultAuxiliaryMethods.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/logger/easylogging++.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/logger/easylogging++.h
 )
 
 set(PUBLIC_HEADERS
