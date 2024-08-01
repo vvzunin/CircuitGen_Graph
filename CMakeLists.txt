@@ -52,12 +52,16 @@ include(GNUInstallDirs)
 
 target_include_directories(
     ${PROJECT_NAME} ${warning_guard}
+    PRIVATE
+    "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/external/easyloggingpp>"
     PUBLIC
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
 )
 
 target_include_directories(
     ${PROJECT_NAME} SYSTEM
+    PRIVATE
+    "\$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/external/easyloggingpp>"
     PUBLIC
     "\$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
 )
