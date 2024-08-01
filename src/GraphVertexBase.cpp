@@ -227,8 +227,10 @@ std::string GraphVertexBase::getInstance() {
 
 std::string GraphVertexBase::toVerilog() {
   if (d_type == VertexTypes::output) {
-    if (VertexPtr ptr = d_inConnections.back().lock()) {
-      return "assign " + d_name + " = " + ptr->getName() + ";";
+    if (!d_inConnections.empty()){
+      if (VertexPtr ptr = d_inConnections.back().lock()) {
+        return "assign " + d_name + " = " + ptr->getName() + ";";
+      }
     }
   }
   return "";
