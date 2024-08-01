@@ -26,6 +26,7 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultSettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultAuxiliaryMethods.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/external/easyloggingpp/easylogging++.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/easyloggingpp/easylogging++.h
 )
 
 set(PUBLIC_HEADERS
