@@ -58,7 +58,7 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 include(GNUInstallDirs)
 
 target_link_libraries(
-  ${PROJECT_NAME} PRIVATE
+  ${PROJECT_NAME} PUBLIC
   easylogging++
 )
 
@@ -101,7 +101,7 @@ set_target_properties(
 
 include(cmake/utils.cmake)
 
-install(TARGETS ${PROJECT_NAME}
+install(TARGETS ${PROJECT_NAME} easylogging++
   EXPORT "${PROJECT_NAME}Targets"
 
   # these get default values from GNUInstallDirs, no need to set them
@@ -120,12 +120,6 @@ install(EXPORT "${PROJECT_NAME}Targets"
   DESTINATION cmake
   NAMESPACE CircuitGenGraph::
 )
-
-include(CTest)
-
-if(BUILD_TESTING)
-  add_subdirectory(test)
-endif()
 
 include(CMakePackageConfigHelpers)
 
