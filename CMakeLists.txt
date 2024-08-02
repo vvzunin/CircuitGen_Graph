@@ -49,8 +49,8 @@ add_library(
 
 add_library(
   easylogging++ STATIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/easyloggingpp/easylogging++.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/external/easyloggingpp/easylogging++.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.h
 )
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
@@ -89,7 +89,7 @@ target_include_directories(${PROJECT_NAME}
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
-include_directories(${CMAKE_SOURCE_DIR}/external)
+include_directories(${CMAKE_SOURCE_DIR}/lib)
 
 set_target_properties(
   ${PROJECT_NAME} PROPERTIES
