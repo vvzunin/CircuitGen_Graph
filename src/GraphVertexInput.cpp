@@ -46,13 +46,7 @@ char GraphVertexInput::updateValue() {
 }
 
 void GraphVertexInput::updateLevel() {
-  for (VertexPtrWeak vert : d_inConnections) {
-    if (auto ptr = vert.lock()) {
-      d_level = (ptr->getLevel() > d_level) ? ptr->getLevel() : d_level;
-    } else {
-      throw std::invalid_argument("Dead pointer!");
-    }
-  }
+  d_level = 0;
 }
 
 void GraphVertexInput::log(el::base::type::ostream_t& os) const {

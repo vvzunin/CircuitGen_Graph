@@ -33,6 +33,7 @@ char GraphVertexOutput::updateValue() {
 void GraphVertexOutput::updateLevel() {
   for (VertexPtrWeak vert : d_inConnections) {
     if (auto ptr = vert.lock()) {
+      ptr->updateLevel();
       d_level = (ptr->getLevel() > d_level) ? ptr->getLevel() : d_level;
     } else {
       throw std::invalid_argument("Dead pointer!");

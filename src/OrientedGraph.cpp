@@ -80,11 +80,9 @@ bool OrientedGraph::needToUpdateLevel() const {
 }
 
 void OrientedGraph::updateLevels() {
-  // for (VertexPtr vert :
-  // d_vertexes.at(VertexTypes::output)) {
-  //   vert->updateLevel();
-  //   d_level = d_level > vert->getLevel() ? d_level : vert->getLevel();
-  // }
+  for (VertexPtr vert : d_vertexes.at(VertexTypes::output)) {
+    vert->updateLevel();
+  }
 }
 
 uint32_t OrientedGraph::getMaxLevel() {
@@ -719,14 +717,32 @@ std::string OrientedGraph::toGraphMLPseudoABCD() const {
   return format(mainTemplate, nodes + edges);
 }
 
+bool CompareLevels(const VertexPtr left, const VertexPtr right)
+{
+  return left->getLevel() < right->getLevel();
+}
+
+void swap(VertexPtr first, VertexPtr second) noexcept {
+  VertexPtr c = first;
+  first = second;
+  second = c;
+}
+
 std::string OrientedGraph::toGraphMLOpenABCD() const {
   using namespace AuxMethods;  // format()
   using namespace OpenABCD;    // templates
 
-  std::shared_ptr<const OrientedGraph> graphPtr = shared_from_this();
+  //std::shared_ptr<const OrientedGraph> graphPtr = shared_from_this();
+  std::shared_ptr<OrientedGraph> graphPtr;
   if (!d_vertexes.at(VertexTypes::subGraph).empty()) {
     graphPtr = this->unrollGraph();
   }
+    
+  graphPtr->updateLevels();
+  std::sort(graphPtr->d_vertexes.at(VertexTypes::gate).begin(), 
+            graphPtr->d_vertexes.at(VertexTypes::gate).end(), 
+            CompareLevels);
+
 
   std::string nodes, edges, nodeType, actualName, currentName;
   Gates       currentGate, vGate, sGate;
