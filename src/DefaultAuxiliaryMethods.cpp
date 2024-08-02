@@ -3,7 +3,6 @@
 
 std::string
     AuxMethods::replacer(const std::string& i_s, const std::string& i_r) {
-  LOG(INFO) << "Run AuxMethods::replacer(" + i_s, + ", " + i_r + ")";
   std::string res;
   res.reserve(i_s.length() * 2);
 
@@ -16,6 +15,5 @@ std::string
   }
 
   res.append(i_s, prev_pos, i_s.length() - prev_pos);
-  LOG(INFO) << "Result AuxMethods::replacer: " << res;
   return res;
 }
