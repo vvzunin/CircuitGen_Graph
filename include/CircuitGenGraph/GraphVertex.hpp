@@ -9,7 +9,7 @@
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
-#include <easylogging++.h>
+#include "easyloggingpp/easylogging++.h"
 
 /// @file GraphVertex.hpp
 /// TODO: Maybe Description some virtual methods for Graph's classes,

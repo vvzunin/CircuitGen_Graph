@@ -34,7 +34,7 @@
 
 > [!IMPORTANT]  
 > В проект добавлена система логирования. Для корректной работы библиотеки необходимо инициализировать библиотеку командой:
-> #include <easylogging++.h>
+> #include "easyloggingpp/easylogging++.h"
 > INITIALIZE_EASYLOGGINGPP
 
 ## Режим разработчика

@@ -12,7 +12,7 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
-#include <easylogging++.h>
+#include "easyloggingpp/easylogging++.h"
 
 std::atomic_size_t OrientedGraph::d_countGraph            = 0;
 std::atomic_size_t OrientedGraph::d_countNewGraphInstance = 0;
