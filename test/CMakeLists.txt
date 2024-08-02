@@ -42,7 +42,7 @@ function(add_new_test name)
   )
 
   target_link_libraries(CircuitGenGraph_test_${name} PRIVATE GTest::gtest_main)
-  target_link_libraries(CircuitGenGraph_test_${name} PRIVATE CircuitGenGraph::CircuitGenGraph  easylogging++)
+  target_link_libraries(CircuitGenGraph_test_${name} PRIVATE CircuitGenGraph::CircuitGenGraph easylogging++)
 
   target_include_directories(
     CircuitGenGraph_test_${name} ${warning_guard}
