@@ -17,6 +17,17 @@
 std::atomic_size_t OrientedGraph::d_countGraph            = 0;
 std::atomic_size_t OrientedGraph::d_countNewGraphInstance = 0;
 
+bool CompareLevels(const VertexPtr left, const VertexPtr right)
+{
+  return left->getLevel() < right->getLevel();
+}
+
+void swap(VertexPtr first, VertexPtr second) noexcept {
+  VertexPtr c = first;
+  first = second;
+  second = c;
+}
+
 OrientedGraph::OrientedGraph(const std::string& i_name) {
   d_graphID = d_countNewGraphInstance++;
 
@@ -665,10 +676,16 @@ std::string OrientedGraph::toGraphMLPseudoABCD() const {
   using namespace AuxMethods;  // format()
   using namespace PseudoABCD;  // templates
 
-  std::shared_ptr<const OrientedGraph> graphPtr = shared_from_this();
+  //std::shared_ptr<const OrientedGraph> graphPtr = shared_from_this();
+  std::shared_ptr<OrientedGraph> graphPtr;
   if (!d_vertexes.at(VertexTypes::subGraph).empty()) {
     graphPtr = this->unrollGraph();
   }
+    
+  graphPtr->updateLevels();
+  std::sort(graphPtr->d_vertexes.at(VertexTypes::gate).begin(), 
+            graphPtr->d_vertexes.at(VertexTypes::gate).end(), 
+            CompareLevels);
 
   std::string                     nodes, edges, nodeType, actualName, sinkName;
   std::map<std::string, uint32_t> nodeNames;
@@ -717,16 +734,7 @@ std::string OrientedGraph::toGraphMLPseudoABCD() const {
   return format(mainTemplate, nodes + edges);
 }
 
-bool CompareLevels(const VertexPtr left, const VertexPtr right)
-{
-  return left->getLevel() < right->getLevel();
-}
 
-void swap(VertexPtr first, VertexPtr second) noexcept {
-  VertexPtr c = first;
-  first = second;
-  second = c;
-}
 
 std::string OrientedGraph::toGraphMLOpenABCD() const {
   using namespace AuxMethods;  // format()
