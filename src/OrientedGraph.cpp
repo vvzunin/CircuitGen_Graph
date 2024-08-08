@@ -452,6 +452,10 @@ std::pair<bool, std::string>
     return std::make_pair(false, "");
   }
 
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  fileStream << "//This file was generated automatically using CircuitGen_Graph at ";
+  fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << "." << std::endl << std::endl;
   fileStream << "module " << d_name << "(\n" << verilogTab;
 
   // here we are parsing inputs by their wire size
@@ -571,6 +575,10 @@ std::pair<bool, std::string>
     return std::make_pair(false, "");
   }
 
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  fileStream << "// This file was generated automatically using CircuitGen_Graph at ";
+  fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << "." << std::endl << std::endl;
   fileStream << "digraph " << d_name << " {\n";
 
   // here we are parsing inputs by their wire size
@@ -622,18 +630,18 @@ std::pair<bool, std::string>
     fileStream << dotTab << oper->toDOT() << "\n";
   }
 
-  // if (d_subGraphs.size()) {
-  //   fileStream << "\n";
-  // }
+  if (d_subGraphs.size()) {
+    fileStream << "\n";
+  }
   // and all modules
-  // for (auto subPtr : d_vertexes[VertexTypes::subGraph]) {
-  //   auto sub = std::static_pointer_cast<GraphVertexSubGraph>(subPtr);
+  for (auto subPtr : d_vertexes[VertexTypes::subGraph]) {
+    auto sub = std::static_pointer_cast<GraphVertexSubGraph>(subPtr);
 
-  //   std::pair<bool, std::string> val = sub->toDOT(i_path);
-  //   if (!val.first)
-  //     return std::make_pair(false, "");
-  //   fileStream << val.second;
-  // }
+    std::pair<bool, std::string> val = sub->toDOT(i_path);
+    if (!val.first)
+      return std::make_pair(false, "");
+    fileStream << val.second;
+  }
 
   if (d_vertexes[VertexTypes::gate].size()) {
     fileStream << "\n";
@@ -769,16 +777,31 @@ std::string OrientedGraph::toGraphMLClassic(
 }
 
 bool OrientedGraph::toGraphMLClassic(std::ofstream& fileStream) const {
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  fileStream << "<!-- This file was generated automatically using CircuitGen_Graph at ";
+  fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << ". -->" << std::endl << std::endl;
+
   fileStream << this->toGraphMLClassic();
   return true;
 }
 
 bool OrientedGraph::toGraphMLPseudoABCD(std::ofstream& fileStream) const {
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  fileStream << "<!-- This file was generated automatically using CircuitGen_Graph at ";
+  fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << ". -->" << std::endl << std::endl;
+
   fileStream << this->toGraphMLPseudoABCD();
   return true;
 }
 
 bool OrientedGraph::toGraphMLOpenABCD(std::ofstream& fileStream) const {
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  fileStream << "<!-- This file was generated automatically using CircuitGen_Graph at ";
+  fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << ". -->" << std::endl << std::endl;
+
   fileStream << this->toGraphMLOpenABCD();
   return true;
 }

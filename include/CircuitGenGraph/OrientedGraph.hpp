@@ -8,6 +8,8 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
+#include <iomanip>
+#include <ctime>
 
 #include <CircuitGenGraph/DefaultSettings.hpp>
 #include <CircuitGenGraph/enums.hpp>
