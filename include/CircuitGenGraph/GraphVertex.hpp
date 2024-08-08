@@ -96,6 +96,7 @@ public:
 
   virtual void updateLevel() override;
   std::string  toVerilog() override;
+  std::string  toDOT() override;
 
   /// @brief getInstance
   /// TO DO:
@@ -127,6 +128,7 @@ public:
   char        updateValue() override;
 
   std::string toVerilog() override;
+  std::string toDOT() override;
 
   /// @brief This method is used as a substructure for
   /// OrientedGraph methods
@@ -138,6 +140,9 @@ public:
   /// and second is string, for graph is empty, for subgraph is module instance
   std::pair<bool, std::string>
               toVerilog(std::string i_path, std::string i_filename = "");
+
+  std::pair<bool, std::string>
+              toDOT(std::string i_path, std::string i_filename = "");
 
   /// @brief This method is used as a substructure for
   /// OrientedGraph methods
@@ -274,6 +279,7 @@ public:
   /// @throws std::invalid_argument if any input connection is invalid
 
   std::string  toVerilog() override;
+  std::string  toDOT() override;
 
   bool         isSubgraphBuffer() const override;
 

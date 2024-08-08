@@ -237,6 +237,18 @@ std::string GraphVertexBase::toVerilog() {
   return "";
 }
 
+std::string GraphVertexBase::toDOT() {
+  if (d_type == VertexTypes::output) {
+    if (!d_inConnections.empty()){
+      if (VertexPtr ptr = d_inConnections.back().lock()) {
+        return ptr->getName() + " -> " + d_name + ";";
+      }
+    }
+  }
+  return "";
+}
+
+
 void GraphVertexBase::log(el::base::type::ostream_t& os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";

@@ -277,26 +277,6 @@ public:
   /// // Creating another vertex
   /// VertexPtr anotherVertex =
   /// std::make_shared<GraphVertexBase>(VertexTypes::input, "vertex2");
-  /// // Add the second vertex to the input connections of the first vertex
-  /// // and get the number of occurrences
-  /// uint32_t count = vertex.addVertexToInConnections(anotherVertex);
-  /// // Output the result
-  /// std::cout << "The number of occurrences of the second vertex in the input
-  /// connections of the first vertex: " << count << std::endl;
-  /// @endcode
-
-  /// @brief addVertexToInConnections
-  /// Adds a vertex to the input connections of this vertex and returns the
-  /// count of occurrences of the given vertex in the input connections
-  /// @param i_vert The vertex to be added to the input connections
-  /// @return The count of occurrences of the given vertex in the input
-  /// connections after adding it
-  /// @code
-  /// // Creating an instance of the GraphVertexBase class
-  /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
-  /// // Creating another vertex
-  /// VertexPtr anotherVertex =
-  /// std::make_shared<GraphVertexBase>(VertexTypes::input, "vertex2");
   /// // Adding a second vertex to the input connections of the first vertex
   /// and getting the number of occurrences
   /// uint32_t occurrences = vertex.addVertexToInConnections(anotherVertex);
@@ -469,6 +449,28 @@ public:
   /// @endcode
 
   virtual std::string    toVerilog();
+
+  /// @brief toDOT
+  /// Generates DOT code for the vertex
+  /// @return A string containing DOT code for the vertex, or an empty
+  /// string if the vertex type is not "output" or if the incoming connection
+  /// is invalid
+  /// @code
+  /// // Creating an instance of the GraphVertexBase class with the type
+  /// "output" and the name "output_vertex"
+  /// GraphVertexBase outputVertex(VertexTypes::output, "output_vertex");
+  /// // Creating another vertex with the type "input" and the name
+  /// "input_vertex" VertexPtr inputVertex =
+  /// std::make_shared<GraphVertexBase>(VertexTypes::input, "input_vertex");
+  /// // Setting the input connection for the vertex "output_vertex"
+  /// outputVertex.addVertexToInConnections(inputVertex);
+  /// // Generating the DOT code for the vertex "output_vertex"
+  /// std::string dotCode = outputVertex.toDOT();
+  /// // Display the generated DOT code on the screen
+  /// std::cout << "Generated DOT code:\n" << dotCode << std::endl;
+  /// @endcode
+
+  virtual std::string    toDOT();
 
   virtual bool           isSubgraphBuffer() const { return false; }
 

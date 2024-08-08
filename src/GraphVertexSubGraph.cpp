@@ -43,6 +43,17 @@ std::pair<bool, std::string>
   return d_subGraph->toVerilog(i_path, i_filename);
 }
 
+std::pair<bool, std::string>
+    GraphVertexSubGraph::toDOT(std::string i_path, std::string i_filename) {
+  if (auto parentPtr = d_baseGraph.lock()) {
+    d_subGraph->setCurrentParent(parentPtr);
+  } else {
+    throw std::invalid_argument("Dead pointer!");
+  }
+
+  return d_subGraph->toDOT(i_path, i_filename);
+}
+
 bool GraphVertexSubGraph::toGraphML(std::ofstream& i_fileStream) const {
   return d_subGraph->toGraphMLClassic(i_fileStream);
 }
@@ -55,6 +66,10 @@ std::string GraphVertexSubGraph::toGraphML(
 }
 
 std::string GraphVertexSubGraph::toVerilog() {
+  return "DO NOT CALL IT";
+}
+
+std::string GraphVertexSubGraph::toDOT() {
   return "DO NOT CALL IT";
 }
 

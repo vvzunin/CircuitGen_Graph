@@ -28,6 +28,12 @@ std::string GraphVertexConstant::toVerilog() {
   return "assign " + d_name + " = 1'b" + d_value + ";";
 }
 
+std::string GraphVertexConstant::toDOT() {
+  std::string str = "const";
+  str += d_value + " -> " + d_name + ";";
+  return str;
+}
+
 void GraphVertexConstant::log(el::base::type::ostream_t& os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";

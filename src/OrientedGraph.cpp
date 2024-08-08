@@ -550,6 +550,117 @@ std::pair<bool, std::string>
   return std::make_pair(true, "");
 }
 
+std::pair<bool, std::string>
+    OrientedGraph::toDOT(std::string i_path, std::string i_filename) {
+  if (d_alreadyParsed && d_isSubGraph) {
+    return std::make_pair(true, getGraphInstance());
+  }
+  // В данном методе происходит только генерация одного графа. Без подграфов.
+  std::string dotTab = "  ";
+
+  if (!i_filename.size()) {
+    i_filename = d_name + ".v";
+  }
+  std::string   path        = i_path + (d_isSubGraph ? "/submodulesDOT" : "");
+
+  auto          correctPath = path + "/" + i_filename;
+  std::ofstream fileStream(correctPath);
+
+  if (!fileStream) {
+    std::cerr << "cannot write file to " << path << std::endl;
+    return std::make_pair(false, "");
+  }
+
+  fileStream << "digraph " << d_name << " {\n";
+
+  // here we are parsing inputs by their wire size
+  for (auto inp : d_vertexes[VertexTypes::input]) {
+    fileStream << dotTab << inp->getName() << ";\n";
+  }
+
+  // and outputs
+  for (auto outVert : d_vertexes[VertexTypes::output]) {
+    fileStream << dotTab << outVert->getName() + ";\n";
+  }
+
+  // parsing inputs, outputs and wires for subgraphs. And wires for operations
+  // too
+  uint8_t count = 0;
+  for (auto eachVertex :
+       {d_vertexes[VertexTypes::input],
+        d_vertexes[VertexTypes::output],
+        d_allSubGraphsOutputs,
+        d_vertexes[VertexTypes::gate]}) {
+    if (eachVertex.size()) {
+      auto usedType = eachVertex.back()->getType();
+
+      fileStream << VertexUtils::vertexTypeToComment(usedType);
+
+      switch (count) {
+        case 2:
+          fileStream << " for subGraphs outputs";
+          break;
+        case 3:
+          fileStream << " for main graph";
+          break;
+      }
+      fileStream << std::endl;
+    }
+
+    for (auto value : eachVertex) {
+      fileStream << dotTab << value->getName() << ";\n";
+    }
+
+    ++count;
+  }
+
+  if (d_vertexes[VertexTypes::constant].size()) {
+    fileStream << "\n";
+  }
+  // writing consts
+  for (auto oper : d_vertexes[VertexTypes::constant]) {
+    fileStream << dotTab << oper->toDOT() << "\n";
+  }
+
+  // if (d_subGraphs.size()) {
+  //   fileStream << "\n";
+  // }
+  // and all modules
+  // for (auto subPtr : d_vertexes[VertexTypes::subGraph]) {
+  //   auto sub = std::static_pointer_cast<GraphVertexSubGraph>(subPtr);
+
+  //   std::pair<bool, std::string> val = sub->toDOT(i_path);
+  //   if (!val.first)
+  //     return std::make_pair(false, "");
+  //   fileStream << val.second;
+  // }
+
+  if (d_vertexes[VertexTypes::gate].size()) {
+    fileStream << "\n";
+  }
+  // and all operations
+  for (auto oper : d_vertexes[VertexTypes::gate]) {
+    fileStream << dotTab << oper->toDOT() << "\n";
+  }
+
+  fileStream << "\n";
+  // and all outputs
+  for (auto oper : d_vertexes[VertexTypes::output]) {
+    fileStream << dotTab << oper->toDOT() << "\n";
+  }
+
+  fileStream << "}\n";
+
+  d_alreadyParsed = true;
+
+  if (d_isSubGraph) {
+    return std::make_pair(true, getGraphInstance());
+  }
+
+  fileStream.close();
+  return std::make_pair(true, "");
+}
+
 std::string OrientedGraph::toGraphMLClassic(
     uint16_t           i_indent,
     const std::string& i_prefix
@@ -864,7 +975,7 @@ GraphPtr OrientedGraph::unrollGraph() const {
             const auto&    vOutputs = v->getOutConnections();
             VertexPtr      ptr;
 
-            unroller(sg, v->getName() + "::", unroller);
+            unroller(sg, v->getName() + "__", unroller);
 
             for (size_t i = 0; i < vInputs.size(); ++i) {
               ptr = vInputs[i].lock();
@@ -913,7 +1024,6 @@ GraphPtr OrientedGraph::unrollGraph() const {
       }
     }
   }
-
   return newGraph;
 }
 

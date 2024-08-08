@@ -187,6 +187,44 @@ std::string GraphVertexGates::toVerilog() {
   return basic;
 }
 
+std::string GraphVertexGates::toDOT() {
+  if (!d_inConnections.size()) {
+    std::cerr << "TODO: delete empty vertices: " << d_name << std::endl;
+    return "";
+  }
+  std::string basic = "";
+
+  std::string oper  = VertexUtils::gateToString(d_gate);
+  if (d_inConnections.empty()) {
+    LOG(WARNING) << d_name << std::endl;
+  }
+  if (VertexPtr ptr = d_inConnections.back().lock()) {
+    if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
+      basic = ptr->getName() + " -> " + d_name + ";";
+      return basic;
+    }
+  } else {
+    throw std::invalid_argument("Dead pointer!");
+  }
+
+  VertexPtr ptr;
+  for (size_t i = 0; i < d_inConnections.size() - 1; ++i) {
+    if (ptr = d_inConnections[i].lock()) {
+      basic += ptr->getName() + " -> " + d_name + ";\n";
+    } else {
+      throw std::invalid_argument("Dead pointer!");
+    }
+  }
+
+  if (ptr = d_inConnections.back().lock()) {
+    basic += ptr->getName() + " -> " + d_name + ";";
+  } else {
+    throw std::invalid_argument("Dead pointer!");
+  }
+
+  return basic;
+}
+
 bool GraphVertexGates::isSubgraphBuffer() const {
   if (d_gate != Gates::GateBuf || d_inConnections.empty()) {
     return false;

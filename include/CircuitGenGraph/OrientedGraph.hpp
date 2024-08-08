@@ -375,6 +375,9 @@ public:
   std::pair<bool, std::string>
               toVerilog(std::string i_path, std::string i_filename = "");
 
+  std::pair<bool, std::string>
+              toDOT(std::string i_path, std::string i_filename = "");
+
   /// @brief toGraphML Writes the graph structure in GraphML format to the
   /// specified output stream
   /// @param i_fileStream A reference to the std::ofstream object, which
