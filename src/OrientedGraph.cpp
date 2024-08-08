@@ -745,6 +745,8 @@ std::string OrientedGraph::toGraphMLOpenABCD() const {
   if (!d_vertexes.at(VertexTypes::subGraph).empty()) {
     graphPtr = this->unrollGraph();
   }
+
+  graphPtr->toVerilog("./test", "test.v");
     
   graphPtr->updateLevels();
   std::sort(graphPtr->d_vertexes.at(VertexTypes::gate).begin(), 
