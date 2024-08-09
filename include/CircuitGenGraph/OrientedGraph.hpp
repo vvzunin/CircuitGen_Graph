@@ -466,7 +466,8 @@ private:
   bool                      d_needLevelUpdate = true;
 
   // also we need to now, was .v file for subgraph created, or not
-  bool                      d_alreadyParsed   = false;
+  bool                      d_alreadyParsedVerilog   = false;
+  bool                      d_alreadyParsedDOT       = false;
 
   // -1 if false, 0 if undefined, 1 if true
   int8_t                    d_connected       = 0;

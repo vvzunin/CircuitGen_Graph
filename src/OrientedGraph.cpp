@@ -433,7 +433,7 @@ std::string OrientedGraph::getGraphInstance() {
 
 std::pair<bool, std::string>
     OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
-  if (d_alreadyParsed && d_isSubGraph) {
+  if (d_alreadyParsedVerilog && d_isSubGraph) {
     return std::make_pair(true, getGraphInstance());
   }
   // В данном методе происходит только генерация одного графа. Без подграфов.
@@ -544,7 +544,7 @@ std::pair<bool, std::string>
 
   fileStream << "endmodule\n";
 
-  d_alreadyParsed = true;
+  d_alreadyParsedVerilog = true;
 
   if (d_isSubGraph) {
     return std::make_pair(true, getGraphInstance());
@@ -556,7 +556,7 @@ std::pair<bool, std::string>
 
 std::pair<bool, std::string>
     OrientedGraph::toDOT(std::string i_path, std::string i_filename) {
-  if (d_alreadyParsed && d_isSubGraph) {
+  if (d_alreadyParsedDOT && d_isSubGraph) {
     return std::make_pair(true, getGraphInstance());
   }
   // В данном методе происходит только генерация одного графа. Без подграфов.
@@ -658,7 +658,7 @@ std::pair<bool, std::string>
 
   fileStream << "}\n";
 
-  d_alreadyParsed = true;
+  d_alreadyParsedDOT = true;
 
   if (d_isSubGraph) {
     return std::make_pair(true, getGraphInstance());
@@ -1165,7 +1165,8 @@ void OrientedGraph::log(el::base::type::ostream_t& os) const {
   os << "Graph ID: " << d_graphID << "\n";
   os << "Number of Edges: " << d_edgesCount << "\n";
   os << "Need Level Update: " << (d_needLevelUpdate ? "Yes" : "No") << "\n";
-  os << "Already Parsed: " << (d_alreadyParsed ? "Yes" : "No") << "\n";
+  os << "Already Parsed Verilog: " << (d_alreadyParsedVerilog ? "Yes" : "No") << "\n";
+  os << "Already Parsed DOT: " << (d_alreadyParsedDOT ? "Yes" : "No") << "\n";
   os << "Graph hash: " << d_hashed << "\n";
 
   bool flag = true;
