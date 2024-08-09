@@ -149,5 +149,16 @@ TEST(TestRemoveVertexToInConnections, RemoveConnections) {
   EXPECT_EQ(vertexPtr1->getInConnections().size(), 1);
 }
 
+TEST(TestToDOT, CheckName) {
+  VertexPtr vertexPtr1 = std::make_shared<GraphVertexConstant>('0');
+  VertexPtr vertexPtr2 = std::make_shared<GraphVertexConstant>('1');
+  VertexPtr vertexPtr3 = std::make_shared<GraphVertexConstant>('x');
+  VertexPtr vertexPtr4 = std::make_shared<GraphVertexConstant>('z');
+  EXPECT_EQ(vertexPtr1->toDOT(), "const0 -> " + vertexPtr1->getName() + ";");
+  EXPECT_EQ(vertexPtr2->toDOT(), "const1 -> " + vertexPtr2->getName() + ";");
+  EXPECT_EQ(vertexPtr3->toDOT(), "constx -> " + vertexPtr3->getName() + ";");
+  EXPECT_EQ(vertexPtr4->toDOT(), "constz -> " + vertexPtr4->getName() + ";");
+}
+
 // need to remake realisition of method
 // TEST(TestRemoveVertexToOutConnections, RemoveConnecttions){}

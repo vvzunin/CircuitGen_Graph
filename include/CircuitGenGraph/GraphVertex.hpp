@@ -139,7 +139,7 @@ public:
   /// @return pair, first is bool, meaning was file writing successful or not
   /// and second is string, for graph is empty, for subgraph is module instance
   std::pair<bool, std::string>
-              toVerilog(std::string i_path, std::string i_filename = "");
+      toVerilog(std::string i_path, std::string i_filename = "");
 
   std::pair<bool, std::string>
               toDOT(std::string i_path, std::string i_filename = "");

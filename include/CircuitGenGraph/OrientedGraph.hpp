@@ -1,6 +1,8 @@
 #pragma once
 
 #include <atomic>
+#include <ctime>
+#include <iomanip>
 #include <map>
 #include <memory>
 #include <set>
@@ -8,8 +10,6 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
-#include <iomanip>
-#include <ctime>
 
 #include <CircuitGenGraph/DefaultSettings.hpp>
 #include <CircuitGenGraph/enums.hpp>
@@ -375,7 +375,7 @@ public:
 
   std::string getGraphInstance();
   std::pair<bool, std::string>
-              toVerilog(std::string i_path, std::string i_filename = "");
+      toVerilog(std::string i_path, std::string i_filename = "");
 
   std::pair<bool, std::string>
               toDOT(std::string i_path, std::string i_filename = "");

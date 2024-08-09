@@ -308,7 +308,7 @@ TEST(TestToVerilog, CerrErrorStringIfDInConnectionsSizeIzZero) {
 
   std::cerr.rdbuf(originalStderr);
   std::string output = capturedOutput.str();
-  EXPECT_EQ(output, "TODO: delete empty vertices\n");
+  EXPECT_EQ(output, "TODO: delete empty vertices: " + gate1.getName() + "\n");
 }
 
 TEST(TestToVerilog, ReturnEmptyStringIfDInConnectionsSizeIsZero) {

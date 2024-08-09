@@ -29,8 +29,8 @@ std::string GraphVertexConstant::toVerilog() {
 }
 
 std::string GraphVertexConstant::toDOT() {
-  std::string str = "const";
-  str += d_value + " -> " + d_name + ";";
+  std::string str(1, d_value);
+  str = "const" + str + " -> " + d_name + ";";
   return str;
 }
 
