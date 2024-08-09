@@ -39,7 +39,7 @@ char GraphVertexInput::updateValue() {
       }
 
     } else {
-      std::cerr << "Error" << std::endl;
+      LOG(ERROR) << "Error" << std::endl;
     }
   }
   return d_value;

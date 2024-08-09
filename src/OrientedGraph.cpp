@@ -448,7 +448,7 @@ std::pair<bool, std::string>
   std::ofstream fileStream(correctPath);
 
   if (!fileStream) {
-    std::cerr << "cannot write file to " << path << std::endl;
+    LOG(ERROR) << "cannot write file to " << path << std::endl;
     return std::make_pair(false, "");
   }
 
@@ -563,7 +563,7 @@ std::pair<bool, std::string>
   std::string dotTab = "  ";
 
   if (!i_filename.size()) {
-    i_filename = d_name + ".v";
+    i_filename = d_name + ".dot";
   }
   std::string   path        = i_path + (d_isSubGraph ? "/submodulesDOT" : "");
 
@@ -571,7 +571,7 @@ std::pair<bool, std::string>
   std::ofstream fileStream(correctPath);
 
   if (!fileStream) {
-    std::cerr << "cannot write file to " << path << std::endl;
+    LOG(ERROR) << "cannot write file to " << path << std::endl;
     return std::make_pair(false, "");
   }
 
@@ -605,10 +605,10 @@ std::pair<bool, std::string>
       fileStream << VertexUtils::vertexTypeToComment(usedType);
 
       switch (count) {
-        case 2:
+        case 3:
           fileStream << " for subGraphs outputs";
           break;
-        case 3:
+        case 2:
           fileStream << " for main graph";
           break;
       }
@@ -618,7 +618,6 @@ std::pair<bool, std::string>
     for (auto value : eachVertex) {
       fileStream << dotTab << value->getName() << ";\n";
     }
-
     ++count;
   }
 

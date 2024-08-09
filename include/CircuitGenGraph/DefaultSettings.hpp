@@ -115,7 +115,7 @@ public:
   /// std::cout << "Operation ID: " << operationInfo.second << std::endl;
   /// } catch (const std::out_of_range& e) {
   /// // Handle an exception if the operation is not found
-  /// std::cerr << "Error: " << e.what() << std::endl;
+  /// LOG(ERROR) << "Error: " << e.what() << std::endl;
   /// }
   /// @endcode
   /// @throws std::out_of_range If the passed operation name does not exist
@@ -187,7 +187,7 @@ public:
   /// operationName = settingsInstance->fromOperationsToName("and");
   /// std::cout << "Operation name: " << operationName << std::endl;
   /// } catch (const std::out_of_range& e) {
-  /// std::cerr << "Error: " << e.what() << std::endl;
+  /// LOG(ERROR) << "Error: " << e.what() << std::endl;
   /// }
   /// @endcode
   /// @throw std::out_of_range If the passed operation does not exist in the

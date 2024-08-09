@@ -56,7 +56,7 @@ char GraphVertexGates::updateValue() {
           table = tableXnor.at(d_value);
           break;
         default:
-          std::cerr << "Error" << std::endl;
+          LOG(ERROR) << "Error" << std::endl;
       }
 
       if (!(ptr = d_inConnections[i].lock())) {
@@ -130,7 +130,7 @@ std::string GraphVertexGates::getVerilogString() const {
 
       s += " " + VertexUtils::gateToString(d_gate) + " " + name;
       if (d_gate == GateDefault)
-        std::cerr << "Error" << std::endl;
+        LOG(ERROR) << "Error" << std::endl;
     }
 
     if ((d_gate == Gates::GateNand) || (d_gate == Gates::GateNor)
@@ -143,7 +143,7 @@ std::string GraphVertexGates::getVerilogString() const {
 
 std::string GraphVertexGates::toVerilog() {
   if (!d_inConnections.size()) {
-    std::cerr << "TODO: delete empty vertices: " << d_name << std::endl;
+    LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
     return "";
   }
   std::string basic = "assign " + d_name + " = ";
@@ -189,21 +189,18 @@ std::string GraphVertexGates::toVerilog() {
 
 std::string GraphVertexGates::toDOT() {
   if (!d_inConnections.size()) {
-    std::cerr << "TODO: delete empty vertices: " << d_name << std::endl;
+    LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
     return "";
   }
   std::string basic = "";
 
-  std::string oper  = VertexUtils::gateToString(d_gate);
-  if (d_inConnections.empty()) {
-    LOG(WARNING) << d_name << std::endl;
-  }
   if (VertexPtr ptr = d_inConnections.back().lock()) {
     if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
       basic = ptr->getName() + " -> " + d_name + ";";
       return basic;
     }
   } else {
+    LOG(ERROR) << "Dead pointer!" << d_name << std::endl;
     throw std::invalid_argument("Dead pointer!");
   }
 
@@ -212,6 +209,7 @@ std::string GraphVertexGates::toDOT() {
     if (ptr = d_inConnections[i].lock()) {
       basic += ptr->getName() + " -> " + d_name + ";\n";
     } else {
+      LOG(ERROR) << "Dead pointer!" << d_name << std::endl;
       throw std::invalid_argument("Dead pointer!");
     }
   }
@@ -219,6 +217,7 @@ std::string GraphVertexGates::toDOT() {
   if (ptr = d_inConnections.back().lock()) {
     basic += ptr->getName() + " -> " + d_name + ";";
   } else {
+    LOG(ERROR) << "Dead pointer!" << d_name << std::endl;
     throw std::invalid_argument("Dead pointer!");
   }
 

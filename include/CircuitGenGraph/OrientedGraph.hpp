@@ -317,7 +317,7 @@ public:
   /// }
   /// else
   /// {
-  ///   std::cerr << "Failed to add edge between Vertex1 and Vertex2\n";
+  ///   LOG(ERROR) << "Failed to add edge between Vertex1 and Vertex2\n";
   /// }
   /// @endcode
   /// @throws std::invalid_argument if attempting to add an edge from one
@@ -356,7 +356,7 @@ public:
   /// }
   /// else
   /// {
-  ///   std::cerr << "Failed to add edges from one or more sources to the
+  ///   LOG(ERROR) << "Failed to add edges from one or more sources to the
   ///   target\n";
   /// }
   /// @endcode
