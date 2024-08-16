@@ -217,7 +217,7 @@ bool GraphVertexBase::removeVertexToOutConnections(VertexPtr i_vert) {
   return false;
 }
 
-std::string GraphVertexBase::getInstance() {
+std::string GraphVertexBase::getVerilogInstance() {
   if (!d_inConnections.size()) {
     LOG(ERROR) << "TODO: delete empty vertex instance: " << d_name << std::endl;
     return "";
@@ -226,6 +226,8 @@ std::string GraphVertexBase::getInstance() {
   return VertexUtils::vertexTypeToVerilog(d_type) + " " + d_name + ";";
 }
 
+
+// TODO: what if some (more than 1) connected to output?
 std::string GraphVertexBase::toVerilog() {
   if (d_type == VertexTypes::output) {
     if (!d_inConnections.empty()){
@@ -237,15 +239,8 @@ std::string GraphVertexBase::toVerilog() {
   return "";
 }
 
-std::string GraphVertexBase::toDOT() {
-  if (d_type == VertexTypes::output) {
-    if (!d_inConnections.empty()){
-      if (VertexPtr ptr = d_inConnections.back().lock()) {
-        return ptr->getName() + " -> " + d_name + ";";
-      }
-    }
-  }
-  return "";
+std::vector<std::pair<DotTypes, std::map<std::string, std::string>>> GraphVertexBase::toDOT() {
+  return {};
 }
 
 

@@ -11,6 +11,11 @@
 /// @brief VertexTypes
 /// Enumeration of vertex types
 
+#ifndef DotReturn
+#  define DotReturn \
+    std::vector<std::pair<DotTypes, std::map<std::string, std::string>>>
+#endif
+
 enum VertexTypes {
   input    = 0,  ///  input vertex
   output   = 4,  ///  output vertex
@@ -34,6 +39,18 @@ enum Gates {  /// logical element - "AND" (AND)
   GateNot,    /// logical element - Buffer
   GateBuf,    /// default logical element
   GateDefault
+};
+
+/// @brief DotTypes
+/// Enumeration for DOT generation
+enum DotTypes {
+  DotGraph    = 0,
+  DotInput    = 1,
+  DotConstant = 2,
+  DotOutput   = 3,
+  DotGate     = 4,
+  DotEdge     = 5,
+  DotSubGraph = 6
 };
 
 /// @todo: To add Description some fields

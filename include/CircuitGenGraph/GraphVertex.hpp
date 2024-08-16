@@ -66,6 +66,8 @@ public:
 
   virtual void updateLevel() override;
 
+  DotReturn    toDOT() override;
+
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
   virtual void log(el::base::type::ostream_t& os) const override;
@@ -96,12 +98,12 @@ public:
 
   virtual void updateLevel() override;
   std::string  toVerilog() override;
-  std::string  toDOT() override;
+  DotReturn    toDOT() override;
 
   /// @brief getInstance
   /// TO DO:
 
-  std::string  getInstance();
+  std::string  getVerilogInstance();
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
@@ -128,7 +130,7 @@ public:
   char        updateValue() override;
 
   std::string toVerilog() override;
-  std::string toDOT() override;
+  DotReturn   toDOT() override;
 
   /// @brief This method is used as a substructure for
   /// OrientedGraph methods
@@ -159,7 +161,7 @@ public:
   /// @brief This method is used as a substructure for
   /// OrientedGraph methods
   /// @return
-  std::string getInstance() override;
+  std::string getVerilogInstance() override;
 
   std::string calculateHash(bool recalculate = false) override;
 
@@ -208,6 +210,8 @@ public:
   /// vertex to one higher than the highest level
 
   virtual void updateLevel() override;
+
+  DotReturn    toDOT() override;
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
@@ -279,7 +283,7 @@ public:
   /// @throws std::invalid_argument if any input connection is invalid
 
   std::string  toVerilog() override;
-  std::string  toDOT() override;
+  DotReturn    toDOT() override;
 
   bool         isSubgraphBuffer() const override;
 

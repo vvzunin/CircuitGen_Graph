@@ -187,41 +187,32 @@ std::string GraphVertexGates::toVerilog() {
   return basic;
 }
 
-std::string GraphVertexGates::toDOT() {
+DotReturn GraphVertexGates::toDOT() {
   if (!d_inConnections.size()) {
     LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
-    return "";
-  }
-  std::string basic = "";
-
-  if (VertexPtr ptr = d_inConnections.back().lock()) {
-    if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
-      basic = ptr->getName() + " -> " + d_name + ";";
-      return basic;
-    }
-  } else {
-    LOG(ERROR) << "Dead pointer!" << d_name << std::endl;
-    throw std::invalid_argument("Dead pointer!");
+    return {};
   }
 
-  VertexPtr ptr;
-  for (size_t i = 0; i < d_inConnections.size() - 1; ++i) {
-    if (ptr = d_inConnections[i].lock()) {
-      basic += ptr->getName() + " -> " + d_name + ";\n";
-    } else {
+  DotReturn dot;
+
+  dot.push_back({DotTypes::DotGate,{
+    {"name", d_name},
+    {"label", d_name},
+    {"level", std::to_string(d_level)}
+  }});
+
+  for (VertexPtrWeak ptrWeak : d_inConnections) {
+    if (VertexPtr ptr = ptrWeak.lock()) 
+      dot.push_back({DotTypes::DotEdge, {
+        {"from", ptr->getName()},
+        {"to", d_name}
+      }});
+    else {
       LOG(ERROR) << "Dead pointer!" << d_name << std::endl;
       throw std::invalid_argument("Dead pointer!");
     }
   }
-
-  if (ptr = d_inConnections.back().lock()) {
-    basic += ptr->getName() + " -> " + d_name + ";";
-  } else {
-    LOG(ERROR) << "Dead pointer!" << d_name << std::endl;
-    throw std::invalid_argument("Dead pointer!");
-  }
-
-  return basic;
+  return dot;
 }
 
 bool GraphVertexGates::isSubgraphBuffer() const {

@@ -49,6 +49,17 @@ void GraphVertexInput::updateLevel() {
   d_level = 0;
 }
 
+DotReturn GraphVertexInput::toDOT() {
+  DotReturn dot;
+
+  dot.push_back({DotTypes::DotInput, {
+    {"name", d_name},
+    {"label", d_name},
+    {"level", std::to_string(d_level)}
+  }});
+  return dot;
+}
+
 void GraphVertexInput::log(el::base::type::ostream_t& os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";

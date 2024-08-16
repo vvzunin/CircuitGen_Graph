@@ -2,6 +2,7 @@
 
 #include <atomic>
 #include <cstdint>
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -412,7 +413,7 @@ public:
 
   virtual std::string    calculateHash(bool recalculate = false);
 
-  /// @brief getInstance
+  /// @brief getVerilogInstance
   /// Generates an instance declaration for the vertex in Verilog format.
   /// @return A string containing the instance declaration for the vertex
   /// in Verilog format.
@@ -420,13 +421,13 @@ public:
   /// // Creating an instance of the GraphVertexBase class
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// // Generating an instance for a vertex in Verilog format
-  /// std::string instanceDeclaration = vertex.getInstance();
+  /// std::string instanceDeclaration = vertex.getVerilogInstance();
   /// // Displaying the instance on the screen
   /// std::cout << "Instance declaration for vertex: " << instanceDeclaration <<
   /// std::endl;
   /// @endcode
 
-  virtual std::string    getInstance();
+  virtual std::string    getVerilogInstance();
 
   /// @brief toVerilog
   /// Generates Verilog code for the vertex
@@ -452,25 +453,9 @@ public:
 
   /// @brief toDOT
   /// Generates DOT code for the vertex
-  /// @return A string containing DOT code for the vertex, or an empty
-  /// string if the vertex type is not "output" or if the incoming connection
-  /// is invalid
-  /// @code
-  /// // Creating an instance of the GraphVertexBase class with the type
-  /// "output" and the name "output_vertex"
-  /// GraphVertexBase outputVertex(VertexTypes::output, "output_vertex");
-  /// // Creating another vertex with the type "input" and the name
-  /// "input_vertex" VertexPtr inputVertex =
-  /// std::make_shared<GraphVertexBase>(VertexTypes::input, "input_vertex");
-  /// // Setting the input connection for the vertex "output_vertex"
-  /// outputVertex.addVertexToInConnections(inputVertex);
-  /// // Generating the DOT code for the vertex "output_vertex"
-  /// std::string dotCode = outputVertex.toDOT();
-  /// // Display the generated DOT code on the screen
-  /// std::cout << "Generated DOT code:\n" << dotCode << std::endl;
-  /// @endcode
+  /// @return
 
-  virtual std::string    toDOT();
+  virtual DotReturn      toDOT();
 
   virtual bool           isSubgraphBuffer() const { return false; }
 

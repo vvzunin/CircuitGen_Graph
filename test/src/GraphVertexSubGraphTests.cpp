@@ -148,7 +148,7 @@ TEST(TestToGraphML, Test) {
       "</graphml>\n"
   );
 }
-// TEST(TestgGetInstance, Test) {}
+// TEST(TestgGetVerilogInstance, Test) {}
 TEST(TestCalculateHash, Test) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("testGraph");
   graphPtr1->addConst('x', "testConst");

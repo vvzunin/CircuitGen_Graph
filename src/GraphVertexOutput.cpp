@@ -41,6 +41,26 @@ void GraphVertexOutput::updateLevel() {
   }
 }
 
+DotReturn GraphVertexOutput::toDOT() {
+  DotReturn dot;
+
+  dot.push_back({DotTypes::DotOutput, {
+    {"name", d_name},
+    {"label", d_name},
+    {"level", std::to_string(d_level)}
+  }});
+
+  for (VertexPtrWeak ptrWeak : d_inConnections) {
+    VertexPtr ptr = ptrWeak.lock();
+    dot.push_back({DotTypes::DotEdge, {
+      {"from", ptr->getName()},
+      {"to", d_name},
+      {"level", std::to_string(d_level)}
+    }});
+  }
+  return dot;
+}
+
 void GraphVertexOutput::log(el::base::type::ostream_t& os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";

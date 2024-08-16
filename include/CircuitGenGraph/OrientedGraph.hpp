@@ -44,6 +44,11 @@ class GraphVertexBase;  // Проблема циклического опред�
 /// converted to Verilog. The key represents the instance number of the
 /// subgraph, and the value represents the count of how many times it has been
 /// converted to Verilog
+/// @param d_graphInstanceToDotCount Map to count instances to DOT
+/// This map is used to count how many times each subgraph instance has been
+/// converted to DOT. The key represents the instance number of the
+/// subgraph, and the value represents the count of how many times it has been
+/// converted to DOT
 /// @param d_subGraphsOutputsPtr Map storing outputs of subgraphs
 /// This map stores the outputs of subgraphs. It maps the instance number of
 /// the subgraph to a vector of vectors of VertexPtr. The outer vector
@@ -373,10 +378,12 @@ public:
   std::map<VertexTypes, std::vector<VertexPtr>> getBaseVertexes() const;
   VertexPtr   getVerticeByIndex(size_t idx) const;
 
-  std::string getGraphInstance();
+  std::string getGraphVerilogInstance();
   std::pair<bool, std::string>
-      toVerilog(std::string i_path, std::string i_filename = "");
+            toVerilog(std::string i_path, std::string i_filename = "");
 
+  DotReturn getGraphDotInstance();
+  DotReturn toDOT();
   std::pair<bool, std::string>
               toDOT(std::string i_path, std::string i_filename = "");
 
@@ -441,7 +448,10 @@ public:
 
   std::map<Gates, std::map<Gates, size_t>> getEdgesGatesCount() const;
 
-  bool         isConnected(bool i_recalculate = false);
+  bool isConnected(bool i_recalculate = false);
+
+  std::map<size_t, std::vector<std::vector<VertexPtr>>> getSubGraphsOutputsPtr(
+  );
 
   GraphPtr     unrollGraph() const;
 
@@ -463,14 +473,14 @@ private:
   std::string               d_name;
 
   // Пока не реализован функционал.
-  bool                      d_needLevelUpdate = true;
+  bool                      d_needLevelUpdate      = true;
 
   // also we need to now, was .v file for subgraph created, or not
-  bool                      d_alreadyParsedVerilog   = false;
-  bool                      d_alreadyParsedDOT       = false;
+  bool                      d_alreadyParsedVerilog = false;
+  bool                      d_alreadyParsedDot     = false;
 
   // -1 if false, 0 if undefined, 1 if true
-  int8_t                    d_connected       = 0;
+  int8_t                    d_connected            = 0;
   void                      dfs(
                            VertexPtr                      i_startVertex,
                            std::unordered_set<VertexPtr>& i_visited,
@@ -480,6 +490,7 @@ private:
   // so we need to count instances to verilog.
   // We are counting to know, which inputs and outputs should we use now
   std::map<size_t, uint64_t> d_graphInstanceToVerilogCount;
+  std::map<size_t, uint64_t> d_graphInstanceToDotCount;
 
   // each subgraph has one or more outputs. We save them,
   // depending on subgraph instance number

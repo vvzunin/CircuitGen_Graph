@@ -5,6 +5,8 @@
 #include <string>
 #include <tuple>
 
+#include <CircuitGenGraph/DefaultSettings.hpp>
+
 /// @file AuxiliaryMethods.hpp
 /// TODO: ToEnum
 /// TODO: if need LineReader
@@ -22,6 +24,7 @@
 namespace AuxMethods {
 
 std::string replacer(const std::string& i_s, const std::string& i_r);
+std::string dotReturnToString(DotReturn dot);
 
 // code from here https://gist.github.com/en4bz/f07ef13706c3ae3a4fb2
 template<class Tuple, std::size_t N>
