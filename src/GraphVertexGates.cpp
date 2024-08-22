@@ -149,9 +149,7 @@ std::string GraphVertexGates::toVerilog() {
   std::string basic = "assign " + d_name + " = ";
 
   std::string oper  = VertexUtils::gateToString(d_gate);
-  if (d_inConnections.empty()) {
-    std::clog << d_name << std::endl;
-  }
+  
   if (VertexPtr ptr = d_inConnections.back().lock()) {
     if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
       basic += oper + ptr->getName() + ";";

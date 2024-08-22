@@ -27,47 +27,49 @@ std::string
 }
 
 std::string AuxMethods::dotReturnToString(DotReturn dot) {
+  LOG(INFO) << "dotReturnToString started:";
   unsigned int         tab    = 0;
   std::string dotTab = "  ";
-  std::string s;
+  std::string s = "";
 
   bool        printingSubGraph = false;
 
   for (int i = 0; i < dot.size(); i++) {
     switch (dot[i].first) {
       case DotTypes::DotGraph:
-        LOG(INFO) << "DotTypes::DotGraph";
-        s += dotTab * tab + "digraph " + dot[i].second["name"] + " {\n";
+        LOG(INFO) << "  DotTypes::DotGraph";
+        s += dotTab * tab++ + "digraph " + dot[i].second["name"] + " {\n";
         break;
       case DotTypes::DotInput:
-        LOG(INFO) << "DotTypes::DotInput";
+        LOG(INFO) << "  DotTypes::DotInput";
         s += dotTab * tab + dot[i].second["name"] + " [shape=triangle, label=\""
            + dot[i].second["label"] + "\"];\n";
         break;
       case DotTypes::DotConstant:
-        LOG(INFO) << "DotTypes::DotConstant";
+        LOG(INFO) << "  DotTypes::DotConstant";
         s += dotTab * tab + dot[i].second["name"] + " [shape=cds, label=\""
            + dot[i].second["label"] + "\\n" + dot[i].second["value"] + "\"];\n";
+        LOG(INFO) << "Complete!";
+        break;
+      case DotTypes::DotOutput:
+        LOG(INFO) << "  DotTypes::DotOutput";
+        s += dotTab * tab + dot[i].second["name"]
+           + " [shape=invtriangle, label=\"" + dot[i].second["label"] + "\\n" + dot[i].second["value"] + "\"];\n";
         break;
       case DotTypes::DotGate:
         LOG(INFO) << "DotTypes::DotGate";
-        s += dotTab * tab + dot[i].second["name"] + ";\n";
+        s += dotTab * tab + dot[i].second["name"] + " [label=\"" + dot[i].second["label"] + "\"];\n";
         break;
-      case DotTypes::DotOutput:
-        LOG(INFO) << "DotTypes::DotOutput";
-        s += dotTab * tab + dot[i].second["name"]
-           + " [shape=invtriangle, label=\"" + dot[i].second["label"] + "\\n"
-           + dot[i].second["value"] + "\"];\n";
-        break;
+      
       case DotTypes::DotEdge:
-        LOG(INFO) << "DotTypes::DotEdge";
+        LOG(INFO) << "  DotTypes::DotEdge";
         s += dotTab * tab + dot[i].second["from"] + " -> " + dot[i].second["to"]
            + ";\n";
         break;
-      case DotTypes::DotSubGraph:
-        LOG(INFO) << "DotTypes::DotSubGraph";
+      case DotTypes::DotSubGraph:        
+        LOG(INFO) << "  DotTypes::DotSubGraph";
         if (printingSubGraph)
-          s += dotTab * tab + "}\n";
+          s += dotTab * --tab + "}\n";
         s += (dotTab * tab++) + "subgraph cluster_" + dot[i].second["instName"]
            + " {\n";
         printingSubGraph = true;
@@ -76,6 +78,8 @@ std::string AuxMethods::dotReturnToString(DotReturn dot) {
   }
 
   if (printingSubGraph)
-    s += dotTab + "}\n";
+    s += dotTab * --tab + "}\n";
   s += "}";
+  LOG(INFO) << "Complete!";
+  return s;
 }

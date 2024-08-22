@@ -153,29 +153,30 @@ TEST(TestRemoveVertexToInConnections, RemoveConnections) {
 }
 
 TEST(TestToDOT, CheckName) {
+  initLogging("TestToDOT", "CheckName");
   VertexPtr vertexPtr1 = std::make_shared<GraphVertexConstant>('0');
   VertexPtr vertexPtr2 = std::make_shared<GraphVertexConstant>('1');
   VertexPtr vertexPtr3 = std::make_shared<GraphVertexConstant>('x');
   VertexPtr vertexPtr4 = std::make_shared<GraphVertexConstant>('z');
   EXPECT_EQ(
       dotReturnToString(vertexPtr1->toDOT()),
-      vertexPtr1->getName() + " [label=\"" + vertexPtr1->getName()
-          + "\\n1'b0\"];"
+      vertexPtr1->getName() + " [shape=cds, label=\"" + vertexPtr1->getName()
+          + "\\n1'b0\"];\n}"
   );
   EXPECT_EQ(
       dotReturnToString(vertexPtr2->toDOT()),
-      vertexPtr2->getName() + " [label=\"" + vertexPtr2->getName()
-          + "\\n1'b1\"];"
+      vertexPtr2->getName() + " [shape=cds, label=\"" + vertexPtr2->getName()
+          + "\\n1'b1\"];\n}"
   );
   EXPECT_EQ(
       dotReturnToString(vertexPtr3->toDOT()),
-      vertexPtr3->getName() + " [label=\"" + vertexPtr3->getName()
-          + "\\n1'bx\"];"
+      vertexPtr3->getName() + " [shape=cds, label=\"" + vertexPtr3->getName()
+          + "\\n1'bx\"];\n}"
   );
   EXPECT_EQ(
       dotReturnToString(vertexPtr4->toDOT()),
-      vertexPtr4->getName() + " [label=\"" + vertexPtr4->getName()
-          + "\\n1'bz\"];"
+      vertexPtr4->getName() + " [shape=cds, label=\"" + vertexPtr4->getName()
+          + "\\n1'bz\"];\n}"
   );
 }
 
