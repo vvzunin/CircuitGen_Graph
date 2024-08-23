@@ -50,7 +50,8 @@ enum DotTypes {
   DotOutput   = 3,
   DotGate     = 4,
   DotEdge     = 5,
-  DotSubGraph = 6
+  DotSubGraph = 6,
+  DotExit     = 7
 };
 
 /// @todo: To add Description some fields

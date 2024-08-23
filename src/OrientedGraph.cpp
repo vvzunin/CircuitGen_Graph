@@ -658,6 +658,9 @@ DotReturn OrientedGraph::toDOT() {
   for (auto i : subDotResults) {
     dot.insert(std::end(dot), std::begin(i.second), std::end(i.second));
   }
+
+  dot.push_back({DotTypes::DotExit, {{"name", d_name}}});
+
   d_alreadyParsedDot = true;
   return dot;
 }

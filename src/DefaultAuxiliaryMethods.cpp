@@ -58,18 +58,18 @@ std::string AuxMethods::dotReturnToString(DotReturn dot) {
         s += dotTab * tab + dot[i].second["from"] + " -> " + dot[i].second["to"]
            + ";\n";
         break;
-      case DotTypes::DotSubGraph:        
-        if (printingSubGraph)
-          s += dotTab * --tab + "}\n";
+      case DotTypes::DotSubGraph:
         s += (dotTab * tab++) + "subgraph cluster_" + dot[i].second["instName"]
            + " {\n";
         printingSubGraph = true;
         break;
+      case DotTypes::DotExit:
+        LOG(INFO) << "tab: " << tab;
+        if (printingSubGraph)
+          s += dotTab * --tab + "}\n";
+        break;
     }
   }
 
-  if (printingSubGraph)
-    s += dotTab * --tab + "}\n";
-  s += "}";
   return s;
 }
