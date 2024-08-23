@@ -308,6 +308,10 @@ std::vector<VertexPtr> OrientedGraph::getVerticesByName(
   return resVert;
 }
 
+std::map<size_t, std::vector<std::vector<VertexPtr>>> OrientedGraph::getSubGraphsOutputsPtr() {
+  return d_subGraphsOutputsPtr;
+}
+
 size_t OrientedGraph::sumFullSize() const {
   return d_vertexes.at(VertexTypes::input).size()
        + d_vertexes.at(VertexTypes::constant).size()
@@ -376,9 +380,10 @@ void OrientedGraph::setCurrentParent(GraphPtr i_parent) {
 
 void OrientedGraph::resetCounters(GraphPtr i_where) {
   d_graphInstanceToVerilogCount[i_where->d_graphID] = 0;
+  d_graphInstanceToDotCount[i_where->d_graphID] = 0;
 }
 
-std::string OrientedGraph::getGraphInstance() {
+std::string OrientedGraph::getGraphVerilogInstance() {
   uint64_t* verilogCount =
       &d_graphInstanceToVerilogCount[d_currentParentGraph.lock()->d_graphID];
   uint64_t allCount =
@@ -386,7 +391,7 @@ std::string OrientedGraph::getGraphInstance() {
 
   if (*verilogCount == allCount) {
     throw std::out_of_range(
-        "Incorrect getInstance call. All modules of "
+        "Incorrect getGraphVerilogInstance call. All modules of "
         + d_currentParentGraph.lock()->getName() + " ("
         + std::to_string(allCount) + ") were already parsed"
     );
@@ -433,8 +438,8 @@ std::string OrientedGraph::getGraphInstance() {
 
 std::pair<bool, std::string>
     OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
-  if (d_alreadyParsed && d_isSubGraph) {
-    return std::make_pair(true, getGraphInstance());
+  if (d_alreadyParsedVerilog && d_isSubGraph) {
+    return std::make_pair(true, getGraphVerilogInstance());
   }
   // В данном методе происходит только генерация одного графа. Без подграфов.
   std::string verilogTab = "  ";
@@ -448,10 +453,14 @@ std::pair<bool, std::string>
   std::ofstream fileStream(correctPath);
 
   if (!fileStream) {
-    std::cerr << "cannot write file to " << path << std::endl;
+    LOG(ERROR) << "cannot write file to " << correctPath;
     return std::make_pair(false, "");
   }
 
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  fileStream << "//This file was generated automatically using CircuitGen_Graph at ";
+  fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << "." << std::endl << std::endl;
   fileStream << "module " << d_name << "(\n" << verilogTab;
 
   // here we are parsing inputs by their wire size
@@ -507,7 +516,7 @@ std::pair<bool, std::string>
   }
   // writing consts
   for (auto oper : d_vertexes[VertexTypes::constant]) {
-    fileStream << verilogTab << oper->getInstance() << "\n";
+    fileStream << verilogTab << oper->getVerilogInstance() << "\n";
     fileStream << verilogTab << oper->toVerilog() << "\n";
   }
 
@@ -540,10 +549,151 @@ std::pair<bool, std::string>
 
   fileStream << "endmodule\n";
 
-  d_alreadyParsed = true;
+  d_alreadyParsedVerilog = true;
 
   if (d_isSubGraph) {
-    return std::make_pair(true, getGraphInstance());
+    return std::make_pair(true, getGraphVerilogInstance());
+  }
+
+  fileStream.close();
+  return std::make_pair(true, "");
+}
+
+DotReturn OrientedGraph::getGraphDotInstance() {
+  uint64_t* dotCount =
+      &d_graphInstanceToDotCount[d_currentParentGraph.lock()->d_graphID];
+  uint64_t allCount =
+      d_subGraphsInputsPtr[d_currentParentGraph.lock()->d_graphID].size();
+  if (*dotCount == allCount) {
+    LOG(INFO) << "        Incorrect getGraphDotInstance call. All modules of "
+        + d_currentParentGraph.lock()->getName() + " ("
+        + std::to_string(allCount) + ") were already parsed";
+    throw std::out_of_range(
+        "Incorrect getGraphDotInstance call. All modules of "
+        + d_currentParentGraph.lock()->getName() + " ("
+        + std::to_string(allCount) + ") were already parsed"
+    );
+  }
+
+  std::string instName = d_name + "_inst_" + std::to_string(*dotCount);
+  DotReturn dot = toDOT();
+
+  dot[0].first = DotTypes::DotSubGraph;
+  dot[0].second["instName"] = instName;
+  for (int i = 0; i < dot.size(); i++) {
+    dot[i].second["name"] = instName + "_" + dot[i].second["name"];
+    if(dot[i].second.find("from")!= dot[i].second.end()) {
+      dot[i].second["from"] = instName + "_" + dot[i].second["from"];
+      dot[i].second["to"] = instName + "_" + dot[i].second["to"];
+    }
+  }
+
+  ++(*dotCount);
+  return dot;
+}
+
+DotReturn OrientedGraph::toDOT() {  
+  DotReturn dot = {{DotTypes::DotGraph, {{"name", d_name}}}};
+  LOG(INFO) << "      DotGraph(" << d_name << ") added to DOT";
+  LOG(INFO) << "      Start adding vertices to DOT";
+  LOG(INFO) << "      inputs          : " << d_vertexes[VertexTypes::input].size();
+  LOG(INFO) << "      outputs         : " << d_vertexes[VertexTypes::output].size();
+  LOG(INFO) << "      subGraphOutputs : " << d_allSubGraphsOutputs.size();
+  LOG(INFO) << "      gates           : " << d_vertexes[VertexTypes::gate].size();
+  LOG(INFO) << "      constants       : " << d_vertexes[VertexTypes::constant].size();
+  for (auto eachVertex :
+       {d_vertexes[VertexTypes::input],
+        d_vertexes[VertexTypes::output],
+        d_vertexes[VertexTypes::gate], 
+        d_vertexes[VertexTypes::constant]
+        }) {
+    int counter = 0;
+    for (auto value : eachVertex) {
+      auto usedType = eachVertex.back()->getType();
+      DotReturn dotVertex = value->toDOT();
+      dot.insert(std::end(dot), std::begin(dotVertex), std::end(dotVertex));
+    }
+  }
+  int counter = 0;
+  for (auto value : d_allSubGraphsOutputs) {
+    dot.push_back(value->toDOT()[0]);
+  }
+  std::vector<std::pair<std::shared_ptr<GraphVertexSubGraph>, DotReturn>> subDotResults;
+  for (auto subPtr : d_vertexes[VertexTypes::subGraph]) {
+    auto sub = std::static_pointer_cast<GraphVertexSubGraph>(subPtr);
+
+    DotReturn val = sub->toDOT();
+    subDotResults.push_back({sub, val});
+
+    auto subGraph = sub->getSubGraph();
+    uint64_t* dotCount = &d_graphInstanceToDotCount[d_graphID];
+    for (size_t i = 0; i < subGraph->getBaseVertexes()[VertexTypes::input].size(); ++i) {
+      for (auto const& tt : subGraph->d_subGraphsInputsPtr) {
+      }
+      auto inp = subGraph->d_subGraphsInputsPtr[d_graphID][*dotCount][i];
+      std::string inp_name = subGraph->getBaseVertexes()[VertexTypes::input][i]->getName();
+
+      dot.push_back({DotTypes::DotEdge, {
+        {"to", val[0].second["instName"] + "_" + inp->getName()},
+        {"from", inp_name}}
+      });
+    }
+  }
+
+  counter = 0;
+  for (auto subGraphPair : subDotResults) {
+    auto buffers = subGraphPair.first->getOutConnections();
+    auto outs = subGraphPair.first->getSubGraph()->getVerticesByType(VertexTypes::output);
+    for (auto i = 0; i < outs.size(); i++) {
+      dot.push_back({DotTypes::DotEdge, {
+          {"from", subGraphPair.second[0].second["instName"] + "_" + outs[i]->getName()},
+          {"to", buffers[i]->getName()}
+        }});
+    }
+  }
+  for (auto i : subDotResults) {
+    dot.insert(std::end(dot), std::begin(i.second), std::end(i.second));
+  }
+  d_alreadyParsedDot = true;
+  return dot;
+}
+
+std::pair<bool, std::string>
+    OrientedGraph::toDOT(std::string i_path, std::string i_filename) {
+  using namespace AuxMethods;
+  if (d_alreadyParsedDot && d_isSubGraph) {
+    LOG(INFO) << "getGraphDotInstance()";
+    return std::make_pair(true, dotReturnToString(getGraphDotInstance()));
+  }
+  updateLevels();
+  DotReturn dot = toDOT();
+
+  std::string dotTab = "  ";
+
+  if (!i_filename.size()) {
+    i_filename = d_name + ".dot";
+  }
+  std::string   path        = i_path + (d_isSubGraph ? "/submodulesDOT" : "");
+
+  auto          correctPath = path + "/" + i_filename;
+  std::ofstream fileStream(correctPath);
+
+  if (!fileStream) {
+    LOG(ERROR) << "cannot write file to " << path;
+    return std::make_pair(false, "");
+  }
+
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  fileStream << "// This file was generated automatically using CircuitGen_Graph at ";
+  fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << "." << std::endl << std::endl;
+  
+  fileStream << dotReturnToString(dot);
+
+  d_alreadyParsedDot = true;
+
+  if (d_isSubGraph) {
+    return std::make_pair(true, dotReturnToString(getGraphDotInstance()));
   }
 
   fileStream.close();
@@ -658,16 +808,31 @@ std::string OrientedGraph::toGraphMLClassic(
 }
 
 bool OrientedGraph::toGraphMLClassic(std::ofstream& fileStream) const {
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  fileStream << "<!-- This file was generated automatically using CircuitGen_Graph at ";
+  fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << ". -->" << std::endl << std::endl;
+
   fileStream << this->toGraphMLClassic();
   return true;
 }
 
 bool OrientedGraph::toGraphMLPseudoABCD(std::ofstream& fileStream) const {
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  fileStream << "<!-- This file was generated automatically using CircuitGen_Graph at ";
+  fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << ". -->" << std::endl << std::endl;
+
   fileStream << this->toGraphMLPseudoABCD();
   return true;
 }
 
 bool OrientedGraph::toGraphMLOpenABCD(std::ofstream& fileStream) const {
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  fileStream << "<!-- This file was generated automatically using CircuitGen_Graph at ";
+  fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << ". -->" << std::endl << std::endl;
+
   fileStream << this->toGraphMLOpenABCD();
   return true;
 }
@@ -862,7 +1027,7 @@ GraphPtr OrientedGraph::unrollGraph() const {
             const auto&    vOutputs = v->getOutConnections();
             VertexPtr      ptr;
 
-            unroller(sg, v->getName() + "::", unroller);
+            unroller(sg, v->getName() + "__", unroller);
 
             for (size_t i = 0; i < vInputs.size(); ++i) {
               ptr = vInputs[i].lock();
@@ -911,7 +1076,6 @@ GraphPtr OrientedGraph::unrollGraph() const {
       }
     }
   }
-
   return newGraph;
 }
 
@@ -1031,7 +1195,8 @@ void OrientedGraph::log(el::base::type::ostream_t& os) const {
   os << "Graph ID: " << d_graphID << "\n";
   os << "Number of Edges: " << d_edgesCount << "\n";
   os << "Need Level Update: " << (d_needLevelUpdate ? "Yes" : "No") << "\n";
-  os << "Already Parsed: " << (d_alreadyParsed ? "Yes" : "No") << "\n";
+  os << "Already Parsed Verilog: " << (d_alreadyParsedVerilog ? "Yes" : "No") << "\n";
+  os << "Already Parsed DOT: " << (d_alreadyParsedDot ? "Yes" : "No") << "\n";
   os << "Graph hash: " << d_hashed << "\n";
 
   bool flag = true;

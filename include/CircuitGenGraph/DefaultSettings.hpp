@@ -11,6 +11,11 @@
 /// @brief VertexTypes
 /// Enumeration of vertex types
 
+#ifndef DotReturn
+#  define DotReturn \
+    std::vector<std::pair<DotTypes, std::map<std::string, std::string>>>
+#endif
+
 enum VertexTypes {
   input    = 0,  ///  input vertex
   output   = 4,  ///  output vertex
@@ -34,6 +39,18 @@ enum Gates {  /// logical element - "AND" (AND)
   GateNot,    /// logical element - Buffer
   GateBuf,    /// default logical element
   GateDefault
+};
+
+/// @brief DotTypes
+/// Enumeration for DOT generation
+enum DotTypes {
+  DotGraph    = 0,
+  DotInput    = 1,
+  DotConstant = 2,
+  DotOutput   = 3,
+  DotGate     = 4,
+  DotEdge     = 5,
+  DotSubGraph = 6
 };
 
 /// @todo: To add Description some fields
@@ -115,7 +132,7 @@ public:
   /// std::cout << "Operation ID: " << operationInfo.second << std::endl;
   /// } catch (const std::out_of_range& e) {
   /// // Handle an exception if the operation is not found
-  /// std::cerr << "Error: " << e.what() << std::endl;
+  /// LOG(ERROR) << "Error: " << e.what() << std::endl;
   /// }
   /// @endcode
   /// @throws std::out_of_range If the passed operation name does not exist
@@ -187,7 +204,7 @@ public:
   /// operationName = settingsInstance->fromOperationsToName("and");
   /// std::cout << "Operation name: " << operationName << std::endl;
   /// } catch (const std::out_of_range& e) {
-  /// std::cerr << "Error: " << e.what() << std::endl;
+  /// LOG(ERROR) << "Error: " << e.what() << std::endl;
   /// }
   /// @endcode
   /// @throw std::out_of_range If the passed operation does not exist in the

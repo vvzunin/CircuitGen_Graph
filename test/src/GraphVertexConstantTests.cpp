@@ -1,7 +1,10 @@
+#include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
 
 #include "easylogging++Init.hpp"
+
+using namespace AuxMethods;
 
 TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrsDefName) {
   initLogging(
@@ -72,10 +75,10 @@ TEST(TestUpdateLevel, CorrectUpdate) {
   EXPECT_EQ(constant1.getLevel(), 0);
 }
 
-TEST(TestGetInstance, ReturnCorrectInstance) {
-  initLogging("TestGetInstance", "ReturnCorrectInstance");
+TEST(TestGetVerilogInstance, ReturnCorrectInstance) {
+  initLogging("TestGetVerilogInstance", "ReturnCorrectInstance");
   GraphVertexConstant constant1('z', "Anything");
-  EXPECT_EQ(constant1.getInstance(), "wire Anything;");
+  EXPECT_EQ(constant1.getVerilogInstance(), "wire Anything;");
 }
 
 // -------------------------------------
@@ -147,6 +150,34 @@ TEST(TestRemoveVertexToInConnections, RemoveConnections) {
   EXPECT_EQ(vertexPtr1->getInConnections().size(), 2);
   EXPECT_EQ(vertexPtr1->removeVertexToInConnections(nullptr), true);
   EXPECT_EQ(vertexPtr1->getInConnections().size(), 1);
+}
+
+TEST(TestToDOT, CheckName) {
+  initLogging("TestToDOT", "CheckName");
+  VertexPtr vertexPtr1 = std::make_shared<GraphVertexConstant>('0');
+  VertexPtr vertexPtr2 = std::make_shared<GraphVertexConstant>('1');
+  VertexPtr vertexPtr3 = std::make_shared<GraphVertexConstant>('x');
+  VertexPtr vertexPtr4 = std::make_shared<GraphVertexConstant>('z');
+  EXPECT_EQ(
+      dotReturnToString(vertexPtr1->toDOT()),
+      vertexPtr1->getName() + " [shape=cds, label=\"" + vertexPtr1->getName()
+          + "\\n1'b0\"];\n}"
+  );
+  EXPECT_EQ(
+      dotReturnToString(vertexPtr2->toDOT()),
+      vertexPtr2->getName() + " [shape=cds, label=\"" + vertexPtr2->getName()
+          + "\\n1'b1\"];\n}"
+  );
+  EXPECT_EQ(
+      dotReturnToString(vertexPtr3->toDOT()),
+      vertexPtr3->getName() + " [shape=cds, label=\"" + vertexPtr3->getName()
+          + "\\n1'bx\"];\n}"
+  );
+  EXPECT_EQ(
+      dotReturnToString(vertexPtr4->toDOT()),
+      vertexPtr4->getName() + " [shape=cds, label=\"" + vertexPtr4->getName()
+          + "\\n1'bz\"];\n}"
+  );
 }
 
 // need to remake realisition of method

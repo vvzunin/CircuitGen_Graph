@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -10,7 +11,7 @@
 
 /*
   Need to add toVerilogTest, setCurrentParentTest,
-    resetCountersTest, getGraphInstanceTest
+    resetCountersTest, getGraphVerilogInstanceTest
   Need to realize getVerticesByLevel, needToUpdateLevel, updateLevels,
     getMaxLevel
 
@@ -21,6 +22,17 @@
     TestGetVerticesByName
     TestCalculateHash
 */
+
+std::string loadStringFile(const std::filesystem::path& p) {
+  std::string   str;
+  std::ifstream file;
+  file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+  file.open(p, std::ios_base::binary);
+  std::size_t sz = static_cast<std::size_t>(file_size(p));
+  str.resize(sz, '\0');
+  file.read(&str[0], sz);
+  return str;
+}
 
 // Test is on top because it needs to contain the graph_0
 TEST(TestSetNameAndGetName, ReturnCorrectName) {
@@ -620,4 +632,148 @@ TEST(TestGetEdgesGatesCount, ReturnCorrectGates) {
   EXPECT_EQ(graphPtr->getEdgesGatesCount()[Gates::GateNand][Gates::GateAnd], 1);
   EXPECT_EQ(graphPtr->getEdgesGatesCount()[Gates::GateOr][Gates::GateAnd], 1);
   EXPECT_EQ(graphPtr->getEdgesGatesCount()[Gates::GateAnd][Gates::GateNand], 1);
+}
+
+TEST(TestToVerilog, Simple) {
+  initLogging("TestToVerilog", "Simple");
+  GraphPtr graphPtr = std::make_shared<OrientedGraph>("testGraph");
+  auto     inA      = graphPtr->addInput("a");
+  auto     inB      = graphPtr->addInput("b");
+  auto     out      = graphPtr->addOutput("c");
+  auto     gateAnd1 = graphPtr->addGate(Gates::GateAnd, "andAB");
+  auto     const1   = graphPtr->addConst('1', "const1");
+  auto     gateOr1  = graphPtr->addGate(Gates::GateOr, "orAnd11");
+  graphPtr->addEdges({inA, inB}, gateAnd1);
+  graphPtr->addEdges({gateAnd1, const1}, gateOr1);
+  graphPtr->addEdge(gateOr1, out);
+  auto        strs     = graphPtr->toVerilog(".", "testSimple.v");
+  std::string curPath  = std::filesystem::current_path();
+  std::string loadFile = loadStringFile(curPath + "/testSimple.v");
+  loadFile             = loadFile.substr(loadFile.find("\n") + 2);
+  LOG(INFO) << "Printing Verilog file: " << strs.first << "\n" << loadFile;
+}
+
+TEST(TestToVerilog, SubGraph) {
+  initLogging("TestToVerilog", "SubGraph");
+  GraphPtr subGraphPtr = std::make_shared<OrientedGraph>("testSubGraph");
+  auto     inA         = subGraphPtr->addInput("a");
+  auto     inB         = subGraphPtr->addInput("b");
+  auto     out         = subGraphPtr->addOutput("c");
+  auto     gateAnd1    = subGraphPtr->addGate(Gates::GateAnd, "andAB");
+  auto     const1      = subGraphPtr->addConst('1', "const1");
+  auto     gateOr1     = subGraphPtr->addGate(Gates::GateOr, "orAnd11");
+  subGraphPtr->addEdges({inA, inB}, gateAnd1);
+  subGraphPtr->addEdges({gateAnd1, const1}, gateOr1);
+  subGraphPtr->addEdge(gateOr1, out);
+
+  GraphPtr graphPtr = std::make_shared<OrientedGraph>("testGraph");
+  inA               = graphPtr->addInput("a");
+  inB               = graphPtr->addInput("b");
+  out               = graphPtr->addOutput("c");
+
+  auto outs         = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
+
+  graphPtr->addEdge(outs[0], out);
+
+  std::filesystem::create_directories("./submodules");
+  auto        strs     = graphPtr->toVerilog(".", "testSubGraph.v");
+  std::string curPath  = std::filesystem::current_path();
+  std::string loadFile = loadStringFile(curPath + "/testSubGraph.v");
+  loadFile             = loadFile.substr(loadFile.find("\n") + 2);
+  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+}
+
+TEST(TestToDOT, Simple) {
+  initLogging("TestToDOT", "Simple");
+  GraphPtr graphPtr = std::make_shared<OrientedGraph>("testGraph");
+  auto     inA      = graphPtr->addInput("a");
+  auto     inB      = graphPtr->addInput("b");
+  auto     out      = graphPtr->addOutput("c");
+  auto     gateAnd1 = graphPtr->addGate(Gates::GateAnd, "andAB");
+  auto     const1   = graphPtr->addConst('1', "const1");
+  auto     gateOr1  = graphPtr->addGate(Gates::GateOr, "orAnd11");
+  graphPtr->addEdges({inA, inB}, gateAnd1);
+  graphPtr->addEdges({gateAnd1, const1}, gateOr1);
+  graphPtr->addEdge(gateOr1, out);
+  auto strs = graphPtr->toDOT(".", "testSimple.dot");
+  LOG(INFO) << "toDot complete!";
+  std::string curPath = std::filesystem::current_path();
+  LOG(INFO) << "curPath: " << curPath;
+  std::string loadFile = loadStringFile(curPath + "/testSimple.dot");
+  LOG(INFO) << "loadFile: " << loadFile;
+  loadFile = loadFile.substr(loadFile.find("\n") + 2);
+  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+}
+
+TEST(TestToDOT, SubGraph) {
+  initLogging("TestToDOT", "SubGraph");
+  GraphPtr subGraphPtr = std::make_shared<OrientedGraph>("testSubGraph");
+  auto     inA         = subGraphPtr->addInput("a");
+  auto     inB         = subGraphPtr->addInput("b");
+  auto     outC        = subGraphPtr->addOutput("c");
+  auto     outD        = subGraphPtr->addOutput("d");
+  auto     gateAnd1    = subGraphPtr->addGate(Gates::GateAnd, "andAB");
+  auto     const1      = subGraphPtr->addConst('1', "const1");
+  auto     gateOr1     = subGraphPtr->addGate(Gates::GateOr, "orAnd11");
+  subGraphPtr->addEdges({inA, inB}, gateAnd1);
+  subGraphPtr->addEdges({gateAnd1, const1}, gateOr1);
+  subGraphPtr->addEdge(gateOr1, outC);
+  subGraphPtr->addEdge(gateAnd1, outD);
+
+  GraphPtr graphPtr = std::make_shared<OrientedGraph>("testGraph");
+  inA               = graphPtr->addInput("a");
+  inB               = graphPtr->addInput("b");
+  outC              = graphPtr->addOutput("c");
+  outD              = graphPtr->addOutput("d");
+  auto outE         = graphPtr->addOutput("e");
+
+  auto outs         = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
+
+  graphPtr->addEdge(outs[0], outC);
+  graphPtr->addEdge(outs[1], outD);
+  graphPtr->addEdge(inB, outE);
+  std::filesystem::create_directories("./submodulesDOT");
+  auto        strs     = graphPtr->toDOT(".", "testSubGraph.dot");
+  std::string curPath  = std::filesystem::current_path();
+  std::string loadFile = loadStringFile(curPath + "/testSubGraph.dot");
+  loadFile             = loadFile.substr(loadFile.find("\n") + 2);
+  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+}
+
+TEST(TestToDOT, SubGraphUnroll) {
+  initLogging("TestToDOT", "SubGraphUnroll");
+  GraphPtr subGraphPtr = std::make_shared<OrientedGraph>("testSubGraph");
+  auto     inA         = subGraphPtr->addInput("a");
+  auto     inB         = subGraphPtr->addInput("b");
+  auto     outC        = subGraphPtr->addOutput("c");
+  auto     outD        = subGraphPtr->addOutput("d");
+  auto     gateAnd1    = subGraphPtr->addGate(Gates::GateAnd, "andAB");
+  auto     const1      = subGraphPtr->addConst('1', "const1");
+  auto     gateOr1     = subGraphPtr->addGate(Gates::GateOr, "orAnd11");
+  subGraphPtr->addEdges({inA, inB}, gateAnd1);
+  subGraphPtr->addEdges({gateAnd1, const1}, gateOr1);
+  subGraphPtr->addEdge(gateOr1, outC);
+  subGraphPtr->addEdge(gateAnd1, outD);
+
+  GraphPtr graphPtr = std::make_shared<OrientedGraph>("testGraph");
+  inA               = graphPtr->addInput("a");
+  inB               = graphPtr->addInput("b");
+  outC              = graphPtr->addOutput("c");
+  outD              = graphPtr->addOutput("d");
+  auto outE         = graphPtr->addOutput("e");
+
+  auto outs         = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
+
+  graphPtr->addEdge(outs[0], outC);
+  graphPtr->addEdge(outs[1], outD);
+  graphPtr->addEdge(inB, outE);
+
+  GraphPtr unrollGraphPtr = graphPtr->unrollGraph();
+
+  std::filesystem::create_directories("./submodulesDOT");
+  auto        strs     = unrollGraphPtr->toDOT(".", "testSubGraphUnroll.dot");
+  std::string curPath  = std::filesystem::current_path();
+  std::string loadFile = loadStringFile(curPath + "/testSubGraphUnroll.dot");
+  loadFile             = loadFile.substr(loadFile.find("\n") + 2);
+  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
 }

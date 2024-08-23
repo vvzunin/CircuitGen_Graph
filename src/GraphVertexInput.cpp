@@ -39,7 +39,7 @@ char GraphVertexInput::updateValue() {
       }
 
     } else {
-      std::cerr << "Error" << std::endl;
+      LOG(ERROR) << "Error" << std::endl;
     }
   }
   return d_value;
@@ -47,6 +47,17 @@ char GraphVertexInput::updateValue() {
 
 void GraphVertexInput::updateLevel() {
   d_level = 0;
+}
+
+DotReturn GraphVertexInput::toDOT() {
+  DotReturn dot;
+
+  dot.push_back({DotTypes::DotInput, {
+    {"name", d_name},
+    {"label", d_name},
+    {"level", std::to_string(d_level)}
+  }});
+  return dot;
 }
 
 void GraphVertexInput::log(el::base::type::ostream_t& os) const {

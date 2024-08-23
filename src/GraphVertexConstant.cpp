@@ -20,12 +20,25 @@ void GraphVertexConstant::updateLevel() {
   d_level = 0;
 }
 
-std::string GraphVertexConstant::getInstance() {
+std::string GraphVertexConstant::getVerilogInstance() {
   return "wire " + d_name + ";";
 }
 
 std::string GraphVertexConstant::toVerilog() {
   return "assign " + d_name + " = 1'b" + d_value + ";";
+}
+
+DotReturn GraphVertexConstant::toDOT() {
+  DotReturn dot;
+  std::string str(1, d_value);
+
+  dot.push_back({DotTypes::DotConstant, {
+    {"name", d_name},
+    {"label", d_name},
+    {"value", "1'b" + str},
+    {"level", std::to_string(d_level)}
+  }});
+  return dot;
 }
 
 void GraphVertexConstant::log(el::base::type::ostream_t& os) const {

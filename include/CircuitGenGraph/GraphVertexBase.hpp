@@ -2,6 +2,7 @@
 
 #include <atomic>
 #include <cstdint>
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -277,26 +278,6 @@ public:
   /// // Creating another vertex
   /// VertexPtr anotherVertex =
   /// std::make_shared<GraphVertexBase>(VertexTypes::input, "vertex2");
-  /// // Add the second vertex to the input connections of the first vertex
-  /// // and get the number of occurrences
-  /// uint32_t count = vertex.addVertexToInConnections(anotherVertex);
-  /// // Output the result
-  /// std::cout << "The number of occurrences of the second vertex in the input
-  /// connections of the first vertex: " << count << std::endl;
-  /// @endcode
-
-  /// @brief addVertexToInConnections
-  /// Adds a vertex to the input connections of this vertex and returns the
-  /// count of occurrences of the given vertex in the input connections
-  /// @param i_vert The vertex to be added to the input connections
-  /// @return The count of occurrences of the given vertex in the input
-  /// connections after adding it
-  /// @code
-  /// // Creating an instance of the GraphVertexBase class
-  /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
-  /// // Creating another vertex
-  /// VertexPtr anotherVertex =
-  /// std::make_shared<GraphVertexBase>(VertexTypes::input, "vertex2");
   /// // Adding a second vertex to the input connections of the first vertex
   /// and getting the number of occurrences
   /// uint32_t occurrences = vertex.addVertexToInConnections(anotherVertex);
@@ -432,7 +413,7 @@ public:
 
   virtual std::string    calculateHash(bool recalculate = false);
 
-  /// @brief getInstance
+  /// @brief getVerilogInstance
   /// Generates an instance declaration for the vertex in Verilog format.
   /// @return A string containing the instance declaration for the vertex
   /// in Verilog format.
@@ -440,13 +421,13 @@ public:
   /// // Creating an instance of the GraphVertexBase class
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// // Generating an instance for a vertex in Verilog format
-  /// std::string instanceDeclaration = vertex.getInstance();
+  /// std::string instanceDeclaration = vertex.getVerilogInstance();
   /// // Displaying the instance on the screen
   /// std::cout << "Instance declaration for vertex: " << instanceDeclaration <<
   /// std::endl;
   /// @endcode
 
-  virtual std::string    getInstance();
+  virtual std::string    getVerilogInstance();
 
   /// @brief toVerilog
   /// Generates Verilog code for the vertex
@@ -469,6 +450,12 @@ public:
   /// @endcode
 
   virtual std::string    toVerilog();
+
+  /// @brief toDOT
+  /// Generates DOT code for the vertex
+  /// @return
+
+  virtual DotReturn      toDOT();
 
   virtual bool           isSubgraphBuffer() const { return false; }
 

@@ -56,7 +56,7 @@ char GraphVertexGates::updateValue() {
           table = tableXnor.at(d_value);
           break;
         default:
-          std::cerr << "Error" << std::endl;
+          LOG(ERROR) << "Error" << std::endl;
       }
 
       if (!(ptr = d_inConnections[i].lock())) {
@@ -130,7 +130,7 @@ std::string GraphVertexGates::getVerilogString() const {
 
       s += " " + VertexUtils::gateToString(d_gate) + " " + name;
       if (d_gate == GateDefault)
-        std::cerr << "Error" << std::endl;
+        LOG(ERROR) << "Error" << std::endl;
     }
 
     if ((d_gate == Gates::GateNand) || (d_gate == Gates::GateNor)
@@ -143,15 +143,13 @@ std::string GraphVertexGates::getVerilogString() const {
 
 std::string GraphVertexGates::toVerilog() {
   if (!d_inConnections.size()) {
-    std::cerr << "TODO: delete empty vertices" << std::endl;
+    LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
     return "";
   }
   std::string basic = "assign " + d_name + " = ";
 
   std::string oper  = VertexUtils::gateToString(d_gate);
-  if (d_inConnections.empty()) {
-    std::clog << d_name << std::endl;
-  }
+  
   if (VertexPtr ptr = d_inConnections.back().lock()) {
     if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
       basic += oper + ptr->getName() + ";";
@@ -185,6 +183,34 @@ std::string GraphVertexGates::toVerilog() {
   }
 
   return basic;
+}
+
+DotReturn GraphVertexGates::toDOT() {
+  if (!d_inConnections.size()) {
+    LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
+    return {};
+  }
+
+  DotReturn dot;
+
+  dot.push_back({DotTypes::DotGate,{
+    {"name", d_name},
+    {"label", d_name},
+    {"level", std::to_string(d_level)}
+  }});
+
+  for (VertexPtrWeak ptrWeak : d_inConnections) {
+    if (VertexPtr ptr = ptrWeak.lock()) 
+      dot.push_back({DotTypes::DotEdge, {
+        {"from", ptr->getName()},
+        {"to", d_name}
+      }});
+    else {
+      LOG(ERROR) << "Dead pointer!" << d_name << std::endl;
+      throw std::invalid_argument("Dead pointer!");
+    }
+  }
+  return dot;
 }
 
 bool GraphVertexGates::isSubgraphBuffer() const {

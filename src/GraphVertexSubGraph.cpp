@@ -27,9 +27,15 @@ char GraphVertexSubGraph::updateValue() {
   return 'x';
 }
 
+void GraphVertexSubGraph::updateLevel() {
+  for (VertexPtr vert : d_subGraph->getVerticesByType(VertexTypes::output)) {
+    vert->updateLevel();
+  }
+}
+
 // In fact is not needed
-std::string GraphVertexSubGraph::getInstance() {
-  return d_subGraph->getGraphInstance();
+std::string GraphVertexSubGraph::getVerilogInstance() {
+  return d_subGraph->getGraphVerilogInstance();
 }
 
 std::pair<bool, std::string>
@@ -41,6 +47,27 @@ std::pair<bool, std::string>
   }
 
   return d_subGraph->toVerilog(i_path, i_filename);
+}
+
+DotReturn GraphVertexSubGraph::toDOT() {
+  if (auto parentPtr = d_baseGraph.lock()) {
+    d_subGraph->setCurrentParent(parentPtr);
+  } else {
+    throw std::invalid_argument("Dead pointer!");
+  }
+
+  return d_subGraph->getGraphDotInstance();
+}
+
+std::pair<bool, std::string>
+    GraphVertexSubGraph::toDOT(std::string i_path, std::string i_filename) {
+  if (auto parentPtr = d_baseGraph.lock()) {
+    d_subGraph->setCurrentParent(parentPtr);
+  } else {
+    throw std::invalid_argument("Dead pointer!");
+  }
+
+  return d_subGraph->toDOT(i_path, i_filename);
 }
 
 bool GraphVertexSubGraph::toGraphML(std::ofstream& i_fileStream) const {
