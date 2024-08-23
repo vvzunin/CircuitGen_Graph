@@ -96,7 +96,7 @@ void OrientedGraph::updateLevels() {
   int counter = 0;
   for (VertexPtr vert : d_vertexes.at(VertexTypes::output)) {
     LOG(INFO) << counter++ << ". " << vert->getName() << " (" << vert->getTypeName() << ")";
-    vert->updateLevel("  ");
+    vert->updateLevel("    ");
   }
 }
 

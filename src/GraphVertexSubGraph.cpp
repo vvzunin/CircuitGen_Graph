@@ -30,7 +30,7 @@ char GraphVertexSubGraph::updateValue() {
 void GraphVertexSubGraph::updateLevel(std::string tab) {
   int counter = 0;
   for (VertexPtr vert : d_subGraph->getVerticesByType(VertexTypes::output)) {
-    LOG(INFO) << counter++ << ". " << vert->getName() << " (" << vert->getTypeName() << ")";
+    LOG(INFO) << tab << counter++ << ". " << vert->getName() << " (" << vert->getTypeName() << ")";
     vert->updateLevel(tab + "  ");
   }
 }

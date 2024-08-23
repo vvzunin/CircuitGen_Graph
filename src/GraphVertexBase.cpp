@@ -117,7 +117,7 @@ void GraphVertexBase::updateLevel(std::string tab) {
   int counter = 0;
   for (VertexPtrWeak vert : d_inConnections) {
     if (VertexPtr ptr = vert.lock()) {
-      LOG(INFO) << counter++ << ". " << ptr->getName() << " (" << ptr->getTypeName() << ")";
+      LOG(INFO) << tab << counter++ << ". " << ptr->getName() << " (" << ptr->getTypeName() << ")";
       ptr->updateLevel(tab + "  ");
       d_level = (ptr->getLevel() >= d_level) ? ptr->getLevel() + 1 : d_level;
     } else {

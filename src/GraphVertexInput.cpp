@@ -46,7 +46,7 @@ char GraphVertexInput::updateValue() {
 }
 
 void GraphVertexInput::updateLevel(std::string tab) {
-  LOG(INFO) << "0. " << d_name << " (" << getTypeName() << ")";
+  LOG(INFO) << tab << "0. " << d_name << " (" << getTypeName() << ")";
   d_level = 0;
 }
 
