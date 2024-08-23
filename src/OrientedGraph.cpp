@@ -560,12 +560,10 @@ std::pair<bool, std::string>
 }
 
 DotReturn OrientedGraph::getGraphDotInstance() {
-  LOG(INFO) << "      getGraphDotInstance started!";
   uint64_t* dotCount =
       &d_graphInstanceToDotCount[d_currentParentGraph.lock()->d_graphID];
   uint64_t allCount =
       d_subGraphsInputsPtr[d_currentParentGraph.lock()->d_graphID].size();
-  // LOG(INFO) << "        dotCount: " << *dotCount << ". allCount: " << allCount << ".";
   if (*dotCount == allCount) {
     LOG(INFO) << "        Incorrect getGraphDotInstance call. All modules of "
         + d_currentParentGraph.lock()->getName() + " ("
@@ -578,12 +576,10 @@ DotReturn OrientedGraph::getGraphDotInstance() {
   }
 
   std::string instName = d_name + "_inst_" + std::to_string(*dotCount);
-  LOG(INFO) << "        Starting toDOT:";
   DotReturn dot = toDOT();
 
   dot[0].first = DotTypes::DotSubGraph;
   dot[0].second["instName"] = instName;
-  LOG(INFO) << "  instName: " << instName;
   for (int i = 0; i < dot.size(); i++) {
     dot[i].second["name"] = instName + "_" + dot[i].second["name"];
     if(dot[i].second.find("from")!= dot[i].second.end()) {
@@ -593,17 +589,13 @@ DotReturn OrientedGraph::getGraphDotInstance() {
   }
 
   ++(*dotCount);
-  LOG(INFO) << "      getGraphDotInstance complete!";
   return dot;
 }
 
-DotReturn OrientedGraph::toDOT() {
-  LOG(INFO) << "    Starting toDOT()!";
-  
+DotReturn OrientedGraph::toDOT() {  
   DotReturn dot = {{DotTypes::DotGraph, {{"name", d_name}}}};
   LOG(INFO) << "      DotGraph(" << d_name << ") added to DOT";
-  // LOG(INFO) << AuxMethods::dotReturnToString(dot);
-  LOG(INFO) << "      Start adding vertexes to DOT";
+  LOG(INFO) << "      Start adding vertices to DOT";
   LOG(INFO) << "      inputs          : " << d_vertexes[VertexTypes::input].size();
   LOG(INFO) << "      outputs         : " << d_vertexes[VertexTypes::output].size();
   LOG(INFO) << "      subGraphOutputs : " << d_allSubGraphsOutputs.size();
@@ -618,48 +610,27 @@ DotReturn OrientedGraph::toDOT() {
     int counter = 0;
     for (auto value : eachVertex) {
       auto usedType = eachVertex.back()->getType();
-      LOG(INFO) << "        Current vertexType: " << d_settings->parseVertexToString(usedType) << ". Count: " << eachVertex.size();
-    
-      LOG(INFO) << "          " << counter++ << ": " << value->getName();
       DotReturn dotVertex = value->toDOT();
-      // LOG(INFO) << "        toDOT() complete!";
-      // LOG(INFO) << AuxMethods::dotReturnToString(dotVertex);
       dot.insert(std::end(dot), std::begin(dotVertex), std::end(dotVertex));
-      // LOG(INFO) << "        dot.insert complete!";
     }
-    LOG(INFO) << "        Complete!";
   }
   int counter = 0;
   for (auto value : d_allSubGraphsOutputs) {
-    LOG(INFO) << "          " << counter++ << ": " << value->getName();
-   dot.push_back(value->toDOT()[0]);
+    dot.push_back(value->toDOT()[0]);
   }
-  LOG(INFO) << "      all vertexes (not SubGraphs) added to DOT";
   std::vector<std::pair<std::shared_ptr<GraphVertexSubGraph>, DotReturn>> subDotResults;
-  LOG(INFO) << "    Starting loop";
   for (auto subPtr : d_vertexes[VertexTypes::subGraph]) {
-    LOG(INFO) << "      SubGraph: " << subPtr->getName();
     auto sub = std::static_pointer_cast<GraphVertexSubGraph>(subPtr);
 
     DotReturn val = sub->toDOT();
-    LOG(INFO) << "      toDOT() complete";
     subDotResults.push_back({sub, val});
-    LOG(INFO) << "      subDotResults updated";
 
     auto subGraph = sub->getSubGraph();
-    LOG(INFO) << "      baseGraph locked!";
     uint64_t* dotCount = &d_graphInstanceToDotCount[d_graphID];
-    LOG(INFO) << "      dotCount: " << *dotCount;
-    LOG(INFO) << "      inputs: " << subGraph->getBaseVertexes()[VertexTypes::input].size();
     for (size_t i = 0; i < subGraph->getBaseVertexes()[VertexTypes::input].size(); ++i) {
-      LOG(INFO) << "        d_graphID: " << d_graphID;
-      LOG(INFO) << "        Availible IDs: ";      
       for (auto const& tt : subGraph->d_subGraphsInputsPtr) {
-        LOG(INFO) << "                     : " << tt.first;
       }
-      LOG(INFO) << "Info printed!";
       auto inp = subGraph->d_subGraphsInputsPtr[d_graphID][*dotCount][i];
-      LOG(INFO) << "        inp: " << inp;
       std::string inp_name = subGraph->getBaseVertexes()[VertexTypes::input][i]->getName();
 
       dot.push_back({DotTypes::DotEdge, {
@@ -667,37 +638,9 @@ DotReturn OrientedGraph::toDOT() {
         {"from", inp_name}}
       });
     }
-
-    LOG(INFO) << "      inputs added";
-    // LOG(INFO) << "      outputs: " << subGraph->getBaseVertexes()[VertexTypes::output].size();
-    // for (size_t i = 0; i < subGraph->getBaseVertexes()[VertexTypes::output].size(); ++i) {
-    //   VertexPtr out =
-    //       subGraph->d_subGraphsOutputsPtr[d_graphID]
-    //                           [*dotCount][i];
-    //   std::string out_name = subGraph->getBaseVertexes()[VertexTypes::output][i]->getName();
-
-    //   dot.push_back({DotTypes::DotEdge, {
-    //     {"to", out_name},
-    //     {"from", out->getName()}}
-    //   });
-    // }
-    // LOG(INFO) << "      outputs added";
   }
-  LOG(INFO) << "    Complete loop";
 
   counter = 0;
-  if (subDotResults.size() > 0) {
-    LOG(INFO) << "        Printing getOutConnections:";
-    LOG(INFO) << subDotResults.size();
-    LOG(INFO) << subDotResults[0].first->getName();
-    LOG(INFO) << subDotResults[0].second.size();
-    LOG(INFO) << subDotResults[0].first->getSubGraph()->getName();
-    LOG(INFO) << subDotResults[0].first->getOutConnections().size();
-    auto t = subDotResults[0].first->getOutConnections();
-    for (auto value : t) {
-      LOG(INFO) << value->getName();
-    }
-  }
   for (auto subGraphPair : subDotResults) {
     auto buffers = subGraphPair.first->getOutConnections();
     auto outs = subGraphPair.first->getSubGraph()->getVerticesByType(VertexTypes::output);
@@ -708,34 +651,23 @@ DotReturn OrientedGraph::toDOT() {
         }});
     }
   }
-  LOG(INFO) << "        Complete!";
   for (auto i : subDotResults) {
     dot.insert(std::end(dot), std::begin(i.second), std::end(i.second));
   }
   d_alreadyParsedDot = true;
-
   return dot;
 }
 
 std::pair<bool, std::string>
     OrientedGraph::toDOT(std::string i_path, std::string i_filename) {
   using namespace AuxMethods;
-  LOG(INFO) << "toDOT with parameters started!";
   if (d_alreadyParsedDot && d_isSubGraph) {
     LOG(INFO) << "getGraphDotInstance()";
     return std::make_pair(true, dotReturnToString(getGraphDotInstance()));
   }
   updateLevels();
-  LOG(INFO) << "Starting toDOT()";
   DotReturn dot = toDOT();
-  LOG(INFO) << "toDOT complete.";
 
-  // for (auto i : dot) {
-  //   LOG(INFO) << i.first << ": "
-  //             << i.second["name"] << "\n";
-  // }
-  // LOG(INFO) << dotReturnToString(dot);
-  // В данном методе происходит только генерация одного графа. Без подграфов.
   std::string dotTab = "  ";
 
   if (!i_filename.size()) {
