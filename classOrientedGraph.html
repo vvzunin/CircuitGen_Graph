@@ -198,12 +198,25 @@
               <span class="m-doc-wrap-bumper">auto <a href="#a1f0d862e7db8f4c0b0417695ffb27c90" class="m-doc-self">getVerticeByIndex</a>(</span><span class="m-doc-wrap">size_t idx) const -&gt; <a href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d" class="m-doc">VertexPtr</a></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="acbe1413fa2ca608fb99ee6b1adde163b">
-              <span class="m-doc-wrap-bumper">auto <a href="#acbe1413fa2ca608fb99ee6b1adde163b" class="m-doc-self">getGraphInstance</a>(</span><span class="m-doc-wrap">) -&gt; std::string</span>
+            <dt id="a1cebf5d2daf52246f1a20ea8ac653195">
+              <span class="m-doc-wrap-bumper">auto <a href="#a1cebf5d2daf52246f1a20ea8ac653195" class="m-doc-self">getGraphVerilogInstance</a>(</span><span class="m-doc-wrap">) -&gt; std::string</span>
             </dt>
             <dd><span></span></dd>
             <dt id="a2eb2d7be1861f101eade432faadb6161">
               <span class="m-doc-wrap-bumper">auto <a href="#a2eb2d7be1861f101eade432faadb6161" class="m-doc-self">toVerilog</a>(</span><span class="m-doc-wrap">std::string i_path,
+              std::string i_filename = &quot;&quot;) -&gt; std::pair&lt;bool, std::string&gt;</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a700fcace58f09f33d2271e6b7c7be64f">
+              <span class="m-doc-wrap-bumper">auto <a href="#a700fcace58f09f33d2271e6b7c7be64f" class="m-doc-self">getGraphDotInstance</a>(</span><span class="m-doc-wrap">) -&gt; <a href="DefaultSettings_8hpp.html#a17d4c52993a980c0401c3a60c8229e05" class="m-doc">DotReturn</a></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="aab7dd4be1fa2fe7c6f3654ac46e2178a">
+              <span class="m-doc-wrap-bumper">auto <a href="#aab7dd4be1fa2fe7c6f3654ac46e2178a" class="m-doc-self">toDOT</a>(</span><span class="m-doc-wrap">) -&gt; <a href="DefaultSettings_8hpp.html#a17d4c52993a980c0401c3a60c8229e05" class="m-doc">DotReturn</a></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a93aa60ef15c0c6a25fdd5e16b1b7caff">
+              <span class="m-doc-wrap-bumper">auto <a href="#a93aa60ef15c0c6a25fdd5e16b1b7caff" class="m-doc-self">toDOT</a>(</span><span class="m-doc-wrap">std::string i_path,
               std::string i_filename = &quot;&quot;) -&gt; std::pair&lt;bool, std::string&gt;</span>
             </dt>
             <dd><span></span></dd>
@@ -265,6 +278,10 @@
             <dd>getEdgesGatesCount Returns a mapping containing the number of edges between different types of gates in the graph</dd>
             <dt id="a0683e1ca5c389c1b3518fe0335e94c8e">
               <span class="m-doc-wrap-bumper">auto <a href="#a0683e1ca5c389c1b3518fe0335e94c8e" class="m-doc-self">isConnected</a>(</span><span class="m-doc-wrap">bool i_recalculate = false) -&gt; bool</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a3a82fda4a94cec5e55facdfc7b3697bf">
+              <span class="m-doc-wrap-bumper">auto <a href="#a3a82fda4a94cec5e55facdfc7b3697bf" class="m-doc-self">getSubGraphsOutputsPtr</a>(</span><span class="m-doc-wrap">) -&gt; std::map&lt;size_t, std::vector&lt;std::vector&lt;<a href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d" class="m-doc">VertexPtr</a>&gt;&gt;&gt;</span>
             </dt>
             <dd><span></span></dd>
             <dt id="a60d945d5c420775430c8dd149629ae7b">
@@ -651,7 +668,7 @@
 <span class="p">}</span>
 <span class="k">else</span>
 <span class="p">{</span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Failed to add edge between Vertex1 and Vertex2</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">  </span><span class="n">LOG</span><span class="p">(</span><span class="n">ERROR</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Failed to add edge between Vertex1 and Vertex2</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
 <span class="p">}</span></pre></td>
                 </tr>
               </thead>
@@ -709,7 +726,7 @@
 <span class="p">}</span>
 <span class="k">else</span>
 <span class="p">{</span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Failed to add edges from one or more sources to the</span>
+<span class="w">  </span><span class="n">LOG</span><span class="p">(</span><span class="n">ERROR</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Failed to add edges from one or more sources to the</span>
 <span class="w">  </span><span class="n">target</span><span class="err">\</span><span class="n">n</span><span class="s">&quot;;</span>
 <span class="p">}</span></pre></td>
                 </tr>

@@ -205,13 +205,17 @@
             </dt>
             <dd>calculateHash Calculates the hash value for the vertex based on its outgoing connections.</dd>
             <dt>
-              <span class="m-doc-wrap-bumper">auto <a href="#ae4e70880a9cd7de29aa4a301ca208df6" class="m-doc">getInstance</a>(</span><span class="m-doc-wrap">) -&gt; std::string <span class="m-label m-flat m-warning">virtual</span></span>
+              <span class="m-doc-wrap-bumper">auto <a href="#aff046f82a58c2ab34046fb65c63bd454" class="m-doc">getVerilogInstance</a>(</span><span class="m-doc-wrap">) -&gt; std::string <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
-            <dd>getInstance Generates an instance declaration for the vertex in Verilog format.</dd>
+            <dd>getVerilogInstance Generates an instance declaration for the vertex in Verilog format.</dd>
             <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#a246bbb9dc5234c74fe538bec28627cee" class="m-doc">toVerilog</a>(</span><span class="m-doc-wrap">) -&gt; std::string <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
             <dd>toVerilog Generates Verilog code for the vertex</dd>
+            <dt id="a9664a48055b0181c8c404f44c5e29ffd">
+              <span class="m-doc-wrap-bumper">auto <a href="#a9664a48055b0181c8c404f44c5e29ffd" class="m-doc-self">toDOT</a>(</span><span class="m-doc-wrap">) -&gt; <a href="DefaultSettings_8hpp.html#a17d4c52993a980c0401c3a60c8229e05" class="m-doc">DotReturn</a> <span class="m-label m-flat m-warning">virtual</span></span>
+            </dt>
+            <dd>toDOT Generates DOT code for the vertex</dd>
             <dt id="ad1e4734f26f7e0d8e0153a3f48e23519">
               <span class="m-doc-wrap-bumper">auto <a href="#ad1e4734f26f7e0d8e0153a3f48e23519" class="m-doc-self">isSubgraphBuffer</a>(</span><span class="m-doc-wrap">) const -&gt; bool <span class="m-label m-flat m-warning">virtual</span></span>
             </dt>
@@ -525,16 +529,15 @@
 <span class="c1">// Creating another vertex</span>
 <span class="n">VertexPtr</span><span class="w"> </span><span class="n">anotherVertex</span><span class="w"> </span><span class="o">=</span>
 <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">GraphVertexBase</span><span class="o">&gt;</span><span class="p">(</span><span class="n">VertexTypes</span><span class="o">::</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;vertex2&quot;</span><span class="p">);</span>
-<span class="c1">// Add the second vertex to the input connections of the first vertex</span>
-<span class="c1">// and get the number of occurrences</span>
-<span class="kt">uint32_t</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vertex</span><span class="p">.</span><span class="n">addVertexToInConnections</span><span class="p">(</span><span class="n">anotherVertex</span><span class="p">);</span>
-<span class="c1">// Output the result</span>
+<span class="c1">// Adding a second vertex to the input connections of the first vertex</span>
+<span class="k">and</span><span class="w"> </span><span class="n">getting</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">occurrences</span>
+<span class="kt">uint32_t</span><span class="w"> </span><span class="n">occurrences</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vertex</span><span class="p">.</span><span class="n">addVertexToInConnections</span><span class="p">(</span><span class="n">anotherVertex</span><span class="p">);</span>
+<span class="c1">// Output of the result</span>
 <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;The number of occurrences of the second vertex in the input</span>
-<span class="n">connections</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="n">vertex</span><span class="o">:</span><span class="w"> </span><span class="s">&quot; &lt;&lt; count &lt;&lt; std::endl;</span></pre></td>
+<span class="n">connections</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="n">vertex</span><span class="o">:</span><span class="w"> </span><span class="s">&quot; &lt;&lt; occurrences &lt;&lt; std::endl;</span></pre></td>
                 </tr>
               </tfoot>
             </table>
-<p>addVertexToInConnections Adds a vertex to the input connections of this vertex and returns the count of occurrences of the given vertex in the input connections</p>
           </div></section>
           <section class="m-doc-details" id="a97e6bb3b3782f86439a0069d775fbfe0"><div>
             <h3>
@@ -712,11 +715,11 @@
               </tfoot>
             </table>
           </div></section>
-          <section class="m-doc-details" id="ae4e70880a9cd7de29aa4a301ca208df6"><div>
+          <section class="m-doc-details" id="aff046f82a58c2ab34046fb65c63bd454"><div>
             <h3>
-              <span class="m-doc-wrap-bumper">std::string GraphVertexBase::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ae4e70880a9cd7de29aa4a301ca208df6" class="m-doc-self">getInstance</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">virtual</span></span></span>
+              <span class="m-doc-wrap-bumper">std::string GraphVertexBase::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aff046f82a58c2ab34046fb65c63bd454" class="m-doc-self">getVerilogInstance</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">virtual</span></span></span>
             </h3>
-            <p>getInstance Generates an instance declaration for the vertex in Verilog format.</p>
+            <p>getVerilogInstance Generates an instance declaration for the vertex in Verilog format.</p>
             <table class="m-table m-fullwidth m-flat">
               <tfoot>
                 <tr>
@@ -724,7 +727,7 @@
                   <td><p>A string containing the instance declaration for the vertex in Verilog format.</p><pre class="m-code"><span class="c1">// Creating an instance of the GraphVertexBase class</span>
 <span class="n">GraphVertexBase</span><span class="w"> </span><span class="n">vertex</span><span class="p">(</span><span class="n">VertexTypes</span><span class="o">::</span><span class="n">input</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;vertex1&quot;</span><span class="p">);</span>
 <span class="c1">// Generating an instance for a vertex in Verilog format</span>
-<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">instanceDeclaration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vertex</span><span class="p">.</span><span class="n">getInstance</span><span class="p">();</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">instanceDeclaration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vertex</span><span class="p">.</span><span class="n">getVerilogInstance</span><span class="p">();</span>
 <span class="c1">// Displaying the instance on the screen</span>
 <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Instance declaration for vertex: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">instanceDeclaration</span><span class="w"> </span><span class="o">&lt;&lt;</span>
 <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span></pre></td>

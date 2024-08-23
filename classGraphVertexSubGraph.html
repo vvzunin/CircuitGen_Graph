@@ -99,14 +99,27 @@
             </dt>
             <dd>updateValue TO DO:</dd>
             <dt>
+              <span class="m-doc-wrap-bumper">void <a href="#ab60eed786224bec0a5ab80ba06ee43e8" class="m-doc">updateLevel</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd>updateLevel This method updates the level of the vertex based on the levels of its input connections. It iterates through each input connection and sets the vertex level to the maximum level of its input connections plus one.</dd>
+            <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#a3ef7ccb93efd390c6f90aba11eee2c88" class="m-doc">toVerilog</a>(</span><span class="m-doc-wrap">) -&gt; std::string <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd>toVerilog Generates Verilog code for the vertex</dd>
+            <dt id="ad905dfcfd242e0fb9904035471169f4a">
+              <span class="m-doc-wrap-bumper">auto <a href="#ad905dfcfd242e0fb9904035471169f4a" class="m-doc-self">toDOT</a>(</span><span class="m-doc-wrap">) -&gt; <a href="DefaultSettings_8hpp.html#a17d4c52993a980c0401c3a60c8229e05" class="m-doc">DotReturn</a> <span class="m-label m-flat m-warning">override</span></span>
+            </dt>
+            <dd>toDOT Generates DOT code for the vertex</dd>
             <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#a2ea1ba66149ba38de143dd849497206a" class="m-doc">toVerilog</a>(</span><span class="m-doc-wrap">std::string i_path,
               std::string i_filename = &quot;&quot;) -&gt; std::pair&lt;bool, std::string&gt;</span>
             </dt>
             <dd>This method is used as a substructure for <a href="classOrientedGraph.html" class="m-doc">OrientedGraph</a> methods.</dd>
+            <dt id="aade772e42335407275e93fea48708620">
+              <span class="m-doc-wrap-bumper">auto <a href="#aade772e42335407275e93fea48708620" class="m-doc-self">toDOT</a>(</span><span class="m-doc-wrap">std::string i_path,
+              std::string i_filename = &quot;&quot;) -&gt; std::pair&lt;bool, std::string&gt;</span>
+            </dt>
+            <dd><span></span></dd>
             <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#a9fe85d8468f974f29a3e08c12534fb5c" class="m-doc">toGraphML</a>(</span><span class="m-doc-wrap">std::ofstream&amp; i_fileStream) const -&gt; bool</span>
             </dt>
@@ -116,8 +129,8 @@
               std::string i_prefix = &quot;&quot;) const -&gt; std::string</span>
             </dt>
             <dd>This method is used as a substructure for <a href="classOrientedGraph.html" class="m-doc">OrientedGraph</a> methods.</dd>
-            <dt id="aa17d5ad4d74428f86f76b2388a02c156">
-              <span class="m-doc-wrap-bumper">auto <a href="#aa17d5ad4d74428f86f76b2388a02c156" class="m-doc-self">getInstance</a>(</span><span class="m-doc-wrap">) -&gt; std::string <span class="m-label m-flat m-warning">override</span></span>
+            <dt id="aa6843642ef16a01acf0b0683c2ee55e8">
+              <span class="m-doc-wrap-bumper">auto <a href="#aa6843642ef16a01acf0b0683c2ee55e8" class="m-doc-self">getVerilogInstance</a>(</span><span class="m-doc-wrap">) -&gt; std::string <span class="m-label m-flat m-warning">override</span></span>
             </dt>
             <dd>This method is used as a substructure for <a href="classOrientedGraph.html" class="m-doc">OrientedGraph</a> methods.</dd>
             <dt>
@@ -148,6 +161,24 @@
         </section>
         <section>
           <h2>Function documentation</h2>
+          <section class="m-doc-details" id="ab60eed786224bec0a5ab80ba06ee43e8"><div>
+            <h3>
+              <span class="m-doc-wrap-bumper">void GraphVertexSubGraph::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab60eed786224bec0a5ab80ba06ee43e8" class="m-doc-self">updateLevel</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
+            </h3>
+            <p>updateLevel This method updates the level of the vertex based on the levels of its input connections. It iterates through each input connection and sets the vertex level to the maximum level of its input connections plus one.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Exceptions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">std::invalid_argument</td>
+                  <td>if any of the input connections are invalid (i.e., null pointers)</td>
+                </tr>
+              </tbody>
+            </table>
+<p><code class="m-code"><span class="n">TO</span><span class="w"> </span><span class="n">DO</span><span class="o">:</span></code></p>
+          </div></section>
           <section class="m-doc-details" id="a3ef7ccb93efd390c6f90aba11eee2c88"><div>
             <h3>
               <span class="m-doc-wrap-bumper">std::string GraphVertexSubGraph::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a3ef7ccb93efd390c6f90aba11eee2c88" class="m-doc-self">toVerilog</a>(</span><span class="m-doc-wrap">) <span class="m-label m-warning">override</span></span></span>
