@@ -91,8 +91,12 @@ bool OrientedGraph::needToUpdateLevel() const {
 }
 
 void OrientedGraph::updateLevels() {
+  LOG(INFO) << "Starting level update. Wait.";
+  LOG(INFO) << "Outputs for update: " << d_vertexes.at(VertexTypes::output).size();
+  int counter = 0;
   for (VertexPtr vert : d_vertexes.at(VertexTypes::output)) {
-    vert->updateLevel();
+    LOG(INFO) << counter++ << ". " << vert->getName() << " (" << vert->getTypeName() << ")";
+    vert->updateLevel("  ");
   }
 }
 

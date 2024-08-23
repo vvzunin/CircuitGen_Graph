@@ -16,7 +16,8 @@ GraphVertexConstant::GraphVertexConstant(
   d_value = i_const;
 }
 
-void GraphVertexConstant::updateLevel() {
+void GraphVertexConstant::updateLevel(std::string tab) {
+  LOG(INFO) << "0. " << d_name << " (" << getTypeName() << ")";
   d_level = 0;
 }
 

@@ -113,10 +113,12 @@ uint32_t GraphVertexBase::getLevel() const {
   return d_level;
 }
 
-void GraphVertexBase::updateLevel() {
+void GraphVertexBase::updateLevel(std::string tab) {
+  int counter = 0;
   for (VertexPtrWeak vert : d_inConnections) {
     if (VertexPtr ptr = vert.lock()) {
-      ptr->updateLevel();
+      LOG(INFO) << counter++ << ". " << ptr->getName() << " (" << ptr->getTypeName() << ")";
+      ptr->updateLevel(tab + "  ");
       d_level = (ptr->getLevel() >= d_level) ? ptr->getLevel() + 1 : d_level;
     } else {
       throw std::invalid_argument("Dead pointer!");
