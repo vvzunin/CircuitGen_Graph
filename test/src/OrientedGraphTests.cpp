@@ -732,11 +732,48 @@ TEST(TestToDOT, SubGraph) {
   graphPtr->addEdge(outs[0], outC);
   graphPtr->addEdge(outs[1], outD);
   graphPtr->addEdge(inB, outE);
-
   std::filesystem::create_directories("./submodulesDOT");
   auto        strs     = graphPtr->toDOT(".", "testSubGraph.dot");
   std::string curPath  = std::filesystem::current_path();
   std::string loadFile = loadStringFile(curPath + "/testSubGraph.dot");
+  loadFile             = loadFile.substr(loadFile.find("\n") + 2);
+  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+}
+
+TEST(TestToDOT, SubGraphUnroll) {
+  initLogging("TestToDOT", "SubGraphUnroll");
+  GraphPtr subGraphPtr = std::make_shared<OrientedGraph>("testSubGraph");
+  auto     inA         = subGraphPtr->addInput("a");
+  auto     inB         = subGraphPtr->addInput("b");
+  auto     outC        = subGraphPtr->addOutput("c");
+  auto     outD        = subGraphPtr->addOutput("d");
+  auto     gateAnd1    = subGraphPtr->addGate(Gates::GateAnd, "andAB");
+  auto     const1      = subGraphPtr->addConst('1', "const1");
+  auto     gateOr1     = subGraphPtr->addGate(Gates::GateOr, "orAnd11");
+  subGraphPtr->addEdges({inA, inB}, gateAnd1);
+  subGraphPtr->addEdges({gateAnd1, const1}, gateOr1);
+  subGraphPtr->addEdge(gateOr1, outC);
+  subGraphPtr->addEdge(gateAnd1, outD);
+
+  GraphPtr graphPtr = std::make_shared<OrientedGraph>("testGraph");
+  inA               = graphPtr->addInput("a");
+  inB               = graphPtr->addInput("b");
+  outC              = graphPtr->addOutput("c");
+  outD              = graphPtr->addOutput("d");
+  auto outE         = graphPtr->addOutput("e");
+
+  auto outs         = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
+
+  graphPtr->addEdge(outs[0], outC);
+  graphPtr->addEdge(outs[1], outD);
+  graphPtr->addEdge(inB, outE);
+
+  GraphPtr unrollGraphPtr = graphPtr->unrollGraph();
+
+  std::filesystem::create_directories("./submodulesDOT");
+  auto        strs     = unrollGraphPtr->toDOT(".", "testSubGraphUnroll.dot");
+  std::string curPath  = std::filesystem::current_path();
+  std::string loadFile = loadStringFile(curPath + "/testSubGraphUnroll.dot");
   loadFile             = loadFile.substr(loadFile.find("\n") + 2);
   LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
 }

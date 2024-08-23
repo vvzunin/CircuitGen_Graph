@@ -629,6 +629,11 @@ DotReturn OrientedGraph::toDOT() {
     }
     LOG(INFO) << "        Complete!";
   }
+  int counter = 0;
+  for (auto value : d_allSubGraphsOutputs) {
+    LOG(INFO) << "          " << counter++ << ": " << value->getName();
+   dot.push_back(value->toDOT()[0]);
+  }
   LOG(INFO) << "      all vertexes (not SubGraphs) added to DOT";
   std::vector<std::pair<std::shared_ptr<GraphVertexSubGraph>, DotReturn>> subDotResults;
   LOG(INFO) << "    Starting loop";
@@ -680,7 +685,7 @@ DotReturn OrientedGraph::toDOT() {
   }
   LOG(INFO) << "    Complete loop";
 
-  int counter = 0;
+  counter = 0;
   if (subDotResults.size() > 0) {
     LOG(INFO) << "        Printing getOutConnections:";
     LOG(INFO) << subDotResults.size();
@@ -720,6 +725,7 @@ std::pair<bool, std::string>
     LOG(INFO) << "getGraphDotInstance()";
     return std::make_pair(true, dotReturnToString(getGraphDotInstance()));
   }
+  updateLevels();
   LOG(INFO) << "Starting toDOT()";
   DotReturn dot = toDOT();
   LOG(INFO) << "toDOT complete.";

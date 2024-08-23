@@ -27,6 +27,12 @@ char GraphVertexSubGraph::updateValue() {
   return 'x';
 }
 
+void GraphVertexSubGraph::updateLevel() {
+  for (VertexPtr vert : d_subGraph->getVerticesByType(VertexTypes::output)) {
+    vert->updateLevel();
+  }
+}
+
 // In fact is not needed
 std::string GraphVertexSubGraph::getVerilogInstance() {
   return d_subGraph->getGraphVerilogInstance();

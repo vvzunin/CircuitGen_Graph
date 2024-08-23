@@ -43,7 +43,7 @@ std::string AuxMethods::dotReturnToString(DotReturn dot) {
       case DotTypes::DotInput:
         LOG(INFO) << "  DotTypes::DotInput";
         s += dotTab * tab + dot[i].second["name"] + " [shape=triangle, label=\""
-           + dot[i].second["label"] + "\"];\n";
+           + dot[i].second["label"] + "\\nlevel: " + dot[i].second["level"] + "\"];\n";
         break;
       case DotTypes::DotConstant:
         LOG(INFO) << "  DotTypes::DotConstant";
@@ -54,11 +54,11 @@ std::string AuxMethods::dotReturnToString(DotReturn dot) {
       case DotTypes::DotOutput:
         LOG(INFO) << "  DotTypes::DotOutput";
         s += dotTab * tab + dot[i].second["name"]
-           + " [shape=invtriangle, label=\"" + dot[i].second["label"] + "\\n" + dot[i].second["value"] + "\"];\n";
+           + " [shape=invtriangle, label=\"" + dot[i].second["label"] + "\\nlevel: " + dot[i].second["level"] + "\"];\n";
         break;
       case DotTypes::DotGate:
         LOG(INFO) << "DotTypes::DotGate";
-        s += dotTab * tab + dot[i].second["name"] + " [label=\"" + dot[i].second["label"] + "\"];\n";
+        s += dotTab * tab + dot[i].second["name"] + " [label=\"" + dot[i].second["label"] + "\\nlevel: " + dot[i].second["level"] + "\"];\n";
         break;
       
       case DotTypes::DotEdge:

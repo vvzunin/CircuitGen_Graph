@@ -128,6 +128,7 @@ public:
   );
 
   char        updateValue() override;
+  void        updateLevel() override;
 
   std::string toVerilog() override;
   DotReturn   toDOT() override;
