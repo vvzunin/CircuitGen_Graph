@@ -30,10 +30,12 @@ char GraphVertexOutput::updateValue() {
   return d_value;
 }
 
-void GraphVertexOutput::updateLevel() {
+void GraphVertexOutput::updateLevel(std::string tab) {
+  int counter = 0;
   for (VertexPtrWeak vert : d_inConnections) {
     if (auto ptr = vert.lock()) {
-      ptr->updateLevel();
+      LOG(INFO) << tab << counter++ << ". " << ptr->getName() << " (" << ptr->getTypeName() << ")";
+      ptr->updateLevel(tab + "  ");
       d_level = (ptr->getLevel() > d_level) ? ptr->getLevel() : d_level;
     } else {
       throw std::invalid_argument("Dead pointer!");

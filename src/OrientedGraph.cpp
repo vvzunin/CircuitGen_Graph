@@ -91,8 +91,12 @@ bool OrientedGraph::needToUpdateLevel() const {
 }
 
 void OrientedGraph::updateLevels() {
+  LOG(INFO) << "Starting level update. Wait.";
+  LOG(INFO) << "Outputs for update: " << d_vertexes.at(VertexTypes::output).size();
+  int counter = 0;
   for (VertexPtr vert : d_vertexes.at(VertexTypes::output)) {
-    vert->updateLevel();
+    LOG(INFO) << counter++ << ". " << vert->getName() << " (" << vert->getTypeName() << ")";
+    vert->updateLevel("    ");
   }
 }
 
@@ -654,6 +658,9 @@ DotReturn OrientedGraph::toDOT() {
   for (auto i : subDotResults) {
     dot.insert(std::end(dot), std::begin(i.second), std::end(i.second));
   }
+
+  dot.push_back({DotTypes::DotExit, {{"name", d_name}}});
+
   d_alreadyParsedDot = true;
   return dot;
 }

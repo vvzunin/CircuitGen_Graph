@@ -216,7 +216,7 @@ public:
   /// @throws std::invalid_argument if any of the input connections are invalid
   /// (i.e., null pointers)
 
-  virtual void               updateLevel();
+  virtual void               updateLevel(std::string tab = "");
 
   /// @brief getGate
   /// Returns the type of the basic logic gate represented by this vertex. If

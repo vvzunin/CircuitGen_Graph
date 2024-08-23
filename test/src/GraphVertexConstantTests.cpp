@@ -161,22 +161,22 @@ TEST(TestToDOT, CheckName) {
   EXPECT_EQ(
       dotReturnToString(vertexPtr1->toDOT()),
       vertexPtr1->getName() + " [shape=cds, label=\"" + vertexPtr1->getName()
-          + "\\n1'b0\"];\n}"
+          + "\\n1'b0\"];\n"
   );
   EXPECT_EQ(
       dotReturnToString(vertexPtr2->toDOT()),
       vertexPtr2->getName() + " [shape=cds, label=\"" + vertexPtr2->getName()
-          + "\\n1'b1\"];\n}"
+          + "\\n1'b1\"];\n"
   );
   EXPECT_EQ(
       dotReturnToString(vertexPtr3->toDOT()),
       vertexPtr3->getName() + " [shape=cds, label=\"" + vertexPtr3->getName()
-          + "\\n1'bx\"];\n}"
+          + "\\n1'bx\"];\n"
   );
   EXPECT_EQ(
       dotReturnToString(vertexPtr4->toDOT()),
       vertexPtr4->getName() + " [shape=cds, label=\"" + vertexPtr4->getName()
-          + "\\n1'bz\"];\n}"
+          + "\\n1'bz\"];\n"
   );
 }
 

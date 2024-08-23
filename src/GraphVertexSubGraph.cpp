@@ -27,9 +27,11 @@ char GraphVertexSubGraph::updateValue() {
   return 'x';
 }
 
-void GraphVertexSubGraph::updateLevel() {
+void GraphVertexSubGraph::updateLevel(std::string tab) {
+  int counter = 0;
   for (VertexPtr vert : d_subGraph->getVerticesByType(VertexTypes::output)) {
-    vert->updateLevel();
+    LOG(INFO) << tab << counter++ << ". " << vert->getName() << " (" << vert->getTypeName() << ")";
+    vert->updateLevel(tab + "  ");
   }
 }
 
