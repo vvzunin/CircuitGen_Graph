@@ -64,7 +64,7 @@ std::string_view DefaultSettings::fromOperationsToHierarchy(int32_t key
   return d_operationsToHierarchy.at(key);
 }
 
-std::string DefaultSettings::fromOperationsToName(const std::string& i_op) const {
+std::string DefaultSettings::fromOperationsToName(std::string_view i_op) const {
   return d_operationsToName.at(i_op);
 }
 

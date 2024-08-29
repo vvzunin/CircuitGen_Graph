@@ -211,7 +211,7 @@ public:
   /// @throw std::out_of_range If the passed operation does not exist in the
   /// list of operations
 
-  virtual std::string fromOperationsToName(const std::string& i_op) const;
+  virtual std::string fromOperationsToName(std::string_view i_op) const;
 
   /// @brief getLogicOperations all logical operations
   /// The method returns a dictionary containing all logical operations
@@ -224,7 +224,7 @@ public:
   /// with logical operations
 
   virtual std::map<std::string, std::pair<std::string, int32_t>>
-                           getLogicOperations() const;
+                      getLogicOperations() const;
 
   /// @brief fromOperationsToHierarchy Converts an operation key to its
   /// corresponding hierarchy
@@ -248,7 +248,7 @@ public:
   /// @throws std::out_of_range If the provided key does not exist in the
   /// internal map of operation keys to hierarchies
 
-  std::string_view fromOperationsToHierarchy(int32_t key) const;
+  std::string_view    fromOperationsToHierarchy(int32_t key) const;
 
   /// @brief parseStringToGate Converts a string representation of a gate to
   /// its corresponding enum value
@@ -264,7 +264,7 @@ public:
   /// std::cout << "Enum value of 'and': " << gate << std::endl;
   /// @endcode
 
-  virtual Gates            parseStringToGate(std::string i_gate) const;
+  virtual Gates       parseStringToGate(std::string i_gate) const;
 
   /// @brief parseGateToString Converts an enum value of a gate to its
   /// corresponding string representation
@@ -285,7 +285,7 @@ public:
   /// representation of Gates::GateAnd: " << gateString << std::endl;
   /// @endcode
 
-  virtual std::string      parseGateToString(Gates gate) const;
+  virtual std::string parseGateToString(Gates gate) const;
 
   /// @brief parseVertexToString Converts an enum value of a vertex type to its
   /// corresponding string representation
@@ -303,9 +303,9 @@ public:
   /// std::endl;
   /// @endcode
 
-  virtual std::string      parseVertexToString(VertexTypes vertex) const;
+  virtual std::string parseVertexToString(VertexTypes vertex) const;
 
-  static void              resetSingletone() { d_singleton = nullptr; }
+  static void         resetSingletone() { d_singleton = nullptr; }
 
 private:
   std::string                                            d_name;
@@ -368,6 +368,6 @@ private:
       {VertexTypes::gate, "gate"}
   };
 
-  std::vector<std::string_view> d_operationsToHierarchy;
-  std::map<std::string, std::string>          d_operationsToName;
+  std::vector<std::string_view>           d_operationsToHierarchy;
+  std::map<std::string_view, std::string> d_operationsToName;
 };
