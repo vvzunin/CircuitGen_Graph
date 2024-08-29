@@ -73,10 +73,9 @@ enum DotTypes {
 ///
 
 class DefaultSettings {
-protected:
+public:
   DefaultSettings(const std::string& i_path) : d_path(i_path) {}
 
-public:
   DefaultSettings(DefaultSettings& other) = delete;
   void operator=(const DefaultSettings&)  = delete;
 
