@@ -248,7 +248,7 @@ public:
   /// @throws std::out_of_range If the provided key does not exist in the
   /// internal map of operation keys to hierarchies
 
-  std::vector<std::string> fromOperationsToHierarchy(int32_t key) const;
+  std::string_view fromOperationsToHierarchy(int32_t key) const;
 
   /// @brief parseStringToGate Converts a string representation of a gate to
   /// its corresponding enum value
@@ -305,6 +305,8 @@ public:
 
   virtual std::string      parseVertexToString(VertexTypes vertex) const;
 
+  static void              resetSingletone() { d_singleton = nullptr; }
+
 private:
   std::string                                            d_name;
   static std::shared_ptr<DefaultSettings>                d_singleton;
@@ -332,7 +334,8 @@ private:
       {"not", Gates::GateNot},
       {"buf", Gates::GateBuf},
       {"xor", Gates::GateXor},
-      {"xnor", Gates::GateXnor}};
+      {"xnor", Gates::GateXnor}
+  };
 
   std::map<Gates, std::string> gateToString = {
       {Gates::GateAnd, "and"},
@@ -343,7 +346,8 @@ private:
       {Gates::GateBuf, "buf"},
       {Gates::GateXor, "xor"},
       {Gates::GateXnor, "xnor"},
-      {Gates::GateDefault, "ERROR"}};
+      {Gates::GateDefault, "ERROR"}
+  };
 
   std::vector<Gates> d_logicElements = {
       Gates::GateAnd,
@@ -353,15 +357,17 @@ private:
       Gates::GateXor,
       Gates::GateXnor,
       Gates::GateNot,
-      Gates::GateBuf};
+      Gates::GateBuf
+  };
 
   std::map<VertexTypes, std::string> vertexToString = {
       {VertexTypes::input, "input"},
       {VertexTypes::output, "output"},
       {VertexTypes::constant, "const"},
       {VertexTypes::subGraph, "subGraph"},
-      {VertexTypes::gate, "gate"}};
+      {VertexTypes::gate, "gate"}
+  };
 
-  std::map<int32_t, std::vector<std::string>> d_operationsToHierarchy;
+  std::vector<std::string_view> d_operationsToHierarchy;
   std::map<std::string, std::string>          d_operationsToName;
 };

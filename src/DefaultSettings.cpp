@@ -21,11 +21,13 @@ std::shared_ptr<DefaultSettings> DefaultSettings::getInstance(const std::string&
 }
 
 void DefaultSettings::loadSettings() {
+  int32_t maxSize = 0;
   for (const auto& [key, value] : d_logicOperations) {
-    int32_t i = value.second;
-    if (!d_operationsToHierarchy.count(i))
-      d_operationsToHierarchy[i] = {};
-    d_operationsToHierarchy[i].push_back(value.first);
+    maxSize = std::max(maxSize, value.second);
+  }
+  d_operationsToHierarchy.resize(maxSize);
+  for (const auto& [key, value] : d_logicOperations) {
+    d_operationsToHierarchy[value.second] = value.first;
   }
 
   for (const auto& [key, value] : d_logicOperations)
@@ -57,7 +59,7 @@ std::pair<std::vector<bool>, std::vector<Gates>>
   return std::make_pair(oneGate, d_logicElements);
 }
 
-std::vector<std::string> DefaultSettings::fromOperationsToHierarchy(int32_t key
+std::string_view DefaultSettings::fromOperationsToHierarchy(int32_t key
 ) const {
   return d_operationsToHierarchy.at(key);
 }
