@@ -168,7 +168,7 @@ public:
   /// std::string name = vertex.getName();
   /// std::cout << "Name of the vertex: " << name << std::endl;
   /// @endcode
-  
+
   std::string                getName() const;
   std::string                getName(const std::string& i_prefix) const;
 

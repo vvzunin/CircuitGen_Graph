@@ -77,5 +77,7 @@ void GraphVertexInput::log(el::base::type::ostream_t& os) const {
      << DefaultSettings::parseVertexToString(VertexTypes::input) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << 0 << "\n";
-  os << "Vertex Hash: " << "NuN" << "\n";
+  os << "Vertex Hash: "
+     << "NuN"
+     << "\n";
 }

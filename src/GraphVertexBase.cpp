@@ -259,8 +259,7 @@ std::string GraphVertexBase::getVerilogInstance() {
     return "";
   }
 
-  return VertexUtils::vertexTypeToVerilog(d_type) + " " + getName()
-       + ";";
+  return VertexUtils::vertexTypeToVerilog(d_type) + " " + getName() + ";";
 }
 
 // TODO: what if some (more than 1) connected to output?
@@ -268,8 +267,7 @@ std::string GraphVertexBase::toVerilog() {
   if (d_type == VertexTypes::output) {
     if (!d_inConnections.empty()) {
       if (VertexPtr ptr = d_inConnections.back().lock()) {
-        return "assign " + getName() + " = " + ptr->getName()
-             + ";";
+        return "assign " + getName() + " = " + ptr->getName() + ";";
       }
     }
   }

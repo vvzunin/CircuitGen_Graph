@@ -8,15 +8,14 @@
 
 /* start of static variable values declaration */
 
-std::shared_ptr<DefaultSettings> DefaultSettings::d_singleton = nullptr;
+std::shared_ptr<DefaultSettings>         DefaultSettings::d_singleton = nullptr;
 
 std::pair<VertexTypes, std::string_view> DefaultSettings::vertexToString[] = {
-  {VertexTypes::input, "input"},
-  {VertexTypes::output, "output"},
-  {VertexTypes::constant, "const"},
-  {VertexTypes::subGraph, "subGraph"},
-  {VertexTypes::gate, "gate"}
-};
+    {VertexTypes::input, "input"},
+    {VertexTypes::output, "output"},
+    {VertexTypes::constant, "const"},
+    {VertexTypes::subGraph, "subGraph"},
+    {VertexTypes::gate, "gate"}};
 
 std::pair<Gates, std::string_view> DefaultSettings::gateToString[] = {
     {Gates::GateAnd, "and"},
@@ -27,12 +26,13 @@ std::pair<Gates, std::string_view> DefaultSettings::gateToString[] = {
     {Gates::GateBuf, "buf"},
     {Gates::GateXor, "xor"},
     {Gates::GateXnor, "xnor"},
-    {Gates::GateDefault, "ERROR"}
-};
+    {Gates::GateDefault, "ERROR"}};
 
 /* end of static variable values declaration */
 
-std::shared_ptr<DefaultSettings> DefaultSettings::getInstance(const std::string& i_value) {
+std::shared_ptr<DefaultSettings> DefaultSettings::getInstance(
+    const std::string& i_value
+) {
   /**
    * This is a safer way to create an instance. instance = new Singleton is
    * dangeruous in case two instance threads wants to access at the same time
@@ -83,8 +83,7 @@ std::pair<std::vector<bool>, std::vector<Gates>>
   return std::make_pair(oneGate, d_logicElements);
 }
 
-std::string_view DefaultSettings::fromOperationsToHierarchy(int32_t key
-) const {
+std::string_view DefaultSettings::fromOperationsToHierarchy(int32_t key) const {
   return d_operationsToHierarchy.at(key);
 }
 
@@ -102,17 +101,19 @@ Gates DefaultSettings::parseStringToGate(std::string i_gate) const {
 }
 
 std::string DefaultSettings::parseGateToString(Gates gate) {
-  auto *iter = std::find_if(
-      std::begin(gateToString), std::end(gateToString), [gate] (const auto &x) {
-    return x.first == gate; 
-  });
+  auto* iter = std::find_if(
+      std::begin(gateToString),
+      std::end(gateToString),
+      [gate](const auto& x) { return x.first == gate; }
+  );
   return std::string(iter->second);
 }
 
 std::string DefaultSettings::parseVertexToString(VertexTypes vertex) {
-  auto *iter = std::find_if(
-      std::begin(vertexToString), std::end(vertexToString), [vertex] (const auto &x) {
-    return x.first == vertex; 
-  });
+  auto* iter = std::find_if(
+      std::begin(vertexToString),
+      std::end(vertexToString),
+      [vertex](const auto& x) { return x.first == vertex; }
+  );
   return std::string(iter->second);
 };

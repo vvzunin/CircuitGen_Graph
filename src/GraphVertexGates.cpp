@@ -136,8 +136,7 @@ std::string GraphVertexGates::getVerilogString() const {
       if (this->d_baseGraph.lock() == ptr->getBaseGraph().lock())
         name = ptr->getName();
       else
-        name = ptr->getBaseGraph().lock()->getName() + "_"
-             + ptr->getName();
+        name = ptr->getBaseGraph().lock()->getName() + "_" + ptr->getName();
 
       s += " " + VertexUtils::gateToString(d_gate) + " " + name;
       if (d_gate == GateDefault)
@@ -177,7 +176,7 @@ std::string GraphVertexGates::toVerilog() {
       || d_gate == Gates::GateXnor) {
     basic += "~ ( ";
 
-    end    = " )";
+    end   = " )";
   }
   VertexPtr ptr;
   for (size_t i = 0; i < d_inConnections.size() - 1; ++i) {
@@ -214,8 +213,7 @@ DotReturn GraphVertexGates::toDOT() {
   for (VertexPtrWeak ptrWeak : d_inConnections) {
     if (VertexPtr ptr = ptrWeak.lock())
       dot.push_back(
-          {DotTypes::DotEdge,
-           {{"from", ptr->getName()}, {"to", getName()}}}
+          {DotTypes::DotEdge, {{"from", ptr->getName()}, {"to", getName()}}}
       );
     else {
       LOG(ERROR) << "Dead pointer!" << d_name << std::endl;
@@ -236,8 +234,10 @@ void GraphVertexGates::log(el::base::type::ostream_t& os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
-  os << "Vertex Type: " << DefaultSettings::parseVertexToString(VertexTypes::gate)
-     << "(" + DefaultSettings::parseGateToString(d_gate) + ")" << "\n";
+  os << "Vertex Type: "
+     << DefaultSettings::parseVertexToString(VertexTypes::gate)
+     << "(" + DefaultSettings::parseGateToString(d_gate) + ")"
+     << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
   os << "Vertex Hash: " << hashed << "\n";

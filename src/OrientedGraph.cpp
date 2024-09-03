@@ -28,8 +28,7 @@ void swap(VertexPtr first, VertexPtr second) noexcept {
   second      = c;
 }
 
-OrientedGraph::OrientedGraph(const std::string& i_name)
-    : GraphMemory() {
+OrientedGraph::OrientedGraph(const std::string& i_name) : GraphMemory() {
   d_graphID = d_countNewGraphInstance++;
 
   if (i_name == "")
@@ -420,28 +419,25 @@ std::string OrientedGraph::getGraphVerilogInstance() {
   for (size_t i = 0; i < d_vertexes[VertexTypes::input].size(); ++i) {
     auto inp = d_subGraphsInputsPtr[d_currentParentGraph.lock()->d_graphID]
                                    [*verilogCount][i];
-    std::string inp_name =
-        d_vertexes[VertexTypes::input][i]->getName();
+    std::string inp_name = d_vertexes[VertexTypes::input][i]->getName();
 
-    module_ver += verilogTab + verilogTab + "." + inp_name + "( ";
-    module_ver += inp->getName() + " ),\n";
+    module_ver           += verilogTab + verilogTab + "." + inp_name + "( ";
+    module_ver           += inp->getName() + " ),\n";
   }
 
   for (size_t i = 0; i < d_vertexes[VertexTypes::output].size() - 1; ++i) {
     VertexPtr out =
         d_subGraphsOutputsPtr[d_currentParentGraph.lock()->d_graphID]
                              [*verilogCount][i];
-    std::string out_name =
-        d_vertexes[VertexTypes::output][i]->getName();
+    std::string out_name = d_vertexes[VertexTypes::output][i]->getName();
 
-    module_ver += verilogTab + verilogTab + "." + out_name + "( ";
-    module_ver += out->getName() + " ),\n";
+    module_ver           += verilogTab + verilogTab + "." + out_name + "( ";
+    module_ver           += out->getName() + " ),\n";
   }
 
-  std::string out_name =
-      d_vertexes[VertexTypes::output].back()->getName();
+  std::string out_name = d_vertexes[VertexTypes::output].back()->getName();
 
-  module_ver += verilogTab + verilogTab + "." + out_name + "( ";
+  module_ver           += verilogTab + verilogTab + "." + out_name + "( ";
   module_ver += d_subGraphsOutputsPtr[d_currentParentGraph.lock()->d_graphID]
                                      [*verilogCount]
                                          .back()
@@ -657,8 +653,7 @@ DotReturn OrientedGraph::toDOT() {
       for (auto const& tt : subGraph->d_subGraphsInputsPtr) {}
       auto        inp = subGraph->d_subGraphsInputsPtr[d_graphID][*dotCount][i];
       std::string inp_name =
-          subGraph->getBaseVertexes()[VertexTypes::input][i]->getName(
-          );
+          subGraph->getBaseVertexes()[VertexTypes::input][i]->getName();
 
       dot.push_back(
           {DotTypes::DotEdge,
