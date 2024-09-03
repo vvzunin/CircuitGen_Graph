@@ -1,12 +1,19 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
+
 #include "easyloggingpp/easylogging++.h"
 
 GraphVertexOutput::GraphVertexOutput(GraphPtr i_baseGraph) :
   GraphVertexBase(VertexTypes::output, i_baseGraph) {}
 
 GraphVertexOutput::GraphVertexOutput(
-    const std::string i_name,
-    GraphPtr          i_baseGraph
+    GraphMemory& memory,
+    GraphPtr     i_baseGraph
+) :
+  GraphVertexBase(VertexTypes::output, memory, i_baseGraph) {}
+
+GraphVertexOutput::GraphVertexOutput(
+    std::string_view i_name,
+    GraphPtr         i_baseGraph
 ) :
   GraphVertexBase(VertexTypes::output, i_name, i_baseGraph) {}
 
@@ -34,7 +41,8 @@ void GraphVertexOutput::updateLevel(std::string tab) {
   int counter = 0;
   for (VertexPtrWeak vert : d_inConnections) {
     if (auto ptr = vert.lock()) {
-      LOG(INFO) << tab << counter++ << ". " << ptr->getName() << " (" << ptr->getTypeName() << ")";
+      LOG(INFO) << tab << counter++ << ". " << ptr->getName() << " ("
+                << ptr->getTypeName() << ")";
       ptr->updateLevel(tab + "  ");
       d_level = (ptr->getLevel() > d_level) ? ptr->getLevel() : d_level;
     } else {
@@ -46,27 +54,31 @@ void GraphVertexOutput::updateLevel(std::string tab) {
 DotReturn GraphVertexOutput::toDOT() {
   DotReturn dot;
 
-  dot.push_back({DotTypes::DotOutput, {
-    {"name", d_name},
-    {"label", d_name},
-    {"level", std::to_string(d_level)}
-  }});
+  dot.push_back(
+      {DotTypes::DotOutput,
+       {{"name", getChangableName()},
+        {"label", getChangableName()},
+        {"level", std::to_string(d_level)}}}
+  );
 
   for (VertexPtrWeak ptrWeak : d_inConnections) {
     VertexPtr ptr = ptrWeak.lock();
-    dot.push_back({DotTypes::DotEdge, {
-      {"from", ptr->getName()},
-      {"to", d_name},
-      {"level", std::to_string(d_level)}
-    }});
+    dot.push_back(
+        {DotTypes::DotEdge,
+         {{"from", ptr->getChangableName()},
+          {"to", getChangableName()},
+          {"level", std::to_string(d_level)}}}
+    );
   }
   return dot;
 }
 
 void GraphVertexOutput::log(el::base::type::ostream_t& os) const {
   GraphPtr gr = d_baseGraph.lock();
-  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";
-  os << "Vertex Type: " << d_settings->parseVertexToString(VertexTypes::output) << "\n";
+  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
+     << ")\n";
+  os << "Vertex Type: "
+     << SettingsUtils::parseVertexToString(VertexTypes::output) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
   os << "Vertex Hash: " << "NuN" << "\n";

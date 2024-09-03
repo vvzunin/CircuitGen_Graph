@@ -6,7 +6,31 @@
 
 #include <CircuitGenGraph/DefaultSettings.hpp>
 
+/* start of static variable values declaration */
+
 std::shared_ptr<DefaultSettings> DefaultSettings::d_singleton = nullptr;
+
+std::pair<VertexTypes, std::string_view> SettingsUtils::vertexToString[] = {
+  {VertexTypes::input, "input"},
+  {VertexTypes::output, "output"},
+  {VertexTypes::constant, "const"},
+  {VertexTypes::subGraph, "subGraph"},
+  {VertexTypes::gate, "gate"}
+};
+
+std::pair<Gates, std::string_view> SettingsUtils::gateToString[] = {
+    {Gates::GateAnd, "and"},
+    {Gates::GateNand, "nand"},
+    {Gates::GateOr, "or"},
+    {Gates::GateNor, "nor"},
+    {Gates::GateNot, "not"},
+    {Gates::GateBuf, "buf"},
+    {Gates::GateXor, "xor"},
+    {Gates::GateXnor, "xnor"},
+    {Gates::GateDefault, "ERROR"}
+};
+
+/* end of static variable values declaration */
 
 std::shared_ptr<DefaultSettings> DefaultSettings::getInstance(const std::string& i_value) {
   /**
@@ -14,7 +38,7 @@ std::shared_ptr<DefaultSettings> DefaultSettings::getInstance(const std::string&
    * dangeruous in case two instance threads wants to access at the same time
    */
   if (d_singleton == nullptr) {
-    d_singleton = std::make_shared<DefaultSettings>(i_value);
+    d_singleton = std::make_shared<HiddenConstructor>(i_value);
     d_singleton->loadSettings();
   }
   return d_singleton;
@@ -77,10 +101,18 @@ Gates DefaultSettings::parseStringToGate(std::string i_gate) const {
   return stringToGate.at(i_gate);
 }
 
-std::string DefaultSettings::parseGateToString(Gates gate) const {
-  return gateToString.at(gate);
+std::string SettingsUtils::parseGateToString(Gates gate) {
+  auto *iter = std::find_if(
+      std::begin(gateToString), std::end(gateToString), [gate] (const auto &x) {
+    return x.first == gate; 
+  });
+  return std::string(iter->second);
 }
 
-std::string DefaultSettings::parseVertexToString(VertexTypes vertex) const {
-  return vertexToString.at(vertex);
+std::string SettingsUtils::parseVertexToString(VertexTypes vertex) {
+  auto *iter = std::find_if(
+      std::begin(vertexToString), std::end(vertexToString), [vertex] (const auto &x) {
+    return x.first == vertex; 
+  });
+  return std::string(iter->second);
 };

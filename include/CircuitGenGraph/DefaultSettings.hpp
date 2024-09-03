@@ -73,9 +73,11 @@ enum DotTypes {
 ///
 
 class DefaultSettings {
-public:
+protected:
+  struct HiddenConstructor;
   DefaultSettings(const std::string& i_path) : d_path(i_path) {}
 
+public:
   DefaultSettings(DefaultSettings& other) = delete;
   void operator=(const DefaultSettings&)  = delete;
 
@@ -265,45 +267,6 @@ public:
 
   virtual Gates       parseStringToGate(std::string i_gate) const;
 
-  /// @brief parseGateToString Converts an enum value of a gate to its
-  /// corresponding string representation
-  /// @param gate The enum value representing the gate
-  /// @return std::string The string representation of the provided gate enum
-  /// value This method converts an enum value representing a gate to its
-  /// corresponding string representation.
-  /// It retrieves the string representation from the internal map date
-  /// ToString, which maps enum values of gates to their string
-  /// representations.
-  /// @code
-  /// // Creating an instance of the DefaultSettings class or getting it from an
-  /// existing object std::shared_ptr<DefaultSettings> settingsInstance =
-  /// DefaultSettings::getInstance("/path/to/settings");
-  /// // Convert the enum value Gates::GateAnd to its corresponding string
-  /// representation std::string gateString =
-  /// settingsInstance->parseGateToString(Gates::GateAnd); std::cout << "String
-  /// representation of Gates::GateAnd: " << gateString << std::endl;
-  /// @endcode
-
-  virtual std::string parseGateToString(Gates gate) const;
-
-  /// @brief parseVertexToString Converts an enum value of a vertex type to its
-  /// corresponding string representation
-  /// @param vertex The enum value representing the vertex type
-  /// @return std::string The string representation of the provided vertex type
-  /// enum value
-  /// @code
-  /// // Creating an instance of the DefaultSettings class or getting it from an
-  /// existing object std::shared_ptr<DefaultSettings> settingsInstance =
-  /// DefaultSettings::getInstance("/path/to/settings");
-  /// // Convert the enum value VertexTypes::input to its corresponding string
-  /// representation std::string vertexString =
-  /// settingsInstance->parseVertexToString(VertexTypes::input); std::cout <<
-  /// "String representation of VertexTypes::input: " << vertexString <<
-  /// std::endl;
-  /// @endcode
-
-  virtual std::string parseVertexToString(VertexTypes vertex) const;
-
   static void         resetSingletone() { d_singleton = nullptr; }
 
 private:
@@ -336,18 +299,6 @@ private:
       {"xnor", Gates::GateXnor}
   };
 
-  std::map<Gates, std::string> gateToString = {
-      {Gates::GateAnd, "and"},
-      {Gates::GateNand, "nand"},
-      {Gates::GateOr, "or"},
-      {Gates::GateNor, "nor"},
-      {Gates::GateNot, "not"},
-      {Gates::GateBuf, "buf"},
-      {Gates::GateXor, "xor"},
-      {Gates::GateXnor, "xnor"},
-      {Gates::GateDefault, "ERROR"}
-  };
-
   std::vector<Gates> d_logicElements = {
       Gates::GateAnd,
       Gates::GateNand,
@@ -359,14 +310,60 @@ private:
       Gates::GateBuf
   };
 
-  std::map<VertexTypes, std::string> vertexToString = {
-      {VertexTypes::input, "input"},
-      {VertexTypes::output, "output"},
-      {VertexTypes::constant, "const"},
-      {VertexTypes::subGraph, "subGraph"},
-      {VertexTypes::gate, "gate"}
-  };
-
   std::vector<std::string_view>           d_operationsToHierarchy;
   std::map<std::string_view, std::string> d_operationsToName;
+};
+
+struct DefaultSettings::HiddenConstructor: public DefaultSettings {
+  HiddenConstructor(const std::string& i_path)
+    : DefaultSettings(i_path)
+  {} 
+};
+
+struct SettingsUtils {
+
+  /// @brief parseVertexToString Converts an enum value of a vertex type to its
+  /// corresponding string representation
+  /// @param vertex The enum value representing the vertex type
+  /// @return std::string The string representation of the provided vertex type
+  /// enum value
+  /// @code
+  /// // Creating an instance of the DefaultSettings class or getting it from an
+  /// existing object std::shared_ptr<DefaultSettings> settingsInstance =
+  /// DefaultSettings::getInstance("/path/to/settings");
+  /// // Convert the enum value VertexTypes::input to its corresponding string
+  /// representation std::string vertexString =
+  /// settingsInstance->parseVertexToString(VertexTypes::input); std::cout <<
+  /// "String representation of VertexTypes::input: " << vertexString <<
+  /// std::endl;
+  /// @endcode
+
+  static std::string parseVertexToString(VertexTypes vertex);
+
+  /// @brief parseGateToString Converts an enum value of a gate to its
+  /// corresponding string representation
+  /// @param gate The enum value representing the gate
+  /// @return std::string The string representation of the provided gate enum
+  /// value This method converts an enum value representing a gate to its
+  /// corresponding string representation.
+  /// It retrieves the string representation from the internal map date
+  /// ToString, which maps enum values of gates to their string
+  /// representations.
+  /// @code
+  /// // Creating an instance of the DefaultSettings class or getting it from an
+  /// existing object std::shared_ptr<DefaultSettings> settingsInstance =
+  /// DefaultSettings::getInstance("/path/to/settings");
+  /// // Convert the enum value Gates::GateAnd to its corresponding string
+  /// representation std::string gateString =
+  /// settingsInstance->parseGateToString(Gates::GateAnd); std::cout << "String
+  /// representation of Gates::GateAnd: " << gateString << std::endl;
+  /// @endcode
+
+  static std::string parseGateToString(Gates gate);
+
+private:
+  static std::pair<VertexTypes, std::string_view> vertexToString[5];
+
+  static std::pair<Gates, std::string_view> gateToString[9];
+
 };

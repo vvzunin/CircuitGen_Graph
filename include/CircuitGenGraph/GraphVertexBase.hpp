@@ -9,11 +9,12 @@
 
 #include <CircuitGenGraph/DefaultSettings.hpp>
 #include <CircuitGenGraph/enums.hpp>
+#include <CircuitGenGraph/GraphMemory.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
 #include "easyloggingpp/easylogging++.h"
 
-class OrientedGraph;  // Проблема циклического определения
+class OrientedGraph;
 
 #define GraphPtr      std::shared_ptr<OrientedGraph>
 #define GraphPtrWeak  std::weak_ptr<OrientedGraph>
@@ -77,7 +78,6 @@ std::string vertexTypeToComment(VertexTypes i_type);
 /// other vertices
 /// @param d_outConnections vector of strong pointers to output connections
 /// with other vertices
-/// @param d_settings A pointer to the settings object for this vertex
 /// @param d_type Vertex Type - Defined by the VertexTypes enumeration
 /// @param d_count Vertex counter for naming and other purposes.
 /// Represented by the uint_fast64_t type
@@ -90,7 +90,13 @@ public:
   /// optional graph
   /// @param i_type The type of the vertex (from the VertexTypes enum).
   /// @param i_graph Optional pointer to the graph containing the vertex
-  GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph = nullptr);
+  GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph);
+
+  GraphVertexBase(
+      const VertexTypes i_type,
+      GraphMemory&      memory,
+      GraphPtr          i_graph = nullptr
+  );
 
   /// @brief GraphVertexBase
   /// Constructs a GraphVertexBase object with the specified vertex type, name,
@@ -100,8 +106,8 @@ public:
   /// @param i_graph Optional pointer to the graph containing the vertex.
   GraphVertexBase(
       const VertexTypes i_type,
-      const std::string i_name,
-      GraphPtr          i_graph = nullptr
+      std::string_view  i_name,
+      GraphPtr          i_graph
   );
 
   GraphVertexBase& operator=(const GraphVertexBase& other
@@ -151,7 +157,7 @@ public:
   /// std::cout << "New name of the vertex: " << vertex.getName() << std::endl;
   /// @endcode
 
-  void                       setName(const std::string i_name);
+  void                       setName(std::string_view i_name);
 
   /// @brief getName
   /// Returns the name of the vertex
@@ -162,7 +168,8 @@ public:
   /// std::cout << "Name of the vertex: " << name << std::endl;
   /// @endcode
 
-  std::string                getName() const;
+  std::string_view           getName() const;
+  std::string                getChangableName() const;
   std::string                getName(const std::string& i_prefix) const;
 
   // Get для значения вершины
@@ -464,17 +471,16 @@ public:
   virtual void           log(el::base::type::ostream_t& os) const;
 
 protected:
-  GraphPtrWeak                     d_baseGraph;
+  GraphPtrWeak               d_baseGraph;
 
-  std::string                      d_name;
-  char                             d_value;
-  uint32_t                         d_level;
+  std::string_view           d_name;
+  char                       d_value;
+  uint32_t                   d_level;
 
-  std::vector<VertexPtrWeak>       d_inConnections;
-  std::vector<VertexPtr>           d_outConnections;
+  std::vector<VertexPtrWeak> d_inConnections;
+  std::vector<VertexPtr>     d_outConnections;
 
-  std::shared_ptr<DefaultSettings> d_settings =
-      DefaultSettings::getInstance("GraphVertexBase");
+  std::string                hashed = "";
 
 private:
   // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых
@@ -483,5 +489,4 @@ private:
 
   // Счетчик вершин для именования и подобного
   static std::atomic_uint64_t d_count;
-  std::string                 hashed = "";
 };

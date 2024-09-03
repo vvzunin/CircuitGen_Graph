@@ -13,6 +13,7 @@
 
 #include <CircuitGenGraph/DefaultSettings.hpp>
 #include <CircuitGenGraph/enums.hpp>
+#include <CircuitGenGraph/GraphMemory.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
 #include "easyloggingpp/easylogging++.h"
@@ -75,6 +76,7 @@ class GraphVertexBase;  // Проблема циклического опред�
 /// @param d_settings Shared pointer to DefaultSettings instance
 
 class OrientedGraph :
+  public GraphMemory,
   public std::enable_shared_from_this<OrientedGraph>,
   public el::Loggable {
 public:
@@ -412,14 +414,14 @@ public:
 
   std::vector<VertexPtr> getVerticesByType(
       const VertexTypes& i_type,
-      const std::string& i_name         = "",
+      std::string_view   i_name         = "",
       const bool&        i_addSubGraphs = false
   ) const;
   std::vector<VertexPtr> getVerticesByLevel(const uint32_t& i_level);
 
   std::vector<VertexPtr> getVerticesByName(
-      const std::string& i_name,
-      const bool&        i_addSubGraphs = false
+      std::string_view i_name,
+      const bool&      i_addSubGraphs = false
   ) const;
 
   bool                    operator==(const OrientedGraph& rhs);
@@ -505,7 +507,8 @@ private:
               {VertexTypes::output, std::vector<VertexPtr>()},
               {VertexTypes::constant, std::vector<VertexPtr>()},
               {VertexTypes::gate, std::vector<VertexPtr>()},
-              {VertexTypes::subGraph, std::vector<VertexPtr>()}};
+              {VertexTypes::subGraph, std::vector<VertexPtr>()}
+  };
 
   static std::atomic_size_t d_countGraph;
 
@@ -518,7 +521,8 @@ private:
       {Gates::GateNot, 0},
       {Gates::GateBuf, 0},
       {Gates::GateXor, 0},
-      {Gates::GateXnor, 0}};
+      {Gates::GateXnor, 0}
+  };
   // used for quick edges of gate type count;
   std::map<Gates, std::map<Gates, size_t>> d_edgesGatesCount;
 

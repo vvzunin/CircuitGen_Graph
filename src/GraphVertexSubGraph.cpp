@@ -4,6 +4,7 @@
 #include <unordered_set>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
+
 #include "easyloggingpp/easylogging++.h"
 
 GraphVertexSubGraph::GraphVertexSubGraph(
@@ -13,10 +14,20 @@ GraphVertexSubGraph::GraphVertexSubGraph(
   GraphVertexBase(VertexTypes::subGraph, i_baseGraph) {
   d_subGraph = i_subGraph;
 }
+
 GraphVertexSubGraph::GraphVertexSubGraph(
-    GraphPtr           i_subGraph,
-    const std::string& i_name,
-    GraphPtr           i_baseGraph
+    GraphPtr     i_subGraph,
+    GraphMemory& memory,
+    GraphPtr     i_baseGraph
+) :
+  GraphVertexBase(VertexTypes::subGraph, memory, i_baseGraph) {
+  d_subGraph = i_subGraph;
+}
+
+GraphVertexSubGraph::GraphVertexSubGraph(
+    GraphPtr         i_subGraph,
+    std::string_view i_name,
+    GraphPtr         i_baseGraph
 ) :
   GraphVertexBase(VertexTypes::subGraph, i_name, i_baseGraph) {
   d_subGraph = i_subGraph;
@@ -30,7 +41,8 @@ char GraphVertexSubGraph::updateValue() {
 void GraphVertexSubGraph::updateLevel(std::string tab) {
   int counter = 0;
   for (VertexPtr vert : d_subGraph->getVerticesByType(VertexTypes::output)) {
-    LOG(INFO) << tab << counter++ << ". " << vert->getName() << " (" << vert->getTypeName() << ")";
+    LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
+              << vert->getTypeName() << ")";
     vert->updateLevel(tab + "  ");
   }
 }
@@ -100,7 +112,7 @@ std::string GraphVertexSubGraph::calculateHash(bool recalculate) {
     return hashed;
 
   // calc hash from subgraph
-  hashed = d_subGraph->calculateHash();
+  hashed = d_subGraph->calculateHash() + std::to_string(d_inConnections.size());
 
   // futuire sorted struct
   std::vector<std::string> hashed_data;
@@ -233,8 +245,10 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
 
 void GraphVertexSubGraph::log(el::base::type::ostream_t& os) const {
   GraphPtr gr = d_baseGraph.lock();
-  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";
-  os << "Vertex Type: " << d_settings->parseVertexToString(VertexTypes::subGraph) << "\n";
+  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
+     << ")\n";
+  os << "Vertex Type: "
+     << SettingsUtils::parseVertexToString(VertexTypes::subGraph) << "\n";
   os << "Vertex Hash: " << hashed;
   os << *d_subGraph;
 }
