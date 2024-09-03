@@ -308,7 +308,7 @@ public:
 
   static void        resetSingletone() { d_singleton = nullptr; }
 
-private:
+protected:
   std::string                                            d_name;
   static std::shared_ptr<DefaultSettings>                d_singleton;
   std::string                                            d_path;
