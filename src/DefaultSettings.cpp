@@ -30,7 +30,7 @@ std::pair<Gates, std::string_view> DefaultSettings::gateToString[] = {
 
 /* end of static variable values declaration */
 
-std::shared_ptr<DefaultSettings> DefaultSettings::getInstance(
+std::shared_ptr<DefaultSettings> DefaultSettings::getDefaultInstance(
     const std::string& i_value
 ) {
   /**
@@ -58,7 +58,7 @@ void DefaultSettings::loadSettings() {
     d_operationsToName[value.first] = key;
 }
 
-std::string DefaultSettings::getInstanceName() const {
+std::string DefaultSettings::getDefaultInstanceName() const {
   return d_name;
 }
 

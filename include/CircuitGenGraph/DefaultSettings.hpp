@@ -79,8 +79,8 @@ public:
   DefaultSettings(DefaultSettings& other) = delete;
   void operator=(const DefaultSettings&)  = delete;
 
-  /// @brief getInstance Gets a single instance of the DefaultSettings class
-  /// The method provides creation and receipt of a single instance of the
+  /// @brief getDefaultInstance Gets a single instance of the DefaultSettings
+  /// class The method provides creation and receipt of a single instance of the
   /// DefaultSettings class with the specified value of the settings path. If an
   /// instance already exists, the method returns a pointer to it,
   /// otherwise it creates a new instance, loads the settings from the
@@ -93,14 +93,15 @@ public:
   /// been
   /// // created yet, and we get a pointer to it
   /// std::shared_ptr<DefaultSettings>        settingsInstance =
-  /// DefaultSettings::getInstance("/path/to/settings");
+  /// DefaultSettings::getDefaultInstance("/path/to/settings");
   /// // Now we can use the settings Instance object to access the methods
   /// // and members of the DefaultSettings class
   /// std::string datasetPath = settingsInstance->getDatasetPath();
   /// std::cout << "Dataset path: " << datasetPath << std::endl;
   /// @endcode
 
-  static std::shared_ptr<DefaultSettings> getInstance(const std::string& i_value
+  static std::shared_ptr<DefaultSettings> getDefaultInstance(
+      const std::string& i_value
   );
 
   /// @brief loadSettings Downloads settings from a file
@@ -109,12 +110,13 @@ public:
   /// settings values from it and updates the corresponding data members of
   /// the class
 
-  virtual void                            loadSettings();
+  void                            loadSettings();
 
-  /// @brief getInstanceName Gets the name of the current instance of settings
+  /// @brief getDefaultInstanceName Gets the name of the current instance of
+  /// settings
   /// @return std::string Name of the current instance of settings
 
-  virtual std::string                     getInstanceName() const;
+  std::string                     getDefaultInstanceName() const;
 
   /// @brief getLogicOperation Gets information about a logical operation by
   /// its name
@@ -138,15 +140,13 @@ public:
   /// @throws std::out_of_range If the passed operation name does not exist
   /// in the list of logical operations
 
-  virtual std::pair<std::string, int32_t> getLogicOperation(
-      const std::string& i_op
-  );
+  std::pair<std::string, int32_t> getLogicOperation(const std::string& i_op);
 
   /// @brief getLogicOperationsKeys Returns the keys of logical operations
   /// @return std::vector<Gates> A vector containing the keys of logical
   /// operations
 
-  virtual std::vector<Gates> getLogicOperationsKeys();
+  std::vector<Gates>              getLogicOperationsKeys();
 
   /// @brief getLogicOperationsWithGates Returns logical operations along with
   /// information about the presence of a single input
@@ -162,7 +162,7 @@ public:
   /// // Creating an instance of the DefaultSettings class or getting it from an
   /// // existing object
   /// std::shared_ptr<DefaultSettings>        settingsInstance =
-  /// DefaultSettings::getInstance("/path/to/settings");
+  /// DefaultSettings::getDefaultInstance("/path/to/settings");
   /// // Get logical operations together with information about the presence
   /// // of a single input
   /// std::pair<std::vector<bool>, std::vector<Gates>> logicOperationsInfo =
@@ -186,8 +186,8 @@ public:
   /// }
   /// @endcode
 
-  virtual std::pair<std::vector<bool>, std::vector<Gates>>
-                      getLogicOperationsWithGates();
+  std::pair<std::vector<bool>, std::vector<Gates>> getLogicOperationsWithGates(
+  );
 
   /// @brief fromOperationsToName Converts the operation to its name
   /// @param i_op a string representing the operation
@@ -196,7 +196,7 @@ public:
   /// // Creating an instance of the DefaultSettings class or getting it from
   /// an existing object
   /// std::shared_ptr<DefaultSettings> settingsInstance =
-  /// DefaultSettings::getInstance("/path/to/settings");
+  /// DefaultSettings::getDefaultInstance("/path/to/settings");
   /// Convert the operation to its name
   /// std::string operationName;
   /// try
@@ -210,7 +210,7 @@ public:
   /// @throw std::out_of_range If the passed operation does not exist in the
   /// list of operations
 
-  virtual std::string fromOperationsToName(std::string_view i_op) const;
+  std::string fromOperationsToName(std::string_view i_op) const;
 
   /// @brief getLogicOperations all logical operations
   /// The method returns a dictionary containing all logical operations
@@ -222,8 +222,8 @@ public:
   /// @return std::map<std::string, std::pair<std::string, int32_t>> Dictionary
   /// with logical operations
 
-  virtual std::map<std::string, std::pair<std::string, int32_t>>
-                     getLogicOperations() const;
+  std::map<std::string, std::pair<std::string, int32_t>> getLogicOperations(
+  ) const;
 
   /// @brief fromOperationsToHierarchy Converts an operation key to its
   /// corresponding hierarchy
@@ -233,7 +233,7 @@ public:
   /// @code
   /// // Creating an instance of the DefaultSettings class or getting it from an
   /// existing object std::shared_ptr<DefaultSettings> settingsInstance =
-  /// DefaultSettings::getInstance("/path/to/settings");
+  /// DefaultSettings::getDefaultInstance("/path/to/settings");
   /// // Get the hierarchy associated with the operation key 5
   /// std::vector<std::string> operationHierarchy =
   /// settingsInstance->fromOperationsToHierarchy(5);
@@ -257,13 +257,13 @@ public:
   /// @code
   /// // Creating an instance of the DefaultSettings class or getting it from an
   /// existing object std::shared_ptr<DefaultSettings> settingsInstance =
-  /// DefaultSettings::getInstance("/path/to/settings");
+  /// DefaultSettings::getDefaultInstance("/path/to/settings");
   /// // Convert the string representation "and" to its corresponding enum value
   /// Gates gate = settingsInstance->parseStringToGate("and");
   /// std::cout << "Enum value of 'and': " << gate << std::endl;
   /// @endcode
 
-  virtual Gates      parseStringToGate(std::string i_gate) const;
+  Gates              parseStringToGate(std::string i_gate) const;
 
   /// @brief parseVertexToString Converts an enum value of a vertex type to its
   /// corresponding string representation
@@ -273,7 +273,7 @@ public:
   /// @code
   /// // Creating an instance of the DefaultSettings class or getting it from an
   /// existing object std::shared_ptr<DefaultSettings> settingsInstance =
-  /// DefaultSettings::getInstance("/path/to/settings");
+  /// DefaultSettings::getDefaultInstance("/path/to/settings");
   /// // Convert the enum value VertexTypes::input to its corresponding string
   /// representation std::string vertexString =
   /// settingsInstance->parseVertexToString(VertexTypes::input); std::cout <<
@@ -295,7 +295,7 @@ public:
   /// @code
   /// // Creating an instance of the DefaultSettings class or getting it from an
   /// existing object std::shared_ptr<DefaultSettings> settingsInstance =
-  /// DefaultSettings::getInstance("/path/to/settings");
+  /// DefaultSettings::getDefaultInstance("/path/to/settings");
   /// // Convert the enum value Gates::GateAnd to its corresponding string
   /// representation std::string gateString =
   /// settingsInstance->parseGateToString(Gates::GateAnd); std::cout << "String

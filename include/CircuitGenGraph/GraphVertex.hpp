@@ -112,7 +112,7 @@ public:
   std::string  toVerilog() override;
   DotReturn    toDOT() override;
 
-  /// @brief getInstance
+  /// @brief getDefaultInstance
   /// TO DO:
 
   std::string  getVerilogInstance();

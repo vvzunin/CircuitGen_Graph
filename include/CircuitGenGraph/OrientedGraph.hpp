@@ -523,5 +523,5 @@ private:
   std::map<Gates, std::map<Gates, size_t>> d_edgesGatesCount;
 
   std::shared_ptr<DefaultSettings>         d_settings =
-      DefaultSettings::getInstance("OrientedGraph");
+      DefaultSettings::getDefaultInstance("OrientedGraph");
 };
