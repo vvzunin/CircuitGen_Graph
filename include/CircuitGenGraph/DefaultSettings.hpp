@@ -310,7 +310,7 @@ protected:
   std::string                                            d_name;
   static std::shared_ptr<DefaultSettings>                d_singleton;
   std::string                                            d_path;
-  std::map<std::string, std::pair<std::string, int32_t>> d_logicOperations = {
+  const std::map<std::string, std::pair<std::string, int32_t>> d_logicOperations = {
       {"input", {"", 10}},
       {"output", {"=", 0}},
       {"const", {"1'b0", 9}},
