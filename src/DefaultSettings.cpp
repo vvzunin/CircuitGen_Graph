@@ -49,7 +49,7 @@ void DefaultSettings::loadSettings() {
   for (const auto& [key, value] : d_logicOperations) {
     maxSize = std::max(maxSize, value.second);
   }
-  d_operationsToHierarchy.resize(maxSize);
+  d_operationsToHierarchy.resize(maxSize + 1);
   for (const auto& [key, value] : d_logicOperations) {
     d_operationsToHierarchy[value.second] = value.first;
   }
