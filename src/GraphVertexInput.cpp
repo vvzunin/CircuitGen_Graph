@@ -52,9 +52,13 @@ char GraphVertexInput::updateValue() {
   return d_value;
 }
 
-void GraphVertexInput::updateLevel(std::string tab) {
+void GraphVertexInput::updateLevel(bool recalculate, std::string tab) {
+  if (wasUpdated && !recalculate) {
+    return;
+  }
   LOG(INFO) << tab << "0. " << d_name << " (" << getTypeName() << ")";
   d_level = 0;
+  wasUpdated = true;
 }
 
 DotReturn GraphVertexInput::toDOT() {

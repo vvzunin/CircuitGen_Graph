@@ -38,13 +38,17 @@ char GraphVertexSubGraph::updateValue() {
   return 'x';
 }
 
-void GraphVertexSubGraph::updateLevel(std::string tab) {
+void GraphVertexSubGraph::updateLevel(bool recalculate, std::string tab) {
   int counter = 0;
+  if (wasUpdated && !recalculate) {
+    return;
+  }
   for (VertexPtr vert : d_subGraph->getVerticesByType(VertexTypes::output)) {
     LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
               << vert->getTypeName() << ")";
-    vert->updateLevel(tab + "  ");
+    vert->updateLevel(recalculate, tab + "  ");
   }
+  wasUpdated = true;
 }
 
 // In fact is not needed
@@ -108,11 +112,12 @@ GraphPtr GraphVertexSubGraph::getSubGraph() const {
 }
 
 std::string GraphVertexSubGraph::calculateHash(bool recalculate) {
-  if (hashed != "" && !recalculate)
-    return hashed;
+  if (hashed && !recalculate)
+    return std::to_string(hashed);
 
   // calc hash from subgraph
-  hashed = d_subGraph->calculateHash() + std::to_string(d_inConnections.size());
+  std::string hashedStr =
+      d_subGraph->calculateHash() + std::to_string(d_inConnections.size());
 
   // futuire sorted struct
   std::vector<std::string> hashed_data;
@@ -123,12 +128,12 @@ std::string GraphVertexSubGraph::calculateHash(bool recalculate) {
   std::sort(hashed_data.begin(), hashed_data.end());
 
   for (const auto& sub : hashed_data) {
-    hashed += sub;
+    hashedStr += sub;
   }
 
-  hashed = std::to_string(std::hash<std::string> {}(hashed));
+  hashed = std::hash<std::string> {}(hashedStr);
 
-  return hashed;
+  return std::to_string(hashed);
 }
 
 std::vector<VertexPtr> GraphVertexSubGraph::getOutputBuffersByOuterInput(

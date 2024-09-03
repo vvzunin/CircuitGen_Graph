@@ -129,7 +129,7 @@ public:
   /// std::cout << "Type of the vertex: " << type << std::endl;
   /// @endcode
 
-  virtual VertexTypes        getType() const final;
+  virtual VertexTypes getType() const final;
 
   // Get для типа вершины в фомате строки
 
@@ -144,7 +144,7 @@ public:
   /// std::cout << "String representation of the vertex type: " << typeName;
   /// @endcode
 
-  virtual std::string        getTypeName() const final;
+  virtual std::string getTypeName() const final;
 
   // Get-Set для имен входов
 
@@ -158,7 +158,7 @@ public:
   /// std::endl;
   /// @endcode
 
-  void                       setName(std::string_view i_name);
+  void                setName(std::string_view i_name);
 
   /// @brief getName
   /// Returns the name of the vertex
@@ -169,10 +169,10 @@ public:
   /// std::cout << "Name of the vertex: " << name << std::endl;
   /// @endcode
 
-  std::string                getName() const;
-  std::string                getName(const std::string& i_prefix) const;
+  std::string         getName() const;
+  std::string         getName(const std::string& i_prefix) const;
 
-  std::string_view           getRawName() const;
+  std::string_view    getRawName() const;
 
   // Get для значения вершины
   /// @brief getValue
@@ -184,12 +184,12 @@ public:
   /// std::cout << "Value of the vertex: " << value << std::endl;
   /// @endcode
 
-  virtual char               getValue() const;
+  virtual char        getValue() const;
 
   /// @brief updateValue
   /// TO DO:
 
-  virtual char               updateValue() = 0;
+  virtual char        updateValue() = 0;
 
   // Get-Set для уровня
 
@@ -202,7 +202,7 @@ public:
   /// std::cout << "New level of the vertex: " << vertex.getLevel() << '\n';
   /// @endcode
 
-  void                       setLevel(const uint32_t i_level);
+  void                setLevel(const uint32_t i_level);
 
   /// @brief getLevel
   /// Returns the level of the vertex
@@ -213,7 +213,7 @@ public:
   /// std::cout << "Level of the vertex: " << level << std::endl;
   /// @endcode
 
-  uint32_t                   getLevel() const;
+  uint32_t            getLevel() const;
 
   /// @brief updateLevel
   /// This method updates the level of the vertex based on the levels of its
@@ -225,7 +225,7 @@ public:
   /// @throws std::invalid_argument if any of the input connections are invalid
   /// (i.e., null pointers)
 
-  virtual void               updateLevel(std::string tab = "");
+  virtual void  updateLevel(bool recalculate = false, std::string tab = "");
 
   /// @brief getGate
   /// Returns the type of the basic logic gate represented by this vertex. If
@@ -237,7 +237,7 @@ public:
   /// Gates gateType = vertex.getGate();
   /// @endcode
 
-  virtual Gates              getGate() const { return Gates::GateDefault; }
+  virtual Gates getGate() const { return Gates::GateDefault; }
 
   // Get-Set для базового графа
   // void setBaseGraph(std::shared_ptr<OrientedGraph> const i_baseGraph);
@@ -248,7 +248,7 @@ public:
   /// TO DO:
   /// @endcode
 
-  GraphPtrWeak               getBaseGraph() const;
+  GraphPtrWeak  getBaseGraph() const;
 
   /// @brief getInConnections
   /// @return A vector of weak pointers to the input connections of this vertex
@@ -477,12 +477,13 @@ protected:
 
   std::string_view           d_name;
   char                       d_value;
+  bool                       wasUpdated = false;
   uint32_t                   d_level;
 
   std::vector<VertexPtrWeak> d_inConnections;
   std::vector<VertexPtr>     d_outConnections;
 
-  std::string                hashed = "";
+  size_t                     hashed = 0;
 
 private:
   // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых

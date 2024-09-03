@@ -118,12 +118,12 @@ TEST(TestUpdateLevel, CorrectUpdate) {
   outputPtr3->setLevel(2);
   output1.addVertexToInConnections(outputPtr2);
   output1.addVertexToInConnections(outputPtr3);
-  output1.updateLevel();
+  output1.updateLevel(true);
   EXPECT_EQ(output1.getLevel(), 3);
 
   VertexPtr outputPtr4 = std::make_shared<GraphVertexOutput>(memoryOwnerOutput);
   output1.addVertexToInConnections(outputPtr4);
-  output1.updateLevel();
+  output1.updateLevel(true);
   EXPECT_EQ(output1.getLevel(), 3);
 }
 
@@ -137,11 +137,11 @@ TEST(TestUpdateLevel, ThrowInvalidArgumentIfDInconnectionsNIzNullptr) {
   EXPECT_NO_THROW(output1.updateLevel());
 
   output1.addVertexToInConnections(nullptr);
-  EXPECT_THROW(output1.updateLevel(), std::invalid_argument);
+  EXPECT_THROW(output1.updateLevel(true), std::invalid_argument);
 
   VertexPtr outputPtr3 = std::make_shared<GraphVertexOutput>(memoryOwnerOutput);
   output1.addVertexToInConnections(outputPtr3);
-  EXPECT_THROW(output1.updateLevel(), std::invalid_argument);
+  EXPECT_THROW(output1.updateLevel(true), std::invalid_argument);
 }
 
 // -------------------------------------

@@ -146,7 +146,7 @@ public:
   ///
   /// */
 
-  void        updateLevels();
+  void        updateLevels(bool recalculate = false);
 
   /// @brief getMaxLevel
   /// Calculates and returns the maximum level of the output vertices in the

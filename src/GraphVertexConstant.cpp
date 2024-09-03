@@ -27,9 +27,13 @@ GraphVertexConstant::GraphVertexConstant(
   d_value = i_const;
 }
 
-void GraphVertexConstant::updateLevel(std::string tab) {
+void GraphVertexConstant::updateLevel(bool recalculate, std::string tab) {
+  if (wasUpdated && !recalculate) {
+    return;
+  }
   LOG(INFO) << tab << "0. " << d_name << " (" << getTypeName() << ")";
   d_level = 0;
+  wasUpdated = true;
 }
 
 std::string GraphVertexConstant::getVerilogInstance() {

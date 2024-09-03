@@ -70,7 +70,7 @@ public:
   /// @brief updateLevel It is designed to update the level of the current
   /// vertex in a directed graph based on the levels of its input connections
 
-  virtual void updateLevel(std::string tab = "") override;
+  virtual void updateLevel(bool recalculate = false, std::string tab = "") override;
 
   DotReturn    toDOT() override;
 
@@ -108,7 +108,7 @@ public:
   /// @brief updateLevel updates the level of the current vertex in the graph
   /// based on the levels of its incoming connections
 
-  virtual void updateLevel(std::string tab = "") override;
+  virtual void updateLevel(bool recalculate = false, std::string tab = "") override;
   std::string  toVerilog() override;
   DotReturn    toDOT() override;
 
@@ -146,7 +146,7 @@ public:
   );
 
   char        updateValue() override;
-  void        updateLevel(std::string tab = "") override;
+  void        updateLevel(bool recalculate = false, std::string tab = "") override;
 
   std::string toVerilog() override;
   DotReturn   toDOT() override;
@@ -229,7 +229,7 @@ public:
   /// vertices to which it is connected, and sets the level of the current
   /// vertex to one higher than the highest level
 
-  virtual void updateLevel(std::string tab = "") override;
+  virtual void updateLevel(bool recalculate = false, std::string tab = "") override;
 
   DotReturn    toDOT() override;
 

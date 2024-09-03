@@ -144,18 +144,22 @@ uint32_t GraphVertexBase::getLevel() const {
   return d_level;
 }
 
-void GraphVertexBase::updateLevel(std::string tab) {
+void GraphVertexBase::updateLevel(bool recalculate, std::string tab) {
   int counter = 0;
+  if (wasUpdated && !recalculate) {
+    return;
+  }
   for (VertexPtrWeak vert : d_inConnections) {
     if (VertexPtr ptr = vert.lock()) {
       LOG(INFO) << tab << counter++ << ". " << ptr->getName() << " ("
                 << ptr->getTypeName() << ")";
-      ptr->updateLevel(tab + "  ");
+      ptr->updateLevel(recalculate, tab + "  ");
       d_level = (ptr->getLevel() >= d_level) ? ptr->getLevel() + 1 : d_level;
     } else {
       throw std::invalid_argument("Dead pointer!");
     }
   }
+  wasUpdated = true;
 }
 
 char GraphVertexBase::getValue() const {
@@ -182,17 +186,17 @@ uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
 }
 
 std::string GraphVertexBase::calculateHash(bool recalculate) {
-  if (hashed != "" && !recalculate)
-    return hashed;
+  if (hashed && !recalculate)
+    return std::to_string(hashed);
 
   if (d_type == VertexTypes::output) {
-    hashed = std::to_string(std::hash<size_t> {}(d_inConnections.size()));
-    return hashed;
+    hashed = std::hash<size_t> {}(d_inConnections.size());
+    return std::to_string(hashed);
   }
 
   // futuire sorted struct
   std::vector<std::string> hashed_data;
-  hashed = "";
+  std::string hashedStr = "";
 
   for (auto& child : d_outConnections) {
     hashed_data.push_back(child->calculateHash(recalculate));
@@ -200,12 +204,12 @@ std::string GraphVertexBase::calculateHash(bool recalculate) {
   std::sort(hashed_data.begin(), hashed_data.end());
 
   for (const auto& sub : hashed_data) {
-    hashed += sub;
+    hashedStr += sub;
   }
 
-  hashed = std::to_string(std::hash<std::string> {}(hashed));
+  hashed = std::hash<std::string> {}(hashedStr);
 
-  return hashed;
+  return std::to_string(hashed);
 }
 
 bool GraphVertexBase::removeVertexToInConnections(

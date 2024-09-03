@@ -83,7 +83,7 @@ TEST(TestUpdateLevel, CorrectUpdate) {
       std::make_shared<GraphVertexGates>(Gates::GateAnd, memoryOwnerGate);
   gatePtr1->setLevel(1);
   gate1.addVertexToInConnections(gatePtr1);
-  gate1.updateLevel();
+  gate1.updateLevel(true);
   EXPECT_EQ(gate1.getLevel(), 2);
 
   VertexPtr gatePtr2 =
@@ -94,13 +94,13 @@ TEST(TestUpdateLevel, CorrectUpdate) {
   gatePtr3->setLevel(2);
   gate1.addVertexToInConnections(gatePtr2);
   gate1.addVertexToInConnections(gatePtr3);
-  gate1.updateLevel();
+  gate1.updateLevel(true);
   EXPECT_EQ(gate1.getLevel(), 4);
 
   VertexPtr gatePtr4 =
       std::make_shared<GraphVertexGates>(Gates::GateAnd, memoryOwnerGate);
   gate1.addVertexToInConnections(gatePtr4);
-  gate1.updateLevel();
+  gate1.updateLevel(true);
   EXPECT_EQ(gate1.getLevel(), 4);
 }
 
@@ -116,12 +116,12 @@ TEST(TestUpdateLevel, ThrowInvalidArgumentIfDInconnectionsNIsNullptr) {
   EXPECT_NO_THROW(gate1.updateLevel());
 
   gate1.addVertexToInConnections(nullptr);
-  EXPECT_THROW(gate1.updateLevel(), std::invalid_argument);
+  EXPECT_THROW(gate1.updateLevel(true), std::invalid_argument);
 
   VertexPtr gatePtr3 =
       std::make_shared<GraphVertexGates>(Gates::GateAnd, memoryOwnerGate);
   gate1.addVertexToInConnections(gatePtr3);
-  EXPECT_THROW(gate1.updateLevel(), std::invalid_argument);
+  EXPECT_THROW(gate1.updateLevel(true), std::invalid_argument);
 }
 
 TEST(TestGetVerilogString, ReturnEmptyStringIfDInConnectionsSizeIsZero) {
