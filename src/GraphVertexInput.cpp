@@ -62,8 +62,8 @@ DotReturn GraphVertexInput::toDOT() {
 
   dot.push_back(
       {DotTypes::DotInput,
-       {{"name", getChangableName()},
-        {"label", getChangableName()},
+       {{"name", getName()},
+        {"label", getName()},
         {"level", std::to_string(d_level)}}}
   );
   return dot;
@@ -74,7 +74,7 @@ void GraphVertexInput::log(el::base::type::ostream_t& os) const {
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
   os << "Vertex Type: "
-     << SettingsUtils::parseVertexToString(VertexTypes::input) << "\n";
+     << DefaultSettings::parseVertexToString(VertexTypes::input) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << 0 << "\n";
   os << "Vertex Hash: " << "NuN" << "\n";

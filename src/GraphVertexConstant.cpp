@@ -33,11 +33,11 @@ void GraphVertexConstant::updateLevel(std::string tab) {
 }
 
 std::string GraphVertexConstant::getVerilogInstance() {
-  return "wire " + getChangableName() + ";";
+  return "wire " + getName() + ";";
 }
 
 std::string GraphVertexConstant::toVerilog() {
-  return "assign " + getChangableName() + " = 1'b" + d_value + ";";
+  return "assign " + getName() + " = 1'b" + d_value + ";";
 }
 
 DotReturn GraphVertexConstant::toDOT() {
@@ -46,8 +46,8 @@ DotReturn GraphVertexConstant::toDOT() {
 
   dot.push_back(
       {DotTypes::DotConstant,
-       {{"name", getChangableName()},
-        {"label", getChangableName()},
+       {{"name", getName()},
+        {"label", getName()},
         {"value", "1'b" + str},
         {"level", std::to_string(d_level)}}}
   );
@@ -59,7 +59,7 @@ void GraphVertexConstant::log(el::base::type::ostream_t& os) const {
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
   os << "Vertex Type: "
-     << SettingsUtils::parseVertexToString(VertexTypes::constant) << "\n";
+     << DefaultSettings::parseVertexToString(VertexTypes::constant) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << 0 << "\n";
   os << "Vertex Hash: " << "NuN" << "\n";

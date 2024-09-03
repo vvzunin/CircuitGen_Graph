@@ -225,7 +225,7 @@ public:
   /// with logical operations
 
   virtual std::map<std::string, std::pair<std::string, int32_t>>
-                      getLogicOperations() const;
+                     getLogicOperations() const;
 
   /// @brief fromOperationsToHierarchy Converts an operation key to its
   /// corresponding hierarchy
@@ -249,7 +249,7 @@ public:
   /// @throws std::out_of_range If the provided key does not exist in the
   /// internal map of operation keys to hierarchies
 
-  std::string_view    fromOperationsToHierarchy(int32_t key) const;
+  std::string_view   fromOperationsToHierarchy(int32_t key) const;
 
   /// @brief parseStringToGate Converts a string representation of a gate to
   /// its corresponding enum value
@@ -265,62 +265,7 @@ public:
   /// std::cout << "Enum value of 'and': " << gate << std::endl;
   /// @endcode
 
-  virtual Gates       parseStringToGate(std::string i_gate) const;
-
-  static void         resetSingletone() { d_singleton = nullptr; }
-
-private:
-  std::string                                            d_name;
-  static std::shared_ptr<DefaultSettings>                d_singleton;
-  std::string                                            d_path;
-  std::map<std::string, std::pair<std::string, int32_t>> d_logicOperations = {
-      {"input", {"", 10}},
-      {"output", {"=", 0}},
-      {"const", {"1'b0", 9}},
-      {"and", {"and", 4}},
-      {"nand", {"nand", 3}},
-      {"or", {"or", 6}},
-      {"nor", {"nor", 5}},
-      {"not", {"not", 7}},
-      {"buf", {"buf", 8}},
-      {"xor", {"xor", 2}},
-      {"xnor", {"xnor", 1}}
-
-  };
-
-  std::map<std::string, Gates> stringToGate = {
-      {"and", Gates::GateAnd},
-      {"nand", Gates::GateNand},
-      {"or", Gates::GateOr},
-      {"nor", Gates::GateNor},
-      {"not", Gates::GateNot},
-      {"buf", Gates::GateBuf},
-      {"xor", Gates::GateXor},
-      {"xnor", Gates::GateXnor}
-  };
-
-  std::vector<Gates> d_logicElements = {
-      Gates::GateAnd,
-      Gates::GateNand,
-      Gates::GateOr,
-      Gates::GateNor,
-      Gates::GateXor,
-      Gates::GateXnor,
-      Gates::GateNot,
-      Gates::GateBuf
-  };
-
-  std::vector<std::string_view>           d_operationsToHierarchy;
-  std::map<std::string_view, std::string> d_operationsToName;
-};
-
-struct DefaultSettings::HiddenConstructor: public DefaultSettings {
-  HiddenConstructor(const std::string& i_path)
-    : DefaultSettings(i_path)
-  {} 
-};
-
-struct SettingsUtils {
+  virtual Gates      parseStringToGate(std::string i_gate) const;
 
   /// @brief parseVertexToString Converts an enum value of a vertex type to its
   /// corresponding string representation
@@ -361,9 +306,55 @@ struct SettingsUtils {
 
   static std::string parseGateToString(Gates gate);
 
+  static void        resetSingletone() { d_singleton = nullptr; }
+
 private:
+  std::string                                            d_name;
+  static std::shared_ptr<DefaultSettings>                d_singleton;
+  std::string                                            d_path;
+  std::map<std::string, std::pair<std::string, int32_t>> d_logicOperations = {
+      {"input", {"", 10}},
+      {"output", {"=", 0}},
+      {"const", {"1'b0", 9}},
+      {"and", {"and", 4}},
+      {"nand", {"nand", 3}},
+      {"or", {"or", 6}},
+      {"nor", {"nor", 5}},
+      {"not", {"not", 7}},
+      {"buf", {"buf", 8}},
+      {"xor", {"xor", 2}},
+      {"xnor", {"xnor", 1}}
+
+  };
+
+  std::map<std::string, Gates> stringToGate = {
+      {"and", Gates::GateAnd},
+      {"nand", Gates::GateNand},
+      {"or", Gates::GateOr},
+      {"nor", Gates::GateNor},
+      {"not", Gates::GateNot},
+      {"buf", Gates::GateBuf},
+      {"xor", Gates::GateXor},
+      {"xnor", Gates::GateXnor}};
+
+  std::vector<Gates> d_logicElements = {
+      Gates::GateAnd,
+      Gates::GateNand,
+      Gates::GateOr,
+      Gates::GateNor,
+      Gates::GateXor,
+      Gates::GateXnor,
+      Gates::GateNot,
+      Gates::GateBuf};
+
   static std::pair<VertexTypes, std::string_view> vertexToString[5];
 
-  static std::pair<Gates, std::string_view> gateToString[9];
+  static std::pair<Gates, std::string_view>       gateToString[9];
 
+  std::vector<std::string_view>                   d_operationsToHierarchy;
+  std::map<std::string_view, std::string>         d_operationsToName;
+};
+
+struct DefaultSettings::HiddenConstructor : public DefaultSettings {
+  HiddenConstructor(const std::string& i_path) : DefaultSettings(i_path) {}
 };

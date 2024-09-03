@@ -10,7 +10,7 @@
 
 std::shared_ptr<DefaultSettings> DefaultSettings::d_singleton = nullptr;
 
-std::pair<VertexTypes, std::string_view> SettingsUtils::vertexToString[] = {
+std::pair<VertexTypes, std::string_view> DefaultSettings::vertexToString[] = {
   {VertexTypes::input, "input"},
   {VertexTypes::output, "output"},
   {VertexTypes::constant, "const"},
@@ -18,7 +18,7 @@ std::pair<VertexTypes, std::string_view> SettingsUtils::vertexToString[] = {
   {VertexTypes::gate, "gate"}
 };
 
-std::pair<Gates, std::string_view> SettingsUtils::gateToString[] = {
+std::pair<Gates, std::string_view> DefaultSettings::gateToString[] = {
     {Gates::GateAnd, "and"},
     {Gates::GateNand, "nand"},
     {Gates::GateOr, "or"},
@@ -101,7 +101,7 @@ Gates DefaultSettings::parseStringToGate(std::string i_gate) const {
   return stringToGate.at(i_gate);
 }
 
-std::string SettingsUtils::parseGateToString(Gates gate) {
+std::string DefaultSettings::parseGateToString(Gates gate) {
   auto *iter = std::find_if(
       std::begin(gateToString), std::end(gateToString), [gate] (const auto &x) {
     return x.first == gate; 
@@ -109,7 +109,7 @@ std::string SettingsUtils::parseGateToString(Gates gate) {
   return std::string(iter->second);
 }
 
-std::string SettingsUtils::parseVertexToString(VertexTypes vertex) {
+std::string DefaultSettings::parseVertexToString(VertexTypes vertex) {
   auto *iter = std::find_if(
       std::begin(vertexToString), std::end(vertexToString), [vertex] (const auto &x) {
     return x.first == vertex; 

@@ -16,7 +16,7 @@ TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrs) {
   std::string      graphNum = std::to_string(0);
   EXPECT_EQ(input.getType(), VertexTypes::input);
   EXPECT_EQ(input.getTypeName(), "input");
-  EXPECT_EQ(input.getName(), "input_" + graphNum);
+  EXPECT_EQ(input.getRawName(), "input_" + graphNum);
   EXPECT_EQ(input.getLevel(), 0);
   EXPECT_EQ(input.getValue(), 'x');
   EXPECT_EQ(input.getBaseGraph().lock(), nullptr);
@@ -29,7 +29,7 @@ TEST(TestConstructorWithoutIName, WithDefaultInputParametrs) {
   GraphVertexInput input(graphPtr, VertexTypes::input);
   EXPECT_EQ(input.getType(), VertexTypes::input);
   EXPECT_EQ(input.getTypeName(), "input");
-  EXPECT_EQ(input.getName(), "input_" + graphNum);
+  EXPECT_EQ(input.getRawName(), "input_" + graphNum);
   EXPECT_EQ(input.getLevel(), 0);
   EXPECT_EQ(input.getValue(), 'x');
   EXPECT_EQ(input.getBaseGraph().lock(), graphPtr);
@@ -41,7 +41,7 @@ TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
   EXPECT_EQ(input.getBaseGraph().lock(), nullptr);
   EXPECT_EQ(input.getType(), VertexTypes::input);
   EXPECT_EQ(input.getTypeName(), "input");
-  EXPECT_EQ(input.getName(), "Anything");
+  EXPECT_EQ(input.getRawName(), "Anything");
   EXPECT_EQ(input.getLevel(), 0);
   EXPECT_EQ(input.getValue(), 'x');
   EXPECT_EQ(input.getBaseGraph().lock(), nullptr);
@@ -53,7 +53,7 @@ TEST(TestConstructorWithIName, WithDefaultInputParametrs) {
   GraphVertexInput input("Anything", graphPtr, VertexTypes::input);
   EXPECT_EQ(input.getType(), VertexTypes::input);
   EXPECT_EQ(input.getTypeName(), "input");
-  EXPECT_EQ(input.getName(), "Anything");
+  EXPECT_EQ(input.getRawName(), "Anything");
   EXPECT_EQ(input.getLevel(), 0);
   EXPECT_EQ(input.getValue(), 'x');
   EXPECT_EQ(input.getBaseGraph().lock(), graphPtr);
@@ -170,7 +170,7 @@ TEST(TestUpdateLevel, ThrowInvalidArgumentIfDInconnectionsNIsNullptr) {
 TEST(TestSetName, InputCorrectName) {
   GraphVertexInput input(memoryOwnerInput);
   input.setName("Anything");
-  EXPECT_EQ(input.getName(), "Anything");
+  EXPECT_EQ(input.getRawName(), "Anything");
 }
 
 TEST(TestAddInConnections, AddConnections) {

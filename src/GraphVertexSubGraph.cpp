@@ -248,7 +248,7 @@ void GraphVertexSubGraph::log(el::base::type::ostream_t& os) const {
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
   os << "Vertex Type: "
-     << SettingsUtils::parseVertexToString(VertexTypes::subGraph) << "\n";
+     << DefaultSettings::parseVertexToString(VertexTypes::subGraph) << "\n";
   os << "Vertex Hash: " << hashed;
   os << *d_subGraph;
 }

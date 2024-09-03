@@ -56,8 +56,8 @@ DotReturn GraphVertexOutput::toDOT() {
 
   dot.push_back(
       {DotTypes::DotOutput,
-       {{"name", getChangableName()},
-        {"label", getChangableName()},
+       {{"name", getName()},
+        {"label", getName()},
         {"level", std::to_string(d_level)}}}
   );
 
@@ -65,8 +65,8 @@ DotReturn GraphVertexOutput::toDOT() {
     VertexPtr ptr = ptrWeak.lock();
     dot.push_back(
         {DotTypes::DotEdge,
-         {{"from", ptr->getChangableName()},
-          {"to", getChangableName()},
+         {{"from", ptr->getName()},
+          {"to", getName()},
           {"level", std::to_string(d_level)}}}
     );
   }
@@ -78,7 +78,7 @@ void GraphVertexOutput::log(el::base::type::ostream_t& os) const {
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
   os << "Vertex Type: "
-     << SettingsUtils::parseVertexToString(VertexTypes::output) << "\n";
+     << DefaultSettings::parseVertexToString(VertexTypes::output) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
   os << "Vertex Hash: " << "NuN" << "\n";

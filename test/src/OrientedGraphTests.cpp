@@ -43,15 +43,12 @@ TEST(TestSetNameAndGetName, ReturnCorrectName) {
   EXPECT_EQ(graphPtr1->getName(), "graph_0");
   EXPECT_EQ(graphPtr2->getName(), "graph_1");
 
-  GraphPtr graphPtr3 = std::make_shared<OrientedGraph>(*graphPtr1);
+  GraphPtr graphPtr3 = std::make_shared<OrientedGraph>();
+  graphPtr3          = graphPtr1;
   EXPECT_EQ(graphPtr3->getName(), "graph_0");
 
-  GraphPtr graphPtr4 = std::make_shared<OrientedGraph>();
-  graphPtr4          = graphPtr1;
-  EXPECT_EQ(graphPtr4->getName(), "graph_0");
-
   graphPtr1->setName("Changed");
-  EXPECT_EQ(graphPtr1->getName(), "Changed");
+  EXPECT_EQ(graphPtr3->getName(), "Changed");
 }
 
 TEST(TestBaseSizeAndFullSizeAndSumFullSize, ReturnCorrectSize) {

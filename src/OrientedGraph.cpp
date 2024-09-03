@@ -28,7 +28,8 @@ void swap(VertexPtr first, VertexPtr second) noexcept {
   second      = c;
 }
 
-OrientedGraph::OrientedGraph(const std::string& i_name) {
+OrientedGraph::OrientedGraph(const std::string& i_name)
+    : GraphMemory() {
   d_graphID = d_countNewGraphInstance++;
 
   if (i_name == "")
@@ -96,7 +97,7 @@ void OrientedGraph::updateLevels() {
             << d_vertexes.at(VertexTypes::output).size();
   int counter = 0;
   for (VertexPtr vert : d_vertexes.at(VertexTypes::output)) {
-    LOG(INFO) << counter++ << ". " << vert->getName() << " ("
+    LOG(INFO) << counter++ << ". " << vert->getRawName() << " ("
               << vert->getTypeName() << ")";
     vert->updateLevel("    ");
   }
@@ -290,7 +291,7 @@ std::vector<VertexPtr> OrientedGraph::getVerticesByType(
 
   std::vector<VertexPtr> resVert;
   for (VertexPtr vert : d_vertexes.at(i_type))
-    if ((i_name == "") || (vert->getName() == i_name))
+    if ((i_name == "") || (vert->getRawName() == i_name))
       resVert.push_back(vert);
 
   if (i_addSubGraphs)
@@ -309,7 +310,7 @@ std::vector<VertexPtr> OrientedGraph::getVerticesByName(
   std::vector<VertexPtr> resVert;
   for (const auto& [key, value] : d_vertexes) {
     for (VertexPtr vert : value)
-      if (vert->getName() == i_name)
+      if (vert->getRawName() == i_name)
         resVert.push_back(vert);
   }
   if (i_addSubGraphs)
@@ -420,10 +421,10 @@ std::string OrientedGraph::getGraphVerilogInstance() {
     auto inp = d_subGraphsInputsPtr[d_currentParentGraph.lock()->d_graphID]
                                    [*verilogCount][i];
     std::string inp_name =
-        d_vertexes[VertexTypes::input][i]->getChangableName();
+        d_vertexes[VertexTypes::input][i]->getName();
 
     module_ver += verilogTab + verilogTab + "." + inp_name + "( ";
-    module_ver += inp->getChangableName() + " ),\n";
+    module_ver += inp->getName() + " ),\n";
   }
 
   for (size_t i = 0; i < d_vertexes[VertexTypes::output].size() - 1; ++i) {
@@ -431,20 +432,20 @@ std::string OrientedGraph::getGraphVerilogInstance() {
         d_subGraphsOutputsPtr[d_currentParentGraph.lock()->d_graphID]
                              [*verilogCount][i];
     std::string out_name =
-        d_vertexes[VertexTypes::output][i]->getChangableName();
+        d_vertexes[VertexTypes::output][i]->getName();
 
     module_ver += verilogTab + verilogTab + "." + out_name + "( ";
-    module_ver += out->getChangableName() + " ),\n";
+    module_ver += out->getName() + " ),\n";
   }
 
   std::string out_name =
-      d_vertexes[VertexTypes::output].back()->getChangableName();
+      d_vertexes[VertexTypes::output].back()->getName();
 
   module_ver += verilogTab + verilogTab + "." + out_name + "( ";
   module_ver += d_subGraphsOutputsPtr[d_currentParentGraph.lock()->d_graphID]
                                      [*verilogCount]
                                          .back()
-                                         ->getChangableName()
+                                         ->getName()
               + " )\n";
   module_ver += verilogTab + "); \n";
 
@@ -484,13 +485,13 @@ std::pair<bool, std::string>
 
   // here we are parsing inputs by their wire size
   for (auto inp : d_vertexes[VertexTypes::input]) {
-    fileStream << inp->getName() << ", ";
+    fileStream << inp->getRawName() << ", ";
   }
   fileStream << '\n' << verilogTab;
 
   // and outputs
   for (auto outVert : d_vertexes[VertexTypes::output]) {
-    fileStream << outVert->getName(
+    fileStream << outVert->getRawName(
     ) << ((outVert == d_vertexes[VertexTypes::output].back()) ? "\n" : ", ");
   }
   fileStream << ");\n" << verilogTab;
@@ -522,7 +523,7 @@ std::pair<bool, std::string>
     }
 
     for (auto value : eachVertex) {
-      fileStream << value->getName()
+      fileStream << value->getRawName()
                  << (value != eachVertex.back() ? ", " : ";\n");
     }
     fileStream << verilogTab;
@@ -656,12 +657,12 @@ DotReturn OrientedGraph::toDOT() {
       for (auto const& tt : subGraph->d_subGraphsInputsPtr) {}
       auto        inp = subGraph->d_subGraphsInputsPtr[d_graphID][*dotCount][i];
       std::string inp_name =
-          subGraph->getBaseVertexes()[VertexTypes::input][i]->getChangableName(
+          subGraph->getBaseVertexes()[VertexTypes::input][i]->getName(
           );
 
       dot.push_back(
           {DotTypes::DotEdge,
-           {{"to", val[0].second["instName"] + "_" + inp->getChangableName()},
+           {{"to", val[0].second["instName"] + "_" + inp->getName()},
             {"from", inp_name}}}
       );
     }
@@ -678,8 +679,8 @@ DotReturn OrientedGraph::toDOT() {
           {DotTypes::DotEdge,
            {{"from",
              subGraphPair.second[0].second["instName"] + "_"
-                 + outs[i]->getChangableName()},
-            {"to", buffers[i]->getChangableName()}}}
+                 + outs[i]->getName()},
+            {"to", buffers[i]->getName()}}}
       );
     }
   }
@@ -761,7 +762,7 @@ std::string OrientedGraph::toGraphMLClassic(
         continue;
       case VertexTypes::input:
       case VertexTypes::output:
-        vertexKindName = SettingsUtils::parseVertexToString(vertexType);
+        vertexKindName = DefaultSettings::parseVertexToString(vertexType);
         break;
     }
 
@@ -772,7 +773,7 @@ std::string OrientedGraph::toGraphMLClassic(
           vertexKindName = std::string(1, v->getValue());
           break;
         case VertexTypes::gate:
-          vertexKindName = SettingsUtils::parseGateToString(v->getGate());
+          vertexKindName = DefaultSettings::parseGateToString(v->getGate());
           break;
       }
 
@@ -921,7 +922,7 @@ std::string OrientedGraph::toGraphMLPseudoABCD() const {
           nodeType = gateToABCDType.at(v->getGate());
           break;
       }
-      actualName = v->getChangableName();
+      actualName = v->getName();
       if (nodeNames.find(actualName) == nodeNames.end()) {
         nodeNames[actualName] = nodeCounter++;
       }
@@ -929,7 +930,7 @@ std::string OrientedGraph::toGraphMLPseudoABCD() const {
           format(nodeTemplate, nodeNames.at(actualName), actualName, nodeType);
 
       for (const auto& sink : v->getOutConnections()) {
-        sinkName = sink->getChangableName();
+        sinkName = sink->getName();
         if (nodeNames.find(sinkName) == nodeNames.end()) {
           nodeNames[sinkName] = nodeCounter++;
         }
@@ -991,7 +992,7 @@ std::string OrientedGraph::toGraphMLOpenABCD() const {
           break;
       }
 
-      actualName = v->getChangableName();
+      actualName = v->getName();
       if (nodeNames.find(actualName) == nodeNames.end()) {
         nodeNames[actualName] = nodeCounter++;
       }
@@ -1012,7 +1013,7 @@ std::string OrientedGraph::toGraphMLOpenABCD() const {
               stck.push({s, sGate == Gates::GateNot ? !state : state});
             }
           } else {
-            currentName = current.first->getChangableName();
+            currentName = current.first->getName();
             if (nodeNames.find(currentName) == nodeNames.end()) {
               nodeNames[currentName] = nodeCounter++;
             }
@@ -1039,10 +1040,10 @@ GraphPtr OrientedGraph::unrollGraph() const {
   std::map<VertexPtr, VertexPtr> vPairs;
 
   for (const auto& v : d_vertexes.at(VertexTypes::input)) {
-    vPairs.insert({v, newGraph->addInput(v->getChangableName())});
+    vPairs.insert({v, newGraph->addInput(v->getName())});
   }
   for (const auto& v : d_vertexes.at(VertexTypes::output)) {
-    vPairs.insert({v, newGraph->addOutput(v->getChangableName())});
+    vPairs.insert({v, newGraph->addOutput(v->getName())});
   }
 
   auto unroller = [&](std::shared_ptr<const OrientedGraph> graph,
@@ -1071,7 +1072,7 @@ GraphPtr OrientedGraph::unrollGraph() const {
             const auto&    vOutputs = v->getOutConnections();
             VertexPtr      ptr;
 
-            unroller(sg, v->getChangableName() + "__", unroller);
+            unroller(sg, v->getName() + "__", unroller);
 
             for (size_t i = 0; i < vInputs.size(); ++i) {
               ptr = vInputs[i].lock();
@@ -1252,7 +1253,7 @@ void OrientedGraph::log(el::base::type::ostream_t& os) const {
   for (const auto& pair : d_vertexes) {
     if (pair.second.size() != 0) {
       flag = false;
-      os << "\n\t" << SettingsUtils::parseVertexToString(pair.first);
+      os << "\n\t" << DefaultSettings::parseVertexToString(pair.first);
       if (pair.first == VertexTypes::subGraph)
         os << "\t:\t" << pair.second.size();
       else
@@ -1268,7 +1269,7 @@ void OrientedGraph::log(el::base::type::ostream_t& os) const {
   for (const auto& pair : d_gatesCount) {
     if (pair.second != 0) {
       flag = false;
-      os << "\n\t" << SettingsUtils::parseGateToString(pair.first) << "\t:\t"
+      os << "\n\t" << DefaultSettings::parseGateToString(pair.first) << "\t:\t"
          << pair.second;
     }
   }
@@ -1282,8 +1283,8 @@ void OrientedGraph::log(el::base::type::ostream_t& os) const {
     for (const auto& inner_pair : outer_pair.second) {
       if (inner_pair.second != 0) {
         flag = false;
-        os << "\n\t" << SettingsUtils::parseGateToString(outer_pair.first)
-           << "\t-> " << SettingsUtils::parseGateToString(inner_pair.first)
+        os << "\n\t" << DefaultSettings::parseGateToString(outer_pair.first)
+           << "\t-> " << DefaultSettings::parseGateToString(inner_pair.first)
            << "\t:\t" << inner_pair.second;
       }
     }

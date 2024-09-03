@@ -117,19 +117,19 @@ VertexTypes GraphVertexBase::getType() const {
 }
 
 std::string GraphVertexBase::getTypeName() const {
-  return SettingsUtils::parseVertexToString(d_type);
+  return DefaultSettings::parseVertexToString(d_type);
 }
 
 void GraphVertexBase::setName(const std::string_view i_name) {
   d_name = i_name;
 }
 
-std::string_view GraphVertexBase::getName() const {
-  return d_name;
+std::string GraphVertexBase::getName() const {
+  return std::string(d_name);
 }
 
-std::string GraphVertexBase::getChangableName() const {
-  return std::string(d_name);
+std::string_view GraphVertexBase::getRawName() const {
+  return d_name;
 }
 
 std::string GraphVertexBase::getName(const std::string& i_prefix) const {
@@ -259,7 +259,7 @@ std::string GraphVertexBase::getVerilogInstance() {
     return "";
   }
 
-  return VertexUtils::vertexTypeToVerilog(d_type) + " " + getChangableName()
+  return VertexUtils::vertexTypeToVerilog(d_type) + " " + getName()
        + ";";
 }
 
@@ -268,7 +268,7 @@ std::string GraphVertexBase::toVerilog() {
   if (d_type == VertexTypes::output) {
     if (!d_inConnections.empty()) {
       if (VertexPtr ptr = d_inConnections.back().lock()) {
-        return "assign " + getChangableName() + " = " + ptr->getChangableName()
+        return "assign " + getName() + " = " + ptr->getName()
              + ";";
       }
     }
@@ -285,7 +285,7 @@ void GraphVertexBase::log(el::base::type::ostream_t& os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
-  os << "Vertex Type: " << SettingsUtils::parseVertexToString(d_type) << "\n";
+  os << "Vertex Type: " << DefaultSettings::parseVertexToString(d_type) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
   os << "Vertex Hash: " << hashed << "\n";

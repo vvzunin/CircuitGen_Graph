@@ -87,13 +87,11 @@ public:
 
   virtual ~OrientedGraph();
 
-  OrientedGraph& operator=(const OrientedGraph& other
-  ) = default;  // оператор копирующего присваивания
-  OrientedGraph& operator=(OrientedGraph&& other
-  ) = default;  // оператор перемещающего присваивания
-  OrientedGraph(const OrientedGraph& other) = default;
-  OrientedGraph(OrientedGraph&& other)      = default;
-
+  OrientedGraph& operator=(const OrientedGraph& other) = delete;
+  OrientedGraph& operator=(OrientedGraph&& other)      = delete;
+  OrientedGraph(const OrientedGraph& other)            = delete;
+  OrientedGraph(OrientedGraph&& other)                 = delete;
+  
   // Количество gate в графе, за исключением подграфов
   /// @brief baseSize returns the number of "gate" type vertices in the graph
   /// @return An integer value representing the number of "gate" type vertices

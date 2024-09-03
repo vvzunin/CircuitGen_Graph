@@ -26,7 +26,7 @@ TEST(TestConstructorWithoutIName, WithoutDefaulParametrs) {
   std::string         graphNum = std::to_string(0);
   EXPECT_EQ(subGraph1.getType(), VertexTypes::subGraph);
   EXPECT_EQ(subGraph1.getTypeName(), "subGraph");
-  EXPECT_EQ(subGraph1.getName(), "subGraph_" + graphNum);
+  EXPECT_EQ(subGraph1.getRawName(), "subGraph_" + graphNum);
   EXPECT_EQ(subGraph1.getLevel(), 0);
   EXPECT_EQ(subGraph1.getValue(), 'x');
   EXPECT_EQ(subGraph1.getBaseGraph().lock(), nullptr);
@@ -40,7 +40,7 @@ TEST(TestConstructorWithoutIName, WithDefaultInputParametrs) {
   std::string         graphNum = std::to_string(1);
   EXPECT_EQ(subGraph1.getType(), VertexTypes::subGraph);
   EXPECT_EQ(subGraph1.getTypeName(), "subGraph");
-  EXPECT_EQ(subGraph1.getName(), "subGraph_" + graphNum);
+  EXPECT_EQ(subGraph1.getRawName(), "subGraph_" + graphNum);
   EXPECT_EQ(subGraph1.getLevel(), 0);
   EXPECT_EQ(subGraph1.getValue(), 'x');
   EXPECT_EQ(subGraph1.getBaseGraph().lock(), graphPtr2);
@@ -53,7 +53,7 @@ TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
   EXPECT_EQ(subGraph1.getBaseGraph().lock(), nullptr);
   EXPECT_EQ(subGraph1.getType(), VertexTypes::subGraph);
   EXPECT_EQ(subGraph1.getTypeName(), "subGraph");
-  EXPECT_EQ(subGraph1.getName(), "Anything");
+  EXPECT_EQ(subGraph1.getRawName(), "Anything");
   EXPECT_EQ(subGraph1.getLevel(), 0);
   EXPECT_EQ(subGraph1.getValue(), 'x');
   EXPECT_EQ(subGraph1.getBaseGraph().lock(), nullptr);
@@ -66,7 +66,7 @@ TEST(TestConstructorWithIName, WithDefaultInputParametrs) {
   GraphVertexSubGraph subGraph1(graphPtr1, "Anything", graphPtr2);
   EXPECT_EQ(subGraph1.getType(), VertexTypes::subGraph);
   EXPECT_EQ(subGraph1.getTypeName(), "subGraph");
-  EXPECT_EQ(subGraph1.getName(), "Anything");
+  EXPECT_EQ(subGraph1.getRawName(), "Anything");
   EXPECT_EQ(subGraph1.getLevel(), 0);
   EXPECT_EQ(subGraph1.getValue(), 'x');
   EXPECT_EQ(subGraph1.getBaseGraph().lock(), graphPtr2);
@@ -181,7 +181,7 @@ TEST(TestSetName, InputCorrectName) {
   GraphPtr            graphPtr1 = std::make_shared<OrientedGraph>();
   GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSub);
   subGraph1.setName("Anything");
-  EXPECT_EQ(subGraph1.getName(), "Anything");
+  EXPECT_EQ(subGraph1.getRawName(), "Anything");
 }
 
 TEST(TestAddInConnections, AddConnections) {

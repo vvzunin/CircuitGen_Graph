@@ -154,7 +154,8 @@ public:
   /// @code
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// vertex.setName("new_vertex_name");
-  /// std::cout << "New name of the vertex: " << vertex.getName() << std::endl;
+  /// std::cout << "New name of the vertex: " << vertex.getRawName() <<
+  /// std::endl;
   /// @endcode
 
   void                       setName(std::string_view i_name);
@@ -167,10 +168,11 @@ public:
   /// std::string name = vertex.getName();
   /// std::cout << "Name of the vertex: " << name << std::endl;
   /// @endcode
-
-  std::string_view           getName() const;
-  std::string                getChangableName() const;
+  
+  std::string                getName() const;
   std::string                getName(const std::string& i_prefix) const;
+
+  std::string_view           getRawName() const;
 
   // Get для значения вершины
   /// @brief getValue

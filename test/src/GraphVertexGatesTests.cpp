@@ -16,7 +16,7 @@ TEST(TestConstructorWithoutIName, WithoutDefaultGatesParametrs) {
   std::string graphNum = std::to_string(0);
   EXPECT_EQ(gate->getType(), VertexTypes::gate);
   EXPECT_EQ(gate->getTypeName(), "gate");
-  EXPECT_EQ(gate->getChangableName(), "gate_" + graphNum);
+  EXPECT_EQ(gate->getName(), "gate_" + graphNum);
   EXPECT_EQ(gate->getLevel(), 0);
   EXPECT_EQ(gate->getValue(), 'x');
   EXPECT_EQ(gate->getBaseGraph().lock(), nullptr);
@@ -29,7 +29,7 @@ TEST(TestConstructorWithoutIName, WithDefaultGatesParametrs) {
   GraphVertexGates gate(Gates::GateAnd, graphPtr);
   EXPECT_EQ(gate.getType(), VertexTypes::gate);
   EXPECT_EQ(gate.getTypeName(), "gate");
-  EXPECT_EQ(gate.getName(), "gate_" + graphNum);
+  EXPECT_EQ(gate.getRawName(), "gate_" + graphNum);
   EXPECT_EQ(gate.getLevel(), 0);
   EXPECT_EQ(gate.getValue(), 'x');
   EXPECT_EQ(gate.getBaseGraph().lock(), graphPtr);
@@ -43,7 +43,7 @@ TEST(TestConstructorWithIName, WithoutDefaultGatesParametrs) {
   EXPECT_EQ(gate->getBaseGraph().lock(), nullptr);
   EXPECT_EQ(gate->getType(), VertexTypes::gate);
   EXPECT_EQ(gate->getTypeName(), "gate");
-  EXPECT_EQ(gate->getChangableName(), "Anything");
+  EXPECT_EQ(gate->getName(), "Anything");
   EXPECT_EQ(gate->getLevel(), 0);
   EXPECT_EQ(gate->getValue(), 'x');
   EXPECT_EQ(gate->getBaseGraph().lock(), nullptr);
@@ -56,7 +56,7 @@ TEST(TestConstructorWithIName, WithDefaultGatesParametrs) {
   GraphVertexGates gate(Gates::GateAnd, "Anything", graphPtr);
   EXPECT_EQ(gate.getType(), VertexTypes::gate);
   EXPECT_EQ(gate.getTypeName(), "gate");
-  EXPECT_EQ(gate.getName(), "Anything");
+  EXPECT_EQ(gate.getRawName(), "Anything");
   EXPECT_EQ(gate.getLevel(), 0);
   EXPECT_EQ(gate.getValue(), 'x');
   EXPECT_EQ(gate.getBaseGraph().lock(), graphPtr);
@@ -325,7 +325,7 @@ TEST(TestGetGate, ReturnCorrectGate) {
 
 //   std::cerr.rdbuf(originalStderr);
 //   std::string output = capturedOutput.str();
-//   EXPECT_EQ(output, "TODO: delete empty vertices: " + gate1.getName() +
+//   EXPECT_EQ(output, "TODO: delete empty vertices: " + gate1.getRawName() +
 //   "\n");
 // }
 
@@ -464,7 +464,7 @@ TEST(TestToVerilog, ReturnCorrectVerilogStringWhenUseGateXor) {
 TEST(TestSetName, GatesCorrectName) {
   GraphVertexGates gate(Gates::GateAnd, memoryOwnerGate);
   gate.setName("Anything");
-  EXPECT_EQ(gate.getName(), "Anything");
+  EXPECT_EQ(gate.getRawName(), "Anything");
 }
 
 TEST(TestAddInConnections, AddConnections) {

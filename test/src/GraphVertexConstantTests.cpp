@@ -17,7 +17,7 @@ TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrsDefName) {
   std::string graphNum = std::to_string(0);
   EXPECT_EQ(constant.getType(), VertexTypes::constant);
   EXPECT_EQ(constant.getTypeName(), "const");
-  EXPECT_EQ(constant.getName(), "const_" + graphNum);
+  EXPECT_EQ(constant.getRawName(), "const_" + graphNum);
   EXPECT_EQ(constant.getLevel(), 0);
   EXPECT_EQ(constant.getValue(), 'z');
   EXPECT_EQ(constant.getBaseGraph().lock(), nullptr);
@@ -34,7 +34,7 @@ TEST(TestConstructorWithoutIName, WithDefaultInputParametrsDefName) {
   GraphVertexConstant constant('z', graphPtr);
   EXPECT_EQ(constant.getType(), VertexTypes::constant);
   EXPECT_EQ(constant.getTypeName(), "const");
-  EXPECT_EQ(constant.getName(), "const_" + graphNum);
+  EXPECT_EQ(constant.getRawName(), "const_" + graphNum);
   EXPECT_EQ(constant.getLevel(), 0);
   EXPECT_EQ(constant.getValue(), 'z');
   EXPECT_EQ(constant.getBaseGraph().lock(), graphPtr);
@@ -46,7 +46,7 @@ TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
   GraphVertexConstant constant('z', "Anything", nullptr);
   EXPECT_EQ(constant.getType(), VertexTypes::constant);
   EXPECT_EQ(constant.getTypeName(), "const");
-  EXPECT_EQ(constant.getName(), "Anything");
+  EXPECT_EQ(constant.getRawName(), "Anything");
   EXPECT_EQ(constant.getLevel(), 0);
   EXPECT_EQ(constant.getValue(), 'z');
   EXPECT_EQ(constant.getBaseGraph().lock(), nullptr);
@@ -60,7 +60,7 @@ TEST(TestConstructorWithIName, WithDefaultInputParametrs) {
   GraphVertexConstant constant('z', "Anything", graphPtr);
   EXPECT_EQ(constant.getType(), VertexTypes::constant);
   EXPECT_EQ(constant.getTypeName(), "const");
-  EXPECT_EQ(constant.getName(), "Anything");
+  EXPECT_EQ(constant.getRawName(), "Anything");
   EXPECT_EQ(constant.getLevel(), 0);
   EXPECT_EQ(constant.getValue(), 'z');
   EXPECT_EQ(constant.getBaseGraph().lock(), graphPtr);
@@ -89,7 +89,7 @@ TEST(TestSetName, InputCorrectName) {
   initLogging("TestSetName", "InputCorrectName");
   GraphVertexConstant constant('z', memoryOwnerConst);
   constant.setName("Anything");
-  EXPECT_EQ(constant.getName(), "Anything");
+  EXPECT_EQ(constant.getRawName(), "Anything");
 }
 
 TEST(TestAddVertexToInConnections, AddConnections1) {
@@ -182,23 +182,23 @@ TEST(TestToDOT, CheckName) {
       std::make_shared<GraphVertexConstant>('z', memoryOwnerConst);
   EXPECT_EQ(
       dotReturnToString(vertexPtr1->toDOT()),
-      vertexPtr1->getChangableName() + " [shape=cds, label=\""
-          + vertexPtr1->getChangableName() + "\\n1'b0\"];\n"
+      vertexPtr1->getName() + " [shape=cds, label=\""
+          + vertexPtr1->getName() + "\\n1'b0\"];\n"
   );
   EXPECT_EQ(
       dotReturnToString(vertexPtr2->toDOT()),
-      vertexPtr2->getChangableName() + " [shape=cds, label=\""
-          + vertexPtr2->getChangableName() + "\\n1'b1\"];\n"
+      vertexPtr2->getName() + " [shape=cds, label=\""
+          + vertexPtr2->getName() + "\\n1'b1\"];\n"
   );
   EXPECT_EQ(
       dotReturnToString(vertexPtr3->toDOT()),
-      vertexPtr3->getChangableName() + " [shape=cds, label=\""
-          + vertexPtr3->getChangableName() + "\\n1'bx\"];\n"
+      vertexPtr3->getName() + " [shape=cds, label=\""
+          + vertexPtr3->getName() + "\\n1'bx\"];\n"
   );
   EXPECT_EQ(
       dotReturnToString(vertexPtr4->toDOT()),
-      vertexPtr4->getChangableName() + " [shape=cds, label=\""
-          + vertexPtr4->getChangableName() + "\\n1'bz\"];\n"
+      vertexPtr4->getName() + " [shape=cds, label=\""
+          + vertexPtr4->getName() + "\\n1'bz\"];\n"
   );
 }
 
