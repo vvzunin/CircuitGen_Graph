@@ -38,7 +38,7 @@ std::shared_ptr<DefaultSettings> DefaultSettings::getInstance(
    * dangeruous in case two instance threads wants to access at the same time
    */
   if (d_singleton == nullptr) {
-    d_singleton = std::make_shared<HiddenConstructor>(i_value);
+    d_singleton = std::make_shared<DefaultSettings>(i_value);
     d_singleton->loadSettings();
   }
   return d_singleton;

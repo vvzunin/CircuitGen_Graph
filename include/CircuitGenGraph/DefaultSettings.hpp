@@ -73,11 +73,9 @@ enum DotTypes {
 ///
 
 class DefaultSettings {
-protected:
-  struct HiddenConstructor;
+public:
   DefaultSettings(const std::string& i_path) : d_path(i_path) {}
 
-public:
   DefaultSettings(DefaultSettings& other) = delete;
   void operator=(const DefaultSettings&)  = delete;
 
@@ -353,8 +351,4 @@ protected:
 
   std::vector<std::string_view>                   d_operationsToHierarchy;
   std::map<std::string_view, std::string>         d_operationsToName;
-};
-
-struct DefaultSettings::HiddenConstructor : public DefaultSettings {
-  HiddenConstructor(const std::string& i_path) : DefaultSettings(i_path) {}
 };
