@@ -37,22 +37,22 @@ char GraphVertexOutput::updateValue() {
   return d_value;
 }
 
-void GraphVertexOutput::updateLevel(bool recalculate, std::string tab) {
+void GraphVertexOutput::updateLevel(bool i_recalculate, std::string tab) {
   int counter = 0;
-  if (wasUpdated && !recalculate) {
+  if (d_wasUpdated && !i_recalculate) {
     return;
   }
   for (VertexPtrWeak vert : d_inConnections) {
     if (auto ptr = vert.lock()) {
       LOG(INFO) << tab << counter++ << ". " << ptr->getName() << " ("
                 << ptr->getTypeName() << ")";
-      ptr->updateLevel(recalculate, tab + "  ");
+      ptr->updateLevel(i_recalculate, tab + "  ");
       d_level = (ptr->getLevel() > d_level) ? ptr->getLevel() : d_level;
     } else {
       throw std::invalid_argument("Dead pointer!");
     }
   }
-  wasUpdated = true;
+  d_wasUpdated = true;
 }
 
 DotReturn GraphVertexOutput::toDOT() {

@@ -38,17 +38,17 @@ char GraphVertexSubGraph::updateValue() {
   return 'x';
 }
 
-void GraphVertexSubGraph::updateLevel(bool recalculate, std::string tab) {
+void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
   int counter = 0;
-  if (wasUpdated && !recalculate) {
+  if (d_wasUpdated && !i_recalculate) {
     return;
   }
   for (VertexPtr vert : d_subGraph->getVerticesByType(VertexTypes::output)) {
     LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
               << vert->getTypeName() << ")";
-    vert->updateLevel(recalculate, tab + "  ");
+    vert->updateLevel(i_recalculate, tab + "  ");
   }
-  wasUpdated = true;
+  d_wasUpdated = true;
 }
 
 // In fact is not needed
@@ -111,19 +111,19 @@ GraphPtr GraphVertexSubGraph::getSubGraph() const {
   return d_subGraph;
 }
 
-std::string GraphVertexSubGraph::calculateHash(bool recalculate) {
-  if (hashed && !recalculate)
-    return std::to_string(hashed);
+size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
+  if (d_hashed && !i_recalculate)
+    return d_hashed;
 
   // calc hash from subgraph
   std::string hashedStr =
       d_subGraph->calculateHash() + std::to_string(d_inConnections.size());
 
   // futuire sorted struct
-  std::vector<std::string> hashed_data;
+  std::vector<size_t> hashed_data;
 
   for (auto& child : d_outConnections) {
-    hashed_data.push_back(child->calculateHash(recalculate));
+    hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
@@ -131,9 +131,9 @@ std::string GraphVertexSubGraph::calculateHash(bool recalculate) {
     hashedStr += sub;
   }
 
-  hashed = std::hash<std::string> {}(hashedStr);
+  d_hashed = std::hash<std::string> {}(hashedStr);
 
-  return std::to_string(hashed);
+  return d_hashed;
 }
 
 std::vector<VertexPtr> GraphVertexSubGraph::getOutputBuffersByOuterInput(
@@ -254,6 +254,6 @@ void GraphVertexSubGraph::log(el::base::type::ostream_t& os) const {
      << ")\n";
   os << "Vertex Type: "
      << DefaultSettings::parseVertexToString(VertexTypes::subGraph) << "\n";
-  os << "Vertex Hash: " << hashed;
+  os << "Vertex Hash: " << d_hashed;
   os << *d_subGraph;
 }

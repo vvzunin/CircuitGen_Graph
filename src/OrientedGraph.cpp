@@ -90,7 +90,7 @@ bool OrientedGraph::needToUpdateLevel() const {
   return d_needLevelUpdate;
 }
 
-void OrientedGraph::updateLevels(bool recalculate) {
+void OrientedGraph::updateLevels(bool i_recalculate) {
   LOG(INFO) << "Starting level update. Wait.";
   LOG(INFO) << "Outputs for update: "
             << d_vertexes.at(VertexTypes::output).size();
@@ -98,7 +98,7 @@ void OrientedGraph::updateLevels(bool recalculate) {
   for (VertexPtr vert : d_vertexes.at(VertexTypes::output)) {
     LOG(INFO) << counter++ << ". " << vert->getRawName() << " ("
               << vert->getTypeName() << ")";
-    vert->updateLevel(recalculate, "    ");
+    vert->updateLevel(i_recalculate, "    ");
   }
 }
 
@@ -343,25 +343,25 @@ std::map<Gates, std::map<Gates, size_t>> OrientedGraph::getEdgesGatesCount(
   return d_edgesGatesCount;
 }
 
-std::string OrientedGraph::calculateHash(bool recalculate) {
-  if (d_hashed != "" && !recalculate)
-    return d_hashed;
+std::string OrientedGraph::calculateHash(bool i_recalculate) {
+  if (d_hashed && !i_recalculate)
+    return std::to_string(d_hashed);
 
-  std::vector<std::string> hashed_data;
-  d_hashed = "";
+  std::vector<size_t> hashed_data;
+  std::string hashedStr = "";
 
   for (auto& input : d_vertexes[VertexTypes::input]) {
-    hashed_data.push_back(input->calculateHash(recalculate));
+    hashed_data.push_back(input->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
   for (const auto& sub : hashed_data) {
-    d_hashed += sub;
+    hashedStr += sub;
   }
 
-  d_hashed = std::to_string(std::hash<std::string> {}(d_hashed));
+  d_hashed = std::hash<std::string> {}(hashedStr);
 
-  return d_hashed;
+  return std::to_string(d_hashed);
 }
 
 std::set<GraphPtr> OrientedGraph::getSetSubGraphs() const {
@@ -385,7 +385,7 @@ bool OrientedGraph::operator==(const OrientedGraph& rhs) {
   if (!correct)
     return false;
 
-  return d_hashed == rhs.d_hashed && d_hashed.size();
+  return d_hashed == rhs.d_hashed && d_hashed;
 }
 
 void OrientedGraph::setCurrentParent(GraphPtr i_parent) {

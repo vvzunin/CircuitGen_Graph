@@ -146,7 +146,7 @@ public:
   ///
   /// */
 
-  void        updateLevels(bool recalculate = false);
+  void        updateLevels(bool i_recalculate = false);
 
   /// @brief getMaxLevel
   /// Calculates and returns the maximum level of the output vertices in the
@@ -426,12 +426,12 @@ public:
 
   /// @brief calculateHash calculates hash values for a graph based on the hash
   /// values of its vertices
-  /// @param recalculate A Boolean value indicating whether the hash value
+  /// @param i_recalculate A Boolean value indicating whether the hash value
   /// should be recalculated even if it has already been previously calculated.
   /// By default, false.
   /// @return A string representing the hash value of the graph
 
-  std::string             calculateHash(bool recalculate = false);
+  std::string             calculateHash(bool i_recalculate = false);
 
   // @brief getGatesCount Returns a display containing the number of each gate
   /// type in the graph
@@ -467,7 +467,8 @@ private:
   GraphPtrWeak              d_currentParentGraph;
   size_t                    d_edgesCount = 0;
 
-  std::string               d_hashed     = "";
+  // TODO check if can be zero. If it is possible, add flag
+  size_t                    d_hashed     = 0;
   bool                      d_isSubGraph = false;
 
   std::string               d_name;
@@ -505,7 +506,8 @@ private:
               {VertexTypes::output, std::vector<VertexPtr>()},
               {VertexTypes::constant, std::vector<VertexPtr>()},
               {VertexTypes::gate, std::vector<VertexPtr>()},
-              {VertexTypes::subGraph, std::vector<VertexPtr>()}};
+              {VertexTypes::subGraph, std::vector<VertexPtr>()}
+  };
 
   static std::atomic_size_t d_countGraph;
 
@@ -518,7 +520,8 @@ private:
       {Gates::GateNot, 0},
       {Gates::GateBuf, 0},
       {Gates::GateXor, 0},
-      {Gates::GateXnor, 0}};
+      {Gates::GateXnor, 0}
+  };
   // used for quick edges of gate type count;
   std::map<Gates, std::map<Gates, size_t>> d_edgesGatesCount;
 

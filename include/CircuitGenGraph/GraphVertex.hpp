@@ -70,7 +70,8 @@ public:
   /// @brief updateLevel It is designed to update the level of the current
   /// vertex in a directed graph based on the levels of its input connections
 
-  virtual void updateLevel(bool recalculate = false, std::string tab = "") override;
+  virtual void updateLevel(bool i_recalculate = false, std::string tab = "")
+      override;
 
   DotReturn    toDOT() override;
 
@@ -108,7 +109,8 @@ public:
   /// @brief updateLevel updates the level of the current vertex in the graph
   /// based on the levels of its incoming connections
 
-  virtual void updateLevel(bool recalculate = false, std::string tab = "") override;
+  virtual void updateLevel(bool i_recalculate = false, std::string tab = "")
+      override;
   std::string  toVerilog() override;
   DotReturn    toDOT() override;
 
@@ -128,7 +130,7 @@ private:
 /// inside. Is used for storing this pointer for providing graph
 /// connectivity
 /// @param d_subGraph Pointer to the subgraph associated with this vertex
-/// @param hashed Cached hash value of the vertex
+/// @param d_hashed Cached hash value of the vertex
 class GraphVertexSubGraph : public GraphVertexBase {
 public:
   GraphVertexSubGraph(GraphPtr i_subGraph, GraphPtr i_baseGraph);
@@ -145,8 +147,8 @@ public:
       GraphPtr         i_baseGraph
   );
 
-  char        updateValue() override;
-  void        updateLevel(bool recalculate = false, std::string tab = "") override;
+  char updateValue() override;
+  void updateLevel(bool i_recalculate = false, std::string tab = "") override;
 
   std::string toVerilog() override;
   DotReturn   toDOT() override;
@@ -182,7 +184,7 @@ public:
   /// @return
   std::string getVerilogInstance() override;
 
-  std::string calculateHash(bool recalculate = false) override;
+  size_t      calculateHash(bool i_recalculate = false) override;
 
   void        setSubGraph(GraphPtr i_subGraph);
   GraphPtr    getSubGraph() const;
@@ -229,7 +231,8 @@ public:
   /// vertices to which it is connected, and sets the level of the current
   /// vertex to one higher than the highest level
 
-  virtual void updateLevel(bool recalculate = false, std::string tab = "") override;
+  virtual void updateLevel(bool i_recalculate = false, std::string tab = "")
+      override;
 
   DotReturn    toDOT() override;
 
@@ -268,15 +271,15 @@ public:
 
   /// @brief calculateHash
   /// Calculates the hash value of the vertex
-  /// @param recalculate Flag indicating whether to recalculate the hash value
-  /// (default false)
+  /// @param i_recalculate Flag indicating whether to i_recalculate the hash
+  /// value (default false)
   /// @throws None.
   /// @code
   /// TO DO:
   /// @endcode
   /// @return The calculated hash value as a string
 
-  std::string  calculateHash(bool recalculate = false) override;
+  size_t       calculateHash(bool i_recalculate = false) override;
 
   /// @brief getVerilogString
   /// Gets a string in Verilog format representing the current vertex

@@ -79,18 +79,18 @@ char GraphVertexGates::updateValue() {
   return d_value;
 }
 
-std::string GraphVertexGates::calculateHash(bool recalculate) {
-  if (hashed && !recalculate)
-    return std::to_string(hashed);
+size_t GraphVertexGates::calculateHash(bool i_recalculate) {
+  if (d_hashed && !i_recalculate)
+    return d_hashed;
 
   std::string hashedStr =
       std::to_string(d_inConnections.size()) + std::to_string(d_gate);
 
   // future sorted struct
-  std::vector<std::string> hashed_data;
+  std::vector<size_t> hashed_data;
 
   for (auto& child : d_outConnections) {
-    hashed_data.push_back(child->calculateHash(recalculate));
+    hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
@@ -98,9 +98,9 @@ std::string GraphVertexGates::calculateHash(bool recalculate) {
     hashedStr += sub;
   }
 
-  hashed = std::hash<std::string> {}(hashedStr);
+  d_hashed = std::hash<std::string> {}(hashedStr);
 
-  return std::to_string(hashed);
+  return d_hashed;
 }
 
 std::string GraphVertexGates::getVerilogString() const {
@@ -177,7 +177,7 @@ std::string GraphVertexGates::toVerilog() {
       || d_gate == Gates::GateXnor) {
     basic += "~ ( ";
 
-    end    = " )";
+    end   = " )";
   }
   VertexPtr ptr;
   for (size_t i = 0; i < d_inConnections.size() - 1; ++i) {
@@ -237,8 +237,9 @@ void GraphVertexGates::log(el::base::type::ostream_t& os) const {
      << ")\n";
   os << "Vertex Type: "
      << DefaultSettings::parseVertexToString(VertexTypes::gate)
-     << "(" + DefaultSettings::parseGateToString(d_gate) + ")" << "\n";
+     << "(" + DefaultSettings::parseGateToString(d_gate) + ")"
+     << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
-  os << "Vertex Hash: " << hashed << "\n";
+  os << "Vertex Hash: " << d_hashed << "\n";
 }

@@ -81,7 +81,7 @@ std::string vertexTypeToComment(VertexTypes i_type);
 /// @param d_type Vertex Type - Defined by the VertexTypes enumeration
 /// @param d_count Vertex counter for naming and other purposes.
 /// Represented by the uint_fast64_t type
-/// @param hashed A string containing the calculated hash value for the vertex
+/// @param d_hashed A string containing the calculated hash value for the vertex
 
 class GraphVertexBase : public el::Loggable {
 public:
@@ -225,7 +225,7 @@ public:
   /// @throws std::invalid_argument if any of the input connections are invalid
   /// (i.e., null pointers)
 
-  virtual void  updateLevel(bool recalculate = false, std::string tab = "");
+  virtual void  updateLevel(bool i_recalculate = false, std::string tab = "");
 
   /// @brief getGate
   /// Returns the type of the basic logic gate represented by this vertex. If
@@ -398,7 +398,7 @@ public:
   /// @brief calculateHash
   /// Calculates the hash value for the vertex based on its outgoing
   /// connections.
-  /// @param recalculate Flag indicating whether to recalculate the hash
+  /// @param i_recalculate Flag indicating whether to i_recalculate the hash
   /// value even if it has already been calculated.
   /// If true, the hash value will be recalculated.
   /// If false and the hash value has already been calculated,
@@ -420,7 +420,7 @@ public:
   /// std::cout << "Hash for the first vertex: " << hashValue << std::endl;
   /// @endcode
 
-  virtual std::string    calculateHash(bool recalculate = false);
+  virtual size_t         calculateHash(bool i_recalculate = false);
 
   /// @brief getVerilogInstance
   /// Generates an instance declaration for the vertex in Verilog format.
@@ -477,13 +477,13 @@ protected:
 
   std::string_view           d_name;
   char                       d_value;
-  bool                       wasUpdated = false;
+  bool                       d_wasUpdated = false;
   uint32_t                   d_level;
 
   std::vector<VertexPtrWeak> d_inConnections;
   std::vector<VertexPtr>     d_outConnections;
 
-  size_t                     hashed = 0;
+  size_t                     d_hashed = 0;
 
 private:
   // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых

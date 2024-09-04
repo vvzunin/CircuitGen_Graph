@@ -144,22 +144,22 @@ uint32_t GraphVertexBase::getLevel() const {
   return d_level;
 }
 
-void GraphVertexBase::updateLevel(bool recalculate, std::string tab) {
+void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
   int counter = 0;
-  if (wasUpdated && !recalculate) {
+  if (d_wasUpdated && !i_recalculate) {
     return;
   }
   for (VertexPtrWeak vert : d_inConnections) {
     if (VertexPtr ptr = vert.lock()) {
       LOG(INFO) << tab << counter++ << ". " << ptr->getName() << " ("
                 << ptr->getTypeName() << ")";
-      ptr->updateLevel(recalculate, tab + "  ");
+      ptr->updateLevel(i_recalculate, tab + "  ");
       d_level = (ptr->getLevel() >= d_level) ? ptr->getLevel() + 1 : d_level;
     } else {
       throw std::invalid_argument("Dead pointer!");
     }
   }
-  wasUpdated = true;
+  d_wasUpdated = true;
 }
 
 char GraphVertexBase::getValue() const {
@@ -185,21 +185,21 @@ uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
   return n;
 }
 
-std::string GraphVertexBase::calculateHash(bool recalculate) {
-  if (hashed && !recalculate)
-    return std::to_string(hashed);
+size_t GraphVertexBase::calculateHash(bool i_recalculate) {
+  if (d_hashed && !i_recalculate)
+    return d_hashed;
 
   if (d_type == VertexTypes::output) {
-    hashed = std::hash<size_t> {}(d_inConnections.size());
-    return std::to_string(hashed);
+    d_hashed = std::hash<size_t> {}(d_inConnections.size());
+    return d_hashed;
   }
 
   // futuire sorted struct
-  std::vector<std::string> hashed_data;
-  std::string hashedStr = "";
+  std::vector<size_t> hashed_data;
+  std::string              hashedStr = "";
 
   for (auto& child : d_outConnections) {
-    hashed_data.push_back(child->calculateHash(recalculate));
+    hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
@@ -207,9 +207,9 @@ std::string GraphVertexBase::calculateHash(bool recalculate) {
     hashedStr += sub;
   }
 
-  hashed = std::hash<std::string> {}(hashedStr);
+  d_hashed = std::hash<std::string> {}(hashedStr);
 
-  return std::to_string(hashed);
+  return d_hashed;
 }
 
 bool GraphVertexBase::removeVertexToInConnections(
@@ -290,5 +290,5 @@ void GraphVertexBase::log(el::base::type::ostream_t& os) const {
   os << "Vertex Type: " << DefaultSettings::parseVertexToString(d_type) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
-  os << "Vertex Hash: " << hashed << "\n";
+  os << "Vertex Hash: " << d_hashed << "\n";
 }

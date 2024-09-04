@@ -183,12 +183,12 @@ TEST(TestAddOutConnections, AddConnections) {
 
 TEST(TestCalculateHash, SameHashWhenEqualInputs) {
   GraphVertexOutput output1(memoryOwnerOutput);
-  EXPECT_EQ(output1.calculateHash(), "0");
+  EXPECT_EQ(output1.calculateHash(), 0);
 
   output1.addVertexToOutConnections(
       std::make_shared<GraphVertexOutput>(memoryOwnerOutput)
   );
-  EXPECT_EQ(output1.calculateHash(true), "0");
+  EXPECT_EQ(output1.calculateHash(true), 0);
 
   GraphPtr         graphPtr1 = std::make_shared<OrientedGraph>();
   GraphVertexInput output2(graphPtr1);
