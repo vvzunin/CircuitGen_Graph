@@ -194,7 +194,7 @@ size_t GraphVertexBase::calculateHash(bool i_recalculate) {
     return d_hashed;
   }
 
-  // futuire sorted struct
+  // future sorted struct
   std::vector<size_t> hashed_data;
   std::string              hashedStr = "";
 

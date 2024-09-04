@@ -153,6 +153,21 @@ TEST(TestCalculateHash, SameHashWhenEqualInputs) {
   );
   EXPECT_EQ(constant1.calculateHash(true), constant2.calculateHash(true));
 }
+TEST(TestCalculateHash, SameGraphDifferentValues) {
+  initLogging("TestCalculateHash", "SameHashWhenEqualInputs");
+  GraphVertexConstant constant1('z', memoryOwnerConst);
+  GraphVertexConstant constant2('x', memoryOwnerConst);
+  EXPECT_NE(constant1.calculateHash(), constant2.calculateHash());
+
+  constant1.addVertexToOutConnections(
+      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst)
+  );
+  EXPECT_NE(constant1.calculateHash(true), constant2.calculateHash(true));
+  constant2.addVertexToOutConnections(
+      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst)
+  );
+  EXPECT_NE(constant1.calculateHash(true), constant2.calculateHash(true));
+}
 
 TEST(TestRemoveVertexToInConnections, RemoveConnections) {
   initLogging("TestRemoveVertexToInConnections", "RemoveConnections");

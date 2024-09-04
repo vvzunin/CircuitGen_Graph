@@ -353,6 +353,9 @@ std::string OrientedGraph::calculateHash(bool i_recalculate) {
   for (auto& input : d_vertexes[VertexTypes::input]) {
     hashed_data.push_back(input->calculateHash(i_recalculate));
   }
+  for (auto& constant : d_vertexes[VertexTypes::constant]) {
+    hashed_data.push_back(constant->calculateHash(i_recalculate));
+  }
   std::sort(hashed_data.begin(), hashed_data.end());
 
   for (const auto& sub : hashed_data) {

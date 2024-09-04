@@ -26,13 +26,34 @@ GraphVertexConstant::GraphVertexConstant(
   GraphVertexInput(i_name, i_baseGraph, VertexTypes::constant) {
   d_value = i_const;
 }
+size_t GraphVertexConstant::calculateHash(bool i_recalculate) {
+  if (d_hashed && !i_recalculate)
+    return d_hashed;
 
+  std::string         hashedStr = std::to_string(d_value);
+
+  // futuire sorted struct
+  std::vector<size_t> hashed_data;
+
+  for (auto& child : d_outConnections) {
+    hashed_data.push_back(child->calculateHash(i_recalculate));
+  }
+  std::sort(hashed_data.begin(), hashed_data.end());
+
+  for (const auto& sub : hashed_data) {
+    hashedStr += sub;
+  }
+
+  d_hashed = std::hash<std::string> {}(hashedStr);
+
+  return d_hashed;
+}
 void GraphVertexConstant::updateLevel(bool i_recalculate, std::string tab) {
   if (d_wasUpdated && !i_recalculate) {
     return;
   }
   LOG(INFO) << tab << "0. " << d_name << " (" << getTypeName() << ")";
-  d_level    = 0;
+  d_level      = 0;
   d_wasUpdated = true;
 }
 

@@ -106,6 +106,8 @@ public:
       GraphPtr         i_baseGraph
   );
 
+  size_t      calculateHash(bool i_recalculate = false) override;
+
   /// @brief updateLevel updates the level of the current vertex in the graph
   /// based on the levels of its incoming connections
 

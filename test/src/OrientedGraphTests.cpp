@@ -551,6 +551,36 @@ TEST(TestCalculateHash, GraphsWithTheSameStructureHaveEqualHash) {
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
 }
 
+TEST(TestCalculateHash, GraphsWithTheSameStructureButDifferentConst) {
+  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
+  GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
+
+  EXPECT_EQ(graphPtr1->calculateHash(), graphPtr1->calculateHash());
+
+  auto inp1 = graphPtr1->addInput();
+  auto inp2 = graphPtr2->addInput();
+  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+
+  auto gate1 = graphPtr1->addGate(Gates::GateAnd);
+  auto gate2 = graphPtr2->addGate(Gates::GateAnd);
+  graphPtr1->addEdge(inp1, gate1);
+  graphPtr2->addEdge(inp2, gate2);
+  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+
+  auto out1 = graphPtr1->addOutput();
+  auto out2 = graphPtr2->addOutput();
+  graphPtr1->addEdge(gate1, out1);
+  graphPtr2->addEdge(gate2, out2);
+  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+
+
+  auto const1 = graphPtr1->addConst('0');
+  auto const2 = graphPtr2->addConst('1');
+  graphPtr1->addEdge(const1, gate1);
+  graphPtr2->addEdge(const2, gate2);
+  EXPECT_NE(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+}
+
 TEST(TestGetGatesCount, ReturnCorrectGates) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
   EXPECT_EQ(graphPtr->getGatesCount().size(), 8);
