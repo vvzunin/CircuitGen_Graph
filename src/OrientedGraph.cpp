@@ -739,7 +739,7 @@ std::pair<bool, std::string>
 std::string OrientedGraph::toGraphMLClassic(
     uint16_t           i_indent,
     const std::string& i_prefix
-) const {
+) {
   using namespace AuxMethods;      // format() and replacer()
   using namespace ClassicGraphML;  // templates
 
@@ -843,7 +843,7 @@ std::string OrientedGraph::toGraphMLClassic(
   return format(mainTemplate, format(finalGraph, d_name));
 }
 
-bool OrientedGraph::toGraphMLClassic(std::ofstream& fileStream) const {
+bool OrientedGraph::toGraphMLClassic(std::ofstream& fileStream) {
   auto t  = std::time(nullptr);
   auto tm = *std::localtime(&t);
   fileStream << "<!-- This file was generated automatically using "
@@ -855,7 +855,7 @@ bool OrientedGraph::toGraphMLClassic(std::ofstream& fileStream) const {
   return true;
 }
 
-bool OrientedGraph::toGraphMLPseudoABCD(std::ofstream& fileStream) const {
+bool OrientedGraph::toGraphMLPseudoABCD(std::ofstream& fileStream) {
   auto t  = std::time(nullptr);
   auto tm = *std::localtime(&t);
   fileStream << "<!-- This file was generated automatically using "
@@ -867,7 +867,7 @@ bool OrientedGraph::toGraphMLPseudoABCD(std::ofstream& fileStream) const {
   return true;
 }
 
-bool OrientedGraph::toGraphMLOpenABCD(std::ofstream& fileStream) const {
+bool OrientedGraph::toGraphMLOpenABCD(std::ofstream& fileStream) {
   auto t  = std::time(nullptr);
   auto tm = *std::localtime(&t);
   fileStream << "<!-- This file was generated automatically using "
@@ -879,12 +879,11 @@ bool OrientedGraph::toGraphMLOpenABCD(std::ofstream& fileStream) const {
   return true;
 }
 
-std::string OrientedGraph::toGraphMLPseudoABCD() const {
+std::string OrientedGraph::toGraphMLPseudoABCD() {
   using namespace AuxMethods;  // format()
   using namespace PseudoABCD;  // templates
 
-  // std::shared_ptr<const OrientedGraph> graphPtr = shared_from_this();
-  std::shared_ptr<OrientedGraph> graphPtr;
+  std::shared_ptr<OrientedGraph> graphPtr = shared_from_this();
   if (!d_vertexes.at(VertexTypes::subGraph).empty()) {
     graphPtr = this->unrollGraph();
   }
@@ -943,12 +942,11 @@ std::string OrientedGraph::toGraphMLPseudoABCD() const {
   return format(mainTemplate, nodes + edges);
 }
 
-std::string OrientedGraph::toGraphMLOpenABCD() const {
+std::string OrientedGraph::toGraphMLOpenABCD() {
   using namespace AuxMethods;  // format()
   using namespace OpenABCD;    // templates
 
-  // std::shared_ptr<const OrientedGraph> graphPtr = shared_from_this();
-  std::shared_ptr<OrientedGraph> graphPtr;
+  std::shared_ptr<OrientedGraph> graphPtr = shared_from_this();
   if (!d_vertexes.at(VertexTypes::subGraph).empty()) {
     graphPtr = this->unrollGraph();
   }

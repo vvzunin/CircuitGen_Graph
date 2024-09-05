@@ -385,7 +385,7 @@ public:
   DotReturn getGraphDotInstance();
   DotReturn toDOT();
   std::pair<bool, std::string>
-              toDOT(std::string i_path, std::string i_filename = "");
+       toDOT(std::string i_path, std::string i_filename = "");
 
   /// @brief toGraphML Writes the graph structure in GraphML format to the
   /// specified output stream
@@ -396,15 +396,13 @@ public:
   /// written in GraphML format, and false otherwise. In this case, it always
   /// returns true.
 
-  bool        toGraphMLClassic(std::ofstream& i_fileStream) const;
-  bool        toGraphMLPseudoABCD(std::ofstream& i_fileStream) const;
-  bool        toGraphMLOpenABCD(std::ofstream& i_fileStream) const;
-  std::string toGraphMLClassic(
-      uint16_t           i_indent = 0,
-      const std::string& i_prefix = ""
-  ) const;
-  std::string            toGraphMLPseudoABCD() const;
-  std::string            toGraphMLOpenABCD() const;
+  bool toGraphMLClassic(std::ofstream& i_fileStream);
+  bool toGraphMLPseudoABCD(std::ofstream& i_fileStream);
+  bool toGraphMLOpenABCD(std::ofstream& i_fileStream);
+  std::string
+      toGraphMLClassic(uint16_t i_indent = 0, const std::string& i_prefix = "");
+  std::string            toGraphMLPseudoABCD();
+  std::string            toGraphMLOpenABCD();
   // visualize
   // calcGraph
 
