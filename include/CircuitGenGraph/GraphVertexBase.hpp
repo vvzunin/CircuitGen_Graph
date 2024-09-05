@@ -477,7 +477,7 @@ protected:
 
   std::string_view           d_name;
   char                       d_value;
-  bool                       d_wasUpdated = false;
+  bool                       d_needUpdate = false;
   uint32_t                   d_level;
 
   std::vector<VertexPtrWeak> d_inConnections;

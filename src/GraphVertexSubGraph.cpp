@@ -40,7 +40,7 @@ char GraphVertexSubGraph::updateValue() {
 
 void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
   int counter = 0;
-  if (d_wasUpdated && !i_recalculate) {
+  if (d_needUpdate && !i_recalculate) {
     return;
   }
   for (VertexPtr vert : d_subGraph->getVerticesByType(VertexTypes::output)) {
@@ -48,7 +48,7 @@ void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
               << vert->getTypeName() << ")";
     vert->updateLevel(i_recalculate, tab + "  ");
   }
-  d_wasUpdated = true;
+  d_needUpdate = true;
 }
 
 // In fact is not needed

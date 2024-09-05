@@ -103,7 +103,7 @@ void OrientedGraph::updateLevels(bool i_recalculate) {
 }
 
 uint32_t OrientedGraph::getMaxLevel() {
-  // this->updateLevels();
+  this->updateLevels();
   uint32_t mx = 0;
   for (VertexPtr vert : d_vertexes.at(VertexTypes::output)) {
     mx = mx > vert->getLevel() ? mx : vert->getLevel();
@@ -274,7 +274,7 @@ VertexPtr OrientedGraph::getVerticeByIndex(size_t idx) const {
 
 std::vector<VertexPtr> OrientedGraph::getVerticesByLevel(const uint32_t& i_level
 ) {
-  // this->updateLevels();
+  this->updateLevels();
   std::vector<VertexPtr> a;
   // TODO: Реализовать
   return a;
@@ -348,7 +348,7 @@ std::string OrientedGraph::calculateHash(bool i_recalculate) {
     return std::to_string(d_hashed);
 
   std::vector<size_t> hashed_data;
-  std::string hashedStr = "";
+  std::string         hashedStr = "";
 
   for (auto& input : d_vertexes[VertexTypes::input]) {
     hashed_data.push_back(input->calculateHash(i_recalculate));
@@ -699,7 +699,7 @@ std::pair<bool, std::string>
     LOG(INFO) << "getGraphDotInstance()";
     return std::make_pair(true, dotReturnToString(getGraphDotInstance()));
   }
-  // updateLevels();
+  updateLevels();
   DotReturn   dot    = toDOT();
 
   std::string dotTab = "  ";
@@ -889,7 +889,7 @@ std::string OrientedGraph::toGraphMLPseudoABCD() const {
     graphPtr = this->unrollGraph();
   }
 
-  // graphPtr->updateLevels();
+  graphPtr->updateLevels();
   std::sort(
       graphPtr->d_vertexes.at(VertexTypes::gate).begin(),
       graphPtr->d_vertexes.at(VertexTypes::gate).end(),
@@ -953,7 +953,7 @@ std::string OrientedGraph::toGraphMLOpenABCD() const {
     graphPtr = this->unrollGraph();
   }
 
-  // graphPtr->updateLevels();
+  graphPtr->updateLevels();
   std::sort(
       graphPtr->d_vertexes.at(VertexTypes::gate).begin(),
       graphPtr->d_vertexes.at(VertexTypes::gate).end(),

@@ -39,7 +39,7 @@ char GraphVertexOutput::updateValue() {
 
 void GraphVertexOutput::updateLevel(bool i_recalculate, std::string tab) {
   int counter = 0;
-  if (d_wasUpdated && !i_recalculate) {
+  if (d_needUpdate && !i_recalculate) {
     return;
   }
   for (VertexPtrWeak vert : d_inConnections) {
@@ -52,7 +52,7 @@ void GraphVertexOutput::updateLevel(bool i_recalculate, std::string tab) {
       throw std::invalid_argument("Dead pointer!");
     }
   }
-  d_wasUpdated = true;
+  d_needUpdate = true;
 }
 
 DotReturn GraphVertexOutput::toDOT() {

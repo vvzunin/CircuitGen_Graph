@@ -146,7 +146,7 @@ uint32_t GraphVertexBase::getLevel() const {
 
 void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
   int counter = 0;
-  if (d_wasUpdated && !i_recalculate) {
+  if (d_needUpdate && !i_recalculate) {
     return;
   }
   for (VertexPtrWeak vert : d_inConnections) {
@@ -159,7 +159,7 @@ void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
       throw std::invalid_argument("Dead pointer!");
     }
   }
-  d_wasUpdated = true;
+  d_needUpdate = true;
 }
 
 char GraphVertexBase::getValue() const {
@@ -196,7 +196,7 @@ size_t GraphVertexBase::calculateHash(bool i_recalculate) {
 
   // future sorted struct
   std::vector<size_t> hashed_data;
-  std::string              hashedStr = "";
+  std::string         hashedStr = "";
 
   for (auto& child : d_outConnections) {
     hashed_data.push_back(child->calculateHash(i_recalculate));

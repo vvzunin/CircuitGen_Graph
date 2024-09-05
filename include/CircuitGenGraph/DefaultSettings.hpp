@@ -307,21 +307,22 @@ public:
   static void        resetSingletone() { d_singleton = nullptr; }
 
 protected:
-  std::string                                            d_name;
-  static std::shared_ptr<DefaultSettings>                d_singleton;
-  std::string                                            d_path;
-  const std::map<std::string, std::pair<std::string, int32_t>> d_logicOperations = {
-      {"input", {"", 10}},
-      {"output", {"=", 0}},
-      {"const", {"1'b0", 9}},
-      {"and", {"and", 4}},
-      {"nand", {"nand", 3}},
-      {"or", {"or", 6}},
-      {"nor", {"nor", 5}},
-      {"not", {"not", 7}},
-      {"buf", {"buf", 8}},
-      {"xor", {"xor", 2}},
-      {"xnor", {"xnor", 1}}
+  std::string                             d_name;
+  static std::shared_ptr<DefaultSettings> d_singleton;
+  std::string                             d_path;
+  const std::map<std::string, std::pair<std::string, int32_t>>
+      d_logicOperations = {
+          {"input", {"", 10}},
+          {"output", {"=", 0}},
+          {"const", {"1'b0", 9}},
+          {"and", {"and", 4}},
+          {"nand", {"nand", 3}},
+          {"or", {"or", 6}},
+          {"nor", {"nor", 5}},
+          {"not", {"not", 7}},
+          {"buf", {"buf", 8}},
+          {"xor", {"xor", 2}},
+          {"xnor", {"xnor", 1}}
 
   };
 
