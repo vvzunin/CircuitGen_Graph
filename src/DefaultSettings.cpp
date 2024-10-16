@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -8,14 +7,16 @@
 
 /* start of static variable values declaration */
 
-std::shared_ptr<DefaultSettings>         DefaultSettings::d_singleton = nullptr;
+std::shared_ptr<DefaultSettings> DefaultSettings::d_singleton = nullptr;
+std::mutex                       DefaultSettings::singletoneProtection     = {};
 
 std::pair<VertexTypes, std::string_view> DefaultSettings::vertexToString[] = {
     {VertexTypes::input, "input"},
     {VertexTypes::output, "output"},
     {VertexTypes::constant, "const"},
     {VertexTypes::subGraph, "subGraph"},
-    {VertexTypes::gate, "gate"}};
+    {VertexTypes::gate, "gate"}
+};
 
 std::pair<Gates, std::string_view> DefaultSettings::gateToString[] = {
     {Gates::GateAnd, "and"},
@@ -26,7 +27,30 @@ std::pair<Gates, std::string_view> DefaultSettings::gateToString[] = {
     {Gates::GateBuf, "buf"},
     {Gates::GateXor, "xor"},
     {Gates::GateXnor, "xnor"},
-    {Gates::GateDefault, "ERROR"}};
+    {Gates::GateDefault, "ERROR"}
+};
+
+std::pair<std::string, Gates> DefaultSettings::stringToGate[] = {
+    {"and", Gates::GateAnd},
+    {"nand", Gates::GateNand},
+    {"or", Gates::GateOr},
+    {"nor", Gates::GateNor},
+    {"not", Gates::GateNot},
+    {"buf", Gates::GateBuf},
+    {"xor", Gates::GateXor},
+    {"xnor", Gates::GateXnor}
+};
+
+std::vector<Gates> DefaultSettings::d_logicElements = {
+    Gates::GateAnd,
+    Gates::GateNand,
+    Gates::GateOr,
+    Gates::GateNor,
+    Gates::GateXor,
+    Gates::GateXnor,
+    Gates::GateNot,
+    Gates::GateBuf
+};
 
 /* end of static variable values declaration */
 
@@ -37,10 +61,12 @@ std::shared_ptr<DefaultSettings> DefaultSettings::getDefaultInstance(
    * This is a safer way to create an instance. instance = new Singleton is
    * dangeruous in case two instance threads wants to access at the same time
    */
+  singletoneProtection.lock();
   if (d_singleton == nullptr) {
     d_singleton = std::make_shared<DefaultSettings>(i_value);
     d_singleton->loadSettings();
   }
+  singletoneProtection.unlock();
   return d_singleton;
 }
 
@@ -97,23 +123,13 @@ std::map<std::string, std::pair<std::string, int32_t>>
 }
 
 Gates DefaultSettings::parseStringToGate(std::string i_gate) const {
-  return stringToGate.at(i_gate);
+  return findPairByKey(stringToGate, i_gate)->second;
 }
 
 std::string DefaultSettings::parseGateToString(Gates gate) {
-  auto* iter = std::find_if(
-      std::begin(gateToString),
-      std::end(gateToString),
-      [gate](const auto& x) { return x.first == gate; }
-  );
-  return std::string(iter->second);
+  return std::string(findPairByKey(gateToString, gate)->second);
 }
 
 std::string DefaultSettings::parseVertexToString(VertexTypes vertex) {
-  auto* iter = std::find_if(
-      std::begin(vertexToString),
-      std::end(vertexToString),
-      [vertex](const auto& x) { return x.first == vertex; }
-  );
-  return std::string(iter->second);
+  return std::string(findPairByKey(vertexToString, vertex)->second);
 };

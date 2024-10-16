@@ -399,6 +399,15 @@ public:
   bool toGraphMLClassic(std::ofstream& i_fileStream);
   bool toGraphMLPseudoABCD(std::ofstream& i_fileStream);
   bool toGraphMLOpenABCD(std::ofstream& i_fileStream);
+  void parseVertexToGraphML(
+      const VertexTypes&            vertexType,
+      const std::vector<VertexPtr>& vertexVector,
+      const std::string&            nodeTemplate,
+      const std::string&            edgeTemplate,
+      const std::string&            i_prefix,
+      std::string&                  nodes,
+      std::string&                  edges
+  );
   std::string
       toGraphMLClassic(uint16_t i_indent = 0, const std::string& i_prefix = "");
   std::string            toGraphMLPseudoABCD();

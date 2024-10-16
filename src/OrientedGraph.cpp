@@ -736,6 +736,51 @@ std::pair<bool, std::string>
   return std::make_pair(true, "");
 }
 
+void OrientedGraph::parseVertexToGraphML(
+    const VertexTypes&            vertexType,
+    const std::vector<VertexPtr>& vertexVector,
+    const std::string&            nodeTemplate,
+    const std::string&            edgeTemplate,
+    const std::string&            i_prefix,
+    std::string&                  nodes,
+    std::string&                  edges
+) {
+  using namespace AuxMethods;  // format() and replacer()
+  std::string vertexKindName;
+
+  switch (vertexType) {
+    // skipping subgraphs, will be parsed later
+    case VertexTypes::subGraph:
+      return;
+    case VertexTypes::input:
+    case VertexTypes::output:
+      vertexKindName = DefaultSettings::parseVertexToString(vertexType);
+      break;
+  }
+
+  for (const auto& v : vertexVector) {
+    // every "gate" and "const" vertex has subtypes
+    switch (vertexType) {
+      case VertexTypes::constant:
+        vertexKindName = std::string(1, v->getValue());
+        break;
+      case VertexTypes::gate:
+        vertexKindName = DefaultSettings::parseGateToString(v->getGate());
+        break;
+    }
+
+    nodes += format(nodeTemplate, v->getName(i_prefix), vertexKindName, "", "");
+
+    for (const auto& sink : v->getOutConnections()) {
+      // parsing edges not related to subGraphs
+      if (sink->getType() != VertexTypes::subGraph) {
+        edges +=
+            format(edgeTemplate, v->getName(i_prefix), sink->getName(i_prefix));
+      }
+    }
+  }
+}
+
 std::string OrientedGraph::toGraphMLClassic(
     uint16_t           i_indent,
     const std::string& i_prefix
@@ -754,39 +799,26 @@ std::string OrientedGraph::toGraphMLClassic(
   std::string       nodes, edges, graphs, vertexKindName;
 
   for (const auto& [vertexType, vertexVector] : d_vertexes) {
-    switch (vertexType) {
-      // skipping subgraphs, will be parsed later
-      case VertexTypes::subGraph:
-        continue;
-      case VertexTypes::input:
-      case VertexTypes::output:
-        vertexKindName = DefaultSettings::parseVertexToString(vertexType);
-        break;
-    }
-
-    for (const auto& v : vertexVector) {
-      // every "gate" and "const" vertex has subtypes
-      switch (vertexType) {
-        case VertexTypes::constant:
-          vertexKindName = std::string(1, v->getValue());
-          break;
-        case VertexTypes::gate:
-          vertexKindName = DefaultSettings::parseGateToString(v->getGate());
-          break;
-      }
-
-      nodes +=
-          format(nodeTemplate, v->getName(i_prefix), vertexKindName, "", "");
-
-      for (const auto& sink : v->getOutConnections()) {
-        // parsing edges not related to subGraphs
-        if (sink->getType() != VertexTypes::subGraph) {
-          edges += format(
-              edgeTemplate, v->getName(i_prefix), sink->getName(i_prefix)
-          );
-        }
-      }
-    }
+    parseVertexToGraphML(
+        vertexType,
+        vertexVector,
+        nodeTemplate,
+        edgeTemplate,
+        i_prefix,
+        nodes,
+        edges
+    );
+  }
+  if (d_allSubGraphsOutputs.size()) {
+    parseVertexToGraphML(
+        VertexTypes::gate,
+        d_allSubGraphsOutputs,
+        nodeTemplate,
+        edgeTemplate,
+        i_prefix,
+        nodes,
+        edges
+    );
   }
 
   std::string currentSubGraphTemplate, sgName;

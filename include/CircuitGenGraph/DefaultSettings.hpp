@@ -1,7 +1,9 @@
 #pragma once
 
+#include <algorithm>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <utility>
 #include <vector>
@@ -306,7 +308,19 @@ public:
 
   static void        resetSingletone() { d_singleton = nullptr; }
 
+  template<typename T, typename M, size_t N>
+  static std::pair<T, M>*
+      findPairByKey(std::pair<T, M> (&iterable)[N], const T& key) {
+    auto* iter = std::find_if(
+        std::begin(iterable),
+        std::end(iterable),
+        [key](const auto& x) { return x.first == key; }
+    );
+    return iter;
+  }
+
 protected:
+  static std::mutex                       singletoneProtection;
   std::string                             d_name;
   static std::shared_ptr<DefaultSettings> d_singleton;
   std::string                             d_path;
@@ -326,25 +340,9 @@ protected:
 
   };
 
-  std::map<std::string, Gates> stringToGate = {
-      {"and", Gates::GateAnd},
-      {"nand", Gates::GateNand},
-      {"or", Gates::GateOr},
-      {"nor", Gates::GateNor},
-      {"not", Gates::GateNot},
-      {"buf", Gates::GateBuf},
-      {"xor", Gates::GateXor},
-      {"xnor", Gates::GateXnor}};
+  static std::vector<Gates>                       d_logicElements;
 
-  std::vector<Gates> d_logicElements = {
-      Gates::GateAnd,
-      Gates::GateNand,
-      Gates::GateOr,
-      Gates::GateNor,
-      Gates::GateXor,
-      Gates::GateXnor,
-      Gates::GateNot,
-      Gates::GateBuf};
+  static std::pair<std::string, Gates>            stringToGate[8];
 
   static std::pair<VertexTypes, std::string_view> vertexToString[5];
 
