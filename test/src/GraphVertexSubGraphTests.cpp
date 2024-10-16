@@ -112,7 +112,7 @@ TEST(TestToVerilog, TestReturnPairCreateCorrectFile) {
   EXPECT_EQ(subGraph1.toVerilog(std::filesystem::current_path()).second, "");
   std::string loadFile = loadStringFile(curPath + '/' + fileName);
   loadFile             = loadFile.substr(loadFile.find("\n") + 2);
-  LOG(INFO) << loadFile;
+  // LOG(INFO) << loadFile;
   EXPECT_EQ(
       loadFile,
       "module testGraph(\n"

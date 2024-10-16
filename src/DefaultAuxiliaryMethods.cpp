@@ -69,7 +69,7 @@ std::string AuxMethods::dotReturnToString(DotReturn dot) {
         printingSubGraph = true;
         break;
       case DotTypes::DotExit:
-        LOG(INFO) << "tab: " << tab;
+        // LOG(INFO) << "tab: " << tab;
         if (printingSubGraph)
           s += dotTab * --tab + "}\n";
         break;

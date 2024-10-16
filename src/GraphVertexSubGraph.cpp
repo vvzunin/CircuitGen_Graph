@@ -44,8 +44,8 @@ void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
     return;
   }
   for (VertexPtr vert : d_subGraph->getVerticesByType(VertexTypes::output)) {
-    LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
-              << vert->getTypeName() << ")";
+    // LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
+              // << vert->getTypeName() << ")";
     vert->updateLevel(i_recalculate, tab + "  ");
   }
   d_needUpdate = true;

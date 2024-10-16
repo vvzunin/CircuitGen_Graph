@@ -52,7 +52,7 @@ void GraphVertexConstant::updateLevel(bool i_recalculate, std::string tab) {
   if (d_needUpdate && !i_recalculate) {
     return;
   }
-  LOG(INFO) << tab << "0. " << d_name << " (" << getTypeName() << ")";
+  // LOG(INFO) << tab << "0. " << d_name << " (" << getTypeName() << ")";
   d_level      = 0;
   d_needUpdate = true;
 }

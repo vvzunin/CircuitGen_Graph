@@ -13,7 +13,7 @@ TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrsDefName) {
       "TestConstructorWithoutIName", "WithoutDefaultInputParametrsDefName"
   );
   GraphVertexConstant constant('z', memoryOwnerConst);
-  LOG(INFO) << constant;
+  // LOG(INFO) << constant;
   std::string graphNum = std::to_string(0);
   EXPECT_EQ(constant.getType(), VertexTypes::constant);
   EXPECT_EQ(constant.getTypeName(), "const");
