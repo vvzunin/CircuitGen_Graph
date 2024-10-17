@@ -35,8 +35,14 @@ public:
   /// @param i_type i_type Type of the vertex. Default is VertexTypes::input.
 
   GraphVertexInput(
-      GraphPtr          i_baseGraph = nullptr,
-      const VertexTypes i_type      = VertexTypes::input
+      GraphPtr          i_baseGraph,
+      const VertexTypes i_type = VertexTypes::input
+  );
+
+  GraphVertexInput(
+      GraphMemory&      memory,
+      const VertexTypes i_type      = VertexTypes::input,
+      GraphPtr          i_baseGraph = nullptr
   );
 
   /// @brief GraphVertexInput
@@ -46,9 +52,9 @@ public:
   /// @param i_baseGraph Pointer to the base graph.
   /// @param i_type Type of the vertex.
   GraphVertexInput(
-      const std::string i_name,
-      GraphPtr          i_baseGraph = nullptr,
-      const VertexTypes i_type      = VertexTypes::input
+      std::string_view  i_name,
+      GraphPtr          i_baseGraph,
+      const VertexTypes i_type = VertexTypes::input
   );
 
   /// @brief updateValue A virtual function for updating the vertex value.
@@ -64,7 +70,8 @@ public:
   /// @brief updateLevel It is designed to update the level of the current
   /// vertex in a directed graph based on the levels of its input connections
 
-  virtual void updateLevel(std::string tab = "") override;
+  virtual void updateLevel(bool i_recalculate = false, std::string tab = "")
+      override;
 
   DotReturn    toDOT() override;
 
@@ -85,22 +92,31 @@ private:
 
 class GraphVertexConstant : public GraphVertexInput {
 public:
-  GraphVertexConstant(char i_const, GraphPtr i_baseGraph = nullptr);
+  GraphVertexConstant(char i_const, GraphPtr i_baseGraph);
 
   GraphVertexConstant(
-      char              i_const,
-      const std::string i_name,
-      GraphPtr          i_baseGraph = nullptr
+      char         i_const,
+      GraphMemory& memory,
+      GraphPtr     i_baseGraph = nullptr
   );
+
+  GraphVertexConstant(
+      char             i_const,
+      std::string_view i_name,
+      GraphPtr         i_baseGraph
+  );
+
+  size_t       calculateHash(bool i_recalculate = false) override;
 
   /// @brief updateLevel updates the level of the current vertex in the graph
   /// based on the levels of its incoming connections
 
-  virtual void updateLevel(std::string tab = "") override;
+  virtual void updateLevel(bool i_recalculate = false, std::string tab = "")
+      override;
   std::string  toVerilog() override;
   DotReturn    toDOT() override;
 
-  /// @brief getInstance
+  /// @brief getDefaultInstance
   /// TO DO:
 
   std::string  getVerilogInstance();
@@ -116,19 +132,25 @@ private:
 /// inside. Is used for storing this pointer for providing graph
 /// connectivity
 /// @param d_subGraph Pointer to the subgraph associated with this vertex
-/// @param hashed Cached hash value of the vertex
+/// @param d_hashed Cached hash value of the vertex
 class GraphVertexSubGraph : public GraphVertexBase {
 public:
-  GraphVertexSubGraph(GraphPtr i_subGraph, GraphPtr i_baseGraph = nullptr);
+  GraphVertexSubGraph(GraphPtr i_subGraph, GraphPtr i_baseGraph);
 
   GraphVertexSubGraph(
-      GraphPtr           i_subGraph,
-      const std::string& i_name,
-      GraphPtr           i_baseGraph = nullptr
+      GraphPtr     i_subGraph,
+      GraphMemory& memory,
+      GraphPtr     i_baseGraph = nullptr
   );
 
-  char        updateValue() override;
-  void        updateLevel(std::string tab = "") override;
+  GraphVertexSubGraph(
+      GraphPtr         i_subGraph,
+      std::string_view i_name,
+      GraphPtr         i_baseGraph
+  );
+
+  char updateValue() override;
+  void updateLevel(bool i_recalculate = false, std::string tab = "") override;
 
   std::string toVerilog() override;
   DotReturn   toDOT() override;
@@ -164,7 +186,7 @@ public:
   /// @return
   std::string getVerilogInstance() override;
 
-  std::string calculateHash(bool recalculate = false) override;
+  size_t      calculateHash(bool i_recalculate = false) override;
 
   void        setSubGraph(GraphPtr i_subGraph);
   GraphPtr    getSubGraph() const;
@@ -178,8 +200,7 @@ public:
   virtual void           log(el::base::type::ostream_t& os) const override;
 
 private:
-  GraphPtr    d_subGraph;
-  std::string hashed;
+  GraphPtr d_subGraph;
 };
 
 /// class GraphVertexOutput It is a vertex of the graph, specially designed for
@@ -188,9 +209,11 @@ private:
 
 class GraphVertexOutput : public GraphVertexBase {
 public:
-  GraphVertexOutput(GraphPtr i_baseGraph = nullptr);
+  GraphVertexOutput(GraphPtr i_baseGraph);
 
-  GraphVertexOutput(const std::string i_name, GraphPtr i_baseGraph = nullptr);
+  GraphVertexOutput(GraphMemory& memory, GraphPtr i_baseGraph = nullptr);
+
+  GraphVertexOutput(std::string_view i_name, GraphPtr i_baseGraph);
 
   /// @brief updateValue updates the value of the current vertex of the graph
   /// based on the values of its incoming connections and the type of logical
@@ -210,7 +233,8 @@ public:
   /// vertices to which it is connected, and sets the level of the current
   /// vertex to one higher than the highest level
 
-  virtual void updateLevel(std::string tab = "") override;
+  virtual void updateLevel(bool i_recalculate = false, std::string tab = "")
+      override;
 
   DotReturn    toDOT() override;
 
@@ -226,13 +250,15 @@ private:
 
 class GraphVertexGates : public GraphVertexBase {
 public:
-  GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph = nullptr);
+  GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph);
 
   GraphVertexGates(
-      Gates             i_gate,
-      const std::string i_name,
-      GraphPtr          i_baseGraph = nullptr
+      Gates        i_gate,
+      GraphMemory& memory,
+      GraphPtr     i_baseGraph = nullptr
   );
+
+  GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph);
 
   /// @brief updateValue
   /// Updates the value of the vertex
@@ -247,15 +273,15 @@ public:
 
   /// @brief calculateHash
   /// Calculates the hash value of the vertex
-  /// @param recalculate Flag indicating whether to recalculate the hash value
-  /// (default false)
+  /// @param i_recalculate Flag indicating whether to i_recalculate the hash
+  /// value (default false)
   /// @throws None.
   /// @code
   /// TO DO:
   /// @endcode
   /// @return The calculated hash value as a string
 
-  std::string  calculateHash(bool recalculate = false) override;
+  size_t       calculateHash(bool i_recalculate = false) override;
 
   /// @brief getVerilogString
   /// Gets a string in Verilog format representing the current vertex
@@ -293,8 +319,7 @@ public:
   virtual void log(el::base::type::ostream_t& os) const override;
 
 private:
-  Gates       d_gate;
-  std::string hashed;
+  Gates d_gate;
   // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых
   // логических операций.
 };

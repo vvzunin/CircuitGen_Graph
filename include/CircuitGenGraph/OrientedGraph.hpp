@@ -13,6 +13,7 @@
 
 #include <CircuitGenGraph/DefaultSettings.hpp>
 #include <CircuitGenGraph/enums.hpp>
+#include <CircuitGenGraph/GraphMemory.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
 #include "easyloggingpp/easylogging++.h"
@@ -75,6 +76,7 @@ class GraphVertexBase;  // Проблема циклического опред�
 /// @param d_settings Shared pointer to DefaultSettings instance
 
 class OrientedGraph :
+  public GraphMemory,
   public std::enable_shared_from_this<OrientedGraph>,
   public el::Loggable {
 public:
@@ -85,12 +87,10 @@ public:
 
   virtual ~OrientedGraph();
 
-  OrientedGraph& operator=(const OrientedGraph& other
-  ) = default;  // оператор копирующего присваивания
-  OrientedGraph& operator=(OrientedGraph&& other
-  ) = default;  // оператор перемещающего присваивания
-  OrientedGraph(const OrientedGraph& other) = default;
-  OrientedGraph(OrientedGraph&& other)      = default;
+  OrientedGraph& operator=(const OrientedGraph& other) = delete;
+  OrientedGraph& operator=(OrientedGraph&& other)      = delete;
+  OrientedGraph(const OrientedGraph& other)            = delete;
+  OrientedGraph(OrientedGraph&& other)                 = delete;
 
   // Количество gate в графе, за исключением подграфов
   /// @brief baseSize returns the number of "gate" type vertices in the graph
@@ -146,7 +146,7 @@ public:
   ///
   /// */
 
-  void        updateLevels();
+  void        updateLevels(bool i_recalculate = false);
 
   /// @brief getMaxLevel
   /// Calculates and returns the maximum level of the output vertices in the
@@ -385,7 +385,7 @@ public:
   DotReturn getGraphDotInstance();
   DotReturn toDOT();
   std::pair<bool, std::string>
-              toDOT(std::string i_path, std::string i_filename = "");
+       toDOT(std::string i_path, std::string i_filename = "");
 
   /// @brief toGraphML Writes the graph structure in GraphML format to the
   /// specified output stream
@@ -396,15 +396,22 @@ public:
   /// written in GraphML format, and false otherwise. In this case, it always
   /// returns true.
 
-  bool        toGraphMLClassic(std::ofstream& i_fileStream) const;
-  bool        toGraphMLPseudoABCD(std::ofstream& i_fileStream) const;
-  bool        toGraphMLOpenABCD(std::ofstream& i_fileStream) const;
-  std::string toGraphMLClassic(
-      uint16_t           i_indent = 0,
-      const std::string& i_prefix = ""
-  ) const;
-  std::string            toGraphMLPseudoABCD() const;
-  std::string            toGraphMLOpenABCD() const;
+  bool toGraphMLClassic(std::ofstream& i_fileStream);
+  bool toGraphMLPseudoABCD(std::ofstream& i_fileStream);
+  bool toGraphMLOpenABCD(std::ofstream& i_fileStream);
+  void parseVertexToGraphML(
+      const VertexTypes&            vertexType,
+      const std::vector<VertexPtr>& vertexVector,
+      const std::string&            nodeTemplate,
+      const std::string&            edgeTemplate,
+      const std::string&            i_prefix,
+      std::string&                  nodes,
+      std::string&                  edges
+  );
+  std::string
+      toGraphMLClassic(uint16_t i_indent = 0, const std::string& i_prefix = "");
+  std::string            toGraphMLPseudoABCD();
+  std::string            toGraphMLOpenABCD();
   // visualize
   // calcGraph
 
@@ -412,26 +419,26 @@ public:
 
   std::vector<VertexPtr> getVerticesByType(
       const VertexTypes& i_type,
-      const std::string& i_name         = "",
+      std::string_view   i_name         = "",
       const bool&        i_addSubGraphs = false
   ) const;
   std::vector<VertexPtr> getVerticesByLevel(const uint32_t& i_level);
 
   std::vector<VertexPtr> getVerticesByName(
-      const std::string& i_name,
-      const bool&        i_addSubGraphs = false
+      std::string_view i_name,
+      const bool&      i_addSubGraphs = false
   ) const;
 
   bool                    operator==(const OrientedGraph& rhs);
 
   /// @brief calculateHash calculates hash values for a graph based on the hash
   /// values of its vertices
-  /// @param recalculate A Boolean value indicating whether the hash value
+  /// @param i_recalculate A Boolean value indicating whether the hash value
   /// should be recalculated even if it has already been previously calculated.
   /// By default, false.
   /// @return A string representing the hash value of the graph
 
-  std::string             calculateHash(bool recalculate = false);
+  std::string             calculateHash(bool i_recalculate = false);
 
   // @brief getGatesCount Returns a display containing the number of each gate
   /// type in the graph
@@ -467,7 +474,8 @@ private:
   GraphPtrWeak              d_currentParentGraph;
   size_t                    d_edgesCount = 0;
 
-  std::string               d_hashed     = "";
+  // TODO check if can be zero. If it is possible, add flag
+  size_t                    d_hashed     = 0;
   bool                      d_isSubGraph = false;
 
   std::string               d_name;
@@ -523,5 +531,5 @@ private:
   std::map<Gates, std::map<Gates, size_t>> d_edgesGatesCount;
 
   std::shared_ptr<DefaultSettings>         d_settings =
-      DefaultSettings::getInstance("OrientedGraph");
+      DefaultSettings::getDefaultInstance("OrientedGraph");
 };
