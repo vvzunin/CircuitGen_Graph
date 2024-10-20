@@ -11,5 +11,5 @@ void initLogging(string testName, string subtestName) {
   el::Loggers::addFlag(el::LoggingFlag::NewLineForContainer);
   el::Loggers::addFlag(el::LoggingFlag::LogDetailedCrashReason);
   el::Loggers::addFlag(el::LoggingFlag::ColoredTerminalOutput);
-  LOG(INFO) << "Logging started\n\n";
+  // LOG(INFO) << "Logging started\n\n";
 }

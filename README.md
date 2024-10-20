@@ -37,6 +37,30 @@
 > #include "easyloggingpp/easylogging++.h"
 > INITIALIZE_EASYLOGGINGPP
 
+## Установка необходимых пакетов
+
+### Установка пакетов с помощью apt
+
+```
+sudo apt install clang clang-tidy clang-format-15 doxygen g++ gcc make openssl cmake
+```
+
+### Установка cmake 3.28.1
+В случае проблем при установке cmake, попробуйте данный способ:
+```
+sudo apt install tar wget
+cd ~/
+wget https://cmake.org/files/v3.28/cmake-3.28.1.tar.gz
+tar xzf cmake-3.28.1.tar.gz
+rm -rf cmake-3.28.1.tar.gz
+cd cmake-3.28.1
+./bootstrap
+make -j$(nproc)
+sudo make install
+cd ..
+sudo rm -rf cmake-3.28.1
+```
+
 ## Режим разработчика
 <a name="hacking"></a> 
 

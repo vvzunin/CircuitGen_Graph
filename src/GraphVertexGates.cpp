@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
+
 #include "easyloggingpp/easylogging++.h"
 
 GraphVertexGates::GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph) :
@@ -9,9 +10,18 @@ GraphVertexGates::GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph) :
 }
 
 GraphVertexGates::GraphVertexGates(
-    Gates             i_gate,
-    const std::string i_name,
-    GraphPtr          i_baseGraph
+    Gates        i_gate,
+    GraphMemory& memory,
+    GraphPtr     i_baseGraph
+) :
+  GraphVertexBase(VertexTypes::gate, memory, i_baseGraph) {
+  d_gate = i_gate;
+}
+
+GraphVertexGates::GraphVertexGates(
+    Gates            i_gate,
+    std::string_view i_name,
+    GraphPtr         i_baseGraph
 ) :
   GraphVertexBase(VertexTypes::gate, i_name, i_baseGraph) {
   d_gate = i_gate;
@@ -69,27 +79,28 @@ char GraphVertexGates::updateValue() {
   return d_value;
 }
 
-std::string GraphVertexGates::calculateHash(bool recalculate) {
-  if (hashed != "" && !recalculate)
-    return hashed;
+size_t GraphVertexGates::calculateHash(bool i_recalculate) {
+  if (d_hashed && !i_recalculate)
+    return d_hashed;
 
-  hashed = std::to_string(d_outConnections.size()) + std::to_string(d_gate);
+  std::string hashedStr =
+      std::to_string(d_inConnections.size()) + std::to_string(d_gate);
 
-  // futuire sorted struct
-  std::vector<std::string> hashed_data;
+  // future sorted struct
+  std::vector<size_t> hashed_data;
 
   for (auto& child : d_outConnections) {
-    hashed_data.push_back(child->calculateHash(recalculate));
+    hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
   for (const auto& sub : hashed_data) {
-    hashed += sub;
+    hashedStr += sub;
   }
 
-  hashed = std::to_string(std::hash<std::string> {}(hashed));
+  d_hashed = std::hash<std::string> {}(hashedStr);
 
-  return hashed;
+  return d_hashed;
 }
 
 std::string GraphVertexGates::getVerilogString() const {
@@ -146,10 +157,10 @@ std::string GraphVertexGates::toVerilog() {
     LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
     return "";
   }
-  std::string basic = "assign " + d_name + " = ";
+  std::string basic = "assign " + getName() + " = ";
 
   std::string oper  = VertexUtils::gateToString(d_gate);
-  
+
   if (VertexPtr ptr = d_inConnections.back().lock()) {
     if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
       basic += oper + ptr->getName() + ";";
@@ -193,18 +204,18 @@ DotReturn GraphVertexGates::toDOT() {
 
   DotReturn dot;
 
-  dot.push_back({DotTypes::DotGate,{
-    {"name", d_name},
-    {"label", d_name},
-    {"level", std::to_string(d_level)}
-  }});
+  dot.push_back(
+      {DotTypes::DotGate,
+       {{"name", getName()},
+        {"label", getName()},
+        {"level", std::to_string(d_level)}}}
+  );
 
   for (VertexPtrWeak ptrWeak : d_inConnections) {
-    if (VertexPtr ptr = ptrWeak.lock()) 
-      dot.push_back({DotTypes::DotEdge, {
-        {"from", ptr->getName()},
-        {"to", d_name}
-      }});
+    if (VertexPtr ptr = ptrWeak.lock())
+      dot.push_back(
+          {DotTypes::DotEdge, {{"from", ptr->getName()}, {"to", getName()}}}
+      );
     else {
       LOG(ERROR) << "Dead pointer!" << d_name << std::endl;
       throw std::invalid_argument("Dead pointer!");
@@ -222,9 +233,13 @@ bool GraphVertexGates::isSubgraphBuffer() const {
 
 void GraphVertexGates::log(el::base::type::ostream_t& os) const {
   GraphPtr gr = d_baseGraph.lock();
-  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";
-  os << "Vertex Type: " << d_settings->parseVertexToString(VertexTypes::gate) << "(" + d_settings->parseGateToString(d_gate) + ")"<< "\n";
+  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
+     << ")\n";
+  os << "Vertex Type: "
+     << DefaultSettings::parseVertexToString(VertexTypes::gate)
+     << "(" + DefaultSettings::parseGateToString(d_gate) + ")"
+     << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
-  os << "Vertex Hash: " << hashed << "\n";
+  os << "Vertex Hash: " << d_hashed << "\n";
 }

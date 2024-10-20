@@ -4,6 +4,7 @@
 #include <unordered_set>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
+
 #include "easyloggingpp/easylogging++.h"
 
 GraphVertexSubGraph::GraphVertexSubGraph(
@@ -13,10 +14,20 @@ GraphVertexSubGraph::GraphVertexSubGraph(
   GraphVertexBase(VertexTypes::subGraph, i_baseGraph) {
   d_subGraph = i_subGraph;
 }
+
 GraphVertexSubGraph::GraphVertexSubGraph(
-    GraphPtr           i_subGraph,
-    const std::string& i_name,
-    GraphPtr           i_baseGraph
+    GraphPtr     i_subGraph,
+    GraphMemory& memory,
+    GraphPtr     i_baseGraph
+) :
+  GraphVertexBase(VertexTypes::subGraph, memory, i_baseGraph) {
+  d_subGraph = i_subGraph;
+}
+
+GraphVertexSubGraph::GraphVertexSubGraph(
+    GraphPtr         i_subGraph,
+    std::string_view i_name,
+    GraphPtr         i_baseGraph
 ) :
   GraphVertexBase(VertexTypes::subGraph, i_name, i_baseGraph) {
   d_subGraph = i_subGraph;
@@ -27,12 +38,17 @@ char GraphVertexSubGraph::updateValue() {
   return 'x';
 }
 
-void GraphVertexSubGraph::updateLevel(std::string tab) {
+void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
   int counter = 0;
-  for (VertexPtr vert : d_subGraph->getVerticesByType(VertexTypes::output)) {
-    LOG(INFO) << tab << counter++ << ". " << vert->getName() << " (" << vert->getTypeName() << ")";
-    vert->updateLevel(tab + "  ");
+  if (d_needUpdate && !i_recalculate) {
+    return;
   }
+  for (VertexPtr vert : d_subGraph->getVerticesByType(VertexTypes::output)) {
+    // LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
+    // << vert->getTypeName() << ")";
+    vert->updateLevel(i_recalculate, tab + "  ");
+  }
+  d_needUpdate = true;
 }
 
 // In fact is not needed
@@ -95,28 +111,29 @@ GraphPtr GraphVertexSubGraph::getSubGraph() const {
   return d_subGraph;
 }
 
-std::string GraphVertexSubGraph::calculateHash(bool recalculate) {
-  if (hashed != "" && !recalculate)
-    return hashed;
+size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
+  if (d_hashed && !i_recalculate)
+    return d_hashed;
 
   // calc hash from subgraph
-  hashed = d_subGraph->calculateHash();
+  std::string hashedStr =
+      d_subGraph->calculateHash() + std::to_string(d_inConnections.size());
 
   // futuire sorted struct
-  std::vector<std::string> hashed_data;
+  std::vector<size_t> hashed_data;
 
   for (auto& child : d_outConnections) {
-    hashed_data.push_back(child->calculateHash(recalculate));
+    hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
   for (const auto& sub : hashed_data) {
-    hashed += sub;
+    hashedStr += sub;
   }
 
-  hashed = std::to_string(std::hash<std::string> {}(hashed));
+  d_hashed = std::hash<std::string> {}(hashedStr);
 
-  return hashed;
+  return d_hashed;
 }
 
 std::vector<VertexPtr> GraphVertexSubGraph::getOutputBuffersByOuterInput(
@@ -233,8 +250,10 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
 
 void GraphVertexSubGraph::log(el::base::type::ostream_t& os) const {
   GraphPtr gr = d_baseGraph.lock();
-  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";
-  os << "Vertex Type: " << d_settings->parseVertexToString(VertexTypes::subGraph) << "\n";
-  os << "Vertex Hash: " << hashed;
+  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
+     << ")\n";
+  os << "Vertex Type: "
+     << DefaultSettings::parseVertexToString(VertexTypes::subGraph) << "\n";
+  os << "Vertex Hash: " << d_hashed;
   os << *d_subGraph;
 }

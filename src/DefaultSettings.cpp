@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -6,33 +5,82 @@
 
 #include <CircuitGenGraph/DefaultSettings.hpp>
 
-std::shared_ptr<DefaultSettings> DefaultSettings::d_singleton = nullptr;
+/* start of static variable values declaration */
 
-std::shared_ptr<DefaultSettings> DefaultSettings::getInstance(const std::string& i_value) {
+std::shared_ptr<DefaultSettings> DefaultSettings::d_singleton = nullptr;
+std::mutex                       DefaultSettings::singletoneProtection     = {};
+
+std::pair<VertexTypes, std::string_view> DefaultSettings::vertexToString[] = {
+    {VertexTypes::input, "input"},
+    {VertexTypes::output, "output"},
+    {VertexTypes::constant, "const"},
+    {VertexTypes::subGraph, "subGraph"},
+    {VertexTypes::gate, "gate"}};
+
+std::pair<Gates, std::string_view> DefaultSettings::gateToString[] = {
+    {Gates::GateAnd, "and"},
+    {Gates::GateNand, "nand"},
+    {Gates::GateOr, "or"},
+    {Gates::GateNor, "nor"},
+    {Gates::GateNot, "not"},
+    {Gates::GateBuf, "buf"},
+    {Gates::GateXor, "xor"},
+    {Gates::GateXnor, "xnor"},
+    {Gates::GateDefault, "ERROR"}};
+
+std::pair<std::string, Gates> DefaultSettings::stringToGate[] = {
+    {"and", Gates::GateAnd},
+    {"nand", Gates::GateNand},
+    {"or", Gates::GateOr},
+    {"nor", Gates::GateNor},
+    {"not", Gates::GateNot},
+    {"buf", Gates::GateBuf},
+    {"xor", Gates::GateXor},
+    {"xnor", Gates::GateXnor}};
+
+std::vector<Gates> DefaultSettings::d_logicElements = {
+    Gates::GateAnd,
+    Gates::GateNand,
+    Gates::GateOr,
+    Gates::GateNor,
+    Gates::GateXor,
+    Gates::GateXnor,
+    Gates::GateNot,
+    Gates::GateBuf};
+
+/* end of static variable values declaration */
+
+std::shared_ptr<DefaultSettings> DefaultSettings::getDefaultInstance(
+    const std::string& i_value
+) {
   /**
    * This is a safer way to create an instance. instance = new Singleton is
    * dangeruous in case two instance threads wants to access at the same time
    */
+  singletoneProtection.lock();
   if (d_singleton == nullptr) {
-    d_singleton.reset(new DefaultSettings(i_value));
+    d_singleton = std::make_shared<DefaultSettings>(i_value);
     d_singleton->loadSettings();
   }
+  singletoneProtection.unlock();
   return d_singleton;
 }
 
 void DefaultSettings::loadSettings() {
+  int32_t maxSize = 0;
   for (const auto& [key, value] : d_logicOperations) {
-    int32_t i = value.second;
-    if (!d_operationsToHierarchy.count(i))
-      d_operationsToHierarchy[i] = {};
-    d_operationsToHierarchy[i].push_back(value.first);
+    maxSize = std::max(maxSize, value.second);
+  }
+  d_operationsToHierarchy.resize(maxSize + 1);
+  for (const auto& [key, value] : d_logicOperations) {
+    d_operationsToHierarchy[value.second] = value.first;
   }
 
   for (const auto& [key, value] : d_logicOperations)
     d_operationsToName[value.first] = key;
 }
 
-std::string DefaultSettings::getInstanceName() const {
+std::string DefaultSettings::getDefaultInstanceName() const {
   return d_name;
 }
 
@@ -57,12 +105,11 @@ std::pair<std::vector<bool>, std::vector<Gates>>
   return std::make_pair(oneGate, d_logicElements);
 }
 
-std::vector<std::string> DefaultSettings::fromOperationsToHierarchy(int32_t key
-) const {
+std::string_view DefaultSettings::fromOperationsToHierarchy(int32_t key) const {
   return d_operationsToHierarchy.at(key);
 }
 
-std::string DefaultSettings::fromOperationsToName(const std::string& i_op) const {
+std::string DefaultSettings::fromOperationsToName(std::string_view i_op) const {
   return d_operationsToName.at(i_op);
 }
 
@@ -72,13 +119,13 @@ std::map<std::string, std::pair<std::string, int32_t>>
 }
 
 Gates DefaultSettings::parseStringToGate(std::string i_gate) const {
-  return stringToGate.at(i_gate);
+  return findPairByKey(stringToGate, i_gate)->second;
 }
 
-std::string DefaultSettings::parseGateToString(Gates gate) const {
-  return gateToString.at(gate);
+std::string DefaultSettings::parseGateToString(Gates gate) {
+  return std::string(findPairByKey(gateToString, gate)->second);
 }
 
-std::string DefaultSettings::parseVertexToString(VertexTypes vertex) const {
-  return vertexToString.at(vertex);
+std::string DefaultSettings::parseVertexToString(VertexTypes vertex) {
+  return std::string(findPairByKey(vertexToString, vertex)->second);
 };

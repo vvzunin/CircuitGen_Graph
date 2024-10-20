@@ -43,15 +43,12 @@ TEST(TestSetNameAndGetName, ReturnCorrectName) {
   EXPECT_EQ(graphPtr1->getName(), "graph_0");
   EXPECT_EQ(graphPtr2->getName(), "graph_1");
 
-  GraphPtr graphPtr3 = std::make_shared<OrientedGraph>(*graphPtr1);
+  GraphPtr graphPtr3 = std::make_shared<OrientedGraph>();
+  graphPtr3          = graphPtr1;
   EXPECT_EQ(graphPtr3->getName(), "graph_0");
 
-  GraphPtr graphPtr4 = std::make_shared<OrientedGraph>();
-  graphPtr4          = graphPtr1;
-  EXPECT_EQ(graphPtr4->getName(), "graph_0");
-
   graphPtr1->setName("Changed");
-  EXPECT_EQ(graphPtr1->getName(), "Changed");
+  EXPECT_EQ(graphPtr3->getName(), "Changed");
 }
 
 TEST(TestBaseSizeAndFullSizeAndSumFullSize, ReturnCorrectSize) {
@@ -119,7 +116,7 @@ TEST(TestBaseSizeAndFullSizeAndSumFullSize, ReturnCorrectSize) {
   EXPECT_EQ(graphPtr->fullSize(), 20);
   // Does sumFullSize() return sum from subGraphs too
   // EXPECT_EQ(graph.sumFullSize(), 32);
-  LOG(INFO) << *graphPtr << std::endl;
+  // LOG(INFO) << *graphPtr << std::endl;
 }
 
 TEST(TestIsEmptyAndIsEmptyFull, ReturnCorrectSize) {
@@ -554,6 +551,36 @@ TEST(TestCalculateHash, GraphsWithTheSameStructureHaveEqualHash) {
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
 }
 
+TEST(TestCalculateHash, GraphsWithTheSameStructureButDifferentConst) {
+  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
+  GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
+
+  EXPECT_EQ(graphPtr1->calculateHash(), graphPtr1->calculateHash());
+
+  auto inp1 = graphPtr1->addInput();
+  auto inp2 = graphPtr2->addInput();
+  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+
+  auto gate1 = graphPtr1->addGate(Gates::GateAnd);
+  auto gate2 = graphPtr2->addGate(Gates::GateAnd);
+  graphPtr1->addEdge(inp1, gate1);
+  graphPtr2->addEdge(inp2, gate2);
+  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+
+  auto out1 = graphPtr1->addOutput();
+  auto out2 = graphPtr2->addOutput();
+  graphPtr1->addEdge(gate1, out1);
+  graphPtr2->addEdge(gate2, out2);
+  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+
+
+  auto const1 = graphPtr1->addConst('0');
+  auto const2 = graphPtr2->addConst('1');
+  graphPtr1->addEdge(const1, gate1);
+  graphPtr2->addEdge(const2, gate2);
+  EXPECT_NE(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+}
+
 TEST(TestGetGatesCount, ReturnCorrectGates) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
   EXPECT_EQ(graphPtr->getGatesCount().size(), 8);
@@ -650,7 +677,7 @@ TEST(TestToVerilog, Simple) {
   std::string curPath  = std::filesystem::current_path();
   std::string loadFile = loadStringFile(curPath + "/testSimple.v");
   loadFile             = loadFile.substr(loadFile.find("\n") + 2);
-  LOG(INFO) << "Printing Verilog file: " << strs.first << "\n" << loadFile;
+  // LOG(INFO) << "Printing Verilog file: " << strs.first << "\n" << loadFile;
 }
 
 TEST(TestToVerilog, SubGraph) {
@@ -680,7 +707,7 @@ TEST(TestToVerilog, SubGraph) {
   std::string curPath  = std::filesystem::current_path();
   std::string loadFile = loadStringFile(curPath + "/testSubGraph.v");
   loadFile             = loadFile.substr(loadFile.find("\n") + 2);
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  // LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
 }
 
 TEST(TestToDOT, Simple) {
@@ -696,13 +723,13 @@ TEST(TestToDOT, Simple) {
   graphPtr->addEdges({gateAnd1, const1}, gateOr1);
   graphPtr->addEdge(gateOr1, out);
   auto strs = graphPtr->toDOT(".", "testSimple.dot");
-  LOG(INFO) << "toDot complete!";
+  // LOG(INFO) << "toDot complete!";
   std::string curPath = std::filesystem::current_path();
-  LOG(INFO) << "curPath: " << curPath;
+  // LOG(INFO) << "curPath: " << curPath;
   std::string loadFile = loadStringFile(curPath + "/testSimple.dot");
-  LOG(INFO) << "loadFile: " << loadFile;
+  // LOG(INFO) << "loadFile: " << loadFile;
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  // LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
 }
 
 TEST(TestToDOT, SubGraph) {
@@ -737,7 +764,7 @@ TEST(TestToDOT, SubGraph) {
   std::string curPath  = std::filesystem::current_path();
   std::string loadFile = loadStringFile(curPath + "/testSubGraph.dot");
   loadFile             = loadFile.substr(loadFile.find("\n") + 2);
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  // LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
 }
 
 TEST(TestToDOT, SubGraphUnroll) {
@@ -775,7 +802,7 @@ TEST(TestToDOT, SubGraphUnroll) {
   std::string curPath  = std::filesystem::current_path();
   std::string loadFile = loadStringFile(curPath + "/testSubGraphUnroll.dot");
   loadFile             = loadFile.substr(loadFile.find("\n") + 2);
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  // LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
 }
 
 TEST(TestToDOT, SubGraphUnroll2) {
@@ -792,7 +819,7 @@ TEST(TestToDOT, SubGraphUnroll2) {
   subGraphPtr->addEdges({gateAnd1, const1}, gateOr1);
   subGraphPtr->addEdge(gateOr1, outC);
   subGraphPtr->addEdge(gateAnd1, outD);
-  LOG(INFO) << "First subGraph added!";
+  // LOG(INFO) << "First subGraph added!";
 
   GraphPtr subGraphPtr2 = std::make_shared<OrientedGraph>("testSubGraph2");
   inA                   = subGraphPtr2->addInput("a");
@@ -806,7 +833,7 @@ TEST(TestToDOT, SubGraphUnroll2) {
   subGraphPtr2->addEdges({gateAnd1, const1}, gateOr1);
   subGraphPtr2->addEdge(gateOr1, outC);
   subGraphPtr2->addEdge(gateAnd1, outD);
-  LOG(INFO) << "Second subGraph added!";
+  // LOG(INFO) << "Second subGraph added!";
 
   GraphPtr graphPtr = std::make_shared<OrientedGraph>("testGraph");
   inA               = graphPtr->addInput("a");
@@ -814,39 +841,39 @@ TEST(TestToDOT, SubGraphUnroll2) {
   outC              = graphPtr->addOutput("c");
   outD              = graphPtr->addOutput("d");
   auto outE         = graphPtr->addOutput("e");
-  LOG(INFO) << "In/outs added to main graph";
+  // LOG(INFO) << "In/outs added to main graph";
 
   auto outs1 = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
   auto outs2 = graphPtr->addSubGraph(subGraphPtr2, {inA, inB});
-  LOG(INFO) << "SubGraphs added!";
+  // LOG(INFO) << "SubGraphs added!";
 
   auto gateAnd2 = graphPtr->addGate(Gates::GateAnd, "andAB2");
   auto gateAnd3 = graphPtr->addGate(Gates::GateAnd, "andAB3");
-  LOG(INFO) << "Two AND gate added";
+  // LOG(INFO) << "Two AND gate added";
 
   graphPtr->addEdge(outs1[0], gateAnd2);
   graphPtr->addEdge(outs1[1], gateAnd2);
-  LOG(INFO) << "outs1 to and";
+  // LOG(INFO) << "outs1 to and";
 
   graphPtr->addEdge(outs2[0], gateAnd3);
   graphPtr->addEdge(outs2[1], gateAnd3);
-  LOG(INFO) << "outs2 to and";
+  // LOG(INFO) << "outs2 to and";
 
   graphPtr->addEdge(gateAnd2, outC);
   graphPtr->addEdge(gateAnd3, outD);
-  LOG(INFO) << "ANDs to outs";
+  // LOG(INFO) << "ANDs to outs";
   graphPtr->addEdge(inB, outE);
-  LOG(INFO) << "inB to outE";
+  // LOG(INFO) << "inB to outE";
 
   GraphPtr unrollGraphPtr = graphPtr->unrollGraph();
-  LOG(INFO) << "Graph unrolled!";
+  // LOG(INFO) << "Graph unrolled!";
 
   std::filesystem::create_directories("./submodulesDOT");
   auto        strs     = unrollGraphPtr->toDOT(".", "testSubGraphUnroll2.dot");
   std::string curPath  = std::filesystem::current_path();
   std::string loadFile = loadStringFile(curPath + "/testSubGraphUnroll2.dot");
   loadFile             = loadFile.substr(loadFile.find("\n") + 2);
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  // LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
 }
 
 TEST(TestToDOT, SubGraphUnroll3) {
@@ -863,7 +890,7 @@ TEST(TestToDOT, SubGraphUnroll3) {
   subGraphPtr->addEdges({gateAnd1, const1}, gateOr1);
   subGraphPtr->addEdge(gateOr1, outC);
   subGraphPtr->addEdge(gateAnd1, outD);
-  LOG(INFO) << "First subGraph added!";
+  // LOG(INFO) << "First subGraph added!";
 
   GraphPtr subGraphPtr2 = std::make_shared<OrientedGraph>("testSubGraph2");
   inA                   = subGraphPtr2->addInput("a");
@@ -877,7 +904,7 @@ TEST(TestToDOT, SubGraphUnroll3) {
   subGraphPtr2->addEdges({gateAnd1, const1}, gateOr1);
   subGraphPtr2->addEdge(gateOr1, outC);
   subGraphPtr2->addEdge(gateAnd1, outD);
-  LOG(INFO) << "Second subGraph added!";
+  // LOG(INFO) << "Second subGraph added!";
   auto outs = subGraphPtr2->addSubGraph(subGraphPtr, {gateAnd1, gateOr1});
   subGraphPtr2->addEdge(outs[0], outC);
   subGraphPtr2->addEdge(outs[1], outD);
@@ -888,14 +915,14 @@ TEST(TestToDOT, SubGraphUnroll3) {
   outC              = graphPtr->addOutput("c");
   outD              = graphPtr->addOutput("d");
   auto outE         = graphPtr->addOutput("e");
-  LOG(INFO) << "In/outs added to main graph";
+  // LOG(INFO) << "In/outs added to main graph";
 
   auto outs2 = graphPtr->addSubGraph(subGraphPtr2, {inA, inB});
-  LOG(INFO) << "SubGraphs added!";
+  // LOG(INFO) << "SubGraphs added!";
 
   auto gateAnd2 = graphPtr->addGate(Gates::GateAnd, "andAB2");
   auto gateAnd3 = graphPtr->addGate(Gates::GateAnd, "andAB3");
-  LOG(INFO) << "Two AND gate added";
+  // LOG(INFO) << "Two AND gate added";
 
   graphPtr->addEdge(outs2[0], outC);
   graphPtr->addEdge(outs2[1], outD);
@@ -903,14 +930,14 @@ TEST(TestToDOT, SubGraphUnroll3) {
   graphPtr->addEdge(inB, outE);
 
   GraphPtr unrollGraphPtr = graphPtr->unrollGraph();
-  LOG(INFO) << "Graph unrolled!";
+  // LOG(INFO) << "Graph unrolled!";
 
   std::filesystem::create_directories("./submodulesDOT");
   auto        strs     = unrollGraphPtr->toDOT(".", "testSubGraphUnroll3.dot");
   std::string curPath  = std::filesystem::current_path();
   std::string loadFile = loadStringFile(curPath + "/testSubGraphUnroll3.dot");
   loadFile             = loadFile.substr(loadFile.find("\n") + 2);
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  // LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
 }
 
 TEST(TestToDOT, SubGraph3) {
@@ -927,7 +954,7 @@ TEST(TestToDOT, SubGraph3) {
   subGraphPtr->addEdges({gateAnd1, const1}, gateOr1);
   subGraphPtr->addEdge(gateOr1, outC);
   subGraphPtr->addEdge(gateAnd1, outD);
-  LOG(INFO) << "First subGraph added!";
+  // LOG(INFO) << "First subGraph added!";
 
   GraphPtr subGraphPtr2 = std::make_shared<OrientedGraph>("testSubGraph2");
   inA                   = subGraphPtr2->addInput("a");
@@ -941,7 +968,7 @@ TEST(TestToDOT, SubGraph3) {
   subGraphPtr2->addEdges({gateAnd1, const1}, gateOr1);
   subGraphPtr2->addEdge(gateOr1, outC);
   subGraphPtr2->addEdge(gateAnd1, outD);
-  LOG(INFO) << "Second subGraph added!";
+  // LOG(INFO) << "Second subGraph added!";
   auto outs = subGraphPtr2->addSubGraph(subGraphPtr, {gateAnd1, gateOr1});
   subGraphPtr2->addEdge(outs[0], outC);
   subGraphPtr2->addEdge(outs[1], outD);
@@ -952,10 +979,10 @@ TEST(TestToDOT, SubGraph3) {
   outC              = graphPtr->addOutput("c");
   outD              = graphPtr->addOutput("d");
   auto outE         = graphPtr->addOutput("e");
-  LOG(INFO) << "In/outs added to main graph";
+  // LOG(INFO) << "In/outs added to main graph";
 
   auto outs2 = graphPtr->addSubGraph(subGraphPtr2, {inA, inB});
-  LOG(INFO) << "SubGraphs added!";
+  // LOG(INFO) << "SubGraphs added!";
 
   graphPtr->addEdge(outs2[0], outC);
   graphPtr->addEdge(outs2[1], outD);
@@ -967,5 +994,5 @@ TEST(TestToDOT, SubGraph3) {
   std::string curPath  = std::filesystem::current_path();
   std::string loadFile = loadStringFile(curPath + "/testSubGraph3.dot");
   loadFile             = loadFile.substr(loadFile.find("\n") + 2);
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  // LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
 }
