@@ -15,8 +15,7 @@ std::pair<VertexTypes, std::string_view> DefaultSettings::vertexToString[] = {
     {VertexTypes::output, "output"},
     {VertexTypes::constant, "const"},
     {VertexTypes::subGraph, "subGraph"},
-    {VertexTypes::gate, "gate"}
-};
+    {VertexTypes::gate, "gate"}};
 
 std::pair<Gates, std::string_view> DefaultSettings::gateToString[] = {
     {Gates::GateAnd, "and"},
@@ -27,8 +26,7 @@ std::pair<Gates, std::string_view> DefaultSettings::gateToString[] = {
     {Gates::GateBuf, "buf"},
     {Gates::GateXor, "xor"},
     {Gates::GateXnor, "xnor"},
-    {Gates::GateDefault, "ERROR"}
-};
+    {Gates::GateDefault, "ERROR"}};
 
 std::pair<std::string, Gates> DefaultSettings::stringToGate[] = {
     {"and", Gates::GateAnd},
@@ -38,8 +36,7 @@ std::pair<std::string, Gates> DefaultSettings::stringToGate[] = {
     {"not", Gates::GateNot},
     {"buf", Gates::GateBuf},
     {"xor", Gates::GateXor},
-    {"xnor", Gates::GateXnor}
-};
+    {"xnor", Gates::GateXnor}};
 
 std::vector<Gates> DefaultSettings::d_logicElements = {
     Gates::GateAnd,
@@ -49,8 +46,7 @@ std::vector<Gates> DefaultSettings::d_logicElements = {
     Gates::GateXor,
     Gates::GateXnor,
     Gates::GateNot,
-    Gates::GateBuf
-};
+    Gates::GateBuf};
 
 /* end of static variable values declaration */
 
