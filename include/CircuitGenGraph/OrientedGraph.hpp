@@ -373,7 +373,7 @@ public:
 
   std::set<GraphPtr>                            getSubGraphs() const;
   std::set<GraphPtr>                            getSetSubGraphs() const;
-  std::map<VertexTypes, std::vector<VertexPtr>> getBaseVertexes() const;
+  std::array<std::vector<VertexPtr>, 5> getBaseVertexes() const;
   VertexPtr   getVerticeByIndex(size_t idx) const;
 
   std::string getGraphVerilogInstance();
@@ -461,7 +461,7 @@ public:
   std::map<size_t, std::vector<std::vector<VertexPtr>>> getSubGraphsOutputsPtr(
   );
 
-  GraphPtr     unrollGraph() const;
+  GraphPtr     unrollGraph();
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
@@ -481,9 +481,9 @@ public:
     return new (allocate<T>()) T(std::forward<Args>(args)...);
   }
 
-  std::pmr::vector<GraphVertexBase*>* createVector() {
-    using vecName = std::pmr::vector<GraphVertexBase*>;
-    return new (allocateForGraph<vecName>()) vecName(&getGraphResource());
+  std::vector<GraphVertexBase*>* createVector() {
+    using vecName = std::vector<GraphVertexBase*>;
+    return new (allocateForGraph<vecName>()) vecName();
   }
 
 private:
@@ -528,7 +528,7 @@ private:
   std::map<size_t, std::vector<std::vector<VertexPtr>>> d_subGraphsInputsPtr;
 
   std::set<GraphPtr>                                    d_subGraphs;
-  std::map<VertexTypes, std::vector<VertexPtr>>         d_vertexes;
+  std::array<std::vector<VertexPtr>, 5>                 d_vertexes;
 
   static std::atomic_size_t                             d_countGraph;
 

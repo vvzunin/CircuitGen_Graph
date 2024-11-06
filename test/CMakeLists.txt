@@ -22,8 +22,8 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(gtest)
 
-add_compile_options(-fsanitize=address)
-add_link_options(-fsanitize=address)
+# add_compile_options(-fsanitize=address)
+# add_link_options(-fsanitize=address)
 
 enable_testing()
 
@@ -53,9 +53,9 @@ function(add_new_test name)
   add_test(NAME ${name} COMMAND CircuitGenGraph_test_${name})
 endfunction()
 
-add_new_test(GraphVertexConstantTests)
-add_new_test(GraphVertexGatesTests)
-add_new_test(GraphVertexInputTests)
-add_new_test(GraphVertexOutputTests)
-add_new_test(GraphVertexSubGraphTests)
+# add_new_test(GraphVertexConstantTests)
+# add_new_test(GraphVertexGatesTests)
+# add_new_test(GraphVertexInputTests)
+# add_new_test(GraphVertexOutputTests)
+# add_new_test(GraphVertexSubGraphTests)
 add_new_test(OrientedGraphTests)

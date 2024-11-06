@@ -6,7 +6,7 @@
 
 #include "easyloggingpp/easylogging++.h"
 
-std::string          VertexUtils::gateToString(Gates i_type) {
+std::string VertexUtils::gateToString(Gates i_type) {
   switch (i_type) {
     case Gates::GateNot:
       return "~";
@@ -97,10 +97,7 @@ GraphVertexBase::GraphVertexBase(
   d_level          = 0;
 }
 
-GraphVertexBase::~GraphVertexBase() {
-  // delete d_outConnections;
-  // delete d_inConnections;
-}
+// GraphVertexBase::~GraphVertexBase() {}
 
 VertexTypes GraphVertexBase::getType() const {
   return d_type;
@@ -156,7 +153,7 @@ GraphPtrWeak GraphVertexBase::getBaseGraph() const {
   return d_baseGraph;
 }
 
-std::pmr::vector<VertexPtr>& GraphVertexBase::getInConnections() const {
+std::vector<VertexPtr>& GraphVertexBase::getInConnections() const {
   return *d_inConnections;
 }
 
@@ -216,9 +213,7 @@ bool GraphVertexBase::removeVertexToInConnections(
   }
 }
 
-std::pmr::vector<VertexPtr>& GraphVertexBase::getOutConnections() const {
-  std::clog << "HHH " << sizeof(GraphVertexBase) << ' ' << sizeof(VertexTypes)
-            << '\n';
+std::vector<VertexPtr>& GraphVertexBase::getOutConnections() const {
   return *d_outConnections;
 }
 

@@ -36,11 +36,11 @@ OrientedGraph::OrientedGraph(const std::string& i_name) : GraphMemory() {
   }
 
   d_vertexes = {
-      {VertexTypes::input, std::vector<VertexPtr>()},
-      {VertexTypes::output, std::vector<VertexPtr>()},
-      {VertexTypes::constant, std::vector<VertexPtr>()},
-      {VertexTypes::gate, std::vector<VertexPtr>()},
-      {VertexTypes::subGraph, std::vector<VertexPtr>()}
+      std::vector<VertexPtr>(),
+      std::vector<VertexPtr>(),
+      std::vector<VertexPtr>(),
+      std::vector<VertexPtr>(),
+      std::vector<VertexPtr>()
   };
 }
 
@@ -70,7 +70,7 @@ bool OrientedGraph::isEmpty() const {
 
 bool OrientedGraph::isEmptyFull() const {
   bool f = true;
-  for (const auto& [key, value] : d_vertexes)
+  for (const auto& value : d_vertexes)
     f &= value.size() == 0;
   if (!f)
     return f;
@@ -133,11 +133,9 @@ VertexPtr OrientedGraph::addOutput(const std::string& i_name) {
 
 VertexPtr
     OrientedGraph::addConst(const char& i_value, const std::string& i_name) {
-  auto name = i_name.empty() ? "" : internalize(i_name);
-  std::clog << "HERE " << name << '\n';
+  auto      name = i_name.empty() ? "" : internalize(i_name);
   VertexPtr newVertex =
       create<GraphVertexConstant>(i_value, name, shared_from_this());
-  std::clog << "HERE " << newVertex->getRawName() << '\n';
   d_vertexes[VertexTypes::constant].push_back(newVertex);
 
   return newVertex;
@@ -247,7 +245,7 @@ std::set<GraphPtr> OrientedGraph::getSubGraphs() const {
   return d_subGraphs;
 }
 
-std::map<VertexTypes, std::vector<VertexPtr>> OrientedGraph::getBaseVertexes(
+std::array<std::vector<VertexPtr>, 5> OrientedGraph::getBaseVertexes(
 ) const {
   return d_vertexes;
 }
@@ -312,7 +310,7 @@ std::vector<VertexPtr> OrientedGraph::getVerticesByName(
     const bool&      i_addSubGraphs
 ) const {
   std::vector<VertexPtr> resVert;
-  for (const auto& [key, value] : d_vertexes) {
+  for (const auto& value : d_vertexes) {
     for (VertexPtr vert : value)
       if (vert->getRawName() == i_name)
         resVert.push_back(vert);
@@ -789,9 +787,10 @@ std::string OrientedGraph::toGraphMLClassic(
 
   std::string       nodes, edges, graphs, vertexKindName;
 
-  for (const auto& [vertexType, vertexVector] : d_vertexes) {
+  uint8_t           counter = 0;
+  for (const auto& vertexVector : d_vertexes) {
     parseVertexToGraphML(
-        vertexType,
+        (VertexTypes)counter++,
         vertexVector,
         nodeTemplate,
         edgeTemplate,
@@ -906,7 +905,7 @@ std::string OrientedGraph::toGraphMLPseudoABCD() {
   using namespace AuxMethods;  // format()
   using namespace PseudoABCD;  // templates
 
-  std::shared_ptr<OrientedGraph> graphPtr = shared_from_this();
+  GraphPtr graphPtr = shared_from_this();
   if (!d_vertexes.at(VertexTypes::subGraph).empty()) {
     graphPtr = this->unrollGraph();
   }
@@ -922,7 +921,8 @@ std::string OrientedGraph::toGraphMLPseudoABCD() {
   std::map<std::string, uint32_t> nodeNames;
   uint32_t                        nodeCounter = 0;
 
-  for (const auto& [vertexType, vertexVector] : graphPtr->d_vertexes) {
+  char                            vertexType  = 0;
+  for (const auto& vertexVector : graphPtr->d_vertexes) {
     switch (vertexType) {
       case VertexTypes::input:
         nodeType = "0";
@@ -960,6 +960,7 @@ std::string OrientedGraph::toGraphMLPseudoABCD() {
         );
       }
     }
+    ++vertexType;
   }
 
   return format(mainTemplate, nodes + edges);
@@ -969,7 +970,7 @@ std::string OrientedGraph::toGraphMLOpenABCD() {
   using namespace AuxMethods;  // format()
   using namespace OpenABCD;    // templates
 
-  std::shared_ptr<OrientedGraph> graphPtr = shared_from_this();
+  GraphPtr graphPtr = shared_from_this();
   if (!d_vertexes.at(VertexTypes::subGraph).empty()) {
     graphPtr = this->unrollGraph();
   }
@@ -986,7 +987,8 @@ std::string OrientedGraph::toGraphMLOpenABCD() {
   std::map<std::string, uint32_t> nodeNames;
   uint32_t                        nodeCounter = 0, inverted;
 
-  for (const auto& [vertexType, vertexVector] : graphPtr->d_vertexes) {
+  char vertexType = 0;
+  for (const auto& vertexVector : graphPtr->d_vertexes) {
     switch (vertexType) {
       case VertexTypes::input:
         nodeType = "0";
@@ -1050,11 +1052,12 @@ std::string OrientedGraph::toGraphMLOpenABCD() {
           nodeTemplate, nodeNames.at(actualName), actualName, nodeType, inverted
       );
     }
+    ++vertexType;
   }
   return format(mainTemplate, nodes + edges);
 }
 
-GraphPtr OrientedGraph::unrollGraph() const {
+GraphPtr OrientedGraph::unrollGraph() {
   GraphPtr newGraph = std::make_shared<OrientedGraph>(d_name + "_unrolled");
   std::map<VertexPtr, VertexPtr> vPairs;
 
@@ -1065,10 +1068,10 @@ GraphPtr OrientedGraph::unrollGraph() const {
     vPairs.insert({v, newGraph->addOutput(v->getName())});
   }
 
-  auto unroller = [&](std::shared_ptr<const OrientedGraph> graph,
-                      std::string                          prefix,
-                      auto&&                               unroller) -> void {
-    for (const auto& [vertexType, vertices] : graph->getBaseVertexes()) {
+  auto unroller = [&](GraphPtr graph, std::string prefix, auto&& unroller
+                  ) -> void {
+    char vertexType = 0;
+    for (const auto& vertices : graph->getBaseVertexes()) {
       for (const auto& v : vertices) {
         VertexPtr newVertex;
 
@@ -1118,6 +1121,7 @@ GraphPtr OrientedGraph::unrollGraph() const {
             continue;
         }
       }
+      ++vertexType;
     }
   };
 
@@ -1158,7 +1162,9 @@ bool OrientedGraph::isConnected(bool i_recalculate) {
 
   std::unordered_set<VertexPtr> visited;
   VertexPtr                     startVertex = nullptr;
-  for (auto& [type, vertices] : d_vertexes) {
+
+  char type = 0;
+  for (auto& vertices : d_vertexes) {
     if (type == VertexTypes::subGraph) {
       continue;
     }
@@ -1166,6 +1172,7 @@ bool OrientedGraph::isConnected(bool i_recalculate) {
       startVertex = vertices[0];
       break;
     }
+    ++type;
   }
 
   dfs(startVertex, visited, disconnectedSubGraphs);

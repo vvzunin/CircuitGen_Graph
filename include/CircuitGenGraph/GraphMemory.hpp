@@ -13,7 +13,7 @@ public:
   /// @param initial_size size, which would be used for memory buffer reserve.
   /// By default we allocate memory for 1024 verticies. Size of one vertex is
   /// suuposed to be 64 bytes by default.
-  GraphMemory(size_t initial_size = 65536) : d_strings {&d_stringMemory} {
+  GraphMemory() : d_strings {&d_stringMemory} {
     // buffer = std::vector<bytea>(initial_size);
     // TODO how to use buffer????
   }
@@ -52,5 +52,5 @@ private:
 
   std::pmr::set<std::string>          d_strings;
 
-  std::vector<bytea>                  buffer;
+  // std::vector<bytea>                  buffer;
 };
