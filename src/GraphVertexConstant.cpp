@@ -32,7 +32,7 @@ size_t GraphVertexConstant::calculateHash(bool i_recalculate) {
 
   std::string         hashedStr = std::to_string(d_value);
 
-  // futuire sorted struct
+  // future sorted struct
   std::vector<size_t> hashed_data;
 
   for (auto& child : d_outConnections) {
@@ -48,6 +48,7 @@ size_t GraphVertexConstant::calculateHash(bool i_recalculate) {
 
   return d_hashed;
 }
+
 void GraphVertexConstant::updateLevel(bool i_recalculate, std::string tab) {
   if (d_needUpdate && !i_recalculate) {
     return;

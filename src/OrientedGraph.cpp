@@ -374,20 +374,6 @@ std::set<GraphPtr> OrientedGraph::getSetSubGraphs() const {
 }
 
 bool OrientedGraph::operator==(const OrientedGraph& rhs) {
-  bool correct = rhs.d_vertexes.at(VertexTypes::input).size()
-              != d_vertexes.at(VertexTypes::input).size();
-  correct &= rhs.d_vertexes.at(VertexTypes::output).size()
-          != d_vertexes.at(VertexTypes::output).size();
-  correct &= rhs.d_vertexes.at(VertexTypes::constant).size()
-          != d_vertexes.at(VertexTypes::constant).size();
-  correct &= rhs.d_vertexes.at(VertexTypes::gate).size()
-          != d_vertexes.at(VertexTypes::gate).size();
-  correct &= rhs.d_vertexes.at(VertexTypes::subGraph).size()
-          != d_vertexes.at(VertexTypes::subGraph).size();
-
-  if (!correct)
-    return false;
-
   return d_hashed == rhs.d_hashed && d_hashed;
 }
 

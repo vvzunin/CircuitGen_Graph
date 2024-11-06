@@ -429,6 +429,9 @@ public:
       const bool&      i_addSubGraphs = false
   ) const;
 
+  /// @brief Call calculateHash before this check!!!!
+  /// @param rhs 
+  /// @return 
   bool                    operator==(const OrientedGraph& rhs);
 
   /// @brief calculateHash calculates hash values for a graph based on the hash
