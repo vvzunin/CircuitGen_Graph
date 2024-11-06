@@ -22,12 +22,6 @@ bool               CompareLevels(const VertexPtr left, const VertexPtr right) {
   return left->getLevel() < right->getLevel();
 }
 
-void swap(VertexPtr first, VertexPtr second) noexcept {
-  VertexPtr c = first;
-  first       = second;
-  second      = c;
-}
-
 OrientedGraph::OrientedGraph(const std::string& i_name) : GraphMemory() {
   d_graphID = d_countNewGraphInstance++;
 
@@ -40,6 +34,14 @@ OrientedGraph::OrientedGraph(const std::string& i_name) : GraphMemory() {
   for (auto cur_gate : d_settings->getLogicOperationsKeys()) {
     d_edgesGatesCount[cur_gate] = d_gatesCount;
   }
+
+  d_vertexes = {
+      {VertexTypes::input, std::vector<VertexPtr>()},
+      {VertexTypes::output, std::vector<VertexPtr>()},
+      {VertexTypes::constant, std::vector<VertexPtr>()},
+      {VertexTypes::gate, std::vector<VertexPtr>()},
+      {VertexTypes::subGraph, std::vector<VertexPtr>()}
+  };
 }
 
 OrientedGraph::~OrientedGraph() {
@@ -112,8 +114,8 @@ uint32_t OrientedGraph::getMaxLevel() {
 }
 
 VertexPtr OrientedGraph::addInput(const std::string& i_name) {
-  VertexPtr newVertex = std::make_shared<GraphVertexInput>(
-      internalize(i_name), shared_from_this()
+  VertexPtr newVertex = create<GraphVertexInput>(
+      i_name.empty() ? "" : internalize(i_name), shared_from_this()
   );
   d_vertexes[VertexTypes::input].push_back(newVertex);
 
@@ -121,8 +123,8 @@ VertexPtr OrientedGraph::addInput(const std::string& i_name) {
 }
 
 VertexPtr OrientedGraph::addOutput(const std::string& i_name) {
-  VertexPtr newVertex = std::make_shared<GraphVertexOutput>(
-      internalize(i_name), shared_from_this()
+  VertexPtr newVertex = create<GraphVertexOutput>(
+      i_name.empty() ? "" : internalize(i_name), shared_from_this()
   );
   d_vertexes[VertexTypes::output].push_back(newVertex);
 
@@ -131,9 +133,11 @@ VertexPtr OrientedGraph::addOutput(const std::string& i_name) {
 
 VertexPtr
     OrientedGraph::addConst(const char& i_value, const std::string& i_name) {
-  VertexPtr newVertex = std::make_shared<GraphVertexConstant>(
-      i_value, internalize(i_name), shared_from_this()
-  );
+  auto name = i_name.empty() ? "" : internalize(i_name);
+  std::clog << "HERE " << name << '\n';
+  VertexPtr newVertex =
+      create<GraphVertexConstant>(i_value, name, shared_from_this());
+  std::clog << "HERE " << newVertex->getRawName() << '\n';
   d_vertexes[VertexTypes::constant].push_back(newVertex);
 
   return newVertex;
@@ -141,8 +145,8 @@ VertexPtr
 
 VertexPtr
     OrientedGraph::addGate(const Gates& i_gate, const std::string& i_name) {
-  VertexPtr newVertex = std::make_shared<GraphVertexGates>(
-      i_gate, internalize(i_name), shared_from_this()
+  VertexPtr newVertex = create<GraphVertexGates>(
+      i_gate, i_name.empty() ? "" : internalize(i_name), shared_from_this()
   );
   d_vertexes[VertexTypes::gate].push_back(newVertex);
 
@@ -170,7 +174,7 @@ std::vector<VertexPtr> OrientedGraph::addSubGraph(
   std::vector<VertexPtr> outputs;
 
   VertexPtr              newGraph =
-      std::make_shared<GraphVertexSubGraph>(i_subGraph, shared_from_this());
+      create<GraphVertexSubGraph>(i_subGraph, shared_from_this());
   d_vertexes[VertexTypes::subGraph].push_back(newGraph);
 
   // adding edges for subGraphs
@@ -178,7 +182,7 @@ std::vector<VertexPtr> OrientedGraph::addSubGraph(
 
   for (auto outVert : i_subGraph->getVerticesByType(VertexTypes::output)) {
     VertexPtr newVertex =
-        std::make_shared<GraphVertexGates>(Gates::GateBuf, shared_from_this());
+        create<GraphVertexGates>(Gates::GateBuf, shared_from_this());
 
     outputs.push_back(newVertex);
     d_allSubGraphsOutputs.push_back(newVertex);
@@ -285,8 +289,9 @@ std::vector<VertexPtr> OrientedGraph::getVerticesByType(
     std::string_view   i_name,
     const bool&        i_addSubGraphs
 ) const {
-  if (i_name.size() != 0)
+  if (i_name.size()) {
     return d_vertexes.at(i_type);
+  }
 
   std::vector<VertexPtr> resVert;
   for (VertexPtr vert : d_vertexes.at(i_type))
@@ -408,7 +413,7 @@ std::string OrientedGraph::getGraphVerilogInstance() {
   for (size_t i = 0; i < d_vertexes[VertexTypes::input].size(); ++i) {
     auto inp = d_subGraphsInputsPtr[d_currentParentGraph.lock()->d_graphID]
                                    [*verilogCount][i];
-    std::string inp_name = d_vertexes[VertexTypes::input][i]->getName();
+    std::string inp_name  = d_vertexes[VertexTypes::input][i]->getName();
 
     module_ver           += verilogTab + verilogTab + "." + inp_name + "( ";
     module_ver           += inp->getName() + " ),\n";
@@ -418,13 +423,13 @@ std::string OrientedGraph::getGraphVerilogInstance() {
     VertexPtr out =
         d_subGraphsOutputsPtr[d_currentParentGraph.lock()->d_graphID]
                              [*verilogCount][i];
-    std::string out_name = d_vertexes[VertexTypes::output][i]->getName();
+    std::string out_name  = d_vertexes[VertexTypes::output][i]->getName();
 
     module_ver           += verilogTab + verilogTab + "." + out_name + "( ";
     module_ver           += out->getName() + " ),\n";
   }
 
-  std::string out_name = d_vertexes[VertexTypes::output].back()->getName();
+  std::string out_name  = d_vertexes[VertexTypes::output].back()->getName();
 
   module_ver           += verilogTab + verilogTab + "." + out_name + "( ";
   module_ver += d_subGraphsOutputsPtr[d_currentParentGraph.lock()->d_graphID]
@@ -530,7 +535,7 @@ std::pair<bool, std::string>
   }
   // and all modules
   for (auto subPtr : d_vertexes[VertexTypes::subGraph]) {
-    auto sub = std::static_pointer_cast<GraphVertexSubGraph>(subPtr);
+    auto sub = static_cast<GraphVertexSubGraph*>(subPtr);
 
     std::pair<bool, std::string> val = sub->toVerilog(i_path);
     if (!val.first)
@@ -627,10 +632,9 @@ DotReturn OrientedGraph::toDOT() {
   for (auto value : d_allSubGraphsOutputs) {
     dot.push_back(value->toDOT()[0]);
   }
-  std::vector<std::pair<std::shared_ptr<GraphVertexSubGraph>, DotReturn>>
-      subDotResults;
+  std::vector<std::pair<GraphVertexSubGraph*, DotReturn>> subDotResults;
   for (auto subPtr : d_vertexes[VertexTypes::subGraph]) {
-    auto      sub = std::static_pointer_cast<GraphVertexSubGraph>(subPtr);
+    auto      sub = static_cast<GraphVertexSubGraph*>(subPtr);
 
     DotReturn val = sub->toDOT();
     subDotResults.push_back({sub, val});
@@ -828,7 +832,7 @@ std::string OrientedGraph::toGraphMLClassic(
 
     for (size_t i = 0; i < vOutputs.size(); ++i) {
       // getting name of current subGraph vertex
-      sgName = vOutputs[i][0]->getInConnections()[0].lock()->getName(i_prefix);
+      sgName = vOutputs[i][0]->getInConnections()[0]->getName(i_prefix);
 
       // element->subGraph edges
       for (size_t j = 0; j < gInputs.size(); ++j) {
@@ -1079,7 +1083,7 @@ GraphPtr OrientedGraph::unrollGraph() const {
             break;
 
           case VertexTypes::subGraph: {
-            const auto sgv = std::dynamic_pointer_cast<GraphVertexSubGraph>(v);
+            const auto     sgv      = static_cast<GraphVertexSubGraph*>(v);
             const GraphPtr sg       = sgv->getSubGraph();
             const auto&    gInputs  = sg->d_vertexes.at(VertexTypes::input);
             const auto&    gOutputs = sg->d_vertexes.at(VertexTypes::output);
@@ -1090,10 +1094,7 @@ GraphPtr OrientedGraph::unrollGraph() const {
             unroller(sg, v->getName() + "__", unroller);
 
             for (size_t i = 0; i < vInputs.size(); ++i) {
-              ptr = vInputs[i].lock();
-              if (!ptr) {
-                throw std::invalid_argument("Dead pointer!");
-              }
+              ptr = vInputs.at(i);
               for (const auto& innerVertex : gInputs[i]->getOutConnections()) {
                 if (vPairs.find(innerVertex) != vPairs.end()
                     && vPairs.find(ptr) != vPairs.end())
@@ -1102,11 +1103,7 @@ GraphPtr OrientedGraph::unrollGraph() const {
             }
 
             for (size_t i = 0; i < vOutputs.size(); ++i) {
-              for (const auto& innerVertex : gOutputs[i]->getInConnections()) {
-                ptr = innerVertex.lock();
-                if (!ptr) {
-                  throw std::invalid_argument("Dead pointer!");
-                }
+              for (const auto& ptr : gOutputs[i]->getInConnections()) {
                 for (const auto& nonBuffer : vOutputs[i]->getOutConnections()) {
                   if (vPairs.find(nonBuffer) != vPairs.end()
                       && vPairs.find(ptr) != vPairs.end())
@@ -1153,7 +1150,7 @@ bool OrientedGraph::isConnected(bool i_recalculate) {
   std::unordered_set<VertexPtr> disconnectedSubGraphs;
   for (auto subGraph : d_vertexes[VertexTypes::subGraph]) {
     subGraphsBuffersCount += subGraph->getOutConnections().size();
-    auto subGraphPtr = std::dynamic_pointer_cast<GraphVertexSubGraph>(subGraph);
+    auto subGraphPtr       = static_cast<GraphVertexSubGraph*>(subGraph);
     if (!subGraphPtr->getSubGraph()->isConnected()) {
       disconnectedSubGraphs.insert(subGraph);
     }
@@ -1222,23 +1219,18 @@ void OrientedGraph::dfs(
             || i_dsg.find(v) == i_dsg.end()) {
           stck.push(v);
         } else {
-          auto subGraphPtr = std::dynamic_pointer_cast<GraphVertexSubGraph>(v);
+          auto subGraphPtr = static_cast<GraphVertexSubGraph*>(v);
           for (auto buf : subGraphPtr->getOutputBuffersByOuterInput(current)) {
             stck.push(buf);
           }
         }
       }
-      for (auto v : current->getInConnections()) {
-        auto ptr = v.lock();
-        if (!ptr) {
-          throw std::invalid_argument("Dead pointer!");
-        }
+      for (auto ptr : current->getInConnections()) {
         if (ptr->getType() != VertexTypes::subGraph
             || i_dsg.find(ptr) == i_dsg.end()) {
           stck.push(ptr);
         } else {
-          auto subGraphPtr =
-              std::dynamic_pointer_cast<GraphVertexSubGraph>(ptr);
+          auto subGraphPtr = static_cast<GraphVertexSubGraph*>(ptr);
           for (auto input :
                subGraphPtr->getOuterInputsByOutputBuffer(current)) {
             stck.push(input);
@@ -1250,64 +1242,68 @@ void OrientedGraph::dfs(
 }
 
 void OrientedGraph::log(el::base::type::ostream_t& os) const {
-  os << "\n";
-  os << "Graph Name: " << d_name << "\n";
-  os << "Graph ID: " << d_graphID << "\n";
-  os << "Number of Edges: " << d_edgesCount << "\n";
-  os << "Need Level Update: " << (d_needLevelUpdate ? "Yes" : "No") << "\n";
-  os << "Already Parsed Verilog: " << (d_alreadyParsedVerilog ? "Yes" : "No")
-     << "\n";
-  os << "Already Parsed DOT: " << (d_alreadyParsedDot ? "Yes" : "No") << "\n";
-  os << "Graph hash: " << d_hashed << "\n";
+  //   os << "\n";
+  //   os << "Graph Name: " << d_name << "\n";
+  //   os << "Graph ID: " << d_graphID << "\n";
+  //   os << "Number of Edges: " << d_edgesCount << "\n";
+  //   os << "Need Level Update: " << (d_needLevelUpdate ? "Yes" : "No") <<
+  //   "\n"; os << "Already Parsed Verilog: " << (d_alreadyParsedVerilog ? "Yes"
+  //   : "No")
+  //      << "\n";
+  //   os << "Already Parsed DOT: " << (d_alreadyParsedDot ? "Yes" : "No") <<
+  //   "\n"; os << "Graph hash: " << d_hashed << "\n";
 
-  bool flag = true;
-  os << "Number of Subgraphs: " << d_subGraphs.size() << "\n";
-  os << "baseSize: " << this->baseSize() << std::endl;
-  os << "fullSize: " << this->fullSize() << std::endl;
-  os << "Stored Vertex Types and Counts:";
-  for (const auto& pair : d_vertexes) {
-    if (pair.second.size() != 0) {
-      flag = false;
-      os << "\n\t" << DefaultSettings::parseVertexToString(pair.first);
-      if (pair.first == VertexTypes::subGraph)
-        os << "\t:\t" << pair.second.size();
-      else
-        os << "\t\t:\t" << pair.second.size();
-    }
-  }
-  if (flag)
-    os << " None";
-  os << std::endl;
+  //   bool flag = true;
+  //   os << "Number of Subgraphs: " << d_subGraphs.size() << "\n";
+  //   os << "baseSize: " << this->baseSize() << std::endl;
+  //   os << "fullSize: " << this->fullSize() << std::endl;
+  //   os << "Stored Vertex Types and Counts:";
+  //   for (const auto& pair : d_vertexes) {
+  //     if (pair.second.size() != 0) {
+  //       flag = false;
+  //       os << "\n\t" << DefaultSettings::parseVertexToString(pair.first);
+  //       if (pair.first == VertexTypes::subGraph)
+  //         os << "\t:\t" << pair.second.size();
+  //       else
+  //         os << "\t\t:\t" << pair.second.size();
+  //     }
+  //   }
+  //   if (flag)
+  //     os << " None";
+  //   os << std::endl;
 
-  flag = true;
-  os << "Gate Types and Counts:";
-  for (const auto& pair : d_gatesCount) {
-    if (pair.second != 0) {
-      flag = false;
-      os << "\n\t" << DefaultSettings::parseGateToString(pair.first) << "\t:\t"
-         << pair.second;
-    }
-  }
-  if (flag)
-    os << " None";
-  os << std::endl;
+  //   flag = true;
+  //   os << "Gate Types and Counts:";
+  //   for (const auto& pair : d_gatesCount) {
+  //     if (pair.second != 0) {
+  //       flag = false;
+  //       os << "\n\t" << DefaultSettings::parseGateToString(pair.first) <<
+  //       "\t:\t"
+  //          << pair.second;
+  //     }
+  //   }
+  //   if (flag)
+  //     os << " None";
+  //   os << std::endl;
 
-  flag = true;
-  os << "Edges Between Gates Counts:";
-  for (const auto& outer_pair : d_edgesGatesCount) {
-    for (const auto& inner_pair : outer_pair.second) {
-      if (inner_pair.second != 0) {
-        flag = false;
-        os << "\n\t" << DefaultSettings::parseGateToString(outer_pair.first)
-           << "\t-> " << DefaultSettings::parseGateToString(inner_pair.first)
-           << "\t:\t" << inner_pair.second;
-      }
-    }
-  }
-  if (flag)
-    os << " None";
-  os << "\n\n";
-  for (const auto& subGraph : d_vertexes.at(VertexTypes::subGraph)) {
-    os << *subGraph;
-  }
+  //   flag = true;
+  //   os << "Edges Between Gates Counts:";
+  //   for (const auto& outer_pair : d_edgesGatesCount) {
+  //     for (const auto& inner_pair : outer_pair.second) {
+  //       if (inner_pair.second != 0) {
+  //         flag = false;
+  //         os << "\n\t" <<
+  //         DefaultSettings::parseGateToString(outer_pair.first)
+  //            << "\t-> " <<
+  //            DefaultSettings::parseGateToString(inner_pair.first)
+  //            << "\t:\t" << inner_pair.second;
+  //       }
+  //     }
+  //   }
+  //   if (flag)
+  //     os << " None";
+  //   os << "\n\n";
+  //   for (const auto& subGraph : d_vertexes.at(VertexTypes::subGraph)) {
+  //     os << *subGraph;
+  //   }
 }

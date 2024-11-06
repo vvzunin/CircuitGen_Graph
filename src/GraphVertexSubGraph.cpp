@@ -16,15 +16,6 @@ GraphVertexSubGraph::GraphVertexSubGraph(
 }
 
 GraphVertexSubGraph::GraphVertexSubGraph(
-    GraphPtr     i_subGraph,
-    GraphMemory& memory,
-    GraphPtr     i_baseGraph
-) :
-  GraphVertexBase(VertexTypes::subGraph, memory, i_baseGraph) {
-  d_subGraph = i_subGraph;
-}
-
-GraphVertexSubGraph::GraphVertexSubGraph(
     GraphPtr         i_subGraph,
     std::string_view i_name,
     GraphPtr         i_baseGraph
@@ -117,12 +108,12 @@ size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
 
   // calc hash from subgraph
   std::string hashedStr =
-      d_subGraph->calculateHash() + std::to_string(d_inConnections.size());
+      d_subGraph->calculateHash() + std::to_string(d_inConnections->size());
 
   // futuire sorted struct
   std::vector<size_t> hashed_data;
 
-  for (auto& child : d_outConnections) {
+  for (auto& child : *d_outConnections) {
     hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
@@ -140,8 +131,8 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOutputBuffersByOuterInput(
     VertexPtr i_outerInput
 ) const {
   size_t inputIndex = SIZE_MAX;
-  for (size_t i = 0; i < d_inConnections.size(); ++i) {
-    if (d_inConnections[i].lock() == i_outerInput) {
+  for (size_t i = 0; i < d_inConnections->size(); ++i) {
+    if (d_inConnections->at(i) == i_outerInput) {
       inputIndex = i;
       break;
     }
@@ -172,13 +163,13 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOutputBuffersByOuterInput(
         if (v->getType() == VertexTypes::output) {
           for (size_t i = 0; i < sgAllOutputs.size(); ++i) {
             if (sgAllOutputs[i] == v) {
-              outputs.push_back(d_outConnections[i]);
+              outputs.push_back(d_outConnections->at(i));
             }
           }
         } else if (v->getType() != VertexTypes::subGraph) {
           stck.push(v);
         } else {
-          auto subGraphPtr = std::dynamic_pointer_cast<GraphVertexSubGraph>(v);
+          auto subGraphPtr = static_cast<GraphVertexSubGraph*>(v);
           for (auto buf : subGraphPtr->getOutputBuffersByOuterInput(current)) {
             stck.push(buf);
           }
@@ -193,8 +184,8 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
     VertexPtr i_outputBuffer
 ) const {
   size_t bufferIndex = SIZE_MAX;
-  for (size_t i = 0; i < d_outConnections.size(); ++i) {
-    if (d_outConnections[i] == i_outputBuffer) {
+  for (size_t i = 0; i < d_outConnections->size(); ++i) {
+    if (d_outConnections->at(i) == i_outputBuffer) {
       bufferIndex = i;
       break;
     }
@@ -221,22 +212,18 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
     if (visited.find(current) == visited.end()) {
       visited.insert(current);
 
-      for (auto v : current->getInConnections()) {
-        auto ptr = v.lock();
-        if (!ptr) {
-          throw std::invalid_argument("Dead pointer!");
-        }
+      for (auto ptr : current->getInConnections()) {
         if (ptr->getType() == VertexTypes::input) {
           for (size_t i = 0; i < sgAllInputs.size(); ++i) {
             if (sgAllInputs[i] == ptr) {
-              inputs.push_back(d_inConnections[i].lock());
+              inputs.push_back(d_inConnections->at(i));
             }
           }
         } else if (ptr->getType() != VertexTypes::subGraph) {
           stck.push(ptr);
         } else {
           auto subGraphPtr =
-              std::dynamic_pointer_cast<GraphVertexSubGraph>(ptr);
+              static_cast<GraphVertexSubGraph*>(ptr);
           for (auto input :
                subGraphPtr->getOuterInputsByOutputBuffer(current)) {
             stck.push(input);

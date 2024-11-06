@@ -39,12 +39,6 @@ public:
       const VertexTypes i_type = VertexTypes::input
   );
 
-  GraphVertexInput(
-      GraphMemory&      memory,
-      const VertexTypes i_type      = VertexTypes::input,
-      GraphPtr          i_baseGraph = nullptr
-  );
-
   /// @brief GraphVertexInput
   /// Initializes the GraphVertexInput object with the provided name, base
   /// graph pointer, and type
@@ -95,12 +89,6 @@ public:
   GraphVertexConstant(char i_const, GraphPtr i_baseGraph);
 
   GraphVertexConstant(
-      char         i_const,
-      GraphMemory& memory,
-      GraphPtr     i_baseGraph = nullptr
-  );
-
-  GraphVertexConstant(
       char             i_const,
       std::string_view i_name,
       GraphPtr         i_baseGraph
@@ -136,12 +124,6 @@ private:
 class GraphVertexSubGraph : public GraphVertexBase {
 public:
   GraphVertexSubGraph(GraphPtr i_subGraph, GraphPtr i_baseGraph);
-
-  GraphVertexSubGraph(
-      GraphPtr     i_subGraph,
-      GraphMemory& memory,
-      GraphPtr     i_baseGraph = nullptr
-  );
 
   GraphVertexSubGraph(
       GraphPtr         i_subGraph,
@@ -211,8 +193,6 @@ class GraphVertexOutput : public GraphVertexBase {
 public:
   GraphVertexOutput(GraphPtr i_baseGraph);
 
-  GraphVertexOutput(GraphMemory& memory, GraphPtr i_baseGraph = nullptr);
-
   GraphVertexOutput(std::string_view i_name, GraphPtr i_baseGraph);
 
   /// @brief updateValue updates the value of the current vertex of the graph
@@ -251,12 +231,6 @@ private:
 class GraphVertexGates : public GraphVertexBase {
 public:
   GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph);
-
-  GraphVertexGates(
-      Gates        i_gate,
-      GraphMemory& memory,
-      GraphPtr     i_baseGraph = nullptr
-  );
 
   GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph);
 

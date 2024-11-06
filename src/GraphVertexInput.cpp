@@ -11,13 +11,6 @@ GraphVertexInput::GraphVertexInput(
   GraphVertexBase(i_type, i_baseGraph) {}
 
 GraphVertexInput::GraphVertexInput(
-    GraphMemory&      memory,
-    const VertexTypes i_type,
-    GraphPtr          i_baseGraph
-) :
-  GraphVertexBase(i_type, memory, i_baseGraph) {}
-
-GraphVertexInput::GraphVertexInput(
     std::string_view  i_name,
     GraphPtr          i_baseGraph,
     const VertexTypes i_type
@@ -26,27 +19,13 @@ GraphVertexInput::GraphVertexInput(
 
 // TODO: Он здесь нужен?
 char GraphVertexInput::updateValue() {
-  if (d_inConnections.size() > 0) {
-    if (!d_baseGraph.lock()) {
-      if (auto ptr = d_inConnections[0].lock()) {
-        d_value = ptr->getValue();
-      } else {
-        throw std::invalid_argument("Dead pointer!");
-        return 'x';
-      }
+  if (d_inConnections->size() > 0) {
+    d_value = d_inConnections->front()->getValue();
 
-      for (size_t i = 1; i < d_inConnections.size(); i++) {
-        if (auto ptr = d_inConnections[i].lock()) {
-          if (ptr->getValue() != d_value) {
-            d_value = 'x';
-          }
-        } else {
-          throw std::invalid_argument("Dead pointer!");
-        }
+    for (size_t i = 1; i < d_inConnections->size(); i++) {
+      if (d_inConnections->at(i)->getValue() != d_value) {
+        d_value = 'x';
       }
-
-    } else {
-      LOG(ERROR) << "Error" << std::endl;
     }
   }
   return d_value;

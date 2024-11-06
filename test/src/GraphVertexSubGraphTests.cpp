@@ -7,7 +7,7 @@
 
 #include "easylogging++Init.hpp"
 
-GraphMemory memoryOwnerSub;
+GraphPtr memoryOwnerSubGr = std::make_shared<OrientedGraph>();
 
 std::string loadStringFile(const std::filesystem::path& p) {
   std::string   str;
@@ -22,14 +22,14 @@ std::string loadStringFile(const std::filesystem::path& p) {
 
 TEST(TestConstructorWithoutIName, WithoutDefaulParametrs) {
   GraphPtr            graphPtr1 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSub);
+  GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSubGr);
   std::string         graphNum = std::to_string(0);
   EXPECT_EQ(subGraph1.getType(), VertexTypes::subGraph);
   EXPECT_EQ(subGraph1.getTypeName(), "subGraph");
   EXPECT_EQ(subGraph1.getRawName(), "subGraph_" + graphNum);
   EXPECT_EQ(subGraph1.getLevel(), 0);
   EXPECT_EQ(subGraph1.getValue(), 'x');
-  EXPECT_EQ(subGraph1.getBaseGraph().lock(), nullptr);
+  EXPECT_EQ(subGraph1.getBaseGraph().lock(), memoryOwnerSubGr);
   EXPECT_EQ(subGraph1.getOutConnections().size(), 0);
 }
 
@@ -49,14 +49,13 @@ TEST(TestConstructorWithoutIName, WithDefaultInputParametrs) {
 
 TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
   GraphPtr            graphPtr1 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph1(graphPtr1, "Anything", nullptr);
-  EXPECT_EQ(subGraph1.getBaseGraph().lock(), nullptr);
+  GraphVertexSubGraph subGraph1(graphPtr1, "Anything", memoryOwnerSubGr);
+  EXPECT_EQ(subGraph1.getBaseGraph().lock(), memoryOwnerSubGr);
   EXPECT_EQ(subGraph1.getType(), VertexTypes::subGraph);
   EXPECT_EQ(subGraph1.getTypeName(), "subGraph");
   EXPECT_EQ(subGraph1.getRawName(), "Anything");
   EXPECT_EQ(subGraph1.getLevel(), 0);
   EXPECT_EQ(subGraph1.getValue(), 'x');
-  EXPECT_EQ(subGraph1.getBaseGraph().lock(), nullptr);
   EXPECT_EQ(subGraph1.getOutConnections().size(), 0);
 }
 
@@ -76,15 +75,15 @@ TEST(TestConstructorWithIName, WithDefaultInputParametrs) {
 GraphPtr graph = std::make_shared<OrientedGraph>();
 TEST(TestUpdateValue, Test) {
   VertexPtr subGraphPtr1 =
-      std::make_shared<GraphVertexSubGraph>(graph, memoryOwnerSub);
+      memoryOwnerSubGr->create<GraphVertexSubGraph>(graph, memoryOwnerSubGr);
   EXPECT_EQ(subGraphPtr1->updateValue(), 'x');
 }
 // return "DO NOT CALL IT" TEST(TestToVerilog, TestReturnString) {}
-TEST(TestToVerilog, TestReturnPairThereIsNoBaseGraph) {
-  GraphPtr            graphPtr1 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph1(graphPtr1, "Anything", nullptr);
-  EXPECT_THROW(subGraph1.toVerilog("path"), std::invalid_argument);
-}
+// TEST(TestToVerilog, TestReturnPairThereIsNoBaseGraph) {
+//   GraphPtr            graphPtr1 = std::make_shared<OrientedGraph>();
+//   GraphVertexSubGraph subGraph1(graphPtr1, "Anything", nullptr);
+//   EXPECT_THROW(subGraph1.toVerilog("path"), std::invalid_argument);
+// }
 
 // TODO: Update with easylogging
 // TEST(TestToVerilog, TestReturnPairWrongPath) {
@@ -179,7 +178,7 @@ TEST(TestSetSubGrahGetSubgraph, Test) {
 
 TEST(TestSetName, InputCorrectName) {
   GraphPtr            graphPtr1 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSub);
+  GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSubGr);
   subGraph1.setName("Anything");
   EXPECT_EQ(subGraph1.getRawName(), "Anything");
 }
@@ -188,37 +187,37 @@ TEST(TestAddInConnections, AddConnections) {
   GraphPtr            graphPtr1 = std::make_shared<OrientedGraph>();
   GraphPtr            graphPtr2 = std::make_shared<OrientedGraph>();
   GraphPtr            graphPtr3 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSub);
+  GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSubGr);
   EXPECT_EQ(subGraph1.getInConnections().size(), 0);
 
   VertexPtr subGraphPtr1 =
-      std::make_shared<GraphVertexSubGraph>(graphPtr2, memoryOwnerSub);
+      memoryOwnerSubGr->create<GraphVertexSubGraph>(graphPtr2, memoryOwnerSubGr);
   EXPECT_EQ(subGraph1.addVertexToInConnections(subGraphPtr1), 1);
   EXPECT_EQ(subGraph1.addVertexToInConnections(subGraphPtr1), 2);
-  EXPECT_EQ(subGraph1.getInConnections()[0].lock(), subGraphPtr1);
-  EXPECT_EQ(subGraph1.getInConnections()[1].lock(), subGraphPtr1);
+  EXPECT_EQ(subGraph1.getInConnections()[0], subGraphPtr1);
+  EXPECT_EQ(subGraph1.getInConnections()[1], subGraphPtr1);
 
   VertexPtr subGraphPtr2 =
-      std::make_shared<GraphVertexSubGraph>(graphPtr3, memoryOwnerSub);
+      memoryOwnerSubGr->create<GraphVertexSubGraph>(graphPtr3, memoryOwnerSubGr);
   subGraph1.addVertexToInConnections(subGraphPtr2);
-  EXPECT_EQ(subGraph1.getInConnections()[2].lock(), subGraphPtr2);
+  EXPECT_EQ(subGraph1.getInConnections()[2], subGraphPtr2);
 }
 
 TEST(TestAddOutConnections, AddConnections) {
   GraphPtr            graphPtr1 = std::make_shared<OrientedGraph>();
   GraphPtr            graphPtr2 = std::make_shared<OrientedGraph>();
   GraphPtr            graphPtr3 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSub);
+  GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSubGr);
   EXPECT_EQ(subGraph1.getOutConnections().size(), 0);
 
   VertexPtr subGraphPtr1 =
-      std::make_shared<GraphVertexSubGraph>(graphPtr2, memoryOwnerSub);
+      memoryOwnerSubGr->create<GraphVertexSubGraph>(graphPtr2, memoryOwnerSubGr);
   EXPECT_EQ(subGraph1.addVertexToOutConnections(subGraphPtr1), true);
   EXPECT_EQ(subGraph1.addVertexToOutConnections(subGraphPtr1), false);
   EXPECT_EQ(subGraph1.getOutConnections()[0], subGraphPtr1);
 
   VertexPtr subGraphPtr2 =
-      std::make_shared<GraphVertexSubGraph>(graphPtr3, memoryOwnerSub);
+      memoryOwnerSubGr->create<GraphVertexSubGraph>(graphPtr3, memoryOwnerSubGr);
   subGraph1.addVertexToOutConnections(subGraphPtr2);
   EXPECT_EQ(subGraph1.getOutConnections()[1], subGraphPtr2);
 }
@@ -228,14 +227,14 @@ TEST(TestRemoveVertexToInConnections, RemoveConnections) {
   GraphPtr            graphPtr2 = std::make_shared<OrientedGraph>();
   GraphPtr            graphPtr3 = std::make_shared<OrientedGraph>();
   VertexPtr subGraphPtr1 =
-      std::make_shared<GraphVertexSubGraph>(graphPtr1, memoryOwnerSub);
+      memoryOwnerSubGr->create<GraphVertexSubGraph>(graphPtr1, memoryOwnerSubGr);
   EXPECT_EQ(subGraphPtr1->removeVertexToInConnections(nullptr), false);
 
   subGraphPtr1->addVertexToInConnections(
-      std::make_shared<GraphVertexSubGraph>(graphPtr2, memoryOwnerSub)
+      memoryOwnerSubGr->create<GraphVertexSubGraph>(graphPtr2, memoryOwnerSubGr)
   );
   subGraphPtr1->addVertexToInConnections(
-      std::make_shared<GraphVertexSubGraph>(graphPtr3, memoryOwnerSub)
+      memoryOwnerSubGr->create<GraphVertexSubGraph>(graphPtr3, memoryOwnerSubGr)
   );
   EXPECT_EQ(subGraphPtr1->getInConnections().size(), 2);
   EXPECT_EQ(subGraphPtr1->removeVertexToInConnections(nullptr), true);
@@ -247,16 +246,16 @@ TEST(TestRemoveVertexToInConnections, RemoveConnections) {
 //   GraphPtr            graphPtr1 = std::make_shared<OrientedGraph>();
 //   GraphVertexSubGraph subGraph1(graphPtr1);
 //   VertexPtr           subGraphPtr1 =
-//       std::make_shared<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
+//       memoryOwnerSubGr->create<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
 //   subGraphPtr1->setLevel(1);
 //   subGraph1.addVertexToInConnections(subGraphPtr1);
 //   subGraph1.updateLevel();
 //   EXPECT_EQ(subGraph1.getLevel(), 2);
 
 //   VertexPtr subGraphPtr2 =
-//       std::make_shared<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
+//       memoryOwnerSubGr->create<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
 //   VertexPtr subGraphPtr3 =
-//       std::make_shared<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
+//       memoryOwnerSubGr->create<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
 //   subGraphPtr2->setLevel(3);
 //   subGraphPtr3->setLevel(2);
 //   subGraph1.addVertexToInConnections(subGraphPtr2);
@@ -265,7 +264,7 @@ TEST(TestRemoveVertexToInConnections, RemoveConnections) {
 //   EXPECT_EQ(subGraph1.getLevel(), 4);
 
 //   VertexPtr subGraphPtr4 =
-//       std::make_shared<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
+//       memoryOwnerSubGr->create<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
 //   subGraph1.addVertexToInConnections(subGraphPtr4);
 //   subGraph1.updateLevel();
 //   EXPECT_EQ(subGraph1.getLevel(), 4);
@@ -276,9 +275,9 @@ TEST(TestRemoveVertexToInConnections, RemoveConnections) {
 //   GraphVertexSubGraph subGraph1(graphPtr1);
 
 //   VertexPtr           subGraphPtr1 =
-//       std::make_shared<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
+//       memoryOwnerSubGr->create<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
 //   VertexPtr subGraphPtr2 =
-//       std::make_shared<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
+//       memoryOwnerSubGr->create<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
 //   subGraph1.addVertexToInConnections(subGraphPtr1);
 //   subGraph1.addVertexToInConnections(subGraphPtr2);
 //   EXPECT_NO_THROW(subGraph1.updateLevel());
@@ -287,7 +286,7 @@ TEST(TestRemoveVertexToInConnections, RemoveConnections) {
 //   EXPECT_THROW(subGraph1.updateLevel(), std::invalid_argument);
 
 //   VertexPtr subGraphPtr3 =
-//       std::make_shared<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
+//       memoryOwnerSubGr->create<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
 //   subGraph1.addVertexToInConnections(subGraphPtr3);
 //   EXPECT_THROW(subGraph1.updateLevel(), std::invalid_argument);
 // }

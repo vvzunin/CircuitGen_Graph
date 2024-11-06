@@ -18,7 +18,8 @@
     std::vector<std::pair<DotTypes, std::map<std::string, std::string>>>
 #endif
 
-enum VertexTypes {
+#pragma 
+enum VertexTypes: uint8_t {
   input    = 0,  ///  input vertex
   output   = 4,  ///  output vertex
   constant = 1,  /// constant vertex
@@ -31,7 +32,7 @@ enum VertexTypes {
 /// This enumeration defines the various types of logic elements that can be
 /// used in digital circuits.
 
-enum Gates {  /// logical element - "AND" (AND)
+enum Gates: uint8_t {  /// logical element - "AND" (AND)
   GateAnd,    /// logical element "AND-NOT" (NAND)
   GateNand,   /// logical element - "OR" (OR)
   GateOr,     /// logical element - "OR-NOT" (NOR)
@@ -45,7 +46,7 @@ enum Gates {  /// logical element - "AND" (AND)
 
 /// @brief DotTypes
 /// Enumeration for DOT generation
-enum DotTypes {
+enum DotTypes: uint8_t {
   DotGraph    = 0,
   DotInput    = 1,
   DotConstant = 2,

@@ -6,21 +6,21 @@
 
 using namespace AuxMethods;
 
-GraphMemory memoryOwnerConst;
+GraphPtr memoryOwnerConstGr = std::make_shared<OrientedGraph>();
 
 TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrsDefName) {
   initLogging(
       "TestConstructorWithoutIName", "WithoutDefaultInputParametrsDefName"
   );
-  GraphVertexConstant constant('z', memoryOwnerConst);
+  GraphVertexConstant constant('z', memoryOwnerConstGr);
   // LOG(INFO) << constant;
-  std::string graphNum = std::to_string(0);
+  std::string         graphNum = std::to_string(0);
   EXPECT_EQ(constant.getType(), VertexTypes::constant);
   EXPECT_EQ(constant.getTypeName(), "const");
   EXPECT_EQ(constant.getRawName(), "const_" + graphNum);
   EXPECT_EQ(constant.getLevel(), 0);
   EXPECT_EQ(constant.getValue(), 'z');
-  EXPECT_EQ(constant.getBaseGraph().lock(), nullptr);
+  EXPECT_EQ(constant.getBaseGraph().lock(), memoryOwnerConstGr);
   EXPECT_EQ(constant.getOutConnections().size(), 0);
 }
 
@@ -43,13 +43,13 @@ TEST(TestConstructorWithoutIName, WithDefaultInputParametrsDefName) {
 
 TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
   initLogging("TestConstructorWithIName", "WithoutDefaultInputParametrs");
-  GraphVertexConstant constant('z', "Anything", nullptr);
+  GraphVertexConstant constant('z', "Anything", memoryOwnerConstGr);
   EXPECT_EQ(constant.getType(), VertexTypes::constant);
   EXPECT_EQ(constant.getTypeName(), "const");
   EXPECT_EQ(constant.getRawName(), "Anything");
   EXPECT_EQ(constant.getLevel(), 0);
   EXPECT_EQ(constant.getValue(), 'z');
-  EXPECT_EQ(constant.getBaseGraph().lock(), nullptr);
+  EXPECT_EQ(constant.getBaseGraph().lock(), memoryOwnerConstGr);
   EXPECT_EQ(constant.getOutConnections().size(), 0);
 }
 
@@ -72,14 +72,14 @@ TEST(TestConstructorWithIName, WithDefaultInputParametrs) {
 // it returns 0 does it correct?
 TEST(TestUpdateLevel, CorrectUpdate) {
   initLogging("TestUpdateLevel", "CorrectUpdate");
-  GraphVertexConstant constant1('z', memoryOwnerConst);
+  GraphVertexConstant constant1('z', memoryOwnerConstGr);
   constant1.updateLevel();
   EXPECT_EQ(constant1.getLevel(), 0);
 }
 
 TEST(TestGetVerilogInstance, ReturnCorrectInstance) {
   initLogging("TestGetVerilogInstance", "ReturnCorrectInstance");
-  GraphVertexConstant constant1('z', "Anything", nullptr);
+  GraphVertexConstant constant1('z', "Anything", memoryOwnerConstGr);
   EXPECT_EQ(constant1.getVerilogInstance(), "wire Anything;");
 }
 
@@ -87,7 +87,7 @@ TEST(TestGetVerilogInstance, ReturnCorrectInstance) {
 
 TEST(TestSetName, InputCorrectName) {
   initLogging("TestSetName", "InputCorrectName");
-  GraphVertexConstant constant('z', memoryOwnerConst);
+  GraphVertexConstant constant('z', memoryOwnerConstGr);
   constant.setName("Anything");
   EXPECT_EQ(constant.getRawName(), "Anything");
 }
@@ -95,76 +95,76 @@ TEST(TestSetName, InputCorrectName) {
 TEST(TestAddVertexToInConnections, AddConnections1) {
   initLogging("TestAddVertexToInConnections", "AddConnections1");
   VertexPtr constant1 =
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst);
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr);
   EXPECT_EQ(constant1->getInConnections().size(), 0);
 
   VertexPtr constant2 =
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst);
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr);
   VertexPtr ptr1 =
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst);
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr);
   ptr1->addVertexToInConnections(constant2);
   EXPECT_EQ(constant1->addVertexToInConnections(ptr1), 1);
   EXPECT_EQ(constant1->addVertexToInConnections(ptr1), 2);
-  EXPECT_EQ(constant1->getInConnections()[0].lock(), ptr1);
-  EXPECT_EQ(constant1->getInConnections()[1].lock(), ptr1);
+  EXPECT_EQ(constant1->getInConnections()[0], ptr1);
+  EXPECT_EQ(constant1->getInConnections()[1], ptr1);
 
   VertexPtr constant3 =
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst);
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr);
   VertexPtr ptr2 =
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst);
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr);
   constant1->addVertexToInConnections(ptr2);
-  EXPECT_EQ(constant1->getInConnections()[2].lock(), ptr2);
+  EXPECT_EQ(constant1->getInConnections()[2], ptr2);
 }
 
 TEST(TestAddVertexToOutConnections, AddConnections2) {
   initLogging("TestAddVertexToOutConnections", "AddConnections2");
   VertexPtr constant1 =
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst);
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr);
   EXPECT_EQ(constant1->getOutConnections().size(), 0);
 
   VertexPtr constant2 =
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst);
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr);
   VertexPtr ptr1 =
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst);
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr);
   EXPECT_EQ(constant1->addVertexToOutConnections(ptr1), true);
   EXPECT_EQ(constant1->addVertexToOutConnections(ptr1), false);
   EXPECT_EQ(constant1->getOutConnections()[0], ptr1);
 
   VertexPtr constant3 =
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst);
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr);
   VertexPtr ptr2 =
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst);
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr);
   constant1->addVertexToOutConnections(ptr2);
   EXPECT_EQ(constant1->getOutConnections()[1], ptr2);
 }
 
 TEST(TestCalculateHash, SameHashWhenEqualInputs) {
   initLogging("TestCalculateHash", "SameHashWhenEqualInputs");
-  GraphVertexConstant constant1('z', memoryOwnerConst);
-  GraphVertexConstant constant2('z', memoryOwnerConst);
+  GraphVertexConstant constant1('z', memoryOwnerConstGr);
+  GraphVertexConstant constant2('z', memoryOwnerConstGr);
   EXPECT_EQ(constant1.calculateHash(), constant2.calculateHash());
 
   constant1.addVertexToOutConnections(
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst)
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr)
   );
   EXPECT_NE(constant1.calculateHash(true), constant2.calculateHash(true));
   constant2.addVertexToOutConnections(
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst)
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr)
   );
   EXPECT_EQ(constant1.calculateHash(true), constant2.calculateHash(true));
 }
 TEST(TestCalculateHash, SameGraphDifferentValues) {
   initLogging("TestCalculateHash", "SameHashWhenEqualInputs");
-  GraphVertexConstant constant1('z', memoryOwnerConst);
-  GraphVertexConstant constant2('x', memoryOwnerConst);
+  GraphVertexConstant constant1('z', memoryOwnerConstGr);
+  GraphVertexConstant constant2('x', memoryOwnerConstGr);
   EXPECT_NE(constant1.calculateHash(), constant2.calculateHash());
 
   constant1.addVertexToOutConnections(
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst)
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr)
   );
   EXPECT_NE(constant1.calculateHash(true), constant2.calculateHash(true));
   constant2.addVertexToOutConnections(
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst)
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr)
   );
   EXPECT_NE(constant1.calculateHash(true), constant2.calculateHash(true));
 }
@@ -172,13 +172,13 @@ TEST(TestCalculateHash, SameGraphDifferentValues) {
 TEST(TestRemoveVertexToInConnections, RemoveConnections) {
   initLogging("TestRemoveVertexToInConnections", "RemoveConnections");
   VertexPtr vertexPtr1 =
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst);
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr);
   EXPECT_EQ(vertexPtr1->removeVertexToInConnections(vertexPtr1), false);
   vertexPtr1->addVertexToInConnections(
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst)
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr)
   );
   vertexPtr1->addVertexToInConnections(
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst)
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr)
   );
   EXPECT_EQ(vertexPtr1->getInConnections().size(), 2);
   EXPECT_EQ(vertexPtr1->removeVertexToInConnections(nullptr), true);
@@ -188,32 +188,32 @@ TEST(TestRemoveVertexToInConnections, RemoveConnections) {
 TEST(TestToDOT, CheckName) {
   initLogging("TestToDOT", "CheckName");
   VertexPtr vertexPtr1 =
-      std::make_shared<GraphVertexConstant>('0', memoryOwnerConst);
+      memoryOwnerConstGr->create<GraphVertexConstant>('0', memoryOwnerConstGr);
   VertexPtr vertexPtr2 =
-      std::make_shared<GraphVertexConstant>('1', memoryOwnerConst);
+      memoryOwnerConstGr->create<GraphVertexConstant>('1', memoryOwnerConstGr);
   VertexPtr vertexPtr3 =
-      std::make_shared<GraphVertexConstant>('x', memoryOwnerConst);
+      memoryOwnerConstGr->create<GraphVertexConstant>('x', memoryOwnerConstGr);
   VertexPtr vertexPtr4 =
-      std::make_shared<GraphVertexConstant>('z', memoryOwnerConst);
+      memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr);
   EXPECT_EQ(
       dotReturnToString(vertexPtr1->toDOT()),
-      vertexPtr1->getName() + " [shape=cds, label=\""
-          + vertexPtr1->getName() + "\\n1'b0\"];\n"
+      vertexPtr1->getName() + " [shape=cds, label=\"" + vertexPtr1->getName()
+          + "\\n1'b0\"];\n"
   );
   EXPECT_EQ(
       dotReturnToString(vertexPtr2->toDOT()),
-      vertexPtr2->getName() + " [shape=cds, label=\""
-          + vertexPtr2->getName() + "\\n1'b1\"];\n"
+      vertexPtr2->getName() + " [shape=cds, label=\"" + vertexPtr2->getName()
+          + "\\n1'b1\"];\n"
   );
   EXPECT_EQ(
       dotReturnToString(vertexPtr3->toDOT()),
-      vertexPtr3->getName() + " [shape=cds, label=\""
-          + vertexPtr3->getName() + "\\n1'bx\"];\n"
+      vertexPtr3->getName() + " [shape=cds, label=\"" + vertexPtr3->getName()
+          + "\\n1'bx\"];\n"
   );
   EXPECT_EQ(
       dotReturnToString(vertexPtr4->toDOT()),
-      vertexPtr4->getName() + " [shape=cds, label=\""
-          + vertexPtr4->getName() + "\\n1'bz\"];\n"
+      vertexPtr4->getName() + " [shape=cds, label=\"" + vertexPtr4->getName()
+          + "\\n1'bz\"];\n"
   );
 }
 

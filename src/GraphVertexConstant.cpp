@@ -1,3 +1,4 @@
+#include <cassert>
 #include <memory>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
@@ -10,15 +11,6 @@ GraphVertexConstant::GraphVertexConstant(char i_const, GraphPtr i_baseGraph) :
 }
 
 GraphVertexConstant::GraphVertexConstant(
-    char         i_const,
-    GraphMemory& memory,
-    GraphPtr     i_baseGraph
-) :
-  GraphVertexInput(memory, VertexTypes::constant, i_baseGraph) {
-  d_value = i_const;
-}
-
-GraphVertexConstant::GraphVertexConstant(
     char             i_const,
     std::string_view i_name,
     GraphPtr         i_baseGraph
@@ -26,6 +18,7 @@ GraphVertexConstant::GraphVertexConstant(
   GraphVertexInput(i_name, i_baseGraph, VertexTypes::constant) {
   d_value = i_const;
 }
+
 size_t GraphVertexConstant::calculateHash(bool i_recalculate) {
   if (d_hashed && !i_recalculate)
     return d_hashed;
@@ -35,7 +28,7 @@ size_t GraphVertexConstant::calculateHash(bool i_recalculate) {
   // future sorted struct
   std::vector<size_t> hashed_data;
 
-  for (auto& child : d_outConnections) {
+  for (auto& child : *d_outConnections) {
     hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());

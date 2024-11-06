@@ -22,11 +22,10 @@
 
 class GraphVertexBase;  // Проблема циклического определения
 
-#define GraphPtr      std::shared_ptr<OrientedGraph>
-#define GraphPtrWeak  std::weak_ptr<OrientedGraph>
+#define GraphPtr     std::shared_ptr<OrientedGraph>
+#define GraphPtrWeak std::weak_ptr<OrientedGraph>
 
-#define VertexPtr     std::shared_ptr<GraphVertexBase>
-#define VertexPtrWeak std::weak_ptr<GraphVertexBase>
+#define VertexPtr    GraphVertexBase*
 
 /// class OrientedGraph
 ///
@@ -80,12 +79,11 @@ class OrientedGraph :
   public std::enable_shared_from_this<OrientedGraph>,
   public el::Loggable {
 public:
-  // friend class Circuit;
   OrientedGraph(const std::string& i_name = "");
 
   // TODO: Добавить использование gates_inputs_info.
 
-  virtual ~OrientedGraph();
+  ~OrientedGraph();
 
   OrientedGraph& operator=(const OrientedGraph& other) = delete;
   OrientedGraph& operator=(OrientedGraph&& other)      = delete;
@@ -430,8 +428,8 @@ public:
   ) const;
 
   /// @brief Call calculateHash before this check!!!!
-  /// @param rhs 
-  /// @return 
+  /// @param rhs
+  /// @return
   bool                    operator==(const OrientedGraph& rhs);
 
   /// @brief calculateHash calculates hash values for a graph based on the hash
@@ -468,6 +466,25 @@ public:
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
   virtual void log(el::base::type::ostream_t& os) const;
+
+  /* memory management block */
+
+  /// @author Fuuulkrum7
+  /// @brief Allocates memory and creates an instance of required type. Is used
+  /// for creating ALL verticies of any type.
+  /// @tparam T
+  /// @tparam ...Args
+  /// @param ...args
+  /// @return
+  template<typename T, typename... Args>
+  T* create(Args&&... args) {
+    return new (allocate<T>()) T(std::forward<Args>(args)...);
+  }
+
+  std::pmr::vector<GraphVertexBase*>* createVector() {
+    using vecName = std::pmr::vector<GraphVertexBase*>;
+    return new (allocateForGraph<vecName>()) vecName(&getGraphResource());
+  }
 
 private:
   static std::atomic_size_t d_countNewGraphInstance;
@@ -511,17 +528,12 @@ private:
   std::map<size_t, std::vector<std::vector<VertexPtr>>> d_subGraphsInputsPtr;
 
   std::set<GraphPtr>                                    d_subGraphs;
-  std::map<VertexTypes, std::vector<VertexPtr>>         d_vertexes {
-              {VertexTypes::input, std::vector<VertexPtr>()},
-              {VertexTypes::output, std::vector<VertexPtr>()},
-              {VertexTypes::constant, std::vector<VertexPtr>()},
-              {VertexTypes::gate, std::vector<VertexPtr>()},
-              {VertexTypes::subGraph, std::vector<VertexPtr>()}};
+  std::map<VertexTypes, std::vector<VertexPtr>>         d_vertexes;
 
-  static std::atomic_size_t d_countGraph;
+  static std::atomic_size_t                             d_countGraph;
 
   // used for quick gates count
-  std::map<Gates, size_t>   d_gatesCount = {
+  std::map<Gates, size_t>                               d_gatesCount = {
       {Gates::GateAnd, 0},
       {Gates::GateNand, 0},
       {Gates::GateOr, 0},
@@ -529,7 +541,8 @@ private:
       {Gates::GateNot, 0},
       {Gates::GateBuf, 0},
       {Gates::GateXor, 0},
-      {Gates::GateXnor, 0}};
+      {Gates::GateXnor, 0}
+  };
   // used for quick edges of gate type count;
   std::map<Gates, std::map<Gates, size_t>> d_edgesGatesCount;
 
