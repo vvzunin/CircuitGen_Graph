@@ -94,6 +94,8 @@ public:
       GraphPtr         i_baseGraph
   );
 
+  ~GraphVertexConstant() {};
+
   size_t       calculateHash(bool i_recalculate = false) override;
 
   /// @brief updateLevel updates the level of the current vertex in the graph
@@ -130,6 +132,8 @@ public:
       std::string_view i_name,
       GraphPtr         i_baseGraph
   );
+
+  ~GraphVertexSubGraph() {};
 
   char updateValue() override;
   void updateLevel(bool i_recalculate = false, std::string tab = "") override;
@@ -233,6 +237,8 @@ public:
   GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph);
 
   GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph);
+
+  ~GraphVertexGates() {};
 
   /// @brief updateValue
   /// Updates the value of the vertex

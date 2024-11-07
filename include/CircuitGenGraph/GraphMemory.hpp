@@ -7,6 +7,10 @@
 
 typedef unsigned char bytea;
 
+class LinearAllocator {
+
+};
+
 /// @author Fuuulkrum7
 class GraphMemory {
 public:
@@ -14,7 +18,6 @@ public:
   /// By default we allocate memory for 1024 verticies. Size of one vertex is
   /// suuposed to be 64 bytes by default.
   GraphMemory() : d_strings {&d_stringMemory} {
-    // buffer = std::vector<bytea>(initial_size);
     // TODO how to use buffer????
   }
 
@@ -36,21 +39,19 @@ public:
     return static_cast<T*>(d_vertexMemory.allocate(sizeof(T), alignof(T)));
   }
 
-  template<typename T>
-  T* allocateForGraph() {
-    return static_cast<T*>(d_graphMemory.allocate(sizeof(T), alignof(T)));
-  }
+  // template<typename T>
+  // T* allocateForGraph() {
+  //   return static_cast<T*>(d_graphMemory.allocate(sizeof(T), alignof(T)));
+  // }
 
   std::pmr::memory_resource& getVertexResource() { return d_vertexMemory; }
 
-  std::pmr::memory_resource& getGraphResource() { return d_graphMemory; }
+  // std::pmr::memory_resource& getGraphResource() { return d_graphMemory; }
 
 private:
   std::pmr::monotonic_buffer_resource d_vertexMemory;
-  std::pmr::monotonic_buffer_resource d_graphMemory;
+  // std::pmr::monotonic_buffer_resource d_graphMemory;
   std::pmr::monotonic_buffer_resource d_stringMemory;
 
   std::pmr::set<std::string>          d_strings;
-
-  // std::vector<bytea>                  buffer;
 };

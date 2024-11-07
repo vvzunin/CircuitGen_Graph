@@ -481,10 +481,10 @@ public:
     return new (allocate<T>()) T(std::forward<Args>(args)...);
   }
 
-  std::vector<GraphVertexBase*>* createVector() {
-    using vecName = std::vector<GraphVertexBase*>;
-    return new (allocateForGraph<vecName>()) vecName();
-  }
+  // std::vector<GraphVertexBase*>* createVector() {
+  //   using vecName = std::vector<GraphVertexBase*>;
+  //   return new (allocateForGraph<vecName>()) vecName();
+  // }
 
 private:
   static std::atomic_size_t d_countNewGraphInstance;

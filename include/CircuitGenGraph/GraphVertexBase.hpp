@@ -114,7 +114,7 @@ public:
   GraphVertexBase(const GraphVertexBase& other) = default;
   GraphVertexBase(GraphVertexBase&& other)      = default;
 
-  // ~GraphVertexBase();
+  ~GraphVertexBase();
 
   /// @brief getType
   /// This method returns the type of the vertex as a value of the VertexTypes
@@ -477,8 +477,8 @@ protected:
   bool                    d_needUpdate = false;
   uint32_t                d_level;
 
-  std::vector<VertexPtr>* d_inConnections;
-  std::vector<VertexPtr>* d_outConnections;
+  std::unique_ptr<std::vector<VertexPtr>> d_inConnections;
+  std::unique_ptr<std::vector<VertexPtr>> d_outConnections;
 
   size_t                  d_hashed = 0;
 

@@ -51,6 +51,28 @@ OrientedGraph::~OrientedGraph() {
 
     sub->d_currentParentGraph.lock() = nullptr;
   }
+  for (auto vertex : d_vertexes[VertexTypes::subGraph]) {
+    static_cast<GraphVertexSubGraph*>(vertex)->~GraphVertexSubGraph();
+  }
+  for (auto vertex : d_vertexes[VertexTypes::gate]) {
+    static_cast<GraphVertexGates*>(vertex)->~GraphVertexGates();
+  }
+  for (auto vertex : d_vertexes[VertexTypes::constant]) {
+    static_cast<GraphVertexConstant*>(vertex)->~GraphVertexConstant();
+  }
+
+  for (auto verticiesVector :
+       {&d_vertexes[VertexTypes::input],
+        &d_vertexes[VertexTypes::output]}) {
+    for (auto vertex : *verticiesVector) {
+      vertex->~GraphVertexBase();
+    }
+  }
+
+  for (auto vertex : d_allSubGraphsOutputs) {
+    vertex->~GraphVertexBase();
+  }
+  std::cout << "Graph dead: " << d_name << '\n';
 }
 
 size_t OrientedGraph::baseSize() const {
@@ -245,8 +267,7 @@ std::set<GraphPtr> OrientedGraph::getSubGraphs() const {
   return d_subGraphs;
 }
 
-std::array<std::vector<VertexPtr>, 5> OrientedGraph::getBaseVertexes(
-) const {
+std::array<std::vector<VertexPtr>, 5> OrientedGraph::getBaseVertexes() const {
   return d_vertexes;
 }
 
@@ -987,7 +1008,7 @@ std::string OrientedGraph::toGraphMLOpenABCD() {
   std::map<std::string, uint32_t> nodeNames;
   uint32_t                        nodeCounter = 0, inverted;
 
-  char vertexType = 0;
+  char                            vertexType  = 0;
   for (const auto& vertexVector : graphPtr->d_vertexes) {
     switch (vertexType) {
       case VertexTypes::input:
@@ -1163,7 +1184,7 @@ bool OrientedGraph::isConnected(bool i_recalculate) {
   std::unordered_set<VertexPtr> visited;
   VertexPtr                     startVertex = nullptr;
 
-  char type = 0;
+  char                          type        = 0;
   for (auto& vertices : d_vertexes) {
     if (type == VertexTypes::subGraph) {
       continue;

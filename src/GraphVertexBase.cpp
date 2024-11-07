@@ -65,8 +65,8 @@ GraphVertexBase::GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph) {
   d_name      = i_graph->internalize(
       this->getTypeName() + "_" + std::to_string(VertexUtils::d_count++)
   );
-  d_inConnections  = i_graph->createVector();
-  d_outConnections = i_graph->createVector();
+  d_inConnections  = std::make_unique<std::vector<VertexPtr>>();
+  d_outConnections = std::make_unique<std::vector<VertexPtr>>();
   d_value          = 'x';
   d_level          = 0;
 }
@@ -91,13 +91,15 @@ GraphVertexBase::GraphVertexBase(
         this->getTypeName() + "_" + std::to_string(VertexUtils::d_count++)
     );
   }
-  d_inConnections  = i_graph->createVector();
-  d_outConnections = i_graph->createVector();
+  d_inConnections  = std::make_unique<std::vector<VertexPtr>>();
+  d_outConnections = std::make_unique<std::vector<VertexPtr>>();
   d_value          = 'x';
   d_level          = 0;
 }
 
-// GraphVertexBase::~GraphVertexBase() {}
+GraphVertexBase::~GraphVertexBase() {
+  std::cout << "Vertex is dead too\n";
+}
 
 VertexTypes GraphVertexBase::getType() const {
   return d_type;

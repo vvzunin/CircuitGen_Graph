@@ -35,6 +35,7 @@ std::string loadStringFile(const std::filesystem::path& p) {
 }
 
 // Test is on top because it needs to contain the graph_0
+
 TEST(TestSetNameAndGetName, ReturnCorrectName) {
   initLogging("TestSetNameAndGetName", "ReturnCorrectName");
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
@@ -169,14 +170,14 @@ TEST(TestIsEmptyAndIsEmptyFull, ReturnCorrectSize) {
 }
 
 // needToUpdateLevel isn't realized
-/*TEST(TestNeedToUpdateLevel, ReturnCorrectValue) {
+TEST(TestNeedToUpdateLevel, ReturnCorrectValue) {
 
-}*/
+}
 
 // updateLevels is commented
-/*TEST(TestUpdateLevelsAndGetMaxLevel, ReturnCorrectMaxLevel) {
+TEST(TestUpdateLevelsAndGetMaxLevel, ReturnCorrectMaxLevel) {
 
-}*/
+}
 
 TEST(TestGetEdgesCount, ReturnCorrectCount) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
@@ -426,7 +427,6 @@ TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenGrpahIsEmpty) {
       "</graphml>\n"
   );
 }
-
 TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreNodes) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("Graph1");
   graphPtr1->addGate(Gates::GateAnd, "gate1");
@@ -559,12 +559,22 @@ TEST(TestCalculateHash, GraphsWithTheSameStructureButDifferentConst) {
 
   auto inp1 = graphPtr1->addInput();
   auto inp2 = graphPtr2->addInput();
+  auto inp11 = graphPtr1->addInput();
+  auto inp22 = graphPtr2->addInput();
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
 
   auto gate1 = graphPtr1->addGate(Gates::GateAnd);
   auto gate2 = graphPtr2->addGate(Gates::GateAnd);
   graphPtr1->addEdge(inp1, gate1);
+  graphPtr1->addEdge(inp11, gate1);
   graphPtr2->addEdge(inp2, gate2);
+  graphPtr2->addEdge(inp22, gate2);
+  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+
+  auto gate3 = graphPtr1->addGate(Gates::GateNot);
+  auto gate4 = graphPtr2->addGate(Gates::GateNot);
+  graphPtr1->addEdge(gate1, gate3);
+  graphPtr2->addEdge(gate2, gate4);
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
 
   auto out1 = graphPtr1->addOutput();
@@ -572,7 +582,6 @@ TEST(TestCalculateHash, GraphsWithTheSameStructureButDifferentConst) {
   graphPtr1->addEdge(gate1, out1);
   graphPtr2->addEdge(gate2, out2);
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
-
 
   auto const1 = graphPtr1->addConst('0');
   auto const2 = graphPtr2->addConst('1');
@@ -680,6 +689,7 @@ TEST(TestToVerilog, Simple) {
   // LOG(INFO) << "Printing Verilog file: " << strs.first << "\n" << loadFile;
 }
 
+
 TEST(TestToVerilog, SubGraph) {
   initLogging("TestToVerilog", "SubGraph");
   GraphPtr subGraphPtr = std::make_shared<OrientedGraph>("testSubGraph");
@@ -709,6 +719,7 @@ TEST(TestToVerilog, SubGraph) {
   loadFile             = loadFile.substr(loadFile.find("\n") + 2);
   // LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
 }
+
 
 TEST(TestToDOT, Simple) {
   initLogging("TestToDOT", "Simple");
