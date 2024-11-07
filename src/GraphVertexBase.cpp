@@ -97,9 +97,7 @@ GraphVertexBase::GraphVertexBase(
   d_level          = 0;
 }
 
-GraphVertexBase::~GraphVertexBase() {
-  std::cout << "Vertex is dead too\n";
-}
+GraphVertexBase::~GraphVertexBase() {}
 
 VertexTypes GraphVertexBase::getType() const {
   return d_type;

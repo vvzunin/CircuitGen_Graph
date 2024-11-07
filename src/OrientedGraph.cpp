@@ -72,7 +72,6 @@ OrientedGraph::~OrientedGraph() {
   for (auto vertex : d_allSubGraphsOutputs) {
     vertex->~GraphVertexBase();
   }
-  std::cout << "Graph dead: " << d_name << '\n';
 }
 
 size_t OrientedGraph::baseSize() const {
