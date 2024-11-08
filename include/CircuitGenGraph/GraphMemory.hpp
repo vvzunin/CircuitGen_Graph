@@ -78,7 +78,7 @@ public:
         size_t buf_size = DEFAULT_BUF,
         size_t chunk_size = CHUNK_SIZE)
       : d_vertexMemory(buf_size, chunk_size)
-      // , d_strings {&d_stringMemory}
+      , d_strings {&d_stringMemory}
   {}
 
   GraphMemory& operator=(GraphMemory&& other)      = delete;
@@ -102,6 +102,6 @@ public:
 private:
   MultiLinearAllocator d_vertexMemory;
 
-  // std::pmr::monotonic_buffer_resource d_stringMemory;
-  std::set<std::string>          d_strings;
+  std::pmr::monotonic_buffer_resource d_stringMemory;
+  std::pmr::set<std::string>          d_strings;
 };
