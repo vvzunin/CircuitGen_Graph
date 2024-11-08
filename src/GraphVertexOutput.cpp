@@ -12,11 +12,11 @@ GraphVertexOutput::GraphVertexOutput(
   GraphVertexBase(VertexTypes::output, i_name, i_baseGraph) {}
 
 char GraphVertexOutput::updateValue() {
-  if (d_inConnections->size() > 0) {
-    d_value = d_inConnections->front()->getValue();
+  if (d_inConnections.size() > 0) {
+    d_value = d_inConnections.front()->getValue();
   }
-  for (size_t i = 1; i < d_inConnections->size(); i++) {
-    if (d_inConnections->at(i)->getValue() != d_value) {
+  for (size_t i = 1; i < d_inConnections.size(); i++) {
+    if (d_inConnections.at(i)->getValue() != d_value) {
       d_value = 'x';
     }
   }
@@ -28,7 +28,7 @@ void GraphVertexOutput::updateLevel(bool i_recalculate, std::string tab) {
   if (d_needUpdate && !i_recalculate) {
     return;
   }
-  for (VertexPtr ptr : *d_inConnections) {
+  for (VertexPtr ptr : d_inConnections) {
     // LOG(INFO) << tab << counter++ << ". " << ptr->getName() << " ("
     // << ptr->getTypeName() << ")";
     ptr->updateLevel(i_recalculate, tab + "  ");
@@ -47,7 +47,7 @@ DotReturn GraphVertexOutput::toDOT() {
         {"level", std::to_string(d_level)}}}
   );
 
-  for (VertexPtr ptr : *d_inConnections) {
+  for (VertexPtr ptr : d_inConnections) {
     dot.push_back(
         {DotTypes::DotEdge,
          {{"from", ptr->getName()},

@@ -24,15 +24,15 @@ Gates GraphVertexGates::getGate() const {
 
 char GraphVertexGates::updateValue() {
   std::map<char, char> table;
-  if (d_inConnections->size() > 0) {
-    VertexPtr ptr = d_inConnections->at(0);
+  if (d_inConnections.size() > 0) {
+    VertexPtr ptr = d_inConnections.at(0);
 
     d_value       = ptr->getValue();
     if (d_gate == Gates::GateBuf)
       d_value = tableBuf.at(ptr->getValue());
     if (d_gate == Gates::GateNot)
       d_value = tableNot.at(ptr->getValue());
-    for (size_t i = 1; i < d_inConnections->size(); i++) {
+    for (size_t i = 1; i < d_inConnections.size(); i++) {
       switch (d_gate) {
         case (Gates::GateAnd):
           table = tableAnd.at(d_value);
@@ -55,7 +55,7 @@ char GraphVertexGates::updateValue() {
         default:
           LOG(ERROR) << "Error" << std::endl;
       }
-      ptr     = d_inConnections->at(i);
+      ptr     = d_inConnections.at(i);
       d_value = table.at(ptr->getValue());
     }
   }
@@ -67,12 +67,12 @@ size_t GraphVertexGates::calculateHash(bool i_recalculate) {
     return d_hashed;
 
   std::string hashedStr =
-      std::to_string(d_inConnections->size()) + std::to_string(d_gate);
+      std::to_string(d_inConnections.size()) + std::to_string(d_gate);
 
   // future sorted struct
   std::vector<size_t> hashed_data;
 
-  for (auto& child : *d_outConnections) {
+  for (auto& child : d_outConnections) {
     hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
@@ -89,8 +89,8 @@ size_t GraphVertexGates::calculateHash(bool i_recalculate) {
 std::string GraphVertexGates::getVerilogString() const {
   std::string s = "";
 
-  if (d_inConnections->size() > 0) {
-    VertexPtr ptr = d_inConnections->at(0);
+  if (d_inConnections.size() > 0) {
+    VertexPtr ptr = d_inConnections.at(0);
     if (!ptr) {
       throw std::invalid_argument(
           "Cannot use nullptr for printing it to verilog"
@@ -108,8 +108,8 @@ std::string GraphVertexGates::getVerilogString() const {
         || (d_gate == Gates::GateXnor))
       s = "~(" + s;
 
-    for (size_t i = 1; i < d_inConnections->size(); i++) {
-      ptr = d_inConnections->at(i);
+    for (size_t i = 1; i < d_inConnections.size(); i++) {
+      ptr = d_inConnections.at(i);
       if (!ptr) {
         throw std::invalid_argument(
             "Cannot use nullptr for printing it to verilog"
@@ -136,14 +136,14 @@ std::string GraphVertexGates::getVerilogString() const {
 }
 
 std::string GraphVertexGates::toVerilog() {
-  if (!d_inConnections->size()) {
+  if (!d_inConnections.size()) {
     LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
     return "";
   }
   std::string basic = "assign " + getName() + " = ";
 
   std::string oper  = VertexUtils::gateToString(d_gate);
-  VertexPtr   ptr   = d_inConnections->back();
+  VertexPtr   ptr   = d_inConnections.back();
   if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
     basic += oper + ptr->getName() + ";";
 
@@ -158,16 +158,16 @@ std::string GraphVertexGates::toVerilog() {
 
     end    = " )";
   }
-  for (size_t i = 0; i < d_inConnections->size() - 1; ++i) {
-    basic += d_inConnections->at(i)->getName() + " " + oper + " ";
+  for (size_t i = 0; i < d_inConnections.size() - 1; ++i) {
+    basic += d_inConnections.at(i)->getName() + " " + oper + " ";
   }
-  basic += d_inConnections->back()->getName() + end + ";";
+  basic += d_inConnections.back()->getName() + end + ";";
 
   return basic;
 }
 
 DotReturn GraphVertexGates::toDOT() {
-  if (!d_inConnections->size()) {
+  if (!d_inConnections.size()) {
     LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
     return {};
   }
@@ -181,7 +181,7 @@ DotReturn GraphVertexGates::toDOT() {
         {"level", std::to_string(d_level)}}}
   );
 
-  for (VertexPtr ptr : *d_inConnections) {
+  for (VertexPtr ptr : d_inConnections) {
     dot.push_back(
         {DotTypes::DotEdge, {{"from", ptr->getName()}, {"to", getName()}}}
     );
@@ -190,10 +190,10 @@ DotReturn GraphVertexGates::toDOT() {
 }
 
 bool GraphVertexGates::isSubgraphBuffer() const {
-  if (d_gate != Gates::GateBuf || d_inConnections->empty()) {
+  if (d_gate != Gates::GateBuf || d_inConnections.empty()) {
     return false;
   }
-  return d_inConnections->front()->getType() == VertexTypes::subGraph;
+  return d_inConnections.front()->getType() == VertexTypes::subGraph;
 }
 
 void GraphVertexGates::log(el::base::type::ostream_t& os) const {

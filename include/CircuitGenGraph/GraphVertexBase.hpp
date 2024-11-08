@@ -270,7 +270,7 @@ public:
   /// }
   /// @endcode
 
-  std::vector<VertexPtr>& getInConnections() const;
+  std::vector<VertexPtr> getInConnections() const;
 
   /// @brief addVertexToInConnections
   /// Adds a vertex to the input connections of this vertex and returns the
@@ -349,7 +349,7 @@ public:
   /// }
   /// @endcode
 
-  std::vector<VertexPtr>& getOutConnections() const;
+  std::vector<VertexPtr> getOutConnections() const;
 
   /// @brief addVertexToOutConnections
   /// Adds a vertex to the output connections of this vertex if it is not
@@ -477,8 +477,8 @@ protected:
   bool                    d_needUpdate = false;
   uint32_t                d_level;
 
-  std::unique_ptr<std::vector<VertexPtr>> d_inConnections;
-  std::unique_ptr<std::vector<VertexPtr>> d_outConnections;
+  std::vector<VertexPtr> d_inConnections;
+  std::vector<VertexPtr> d_outConnections;
 
   size_t                  d_hashed = 0;
 

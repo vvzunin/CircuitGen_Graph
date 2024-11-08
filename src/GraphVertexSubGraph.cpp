@@ -108,12 +108,12 @@ size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
 
   // calc hash from subgraph
   std::string hashedStr =
-      d_subGraph->calculateHash() + std::to_string(d_inConnections->size());
+      d_subGraph->calculateHash() + std::to_string(d_inConnections.size());
 
   // futuire sorted struct
   std::vector<size_t> hashed_data;
 
-  for (auto& child : *d_outConnections) {
+  for (auto& child : d_outConnections) {
     hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
@@ -131,8 +131,8 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOutputBuffersByOuterInput(
     VertexPtr i_outerInput
 ) const {
   size_t inputIndex = SIZE_MAX;
-  for (size_t i = 0; i < d_inConnections->size(); ++i) {
-    if (d_inConnections->at(i) == i_outerInput) {
+  for (size_t i = 0; i < d_inConnections.size(); ++i) {
+    if (d_inConnections.at(i) == i_outerInput) {
       inputIndex = i;
       break;
     }
@@ -163,7 +163,7 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOutputBuffersByOuterInput(
         if (v->getType() == VertexTypes::output) {
           for (size_t i = 0; i < sgAllOutputs.size(); ++i) {
             if (sgAllOutputs[i] == v) {
-              outputs.push_back(d_outConnections->at(i));
+              outputs.push_back(d_outConnections.at(i));
             }
           }
         } else if (v->getType() != VertexTypes::subGraph) {
@@ -184,8 +184,8 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
     VertexPtr i_outputBuffer
 ) const {
   size_t bufferIndex = SIZE_MAX;
-  for (size_t i = 0; i < d_outConnections->size(); ++i) {
-    if (d_outConnections->at(i) == i_outputBuffer) {
+  for (size_t i = 0; i < d_outConnections.size(); ++i) {
+    if (d_outConnections.at(i) == i_outputBuffer) {
       bufferIndex = i;
       break;
     }
@@ -216,7 +216,7 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
         if (ptr->getType() == VertexTypes::input) {
           for (size_t i = 0; i < sgAllInputs.size(); ++i) {
             if (sgAllInputs[i] == ptr) {
-              inputs.push_back(d_inConnections->at(i));
+              inputs.push_back(d_inConnections.at(i));
             }
           }
         } else if (ptr->getType() != VertexTypes::subGraph) {

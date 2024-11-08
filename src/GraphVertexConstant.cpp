@@ -28,7 +28,7 @@ size_t GraphVertexConstant::calculateHash(bool i_recalculate) {
   // future sorted struct
   std::vector<size_t> hashed_data;
 
-  for (auto& child : *d_outConnections) {
+  for (auto& child : d_outConnections) {
     hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());

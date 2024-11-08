@@ -19,11 +19,11 @@ GraphVertexInput::GraphVertexInput(
 
 // TODO: Он здесь нужен?
 char GraphVertexInput::updateValue() {
-  if (d_inConnections->size() > 0) {
-    d_value = d_inConnections->front()->getValue();
+  if (d_inConnections.size() > 0) {
+    d_value = d_inConnections.front()->getValue();
 
-    for (size_t i = 1; i < d_inConnections->size(); i++) {
-      if (d_inConnections->at(i)->getValue() != d_value) {
+    for (size_t i = 1; i < d_inConnections.size(); i++) {
+      if (d_inConnections.at(i)->getValue() != d_value) {
         d_value = 'x';
       }
     }
