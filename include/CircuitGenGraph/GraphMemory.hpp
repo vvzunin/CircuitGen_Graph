@@ -69,10 +69,10 @@ private:
 class GraphMemory {
 public:
   /// @param buf_size size, which would be used for memory buffer reserve.
-  /// By default we allocate memory for 1024 base verticies. Size of one vertex
+  /// By default we allocate memory for 1024 base vertices. Size of one vertex
   /// is supposed to be 80 bytes by default.
   /// @param chunk_size additional size, which would allocated, if buffer ends.
-  /// By default we allocate memory for 128 base verticies. Size of one vertex
+  /// By default we allocate memory for 128 base vertices. Size of one vertex
   /// is supposed to be 80 bytes by default.
   GraphMemory(
         size_t buf_size = DEFAULT_BUF,

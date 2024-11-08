@@ -475,7 +475,7 @@ public:
 
   /// @author Fuuulkrum7
   /// @brief Allocates memory and creates an instance of required type. Is used
-  /// for creating ALL verticies of any type.
+  /// for creating ALL vertices of any type.
   /// @tparam T
   /// @tparam ...Args
   /// @param ...args
