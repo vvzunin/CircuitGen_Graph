@@ -6,8 +6,8 @@
 #include <string>
 #include <string_view>
 
-#define DEFAULT_BUF 81920
-#define CHUNK_SIZE 10240
+#define DEFAULT_BUF 114688
+#define CHUNK_SIZE 14336
 
 typedef unsigned char bytea;
 
