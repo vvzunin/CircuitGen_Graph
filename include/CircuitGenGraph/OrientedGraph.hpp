@@ -79,7 +79,11 @@ class OrientedGraph :
   public std::enable_shared_from_this<OrientedGraph>,
   public el::Loggable {
 public:
-  OrientedGraph(const std::string& i_name = "");
+  OrientedGraph(
+      const std::string& i_name      = "",
+      size_t             buffer_size = DEFAULT_BUF,
+      size_t             chunk_size  = CHUNK_SIZE
+  );
 
   // TODO: Добавить использование gates_inputs_info.
 
@@ -371,12 +375,12 @@ public:
   /// @return The total number of edges in the graph
   size_t getEdgesCount() { return d_edgesCount; }
 
-  std::set<GraphPtr>                            getSubGraphs() const;
-  std::set<GraphPtr>                            getSetSubGraphs() const;
+  std::set<GraphPtr>                    getSubGraphs() const;
+  std::set<GraphPtr>                    getSetSubGraphs() const;
   std::array<std::vector<VertexPtr>, 5> getBaseVertexes() const;
-  VertexPtr   getVerticeByIndex(size_t idx) const;
+  VertexPtr                             getVerticeByIndex(size_t idx) const;
 
-  std::string getGraphVerilogInstance();
+  std::string                           getGraphVerilogInstance();
   std::pair<bool, std::string>
             toVerilog(std::string i_path, std::string i_filename = "");
 

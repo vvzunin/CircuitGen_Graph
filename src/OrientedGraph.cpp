@@ -22,7 +22,12 @@ bool               CompareLevels(const VertexPtr left, const VertexPtr right) {
   return left->getLevel() < right->getLevel();
 }
 
-OrientedGraph::OrientedGraph(const std::string& i_name) : GraphMemory() {
+OrientedGraph::OrientedGraph(
+    const std::string& i_name,
+    size_t             buffer_size,
+    size_t             chunk_size
+) :
+  GraphMemory(buffer_size, chunk_size) {
   d_graphID = d_countNewGraphInstance++;
 
   if (i_name == "")
@@ -62,8 +67,7 @@ OrientedGraph::~OrientedGraph() {
   }
 
   for (auto verticiesVector :
-       {&d_vertexes[VertexTypes::input],
-        &d_vertexes[VertexTypes::output]}) {
+       {&d_vertexes[VertexTypes::input], &d_vertexes[VertexTypes::output]}) {
     for (auto vertex : *verticiesVector) {
       vertex->~GraphVertexBase();
     }

@@ -40,8 +40,8 @@ struct MultiLinearAllocator {
       if (offset == blocks.back()) {
         return nullptr;
       }
-      blocks.push_back(new bytea[chunk_size]);
-      offset = blocks.back();
+      blocks.push_back(offset = new bytea[chunk_size]);
+      buf_size = chunk_size;
       return allocate<T>();
     }
     return reinterpret_cast<T*>(current);
