@@ -63,6 +63,20 @@ target_link_libraries(
   easylogging++
 )
 
+find_program(CLANG_TIDY NAMES clang-tidy)
+
+if (CLANG_TIDY)
+  set(GRAPH_CLANG_TIDY
+    ${CLANG_TIDY};
+    -line-filter=[{"name":".hpp"},{"name":".cpp"}]
+  )
+  set_target_properties(${PROJECT_NAME} PROPERTIES
+    CXX_CLANG_TIDY "${GRAPH_CLANG_TIDY}"
+  )
+else()
+  message("clang-tidy not found")
+endif()
+
 target_include_directories(
   ${PROJECT_NAME} ${warning_guard}
   PUBLIC
