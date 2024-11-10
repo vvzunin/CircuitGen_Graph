@@ -32,7 +32,7 @@ foreach(file IN LISTS files)
   message("${FORMAT_COMMAND} " --style=file " ${flag} " "${file}")
 
   execute_process(
-      COMMAND "${FORMAT_COMMAND} " --style=file " ${flag} " "${file}"
+      COMMAND "${FORMAT_COMMAND}" --style=file "${flag}" "${file}"
       WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
       RESULT_VARIABLE result
       ${args}
