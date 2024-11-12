@@ -292,7 +292,7 @@ public:
   /// connections of the first vertex: " << occurrences << std::endl;
   /// @endcode
 
-  uint32_t                addVertexToInConnections(VertexPtr i_vert);
+  uint32_t               addVertexToInConnections(VertexPtr i_vert);
 
   /// @brief removeVertexToInConnections
   /// Removes a vertex from the input connections of this vertex.
@@ -361,7 +361,7 @@ public:
   /// TO DO:
   /// @endcode
 
-  bool                    addVertexToOutConnections(VertexPtr i_vert);
+  bool                   addVertexToOutConnections(VertexPtr i_vert);
 
   /// @brief removeVertexToOutConnections
   /// Removes a vertex from the output connections of this vertex.
@@ -390,7 +390,7 @@ public:
   /// }
   /// @endcode
 
-  bool                    removeVertexToOutConnections(VertexPtr i_vert);
+  bool                   removeVertexToOutConnections(VertexPtr i_vert);
 
   /// @brief calculateHash
   /// Calculates the hash value for the vertex based on its outgoing
@@ -417,7 +417,7 @@ public:
   /// std::cout << "Hash for the first vertex: " << hashValue << std::endl;
   /// @endcode
 
-  virtual size_t          calculateHash(bool i_recalculate = false);
+  virtual size_t         calculateHash(bool i_recalculate = false);
 
   /// @brief getVerilogInstance
   /// Generates an instance declaration for the vertex in Verilog format.
@@ -433,7 +433,7 @@ public:
   /// std::endl;
   /// @endcode
 
-  virtual std::string     getVerilogInstance();
+  virtual std::string    getVerilogInstance();
 
   /// @brief toVerilog
   /// Generates Verilog code for the vertex
@@ -455,32 +455,33 @@ public:
   /// std::cout << "Generated Verilog code:\n" << verilogCode << std::endl;
   /// @endcode
 
-  virtual std::string     toVerilog();
+  virtual std::string    toVerilog();
 
   /// @brief toDOT
   /// Generates DOT code for the vertex
   /// @return
 
-  virtual DotReturn       toDOT();
+  virtual DotReturn      toDOT();
 
-  virtual bool            isSubgraphBuffer() const { return false; }
+  virtual bool           isSubgraphBuffer() const { return false; }
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  virtual void            log(el::base::type::ostream_t& os) const;
+  virtual void           log(el::base::type::ostream_t& os) const;
 
 protected:
-  GraphPtrWeak            d_baseGraph;
+  GraphPtrWeak           d_baseGraph;
 
-  std::string_view        d_name;
-  char                    d_value;
-  bool                    d_needUpdate = false;
-  uint32_t                d_level;
+  std::string_view       d_name;
+  char                   d_value;
+  char                   d_needUpdate = 0;
+  char                   d_hasHash    = 0;
+  uint32_t               d_level;
 
   std::vector<VertexPtr> d_inConnections;
   std::vector<VertexPtr> d_outConnections;
 
-  size_t                  d_hashed = 0;
+  size_t                 d_hashed = 0;
 
 private:
   // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых

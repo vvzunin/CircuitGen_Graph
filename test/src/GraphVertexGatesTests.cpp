@@ -370,7 +370,7 @@ TEST(TestToVerilog, ThrowInvalidArgumentIfDInConnectionsLastIsDead) {
   // gate1.addVertexToInConnections(nullptr);
   // EXPECT_THROW(gate1.toVerilog(), std::invalid_argument);
 
-  VertexPtr gatePtr1 = memoryOwnerGateGr->create<GraphVertexGates>(
+  VertexPtr        gatePtr1 = memoryOwnerGateGr->create<GraphVertexGates>(
       Gates::GateAnd, memoryOwnerGateGr
   );
   gate1.addVertexToInConnections(gatePtr1);
@@ -525,8 +525,9 @@ TEST(TestAddInConnections, AddConnections) {
   VertexPtr gate2 = memoryOwnerGateGr->create<GraphVertexGates>(
       Gates::GateAnd, memoryOwnerGateGr
   );
-  GraphVertexGates* ptr1 =
-      memoryOwnerGateGr->create<GraphVertexGates>(Gates::GateOr, memoryOwnerGateGr);
+  GraphVertexGates* ptr1 = memoryOwnerGateGr->create<GraphVertexGates>(
+      Gates::GateOr, memoryOwnerGateGr
+  );
   EXPECT_EQ(gate1->addVertexToInConnections(ptr1), 1);
   EXPECT_EQ(gate1->addVertexToInConnections(ptr1), 2);
   EXPECT_EQ(gate1->getInConnections()[0], ptr1);
@@ -549,8 +550,9 @@ TEST(TestAddOutConnections, AddConnections) {
   EXPECT_EQ(gate1->getOutConnections().size(), 0);
 
   GraphVertexGates gate2(Gates::GateAnd, memoryOwnerGateGr);
-  VertexPtr        ptr1 =
-      memoryOwnerGateGr->create<GraphVertexGates>(Gates::GateOr, memoryOwnerGateGr);
+  VertexPtr        ptr1 = memoryOwnerGateGr->create<GraphVertexGates>(
+      Gates::GateOr, memoryOwnerGateGr
+  );
   EXPECT_EQ(gate1->addVertexToOutConnections(ptr1), true);
   EXPECT_EQ(gate1->addVertexToOutConnections(ptr1), false);
   EXPECT_EQ(gate1->getOutConnections()[0], ptr1);
@@ -570,13 +572,13 @@ TEST(TestCalculateHash, SameHashWhenEqualInputs) {
   GraphVertexGates gate2(Gates::GateAnd, memoryOwnerGateGr);
   EXPECT_EQ(gate1.calculateHash(), gate2.calculateHash());
 
-  gate1.addVertexToOutConnections(
-      memoryOwnerGateGr->create<GraphVertexGates>(Gates::GateAnd, memoryOwnerGateGr)
-  );
+  gate1.addVertexToOutConnections(memoryOwnerGateGr->create<GraphVertexGates>(
+      Gates::GateAnd, memoryOwnerGateGr
+  ));
   EXPECT_NE(gate1.calculateHash(true), gate2.calculateHash(true));
-  gate2.addVertexToOutConnections(
-      memoryOwnerGateGr->create<GraphVertexGates>(Gates::GateAnd, memoryOwnerGateGr)
-  );
+  gate2.addVertexToOutConnections(memoryOwnerGateGr->create<GraphVertexGates>(
+      Gates::GateAnd, memoryOwnerGateGr
+  ));
   EXPECT_EQ(gate1.calculateHash(true), gate2.calculateHash(true));
 }
 
@@ -587,10 +589,14 @@ TEST(TestRemoveVertexToInConnections, RemoveConnections) {
   EXPECT_EQ(gatesPtr1->removeVertexToInConnections(nullptr), false);
 
   gatesPtr1->addVertexToInConnections(
-      memoryOwnerGateGr->create<GraphVertexGates>(Gates::GateAnd, memoryOwnerGateGr)
+      memoryOwnerGateGr->create<GraphVertexGates>(
+          Gates::GateAnd, memoryOwnerGateGr
+      )
   );
   gatesPtr1->addVertexToInConnections(
-      memoryOwnerGateGr->create<GraphVertexGates>(Gates::GateAnd, memoryOwnerGateGr)
+      memoryOwnerGateGr->create<GraphVertexGates>(
+          Gates::GateAnd, memoryOwnerGateGr
+      )
   );
   EXPECT_EQ(gatesPtr1->getInConnections().size(), 2);
   EXPECT_EQ(gatesPtr1->removeVertexToInConnections(nullptr), true);

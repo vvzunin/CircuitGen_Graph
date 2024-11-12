@@ -61,20 +61,23 @@ TEST(TestConstructorWithIName, WithDefaultInputParametrs) {
 
 TEST(TestUpdateValue, UpdateValueCorrect) {
   GraphVertexOutput output1(memoryOwnerOutputGr);
-  VertexPtr         constantPtr1 =
-      memoryOwnerOutputGr->create<GraphVertexConstant>('z', memoryOwnerOutputGr);
+  VertexPtr constantPtr1 = memoryOwnerOutputGr->create<GraphVertexConstant>(
+      'z', memoryOwnerOutputGr
+  );
   output1.addVertexToInConnections(constantPtr1);
   EXPECT_EQ(output1.getValue(), 'x');
   EXPECT_EQ(output1.updateValue(), 'z');
   EXPECT_EQ(output1.getValue(), 'z');
 
-  VertexPtr constantPtr2 =
-      memoryOwnerOutputGr->create<GraphVertexConstant>('z', memoryOwnerOutputGr);
+  VertexPtr constantPtr2 = memoryOwnerOutputGr->create<GraphVertexConstant>(
+      'z', memoryOwnerOutputGr
+  );
   output1.addVertexToInConnections(constantPtr2);
   EXPECT_EQ(output1.updateValue(), 'z');
 
-  VertexPtr constantPtr3 =
-      memoryOwnerOutputGr->create<GraphVertexConstant>('1', memoryOwnerOutputGr);
+  VertexPtr constantPtr3 = memoryOwnerOutputGr->create<GraphVertexConstant>(
+      '1', memoryOwnerOutputGr
+  );
   output1.addVertexToInConnections(constantPtr3);
   EXPECT_EQ(output1.updateValue(), 'x');
 }
@@ -254,8 +257,8 @@ TEST(TestIsConnected, SizeTwoWithoutEdgesIsNotConnected) {
 
 TEST(TestIsConnected, SizeTwoWithEdgeIsConnected) {
   GraphPtr  graphPtr = std::make_shared<OrientedGraph>();
-  VertexPtr input  = graphPtr->addInput("input");
-  VertexPtr output = graphPtr->addOutput("output");
+  VertexPtr input    = graphPtr->addInput("input");
+  VertexPtr output   = graphPtr->addOutput("output");
   graphPtr->addEdge(input, output);
 
   EXPECT_EQ(graphPtr->isConnected(), true);
@@ -269,7 +272,7 @@ TEST(TestIsConnectedWithSubGraphsTrivial, ConnectedSubGraphIsConnected) {
   VertexPtr              output = graphPtr->addOutput("output");
   inputs.push_back(input);
 
-  GraphPtr  subGraphPtr = std::make_shared<OrientedGraph>();
+  GraphPtr  subGraphPtr    = std::make_shared<OrientedGraph>();
 
   VertexPtr subGraphInput  = subGraphPtr->addInput("subGraphInput");
   VertexPtr testBuf        = subGraphPtr->addGate(Gates::GateBuf);
@@ -288,10 +291,10 @@ TEST(TestIsConnectedWithSubGraphsTrivial, ConnectedSubGraphIsConnected) {
 }
 
 TEST(TestIsConnectedWithSubGraphsTrivial, DisconnectedSubGraphIsNotConnected) {
-  GraphPtr  graphPtr = std::make_shared<OrientedGraph>();
-  VertexPtr input = graphPtr->addInput("input");
+  GraphPtr  graphPtr       = std::make_shared<OrientedGraph>();
+  VertexPtr input          = graphPtr->addInput("input");
 
-  GraphPtr  subGraphPtr = std::make_shared<OrientedGraph>();
+  GraphPtr  subGraphPtr    = std::make_shared<OrientedGraph>();
   VertexPtr subGraphInput  = subGraphPtr->addInput("subGraphInput");
   VertexPtr subGraphOutput = subGraphPtr->addOutput("subGraphOutput");
 
@@ -306,9 +309,9 @@ TEST(
     TestIsConnectedWithSubGraphsNontrivial,
     DisconnectedSubGraphLvl2IsNotConnected
 ) {
-  GraphPtr  lvl0 = std::make_shared<OrientedGraph>();
-  GraphPtr  lvl1 = std::make_shared<OrientedGraph>();
-  GraphPtr  lvl2 = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl0        = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl1        = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl2        = std::make_shared<OrientedGraph>();
 
   VertexPtr lvl2Input1  = lvl2->addInput("lvl2Input1");
   VertexPtr lvl2Output1 = lvl2->addOutput("lvl2Output1");
@@ -341,9 +344,9 @@ TEST(
 }
 
 TEST(TestIsConnectedWithSubGraphsNontrivial, ConnectedSubGraphLvl2IsConnected) {
-  GraphPtr  lvl0 = std::make_shared<OrientedGraph>();
-  GraphPtr  lvl1 = std::make_shared<OrientedGraph>();
-  GraphPtr  lvl2 = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl0        = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl1        = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl2        = std::make_shared<OrientedGraph>();
 
   VertexPtr lvl2Input1  = lvl2->addInput("lvl2Input1");
   VertexPtr lvl2Output1 = lvl2->addOutput("lvl2Output1");
@@ -380,9 +383,9 @@ TEST(
     TestIsConnectedWithSubGraphsNontrivial,
     ConnectedSubGraphLvl1IsConnectedStraight
 ) {
-  GraphPtr  lvl0 = std::make_shared<OrientedGraph>();
-  GraphPtr  lvl1 = std::make_shared<OrientedGraph>();
-  GraphPtr  lvl2 = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl0        = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl1        = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl2        = std::make_shared<OrientedGraph>();
 
   VertexPtr lvl2Input1  = lvl2->addInput("lvl2Input1");
   VertexPtr lvl2Output1 = lvl2->addOutput("lvl2Output1");
@@ -421,9 +424,9 @@ TEST(
     TestIsConnectedWithSubGraphsNontrivial,
     ConnectedSubGraphLvl1IsConnectedReverse
 ) {
-  GraphPtr  lvl0 = std::make_shared<OrientedGraph>();
-  GraphPtr  lvl1 = std::make_shared<OrientedGraph>();
-  GraphPtr  lvl2 = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl0        = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl1        = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl2        = std::make_shared<OrientedGraph>();
 
   VertexPtr lvl2Input1  = lvl2->addInput("lvl2Input1");
   VertexPtr lvl2Output1 = lvl2->addOutput("lvl2Output1");
@@ -463,9 +466,9 @@ TEST(
     TestIsConnectedWithSubGraphsNontrivial,
     ConnectedSubGraphLvl0IsConnectedStraight
 ) {
-  GraphPtr  lvl0 = std::make_shared<OrientedGraph>();
-  GraphPtr  lvl1 = std::make_shared<OrientedGraph>();
-  GraphPtr  lvl2 = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl0        = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl1        = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl2        = std::make_shared<OrientedGraph>();
 
   VertexPtr lvl2Input1  = lvl2->addInput("lvl2Input1");
   VertexPtr lvl2Output1 = lvl2->addOutput("lvl2Output1");
@@ -504,9 +507,9 @@ TEST(
     TestIsConnectedWithSubGraphsNontrivial,
     ConnectedSubGraphLvl0IsConnectedReverse
 ) {
-  GraphPtr  lvl0 = std::make_shared<OrientedGraph>();
-  GraphPtr  lvl1 = std::make_shared<OrientedGraph>();
-  GraphPtr  lvl2 = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl0        = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl1        = std::make_shared<OrientedGraph>();
+  GraphPtr  lvl2        = std::make_shared<OrientedGraph>();
 
   VertexPtr lvl2Input1  = lvl2->addInput("lvl2Input1");
   VertexPtr lvl2Output1 = lvl2->addOutput("lvl2Output1");
@@ -544,8 +547,8 @@ TEST(
 
 TEST(TestIsConnectedRecalculation, SimpleRecalculation) {
   GraphPtr  graphPtr = std::make_shared<OrientedGraph>();
-  VertexPtr input  = graphPtr->addInput("input");
-  VertexPtr output = graphPtr->addOutput("output");
+  VertexPtr input    = graphPtr->addInput("input");
+  VertexPtr output   = graphPtr->addOutput("output");
   EXPECT_EQ(graphPtr->isConnected(), false);
 
   graphPtr->addEdge(input, output);

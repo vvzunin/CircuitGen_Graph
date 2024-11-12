@@ -20,9 +20,9 @@ GraphVertexConstant::GraphVertexConstant(
 }
 
 size_t GraphVertexConstant::calculateHash(bool i_recalculate) {
-  if (d_hashed && !i_recalculate)
+  if (d_hasHash && !i_recalculate) {
     return d_hashed;
-
+  }
   std::string         hashedStr = std::to_string(d_value);
 
   // future sorted struct
@@ -37,7 +37,8 @@ size_t GraphVertexConstant::calculateHash(bool i_recalculate) {
     hashedStr += sub;
   }
 
-  d_hashed = std::hash<std::string> {}(hashedStr);
+  d_hashed  = std::hash<std::string> {}(hashedStr);
+  d_hasHash = 1;
 
   return d_hashed;
 }
@@ -48,7 +49,7 @@ void GraphVertexConstant::updateLevel(bool i_recalculate, std::string tab) {
   }
   // LOG(INFO) << tab << "0. " << d_name << " (" << getTypeName() << ")";
   d_level      = 0;
-  d_needUpdate = true;
+  d_needUpdate = 1;
 }
 
 std::string GraphVertexConstant::getVerilogInstance() {

@@ -63,12 +63,13 @@ char GraphVertexGates::updateValue() {
 }
 
 size_t GraphVertexGates::calculateHash(bool i_recalculate) {
-  if (d_hashed && !i_recalculate)
+  if (d_hasHash && (!i_recalculate || d_hasHash == 2)) {
     return d_hashed;
-
+  }
   std::string hashedStr =
       std::to_string(d_inConnections.size()) + std::to_string(d_gate);
 
+  d_hasHash = 2;
   // future sorted struct
   std::vector<size_t> hashed_data;
 
@@ -81,7 +82,8 @@ size_t GraphVertexGates::calculateHash(bool i_recalculate) {
     hashedStr += sub;
   }
 
-  d_hashed = std::hash<std::string> {}(hashedStr);
+  d_hashed  = std::hash<std::string> {}(hashedStr);
+  d_hasHash = 1;
 
   return d_hashed;
 }

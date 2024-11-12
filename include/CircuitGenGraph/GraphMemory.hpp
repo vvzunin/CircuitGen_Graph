@@ -7,10 +7,9 @@
 #include <string_view>
 
 #define DEFAULT_BUF 114688
-#define CHUNK_SIZE 14336
+#define CHUNK_SIZE  14336
 
 typedef unsigned char bytea;
-
 
 /// @author Fuuulkrum7
 struct MultiLinearAllocator {
@@ -24,15 +23,15 @@ struct MultiLinearAllocator {
   }
 
   ~MultiLinearAllocator() {
-    for (auto block: blocks) {
+    for (auto block : blocks) {
       delete[] block;
     }
   }
 
   template<typename T>
   T* allocate() {
-    bytea *current = offset;
-    offset += sizeof(T);
+    bytea* current = offset;
+    offset         += sizeof(T);
     align<T>();
     if (offset > blocks.back() + buf_size) {
       // bad alloc - memory was taken, but allocation is impossible, and we try
@@ -59,10 +58,10 @@ private:
   }
 
 private:
-  std::vector<bytea *> blocks;
-  bytea* offset;
-  size_t buf_size;
-  size_t chunk_size;
+  std::vector<bytea*> blocks;
+  bytea*              offset;
+  size_t              buf_size;
+  size_t              chunk_size;
 };
 
 /// @author Fuuulkrum7
@@ -100,7 +99,7 @@ public:
   }
 
 private:
-  MultiLinearAllocator d_vertexMemory;
+  MultiLinearAllocator                d_vertexMemory;
 
   std::pmr::monotonic_buffer_resource d_stringMemory;
   std::pmr::set<std::string>          d_strings;

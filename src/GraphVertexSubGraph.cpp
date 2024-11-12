@@ -34,12 +34,13 @@ void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
   if (d_needUpdate && !i_recalculate) {
     return;
   }
+  d_needUpdate = 2;
   for (VertexPtr vert : d_subGraph->getVerticesByType(VertexTypes::output)) {
     // LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
     // << vert->getTypeName() << ")";
     vert->updateLevel(i_recalculate, tab + "  ");
   }
-  d_needUpdate = true;
+  d_needUpdate = 1;
 }
 
 // In fact is not needed
@@ -103,13 +104,14 @@ GraphPtr GraphVertexSubGraph::getSubGraph() const {
 }
 
 size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
-  if (d_hashed && !i_recalculate)
+  if (d_hasHash && (!i_recalculate || d_hasHash == 2)) {
     return d_hashed;
-
+  }
   // calc hash from subgraph
   std::string hashedStr =
       d_subGraph->calculateHash() + std::to_string(d_inConnections.size());
 
+  d_hasHash = 2;
   // futuire sorted struct
   std::vector<size_t> hashed_data;
 
@@ -122,7 +124,8 @@ size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
     hashedStr += sub;
   }
 
-  d_hashed = std::hash<std::string> {}(hashedStr);
+  d_hashed  = std::hash<std::string> {}(hashedStr);
+  d_hasHash = 1;
 
   return d_hashed;
 }
@@ -222,8 +225,7 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
         } else if (ptr->getType() != VertexTypes::subGraph) {
           stck.push(ptr);
         } else {
-          auto subGraphPtr =
-              static_cast<GraphVertexSubGraph*>(ptr);
+          auto subGraphPtr = static_cast<GraphVertexSubGraph*>(ptr);
           for (auto input :
                subGraphPtr->getOuterInputsByOutputBuffer(current)) {
             stck.push(input);

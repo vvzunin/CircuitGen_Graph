@@ -65,8 +65,8 @@ GraphVertexBase::GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph) {
   d_name      = i_graph->internalize(
       this->getTypeName() + "_" + std::to_string(VertexUtils::d_count++)
   );
-  d_value          = 'x';
-  d_level          = 0;
+  d_value = 'x';
+  d_level = 0;
 }
 
 GraphVertexBase::GraphVertexBase(
@@ -89,8 +89,8 @@ GraphVertexBase::GraphVertexBase(
         this->getTypeName() + "_" + std::to_string(VertexUtils::d_count++)
     );
   }
-  d_value          = 'x';
-  d_level          = 0;
+  d_value = 'x';
+  d_level = 0;
 }
 
 GraphVertexBase::~GraphVertexBase() {}
@@ -129,16 +129,17 @@ uint32_t GraphVertexBase::getLevel() const {
 
 void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
   int counter = 0;
-  if (d_needUpdate && !i_recalculate) {
+  if (d_needUpdate && (!i_recalculate || d_needUpdate == 2)) {
     return;
   }
+  d_needUpdate = 2;
   for (VertexPtr vert : d_inConnections) {
     // LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
     // << vert->getTypeName() << ")";
     vert->updateLevel(i_recalculate, tab + "  ");
     d_level = (vert->getLevel() >= d_level) ? vert->getLevel() + 1 : d_level;
   }
-  d_needUpdate = true;
+  d_needUpdate = 1;
 }
 
 char GraphVertexBase::getValue() const {
@@ -163,14 +164,15 @@ uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
 }
 
 size_t GraphVertexBase::calculateHash(bool i_recalculate) {
-  if (d_hashed && !i_recalculate)
-    return d_hashed;
-
-  if (d_type == VertexTypes::output) {
-    d_hashed = std::hash<size_t> {}(d_inConnections.size());
+  if (d_hasHash && (!i_recalculate || d_hasHash == 2)) {
     return d_hashed;
   }
-
+  if (d_type == VertexTypes::output) {
+    d_hashed  = std::hash<size_t> {}(d_inConnections.size());
+    d_hasHash = 1;
+    return d_hashed;
+  }
+  d_hasHash = 2;
   // future sorted struct
   std::vector<size_t> hashed_data;
   std::string         hashedStr = "";
@@ -184,7 +186,8 @@ size_t GraphVertexBase::calculateHash(bool i_recalculate) {
     hashedStr += sub;
   }
 
-  d_hashed = std::hash<std::string> {}(hashedStr);
+  d_hashed  = std::hash<std::string> {}(hashedStr);
+  d_hasHash = 1;
 
   return d_hashed;
 }

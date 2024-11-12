@@ -170,14 +170,10 @@ TEST(TestIsEmptyAndIsEmptyFull, ReturnCorrectSize) {
 }
 
 // needToUpdateLevel isn't realized
-TEST(TestNeedToUpdateLevel, ReturnCorrectValue) {
-
-}
+TEST(TestNeedToUpdateLevel, ReturnCorrectValue) {}
 
 // updateLevels is commented
-TEST(TestUpdateLevelsAndGetMaxLevel, ReturnCorrectMaxLevel) {
-
-}
+TEST(TestUpdateLevelsAndGetMaxLevel, ReturnCorrectMaxLevel) {}
 
 TEST(TestGetEdgesCount, ReturnCorrectCount) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
@@ -557,8 +553,8 @@ TEST(TestCalculateHash, GraphsWithTheSameStructureButDifferentConst) {
 
   EXPECT_EQ(graphPtr1->calculateHash(), graphPtr1->calculateHash());
 
-  auto inp1 = graphPtr1->addInput();
-  auto inp2 = graphPtr2->addInput();
+  auto inp1  = graphPtr1->addInput();
+  auto inp2  = graphPtr2->addInput();
   auto inp11 = graphPtr1->addInput();
   auto inp22 = graphPtr2->addInput();
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
@@ -689,7 +685,6 @@ TEST(TestToVerilog, Simple) {
   // LOG(INFO) << "Printing Verilog file: " << strs.first << "\n" << loadFile;
 }
 
-
 TEST(TestToVerilog, SubGraph) {
   initLogging("TestToVerilog", "SubGraph");
   GraphPtr subGraphPtr = std::make_shared<OrientedGraph>("testSubGraph");
@@ -720,7 +715,6 @@ TEST(TestToVerilog, SubGraph) {
   // LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
 }
 
-
 TEST(TestToDOT, Simple) {
   initLogging("TestToDOT", "Simple");
   GraphPtr graphPtr = std::make_shared<OrientedGraph>("testGraph");
@@ -733,13 +727,13 @@ TEST(TestToDOT, Simple) {
   graphPtr->addEdges({inA, inB}, gateAnd1);
   graphPtr->addEdges({gateAnd1, const1}, gateOr1);
   graphPtr->addEdge(gateOr1, out);
-  auto strs = graphPtr->toDOT(".", "testSimple.dot");
+  auto        strs     = graphPtr->toDOT(".", "testSimple.dot");
   // LOG(INFO) << "toDot complete!";
-  std::string curPath = std::filesystem::current_path();
+  std::string curPath  = std::filesystem::current_path();
   // LOG(INFO) << "curPath: " << curPath;
   std::string loadFile = loadStringFile(curPath + "/testSimple.dot");
   // LOG(INFO) << "loadFile: " << loadFile;
-  loadFile = loadFile.substr(loadFile.find("\n") + 2);
+  loadFile             = loadFile.substr(loadFile.find("\n") + 2);
   // LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
 }
 
@@ -854,12 +848,12 @@ TEST(TestToDOT, SubGraphUnroll2) {
   auto outE         = graphPtr->addOutput("e");
   // LOG(INFO) << "In/outs added to main graph";
 
-  auto outs1 = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
-  auto outs2 = graphPtr->addSubGraph(subGraphPtr2, {inA, inB});
+  auto outs1        = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
+  auto outs2        = graphPtr->addSubGraph(subGraphPtr2, {inA, inB});
   // LOG(INFO) << "SubGraphs added!";
 
-  auto gateAnd2 = graphPtr->addGate(Gates::GateAnd, "andAB2");
-  auto gateAnd3 = graphPtr->addGate(Gates::GateAnd, "andAB3");
+  auto gateAnd2     = graphPtr->addGate(Gates::GateAnd, "andAB2");
+  auto gateAnd3     = graphPtr->addGate(Gates::GateAnd, "andAB3");
   // LOG(INFO) << "Two AND gate added";
 
   graphPtr->addEdge(outs1[0], gateAnd2);
@@ -928,11 +922,11 @@ TEST(TestToDOT, SubGraphUnroll3) {
   auto outE         = graphPtr->addOutput("e");
   // LOG(INFO) << "In/outs added to main graph";
 
-  auto outs2 = graphPtr->addSubGraph(subGraphPtr2, {inA, inB});
+  auto outs2        = graphPtr->addSubGraph(subGraphPtr2, {inA, inB});
   // LOG(INFO) << "SubGraphs added!";
 
-  auto gateAnd2 = graphPtr->addGate(Gates::GateAnd, "andAB2");
-  auto gateAnd3 = graphPtr->addGate(Gates::GateAnd, "andAB3");
+  auto gateAnd2     = graphPtr->addGate(Gates::GateAnd, "andAB2");
+  auto gateAnd3     = graphPtr->addGate(Gates::GateAnd, "andAB3");
   // LOG(INFO) << "Two AND gate added";
 
   graphPtr->addEdge(outs2[0], outC);
@@ -992,7 +986,7 @@ TEST(TestToDOT, SubGraph3) {
   auto outE         = graphPtr->addOutput("e");
   // LOG(INFO) << "In/outs added to main graph";
 
-  auto outs2 = graphPtr->addSubGraph(subGraphPtr2, {inA, inB});
+  auto outs2        = graphPtr->addSubGraph(subGraphPtr2, {inA, inB});
   // LOG(INFO) << "SubGraphs added!";
 
   graphPtr->addEdge(outs2[0], outC);

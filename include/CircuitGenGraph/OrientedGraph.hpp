@@ -545,8 +545,7 @@ private:
       {Gates::GateNot, 0},
       {Gates::GateBuf, 0},
       {Gates::GateXor, 0},
-      {Gates::GateXnor, 0}
-  };
+      {Gates::GateXnor, 0}};
   // used for quick edges of gate type count;
   std::map<Gates, std::map<Gates, size_t>> d_edgesGatesCount;
 
