@@ -74,7 +74,7 @@ if (CLANG_TIDY)
     CXX_CLANG_TIDY "${GRAPH_CLANG_TIDY}"
   )
 else()
-  message("clang-tidy not found")
+  message(FATAL_ERROR "clang-tidy not found, aborting")
 endif()
 
 target_include_directories(
