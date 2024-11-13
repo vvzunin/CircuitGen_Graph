@@ -11,9 +11,10 @@
 
 typedef unsigned char bytea;
 
-
 /// @author Fuuulkrum7
 struct MultiLinearAllocator {
+  // clang-format off
+
   MultiLinearAllocator(size_t buf_size, size_t chunk_size)
       : buf_size(buf_size)
       , chunk_size(chunk_size) {
@@ -23,6 +24,8 @@ struct MultiLinearAllocator {
     blocks.push_back(offset = new bytea[buf_size]);
   }
 
+  // clang-format on
+
   ~MultiLinearAllocator() {
     for (auto block: blocks) {
       delete[] block;
@@ -30,7 +33,7 @@ struct MultiLinearAllocator {
   }
 
   template<typename T>
-  T* allocate() {
+  T *allocate() {
     bytea *current = offset;
     offset += sizeof(T);
     align<T>();
@@ -44,7 +47,7 @@ struct MultiLinearAllocator {
       buf_size = chunk_size;
       return allocate<T>();
     }
-    return reinterpret_cast<T*>(current);
+    return reinterpret_cast<T *>(current);
   }
 
   void deallocate() {}
@@ -60,7 +63,7 @@ private:
 
 private:
   std::vector<bytea *> blocks;
-  bytea* offset;
+  bytea *offset;
   size_t buf_size;
   size_t chunk_size;
 };
@@ -68,6 +71,8 @@ private:
 /// @author Fuuulkrum7
 class GraphMemory {
 public:
+  // clang-format off
+
   /// @param buf_size size, which would be used for memory buffer reserve.
   /// By default we allocate memory for 1024 base vertices. Size of one vertex
   /// is supposed to be 80 bytes by default.
@@ -81,21 +86,23 @@ public:
       , d_strings {&d_stringMemory}
   {}
 
-  GraphMemory& operator=(GraphMemory&& other)      = delete;
-  GraphMemory(GraphMemory&& other)                 = delete;
-  GraphMemory& operator=(const GraphMemory& other) = delete;
-  GraphMemory(const GraphMemory& other)            = delete;
+  // clang-format on
+
+  GraphMemory &operator=(GraphMemory &&other) = delete;
+  GraphMemory(GraphMemory &&other) = delete;
+  GraphMemory &operator=(const GraphMemory &other) = delete;
+  GraphMemory(const GraphMemory &other) = delete;
 
   std::string_view internalize(std::string_view s) {
     return *d_strings.emplace(s).first;
   }
 
-  std::string_view internalize(const std::string& s) {
+  std::string_view internalize(const std::string &s) {
     return *d_strings.emplace(s).first;
   }
 
   template<typename T>
-  T* allocate() {
+  T *allocate() {
     return d_vertexMemory.allocate<T>();
   }
 
@@ -103,5 +110,5 @@ private:
   MultiLinearAllocator d_vertexMemory;
 
   std::pmr::monotonic_buffer_resource d_stringMemory;
-  std::pmr::set<std::string>          d_strings;
+  std::pmr::set<std::string> d_strings;
 };

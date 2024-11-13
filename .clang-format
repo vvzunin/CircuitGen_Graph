@@ -1,11 +1,11 @@
 ---
 Language:        Cpp
-BasedOnStyle:  LLVM
+BasedOnStyle:  None          ####We can't add a style, because of adding default conditions for the style
 AccessModifierOffset: -2
 #AlignAfterOpenBracket: None    ####I suppose we don't have the functions with so much args
 #AlignArrayOfStructures: None   
 #AlignConsecutiveMacros: None  
-#AlignConsecutiveAssignments: None 
+AlignConsecutiveAssignments: false
 #AlignConsecutiveBitFields: None 
 #AlignConsecutiveDeclarations: None 
 AlignEscapedNewlines: DontAlign ###changed
@@ -28,7 +28,7 @@ AttributeMacros:
   - __capability
 #BinPackArguments: true
 #BinPackParameters: true
-# BraceWrapping:
+BraceWrapping:
 #   AfterCaseLabel:  false
 #   AfterClass:      false
 #   AfterControlStatement: Never
@@ -66,12 +66,12 @@ ContinuationIndentWidth: 4
 #Cpp11BracedListStyle: true
 DeriveLineEnding: true
 DerivePointerAlignment: false
-DisableFormat:   false
+DisableFormat:   false             ##########ERROR
 #EmptyLineAfterAccessModifier: Never
 #EmptyLineBeforeAccessModifier: LogicalBlock
 #ExperimentalAutoDetectBinPacking: false
 #PackConstructorInitializers: BinPack
-BasedOnStyle:    ''
+BasedOnStyle: None                    ########ERROR
 #ConstructorInitializerAllOnOneLineOrOnePerLine: false
 #AllowAllConstructorInitializersOnNextLine: true
 FixNamespaceComments: true
@@ -109,8 +109,7 @@ IndentWidth:     2
 #InsertTrailingCommas: None
 #JavaScriptQuotes: Leave
 #JavaScriptWrapImports: true
-KeepEmptyLinesAtTheStartOfBlocks: false ###changed
-LineEnding: LF
+KeepEmptyLinesAtTheStartOfBlocks: true ###changed
 #LambdaBodyIndentation: OuterScope
 MacroBlockBegin: ''
 MacroBlockEnd:   ''
@@ -143,7 +142,7 @@ SeparateDefinitionBlocks: Leave
 #SortUsingDeclarations: true
 SpaceAfterCStyleCast: false
 SpaceAfterLogicalNot: false
-SpaceAfterTemplateKeyword: true
+SpaceAfterTemplateKeyword: false
 SpaceBeforeAssignmentOperators: true
 SpaceBeforeCaseColon: false
 #SpaceBeforeCpp11BracedList: false
