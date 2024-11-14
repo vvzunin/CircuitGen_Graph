@@ -37,6 +37,54 @@
 > #include "easyloggingpp/easylogging++.h"
 > INITIALIZE_EASYLOGGINGPP
 
+## Установка необходимых пакетов
+
+### Установка пакетов
+
+#### С помощью apt
+```
+sudo apt install clang clang-tidy clang-format-15 doxygen g++ gcc make openssl cmake
+```
+
+#### С помощью dnf (для rpm ветки)
+```
+sudo dnf install clang clang-tools-extra doxygen g++ gcc make openssl cmake
+```
+Так как в проекте используется `clang-format-15`, предлагается два возможных решения. 
+1) Так как критических отличий между различными версиями clang нет, 
+допустимо просто создать link с именем `clang-format-15`:  
+```
+sudo link /usr/bin/clang-format /usr/bin/clang-format-15
+```
+2) Допустимой является установка `clang-format-15` посредством `pip`. 
+Отметим, что в данном случае создание link может быть сопряжено с некоторыми трудностями.
+```
+sudo dnf install python python-pip
+```
+Далее требуется скачать конкретную версию clang-format.
+```
+pip install clang-format==15.0.7
+```
+
+Для проверки корректности кода на этапе компиляции используется clang-tidy. В случае, если clang-tidy 
+не будет найден, в терминал выведется соответствующее сообщение и компиляция прервется. 
+
+### Установка cmake 3.28.1
+В случае проблем при установке cmake, попробуйте данный способ:
+```
+sudo apt install tar wget
+cd ~/
+wget https://cmake.org/files/v3.28/cmake-3.28.1.tar.gz
+tar xzf cmake-3.28.1.tar.gz
+rm -rf cmake-3.28.1.tar.gz
+cd cmake-3.28.1
+./bootstrap
+make -j$(nproc)
+sudo make install
+cd ..
+sudo rm -rf cmake-3.28.1
+```
+
 ## Режим разработчика
 <a name="hacking"></a> 
 

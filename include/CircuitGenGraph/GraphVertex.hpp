@@ -34,10 +34,8 @@ public:
   /// @param i_baseGraph Pointer to the base graph. Default is nullptr.
   /// @param i_type i_type Type of the vertex. Default is VertexTypes::input.
 
-  GraphVertexInput(
-      GraphPtr          i_baseGraph = nullptr,
-      const VertexTypes i_type      = VertexTypes::input
-  );
+  GraphVertexInput(GraphPtr i_baseGraph,
+                   const VertexTypes i_type = VertexTypes::input);
 
   /// @brief GraphVertexInput
   /// Initializes the GraphVertexInput object with the provided name, base
@@ -45,11 +43,8 @@ public:
   /// @param i_name Name of the vertex.
   /// @param i_baseGraph Pointer to the base graph.
   /// @param i_type Type of the vertex.
-  GraphVertexInput(
-      const std::string i_name,
-      GraphPtr          i_baseGraph = nullptr,
-      const VertexTypes i_type      = VertexTypes::input
-  );
+  GraphVertexInput(std::string_view i_name, GraphPtr i_baseGraph,
+                   const VertexTypes i_type = VertexTypes::input);
 
   /// @brief updateValue A virtual function for updating the vertex value.
   /// The implementation is provided in derived classes
@@ -64,13 +59,14 @@ public:
   /// @brief updateLevel It is designed to update the level of the current
   /// vertex in a directed graph based on the levels of its input connections
 
-  virtual void updateLevel(std::string tab = "") override;
+  virtual void updateLevel(bool i_recalculate = false,
+                           std::string tab = "") override;
 
-  DotReturn    toDOT() override;
+  DotReturn toDOT() override;
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  virtual void log(el::base::type::ostream_t& os) const override;
+  virtual void log(el::base::type::ostream_t &os) const override;
 
 protected:
   GraphVertexInput(VertexTypes i_type);
@@ -85,29 +81,31 @@ private:
 
 class GraphVertexConstant : public GraphVertexInput {
 public:
-  GraphVertexConstant(char i_const, GraphPtr i_baseGraph = nullptr);
+  GraphVertexConstant(char i_const, GraphPtr i_baseGraph);
 
-  GraphVertexConstant(
-      char              i_const,
-      const std::string i_name,
-      GraphPtr          i_baseGraph = nullptr
-  );
+  GraphVertexConstant(char i_const, std::string_view i_name,
+                      GraphPtr i_baseGraph);
+
+  ~GraphVertexConstant(){};
+
+  size_t calculateHash(bool i_recalculate = false) override;
 
   /// @brief updateLevel updates the level of the current vertex in the graph
   /// based on the levels of its incoming connections
 
-  virtual void updateLevel(std::string tab = "") override;
-  std::string  toVerilog() override;
-  DotReturn    toDOT() override;
+  virtual void updateLevel(bool i_recalculate = false,
+                           std::string tab = "") override;
+  std::string toVerilog() override;
+  DotReturn toDOT() override;
 
-  /// @brief getInstance
+  /// @brief getDefaultInstance
   /// TO DO:
 
-  std::string  getVerilogInstance();
+  std::string getVerilogInstance();
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  virtual void log(el::base::type::ostream_t& os) const override;
+  virtual void log(el::base::type::ostream_t &os) const override;
 
 private:
 };
@@ -116,22 +114,21 @@ private:
 /// inside. Is used for storing this pointer for providing graph
 /// connectivity
 /// @param d_subGraph Pointer to the subgraph associated with this vertex
-/// @param hashed Cached hash value of the vertex
+/// @param d_hashed Cached hash value of the vertex
 class GraphVertexSubGraph : public GraphVertexBase {
 public:
-  GraphVertexSubGraph(GraphPtr i_subGraph, GraphPtr i_baseGraph = nullptr);
+  GraphVertexSubGraph(GraphPtr i_subGraph, GraphPtr i_baseGraph);
 
-  GraphVertexSubGraph(
-      GraphPtr           i_subGraph,
-      const std::string& i_name,
-      GraphPtr           i_baseGraph = nullptr
-  );
+  GraphVertexSubGraph(GraphPtr i_subGraph, std::string_view i_name,
+                      GraphPtr i_baseGraph);
 
-  char        updateValue() override;
-  void        updateLevel(std::string tab = "") override;
+  ~GraphVertexSubGraph(){};
+
+  char updateValue() override;
+  void updateLevel(bool i_recalculate = false, std::string tab = "") override;
 
   std::string toVerilog() override;
-  DotReturn   toDOT() override;
+  DotReturn toDOT() override;
 
   /// @brief This method is used as a substructure for
   /// OrientedGraph methods
@@ -141,17 +138,17 @@ public:
   /// name)
   /// @return pair, first is bool, meaning was file writing successful or not
   /// and second is string, for graph is empty, for subgraph is module instance
-  std::pair<bool, std::string>
-      toVerilog(std::string i_path, std::string i_filename = "");
+  std::pair<bool, std::string> toVerilog(std::string i_path,
+                                         std::string i_filename = "");
 
-  std::pair<bool, std::string>
-              toDOT(std::string i_path, std::string i_filename = "");
+  std::pair<bool, std::string> toDOT(std::string i_path,
+                                     std::string i_filename = "");
 
   /// @brief This method is used as a substructure for
   /// OrientedGraph methods
   /// @param i_fileStream TO DO:
   /// @return TO DO:
-  bool        toGraphML(std::ofstream& i_fileStream) const;
+  bool toGraphML(std::ofstream &i_fileStream) const;
 
   /// @brief This method is used as a substructure for
   /// OrientedGraph methods
@@ -164,22 +161,21 @@ public:
   /// @return
   std::string getVerilogInstance() override;
 
-  std::string calculateHash(bool recalculate = false) override;
+  size_t calculateHash(bool i_recalculate = false) override;
 
-  void        setSubGraph(GraphPtr i_subGraph);
-  GraphPtr    getSubGraph() const;
-  std::vector<VertexPtr> getOutputBuffersByOuterInput(VertexPtr i_outerInput
-  ) const;
-  std::vector<VertexPtr> getOuterInputsByOutputBuffer(VertexPtr i_outputBuffer
-  ) const;
+  void setSubGraph(GraphPtr i_subGraph);
+  GraphPtr getSubGraph() const;
+  std::vector<VertexPtr>
+  getOutputBuffersByOuterInput(VertexPtr i_outerInput) const;
+  std::vector<VertexPtr>
+  getOuterInputsByOutputBuffer(VertexPtr i_outputBuffer) const;
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  virtual void           log(el::base::type::ostream_t& os) const override;
+  virtual void log(el::base::type::ostream_t &os) const override;
 
 private:
-  GraphPtr    d_subGraph;
-  std::string hashed;
+  GraphPtr d_subGraph;
 };
 
 /// class GraphVertexOutput It is a vertex of the graph, specially designed for
@@ -188,9 +184,9 @@ private:
 
 class GraphVertexOutput : public GraphVertexBase {
 public:
-  GraphVertexOutput(GraphPtr i_baseGraph = nullptr);
+  GraphVertexOutput(GraphPtr i_baseGraph);
 
-  GraphVertexOutput(const std::string i_name, GraphPtr i_baseGraph = nullptr);
+  GraphVertexOutput(std::string_view i_name, GraphPtr i_baseGraph);
 
   /// @brief updateValue updates the value of the current vertex of the graph
   /// based on the values of its incoming connections and the type of logical
@@ -210,13 +206,14 @@ public:
   /// vertices to which it is connected, and sets the level of the current
   /// vertex to one higher than the highest level
 
-  virtual void updateLevel(std::string tab = "") override;
+  virtual void updateLevel(bool i_recalculate = false,
+                           std::string tab = "") override;
 
-  DotReturn    toDOT() override;
+  DotReturn toDOT() override;
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  virtual void log(el::base::type::ostream_t& os) const override;
+  virtual void log(el::base::type::ostream_t &os) const override;
 
 private:
 };
@@ -226,13 +223,11 @@ private:
 
 class GraphVertexGates : public GraphVertexBase {
 public:
-  GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph = nullptr);
+  GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph);
 
-  GraphVertexGates(
-      Gates             i_gate,
-      const std::string i_name,
-      GraphPtr          i_baseGraph = nullptr
-  );
+  GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph);
+
+  ~GraphVertexGates(){};
 
   /// @brief updateValue
   /// Updates the value of the vertex
@@ -247,22 +242,22 @@ public:
 
   /// @brief calculateHash
   /// Calculates the hash value of the vertex
-  /// @param recalculate Flag indicating whether to recalculate the hash value
-  /// (default false)
+  /// @param i_recalculate Flag indicating whether to i_recalculate the hash
+  /// value (default false)
   /// @throws None.
   /// @code
   /// TO DO:
   /// @endcode
   /// @return The calculated hash value as a string
 
-  std::string  calculateHash(bool recalculate = false) override;
+  size_t calculateHash(bool i_recalculate = false) override;
 
   /// @brief getVerilogString
   /// Gets a string in Verilog format representing the current vertex
   /// @return A string in Verilog format representing the current vertex
   /// @throws std::invalid_argument if any input connection is invalid
 
-  std::string  getVerilogString() const;
+  std::string getVerilogString() const;
 
   /// @brief getGate
   /// Returns the type of valve associated with the current vertex
@@ -273,7 +268,7 @@ public:
   /// std:: cout << "Gate type : " << gateType << std::endl;
   /// @endcode
 
-  Gates        getGate() const;
+  Gates getGate() const;
 
   /// @brief toVerilog
   /// generates a string in Verilog format for the current vertex,
@@ -283,18 +278,17 @@ public:
   /// @return A Verilog format string for the current vertex
   /// @throws std::invalid_argument if any input connection is invalid
 
-  std::string  toVerilog() override;
-  DotReturn    toDOT() override;
+  std::string toVerilog() override;
+  DotReturn toDOT() override;
 
-  bool         isSubgraphBuffer() const override;
+  bool isSubgraphBuffer() const override;
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  virtual void log(el::base::type::ostream_t& os) const override;
+  virtual void log(el::base::type::ostream_t &os) const override;
 
 private:
-  Gates       d_gate;
-  std::string hashed;
+  Gates d_gate;
   // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых
   // логических операций.
 };

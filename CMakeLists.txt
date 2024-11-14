@@ -10,6 +10,7 @@ project(
   LANGUAGES CXX
 )
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_INIT} -std=c++17 -fPIC")
 include(cmake/project-is-top-level.cmake)
 include(cmake/variables.cmake)
 
@@ -61,6 +62,20 @@ target_link_libraries(
   ${PROJECT_NAME} PUBLIC
   easylogging++
 )
+
+find_program(CLANG_TIDY NAMES clang-tidy)
+
+if (CLANG_TIDY)
+  set(GRAPH_CLANG_TIDY
+    ${CLANG_TIDY};
+    -line-filter=[{"name":".hpp"},{"name":".cpp"}]
+  )
+  set_target_properties(${PROJECT_NAME} PROPERTIES
+    CXX_CLANG_TIDY "${GRAPH_CLANG_TIDY}"
+  )
+else()
+  message(FATAL_ERROR "clang-tidy not found, aborting")
+endif()
 
 target_include_directories(
   ${PROJECT_NAME} ${warning_guard}

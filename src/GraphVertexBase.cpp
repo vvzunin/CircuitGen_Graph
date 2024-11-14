@@ -3,11 +3,10 @@
 #include <string>
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
+
 #include "easyloggingpp/easylogging++.h"
 
-std::atomic_uint64_t GraphVertexBase::d_count = 0;
-
-std::string          VertexUtils::gateToString(Gates i_type) {
+std::string VertexUtils::gateToString(Gates i_type) {
   switch (i_type) {
     case Gates::GateNot:
       return "~";
@@ -63,22 +62,33 @@ std::string VertexUtils::vertexTypeToComment(VertexTypes i_type) {
 GraphVertexBase::GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph) {
   d_baseGraph = i_graph;
   d_type      = i_type;
-  d_name      = this->getTypeName() + "_" + std::to_string(d_count++);
-  d_value     = 'x';
-  d_level     = 0;
+  d_name      = i_graph->internalize(
+      this->getTypeName() + "_" + std::to_string(VertexUtils::d_count++)
+  );
+  d_value = 'x';
+  d_level = 0;
 }
 
 GraphVertexBase::GraphVertexBase(
     const VertexTypes i_type,
-    const std::string i_name,
+    std::string_view  i_name,
     GraphPtr          i_graph
 ) {
   d_baseGraph = i_graph;
   d_type      = i_type;
-  if (i_name.size())
+  if (i_name.size()) {
     d_name = i_name;
-  else
-    d_name = this->getTypeName() + "_" + std::to_string(d_count++);
+  } else {
+    if (!i_graph) {
+      throw std::invalid_argument(
+          "Graph name is empty, and pointer on graph is empty, so string_view "
+          "name cannot be created"
+      );
+    }
+    d_name = i_graph->internalize(
+        this->getTypeName() + "_" + std::to_string(VertexUtils::d_count++)
+    );
+  }
   d_value = 'x';
   d_level = 0;
 }
@@ -90,19 +100,23 @@ VertexTypes GraphVertexBase::getType() const {
 }
 
 std::string GraphVertexBase::getTypeName() const {
-  return d_settings->parseVertexToString(d_type);
+  return DefaultSettings::parseVertexToString(d_type);
 }
 
-void GraphVertexBase::setName(const std::string i_name) {
+void GraphVertexBase::setName(const std::string_view i_name) {
   d_name = i_name;
 }
 
 std::string GraphVertexBase::getName() const {
+  return std::string(d_name);
+}
+
+std::string_view GraphVertexBase::getRawName() const {
   return d_name;
 }
 
 std::string GraphVertexBase::getName(const std::string& i_prefix) const {
-  return i_prefix + d_name;
+  return i_prefix + std::string(d_name);
 }
 
 void GraphVertexBase::setLevel(const uint32_t i_level) {
@@ -113,17 +127,19 @@ uint32_t GraphVertexBase::getLevel() const {
   return d_level;
 }
 
-void GraphVertexBase::updateLevel(std::string tab) {
+void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
   int counter = 0;
-  for (VertexPtrWeak vert : d_inConnections) {
-    if (VertexPtr ptr = vert.lock()) {
-      LOG(INFO) << tab << counter++ << ". " << ptr->getName() << " (" << ptr->getTypeName() << ")";
-      ptr->updateLevel(tab + "  ");
-      d_level = (ptr->getLevel() >= d_level) ? ptr->getLevel() + 1 : d_level;
-    } else {
-      throw std::invalid_argument("Dead pointer!");
-    }
+  if (d_needUpdate && (!i_recalculate || d_needUpdate == 2)) {
+    return;
   }
+  d_needUpdate = 2;
+  for (VertexPtr vert : d_inConnections) {
+    // LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
+    // << vert->getTypeName() << ")";
+    vert->updateLevel(i_recalculate, tab + "  ");
+    d_level = (vert->getLevel() >= d_level) ? vert->getLevel() + 1 : d_level;
+  }
+  d_needUpdate = 1;
 }
 
 char GraphVertexBase::getValue() const {
@@ -134,52 +150,52 @@ GraphPtrWeak GraphVertexBase::getBaseGraph() const {
   return d_baseGraph;
 }
 
-std::vector<VertexPtrWeak> GraphVertexBase::getInConnections() const {
+std::vector<VertexPtr> GraphVertexBase::getInConnections() const {
   return d_inConnections;
 }
 
 uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
-  VertexPtrWeak vertWeak(i_vert);
-
-  d_inConnections.push_back(vertWeak);
+  d_inConnections.push_back(i_vert);
   uint32_t n = 0;
   // TODO use map<VertexPtr, uint32_t> instead of for
-  for (VertexPtrWeak vert : d_inConnections)
-    n += (vert.lock() == i_vert);
+  for (VertexPtr vert : d_inConnections)
+    n += (vert == i_vert);
   return n;
 }
 
-std::string GraphVertexBase::calculateHash(bool recalculate) {
-  if (hashed != "" && !recalculate)
-    return hashed;
-
-  if (d_type == VertexTypes::output && !d_baseGraph.lock())
-    return "";
-
-  // futuire sorted struct
-  std::vector<std::string> hashed_data;
-  hashed = "";
+size_t GraphVertexBase::calculateHash(bool i_recalculate) {
+  if (d_hasHash && (!i_recalculate || d_hasHash == 2)) {
+    return d_hashed;
+  }
+  if (d_type == VertexTypes::output) {
+    d_hashed  = std::hash<size_t> {}(d_inConnections.size());
+    d_hasHash = 1;
+    return d_hashed;
+  }
+  d_hasHash = 2;
+  // future sorted struct
+  std::vector<size_t> hashed_data;
+  std::string         hashedStr = "";
 
   for (auto& child : d_outConnections) {
-    hashed_data.push_back(child->calculateHash(recalculate));
+    hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
   for (const auto& sub : hashed_data) {
-    hashed += sub;
+    hashedStr += sub;
   }
 
-  hashed = std::to_string(std::hash<std::string> {}(hashed));
+  d_hashed  = std::hash<std::string> {}(hashedStr);
+  d_hasHash = 1;
 
-  return hashed;
+  return d_hashed;
 }
 
 bool GraphVertexBase::removeVertexToInConnections(
     VertexPtr i_vert,
     bool      i_full
 ) {
-  VertexPtrWeak vert(i_vert);
-
   if (i_full) {
     bool f = false;
     for (int64_t i = d_inConnections.size() - 1; i >= 0; i--) {
@@ -187,13 +203,12 @@ bool GraphVertexBase::removeVertexToInConnections(
       f = true;
     }
     return f;
-  } else {
-    for (size_t i = 0; i < d_inConnections.size(); i++) {
-      d_inConnections.erase(d_inConnections.begin() + i);
-      return true;
-    }
-    return false;
   }
+  for (size_t i = 0; i < d_inConnections.size(); i++) {
+    d_inConnections.erase(d_inConnections.begin() + i);
+    return true;
+  }
+  return false;
 }
 
 std::vector<VertexPtr> GraphVertexBase::getOutConnections() const {
@@ -225,32 +240,31 @@ std::string GraphVertexBase::getVerilogInstance() {
     return "";
   }
 
-  return VertexUtils::vertexTypeToVerilog(d_type) + " " + d_name + ";";
+  return VertexUtils::vertexTypeToVerilog(d_type) + " " + getName() + ";";
 }
-
 
 // TODO: what if some (more than 1) connected to output?
 std::string GraphVertexBase::toVerilog() {
   if (d_type == VertexTypes::output) {
-    if (!d_inConnections.empty()){
-      if (VertexPtr ptr = d_inConnections.back().lock()) {
-        return "assign " + d_name + " = " + ptr->getName() + ";";
-      }
+    if (!d_inConnections.empty()) {
+      return "assign " + getName() + " = " + d_inConnections.back()->getName()
+           + ";";
     }
   }
   return "";
 }
 
-std::vector<std::pair<DotTypes, std::map<std::string, std::string>>> GraphVertexBase::toDOT() {
+std::vector<std::pair<DotTypes, std::map<std::string, std::string>>>
+    GraphVertexBase::toDOT() {
   return {};
 }
 
-
 void GraphVertexBase::log(el::base::type::ostream_t& os) const {
   GraphPtr gr = d_baseGraph.lock();
-  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "") << ")\n";
-  os << "Vertex Type: " << d_settings->parseVertexToString(d_type) << "\n";
+  os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
+     << ")\n";
+  os << "Vertex Type: " << DefaultSettings::parseVertexToString(d_type) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
-  os << "Vertex Hash: " << hashed << "\n";
+  os << "Vertex Hash: " << d_hashed << "\n";
 }

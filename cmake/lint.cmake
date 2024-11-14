@@ -29,7 +29,7 @@ string(LENGTH "${CMAKE_SOURCE_DIR}/" path_prefix_length)
 
 
 foreach(file IN LISTS files)
-  message("${FORMAT_COMMAND}" --style=file "${flag}" "${file}")
+  message("${FORMAT_COMMAND} " --style=file " ${flag} " "${file}")
 
   execute_process(
       COMMAND "${FORMAT_COMMAND}" --style=file "${flag}" "${file}"
