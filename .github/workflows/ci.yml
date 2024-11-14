@@ -88,7 +88,7 @@ jobs:
           check_initialization_order=1:\
           strict_init_order=1:\
           detect_leaks=1:\
-          detect_odr_violation=0"
+          detect_odr_violation=1"
         UBSAN_OPTIONS: print_stacktrace=1
       run: ctest --output-on-failure --no-tests=error -j $(nproc)
 
