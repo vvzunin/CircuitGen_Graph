@@ -14,16 +14,16 @@
 /// Enumeration of vertex types
 
 #ifndef DotReturn
-#  define DotReturn \
-    std::vector<std::pair<DotTypes, std::map<std::string, std::string>>>
+#define DotReturn \
+  std::vector<std::pair<DotTypes, std::map<std::string, std::string>>>
 #endif
 
 enum VertexTypes : uint8_t {
-  input    = 0,  ///  input vertex
-  output   = 4,  ///  output vertex
-  constant = 1,  /// constant vertex
-  gate     = 2,  /// vertex representing a logical element
-  subGraph = 3   /// subgraph that makes up the vertex
+  input = 0,    ///  input vertex
+  output = 4,   ///  output vertex
+  constant = 1, /// constant vertex
+  gate = 2,     /// vertex representing a logical element
+  subGraph = 3  /// subgraph that makes up the vertex
 };
 
 /// @brief Gates
@@ -31,29 +31,29 @@ enum VertexTypes : uint8_t {
 /// This enumeration defines the various types of logic elements that can be
 /// used in digital circuits.
 
-enum Gates : uint8_t {  /// logical element - "AND" (AND)
-  GateAnd,              /// logical element "AND-NOT" (NAND)
-  GateNand,             /// logical element - "OR" (OR)
-  GateOr,               /// logical element - "OR-NOT" (NOR)
-  GateNor,              /// lofical element - "Exclusive OR" (XOR)
-  GateXor,              /// logical element - XNOR
-  GateXnor,             /// logical element - NOT
-  GateNot,              /// logical element - Buffer
-  GateBuf,              /// default logical element
+enum Gates : uint8_t { /// logical element - "AND" (AND)
+  GateAnd,             /// logical element "AND-NOT" (NAND)
+  GateNand,            /// logical element - "OR" (OR)
+  GateOr,              /// logical element - "OR-NOT" (NOR)
+  GateNor,             /// lofical element - "Exclusive OR" (XOR)
+  GateXor,             /// logical element - XNOR
+  GateXnor,            /// logical element - NOT
+  GateNot,             /// logical element - Buffer
+  GateBuf,             /// default logical element
   GateDefault
 };
 
 /// @brief DotTypes
 /// Enumeration for DOT generation
 enum DotTypes : uint8_t {
-  DotGraph    = 0,
-  DotInput    = 1,
+  DotGraph = 0,
+  DotInput = 1,
   DotConstant = 2,
-  DotOutput   = 3,
-  DotGate     = 4,
-  DotEdge     = 5,
+  DotOutput = 3,
+  DotGate = 4,
+  DotEdge = 5,
   DotSubGraph = 6,
-  DotExit     = 7
+  DotExit = 7
 };
 
 /// @todo: To add Description some fields
@@ -76,10 +76,10 @@ enum DotTypes : uint8_t {
 
 class DefaultSettings {
 public:
-  DefaultSettings(const std::string& i_path) : d_path(i_path) {}
+  DefaultSettings(const std::string &i_path) : d_path(i_path) {}
 
-  DefaultSettings(DefaultSettings& other) = delete;
-  void operator=(const DefaultSettings&)  = delete;
+  DefaultSettings(DefaultSettings &other) = delete;
+  void operator=(const DefaultSettings &) = delete;
 
   /// @brief getDefaultInstance Gets a single instance of the DefaultSettings
   /// class The method provides creation and receipt of a single instance of the
@@ -102,9 +102,8 @@ public:
   /// std::cout << "Dataset path: " << datasetPath << std::endl;
   /// @endcode
 
-  static std::shared_ptr<DefaultSettings> getDefaultInstance(
-      const std::string& i_value
-  );
+  static std::shared_ptr<DefaultSettings>
+  getDefaultInstance(const std::string &i_value);
 
   /// @brief loadSettings Downloads settings from a file
   /// The method loads the settings from a file with the name specified in
@@ -112,13 +111,13 @@ public:
   /// settings values from it and updates the corresponding data members of
   /// the class
 
-  void                            loadSettings();
+  void loadSettings();
 
   /// @brief getDefaultInstanceName Gets the name of the current instance of
   /// settings
   /// @return std::string Name of the current instance of settings
 
-  std::string                     getDefaultInstanceName() const;
+  std::string getDefaultInstanceName() const;
 
   /// @brief getLogicOperation Gets information about a logical operation by
   /// its name
@@ -142,13 +141,13 @@ public:
   /// @throws std::out_of_range If the passed operation name does not exist
   /// in the list of logical operations
 
-  std::pair<std::string, int32_t> getLogicOperation(const std::string& i_op);
+  std::pair<std::string, int32_t> getLogicOperation(const std::string &i_op);
 
   /// @brief getLogicOperationsKeys Returns the keys of logical operations
   /// @return std::vector<Gates> A vector containing the keys of logical
   /// operations
 
-  std::vector<Gates>              getLogicOperationsKeys();
+  std::vector<Gates> getLogicOperationsKeys();
 
   /// @brief getLogicOperationsWithGates Returns logical operations along with
   /// information about the presence of a single input
@@ -188,8 +187,8 @@ public:
   /// }
   /// @endcode
 
-  std::pair<std::vector<bool>, std::vector<Gates>> getLogicOperationsWithGates(
-  );
+  std::pair<std::vector<bool>, std::vector<Gates>>
+  getLogicOperationsWithGates();
 
   /// @brief fromOperationsToName Converts the operation to its name
   /// @param i_op a string representing the operation
@@ -224,8 +223,8 @@ public:
   /// @return std::map<std::string, std::pair<std::string, int32_t>> Dictionary
   /// with logical operations
 
-  std::map<std::string, std::pair<std::string, int32_t>> getLogicOperations(
-  ) const;
+  std::map<std::string, std::pair<std::string, int32_t>>
+  getLogicOperations() const;
 
   /// @brief fromOperationsToHierarchy Converts an operation key to its
   /// corresponding hierarchy
@@ -249,7 +248,7 @@ public:
   /// @throws std::out_of_range If the provided key does not exist in the
   /// internal map of operation keys to hierarchies
 
-  std::string_view   fromOperationsToHierarchy(int32_t key) const;
+  std::string_view fromOperationsToHierarchy(int32_t key) const;
 
   /// @brief parseStringToGate Converts a string representation of a gate to
   /// its corresponding enum value
@@ -265,7 +264,7 @@ public:
   /// std::cout << "Enum value of 'and': " << gate << std::endl;
   /// @endcode
 
-  Gates              parseStringToGate(std::string i_gate) const;
+  Gates parseStringToGate(std::string i_gate) const;
 
   /// @brief parseVertexToString Converts an enum value of a vertex type to its
   /// corresponding string representation
@@ -306,48 +305,38 @@ public:
 
   static std::string parseGateToString(Gates gate);
 
-  static void        resetSingletone() { d_singleton = nullptr; }
+  static void resetSingletone() { d_singleton = nullptr; }
 
   template<typename T, typename M, size_t N>
-  static std::pair<T, M>*
-      findPairByKey(std::pair<T, M> (&iterable)[N], const T& key) {
-    auto* iter = std::find_if(
-        std::begin(iterable),
-        std::end(iterable),
-        [key](const auto& x) { return x.first == key; }
-    );
+  static std::pair<T, M> *findPairByKey(std::pair<T, M> (&iterable)[N],
+                                        const T &key) {
+    auto *iter = std::find_if(std::begin(iterable), std::end(iterable),
+                              [key](const auto &x) { return x.first == key; });
     return iter;
   }
 
 protected:
-  static std::mutex                       singletoneProtection;
-  std::string                             d_name;
+  static std::mutex singletoneProtection;
+  std::string d_name;
   static std::shared_ptr<DefaultSettings> d_singleton;
-  std::string                             d_path;
+  std::string d_path;
   const std::map<std::string, std::pair<std::string, int32_t>>
       d_logicOperations = {
-          {"input", {"", 10}},
-          {"output", {"=", 0}},
-          {"const", {"1'b0", 9}},
-          {"and", {"and", 4}},
-          {"nand", {"nand", 3}},
-          {"or", {"or", 6}},
-          {"nor", {"nor", 5}},
-          {"not", {"not", 7}},
-          {"buf", {"buf", 8}},
-          {"xor", {"xor", 2}},
-          {"xnor", {"xnor", 1}}
+          {"input", {"", 10}}, {"output", {"=", 0}},  {"const", {"1'b0", 9}},
+          {"and", {"and", 4}}, {"nand", {"nand", 3}}, {"or", {"or", 6}},
+          {"nor", {"nor", 5}}, {"not", {"not", 7}},   {"buf", {"buf", 8}},
+          {"xor", {"xor", 2}}, {"xnor", {"xnor", 1}}
 
   };
 
-  static std::vector<Gates>                       d_logicElements;
+  static std::vector<Gates> d_logicElements;
 
-  static std::pair<std::string, Gates>            stringToGate[8];
+  static std::pair<std::string, Gates> stringToGate[8];
 
   static std::pair<VertexTypes, std::string_view> vertexToString[5];
 
-  static std::pair<Gates, std::string_view>       gateToString[9];
+  static std::pair<Gates, std::string_view> gateToString[9];
 
-  std::vector<std::string_view>                   d_operationsToHierarchy;
-  std::map<std::string_view, std::string>         d_operationsToName;
+  std::vector<std::string_view> d_operationsToHierarchy;
+  std::map<std::string_view, std::string> d_operationsToName;
 };

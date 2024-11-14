@@ -34,10 +34,8 @@ public:
   /// @param i_baseGraph Pointer to the base graph. Default is nullptr.
   /// @param i_type i_type Type of the vertex. Default is VertexTypes::input.
 
-  GraphVertexInput(
-      GraphPtr          i_baseGraph,
-      const VertexTypes i_type = VertexTypes::input
-  );
+  GraphVertexInput(GraphPtr i_baseGraph,
+                   const VertexTypes i_type = VertexTypes::input);
 
   /// @brief GraphVertexInput
   /// Initializes the GraphVertexInput object with the provided name, base
@@ -45,11 +43,8 @@ public:
   /// @param i_name Name of the vertex.
   /// @param i_baseGraph Pointer to the base graph.
   /// @param i_type Type of the vertex.
-  GraphVertexInput(
-      std::string_view  i_name,
-      GraphPtr          i_baseGraph,
-      const VertexTypes i_type = VertexTypes::input
-  );
+  GraphVertexInput(std::string_view i_name, GraphPtr i_baseGraph,
+                   const VertexTypes i_type = VertexTypes::input);
 
   /// @brief updateValue A virtual function for updating the vertex value.
   /// The implementation is provided in derived classes
@@ -64,14 +59,14 @@ public:
   /// @brief updateLevel It is designed to update the level of the current
   /// vertex in a directed graph based on the levels of its input connections
 
-  virtual void updateLevel(bool i_recalculate = false, std::string tab = "")
-      override;
+  virtual void updateLevel(bool i_recalculate = false,
+                           std::string tab = "") override;
 
-  DotReturn    toDOT() override;
+  DotReturn toDOT() override;
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  virtual void log(el::base::type::ostream_t& os) const override;
+  virtual void log(el::base::type::ostream_t &os) const override;
 
 protected:
   GraphVertexInput(VertexTypes i_type);
@@ -88,32 +83,29 @@ class GraphVertexConstant : public GraphVertexInput {
 public:
   GraphVertexConstant(char i_const, GraphPtr i_baseGraph);
 
-  GraphVertexConstant(
-      char             i_const,
-      std::string_view i_name,
-      GraphPtr         i_baseGraph
-  );
+  GraphVertexConstant(char i_const, std::string_view i_name,
+                      GraphPtr i_baseGraph);
 
   ~GraphVertexConstant() {};
 
-  size_t       calculateHash(bool i_recalculate = false) override;
+  size_t calculateHash(bool i_recalculate = false) override;
 
   /// @brief updateLevel updates the level of the current vertex in the graph
   /// based on the levels of its incoming connections
 
-  virtual void updateLevel(bool i_recalculate = false, std::string tab = "")
-      override;
-  std::string  toVerilog() override;
-  DotReturn    toDOT() override;
+  virtual void updateLevel(bool i_recalculate = false,
+                           std::string tab = "") override;
+  std::string toVerilog() override;
+  DotReturn toDOT() override;
 
   /// @brief getDefaultInstance
   /// TO DO:
 
-  std::string  getVerilogInstance();
+  std::string getVerilogInstance();
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  virtual void log(el::base::type::ostream_t& os) const override;
+  virtual void log(el::base::type::ostream_t &os) const override;
 
 private:
 };
@@ -127,11 +119,8 @@ class GraphVertexSubGraph : public GraphVertexBase {
 public:
   GraphVertexSubGraph(GraphPtr i_subGraph, GraphPtr i_baseGraph);
 
-  GraphVertexSubGraph(
-      GraphPtr         i_subGraph,
-      std::string_view i_name,
-      GraphPtr         i_baseGraph
-  );
+  GraphVertexSubGraph(GraphPtr i_subGraph, std::string_view i_name,
+                      GraphPtr i_baseGraph);
 
   ~GraphVertexSubGraph() {};
 
@@ -139,7 +128,7 @@ public:
   void updateLevel(bool i_recalculate = false, std::string tab = "") override;
 
   std::string toVerilog() override;
-  DotReturn   toDOT() override;
+  DotReturn toDOT() override;
 
   /// @brief This method is used as a substructure for
   /// OrientedGraph methods
@@ -149,17 +138,17 @@ public:
   /// name)
   /// @return pair, first is bool, meaning was file writing successful or not
   /// and second is string, for graph is empty, for subgraph is module instance
-  std::pair<bool, std::string>
-      toVerilog(std::string i_path, std::string i_filename = "");
+  std::pair<bool, std::string> toVerilog(std::string i_path,
+                                         std::string i_filename = "");
 
-  std::pair<bool, std::string>
-              toDOT(std::string i_path, std::string i_filename = "");
+  std::pair<bool, std::string> toDOT(std::string i_path,
+                                     std::string i_filename = "");
 
   /// @brief This method is used as a substructure for
   /// OrientedGraph methods
   /// @param i_fileStream TO DO:
   /// @return TO DO:
-  bool        toGraphML(std::ofstream& i_fileStream) const;
+  bool toGraphML(std::ofstream &i_fileStream) const;
 
   /// @brief This method is used as a substructure for
   /// OrientedGraph methods
@@ -172,18 +161,18 @@ public:
   /// @return
   std::string getVerilogInstance() override;
 
-  size_t      calculateHash(bool i_recalculate = false) override;
+  size_t calculateHash(bool i_recalculate = false) override;
 
-  void        setSubGraph(GraphPtr i_subGraph);
-  GraphPtr    getSubGraph() const;
-  std::vector<VertexPtr> getOutputBuffersByOuterInput(VertexPtr i_outerInput
-  ) const;
-  std::vector<VertexPtr> getOuterInputsByOutputBuffer(VertexPtr i_outputBuffer
-  ) const;
+  void setSubGraph(GraphPtr i_subGraph);
+  GraphPtr getSubGraph() const;
+  std::vector<VertexPtr>
+  getOutputBuffersByOuterInput(VertexPtr i_outerInput) const;
+  std::vector<VertexPtr>
+  getOuterInputsByOutputBuffer(VertexPtr i_outputBuffer) const;
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  virtual void           log(el::base::type::ostream_t& os) const override;
+  virtual void log(el::base::type::ostream_t &os) const override;
 
 private:
   GraphPtr d_subGraph;
@@ -217,14 +206,14 @@ public:
   /// vertices to which it is connected, and sets the level of the current
   /// vertex to one higher than the highest level
 
-  virtual void updateLevel(bool i_recalculate = false, std::string tab = "")
-      override;
+  virtual void updateLevel(bool i_recalculate = false,
+                           std::string tab = "") override;
 
-  DotReturn    toDOT() override;
+  DotReturn toDOT() override;
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  virtual void log(el::base::type::ostream_t& os) const override;
+  virtual void log(el::base::type::ostream_t &os) const override;
 
 private:
 };
@@ -261,14 +250,14 @@ public:
   /// @endcode
   /// @return The calculated hash value as a string
 
-  size_t       calculateHash(bool i_recalculate = false) override;
+  size_t calculateHash(bool i_recalculate = false) override;
 
   /// @brief getVerilogString
   /// Gets a string in Verilog format representing the current vertex
   /// @return A string in Verilog format representing the current vertex
   /// @throws std::invalid_argument if any input connection is invalid
 
-  std::string  getVerilogString() const;
+  std::string getVerilogString() const;
 
   /// @brief getGate
   /// Returns the type of valve associated with the current vertex
@@ -279,7 +268,7 @@ public:
   /// std:: cout << "Gate type : " << gateType << std::endl;
   /// @endcode
 
-  Gates        getGate() const;
+  Gates getGate() const;
 
   /// @brief toVerilog
   /// generates a string in Verilog format for the current vertex,
@@ -289,14 +278,14 @@ public:
   /// @return A Verilog format string for the current vertex
   /// @throws std::invalid_argument if any input connection is invalid
 
-  std::string  toVerilog() override;
-  DotReturn    toDOT() override;
+  std::string toVerilog() override;
+  DotReturn toDOT() override;
 
-  bool         isSubgraphBuffer() const override;
+  bool isSubgraphBuffer() const override;
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  virtual void log(el::base::type::ostream_t& os) const override;
+  virtual void log(el::base::type::ostream_t &os) const override;
 
 private:
   Gates d_gate;

@@ -16,10 +16,10 @@
 
 class OrientedGraph;
 
-#define GraphPtr     std::shared_ptr<OrientedGraph>
+#define GraphPtr std::shared_ptr<OrientedGraph>
 #define GraphPtrWeak std::weak_ptr<OrientedGraph>
 
-#define VertexPtr    GraphVertexBase*
+#define VertexPtr GraphVertexBase *
 
 /// @brief VertexUtils
 /// Namespace containing utility functions for working with vertices
@@ -41,7 +41,7 @@ static std::atomic_uint64_t d_count;
 /// VertexUtils::gateToString(gateType); std::cout << "String representation of
 /// gate type: " << gateString << std::endl;
 /// @endcode
-std::string                 gateToString(Gates i_type);
+std::string gateToString(Gates i_type);
 
 /// @brief vertexTypeToComment
 /// Converts a vertex type enum value to its Verilog representation
@@ -53,7 +53,7 @@ std::string                 gateToString(Gates i_type);
 /// std::cout << "Verilog representation of vertex type: " << verilogType <<
 /// std::endl;
 /// @endcode
-std::string                 vertexTypeToVerilog(VertexTypes i_type);
+std::string vertexTypeToVerilog(VertexTypes i_type);
 
 /// @brief vertexTypeToComment
 /// Converts a vertex type enum value to its comment representation
@@ -68,8 +68,8 @@ std::string                 vertexTypeToVerilog(VertexTypes i_type);
 /// std::string comment = VertexUtils::vertexTypeToComment(vertexType);
 /// std::cout << "Comment for input vertex type: " << comment << std::endl;
 /// @endcode
-std::string                 vertexTypeToComment(VertexTypes i_type);
-}  // namespace VertexUtils
+std::string vertexTypeToComment(VertexTypes i_type);
+} // namespace VertexUtils
 
 /// class GraphVertexBase
 /// @param d_baseGraph A weak pointer to the base graph containing this vertex
@@ -101,18 +101,15 @@ public:
   /// @param i_type The type of the vertex (from the VertexTypes enum)
   /// @param i_name The name of the vertex.
   /// @param i_graph Optional pointer to the graph containing the vertex.
-  GraphVertexBase(
-      const VertexTypes i_type,
-      std::string_view  i_name,
-      GraphPtr          i_graph
-  );
+  GraphVertexBase(const VertexTypes i_type, std::string_view i_name,
+                  GraphPtr i_graph);
 
-  GraphVertexBase& operator=(const GraphVertexBase& other
-  ) = default;  // оператор копирующего присваивания
-  GraphVertexBase& operator=(GraphVertexBase&& other
-  ) = default;  // оператор перемещающего присваивания
-  GraphVertexBase(const GraphVertexBase& other) = default;
-  GraphVertexBase(GraphVertexBase&& other)      = default;
+  GraphVertexBase &operator=(const GraphVertexBase &other) =
+      default; // оператор копирующего присваивания
+  GraphVertexBase &operator=(GraphVertexBase &&other) =
+      default; // оператор перемещающего присваивания
+  GraphVertexBase(const GraphVertexBase &other) = default;
+  GraphVertexBase(GraphVertexBase &&other) = default;
 
   ~GraphVertexBase();
 
@@ -126,7 +123,7 @@ public:
   /// std::cout << "Type of the vertex: " << type << std::endl;
   /// @endcode
 
-  VertexTypes      getType() const;
+  VertexTypes getType() const;
 
   // Get для типа вершины в фомате строки
 
@@ -141,7 +138,7 @@ public:
   /// std::cout << "String representation of the vertex type: " << typeName;
   /// @endcode
 
-  std::string      getTypeName() const;
+  std::string getTypeName() const;
 
   // Get-Set для имен входов
 
@@ -155,7 +152,7 @@ public:
   /// std::endl;
   /// @endcode
 
-  void             setName(std::string_view i_name);
+  void setName(std::string_view i_name);
 
   /// @brief getName
   /// Returns the name of the vertex
@@ -166,8 +163,8 @@ public:
   /// std::cout << "Name of the vertex: " << name << std::endl;
   /// @endcode
 
-  std::string      getName() const;
-  std::string      getName(const std::string& i_prefix) const;
+  std::string getName() const;
+  std::string getName(const std::string &i_prefix) const;
 
   std::string_view getRawName() const;
 
@@ -181,12 +178,12 @@ public:
   /// std::cout << "Value of the vertex: " << value << std::endl;
   /// @endcode
 
-  char             getValue() const;
+  char getValue() const;
 
   /// @brief updateValue
   /// TO DO:
 
-  virtual char     updateValue() = 0;
+  virtual char updateValue() = 0;
 
   // Get-Set для уровня
 
@@ -199,7 +196,7 @@ public:
   /// std::cout << "New level of the vertex: " << vertex.getLevel() << '\n';
   /// @endcode
 
-  void             setLevel(const uint32_t i_level);
+  void setLevel(const uint32_t i_level);
 
   /// @brief getLevel
   /// Returns the level of the vertex
@@ -210,7 +207,7 @@ public:
   /// std::cout << "Level of the vertex: " << level << std::endl;
   /// @endcode
 
-  uint32_t         getLevel() const;
+  uint32_t getLevel() const;
 
   /// @brief updateLevel
   /// This method updates the level of the vertex based on the levels of its
@@ -222,7 +219,7 @@ public:
   /// @throws std::invalid_argument if any of the input connections are invalid
   /// (i.e., null pointers)
 
-  virtual void  updateLevel(bool i_recalculate = false, std::string tab = "");
+  virtual void updateLevel(bool i_recalculate = false, std::string tab = "");
 
   /// @brief getGate
   /// Returns the type of the basic logic gate represented by this vertex. If
@@ -245,7 +242,7 @@ public:
   /// TO DO:
   /// @endcode
 
-  GraphPtrWeak  getBaseGraph() const;
+  GraphPtrWeak getBaseGraph() const;
 
   /// @brief getInConnections
   /// @return A vector of weak pointers to the input connections of this vertex
@@ -292,7 +289,7 @@ public:
   /// connections of the first vertex: " << occurrences << std::endl;
   /// @endcode
 
-  uint32_t               addVertexToInConnections(VertexPtr i_vert);
+  uint32_t addVertexToInConnections(VertexPtr i_vert);
 
   /// @brief removeVertexToInConnections
   /// Removes a vertex from the input connections of this vertex.
@@ -361,7 +358,7 @@ public:
   /// TO DO:
   /// @endcode
 
-  bool                   addVertexToOutConnections(VertexPtr i_vert);
+  bool addVertexToOutConnections(VertexPtr i_vert);
 
   /// @brief removeVertexToOutConnections
   /// Removes a vertex from the output connections of this vertex.
@@ -390,7 +387,7 @@ public:
   /// }
   /// @endcode
 
-  bool                   removeVertexToOutConnections(VertexPtr i_vert);
+  bool removeVertexToOutConnections(VertexPtr i_vert);
 
   /// @brief calculateHash
   /// Calculates the hash value for the vertex based on its outgoing
@@ -417,7 +414,7 @@ public:
   /// std::cout << "Hash for the first vertex: " << hashValue << std::endl;
   /// @endcode
 
-  virtual size_t         calculateHash(bool i_recalculate = false);
+  virtual size_t calculateHash(bool i_recalculate = false);
 
   /// @brief getVerilogInstance
   /// Generates an instance declaration for the vertex in Verilog format.
@@ -433,7 +430,7 @@ public:
   /// std::endl;
   /// @endcode
 
-  virtual std::string    getVerilogInstance();
+  virtual std::string getVerilogInstance();
 
   /// @brief toVerilog
   /// Generates Verilog code for the vertex
@@ -455,33 +452,33 @@ public:
   /// std::cout << "Generated Verilog code:\n" << verilogCode << std::endl;
   /// @endcode
 
-  virtual std::string    toVerilog();
+  virtual std::string toVerilog();
 
   /// @brief toDOT
   /// Generates DOT code for the vertex
   /// @return
 
-  virtual DotReturn      toDOT();
+  virtual DotReturn toDOT();
 
-  virtual bool           isSubgraphBuffer() const { return false; }
+  virtual bool isSubgraphBuffer() const { return false; }
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
-  virtual void           log(el::base::type::ostream_t& os) const;
+  virtual void log(el::base::type::ostream_t &os) const;
 
 protected:
-  GraphPtrWeak           d_baseGraph;
+  GraphPtrWeak d_baseGraph;
 
-  std::string_view       d_name;
-  char                   d_value;
-  char                   d_needUpdate = 0;
-  char                   d_hasHash    = 0;
-  uint32_t               d_level;
+  std::string_view d_name;
+  char d_value;
+  char d_needUpdate = 0;
+  char d_hasHash = 0;
+  uint32_t d_level;
 
   std::vector<VertexPtr> d_inConnections;
   std::vector<VertexPtr> d_outConnections;
 
-  size_t                 d_hashed = 0;
+  size_t d_hashed = 0;
 
 private:
   // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых

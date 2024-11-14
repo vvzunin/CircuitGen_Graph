@@ -203,13 +203,12 @@ bool GraphVertexBase::removeVertexToInConnections(
       f = true;
     }
     return f;
-  } else {
-    for (size_t i = 0; i < d_inConnections.size(); i++) {
-      d_inConnections.erase(d_inConnections.begin() + i);
-      return true;
-    }
-    return false;
   }
+  for (size_t i = 0; i < d_inConnections.size(); i++) {
+    d_inConnections.erase(d_inConnections.begin() + i);
+    return true;
+  }
+  return false;
 }
 
 std::vector<VertexPtr> GraphVertexBase::getOutConnections() const {

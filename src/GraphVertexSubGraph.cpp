@@ -162,7 +162,7 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOutputBuffersByOuterInput(
     if (visited.find(current) == visited.end()) {
       visited.insert(current);
 
-      for (auto v : current->getOutConnections()) {
+      for (auto *v : current->getOutConnections()) {
         if (v->getType() == VertexTypes::output) {
           for (size_t i = 0; i < sgAllOutputs.size(); ++i) {
             if (sgAllOutputs[i] == v) {
@@ -172,8 +172,8 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOutputBuffersByOuterInput(
         } else if (v->getType() != VertexTypes::subGraph) {
           stck.push(v);
         } else {
-          auto subGraphPtr = static_cast<GraphVertexSubGraph*>(v);
-          for (auto buf : subGraphPtr->getOutputBuffersByOuterInput(current)) {
+          auto *subGraphPtr = static_cast<GraphVertexSubGraph*>(v);
+          for (auto *buf : subGraphPtr->getOutputBuffersByOuterInput(current)) {
             stck.push(buf);
           }
         }
@@ -215,7 +215,7 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
     if (visited.find(current) == visited.end()) {
       visited.insert(current);
 
-      for (auto ptr : current->getInConnections()) {
+      for (auto *ptr : current->getInConnections()) {
         if (ptr->getType() == VertexTypes::input) {
           for (size_t i = 0; i < sgAllInputs.size(); ++i) {
             if (sgAllInputs[i] == ptr) {
@@ -225,8 +225,8 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
         } else if (ptr->getType() != VertexTypes::subGraph) {
           stck.push(ptr);
         } else {
-          auto subGraphPtr = static_cast<GraphVertexSubGraph*>(ptr);
-          for (auto input :
+          auto *subGraphPtr = static_cast<GraphVertexSubGraph*>(ptr);
+          for (auto *input :
                subGraphPtr->getOuterInputsByOutputBuffer(current)) {
             stck.push(input);
           }
