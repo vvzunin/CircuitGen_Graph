@@ -1,0 +1,23 @@
+<map id="CircuitGenGraph/DefaultSettings.hpp" name="CircuitGenGraph/DefaultSettings.hpp">
+<area shape="rect" id="node1" title=" " alt="" coords="1254,5,1517,32"/>
+<area shape="rect" id="node2" href="$DefaultAuxiliaryMethods_8hpp.html" title=" " alt="" coords="342,169,581,211"/>
+<area shape="rect" id="node6" href="$GraphMLTemplates_8hpp.html" title=" " alt="" coords="872,87,1157,114"/>
+<area shape="rect" id="node7" href="$GraphVertexBase_8hpp.html" title=" " alt="" coords="1278,80,1493,121"/>
+<area shape="rect" id="node18" href="$OrientedGraph_8hpp.html" title=" " alt="" coords="1623,169,1812,211"/>
+<area shape="rect" id="node21" href="$DefaultSettings_8cpp.html" title=" " alt="" coords="1568,87,1741,114"/>
+<area shape="rect" id="node3" href="$DefaultAuxiliaryMethods_8cpp.html" title=" " alt="" coords="5,266,240,293"/>
+<area shape="rect" id="node4" href="$OrientedGraph_8cpp.html" title=" " alt="" coords="502,266,669,293"/>
+<area shape="rect" id="node5" href="$GraphVertexConstantTests_8cpp.html" title=" " alt="" coords="264,259,477,300"/>
+<area shape="rect" id="node8" href="$GraphVertex_8hpp.html" title="TODO: Maybe Description some virtual methods for Graph&#39;s classes, such as GraphVertexGates." alt="" coords="1145,177,1388,203"/>
+<area shape="rect" id="node20" href="$GraphVertexBase_8cpp.html" title=" " alt="" coords="1413,177,1598,203"/>
+<area shape="rect" id="node9" href="$GraphVertexConstant_8cpp.html" title=" " alt="" coords="936,266,1147,293"/>
+<area shape="rect" id="node10" href="$GraphVertexGates_8cpp.html" title=" " alt="" coords="1171,266,1362,293"/>
+<area shape="rect" id="node11" href="$GraphVertexInput_8cpp.html" title=" " alt="" coords="1387,266,1573,293"/>
+<area shape="rect" id="node12" href="$GraphVertexOutput_8cpp.html" title=" " alt="" coords="1597,266,1795,293"/>
+<area shape="rect" id="node13" href="$GraphVertexSubGraph_8cpp.html" title=" " alt="" coords="1819,266,2035,293"/>
+<area shape="rect" id="node14" href="$GraphVertexGatesTests_8cpp.html" title=" " alt="" coords="2059,259,2253,300"/>
+<area shape="rect" id="node15" href="$GraphVertexInputTests_8cpp.html" title=" " alt="" coords="2277,259,2465,300"/>
+<area shape="rect" id="node16" href="$GraphVertexOutputTests_8cpp.html" title=" " alt="" coords="2489,259,2687,300"/>
+<area shape="rect" id="node17" href="$GraphVertexSubGraphTests_8cpp.html" title=" " alt="" coords="693,259,912,300"/>
+<area shape="rect" id="node19" href="$OrientedGraphTests_8cpp.html" title=" " alt="" coords="2712,266,2941,293"/>
+</map>

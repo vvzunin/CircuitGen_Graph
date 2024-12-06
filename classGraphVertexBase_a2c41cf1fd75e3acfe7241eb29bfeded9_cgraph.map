@@ -1,0 +1,6 @@
+<map id="GraphVertexBase::GraphVertexBase" name="GraphVertexBase::GraphVertexBase">
+<area shape="rect" id="node1" title="GraphVertexBase Constructs a GraphVertexBase object with the specified vertex type and optional graph..." alt="" coords="5,13,261,39"/>
+<area shape="rect" id="node2" href="$classGraphVertexBase.html#ab98566fb1899dad889ab12dd77c88923" title="getTypeName This method returns the string representation of the vertex type by parsing the vertex ty..." alt="" coords="309,13,543,39"/>
+<area shape="rect" id="node3" href="$classDefaultSettings.html#a329efbd10ce7958bac8aa5d22147c4d6" title="parseVertexToString Converts an enum value of a vertex type to its corresponding string representatio..." alt="" coords="591,5,800,47"/>
+<area shape="rect" id="node4" href="$classDefaultSettings.html#af4b14ef9259709a2f9c2fa3a350427f1" title=" " alt="" coords="848,5,1027,47"/>
+</map>

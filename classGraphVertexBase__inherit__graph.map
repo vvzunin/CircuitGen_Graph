@@ -1,0 +1,8 @@
+<map id="GraphVertexBase" name="GraphVertexBase">
+<area shape="rect" id="node1" title="class GraphVertexBase" alt="" coords="297,5,467,361"/>
+<area shape="rect" id="node2" href="$classGraphVertexGates.html" title="GraphVertexGates Class representing a vertex in a graph with gates." alt="" coords="5,409,183,633"/>
+<area shape="rect" id="node3" href="$classGraphVertexInput.html" title="class GraphVertexInput Represents a vertex in a directed graph that serves as an input vertex." alt="" coords="207,439,368,604"/>
+<area shape="rect" id="node5" href="$classGraphVertexOutput.html" title="class GraphVertexOutput It is a vertex of the graph, specially designed for data output." alt="" coords="392,446,564,597"/>
+<area shape="rect" id="node6" href="$classGraphVertexSubGraph.html" title="class GraphVertexSubGraph It is a class, having a subGruph pointer inside." alt="" coords="589,409,791,633"/>
+<area shape="rect" id="node4" href="$classGraphVertexConstant.html" title="class GraphVertexConstant TO DO: Description" alt="" coords="189,681,386,876"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="el::Loggable" name="el::Loggable">
+<area shape="rect" id="node1" title="Base of Easylogging++ friendly class." alt="" coords="367,5,484,97"/>
+<area shape="rect" id="node2" href="$classOrientedGraph.html" title="class OrientedGraph" alt="" coords="5,145,211,560"/>
+<area shape="rect" id="node3" href="$classel_1_1Configuration.html" title="Represents single configuration that has representing level, configuration type and a string based va..." alt="" coords="235,241,402,465"/>
+<area shape="rect" id="node4" href="$classel_1_1Logger.html" title="Represents a logger holding ID and configurations we need to write logs." alt="" coords="427,145,637,560"/>
+<area shape="rect" id="node5" href="$classel_1_1base_1_1LogFormat.html" title="Represents log format containing flags and date format. This is used internally to start initial log." alt="" coords="662,145,831,560"/>
+</map>

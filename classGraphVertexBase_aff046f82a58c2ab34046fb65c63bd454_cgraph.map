@@ -1,0 +1,5 @@
+<map id="GraphVertexBase::getVerilogInstance" name="GraphVertexBase::getVerilogInstance">
+<area shape="rect" id="node1" title="getVerilogInstance Generates an instance declaration for the vertex in Verilog format." alt="" coords="5,27,215,69"/>
+<area shape="rect" id="node2" href="$classGraphVertexBase.html#af1d900fc4073ade5fc0fe0bf3346ff49" title="getName Returns the name of the vertex" alt="" coords="263,5,465,32"/>
+<area shape="rect" id="node3" href="$namespaceVertexUtils.html#a58a8373cb1f0f5be90a30b7fc3b51abd" title="vertexTypeToComment Converts a vertex type enum value to its Verilog representation" alt="" coords="270,57,458,98"/>
+</map>

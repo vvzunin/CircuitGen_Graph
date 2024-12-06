@@ -1,0 +1,5 @@
+<map id="VertexUtils::vertexTypeToVerilog" name="VertexUtils::vertexTypeToVerilog">
+<area shape="rect" id="node1" title="vertexTypeToComment Converts a vertex type enum value to its Verilog representation" alt="" coords="263,35,451,76"/>
+<area shape="rect" id="node2" href="$classGraphVertexBase.html#aff046f82a58c2ab34046fb65c63bd454" title="getVerilogInstance Generates an instance declaration for the vertex in Verilog format." alt="" coords="5,5,215,47"/>
+<area shape="rect" id="node3" href="$classOrientedGraph.html#a2eb2d7be1861f101eade432faadb6161" title=" " alt="" coords="19,71,201,98"/>
+</map>
