@@ -6,8 +6,8 @@
 #include <string>
 #include <string_view>
 
-#define DEFAULT_BUF 114688
-#define CHUNK_SIZE 14336
+constexpr int DEFAULT_BUF = 114688;
+constexpr int CHUNK_SIZE = 14336;
 
 typedef unsigned char bytea;
 
