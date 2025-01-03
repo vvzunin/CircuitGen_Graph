@@ -111,7 +111,7 @@ public:
   GraphVertexBase(const GraphVertexBase &other) = default;
   GraphVertexBase(GraphVertexBase &&other) = default;
 
-  ~GraphVertexBase();
+  virtual ~GraphVertexBase();
 
   /// @brief getType
   /// This method returns the type of the vertex as a value of the VertexTypes

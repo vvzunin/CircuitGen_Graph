@@ -56,19 +56,9 @@ OrientedGraph::~OrientedGraph() {
 
     sub->d_currentParentGraph.lock() = nullptr;
   }
-  for (auto* vertex : d_vertexes[VertexTypes::subGraph]) {
-    static_cast<GraphVertexSubGraph*>(vertex)->~GraphVertexSubGraph();
-  }
-  for (auto* vertex : d_vertexes[VertexTypes::gate]) {
-    static_cast<GraphVertexGates*>(vertex)->~GraphVertexGates();
-  }
-  for (auto* vertex : d_vertexes[VertexTypes::constant]) {
-    static_cast<GraphVertexConstant*>(vertex)->~GraphVertexConstant();
-  }
 
-  for (auto* verticiesVector :
-       {&d_vertexes[VertexTypes::input], &d_vertexes[VertexTypes::output]}) {
-    for (auto* vertex : *verticiesVector) {
+  for (auto &verticiesVector : d_vertexes) {
+    for (auto* vertex : verticiesVector) {
       vertex->~GraphVertexBase();
     }
   }
