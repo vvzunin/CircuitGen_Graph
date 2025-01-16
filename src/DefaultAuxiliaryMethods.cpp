@@ -10,8 +10,8 @@ std::string operator*(std::string a, unsigned int b) {
   return output;
 }
 
-std::string
-    AuxMethods::replacer(const std::string& i_s, const std::string& i_r) {
+std::string AuxMethods::replacer(const std::string &i_s,
+                                 const std::string &i_r) {
   std::string res;
   res.reserve(i_s.length() * 2);
 
@@ -28,11 +28,11 @@ std::string
 }
 
 std::string AuxMethods::dotReturnToString(DotReturn dot) {
-  unsigned int tab              = 0;
-  std::string  dotTab           = "  ";
-  std::string  s                = "";
+  unsigned int tab = 0;
+  std::string dotTab = "  ";
+  std::string s = "";
 
-  bool         printingSubGraph = false;
+  bool printingSubGraph = false;
 
   for (int i = 0; i < dot.size(); i++) {
     switch (dot[i].first) {
@@ -40,32 +40,32 @@ std::string AuxMethods::dotReturnToString(DotReturn dot) {
         s += dotTab * tab++ + "digraph " + dot[i].second["name"] + " {\n";
         break;
       case DotTypes::DotInput:
-        s += dotTab * tab + dot[i].second["name"] + " [shape=triangle, label=\""
-           + dot[i].second["label"] + "\\nlevel: " + dot[i].second["level"]
-           + "\"];\n";
+        s += dotTab * tab + dot[i].second["name"] +
+             " [shape=triangle, label=\"" + dot[i].second["label"] +
+             "\\nlevel: " + dot[i].second["level"] + "\"];\n";
         break;
       case DotTypes::DotConstant:
-        s += dotTab * tab + dot[i].second["name"] + " [shape=cds, label=\""
-           + dot[i].second["label"] + "\\n" + dot[i].second["value"] + "\"];\n";
+        s += dotTab * tab + dot[i].second["name"] + " [shape=cds, label=\"" +
+             dot[i].second["label"] + "\\n" + dot[i].second["value"] + "\"];\n";
         break;
       case DotTypes::DotOutput:
-        s += dotTab * tab + dot[i].second["name"]
-           + " [shape=invtriangle, label=\"" + dot[i].second["label"]
-           + "\\nlevel: " + dot[i].second["level"] + "\"];\n";
+        s += dotTab * tab + dot[i].second["name"] +
+             " [shape=invtriangle, label=\"" + dot[i].second["label"] +
+             "\\nlevel: " + dot[i].second["level"] + "\"];\n";
         break;
       case DotTypes::DotGate:
-        s += dotTab * tab + dot[i].second["name"] + " [label=\""
-           + dot[i].second["label"] + "\\nlevel: " + dot[i].second["level"]
-           + "\"];\n";
+        s += dotTab * tab + dot[i].second["name"] + " [label=\"" +
+             dot[i].second["label"] + "\\nlevel: " + dot[i].second["level"] +
+             "\"];\n";
         break;
 
       case DotTypes::DotEdge:
-        s += dotTab * tab + dot[i].second["from"] + " -> " + dot[i].second["to"]
-           + ";\n";
+        s += dotTab * tab + dot[i].second["from"] + " -> " +
+             dot[i].second["to"] + ";\n";
         break;
       case DotTypes::DotSubGraph:
-        s += (dotTab * tab++) + "subgraph cluster_" + dot[i].second["instName"]
-           + " {\n";
+        s += (dotTab * tab++) + "subgraph cluster_" +
+             dot[i].second["instName"] + " {\n";
         printingSubGraph = true;
         break;
       case DotTypes::DotExit:

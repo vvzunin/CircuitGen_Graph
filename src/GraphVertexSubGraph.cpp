@@ -7,20 +7,16 @@
 
 #include "easyloggingpp/easylogging++.h"
 
-GraphVertexSubGraph::GraphVertexSubGraph(
-    GraphPtr i_subGraph,
-    GraphPtr i_baseGraph
-) :
-  GraphVertexBase(VertexTypes::subGraph, i_baseGraph) {
+GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
+                                         GraphPtr i_baseGraph) :
+    GraphVertexBase(VertexTypes::subGraph, i_baseGraph) {
   d_subGraph = i_subGraph;
 }
 
-GraphVertexSubGraph::GraphVertexSubGraph(
-    GraphPtr         i_subGraph,
-    std::string_view i_name,
-    GraphPtr         i_baseGraph
-) :
-  GraphVertexBase(VertexTypes::subGraph, i_name, i_baseGraph) {
+GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
+                                         std::string_view i_name,
+                                         GraphPtr i_baseGraph) :
+    GraphVertexBase(VertexTypes::subGraph, i_name, i_baseGraph) {
   d_subGraph = i_subGraph;
 }
 
@@ -35,7 +31,7 @@ void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
     return;
   }
   d_needUpdate = 2;
-  for (VertexPtr vert : d_subGraph->getVerticesByType(VertexTypes::output)) {
+  for (VertexPtr vert: d_subGraph->getVerticesByType(VertexTypes::output)) {
     // LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
     // << vert->getTypeName() << ")";
     vert->updateLevel(i_recalculate, tab + "  ");
@@ -49,7 +45,7 @@ std::string GraphVertexSubGraph::getVerilogInstance() {
 }
 
 std::pair<bool, std::string>
-    GraphVertexSubGraph::toVerilog(std::string i_path, std::string i_filename) {
+GraphVertexSubGraph::toVerilog(std::string i_path, std::string i_filename) {
   if (auto parentPtr = d_baseGraph.lock()) {
     d_subGraph->setCurrentParent(parentPtr);
   } else {
@@ -70,7 +66,7 @@ DotReturn GraphVertexSubGraph::toDOT() {
 }
 
 std::pair<bool, std::string>
-    GraphVertexSubGraph::toDOT(std::string i_path, std::string i_filename) {
+GraphVertexSubGraph::toDOT(std::string i_path, std::string i_filename) {
   if (auto parentPtr = d_baseGraph.lock()) {
     d_subGraph->setCurrentParent(parentPtr);
   } else {
@@ -80,14 +76,12 @@ std::pair<bool, std::string>
   return d_subGraph->toDOT(i_path, i_filename);
 }
 
-bool GraphVertexSubGraph::toGraphML(std::ofstream& i_fileStream) const {
+bool GraphVertexSubGraph::toGraphML(std::ofstream &i_fileStream) const {
   return d_subGraph->toGraphMLClassic(i_fileStream);
 }
 
-std::string GraphVertexSubGraph::toGraphML(
-    uint16_t    i_indent,
-    std::string i_prefix
-) const {
+std::string GraphVertexSubGraph::toGraphML(uint16_t i_indent,
+                                           std::string i_prefix) const {
   return d_subGraph->toGraphMLClassic(i_indent, i_prefix);
 }
 
@@ -115,24 +109,23 @@ size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
   // futuire sorted struct
   std::vector<size_t> hashed_data;
 
-  for (auto& child : d_outConnections) {
+  for (auto &child: d_outConnections) {
     hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
-  for (const auto& sub : hashed_data) {
+  for (const auto &sub: hashed_data) {
     hashedStr += sub;
   }
 
-  d_hashed  = std::hash<std::string> {}(hashedStr);
+  d_hashed = std::hash<std::string>{}(hashedStr);
   d_hasHash = 1;
 
   return d_hashed;
 }
 
 std::vector<VertexPtr> GraphVertexSubGraph::getOutputBuffersByOuterInput(
-    VertexPtr i_outerInput
-) const {
+    VertexPtr i_outerInput) const {
   size_t inputIndex = SIZE_MAX;
   for (size_t i = 0; i < d_inConnections.size(); ++i) {
     if (d_inConnections.at(i) == i_outerInput) {
@@ -142,17 +135,16 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOutputBuffersByOuterInput(
   }
   if (inputIndex == SIZE_MAX) {
     throw std::invalid_argument(
-        "Provided outer input does not correspond to this subgraph."
-    );
+        "Provided outer input does not correspond to this subgraph.");
   }
   VertexPtr sgInput =
       d_subGraph->getBaseVertexes().at(VertexTypes::input).at(inputIndex);
   std::vector<VertexPtr> sgAllOutputs =
       d_subGraph->getBaseVertexes().at(VertexTypes::output);
-  std::vector<VertexPtr>        outputs;
+  std::vector<VertexPtr> outputs;
 
   std::unordered_set<VertexPtr> visited;
-  std::stack<VertexPtr>         stck;
+  std::stack<VertexPtr> stck;
   stck.push(sgInput);
 
   while (!stck.empty()) {
@@ -162,7 +154,7 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOutputBuffersByOuterInput(
     if (visited.find(current) == visited.end()) {
       visited.insert(current);
 
-      for (auto *v : current->getOutConnections()) {
+      for (auto *v: current->getOutConnections()) {
         if (v->getType() == VertexTypes::output) {
           for (size_t i = 0; i < sgAllOutputs.size(); ++i) {
             if (sgAllOutputs[i] == v) {
@@ -172,8 +164,8 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOutputBuffersByOuterInput(
         } else if (v->getType() != VertexTypes::subGraph) {
           stck.push(v);
         } else {
-          auto *subGraphPtr = static_cast<GraphVertexSubGraph*>(v);
-          for (auto *buf : subGraphPtr->getOutputBuffersByOuterInput(current)) {
+          auto *subGraphPtr = static_cast<GraphVertexSubGraph *>(v);
+          for (auto *buf: subGraphPtr->getOutputBuffersByOuterInput(current)) {
             stck.push(buf);
           }
         }
@@ -184,8 +176,7 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOutputBuffersByOuterInput(
 }
 
 std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
-    VertexPtr i_outputBuffer
-) const {
+    VertexPtr i_outputBuffer) const {
   size_t bufferIndex = SIZE_MAX;
   for (size_t i = 0; i < d_outConnections.size(); ++i) {
     if (d_outConnections.at(i) == i_outputBuffer) {
@@ -195,17 +186,16 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
   }
   if (bufferIndex == SIZE_MAX) {
     throw std::invalid_argument(
-        "Provided output buffer does not correspond to this subgraph."
-    );
+        "Provided output buffer does not correspond to this subgraph.");
   }
   VertexPtr sgOutput =
       d_subGraph->getBaseVertexes().at(VertexTypes::output).at(bufferIndex);
   std::vector<VertexPtr> sgAllInputs =
       d_subGraph->getBaseVertexes().at(VertexTypes::input);
-  std::vector<VertexPtr>        inputs;
+  std::vector<VertexPtr> inputs;
 
   std::unordered_set<VertexPtr> visited;
-  std::stack<VertexPtr>         stck;
+  std::stack<VertexPtr> stck;
   stck.push(sgOutput);
 
   while (!stck.empty()) {
@@ -215,7 +205,7 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
     if (visited.find(current) == visited.end()) {
       visited.insert(current);
 
-      for (auto *ptr : current->getInConnections()) {
+      for (auto *ptr: current->getInConnections()) {
         if (ptr->getType() == VertexTypes::input) {
           for (size_t i = 0; i < sgAllInputs.size(); ++i) {
             if (sgAllInputs[i] == ptr) {
@@ -225,8 +215,8 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
         } else if (ptr->getType() != VertexTypes::subGraph) {
           stck.push(ptr);
         } else {
-          auto *subGraphPtr = static_cast<GraphVertexSubGraph*>(ptr);
-          for (auto *input :
+          auto *subGraphPtr = static_cast<GraphVertexSubGraph *>(ptr);
+          for (auto *input:
                subGraphPtr->getOuterInputsByOutputBuffer(current)) {
             stck.push(input);
           }
@@ -237,7 +227,7 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
   return inputs;
 }
 
-void GraphVertexSubGraph::log(el::base::type::ostream_t& os) const {
+void GraphVertexSubGraph::log(el::base::type::ostream_t &os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
