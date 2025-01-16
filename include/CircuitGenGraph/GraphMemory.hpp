@@ -13,14 +13,14 @@ typedef unsigned char bytea;
 
 /// @author Fuuulkrum7
 /// @brief This is a custom allocator, which allocates firstly `buf_size`
-/// bytes, and than, if requires, allocates additionaly `chunk_size` bytes.
+/// bytes, and than, if requires, allocates additionally `chunk_size` bytes.
 /// Pointers on all allocated blocks are stored in a vector, so, if it is
 /// possible, calculate buf_size correctly to reduce time for deallocation
 struct MultiLinearAllocator {
   // clang-format off
 
   /// @brief buf_size should be more than 128 bytes,
-  /// as the bigest vertex has such size
+  /// as the biggest vertex has such size
   /// @param buf_size size for the first allocation
   /// @param chunk_size size for further allocations (usually is less
   /// than `buf_size` value)
@@ -86,7 +86,7 @@ private:
   /// @brief all pinters on memory blocks, which have been allocated
   std::vector<bytea *> blocks;
   /// @brief pointer on position, from which allocation should be started (from
-  /// `offest` to `offset + sizeof(T)`)
+  /// `offset` to `offset + sizeof(T)`)
   bytea *offset;
   /// @brief size of the first buffer
   size_t buf_size;
@@ -95,10 +95,10 @@ private:
 };
 
 /// @author Fuuulkrum7
-/// @brief This class is used for memory managment. It has a
-/// `MultiLinearAllocator` for allocating memory for graph verticies and
-/// monotonic_buffer_resource, whcih is used for memory allocation for set of
-/// strings, where all vertexes names are stored.
+/// @brief This class is used for memory management. It has a
+/// `MultiLinearAllocator` for allocating memory for graph vertices and
+/// monotonic_buffer_resource, which is used for memory allocation for set of
+/// strings, where all vertices names are stored.
 class GraphMemory {
 public:
   // clang-format off
@@ -148,11 +148,11 @@ public:
   }
 
 private:
-  /// @brief allocator for verticies
+  /// @brief allocator for vertices
   MultiLinearAllocator d_vertexMemory;
 
   /// @brief resource for memory set without deallocations
   std::pmr::monotonic_buffer_resource d_stringMemory;
-  /// @brief set with all verticies names
+  /// @brief set with all vertices names
   std::pmr::set<std::string> d_strings;
 };
