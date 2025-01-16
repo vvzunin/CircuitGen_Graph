@@ -2,7 +2,7 @@ var classGraphVertexSubGraph =
 [
     [ "GraphVertexSubGraph", "classGraphVertexSubGraph.html#aa998a5a3701e26f478575c9bdeeb17b3", null ],
     [ "GraphVertexSubGraph", "classGraphVertexSubGraph.html#ad654a2d0460e1385744c91fed7775624", null ],
-    [ "~GraphVertexSubGraph", "classGraphVertexSubGraph.html#a220d8acdc823f93f4b149a874773ec79", null ],
+    [ "~GraphVertexSubGraph", "classGraphVertexSubGraph.html#ada037626f46eedf5ca30b3ee681fbbc5", null ],
     [ "calculateHash", "classGraphVertexSubGraph.html#aec1f2ca29de8081440c40e8165d69f89", null ],
     [ "getOuterInputsByOutputBuffer", "classGraphVertexSubGraph.html#a689da66c9ebbb21d9b33ae18fb39a9a6", null ],
     [ "getOutputBuffersByOuterInput", "classGraphVertexSubGraph.html#abc32bace61c67e2bf2168f5b87057d98", null ],

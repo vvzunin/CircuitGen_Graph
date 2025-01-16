@@ -104,24 +104,37 @@ $(document).ready(function(){initNavTree('structMultiLinearAllocator.html',''); 
 </div><!--header-->
 <div class="contents">
 
+<p>This is a custom allocator, which allocates firstly <code>buf_size</code> bytes, and than, if requires, allocates additionally <code>chunk_size</code> bytes. Pointers on all allocated blocks are stored in a vector, so, if it is possible, calculate buf_size correctly to reduce time for deallocation.  
+ <a href="structMultiLinearAllocator.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="GraphMemory_8hpp_source.html">GraphMemory.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for MultiLinearAllocator:</div>
 <div class="dyncontent">
 <div class="center"><img src="structMultiLinearAllocator__coll__graph.png" border="0" usemap="#aMultiLinearAllocator_coll__map" alt="Collaboration graph"/></div>
 <map name="aMultiLinearAllocator_coll__map" id="aMultiLinearAllocator_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,195,185"/>
+<area shape="rect" title="This is a custom allocator, which allocates firstly buf_size bytes, and than, if requires,..." alt="" coords="5,5,195,244"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa3e8247b4ebc530e6137d1bd1b7e4982"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMultiLinearAllocator.html#aa3e8247b4ebc530e6137d1bd1b7e4982">MultiLinearAllocator</a> (size_t <a class="el" href="structMultiLinearAllocator.html#a724b49b432f37274bbfc8687a8f2fb3e">buf_size</a>, size_t <a class="el" href="structMultiLinearAllocator.html#a62cf864ad111b76be485a133bf5ba307">chunk_size</a>)</td></tr>
+<tr class="memdesc:aa3e8247b4ebc530e6137d1bd1b7e4982"><td class="mdescLeft">&#160;</td><td class="mdescRight">buf_size should be more than 128 bytes, as the biggest vertex has such size  <a href="structMultiLinearAllocator.html#aa3e8247b4ebc530e6137d1bd1b7e4982">More...</a><br /></td></tr>
 <tr class="separator:aa3e8247b4ebc530e6137d1bd1b7e4982"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5add7949ebffae66385ad0bf2f9579bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMultiLinearAllocator.html">MultiLinearAllocator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMultiLinearAllocator.html#a5add7949ebffae66385ad0bf2f9579bb">operator=</a> (<a class="el" href="structMultiLinearAllocator.html">MultiLinearAllocator</a> &amp;&amp;other)=delete</td></tr>
+<tr class="separator:a5add7949ebffae66385ad0bf2f9579bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e5867794bd361f272e5045e265d03d8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMultiLinearAllocator.html#a2e5867794bd361f272e5045e265d03d8">MultiLinearAllocator</a> (<a class="el" href="structMultiLinearAllocator.html">MultiLinearAllocator</a> &amp;&amp;other)=delete</td></tr>
+<tr class="separator:a2e5867794bd361f272e5045e265d03d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a448b49d69c0d3cf3dbb66d701c0dfdfb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structMultiLinearAllocator.html">MultiLinearAllocator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMultiLinearAllocator.html#a448b49d69c0d3cf3dbb66d701c0dfdfb">operator=</a> (const <a class="el" href="structMultiLinearAllocator.html">MultiLinearAllocator</a> &amp;other)=delete</td></tr>
+<tr class="separator:a448b49d69c0d3cf3dbb66d701c0dfdfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a218a28a62f146c9ec3c6849a3a927069"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMultiLinearAllocator.html#a218a28a62f146c9ec3c6849a3a927069">MultiLinearAllocator</a> (const <a class="el" href="structMultiLinearAllocator.html">MultiLinearAllocator</a> &amp;other)=delete</td></tr>
+<tr class="separator:a218a28a62f146c9ec3c6849a3a927069"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fcc14a5ede62c563ca1dc8bd0945d32"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMultiLinearAllocator.html#a1fcc14a5ede62c563ca1dc8bd0945d32">~MultiLinearAllocator</a> ()</td></tr>
 <tr class="separator:a1fcc14a5ede62c563ca1dc8bd0945d32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7479cb0d3ebf4317407af8d94cd5efe0"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a7479cb0d3ebf4317407af8d94cd5efe0"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structMultiLinearAllocator.html#a7479cb0d3ebf4317407af8d94cd5efe0">allocate</a> ()</td></tr>
+<tr class="memdesc:a7479cb0d3ebf4317407af8d94cd5efe0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gives out memory for given type and returns a pointer on an object of given type.  <a href="structMultiLinearAllocator.html#a7479cb0d3ebf4317407af8d94cd5efe0">More...</a><br /></td></tr>
 <tr class="separator:a7479cb0d3ebf4317407af8d94cd5efe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21810d16c980f9320ad6d7b09ae26880"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMultiLinearAllocator.html#a21810d16c980f9320ad6d7b09ae26880">deallocate</a> ()</td></tr>
 <tr class="separator:a21810d16c980f9320ad6d7b09ae26880"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -130,24 +143,30 @@ Public Member Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a40d16962a94c93f85af253251b509c6a"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a40d16962a94c93f85af253251b509c6a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structMultiLinearAllocator.html#a40d16962a94c93f85af253251b509c6a">align</a> ()</td></tr>
+<tr class="memdesc:a40d16962a94c93f85af253251b509c6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">simple aligner for memory address  <a href="structMultiLinearAllocator.html#a40d16962a94c93f85af253251b509c6a">More...</a><br /></td></tr>
 <tr class="separator:a40d16962a94c93f85af253251b509c6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a757fce3f75a120c7cc1b5d2f4700deaf"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="GraphMemory_8hpp.html#a25ea1383ce7edb4210f11a3dbdbaaa3e">bytea</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMultiLinearAllocator.html#a757fce3f75a120c7cc1b5d2f4700deaf">blocks</a></td></tr>
+<tr class="memdesc:a757fce3f75a120c7cc1b5d2f4700deaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">all pinters on memory blocks, which have been allocated  <a href="structMultiLinearAllocator.html#a757fce3f75a120c7cc1b5d2f4700deaf">More...</a><br /></td></tr>
 <tr class="separator:a757fce3f75a120c7cc1b5d2f4700deaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0afbde546a3fc13dfe5c9f4107021106"><td class="memItemLeft" align="right" valign="top"><a class="el" href="GraphMemory_8hpp.html#a25ea1383ce7edb4210f11a3dbdbaaa3e">bytea</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMultiLinearAllocator.html#a0afbde546a3fc13dfe5c9f4107021106">offset</a></td></tr>
+<tr class="memdesc:a0afbde546a3fc13dfe5c9f4107021106"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer on position, from which allocation should be started (from <code>offset</code> to <code>offset + sizeof(T)</code>)  <a href="structMultiLinearAllocator.html#a0afbde546a3fc13dfe5c9f4107021106">More...</a><br /></td></tr>
 <tr class="separator:a0afbde546a3fc13dfe5c9f4107021106"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a724b49b432f37274bbfc8687a8f2fb3e"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMultiLinearAllocator.html#a724b49b432f37274bbfc8687a8f2fb3e">buf_size</a></td></tr>
+<tr class="memdesc:a724b49b432f37274bbfc8687a8f2fb3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">size of the first buffer  <a href="structMultiLinearAllocator.html#a724b49b432f37274bbfc8687a8f2fb3e">More...</a><br /></td></tr>
 <tr class="separator:a724b49b432f37274bbfc8687a8f2fb3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62cf864ad111b76be485a133bf5ba307"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMultiLinearAllocator.html#a62cf864ad111b76be485a133bf5ba307">chunk_size</a></td></tr>
+<tr class="memdesc:a62cf864ad111b76be485a133bf5ba307"><td class="mdescLeft">&#160;</td><td class="mdescRight">size for further allocations  <a href="structMultiLinearAllocator.html#a62cf864ad111b76be485a133bf5ba307">More...</a><br /></td></tr>
 <tr class="separator:a62cf864ad111b76be485a133bf5ba307"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><dl class="section author"><dt>Author</dt><dd>Fuuulkrum7 </dd></dl>
+<div class="textblock"><p>This is a custom allocator, which allocates firstly <code>buf_size</code> bytes, and than, if requires, allocates additionally <code>chunk_size</code> bytes. Pointers on all allocated blocks are stored in a vector, so, if it is possible, calculate buf_size correctly to reduce time for deallocation. </p>
+<dl class="section author"><dt>Author</dt><dd>Fuuulkrum7 </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa3e8247b4ebc530e6137d1bd1b7e4982"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3e8247b4ebc530e6137d1bd1b7e4982">&#9670;&nbsp;</a></span>MultiLinearAllocator()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3e8247b4ebc530e6137d1bd1b7e4982">&#9670;&nbsp;</a></span>MultiLinearAllocator() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -176,6 +195,67 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>buf_size should be more than 128 bytes, as the biggest vertex has such size </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buf_size</td><td>size for the first allocation </td></tr>
+    <tr><td class="paramname">chunk_size</td><td>size for further allocations (usually is less than <code>buf_size</code> value) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2e5867794bd361f272e5045e265d03d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e5867794bd361f272e5045e265d03d8">&#9670;&nbsp;</a></span>MultiLinearAllocator() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">MultiLinearAllocator::MultiLinearAllocator </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structMultiLinearAllocator.html">MultiLinearAllocator</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a218a28a62f146c9ec3c6849a3a927069"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a218a28a62f146c9ec3c6849a3a927069">&#9670;&nbsp;</a></span>MultiLinearAllocator() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">MultiLinearAllocator::MultiLinearAllocator </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structMultiLinearAllocator.html">MultiLinearAllocator</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -233,6 +313,14 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>simple aligner for memory address </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>type, align of which we should get </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="a7479cb0d3ebf4317407af8d94cd5efe0"></a>
@@ -259,13 +347,22 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Gives out memory for given type and returns a pointer on an object of given type. </p>
+<p>If memory of size <code>buf_size</code> ends, allocates <code>chunk_size</code> memory. If allocation of required size is impossible, returns <code>nullptr</code> </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>type, memory for which should be given. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>pointer of type T </dd></dl>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="structMultiLinearAllocator_a7479cb0d3ebf4317407af8d94cd5efe0_icgraph.png" border="0" usemap="#astructMultiLinearAllocator_a7479cb0d3ebf4317407af8d94cd5efe0_icgraph" alt=""/></div>
 <map name="astructMultiLinearAllocator_a7479cb0d3ebf4317407af8d94cd5efe0_icgraph" id="astructMultiLinearAllocator_a7479cb0d3ebf4317407af8d94cd5efe0_icgraph">
-<area shape="rect" title=" " alt="" coords="228,5,381,47"/>
-<area shape="rect" href="classGraphMemory.html#a89e8086c3773dce7de7c8496ea49b536" title=" " alt="" coords="5,13,180,39"/>
+<area shape="rect" title="Gives out memory for given type and returns a pointer on an object of given type." alt="" coords="228,5,381,47"/>
+<area shape="rect" href="classGraphMemory.html#a89e8086c3773dce7de7c8496ea49b536" title="allocates memory for graph vertex" alt="" coords="5,13,180,39"/>
 </map>
 </div>
 
@@ -296,6 +393,58 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a448b49d69c0d3cf3dbb66d701c0dfdfb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a448b49d69c0d3cf3dbb66d701c0dfdfb">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structMultiLinearAllocator.html">MultiLinearAllocator</a>&amp; MultiLinearAllocator::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structMultiLinearAllocator.html">MultiLinearAllocator</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5add7949ebffae66385ad0bf2f9579bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5add7949ebffae66385ad0bf2f9579bb">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structMultiLinearAllocator.html">MultiLinearAllocator</a>&amp; MultiLinearAllocator::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structMultiLinearAllocator.html">MultiLinearAllocator</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a757fce3f75a120c7cc1b5d2f4700deaf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a757fce3f75a120c7cc1b5d2f4700deaf">&#9670;&nbsp;</a></span>blocks</h2>
@@ -316,6 +465,8 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>all pinters on memory blocks, which have been allocated </p>
 
 </div>
 </div>
@@ -339,6 +490,8 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
+<p>size of the first buffer </p>
+
 </div>
 </div>
 <a id="a62cf864ad111b76be485a133bf5ba307"></a>
@@ -361,6 +514,8 @@ Here is the caller graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
+<p>size for further allocations </p>
+
 </div>
 </div>
 <a id="a0afbde546a3fc13dfe5c9f4107021106"></a>
@@ -382,6 +537,8 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>pointer on position, from which allocation should be started (from <code>offset</code> to <code>offset + sizeof(T)</code>) </p>
 
 </div>
 </div>

@@ -1,6 +1,6 @@
 <map id="OrientedGraph" name="OrientedGraph">
-<area shape="rect" id="node1" title="class OrientedGraph" alt="" coords="178,263,383,677"/>
-<area shape="rect" id="node2" href="$classGraphMemory.html" title=" " alt="" coords="5,5,148,215"/>
+<area shape="rect" id="node1" title="class OrientedGraph" alt="" coords="178,263,383,692"/>
+<area shape="rect" id="node2" href="$classGraphMemory.html" title="This class is used for memory management. It has a MultiLinearAllocator for allocating memory for gra..." alt="" coords="5,5,148,215"/>
 <area shape="rect" id="node3" title=" " alt="" coords="173,64,389,156"/>
 <area shape="rect" id="node4" href="$classel_1_1Loggable.html" title="Base of Easylogging++ friendly class." alt="" coords="413,64,530,156"/>
 </map>

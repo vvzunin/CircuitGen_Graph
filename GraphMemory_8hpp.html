@@ -96,8 +96,8 @@ $(document).ready(function(){initNavTree('GraphMemory_8hpp.html',''); initResiza
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#define-members">Macros</a> &#124;
-<a href="#typedef-members">Typedefs</a>  </div>
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">GraphMemory.hpp File Reference</div>  </div>
 </div><!--header-->
@@ -150,51 +150,24 @@ This graph shows which files directly or indirectly include this file:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structMultiLinearAllocator.html">MultiLinearAllocator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a custom allocator, which allocates firstly <code>buf_size</code> bytes, and than, if requires, allocates additionally <code>chunk_size</code> bytes. Pointers on all allocated blocks are stored in a vector, so, if it is possible, calculate buf_size correctly to reduce time for deallocation.  <a href="structMultiLinearAllocator.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGraphMemory.html">GraphMemory</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This class is used for memory management. It has a <code><a class="el" href="structMultiLinearAllocator.html" title="This is a custom allocator, which allocates firstly buf_size bytes, and than, if requires,...">MultiLinearAllocator</a></code> for allocating memory for graph vertices and monotonic_buffer_resource, which is used for memory allocation for set of strings, where all vertices names are stored.  <a href="classGraphMemory.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
-Macros</h2></td></tr>
-<tr class="memitem:ad87e3cb29f1fd635744fc3b2f49bd493"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="GraphMemory_8hpp.html#ad87e3cb29f1fd635744fc3b2f49bd493">DEFAULT_BUF</a>&#160;&#160;&#160;114688</td></tr>
-<tr class="separator:ad87e3cb29f1fd635744fc3b2f49bd493"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea3cfda4f3a9f978ec759f206cf186fe"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="GraphMemory_8hpp.html#aea3cfda4f3a9f978ec759f206cf186fe">CHUNK_SIZE</a>&#160;&#160;&#160;14336</td></tr>
-<tr class="separator:aea3cfda4f3a9f978ec759f206cf186fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a25ea1383ce7edb4210f11a3dbdbaaa3e"><td class="memItemLeft" align="right" valign="top">typedef unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="GraphMemory_8hpp.html#a25ea1383ce7edb4210f11a3dbdbaaa3e">bytea</a></td></tr>
 <tr class="separator:a25ea1383ce7edb4210f11a3dbdbaaa3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a6baad3a6ff5645e75d8302d474ac03e8"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="GraphMemory_8hpp.html#a6baad3a6ff5645e75d8302d474ac03e8">DEFAULT_BUF</a> = 114688</td></tr>
+<tr class="separator:a6baad3a6ff5645e75d8302d474ac03e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af71860bd93181107ebafa4249dac4715"><td class="memItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="GraphMemory_8hpp.html#af71860bd93181107ebafa4249dac4715">CHUNK_SIZE</a> = 14336</td></tr>
+<tr class="separator:af71860bd93181107ebafa4249dac4715"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="aea3cfda4f3a9f978ec759f206cf186fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aea3cfda4f3a9f978ec759f206cf186fe">&#9670;&nbsp;</a></span>CHUNK_SIZE</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define CHUNK_SIZE&#160;&#160;&#160;14336</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad87e3cb29f1fd635744fc3b2f49bd493"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad87e3cb29f1fd635744fc3b2f49bd493">&#9670;&nbsp;</a></span>DEFAULT_BUF</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DEFAULT_BUF&#160;&#160;&#160;114688</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="a25ea1383ce7edb4210f11a3dbdbaaa3e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a25ea1383ce7edb4210f11a3dbdbaaa3e">&#9670;&nbsp;</a></span>bytea</h2>
@@ -206,6 +179,51 @@ Typedefs</h2></td></tr>
           <td class="memname">typedef unsigned char <a class="el" href="GraphMemory_8hpp.html#a25ea1383ce7edb4210f11a3dbdbaaa3e">bytea</a></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="af71860bd93181107ebafa4249dac4715"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af71860bd93181107ebafa4249dac4715">&#9670;&nbsp;</a></span>CHUNK_SIZE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int CHUNK_SIZE = 14336</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6baad3a6ff5645e75d8302d474ac03e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6baad3a6ff5645e75d8302d474ac03e8">&#9670;&nbsp;</a></span>DEFAULT_BUF</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int DEFAULT_BUF = 114688</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

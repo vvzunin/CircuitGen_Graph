@@ -92,7 +92,7 @@ var searchData=
   ['deallocate_266',['deallocate',['../structMultiLinearAllocator.html#a21810d16c980f9320ad6d7b09ae26880',1,'MultiLinearAllocator']]],
   ['debug_267',['Debug',['../namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36aa603905470e2a5b8c13e96b579ef0dba',1,'el']]],
   ['deepcopy_268',['deepCopy',['../classel_1_1base_1_1utils_1_1RegistryWithPred.html#adbd5dd3ecd87c89ccd2198f03e242a39',1,'el::base::utils::RegistryWithPred::deepCopy()'],['../classel_1_1base_1_1utils_1_1Registry.html#ab174d1616268db95701e8739914e66b1',1,'el::base::utils::Registry::deepCopy()'],['../classel_1_1base_1_1utils_1_1AbstractRegistry.html#aaf42dab7089a9b1198e2920983ca82bb',1,'el::base::utils::AbstractRegistry::deepCopy()']]],
-  ['default_5fbuf_269',['DEFAULT_BUF',['../GraphMemory_8hpp.html#ad87e3cb29f1fd635744fc3b2f49bd493',1,'GraphMemory.hpp']]],
+  ['default_5fbuf_269',['DEFAULT_BUF',['../GraphMemory_8hpp.html#a6baad3a6ff5645e75d8302d474ac03e8',1,'GraphMemory.hpp']]],
   ['defaultauxiliarymethods_2ecpp_270',['DefaultAuxiliaryMethods.cpp',['../DefaultAuxiliaryMethods_8cpp.html',1,'']]],
   ['defaultauxiliarymethods_2ehpp_271',['DefaultAuxiliaryMethods.hpp',['../DefaultAuxiliaryMethods_8hpp.html',1,'']]],
   ['defaultconfigurations_272',['defaultConfigurations',['../classel_1_1Loggers.html#ac40ea77b26a058b8f820be7a119ce69f',1,'el::Loggers::defaultConfigurations()'],['../classel_1_1base_1_1RegisteredLoggers.html#acb38f67cf5e297f4be3efa5312e09914',1,'el::base::RegisteredLoggers::defaultConfigurations()']]],

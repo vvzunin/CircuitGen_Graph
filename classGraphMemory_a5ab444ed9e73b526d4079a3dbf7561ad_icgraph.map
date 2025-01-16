@@ -1,5 +1,5 @@
 <map id="GraphMemory::internalize" name="GraphMemory::internalize">
-<area shape="rect" id="node1" title=" " alt="" coords="247,81,437,108"/>
+<area shape="rect" id="node1" title="puts string_view to strings set and returns a string_view on the added string" alt="" coords="247,81,437,108"/>
 <area shape="rect" id="node2" href="$classOrientedGraph.html#a39a19456af71baba506bce70e4d1bfb7" title="addConst Adds a constant vertex to the current graph" alt="" coords="9,5,195,32"/>
 <area shape="rect" id="node3" href="$classOrientedGraph.html#aa94d5942af735685e97807ad850c8522" title="addGate Adds a gate vertex to the current graph" alt="" coords="12,56,192,83"/>
 <area shape="rect" id="node4" href="$classOrientedGraph.html#a0c859a9197a0ccb61ee8cc77390190b2" title="addInput Adds an input vertex to the current graph" alt="" coords="11,107,193,133"/>

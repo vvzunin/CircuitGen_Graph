@@ -1,4 +1,4 @@
 <map id="OrientedGraph::addGate" name="OrientedGraph::addGate">
 <area shape="rect" id="node1" title="addGate Adds a gate vertex to the current graph" alt="" coords="5,5,185,32"/>
-<area shape="rect" id="node2" href="$classGraphMemory.html#a5ab444ed9e73b526d4079a3dbf7561ad" title=" " alt="" coords="233,5,424,32"/>
+<area shape="rect" id="node2" href="$classGraphMemory.html#a5ab444ed9e73b526d4079a3dbf7561ad" title="puts string_view to strings set and returns a string_view on the added string" alt="" coords="233,5,424,32"/>
 </map>

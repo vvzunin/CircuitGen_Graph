@@ -1,4 +1,4 @@
 <map id="GraphMemory" name="GraphMemory">
-<area shape="rect" id="node1" title=" " alt="" coords="30,248,170,443"/>
-<area shape="rect" id="node2" href="$structMultiLinearAllocator.html" title=" " alt="" coords="5,5,195,185"/>
+<area shape="rect" id="node1" title="This class is used for memory management. It has a MultiLinearAllocator for allocating memory for gra..." alt="" coords="30,307,170,501"/>
+<area shape="rect" id="node2" href="$structMultiLinearAllocator.html" title="This is a custom allocator, which allocates firstly buf_size bytes, and than, if requires,..." alt="" coords="5,5,195,244"/>
 </map>

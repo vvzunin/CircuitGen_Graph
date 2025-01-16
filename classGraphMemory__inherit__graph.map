@@ -1,4 +1,4 @@
 <map id="GraphMemory" name="GraphMemory">
-<area shape="rect" id="node1" title=" " alt="" coords="37,5,179,215"/>
-<area shape="rect" id="node2" href="$classOrientedGraph.html" title="class OrientedGraph" alt="" coords="5,263,211,677"/>
+<area shape="rect" id="node1" title="This class is used for memory management. It has a MultiLinearAllocator for allocating memory for gra..." alt="" coords="37,5,179,215"/>
+<area shape="rect" id="node2" href="$classOrientedGraph.html" title="class OrientedGraph" alt="" coords="5,263,211,692"/>
 </map>

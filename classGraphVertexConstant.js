@@ -2,7 +2,7 @@ var classGraphVertexConstant =
 [
     [ "GraphVertexConstant", "classGraphVertexConstant.html#a10876bb1a88955c8c732cd6acb85e160", null ],
     [ "GraphVertexConstant", "classGraphVertexConstant.html#a95365e23acc4e8873d786a47f4763569", null ],
-    [ "~GraphVertexConstant", "classGraphVertexConstant.html#a69a4c3f403b9becb2dfdc6510730e677", null ],
+    [ "~GraphVertexConstant", "classGraphVertexConstant.html#a52ccaf821b9d88902350abdd66a1f67d", null ],
     [ "calculateHash", "classGraphVertexConstant.html#aed1c8f72635d70210002eb99a2b8ca72", null ],
     [ "getVerilogInstance", "classGraphVertexConstant.html#ad447e00a09a3c3b61f30e99cec3ff67d", null ],
     [ "log", "classGraphVertexConstant.html#a77552c7ef2f40f486c7a206de2f0f3f2", null ],

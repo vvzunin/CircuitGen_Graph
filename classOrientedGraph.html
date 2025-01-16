@@ -96,6 +96,7 @@ $(document).ready(function(){initNavTree('classOrientedGraph.html',''); initResi
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
@@ -114,8 +115,8 @@ Inheritance diagram for OrientedGraph:</div>
 <div class="dyncontent">
 <div class="center"><img src="classOrientedGraph__inherit__graph.png" border="0" usemap="#aOrientedGraph_inherit__map" alt="Inheritance graph"/></div>
 <map name="aOrientedGraph_inherit__map" id="aOrientedGraph_inherit__map">
-<area shape="rect" title="class OrientedGraph" alt="" coords="178,263,383,677"/>
-<area shape="rect" href="classGraphMemory.html" title=" " alt="" coords="5,5,148,215"/>
+<area shape="rect" title="class OrientedGraph" alt="" coords="178,263,383,692"/>
+<area shape="rect" href="classGraphMemory.html" title="This class is used for memory management. It has a MultiLinearAllocator for allocating memory for gra..." alt="" coords="5,5,148,215"/>
 <area shape="rect" title=" " alt="" coords="173,64,389,156"/>
 <area shape="rect" href="classel_1_1Loggable.html" title="Base of Easylogging++ friendly class." alt="" coords="413,64,530,156"/>
 </map>
@@ -125,17 +126,17 @@ Collaboration diagram for OrientedGraph:</div>
 <div class="dyncontent">
 <div class="center"><img src="classOrientedGraph__coll__graph.png" border="0" usemap="#aOrientedGraph_coll__map" alt="Collaboration graph"/></div>
 <map name="aOrientedGraph_coll__map" id="aOrientedGraph_coll__map">
-<area shape="rect" title="class OrientedGraph" alt="" coords="200,492,405,907"/>
-<area shape="rect" href="classGraphMemory.html" title=" " alt="" coords="30,248,170,443"/>
-<area shape="rect" href="structMultiLinearAllocator.html" title=" " alt="" coords="5,5,195,185"/>
-<area shape="rect" title=" " alt="" coords="195,299,411,391"/>
-<area shape="rect" href="classel_1_1Loggable.html" title="Base of Easylogging++ friendly class." alt="" coords="435,299,552,391"/>
+<area shape="rect" title="class OrientedGraph" alt="" coords="200,551,405,980"/>
+<area shape="rect" href="classGraphMemory.html" title="This class is used for memory management. It has a MultiLinearAllocator for allocating memory for gra..." alt="" coords="30,307,170,501"/>
+<area shape="rect" href="structMultiLinearAllocator.html" title="This is a custom allocator, which allocates firstly buf_size bytes, and than, if requires,..." alt="" coords="5,5,195,244"/>
+<area shape="rect" title=" " alt="" coords="195,358,411,450"/>
+<area shape="rect" href="classel_1_1Loggable.html" title="Base of Easylogging++ friendly class." alt="" coords="435,358,552,450"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5c0f26a8b2c1b8dd148bcebd761d9334"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOrientedGraph.html#a5c0f26a8b2c1b8dd148bcebd761d9334">OrientedGraph</a> (const std::string &amp;i_name=&quot;&quot;, size_t buffer_size=<a class="el" href="GraphMemory_8hpp.html#ad87e3cb29f1fd635744fc3b2f49bd493">DEFAULT_BUF</a>, size_t chunk_size=<a class="el" href="GraphMemory_8hpp.html#aea3cfda4f3a9f978ec759f206cf186fe">CHUNK_SIZE</a>)</td></tr>
+<tr class="memitem:a5c0f26a8b2c1b8dd148bcebd761d9334"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOrientedGraph.html#a5c0f26a8b2c1b8dd148bcebd761d9334">OrientedGraph</a> (const std::string &amp;i_name=&quot;&quot;, size_t buffer_size=<a class="el" href="GraphMemory_8hpp.html#a6baad3a6ff5645e75d8302d474ac03e8">DEFAULT_BUF</a>, size_t chunk_size=<a class="el" href="GraphMemory_8hpp.html#af71860bd93181107ebafa4249dac4715">CHUNK_SIZE</a>)</td></tr>
 <tr class="separator:a5c0f26a8b2c1b8dd148bcebd761d9334"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a173714e9c12e69863e2988198c270f33"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOrientedGraph.html#a173714e9c12e69863e2988198c270f33">~OrientedGraph</a> ()</td></tr>
 <tr class="separator:a173714e9c12e69863e2988198c270f33"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -266,12 +267,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad63731c28a5bffb8a0f37884a46c6e09"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classOrientedGraph.html#ad63731c28a5bffb8a0f37884a46c6e09">log</a> (<a class="el" href="namespaceel_1_1base_1_1type.html#a74ea109bf34d1c44926837fb0830f445">el::base::type::ostream_t</a> &amp;os) const</td></tr>
 <tr class="memdesc:ad63731c28a5bffb8a0f37884a46c6e09"><td class="mdescLeft">&#160;</td><td class="mdescRight">log Used for easylogging++  <a href="classOrientedGraph.html#ad63731c28a5bffb8a0f37884a46c6e09">More...</a><br /></td></tr>
 <tr class="separator:ad63731c28a5bffb8a0f37884a46c6e09"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef46b7afd1a2ea451028af1b41c442bc"><td class="memTemplParams" colspan="2">template&lt;typename T , typename... Args&gt; </td></tr>
-<tr class="memitem:aef46b7afd1a2ea451028af1b41c442bc"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classOrientedGraph.html#aef46b7afd1a2ea451028af1b41c442bc">create</a> (Args &amp;&amp;...args)</td></tr>
-<tr class="memdesc:aef46b7afd1a2ea451028af1b41c442bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates memory and creates an instance of required type. Is used for creating ALL vertices of any type.  <a href="classOrientedGraph.html#aef46b7afd1a2ea451028af1b41c442bc">More...</a><br /></td></tr>
-<tr class="separator:aef46b7afd1a2ea451028af1b41c442bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classGraphMemory"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classGraphMemory')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classGraphMemory.html">GraphMemory</a></td></tr>
-<tr class="memitem:a3ce5d6c12812b320514b6a7ea9074c17 inherit pub_methods_classGraphMemory"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGraphMemory.html#a3ce5d6c12812b320514b6a7ea9074c17">GraphMemory</a> (size_t buf_size=<a class="el" href="GraphMemory_8hpp.html#ad87e3cb29f1fd635744fc3b2f49bd493">DEFAULT_BUF</a>, size_t chunk_size=<a class="el" href="GraphMemory_8hpp.html#aea3cfda4f3a9f978ec759f206cf186fe">CHUNK_SIZE</a>)</td></tr>
+<tr class="memitem:a3ce5d6c12812b320514b6a7ea9074c17 inherit pub_methods_classGraphMemory"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGraphMemory.html#a3ce5d6c12812b320514b6a7ea9074c17">GraphMemory</a> (size_t buf_size=<a class="el" href="GraphMemory_8hpp.html#a6baad3a6ff5645e75d8302d474ac03e8">DEFAULT_BUF</a>, size_t chunk_size=<a class="el" href="GraphMemory_8hpp.html#af71860bd93181107ebafa4249dac4715">CHUNK_SIZE</a>)</td></tr>
 <tr class="separator:a3ce5d6c12812b320514b6a7ea9074c17 inherit pub_methods_classGraphMemory"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8d9266b8484087ecde1fd03c4700e88 inherit pub_methods_classGraphMemory"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classGraphMemory.html">GraphMemory</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGraphMemory.html#ad8d9266b8484087ecde1fd03c4700e88">operator=</a> (<a class="el" href="classGraphMemory.html">GraphMemory</a> &amp;&amp;other)=delete</td></tr>
 <tr class="separator:ad8d9266b8484087ecde1fd03c4700e88 inherit pub_methods_classGraphMemory"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -282,15 +279,25 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a672cf3383460bc1fcd144aa52b398ded inherit pub_methods_classGraphMemory"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGraphMemory.html#a672cf3383460bc1fcd144aa52b398ded">GraphMemory</a> (const <a class="el" href="classGraphMemory.html">GraphMemory</a> &amp;other)=delete</td></tr>
 <tr class="separator:a672cf3383460bc1fcd144aa52b398ded inherit pub_methods_classGraphMemory"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ab444ed9e73b526d4079a3dbf7561ad inherit pub_methods_classGraphMemory"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGraphMemory.html#a5ab444ed9e73b526d4079a3dbf7561ad">internalize</a> (std::string_view s)</td></tr>
+<tr class="memdesc:a5ab444ed9e73b526d4079a3dbf7561ad inherit pub_methods_classGraphMemory"><td class="mdescLeft">&#160;</td><td class="mdescRight">puts string_view to strings set and returns a string_view on the added string  <a href="classGraphMemory.html#a5ab444ed9e73b526d4079a3dbf7561ad">More...</a><br /></td></tr>
 <tr class="separator:a5ab444ed9e73b526d4079a3dbf7561ad inherit pub_methods_classGraphMemory"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc8ec19c6b29c0028a6c080f0b1a8804 inherit pub_methods_classGraphMemory"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGraphMemory.html#adc8ec19c6b29c0028a6c080f0b1a8804">internalize</a> (const std::string &amp;s)</td></tr>
+<tr class="memdesc:adc8ec19c6b29c0028a6c080f0b1a8804 inherit pub_methods_classGraphMemory"><td class="mdescLeft">&#160;</td><td class="mdescRight">puts string_view to strings set and returns a string_view on the added string  <a href="classGraphMemory.html#adc8ec19c6b29c0028a6c080f0b1a8804">More...</a><br /></td></tr>
 <tr class="separator:adc8ec19c6b29c0028a6c080f0b1a8804 inherit pub_methods_classGraphMemory"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89e8086c3773dce7de7c8496ea49b536 inherit pub_methods_classGraphMemory"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a89e8086c3773dce7de7c8496ea49b536 inherit pub_methods_classGraphMemory"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classGraphMemory.html#a89e8086c3773dce7de7c8496ea49b536">allocate</a> ()</td></tr>
+<tr class="memdesc:a89e8086c3773dce7de7c8496ea49b536 inherit pub_methods_classGraphMemory"><td class="mdescLeft">&#160;</td><td class="mdescRight">allocates memory for graph vertex  <a href="classGraphMemory.html#a89e8086c3773dce7de7c8496ea49b536">More...</a><br /></td></tr>
 <tr class="separator:a89e8086c3773dce7de7c8496ea49b536 inherit pub_methods_classGraphMemory"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classel_1_1Loggable"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classel_1_1Loggable')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classel_1_1Loggable.html">el::Loggable</a></td></tr>
 <tr class="memitem:a6891b802d139da4041edf9e36d38e6c4 inherit pub_methods_classel_1_1Loggable"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classel_1_1Loggable.html#a6891b802d139da4041edf9e36d38e6c4">~Loggable</a> (void)</td></tr>
 <tr class="separator:a6891b802d139da4041edf9e36d38e6c4 inherit pub_methods_classel_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:aef46b7afd1a2ea451028af1b41c442bc"><td class="memTemplParams" colspan="2">template&lt;typename T , typename... Args&gt; </td></tr>
+<tr class="memitem:aef46b7afd1a2ea451028af1b41c442bc"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classOrientedGraph.html#aef46b7afd1a2ea451028af1b41c442bc">create</a> (Args &amp;&amp;...args)</td></tr>
+<tr class="memdesc:aef46b7afd1a2ea451028af1b41c442bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates memory and creates an instance of required type. Is used for creating ALL vertices of any type.  <a href="classOrientedGraph.html#aef46b7afd1a2ea451028af1b41c442bc">More...</a><br /></td></tr>
+<tr class="separator:aef46b7afd1a2ea451028af1b41c442bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -391,13 +398,13 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>buffer_size</em> = <code><a class="el" href="GraphMemory_8hpp.html#ad87e3cb29f1fd635744fc3b2f49bd493">DEFAULT_BUF</a></code>, </td>
+          <td class="paramname"><em>buffer_size</em> = <code><a class="el" href="GraphMemory_8hpp.html#a6baad3a6ff5645e75d8302d474ac03e8">DEFAULT_BUF</a></code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>chunk_size</em> = <code><a class="el" href="GraphMemory_8hpp.html#aea3cfda4f3a9f978ec759f206cf186fe">CHUNK_SIZE</a></code>&#160;</td>
+          <td class="paramname"><em>chunk_size</em> = <code><a class="el" href="GraphMemory_8hpp.html#af71860bd93181107ebafa4249dac4715">CHUNK_SIZE</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -423,15 +430,6 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classOrientedGraph_a173714e9c12e69863e2988198c270f33_cgraph.png" border="0" usemap="#aclassOrientedGraph_a173714e9c12e69863e2988198c270f33_cgraph" alt=""/></div>
-<map name="aclassOrientedGraph_a173714e9c12e69863e2988198c270f33_cgraph" id="aclassOrientedGraph_a173714e9c12e69863e2988198c270f33_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,197,47"/>
-<area shape="rect" href="classGraphVertexBase.html#a97d09e7b5904ecd715a5ac057b8d737b" title=" " alt="" coords="245,13,512,39"/>
-</map>
-</div>
 
 </div>
 </div>
@@ -536,7 +534,7 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="classOrientedGraph_a39a19456af71baba506bce70e4d1bfb7_cgraph.png" border="0" usemap="#aclassOrientedGraph_a39a19456af71baba506bce70e4d1bfb7_cgraph" alt=""/></div>
 <map name="aclassOrientedGraph_a39a19456af71baba506bce70e4d1bfb7_cgraph" id="aclassOrientedGraph_a39a19456af71baba506bce70e4d1bfb7_cgraph">
 <area shape="rect" title="addConst Adds a constant vertex to the current graph" alt="" coords="5,5,192,32"/>
-<area shape="rect" href="classGraphMemory.html#a5ab444ed9e73b526d4079a3dbf7561ad" title=" " alt="" coords="240,5,431,32"/>
+<area shape="rect" href="classGraphMemory.html#a5ab444ed9e73b526d4079a3dbf7561ad" title="puts string_view to strings set and returns a string_view on the added string" alt="" coords="240,5,431,32"/>
 </map>
 </div>
 
@@ -738,7 +736,7 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="classOrientedGraph_aa94d5942af735685e97807ad850c8522_cgraph.png" border="0" usemap="#aclassOrientedGraph_aa94d5942af735685e97807ad850c8522_cgraph" alt=""/></div>
 <map name="aclassOrientedGraph_aa94d5942af735685e97807ad850c8522_cgraph" id="aclassOrientedGraph_aa94d5942af735685e97807ad850c8522_cgraph">
 <area shape="rect" title="addGate Adds a gate vertex to the current graph" alt="" coords="5,5,185,32"/>
-<area shape="rect" href="classGraphMemory.html#a5ab444ed9e73b526d4079a3dbf7561ad" title=" " alt="" coords="233,5,424,32"/>
+<area shape="rect" href="classGraphMemory.html#a5ab444ed9e73b526d4079a3dbf7561ad" title="puts string_view to strings set and returns a string_view on the added string" alt="" coords="233,5,424,32"/>
 </map>
 </div>
 
@@ -779,7 +777,7 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="classOrientedGraph_a0c859a9197a0ccb61ee8cc77390190b2_cgraph.png" border="0" usemap="#aclassOrientedGraph_a0c859a9197a0ccb61ee8cc77390190b2_cgraph" alt=""/></div>
 <map name="aclassOrientedGraph_a0c859a9197a0ccb61ee8cc77390190b2_cgraph" id="aclassOrientedGraph_a0c859a9197a0ccb61ee8cc77390190b2_cgraph">
 <area shape="rect" title="addInput Adds an input vertex to the current graph" alt="" coords="5,5,188,32"/>
-<area shape="rect" href="classGraphMemory.html#a5ab444ed9e73b526d4079a3dbf7561ad" title=" " alt="" coords="236,5,427,32"/>
+<area shape="rect" href="classGraphMemory.html#a5ab444ed9e73b526d4079a3dbf7561ad" title="puts string_view to strings set and returns a string_view on the added string" alt="" coords="236,5,427,32"/>
 </map>
 </div>
 
@@ -820,7 +818,7 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="classOrientedGraph_a57404c5e548a8388b0bbbeb64f4cc049_cgraph.png" border="0" usemap="#aclassOrientedGraph_a57404c5e548a8388b0bbbeb64f4cc049_cgraph" alt=""/></div>
 <map name="aclassOrientedGraph_a57404c5e548a8388b0bbbeb64f4cc049_cgraph" id="aclassOrientedGraph_a57404c5e548a8388b0bbbeb64f4cc049_cgraph">
 <area shape="rect" title="addOutput Adds an output vertex to the current graph" alt="" coords="5,5,199,32"/>
-<area shape="rect" href="classGraphMemory.html#a5ab444ed9e73b526d4079a3dbf7561ad" title=" " alt="" coords="247,5,437,32"/>
+<area shape="rect" href="classGraphMemory.html#a5ab444ed9e73b526d4079a3dbf7561ad" title="puts string_view to strings set and returns a string_view on the added string" alt="" coords="247,5,437,32"/>
 </map>
 </div>
 
@@ -973,7 +971,7 @@ template&lt;typename T , typename... Args&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -2647,7 +2645,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">      <a class="code" href="classDefaultSettings.html#a2150e34bde58bd55dbecefb956e19afb">DefaultSettings::getDefaultInstance</a>(<span class="stringliteral">&quot;OrientedGraph&quot;</span>)</div>
-<div class="ttc" id="aclassDefaultSettings_html_a2150e34bde58bd55dbecefb956e19afb"><div class="ttname"><a href="classDefaultSettings.html#a2150e34bde58bd55dbecefb956e19afb">DefaultSettings::getDefaultInstance</a></div><div class="ttdeci">static std::shared_ptr&lt; DefaultSettings &gt; getDefaultInstance(const std::string &amp;i_value)</div><div class="ttdoc">getDefaultInstance Gets a single instance of the DefaultSettings class The method provides creation a...</div><div class="ttdef"><b>Definition:</b> DefaultSettings.cpp:53</div></div>
+<div class="ttc" id="aclassDefaultSettings_html_a2150e34bde58bd55dbecefb956e19afb"><div class="ttname"><a href="classDefaultSettings.html#a2150e34bde58bd55dbecefb956e19afb">DefaultSettings::getDefaultInstance</a></div><div class="ttdeci">static std::shared_ptr&lt; DefaultSettings &gt; getDefaultInstance(const std::string &amp;i_value)</div><div class="ttdoc">getDefaultInstance Gets a single instance of the DefaultSettings class The method provides creation a...</div><div class="ttdef"><b>Definition:</b> DefaultSettings.cpp:39</div></div>
 </div><!-- fragment -->
 </div>
 </div>

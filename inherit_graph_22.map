@@ -1,7 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
 <area shape="rect" id="node1" title=" " alt="" coords="5,57,151,98"/>
 <area shape="rect" id="node2" href="$classOrientedGraph.html" title="class OrientedGraph" alt="" coords="257,53,374,80"/>
-<area shape="rect" id="node3" href="$classGraphMemory.html" title=" " alt="" coords="21,5,135,32"/>
+<area shape="rect" id="node3" href="$classGraphMemory.html" title="This class is used for memory management. It has a MultiLinearAllocator for allocating memory for gra..." alt="" coords="21,5,135,32"/>
 <area shape="rect" id="node4" href="$classel_1_1Loggable.html" title="Base of Easylogging++ friendly class." alt="" coords="27,144,129,171"/>
 <area shape="rect" id="node5" href="$classel_1_1Configuration.html" title="Represents single configuration that has representing level, configuration type and a string based va..." alt="" coords="251,104,380,131"/>
 <area shape="rect" id="node6" href="$classel_1_1Logger.html" title="Represents a logger holding ID and configurations we need to write logs." alt="" coords="272,205,359,232"/>
