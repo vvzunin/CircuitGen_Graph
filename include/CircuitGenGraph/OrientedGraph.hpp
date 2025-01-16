@@ -463,6 +463,7 @@ public:
   /// @param os Stream for easylogging
   virtual void log(el::base::type::ostream_t &os) const;
 
+protected:
   /* memory management block */
 
   /// @author Fuuulkrum7
@@ -476,11 +477,6 @@ public:
   T *create(Args &&...args) {
     return new (allocate<T>()) T(std::forward<Args>(args)...);
   }
-
-  // std::vector<GraphVertexBase*>* createVector() {
-  //   using vecName = std::vector<GraphVertexBase*>;
-  //   return new (allocateForGraph<vecName>()) vecName();
-  // }
 
 private:
   static std::atomic_size_t d_countNewGraphInstance;

@@ -5,16 +5,13 @@
 #include "easyloggingpp/easylogging++.h"
 
 GraphVertexGates::GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph) :
-  GraphVertexBase(VertexTypes::gate, i_baseGraph) {
+    GraphVertexBase(VertexTypes::gate, i_baseGraph) {
   d_gate = i_gate;
 }
 
-GraphVertexGates::GraphVertexGates(
-    Gates            i_gate,
-    std::string_view i_name,
-    GraphPtr         i_baseGraph
-) :
-  GraphVertexBase(VertexTypes::gate, i_name, i_baseGraph) {
+GraphVertexGates::GraphVertexGates(Gates i_gate, std::string_view i_name,
+                                   GraphPtr i_baseGraph) :
+    GraphVertexBase(VertexTypes::gate, i_name, i_baseGraph) {
   d_gate = i_gate;
 }
 
@@ -27,7 +24,7 @@ char GraphVertexGates::updateValue() {
   if (d_inConnections.size() > 0) {
     VertexPtr ptr = d_inConnections.at(0);
 
-    d_value       = ptr->getValue();
+    d_value = ptr->getValue();
     if (d_gate == Gates::GateBuf)
       d_value = tableBuf.at(ptr->getValue());
     if (d_gate == Gates::GateNot)
@@ -55,7 +52,7 @@ char GraphVertexGates::updateValue() {
         default:
           LOG(ERROR) << "Error" << std::endl;
       }
-      ptr     = d_inConnections.at(i);
+      ptr = d_inConnections.at(i);
       d_value = table.at(ptr->getValue());
     }
   }
@@ -73,16 +70,16 @@ size_t GraphVertexGates::calculateHash(bool i_recalculate) {
   // future sorted struct
   std::vector<size_t> hashed_data;
 
-  for (auto& child : d_outConnections) {
+  for (auto &child: d_outConnections) {
     hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
-  for (const auto& sub : hashed_data) {
+  for (const auto &sub: hashed_data) {
     hashedStr += sub;
   }
 
-  d_hashed  = std::hash<std::string> {}(hashedStr);
+  d_hashed = std::hash<std::string>{}(hashedStr);
   d_hasHash = 1;
 
   return d_hashed;
@@ -95,8 +92,7 @@ std::string GraphVertexGates::getVerilogString() const {
     VertexPtr ptr = d_inConnections.at(0);
     if (!ptr) {
       throw std::invalid_argument(
-          "Cannot use nullptr for printing it to verilog"
-      );
+          "Cannot use nullptr for printing it to verilog");
     }
 
     if (this->d_baseGraph.lock() == ptr->getBaseGraph().lock())
@@ -106,16 +102,15 @@ std::string GraphVertexGates::getVerilogString() const {
 
     if (d_gate == Gates::GateNot)
       s = "~" + s;
-    if ((d_gate == Gates::GateNand) || (d_gate == Gates::GateNor)
-        || (d_gate == Gates::GateXnor))
+    if ((d_gate == Gates::GateNand) || (d_gate == Gates::GateNor) ||
+        (d_gate == Gates::GateXnor))
       s = "~(" + s;
 
     for (size_t i = 1; i < d_inConnections.size(); i++) {
       ptr = d_inConnections.at(i);
       if (!ptr) {
         throw std::invalid_argument(
-            "Cannot use nullptr for printing it to verilog"
-        );
+            "Cannot use nullptr for printing it to verilog");
       }
 
       std::string name;
@@ -129,8 +124,8 @@ std::string GraphVertexGates::getVerilogString() const {
         LOG(ERROR) << "Error" << std::endl;
     }
 
-    if ((d_gate == Gates::GateNand) || (d_gate == Gates::GateNor)
-        || (d_gate == Gates::GateXnor))
+    if ((d_gate == Gates::GateNand) || (d_gate == Gates::GateNor) ||
+        (d_gate == Gates::GateXnor))
       s += ")";
   }
 
@@ -144,8 +139,8 @@ std::string GraphVertexGates::toVerilog() {
   }
   std::string basic = "assign " + getName() + " = ";
 
-  std::string oper  = VertexUtils::gateToString(d_gate);
-  VertexPtr   ptr   = d_inConnections.back();
+  std::string oper = VertexUtils::gateToString(d_gate);
+  VertexPtr ptr = d_inConnections.back();
   if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
     basic += oper + ptr->getName() + ";";
 
@@ -154,11 +149,11 @@ std::string GraphVertexGates::toVerilog() {
 
   std::string end = "";
 
-  if (d_gate == Gates::GateNand || d_gate == Gates::GateNor
-      || d_gate == Gates::GateXnor) {
+  if (d_gate == Gates::GateNand || d_gate == Gates::GateNor ||
+      d_gate == Gates::GateXnor) {
     basic += "~ ( ";
 
-    end    = " )";
+    end = " )";
   }
   for (size_t i = 0; i < d_inConnections.size() - 1; ++i) {
     basic += d_inConnections.at(i)->getName() + " " + oper + " ";
@@ -176,17 +171,14 @@ DotReturn GraphVertexGates::toDOT() {
 
   DotReturn dot;
 
-  dot.push_back(
-      {DotTypes::DotGate,
-       {{"name", getName()},
-        {"label", getName()},
-        {"level", std::to_string(d_level)}}}
-  );
+  dot.push_back({DotTypes::DotGate,
+                 {{"name", getName()},
+                  {"label", getName()},
+                  {"level", std::to_string(d_level)}}});
 
-  for (VertexPtr ptr : d_inConnections) {
+  for (VertexPtr ptr: d_inConnections) {
     dot.push_back(
-        {DotTypes::DotEdge, {{"from", ptr->getName()}, {"to", getName()}}}
-    );
+        {DotTypes::DotEdge, {{"from", ptr->getName()}, {"to", getName()}}});
   }
   return dot;
 }
@@ -198,13 +190,14 @@ bool GraphVertexGates::isSubgraphBuffer() const {
   return d_inConnections.front()->getType() == VertexTypes::subGraph;
 }
 
-void GraphVertexGates::log(el::base::type::ostream_t& os) const {
+void GraphVertexGates::log(el::base::type::ostream_t &os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
   os << "Vertex Type: "
      << DefaultSettings::parseVertexToString(VertexTypes::gate)
-     << "(" + DefaultSettings::parseGateToString(d_gate) + ")" << "\n";
+     << "(" + DefaultSettings::parseGateToString(d_gate) + ")"
+     << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
   os << "Vertex Hash: " << d_hashed << "\n";

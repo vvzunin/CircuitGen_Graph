@@ -10,3 +10,6 @@ build/
 cmake-build-*/
 CMakeLists.txt.user
 CMakeUserPresets.json
+
+logs/
+*.log

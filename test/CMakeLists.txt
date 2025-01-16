@@ -22,6 +22,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(gtest)
 
+# option for looking for possible memory leaks
 add_compile_options(-fsanitize=address)
 add_link_options(-fsanitize=address)
 
