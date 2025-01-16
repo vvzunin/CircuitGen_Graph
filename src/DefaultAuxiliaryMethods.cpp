@@ -75,6 +75,7 @@ std::string AuxMethods::dotReturnToString(DotReturn dot) {
         break;
     }
   }
+  s += "}";
 
   return s;
 }

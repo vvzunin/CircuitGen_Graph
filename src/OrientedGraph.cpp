@@ -629,7 +629,7 @@ DotReturn OrientedGraph::toDOT() {
   // << d_vertexes[VertexTypes::gate].size();
   // LOG(INFO) << "      constants       : "
   // << d_vertexes[VertexTypes::constant].size();
-  for (auto eachVertex :
+  for (const auto &eachVertex :
        {d_vertexes[VertexTypes::input],
         d_vertexes[VertexTypes::output],
         d_vertexes[VertexTypes::gate],
@@ -669,7 +669,7 @@ DotReturn OrientedGraph::toDOT() {
     }
   }
 
-  for (auto subGraphPair : subDotResults) {
+  for (const auto &subGraphPair : subDotResults) {
     auto buffers = subGraphPair.first->getOutConnections();
     auto outs =
         subGraphPair.first->getSubGraph()->getVerticesByType(VertexTypes::output
@@ -678,13 +678,13 @@ DotReturn OrientedGraph::toDOT() {
       dot.push_back(
           {DotTypes::DotEdge,
            {{"from",
-             subGraphPair.second[0].second["instName"] + "_"
+             subGraphPair.second[0].second.at("instName") + "_"
                  + outs[i]->getName()},
             {"to", buffers[i]->getName()}}}
       );
     }
   }
-  for (auto i : subDotResults) {
+  for (auto &i : subDotResults) {
     dot.insert(std::end(dot), std::begin(i.second), std::end(i.second));
   }
 
@@ -723,8 +723,7 @@ std::pair<bool, std::string>
   auto tm = *std::localtime(&t);
   fileStream
       << "// This file was generated automatically using CircuitGen_Graph at ";
-  fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << "." << std::endl
-             << std::endl;
+  fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << ".\n\n";
 
   fileStream << dotReturnToString(dot);
 
