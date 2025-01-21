@@ -13,3 +13,6 @@ CMakeUserPresets.json
 
 logs/
 *.log
+
+coverage.info
+coverage_report/
