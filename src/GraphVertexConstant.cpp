@@ -53,7 +53,7 @@ std::string GraphVertexConstant::getVerilogInstance() {
   return "wire " + getName() + ";";
 }
 
-std::string GraphVertexConstant::toVerilog() {
+std::string GraphVertexConstant::toVerilog() const {
   return "assign " + getName() + " = 1'b" + d_value + ";";
 }
 

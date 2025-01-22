@@ -43,12 +43,12 @@
 
 #### С помощью apt
 ```
-sudo apt install clang clang-tidy clang-format-15 doxygen g++ gcc make openssl cmake
+sudo apt install clang clang-tidy clang-format-15 doxygen g++ gcc make openssl cmake lcov
 ```
 
 #### С помощью dnf (для rpm ветки)
 ```
-sudo dnf install clang clang-tools-extra doxygen g++ gcc make openssl cmake
+sudo dnf install clang clang-tools-extra doxygen g++ gcc make openssl cmake lcov
 ```
 Так как в проекте используется `clang-format-15`, предлагается два возможных решения. 
 1) Так как критических отличий между различными версиями clang нет, 

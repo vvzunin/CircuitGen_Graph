@@ -86,7 +86,7 @@ public:
   GraphVertexConstant(char i_const, std::string_view i_name,
                       GraphPtr i_baseGraph);
 
-  ~GraphVertexConstant() override{};
+  ~GraphVertexConstant() override {};
 
   size_t calculateHash(bool i_recalculate = false) override;
 
@@ -95,7 +95,7 @@ public:
 
   virtual void updateLevel(bool i_recalculate = false,
                            std::string tab = "") override;
-  std::string toVerilog() override;
+  std::string toVerilog() const override;
   DotReturn toDOT() override;
 
   /// @brief getDefaultInstance
@@ -122,12 +122,12 @@ public:
   GraphVertexSubGraph(GraphPtr i_subGraph, std::string_view i_name,
                       GraphPtr i_baseGraph);
 
-  ~GraphVertexSubGraph() override{};
+  ~GraphVertexSubGraph() override {};
 
   char updateValue() override;
   void updateLevel(bool i_recalculate = false, std::string tab = "") override;
 
-  std::string toVerilog() override;
+  std::string toVerilog() const override;
   DotReturn toDOT() override;
 
   /// @brief This method is used as a substructure for
@@ -227,7 +227,7 @@ public:
 
   GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph);
 
-  ~GraphVertexGates() override{};
+  ~GraphVertexGates() override {};
 
   /// @brief updateValue
   /// Updates the value of the vertex
@@ -278,7 +278,7 @@ public:
   /// @return A Verilog format string for the current vertex
   /// @throws std::invalid_argument if any input connection is invalid
 
-  std::string toVerilog() override;
+  std::string toVerilog() const override;
   DotReturn toDOT() override;
 
   bool isSubgraphBuffer() const override;

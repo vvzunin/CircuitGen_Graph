@@ -17,17 +17,14 @@ if [ -d "$BUILD_DIR" ]; then
     rm -rf "$BUILD_DIR"
 fi
 
-# Конфигурируем проект
 echo "*** Configuring project with coverage enabled ***"
-cmake --preset=dev -DENABLE_COVERAGE=ON -DCMAKE_BUILD_TYPE="$BUILD_TYPE" | tee cmake_config.log
+cmake --preset=dev -DENABLE_COVERAGE=ON -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
 
-# Сборка проекта
 echo "*** Running build ***"
-cmake --build --preset=dev -j $(nproc) | tee build.log
+cmake --build --preset=dev -j $(nproc)
 
-# Запуск тестов
 echo "*** Running tests ***"
-ctest --preset=dev --output-on-failure -j $(nproc) | tee tests.log
+ctest --preset=dev --output-on-failure -j $(nproc)
 
 # Проверяем наличие lcov
 if ! command -v lcov &> /dev/null; then
@@ -48,7 +45,7 @@ echo "*** Generating HTML report ***"
 if [ -d "$COVERAGE_DIR" ]; then
     rm -rf "$COVERAGE_DIR"
 fi
-genhtml "$COVERAGE_INFO" --output-directory "$COVERAGE_DIR" | tee genhtml.log
+genhtml "$COVERAGE_INFO" --output-directory "$COVERAGE_DIR"
 
 # Открытие отчета
 if command -v xdg-open &> /dev/null; then

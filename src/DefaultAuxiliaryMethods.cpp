@@ -10,20 +10,21 @@ std::string operator*(std::string a, unsigned int b) {
   return output;
 }
 
-std::string AuxMethods::replacer(const std::string &i_s,
-                                 const std::string &i_r) {
+std::string AuxMethods::replacer(const std::string &i_fmt,
+                                 const std::string &i_val) {
   std::string res;
-  res.reserve(i_s.length() * 2);
-
   std::string::size_type pos = 0, prev_pos = 0;
+  
+  size_t count = std::count(i_fmt.begin(), i_fmt.end(), '%');
+  res.reserve(i_fmt.length() + (i_val.length() - 1) * count);
 
-  while ((pos = i_s.find('%', pos)) != std::string::npos) {
-    res.append(i_s, prev_pos, pos - prev_pos);
-    res.append(i_r);
+  while ((pos = i_fmt.find('%', pos)) != std::string::npos) {
+    res.append(i_fmt, prev_pos, pos - prev_pos);
+    res.append(i_val);
     prev_pos = ++pos;
   }
 
-  res.append(i_s, prev_pos, i_s.length() - prev_pos);
+  res.append(i_fmt, prev_pos, i_fmt.length() - prev_pos);
   return res;
 }
 

@@ -31,16 +31,16 @@ enum VertexTypes : uint8_t {
 /// This enumeration defines the various types of logic elements that can be
 /// used in digital circuits.
 
-enum Gates : uint8_t { /// logical element - "AND" (AND)
-  GateAnd,             /// logical element "AND-NOT" (NAND)
-  GateNand,            /// logical element - "OR" (OR)
-  GateOr,              /// logical element - "OR-NOT" (NOR)
-  GateNor,             /// lofical element - "Exclusive OR" (XOR)
-  GateXor,             /// logical element - XNOR
-  GateXnor,            /// logical element - NOT
-  GateNot,             /// logical element - Buffer
-  GateBuf,             /// default logical element
-  GateDefault
+enum Gates : uint8_t {
+  GateAnd,    /// logical element - "AND" (AND)
+  GateNand,   /// logical element "AND-NOT" (NAND)
+  GateOr,     /// logical element - "OR" (OR)
+  GateNor,    /// logical element - "OR-NOT" (NOR)
+  GateXor,    /// lofical element - "Exclusive OR" (XOR)
+  GateXnor,   /// logical element - XNOR
+  GateNot,    /// logical element - NOT
+  GateBuf,    /// logical element - Buffer
+  GateDefault /// default logical element
 };
 
 /// @brief DotTypes

@@ -58,9 +58,9 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
 option(ENABLE_OPTIMIZATIONS_GRAPH "Enable compiler optimizations for CircuitGenGraph library" OFF)
 
-if(ENABLE_OPTIMIZATIONS_GRAPH)
+if(ENABLE_OPTIMIZATIONS_GRAPH OR NOT PROJECT_IS_TOP_LEVEL)
   message(STATUS "Compiler optimizations enabled for CircuitGenGraph")
-  target_compile_options(${PROJECT_NAME} PRIVATE -O2)
+  target_compile_options(${PROJECT_NAME} PRIVATE -O3)
 endif()
 
 option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
