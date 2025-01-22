@@ -4,7 +4,7 @@ include(cmake/prelude.cmake)
 
 project(
   CircuitGenGraph
-  VERSION 1.1.0
+  VERSION 1.3.1
   DESCRIPTION "Graph for circuits dataset generation"
   HOMEPAGE_URL "https://github.com/vvzunin/CircuitGen_Graph"
   LANGUAGES CXX
@@ -58,7 +58,7 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
 option(ENABLE_OPTIMIZATIONS_GRAPH "Enable compiler optimizations for CircuitGenGraph library" OFF)
 
-if(ENABLE_OPTIMIZATIONS_GRAPH OR NOT PROJECT_IS_TOP_LEVEL)
+if(ENABLE_OPTIMIZATIONS_GRAPH)
   message(STATUS "Compiler optimizations enabled for CircuitGenGraph")
   target_compile_options(${PROJECT_NAME} PRIVATE -O3)
 endif()

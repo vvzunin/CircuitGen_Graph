@@ -262,8 +262,7 @@ void GraphVertexBase::log(el::base::type::ostream_t &os) const {
   os << "Vertex Hash: " << d_hashed << "\n";
 }
 
-std::ostream& operator<< (
-      std::ostream& stream, const GraphVertexBase& vertex) {
+std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex) {
   stream << vertex.toVerilog();
   return stream;
 }

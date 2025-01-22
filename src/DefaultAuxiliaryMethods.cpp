@@ -14,7 +14,7 @@ std::string AuxMethods::replacer(const std::string &i_fmt,
                                  const std::string &i_val) {
   std::string res;
   std::string::size_type pos = 0, prev_pos = 0;
-  
+
   size_t count = std::count(i_fmt.begin(), i_fmt.end(), '%');
   res.reserve(i_fmt.length() + (i_val.length() - 1) * count);
 
