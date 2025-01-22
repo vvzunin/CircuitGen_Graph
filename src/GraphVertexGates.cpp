@@ -67,8 +67,8 @@ size_t GraphVertexGates::calculateHash(bool i_recalculate) {
       std::to_string(d_outConnections.size()) + std::to_string(d_gate);
 
   d_hasHash = IN_PROGRESS;
-  // future sorted struct
   std::vector<size_t> hashed_data;
+  hashed_data.reserve(d_inConnections.size());
 
   for (auto &child: d_inConnections) {
     hashed_data.push_back(child->calculateHash(i_recalculate));
