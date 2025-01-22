@@ -59,7 +59,7 @@ struct MultiLinearAllocator {
     if (offset > blocks.back() + buf_size) {
       // bad alloc - memory was taken, but allocation is impossible, and we try
       // to allocate more memory, than is located in buffer
-      if (offset == blocks.back()) {
+      if (current == blocks.back()) {
         return nullptr;
       }
       blocks.push_back(offset = new bytea[chunk_size]);

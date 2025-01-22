@@ -54,4 +54,5 @@ std::string format(const std::string &fmt, Args &&...args) {
   TuplePrinter<decltype(t), sizeof...(Args)>::print(fmt, ss, t);
   return ss.str();
 }
+
 } // namespace AuxMethods
