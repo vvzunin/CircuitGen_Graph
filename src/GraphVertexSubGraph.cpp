@@ -106,8 +106,8 @@ size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
       d_subGraph->calculateHash() + std::to_string(d_outConnections.size());
 
   d_hasHash = IN_PROGRESS;
-  // futuire sorted struct
   std::vector<size_t> hashed_data;
+  hashed_data.reserve(d_inConnections.size());
 
   for (auto *child: d_inConnections) {
     hashed_data.push_back(child->calculateHash(i_recalculate));
