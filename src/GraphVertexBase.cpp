@@ -159,20 +159,20 @@ uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
 }
 
 size_t GraphVertexBase::calculateHash(bool i_recalculate) {
-  if (d_hasHash && (!i_recalculate || d_hasHash == 2)) {
+  if (d_hasHash && (!i_recalculate || d_hasHash == IN_PROGRESS)) {
     return d_hashed;
   }
-  if (d_type == VertexTypes::output) {
-    d_hashed = std::hash<size_t>{}(d_inConnections.size());
-    d_hasHash = 1;
+  if (d_type == VertexTypes::input) {
+    d_hashed = std::hash<size_t>{}(d_outConnections.size());
+    d_hasHash = CALC;
     return d_hashed;
   }
-  d_hasHash = 2;
+  d_hasHash = IN_PROGRESS;
   // future sorted struct
   std::vector<size_t> hashed_data;
   std::string hashedStr = "";
 
-  for (auto &child: d_outConnections) {
+  for (auto *child: d_inConnections) {
     hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
@@ -180,9 +180,8 @@ size_t GraphVertexBase::calculateHash(bool i_recalculate) {
   for (const auto &sub: hashed_data) {
     hashedStr += sub;
   }
-
   d_hashed = std::hash<std::string>{}(hashedStr);
-  d_hasHash = 1;
+  d_hasHash = CALC;
 
   return d_hashed;
 }

@@ -98,18 +98,18 @@ GraphPtr GraphVertexSubGraph::getSubGraph() const {
 }
 
 size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
-  if (d_hasHash && (!i_recalculate || d_hasHash == 2)) {
+  if (d_hasHash && (!i_recalculate || d_hasHash == IN_PROGRESS)) {
     return d_hashed;
   }
   // calc hash from subgraph
   std::string hashedStr =
-      d_subGraph->calculateHash() + std::to_string(d_inConnections.size());
+      d_subGraph->calculateHash() + std::to_string(d_outConnections.size());
 
-  d_hasHash = 2;
+  d_hasHash = IN_PROGRESS;
   // futuire sorted struct
   std::vector<size_t> hashed_data;
 
-  for (auto &child: d_outConnections) {
+  for (auto *child: d_inConnections) {
     hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
@@ -117,9 +117,8 @@ size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
   for (const auto &sub: hashed_data) {
     hashedStr += sub;
   }
-
   d_hashed = std::hash<std::string>{}(hashedStr);
-  d_hasHash = 1;
+  d_hasHash = CALC;
 
   return d_hashed;
 }

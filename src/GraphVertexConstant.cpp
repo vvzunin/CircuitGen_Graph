@@ -17,25 +17,13 @@ GraphVertexConstant::GraphVertexConstant(char i_const, std::string_view i_name,
 }
 
 size_t GraphVertexConstant::calculateHash(bool i_recalculate) {
-  if (d_hasHash && !i_recalculate) {
+  if (d_hasHash &&  (!i_recalculate || d_hasHash == IN_PROGRESS)) {
     return d_hashed;
   }
-  std::string hashedStr = std::to_string(d_value);
-
-  // future sorted struct
-  std::vector<size_t> hashed_data;
-
-  for (auto &child: d_outConnections) {
-    hashed_data.push_back(child->calculateHash(i_recalculate));
-  }
-  std::sort(hashed_data.begin(), hashed_data.end());
-
-  for (const auto &sub: hashed_data) {
-    hashedStr += sub;
-  }
-
-  d_hashed = std::hash<std::string>{}(hashedStr);
-  d_hasHash = 1;
+  d_hashed = std::hash<std::string>{}(
+      std::to_string(d_value) + std::to_string(d_outConnections.size())
+  );
+  d_hasHash = CALC;
 
   return d_hashed;
 }
