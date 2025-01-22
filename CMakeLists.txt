@@ -56,12 +56,7 @@ add_library(
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
-option(ENABLE_OPTIMIZATIONS_GRAPH "Enable compiler optimizations for CircuitGenGraph library" OFF)
-
-if(ENABLE_OPTIMIZATIONS_GRAPH)
-  message(STATUS "Compiler optimizations enabled for CircuitGenGraph")
-  target_compile_options(${PROJECT_NAME} PRIVATE -O3)
-endif()
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 
 option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
 
