@@ -88,6 +88,8 @@ std::string vertexTypeToComment(VertexTypes i_type);
 
 class GraphVertexBase {
 public:
+  enum HASH_CONDITION : char { NOT_CALC = 0, IN_PROGRESS = 1, CALC = 2 };
+
   /// @brief GraphVertexBase
   /// Constructs a GraphVertexBase object with the specified vertex type and
   /// optional graph
@@ -475,7 +477,7 @@ protected:
   std::string_view d_name;
   char d_value;
   char d_needUpdate = 0;
-  char d_hasHash = 0;
+  HASH_CONDITION d_hasHash = NOT_CALC;
   uint32_t d_level;
 
   std::vector<VertexPtr> d_inConnections;

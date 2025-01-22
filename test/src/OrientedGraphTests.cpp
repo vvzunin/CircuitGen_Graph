@@ -500,27 +500,35 @@ TEST(TestCalculateHash, GraphsWithTheSameStructureHaveEqualHash) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
 
-  EXPECT_EQ(graphPtr1->calculateHash(), graphPtr1->calculateHash(true));
   EXPECT_EQ(graphPtr1->calculateHash(), graphPtr2->calculateHash());
 
-  graphPtr1->addGate(Gates::GateAnd, "Anything");
-  graphPtr2->addGate(Gates::GateAnd, "Anything");
+  auto *vert1 = graphPtr1->addGate(Gates::GateNot, "Anything");
+  auto *vert2 = graphPtr2->addGate(Gates::GateNot, "Anything");
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
 
   graphPtr1->addGate(Gates::GateNand, "Anything");
-  // Should hash be not the same if there are differences in Gates
-  // EXPECT_NE(graphPtr1->calculateHash(true),
-  // graphPtr2->calculateHash(true));
-
-  graphPtr1->addInput("Anything");
-  EXPECT_NE(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
-  graphPtr2->addInput("Anything");
+  // Should hash be the same if there are differences in Gates (without edges)
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
 
-  graphPtr1->addOutput("Anything");
+  auto *inp1 = graphPtr1->addInput("Anything");
+  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  auto *inp2 = graphPtr2->addInput("Anything");
+  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+
+  auto *out1 = graphPtr1->addOutput("Anything");
   // Should hash be not the same if there are differences in Outputs
-  // EXPECT_NE(graphPtr1->calculateHash(true),
-  // graphPtr2->calculateHash(true)); graphPtr2->addOutput("Anything");
+  EXPECT_NE(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+
+  auto *out2 = graphPtr2->addOutput("Anything");
+  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+
+  graphPtr1->addEdge(inp1, vert1);
+  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  graphPtr2->addEdge(inp2, vert2);
+
+  graphPtr1->addEdge(vert1, out1);
+  EXPECT_NE(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  graphPtr2->addEdge(vert2, out2);
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
 }
 
