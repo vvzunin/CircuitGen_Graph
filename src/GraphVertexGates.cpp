@@ -75,6 +75,8 @@ size_t GraphVertexGates::calculateHash(bool i_recalculate) {
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
+  hashedStr.reserve(sizeof(decltype(hashed_data)::value_type) *
+                    hashed_data.size());
   for (const auto &sub: hashed_data) {
     hashedStr += sub;
   }

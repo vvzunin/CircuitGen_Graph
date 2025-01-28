@@ -157,13 +157,15 @@ size_t GraphVertexBase::calculateHash(bool i_recalculate) {
   d_hasHash = IN_PROGRESS;
   std::vector<size_t> hashed_data;
   hashed_data.reserve(d_inConnections.size());
-  std::string hashedStr = "";
+  std::string hashedStr;
 
   for (auto *child: d_inConnections) {
     hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
+  hashedStr.reserve(sizeof(decltype(hashed_data)::value_type) *
+                    hashed_data.size());
   for (const auto &sub: hashed_data) {
     hashedStr += sub;
   }
