@@ -352,18 +352,16 @@ std::string OrientedGraph::calculateHash(bool i_recalculate) {
   std::vector<size_t> hashed_data;
   std::string hashedStr = "";
 
-  for (auto &input: d_vertexes[VertexTypes::input]) {
-    hashed_data.push_back(input->calculateHash(i_recalculate));
-  }
-  for (auto &constant: d_vertexes[VertexTypes::constant]) {
-    hashed_data.push_back(constant->calculateHash(i_recalculate));
+  for (auto *vertex: d_vertexes[VertexTypes::output]) {
+    hashed_data.push_back(vertex->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
+  hashedStr.reserve(sizeof(decltype(hashed_data)::value_type) *
+                    hashed_data.size());
   for (const auto &sub: hashed_data) {
     hashedStr += sub;
   }
-
   d_hashed = std::hash<std::string>{}(hashedStr);
 
   return std::to_string(d_hashed);
@@ -522,7 +520,7 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
   // writing consts
   for (auto *oper: d_vertexes[VertexTypes::constant]) {
     fileStream << verilogTab << oper->getVerilogInstance() << "\n";
-    fileStream << verilogTab << oper->toVerilog() << "\n";
+    fileStream << verilogTab << (*oper) << "\n";
   }
 
   if (d_subGraphs.size()) {
@@ -543,13 +541,13 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
   }
   // and all operations
   for (auto *oper: d_vertexes[VertexTypes::gate]) {
-    fileStream << verilogTab << oper->toVerilog() << "\n";
+    fileStream << verilogTab << (*oper) << "\n";
   }
 
   fileStream << "\n";
   // and all outputs
   for (auto *oper: d_vertexes[VertexTypes::output]) {
-    fileStream << verilogTab << oper->toVerilog() << "\n";
+    fileStream << verilogTab << (*oper) << "\n";
   }
 
   fileStream << "endmodule\n";

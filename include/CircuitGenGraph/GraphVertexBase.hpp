@@ -88,6 +88,8 @@ std::string vertexTypeToComment(VertexTypes i_type);
 
 class GraphVertexBase {
 public:
+  enum HASH_CONDITION : char { NOT_CALC = 0, IN_PROGRESS = 1, CALC = 2 };
+
   /// @brief GraphVertexBase
   /// Constructs a GraphVertexBase object with the specified vertex type and
   /// optional graph
@@ -452,11 +454,14 @@ public:
   /// std::cout << "Generated Verilog code:\n" << verilogCode << std::endl;
   /// @endcode
 
-  virtual std::string toVerilog();
+  virtual std::string toVerilog() const;
 
   /// @brief toDOT
   /// Generates DOT code for the vertex
   /// @return
+
+  friend std::ostream &operator<<(std::ostream &stream,
+                                  const GraphVertexBase &matrix);
 
   virtual DotReturn toDOT();
 
@@ -472,7 +477,7 @@ protected:
   std::string_view d_name;
   char d_value;
   char d_needUpdate = 0;
-  char d_hasHash = 0;
+  HASH_CONDITION d_hasHash = NOT_CALC;
   uint32_t d_level;
 
   std::vector<VertexPtr> d_inConnections;
@@ -485,3 +490,5 @@ private:
   // логических операций.
   VertexTypes d_type;
 };
+
+std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex);

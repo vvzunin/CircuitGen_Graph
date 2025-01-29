@@ -56,11 +56,18 @@ add_library(
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
-option(ENABLE_OPTIMIZATIONS_GRAPH "Enable compiler optimizations for CircuitGenGraph library" OFF)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 
-if(ENABLE_OPTIMIZATIONS_GRAPH)
-  message(STATUS "Compiler optimizations enabled for CircuitGenGraph")
-  target_compile_options(${PROJECT_NAME} PRIVATE -O2)
+option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
+
+if(ENABLE_COVERAGE)
+  message(STATUS "Code coverage enabled")
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    target_compile_options(${PROJECT_NAME} PRIVATE -fprofile-arcs -ftest-coverage -O0)
+    target_link_options(${PROJECT_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
+  else()
+    message(WARNING "Code coverage is only supported with GCC or Clang")
+  endif()
 endif()
 
 include(GNUInstallDirs)

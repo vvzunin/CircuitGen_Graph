@@ -2,9 +2,8 @@
 INITIALIZE_EASYLOGGINGPP
 
 #include "string.h"
-using namespace std;
 
-void initLogging(string testName, string subtestName) {
+void initLogging(std::string testName, std::string subtestName) {
   el::Configurations conf("easylogging++.conf");
   el::Loggers::reconfigureAllLoggers(conf);
   el::Loggers::reconfigureAllLoggers(el::ConfigurationType::Filename,
