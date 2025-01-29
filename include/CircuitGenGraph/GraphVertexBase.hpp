@@ -452,11 +452,14 @@ public:
   /// std::cout << "Generated Verilog code:\n" << verilogCode << std::endl;
   /// @endcode
 
-  virtual std::string toVerilog();
+  virtual std::string toVerilog() const;
 
   /// @brief toDOT
   /// Generates DOT code for the vertex
   /// @return
+
+  friend std::ostream &operator<<(std::ostream &stream,
+                                  const GraphVertexBase &matrix);
 
   virtual DotReturn toDOT();
 
@@ -485,3 +488,5 @@ private:
   // логических операций.
   VertexTypes d_type;
 };
+
+std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex);

@@ -843,7 +843,7 @@ TEST(TestToDOT, SubGraphUnroll2) {
 
   graphPtr->addEdge(gateAnd2, outC);
   graphPtr->addEdge(gateAnd3, outD);
-  // LOG(INFO) << "ANDs to outs";
+  // LOG(INFO) << "AND's to outs";
   graphPtr->addEdge(inB, outE);
   // LOG(INFO) << "inB to outE";
 
