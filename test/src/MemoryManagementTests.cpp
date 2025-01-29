@@ -1,4 +1,5 @@
 #include <CircuitGenGraph/GraphMemory.hpp>
+
 #include <gtest/gtest.h>
 
 #include "easylogging++Init.hpp"
