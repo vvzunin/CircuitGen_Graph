@@ -1,6 +1,8 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 
+#ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
+#endif
 
 GraphVertexOutput::GraphVertexOutput(GraphPtr i_baseGraph) :
     GraphVertexBase(VertexTypes::output, i_baseGraph) {
@@ -29,8 +31,10 @@ void GraphVertexOutput::updateLevel(bool i_recalculate, std::string tab) {
     return;
   }
   for (VertexPtr ptr: d_inConnections) {
-    // LOG(INFO) << tab << counter++ << ". " << ptr->getName() << " ("
-    // << ptr->getTypeName() << ")";
+#ifdef LOGFLAG    
+    LOG(INFO) << tab << counter++ << ". " << ptr->getName() << " ("
+    << ptr->getTypeName() << ")";
+#endif
     ptr->updateLevel(i_recalculate, tab + "  ");
     d_level = (ptr->getLevel() > d_level) ? ptr->getLevel() : d_level;
   }
@@ -54,6 +58,7 @@ DotReturn GraphVertexOutput::toDOT() {
   return dot;
 }
 
+#ifdef LOGFLAG
 void GraphVertexOutput::log(el::base::type::ostream_t &os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
@@ -66,3 +71,4 @@ void GraphVertexOutput::log(el::base::type::ostream_t &os) const {
      << "NuN"
      << "\n";
 }
+#endif

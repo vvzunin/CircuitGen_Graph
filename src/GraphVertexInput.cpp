@@ -2,7 +2,9 @@
 
 #include <CircuitGenGraph/GraphVertex.hpp>
 
+#ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
+#endif
 
 GraphVertexInput::GraphVertexInput(GraphPtr i_baseGraph,
                                    const VertexTypes i_type) :
@@ -33,7 +35,9 @@ void GraphVertexInput::updateLevel(bool i_recalculate, std::string tab) {
   if (d_needUpdate && !i_recalculate) {
     return;
   }
-  // LOG(INFO) << tab << "0. " << d_name << " (" << getTypeName() << ")";
+#ifdef LOGFLAG
+  LOG(INFO) << tab << "0. " << d_name << " (" << getTypeName() << ")";
+#endif
   d_level = 0;
   d_needUpdate = 1;
 }
@@ -48,6 +52,7 @@ DotReturn GraphVertexInput::toDOT() {
   return dot;
 }
 
+#ifdef LOGFLAG
 void GraphVertexInput::log(el::base::type::ostream_t &os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
@@ -60,3 +65,4 @@ void GraphVertexInput::log(el::base::type::ostream_t &os) const {
      << "NuN"
      << "\n";
 }
+#endif

@@ -2,17 +2,23 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
 
+#ifdef LOGFLAG
 #include "easylogging++Init.hpp"
+#endif
 
 using namespace AuxMethods;
 
 GraphPtr memoryOwnerConstGr = std::make_shared<OrientedGraph>();
 
 TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrsDefName) {
+#ifdef LOGFLAG
   initLogging("TestConstructorWithoutIName",
               "WithoutDefaultInputParametrsDefName");
+#endif
   GraphVertexConstant constant('z', memoryOwnerConstGr);
-  // LOG(INFO) << constant;
+#ifdef LOGFLAG
+  LOG(INFO) << constant;
+#endif 
   std::string graphNum = std::to_string(0);
   EXPECT_EQ(constant.getType(), VertexTypes::constant);
   EXPECT_EQ(constant.getTypeName(), "const");
@@ -24,8 +30,10 @@ TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrsDefName) {
 }
 
 TEST(TestConstructorWithoutIName, WithDefaultInputParametrsDefName) {
+#ifdef LOGFLAG
   initLogging("TestConstructorWithoutIName",
               "WithDefaultInputParametrsDefName");
+#endif
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
 
   std::string graphNum = std::to_string(1);
@@ -40,7 +48,9 @@ TEST(TestConstructorWithoutIName, WithDefaultInputParametrsDefName) {
 }
 
 TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
+#ifdef LOGFLAG
   initLogging("TestConstructorWithIName", "WithoutDefaultInputParametrs");
+#endif
   GraphVertexConstant constant('z', "Anything", memoryOwnerConstGr);
   EXPECT_EQ(constant.getType(), VertexTypes::constant);
   EXPECT_EQ(constant.getTypeName(), "const");
@@ -52,7 +62,9 @@ TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
 }
 
 TEST(TestConstructorWithIName, WithDefaultInputParametrs) {
+#ifdef LOGFLAG
   initLogging("TestConstructorWithIName", "WithDefaultInputParametrs");
+#endif
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
 
   GraphVertexConstant constant('z', "Anything", graphPtr);
@@ -69,14 +81,18 @@ TEST(TestConstructorWithIName, WithDefaultInputParametrs) {
 
 // it returns 0 does it correct?
 TEST(TestUpdateLevel, CorrectUpdate) {
+#ifdef LOGFLAG
   initLogging("TestUpdateLevel", "CorrectUpdate");
+#endif
   GraphVertexConstant constant1('z', memoryOwnerConstGr);
   constant1.updateLevel();
   EXPECT_EQ(constant1.getLevel(), 0);
 }
 
 TEST(TestGetVerilogInstance, ReturnCorrectInstance) {
+#ifdef LOGFLAG
   initLogging("TestGetVerilogInstance", "ReturnCorrectInstance");
+#endif
   GraphVertexConstant constant1('z', "Anything", memoryOwnerConstGr);
   EXPECT_EQ(constant1.getVerilogInstance(), "wire Anything;");
 }
@@ -84,14 +100,18 @@ TEST(TestGetVerilogInstance, ReturnCorrectInstance) {
 // -------------------------------------
 
 TEST(TestSetName, InputCorrectName) {
+#ifdef LOGFLAG
   initLogging("TestSetName", "InputCorrectName");
+#endif
   GraphVertexConstant constant('z', memoryOwnerConstGr);
   constant.setName("Anything");
   EXPECT_EQ(constant.getRawName(), "Anything");
 }
 
 TEST(TestAddVertexToInConnections, AddConnections1) {
+#ifdef LOGFLAG
   initLogging("TestAddVertexToInConnections", "AddConnections1");
+#endif
   VertexPtr constant1 =
       memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr);
   EXPECT_EQ(constant1->getInConnections().size(), 0);
@@ -115,7 +135,9 @@ TEST(TestAddVertexToInConnections, AddConnections1) {
 }
 
 TEST(TestAddVertexToOutConnections, AddConnections2) {
+#ifdef LOGFLAG
   initLogging("TestAddVertexToOutConnections", "AddConnections2");
+#endif
   VertexPtr constant1 =
       memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr);
   EXPECT_EQ(constant1->getOutConnections().size(), 0);
@@ -137,7 +159,9 @@ TEST(TestAddVertexToOutConnections, AddConnections2) {
 }
 
 TEST(TestCalculateHash, SameHashWhenEqualInputs) {
+#ifdef LOGFLAG
   initLogging("TestCalculateHash", "SameHashWhenEqualInputs");
+#endif
   GraphVertexConstant constant1('z', memoryOwnerConstGr);
   GraphVertexConstant constant2('z', memoryOwnerConstGr);
   EXPECT_EQ(constant1.calculateHash(), constant2.calculateHash());
@@ -150,7 +174,9 @@ TEST(TestCalculateHash, SameHashWhenEqualInputs) {
   EXPECT_EQ(constant1.calculateHash(true), constant2.calculateHash(true));
 }
 TEST(TestCalculateHash, SameGraphDifferentValues) {
+#ifdef LOGFLAG
   initLogging("TestCalculateHash", "SameHashWhenEqualInputs");
+#endif
   GraphVertexConstant constant1('z', memoryOwnerConstGr);
   GraphVertexConstant constant2('x', memoryOwnerConstGr);
   EXPECT_NE(constant1.calculateHash(), constant2.calculateHash());
@@ -164,7 +190,9 @@ TEST(TestCalculateHash, SameGraphDifferentValues) {
 }
 
 TEST(TestRemoveVertexToInConnections, RemoveConnections) {
+#ifdef LOGFLAG
   initLogging("TestRemoveVertexToInConnections", "RemoveConnections");
+#endif
   VertexPtr vertexPtr1 =
       memoryOwnerConstGr->create<GraphVertexConstant>('z', memoryOwnerConstGr);
   EXPECT_EQ(vertexPtr1->removeVertexToInConnections(vertexPtr1), false);
@@ -178,7 +206,9 @@ TEST(TestRemoveVertexToInConnections, RemoveConnections) {
 }
 
 TEST(TestToDOT, CheckName) {
+#ifdef LOGFLAG
   initLogging("TestToDOT", "CheckName");
+#endif
   VertexPtr vertexPtr1 =
       memoryOwnerConstGr->create<GraphVertexConstant>('0', memoryOwnerConstGr);
   VertexPtr vertexPtr2 =

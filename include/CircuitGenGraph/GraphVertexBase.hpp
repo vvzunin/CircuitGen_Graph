@@ -12,7 +12,6 @@
 #include <CircuitGenGraph/GraphMemory.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
-#include "easyloggingpp/easylogging++.h"
 
 class OrientedGraph;
 
@@ -464,7 +463,9 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
+#ifdef LOGFLAG
   virtual void log(el::base::type::ostream_t &os) const;
+#endif
 
 protected:
   GraphPtrWeak d_baseGraph;

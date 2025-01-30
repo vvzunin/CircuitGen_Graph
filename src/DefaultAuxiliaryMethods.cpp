@@ -1,6 +1,8 @@
 #include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
 
+#ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
+#endif
 
 std::string operator*(std::string a, unsigned int b) {
   std::string output = "";
@@ -69,7 +71,9 @@ std::string AuxMethods::dotReturnToString(DotReturn dot) {
         printingSubGraph = true;
         break;
       case DotTypes::DotExit:
-        // LOG(INFO) << "tab: " << tab;
+#ifdef LOGFLAG
+        LOG(INFO) << "tab: " << tab;
+#endif
         if (printingSubGraph)
           s += dotTab * --tab + "}\n";
         break;
