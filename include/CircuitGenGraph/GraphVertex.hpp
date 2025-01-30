@@ -100,7 +100,7 @@ public:
 
   virtual void updateLevel(bool i_recalculate = false,
                            std::string tab = "") override;
-  std::string toVerilog() override;
+  std::string toVerilog() const override;
   DotReturn toDOT() override;
 
   /// @brief getDefaultInstance
@@ -134,7 +134,7 @@ public:
   char updateValue() override;
   void updateLevel(bool i_recalculate = false, std::string tab = "") override;
 
-  std::string toVerilog() override;
+  std::string toVerilog() const override;
   DotReturn toDOT() override;
 
   /// @brief This method is used as a substructure for
@@ -289,7 +289,7 @@ public:
   /// @return A Verilog format string for the current vertex
   /// @throws std::invalid_argument if any input connection is invalid
 
-  std::string toVerilog() override;
+  std::string toVerilog() const override;
   DotReturn toDOT() override;
 
   bool isSubgraphBuffer() const override;

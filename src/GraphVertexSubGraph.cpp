@@ -89,7 +89,7 @@ std::string GraphVertexSubGraph::toGraphML(uint16_t i_indent,
   return d_subGraph->toGraphMLClassic(i_indent, i_prefix);
 }
 
-std::string GraphVertexSubGraph::toVerilog() {
+std::string GraphVertexSubGraph::toVerilog() const {
   return "DO NOT CALL IT";
 }
 

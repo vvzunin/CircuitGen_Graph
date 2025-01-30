@@ -142,7 +142,7 @@ std::string GraphVertexGates::getVerilogString() const {
   return s;
 }
 
-std::string GraphVertexGates::toVerilog() {
+std::string GraphVertexGates::toVerilog() const {
   if (!d_inConnections.size()) {
 #ifdef LOGFLAG
     LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;

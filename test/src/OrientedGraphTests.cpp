@@ -891,7 +891,7 @@ TEST(TestToDOT, SubGraphUnroll2) {
   graphPtr->addEdge(gateAnd2, outC);
   graphPtr->addEdge(gateAnd3, outD);
 #ifdef LOGFLAG
-  LOG(INFO) << "ANDs to outs";
+  LOG(INFO) << "AND's to outs";
 #endif
   graphPtr->addEdge(inB, outE);
 #ifdef LOGFLAG

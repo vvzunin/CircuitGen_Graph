@@ -245,7 +245,7 @@ std::string GraphVertexBase::getVerilogInstance() {
 }
 
 // TODO: what if some (more than 1) connected to output?
-std::string GraphVertexBase::toVerilog() {
+std::string GraphVertexBase::toVerilog() const {
   if (d_type == VertexTypes::output) {
     if (!d_inConnections.empty()) {
       return "assign " + getName() + " = " + d_inConnections.back()->getName() +
@@ -271,3 +271,8 @@ void GraphVertexBase::log(el::base::type::ostream_t &os) const {
   os << "Vertex Hash: " << d_hashed << "\n";
 }
 #endif
+
+std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex) {
+  stream << vertex.toVerilog();
+  return stream;
+}

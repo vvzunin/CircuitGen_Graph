@@ -532,7 +532,7 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
   // writing consts
   for (auto *oper: d_vertexes[VertexTypes::constant]) {
     fileStream << verilogTab << oper->getVerilogInstance() << "\n";
-    fileStream << verilogTab << oper->toVerilog() << "\n";
+    fileStream << verilogTab << (*oper) << "\n";
   }
 
   if (d_subGraphs.size()) {
@@ -553,13 +553,13 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
   }
   // and all operations
   for (auto *oper: d_vertexes[VertexTypes::gate]) {
-    fileStream << verilogTab << oper->toVerilog() << "\n";
+    fileStream << verilogTab << (*oper) << "\n";
   }
 
   fileStream << "\n";
   // and all outputs
   for (auto *oper: d_vertexes[VertexTypes::output]) {
-    fileStream << verilogTab << oper->toVerilog() << "\n";
+    fileStream << verilogTab << (*oper) << "\n";
   }
 
   fileStream << "endmodule\n";
