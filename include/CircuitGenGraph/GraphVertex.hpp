@@ -10,6 +10,10 @@
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
 
+#ifdef LOGFLAG
+#include "easyloggingpp/easylogging++.h"
+#endif
+
 /// @file GraphVertex.hpp
 /// TODO: Maybe Description some virtual methods for Graph's classes,
 /// such as GraphVertexGates

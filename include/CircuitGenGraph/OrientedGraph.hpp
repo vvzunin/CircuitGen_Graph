@@ -16,6 +16,9 @@
 #include <CircuitGenGraph/GraphMemory.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
+#ifdef LOGFLAG
+#include "easyloggingpp/easylogging++.h"
+#endif
 
 // TODO: Добавить проверку на имена файлов при доблении новых вершин
 

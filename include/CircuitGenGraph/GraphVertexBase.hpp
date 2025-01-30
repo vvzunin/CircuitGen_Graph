@@ -13,6 +13,10 @@
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
 
+#ifdef LOGFLAG
+#include "easyloggingpp/easylogging++.h"
+#endif
+
 class OrientedGraph;
 
 #define GraphPtr std::shared_ptr<OrientedGraph>
