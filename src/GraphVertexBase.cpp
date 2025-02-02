@@ -149,46 +149,50 @@ GraphPtrWeak GraphVertexBase::getBaseGraph() const {
   return d_baseGraph;
 }
 
+size_t GraphVertexBase::calculateHash(bool i_recalculate) {
+  if (d_hasHash && (!i_recalculate || d_hasHash == IN_PROGRESS)) {
+    return d_hashed;
+  }
+  if (d_type == VertexTypes::input) {
+    d_hashed = std::hash<size_t>{}(d_outConnections.size());
+    d_hasHash = CALC;
+    return d_hashed;
+  }
+  d_hasHash = IN_PROGRESS;
+  std::vector<size_t> hashed_data;
+  hashed_data.reserve(d_inConnections.size());
+  std::string hashedStr;
+
+  for (auto *child: d_inConnections) {
+    hashed_data.push_back(child->calculateHash(i_recalculate));
+  }
+  std::sort(hashed_data.begin(), hashed_data.end());
+
+  hashedStr.reserve(sizeof(decltype(hashed_data)::value_type) *
+                    hashed_data.size());
+  for (const auto &sub: hashed_data) {
+    hashedStr += sub;
+  }
+  d_hashed = std::hash<std::string>{}(hashedStr);
+  d_hasHash = CALC;
+
+  return d_hashed;
+}
+
 std::vector<VertexPtr> GraphVertexBase::getInConnections() const {
   return d_inConnections;
 }
 
 uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
+  assert(i_vert != this);
+  assert(d_type != input && d_type != constant);
+
   d_inConnections.push_back(i_vert);
   uint32_t n = 0;
-  // TODO use map<VertexPtr, uint32_t> instead of for
+  // TODO is rly needed?
   for (VertexPtr vert: d_inConnections)
     n += (vert == i_vert);
   return n;
-}
-
-size_t GraphVertexBase::calculateHash(bool i_recalculate) {
-  if (d_hasHash && (!i_recalculate || d_hasHash == 2)) {
-    return d_hashed;
-  }
-  if (d_type == VertexTypes::output) {
-    d_hashed = std::hash<size_t>{}(d_inConnections.size());
-    d_hasHash = 1;
-    return d_hashed;
-  }
-  d_hasHash = 2;
-  // future sorted struct
-  std::vector<size_t> hashed_data;
-  std::string hashedStr = "";
-
-  for (auto &child: d_outConnections) {
-    hashed_data.push_back(child->calculateHash(i_recalculate));
-  }
-  std::sort(hashed_data.begin(), hashed_data.end());
-
-  for (const auto &sub: hashed_data) {
-    hashedStr += sub;
-  }
-
-  d_hashed = std::hash<std::string>{}(hashedStr);
-  d_hasHash = 1;
-
-  return d_hashed;
 }
 
 bool GraphVertexBase::removeVertexToInConnections(VertexPtr i_vert,
@@ -213,6 +217,9 @@ std::vector<VertexPtr> GraphVertexBase::getOutConnections() const {
 }
 
 bool GraphVertexBase::addVertexToOutConnections(VertexPtr i_vert) {
+  assert(i_vert != this);
+  assert(d_type != output);
+
   size_t n = 0;
   for (VertexPtr vert: d_outConnections)
     n += (vert == i_vert);
