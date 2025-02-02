@@ -176,10 +176,10 @@ TEST(TestUpdateLevelsAndGetMaxLevel, ReturnCorrectMaxLevel) {
 
 TEST(TestGetEdgesCount, ReturnCorrectCount) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
-  auto input1 = graphPtr1->addInput("Input1");
-  auto input2 = graphPtr1->addInput("Input2");
-  auto gate1 = graphPtr1->addGate(Gates::GateAnd, "And");
-  auto output1 = graphPtr1->addOutput("Output");
+  VertexPtr input1 = graphPtr1->addInput("Input1");
+  VertexPtr input2 = graphPtr1->addInput("Input2");
+  VertexPtr gate1 = graphPtr1->addGate(Gates::GateAnd, "And");
+  VertexPtr output1 = graphPtr1->addOutput("Output");
   EXPECT_EQ(graphPtr1->getEdgesCount(), 0);
 
   graphPtr1->addEdge(gate1, output1);
@@ -199,8 +199,8 @@ TEST(TestGetEdgesCount, ReturnCorrectCount) {
   // EXPECT_THROW()
 
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
-  auto gate2 = graphPtr2->addGate(Gates::GateAnd, "And");
-  auto gate3 = graphPtr2->addGate(Gates::GateAnd, "And");
+  VertexPtr gate2 = graphPtr2->addGate(Gates::GateAnd, "And");
+  VertexPtr gate3 = graphPtr2->addGate(Gates::GateAnd, "And");
 
   // There is no check to the same objects in Edge
   // graph2.addEdge(gate2, gate2);
@@ -241,19 +241,19 @@ TEST(TestGetBaseVertexes, ReturnCorrectVertexes) {
   EXPECT_EQ(graphPtr->getBaseVertexes()[VertexTypes::input].size(), 0);
 
   // without subGraph
-  auto gate1 = graphPtr->addGate(Gates::GateAnd, "Anything");
+  VertexPtr gate1 = graphPtr->addGate(Gates::GateAnd, "Anything");
   EXPECT_EQ(graphPtr->getBaseVertexes()[VertexTypes::gate].size(), 1);
   EXPECT_EQ(graphPtr->getBaseVertexes()[VertexTypes::gate][0], gate1);
 
-  auto input1 = graphPtr->addInput("Anything");
+  VertexPtr input1 = graphPtr->addInput("Anything");
   EXPECT_EQ(graphPtr->getBaseVertexes()[VertexTypes::input].size(), 1);
   EXPECT_EQ(graphPtr->getBaseVertexes()[VertexTypes::input][0], input1);
 
-  auto output1 = graphPtr->addOutput("Anything");
+  VertexPtr output1 = graphPtr->addOutput("Anything");
   EXPECT_EQ(graphPtr->getBaseVertexes()[VertexTypes::output].size(), 1);
   EXPECT_EQ(graphPtr->getBaseVertexes()[VertexTypes::output][0], output1);
 
-  auto const1 = graphPtr->addConst('x', "Anything");
+  VertexPtr const1 = graphPtr->addConst('x', "Anything");
   EXPECT_EQ(graphPtr->getBaseVertexes()[VertexTypes::constant].size(), 1);
   EXPECT_EQ(graphPtr->getBaseVertexes()[VertexTypes::constant][0], const1);
 
@@ -338,7 +338,7 @@ TEST(TestGetVerticeByIndex, ThrowExceptionWhenWrongIndex) {
 // //   // EXPECT_EQ(graph.getVerticesByLevel(0).size(), 0);
 
 // //   // Do not work
-// //   // auto          gate = graph.addGate(Gates::GateAnd, "Anything");
+// //   // VertexPtr          gate = graph.addGate(Gates::GateAnd, "Anything");
 // //   // EXPECT_EQ(gate->getLevel(), 0);
 // //   // EXPECT_EQ(graph.getVerticesByLevel(0)[0]->getType(),
 // VertexTypes::gate);
@@ -449,9 +449,9 @@ TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreNodes) {
 
 TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreSubEdges) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("Graph1");
-  auto gate1 = graphPtr1->addGate(Gates::GateAnd, "gate1");
-  auto input1 = graphPtr1->addInput("input1");
-  auto input2 = graphPtr1->addInput("input2");
+  VertexPtr gate1 = graphPtr1->addGate(Gates::GateAnd, "gate1");
+  VertexPtr input1 = graphPtr1->addInput("input1");
+  VertexPtr input2 = graphPtr1->addInput("input2");
 
   graphPtr1->addEdges({input1, input2}, gate1);
   EXPECT_EQ(
@@ -476,9 +476,9 @@ TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreSubEdges) {
 //   std::string   filename = "ToGraphMLTest.txt";
 //   std::ofstream outF(filename);
 //   GraphPtr      graphPtr1    = std::make_shared<OrientedGraph>("Graph1");
-//   auto          gate1        = graphPtr1->addGate(Gates::GateAnd, "gate1");
-//   auto          input1       = graphPtr1->addInput("input1");
-//   auto          input2       = graphPtr1->addInput("input2");
+//   VertexPtr          gate1        = graphPtr1->addGate(Gates::GateAnd,
+//   "gate1"); VertexPtr          input1       = graphPtr1->addInput("input1");
+//   VertexPtr          input2       = graphPtr1->addInput("input2");
 //   GraphPtr      subGraphPtr1 = std::make_shared<OrientedGraph>("SubGraph1");
 //   graphPtr1->addSubGraph(
 //       subGraphPtr1, subGraphPtr1->getVerticesByType(VertexTypes::input)
@@ -500,27 +500,35 @@ TEST(TestCalculateHash, GraphsWithTheSameStructureHaveEqualHash) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
 
-  EXPECT_EQ(graphPtr1->calculateHash(), graphPtr1->calculateHash(true));
   EXPECT_EQ(graphPtr1->calculateHash(), graphPtr2->calculateHash());
 
-  graphPtr1->addGate(Gates::GateAnd, "Anything");
-  graphPtr2->addGate(Gates::GateAnd, "Anything");
+  VertexPtr vert1 = graphPtr1->addGate(Gates::GateNot, "Anything");
+  VertexPtr vert2 = graphPtr2->addGate(Gates::GateNot, "Anything");
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
 
   graphPtr1->addGate(Gates::GateNand, "Anything");
-  // Should hash be not the same if there are differences in Gates
-  // EXPECT_NE(graphPtr1->calculateHash(true),
-  // graphPtr2->calculateHash(true));
-
-  graphPtr1->addInput("Anything");
-  EXPECT_NE(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
-  graphPtr2->addInput("Anything");
+  // Should hash be the same if there are differences in Gates (without edges)
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
 
-  graphPtr1->addOutput("Anything");
+  VertexPtr inp1 = graphPtr1->addInput("Anything");
+  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  VertexPtr inp2 = graphPtr2->addInput("Anything");
+  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+
+  VertexPtr out1 = graphPtr1->addOutput("Anything");
   // Should hash be not the same if there are differences in Outputs
-  // EXPECT_NE(graphPtr1->calculateHash(true),
-  // graphPtr2->calculateHash(true)); graphPtr2->addOutput("Anything");
+  EXPECT_NE(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+
+  VertexPtr out2 = graphPtr2->addOutput("Anything");
+  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+
+  graphPtr1->addEdge(inp1, vert1);
+  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  graphPtr2->addEdge(inp2, vert2);
+
+  graphPtr1->addEdge(vert1, out1);
+  EXPECT_NE(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  graphPtr2->addEdge(vert2, out2);
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
 }
 
@@ -530,34 +538,34 @@ TEST(TestCalculateHash, GraphsWithTheSameStructureButDifferentConst) {
 
   EXPECT_EQ(graphPtr1->calculateHash(), graphPtr1->calculateHash());
 
-  auto inp1 = graphPtr1->addInput();
-  auto inp2 = graphPtr2->addInput();
-  auto inp11 = graphPtr1->addInput();
-  auto inp22 = graphPtr2->addInput();
+  VertexPtr inp1 = graphPtr1->addInput();
+  VertexPtr inp2 = graphPtr2->addInput();
+  VertexPtr inp11 = graphPtr1->addInput();
+  VertexPtr inp22 = graphPtr2->addInput();
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
 
-  auto gate1 = graphPtr1->addGate(Gates::GateAnd);
-  auto gate2 = graphPtr2->addGate(Gates::GateAnd);
+  VertexPtr gate1 = graphPtr1->addGate(Gates::GateAnd);
+  VertexPtr gate2 = graphPtr2->addGate(Gates::GateAnd);
   graphPtr1->addEdge(inp1, gate1);
   graphPtr1->addEdge(inp11, gate1);
   graphPtr2->addEdge(inp2, gate2);
   graphPtr2->addEdge(inp22, gate2);
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
 
-  auto gate3 = graphPtr1->addGate(Gates::GateNot);
-  auto gate4 = graphPtr2->addGate(Gates::GateNot);
+  VertexPtr gate3 = graphPtr1->addGate(Gates::GateNot);
+  VertexPtr gate4 = graphPtr2->addGate(Gates::GateNot);
   graphPtr1->addEdge(gate1, gate3);
   graphPtr2->addEdge(gate2, gate4);
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
 
-  auto out1 = graphPtr1->addOutput();
-  auto out2 = graphPtr2->addOutput();
+  VertexPtr out1 = graphPtr1->addOutput();
+  VertexPtr out2 = graphPtr2->addOutput();
   graphPtr1->addEdge(gate1, out1);
   graphPtr2->addEdge(gate2, out2);
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
 
-  auto const1 = graphPtr1->addConst('0');
-  auto const2 = graphPtr2->addConst('1');
+  VertexPtr const1 = graphPtr1->addConst('0');
+  VertexPtr const2 = graphPtr2->addConst('1');
   graphPtr1->addEdge(const1, gate1);
   graphPtr2->addEdge(const2, gate2);
   EXPECT_NE(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
@@ -623,8 +631,8 @@ TEST(TestGetEdgesGatesCount, ReturnCorrectGates) {
   EXPECT_EQ(graphPtr->getEdgesGatesCount()[Gates::GateNot].size(), 8);
   EXPECT_EQ(graphPtr->getEdgesGatesCount()[Gates::GateBuf].size(), 8);
 
-  auto gate1 = graphPtr->addGate(Gates::GateAnd, "Anything");
-  auto gate2 = graphPtr->addGate(Gates::GateNand, "Anything");
+  VertexPtr gate1 = graphPtr->addGate(Gates::GateAnd, "Anything");
+  VertexPtr gate2 = graphPtr->addGate(Gates::GateNand, "Anything");
   graphPtr->addEdge(gate1, gate2);
   EXPECT_EQ(graphPtr->getEdgesGatesCount()[Gates::GateAnd][Gates::GateNand], 1);
   EXPECT_EQ(graphPtr->getEdgesGatesCount()[Gates::GateAnd][Gates::GateOr], 0);
@@ -635,8 +643,8 @@ TEST(TestGetEdgesGatesCount, ReturnCorrectGates) {
   EXPECT_EQ(graphPtr->getEdgesGatesCount()[Gates::GateAnd][Gates::GateNot], 0);
   EXPECT_EQ(graphPtr->getEdgesGatesCount()[Gates::GateAnd][Gates::GateBuf], 0);
 
-  auto gate3 = graphPtr->addGate(Gates::GateNand, "Anything");
-  auto gate4 = graphPtr->addGate(Gates::GateOr, "Anything");
+  VertexPtr gate3 = graphPtr->addGate(Gates::GateNand, "Anything");
+  VertexPtr gate4 = graphPtr->addGate(Gates::GateOr, "Anything");
   graphPtr->addEdges({gate3, gate4}, gate1);
   EXPECT_EQ(graphPtr->getEdgesGatesCount()[Gates::GateNand][Gates::GateAnd], 1);
   EXPECT_EQ(graphPtr->getEdgesGatesCount()[Gates::GateOr][Gates::GateAnd], 1);
@@ -646,12 +654,12 @@ TEST(TestGetEdgesGatesCount, ReturnCorrectGates) {
 TEST(TestToVerilog, Simple) {
   initLogging("TestToVerilog", "Simple");
   GraphPtr graphPtr = std::make_shared<OrientedGraph>("testGraph");
-  auto inA = graphPtr->addInput("a");
-  auto inB = graphPtr->addInput("b");
-  auto out = graphPtr->addOutput("c");
-  auto gateAnd1 = graphPtr->addGate(Gates::GateAnd, "andAB");
-  auto const1 = graphPtr->addConst('1', "const1");
-  auto gateOr1 = graphPtr->addGate(Gates::GateOr, "orAnd11");
+  VertexPtr inA = graphPtr->addInput("a");
+  VertexPtr inB = graphPtr->addInput("b");
+  VertexPtr out = graphPtr->addOutput("c");
+  VertexPtr gateAnd1 = graphPtr->addGate(Gates::GateAnd, "andAB");
+  VertexPtr const1 = graphPtr->addConst('1', "const1");
+  VertexPtr gateOr1 = graphPtr->addGate(Gates::GateOr, "orAnd11");
   graphPtr->addEdges({inA, inB}, gateAnd1);
   graphPtr->addEdges({gateAnd1, const1}, gateOr1);
   graphPtr->addEdge(gateOr1, out);
@@ -665,12 +673,12 @@ TEST(TestToVerilog, Simple) {
 TEST(TestToVerilog, SubGraph) {
   initLogging("TestToVerilog", "SubGraph");
   GraphPtr subGraphPtr = std::make_shared<OrientedGraph>("testSubGraph");
-  auto inA = subGraphPtr->addInput("a");
-  auto inB = subGraphPtr->addInput("b");
-  auto out = subGraphPtr->addOutput("c");
-  auto gateAnd1 = subGraphPtr->addGate(Gates::GateAnd, "andAB");
-  auto const1 = subGraphPtr->addConst('1', "const1");
-  auto gateOr1 = subGraphPtr->addGate(Gates::GateOr, "orAnd11");
+  VertexPtr inA = subGraphPtr->addInput("a");
+  VertexPtr inB = subGraphPtr->addInput("b");
+  VertexPtr out = subGraphPtr->addOutput("c");
+  VertexPtr gateAnd1 = subGraphPtr->addGate(Gates::GateAnd, "andAB");
+  VertexPtr const1 = subGraphPtr->addConst('1', "const1");
+  VertexPtr gateOr1 = subGraphPtr->addGate(Gates::GateOr, "orAnd11");
   subGraphPtr->addEdges({inA, inB}, gateAnd1);
   subGraphPtr->addEdges({gateAnd1, const1}, gateOr1);
   subGraphPtr->addEdge(gateOr1, out);
@@ -680,7 +688,7 @@ TEST(TestToVerilog, SubGraph) {
   inB = graphPtr->addInput("b");
   out = graphPtr->addOutput("c");
 
-  auto outs = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
+  std::vector<VertexPtr> outs = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
 
   graphPtr->addEdge(outs[0], out);
 
@@ -695,12 +703,12 @@ TEST(TestToVerilog, SubGraph) {
 TEST(TestToDOT, Simple) {
   initLogging("TestToDOT", "Simple");
   GraphPtr graphPtr = std::make_shared<OrientedGraph>("testGraph");
-  auto inA = graphPtr->addInput("a");
-  auto inB = graphPtr->addInput("b");
-  auto out = graphPtr->addOutput("c");
-  auto gateAnd1 = graphPtr->addGate(Gates::GateAnd, "andAB");
-  auto const1 = graphPtr->addConst('1', "const1");
-  auto gateOr1 = graphPtr->addGate(Gates::GateOr, "orAnd11");
+  VertexPtr inA = graphPtr->addInput("a");
+  VertexPtr inB = graphPtr->addInput("b");
+  VertexPtr out = graphPtr->addOutput("c");
+  VertexPtr gateAnd1 = graphPtr->addGate(Gates::GateAnd, "andAB");
+  VertexPtr const1 = graphPtr->addConst('1', "const1");
+  VertexPtr gateOr1 = graphPtr->addGate(Gates::GateOr, "orAnd11");
   graphPtr->addEdges({inA, inB}, gateAnd1);
   graphPtr->addEdges({gateAnd1, const1}, gateOr1);
   graphPtr->addEdge(gateOr1, out);
@@ -717,13 +725,13 @@ TEST(TestToDOT, Simple) {
 TEST(TestToDOT, SubGraph) {
   initLogging("TestToDOT", "SubGraph");
   GraphPtr subGraphPtr = std::make_shared<OrientedGraph>("testSubGraph");
-  auto inA = subGraphPtr->addInput("a");
-  auto inB = subGraphPtr->addInput("b");
-  auto outC = subGraphPtr->addOutput("c");
-  auto outD = subGraphPtr->addOutput("d");
-  auto gateAnd1 = subGraphPtr->addGate(Gates::GateAnd, "andAB");
-  auto const1 = subGraphPtr->addConst('1', "const1");
-  auto gateOr1 = subGraphPtr->addGate(Gates::GateOr, "orAnd11");
+  VertexPtr inA = subGraphPtr->addInput("a");
+  VertexPtr inB = subGraphPtr->addInput("b");
+  VertexPtr outC = subGraphPtr->addOutput("c");
+  VertexPtr outD = subGraphPtr->addOutput("d");
+  VertexPtr gateAnd1 = subGraphPtr->addGate(Gates::GateAnd, "andAB");
+  VertexPtr const1 = subGraphPtr->addConst('1', "const1");
+  VertexPtr gateOr1 = subGraphPtr->addGate(Gates::GateOr, "orAnd11");
   subGraphPtr->addEdges({inA, inB}, gateAnd1);
   subGraphPtr->addEdges({gateAnd1, const1}, gateOr1);
   subGraphPtr->addEdge(gateOr1, outC);
@@ -734,9 +742,9 @@ TEST(TestToDOT, SubGraph) {
   inB = graphPtr->addInput("b");
   outC = graphPtr->addOutput("c");
   outD = graphPtr->addOutput("d");
-  auto outE = graphPtr->addOutput("e");
+  VertexPtr outE = graphPtr->addOutput("e");
 
-  auto outs = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
+  std::vector<VertexPtr> outs = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
 
   graphPtr->addEdge(outs[0], outC);
   graphPtr->addEdge(outs[1], outD);
@@ -752,13 +760,13 @@ TEST(TestToDOT, SubGraph) {
 TEST(TestToDOT, SubGraphUnroll) {
   initLogging("TestToDOT", "SubGraphUnroll");
   GraphPtr subGraphPtr = std::make_shared<OrientedGraph>("testSubGraph");
-  auto inA = subGraphPtr->addInput("a");
-  auto inB = subGraphPtr->addInput("b");
-  auto outC = subGraphPtr->addOutput("c");
-  auto outD = subGraphPtr->addOutput("d");
-  auto gateAnd1 = subGraphPtr->addGate(Gates::GateAnd, "andAB");
-  auto const1 = subGraphPtr->addConst('1', "const1");
-  auto gateOr1 = subGraphPtr->addGate(Gates::GateOr, "orAnd11");
+  VertexPtr inA = subGraphPtr->addInput("a");
+  VertexPtr inB = subGraphPtr->addInput("b");
+  VertexPtr outC = subGraphPtr->addOutput("c");
+  VertexPtr outD = subGraphPtr->addOutput("d");
+  VertexPtr gateAnd1 = subGraphPtr->addGate(Gates::GateAnd, "andAB");
+  VertexPtr const1 = subGraphPtr->addConst('1', "const1");
+  VertexPtr gateOr1 = subGraphPtr->addGate(Gates::GateOr, "orAnd11");
   subGraphPtr->addEdges({inA, inB}, gateAnd1);
   subGraphPtr->addEdges({gateAnd1, const1}, gateOr1);
   subGraphPtr->addEdge(gateOr1, outC);
@@ -769,9 +777,9 @@ TEST(TestToDOT, SubGraphUnroll) {
   inB = graphPtr->addInput("b");
   outC = graphPtr->addOutput("c");
   outD = graphPtr->addOutput("d");
-  auto outE = graphPtr->addOutput("e");
+  VertexPtr outE = graphPtr->addOutput("e");
 
-  auto outs = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
+  std::vector<VertexPtr> outs = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
 
   graphPtr->addEdge(outs[0], outC);
   graphPtr->addEdge(outs[1], outD);
@@ -790,13 +798,13 @@ TEST(TestToDOT, SubGraphUnroll) {
 TEST(TestToDOT, SubGraphUnroll2) {
   initLogging("TestToDOT", "SubGraphUnroll2");
   GraphPtr subGraphPtr = std::make_shared<OrientedGraph>("testSubGraph");
-  auto inA = subGraphPtr->addInput("a");
-  auto inB = subGraphPtr->addInput("b");
-  auto outC = subGraphPtr->addOutput("c");
-  auto outD = subGraphPtr->addOutput("d");
-  auto gateAnd1 = subGraphPtr->addGate(Gates::GateAnd, "andAB");
-  auto const1 = subGraphPtr->addConst('1', "const1");
-  auto gateOr1 = subGraphPtr->addGate(Gates::GateOr, "orAnd11");
+  VertexPtr inA = subGraphPtr->addInput("a");
+  VertexPtr inB = subGraphPtr->addInput("b");
+  VertexPtr outC = subGraphPtr->addOutput("c");
+  VertexPtr outD = subGraphPtr->addOutput("d");
+  VertexPtr gateAnd1 = subGraphPtr->addGate(Gates::GateAnd, "andAB");
+  VertexPtr const1 = subGraphPtr->addConst('1', "const1");
+  VertexPtr gateOr1 = subGraphPtr->addGate(Gates::GateOr, "orAnd11");
   subGraphPtr->addEdges({inA, inB}, gateAnd1);
   subGraphPtr->addEdges({gateAnd1, const1}, gateOr1);
   subGraphPtr->addEdge(gateOr1, outC);
@@ -822,15 +830,16 @@ TEST(TestToDOT, SubGraphUnroll2) {
   inB = graphPtr->addInput("b");
   outC = graphPtr->addOutput("c");
   outD = graphPtr->addOutput("d");
-  auto outE = graphPtr->addOutput("e");
+  VertexPtr outE = graphPtr->addOutput("e");
   // LOG(INFO) << "In/outs added to main graph";
 
-  auto outs1 = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
-  auto outs2 = graphPtr->addSubGraph(subGraphPtr2, {inA, inB});
+  std::vector<VertexPtr> outs1 = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
+  std::vector<VertexPtr> outs2 =
+      graphPtr->addSubGraph(subGraphPtr2, {inA, inB});
   // LOG(INFO) << "SubGraphs added!";
 
-  auto gateAnd2 = graphPtr->addGate(Gates::GateAnd, "andAB2");
-  auto gateAnd3 = graphPtr->addGate(Gates::GateAnd, "andAB3");
+  VertexPtr gateAnd2 = graphPtr->addGate(Gates::GateAnd, "andAB2");
+  VertexPtr gateAnd3 = graphPtr->addGate(Gates::GateAnd, "andAB3");
   // LOG(INFO) << "Two AND gate added";
 
   graphPtr->addEdge(outs1[0], gateAnd2);
@@ -861,13 +870,13 @@ TEST(TestToDOT, SubGraphUnroll2) {
 TEST(TestToDOT, SubGraphUnroll3) {
   initLogging("TestToDOT", "SubGraphUnroll3");
   GraphPtr subGraphPtr = std::make_shared<OrientedGraph>("testSubGraph");
-  auto inA = subGraphPtr->addInput("a");
-  auto inB = subGraphPtr->addInput("b");
-  auto outC = subGraphPtr->addOutput("c");
-  auto outD = subGraphPtr->addOutput("d");
-  auto gateAnd1 = subGraphPtr->addGate(Gates::GateAnd, "andAB");
-  auto const1 = subGraphPtr->addConst('1', "const1");
-  auto gateOr1 = subGraphPtr->addGate(Gates::GateOr, "orAnd11");
+  VertexPtr inA = subGraphPtr->addInput("a");
+  VertexPtr inB = subGraphPtr->addInput("b");
+  VertexPtr outC = subGraphPtr->addOutput("c");
+  VertexPtr outD = subGraphPtr->addOutput("d");
+  VertexPtr gateAnd1 = subGraphPtr->addGate(Gates::GateAnd, "andAB");
+  VertexPtr const1 = subGraphPtr->addConst('1', "const1");
+  VertexPtr gateOr1 = subGraphPtr->addGate(Gates::GateOr, "orAnd11");
   subGraphPtr->addEdges({inA, inB}, gateAnd1);
   subGraphPtr->addEdges({gateAnd1, const1}, gateOr1);
   subGraphPtr->addEdge(gateOr1, outC);
@@ -887,7 +896,8 @@ TEST(TestToDOT, SubGraphUnroll3) {
   subGraphPtr2->addEdge(gateOr1, outC);
   subGraphPtr2->addEdge(gateAnd1, outD);
   // LOG(INFO) << "Second subGraph added!";
-  auto outs = subGraphPtr2->addSubGraph(subGraphPtr, {gateAnd1, gateOr1});
+  std::vector<VertexPtr> outs =
+      subGraphPtr2->addSubGraph(subGraphPtr, {gateAnd1, gateOr1});
   subGraphPtr2->addEdge(outs[0], outC);
   subGraphPtr2->addEdge(outs[1], outD);
 
@@ -896,14 +906,15 @@ TEST(TestToDOT, SubGraphUnroll3) {
   inB = graphPtr->addInput("b");
   outC = graphPtr->addOutput("c");
   outD = graphPtr->addOutput("d");
-  auto outE = graphPtr->addOutput("e");
+  VertexPtr outE = graphPtr->addOutput("e");
   // LOG(INFO) << "In/outs added to main graph";
 
-  auto outs2 = graphPtr->addSubGraph(subGraphPtr2, {inA, inB});
+  std::vector<VertexPtr> outs2 =
+      graphPtr->addSubGraph(subGraphPtr2, {inA, inB});
   // LOG(INFO) << "SubGraphs added!";
 
-  auto gateAnd2 = graphPtr->addGate(Gates::GateAnd, "andAB2");
-  auto gateAnd3 = graphPtr->addGate(Gates::GateAnd, "andAB3");
+  VertexPtr gateAnd2 = graphPtr->addGate(Gates::GateAnd, "andAB2");
+  VertexPtr gateAnd3 = graphPtr->addGate(Gates::GateAnd, "andAB3");
   // LOG(INFO) << "Two AND gate added";
 
   graphPtr->addEdge(outs2[0], outC);
@@ -925,13 +936,13 @@ TEST(TestToDOT, SubGraphUnroll3) {
 TEST(TestToDOT, SubGraph3) {
   initLogging("TestToDOT", "SubGraph3");
   GraphPtr subGraphPtr = std::make_shared<OrientedGraph>("testSubGraph");
-  auto inA = subGraphPtr->addInput("a");
-  auto inB = subGraphPtr->addInput("b");
-  auto outC = subGraphPtr->addOutput("c");
-  auto outD = subGraphPtr->addOutput("d");
-  auto gateAnd1 = subGraphPtr->addGate(Gates::GateAnd);
-  auto const1 = subGraphPtr->addConst('1');
-  auto gateOr1 = subGraphPtr->addGate(Gates::GateOr);
+  VertexPtr inA = subGraphPtr->addInput("a");
+  VertexPtr inB = subGraphPtr->addInput("b");
+  VertexPtr outC = subGraphPtr->addOutput("c");
+  VertexPtr outD = subGraphPtr->addOutput("d");
+  VertexPtr gateAnd1 = subGraphPtr->addGate(Gates::GateAnd);
+  VertexPtr const1 = subGraphPtr->addConst('1');
+  VertexPtr gateOr1 = subGraphPtr->addGate(Gates::GateOr);
   subGraphPtr->addEdges({inA, inB}, gateAnd1);
   subGraphPtr->addEdges({gateAnd1, const1}, gateOr1);
   subGraphPtr->addEdge(gateOr1, outC);
@@ -951,7 +962,8 @@ TEST(TestToDOT, SubGraph3) {
   subGraphPtr2->addEdge(gateOr1, outC);
   subGraphPtr2->addEdge(gateAnd1, outD);
   // LOG(INFO) << "Second subGraph added!";
-  auto outs = subGraphPtr2->addSubGraph(subGraphPtr, {gateAnd1, gateOr1});
+  std::vector<VertexPtr> outs =
+      subGraphPtr2->addSubGraph(subGraphPtr, {gateAnd1, gateOr1});
   subGraphPtr2->addEdge(outs[0], outC);
   subGraphPtr2->addEdge(outs[1], outD);
 
@@ -960,10 +972,11 @@ TEST(TestToDOT, SubGraph3) {
   inB = graphPtr->addInput("b");
   outC = graphPtr->addOutput("c");
   outD = graphPtr->addOutput("d");
-  auto outE = graphPtr->addOutput("e");
+  VertexPtr outE = graphPtr->addOutput("e");
   // LOG(INFO) << "In/outs added to main graph";
 
-  auto outs2 = graphPtr->addSubGraph(subGraphPtr2, {inA, inB});
+  std::vector<VertexPtr> outs2 =
+      graphPtr->addSubGraph(subGraphPtr2, {inA, inB});
   // LOG(INFO) << "SubGraphs added!";
 
   graphPtr->addEdge(outs2[0], outC);

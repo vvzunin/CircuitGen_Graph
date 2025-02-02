@@ -43,7 +43,7 @@ jobs:
 
     - name: Install LCov
       run: sudo apt-get update -q
-        && sudo apt-get install lcov -q -y
+        && sudo apt-get install ninja-build lcov -q -y
 
     - name: Configure
       run: cmake --preset=ci-coverage
@@ -73,6 +73,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Install ninja
+      run: sudo apt-get install ninja-build -q -y
 
     - name: Configure
       run: cmake --preset=ci-sanitize
@@ -108,7 +111,7 @@ jobs:
     - name: Install static analyzers
       if: matrix.os == 'ubuntu-22.04'
       run: >-
-        sudo apt-get install clang-tidy-15 cppcheck -y -q
+        sudo apt-get install ninja-build clang-tidy-15 cppcheck -y -q
 
         sudo update-alternatives --install
         /usr/bin/clang-tidy clang-tidy
@@ -155,7 +158,7 @@ jobs:
 
     - name: Install Doxygen
       run: sudo apt-get update -q
-        && sudo apt-get install doxygen -q -y
+        && sudo apt-get install ninja-build doxygen -q -y
     
     - name: Install Graphviz
       run: sudo apt-get update -q && sudo apt-get install -y -q graphviz ghostscript

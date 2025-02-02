@@ -60,27 +60,28 @@ char GraphVertexGates::updateValue() {
 }
 
 size_t GraphVertexGates::calculateHash(bool i_recalculate) {
-  if (d_hasHash && (!i_recalculate || d_hasHash == 2)) {
+  if (d_hasHash && (!i_recalculate || d_hasHash == IN_PROGRESS)) {
     return d_hashed;
   }
   std::string hashedStr =
-      std::to_string(d_inConnections.size()) + std::to_string(d_gate);
+      std::to_string(d_outConnections.size()) + std::to_string(d_gate);
 
-  d_hasHash = 2;
-  // future sorted struct
+  d_hasHash = IN_PROGRESS;
   std::vector<size_t> hashed_data;
+  hashed_data.reserve(d_inConnections.size());
 
-  for (auto &child: d_outConnections) {
+  for (auto &child: d_inConnections) {
     hashed_data.push_back(child->calculateHash(i_recalculate));
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
+  hashedStr.reserve(sizeof(decltype(hashed_data)::value_type) *
+                    hashed_data.size());
   for (const auto &sub: hashed_data) {
     hashedStr += sub;
   }
-
   d_hashed = std::hash<std::string>{}(hashedStr);
-  d_hasHash = 1;
+  d_hasHash = CALC;
 
   return d_hashed;
 }

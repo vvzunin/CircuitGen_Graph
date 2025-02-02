@@ -1,6 +1,7 @@
 #include <string>
 
 #include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
+
 #include <gtest/gtest.h>
 
 #include "easylogging++Init.hpp"
