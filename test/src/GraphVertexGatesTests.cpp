@@ -38,8 +38,7 @@ TEST(TestConstructorWithoutIName, WithDefaultGatesParametrs) {
 }
 
 TEST(TestConstructorWithIName, WithoutDefaultGatesParametrs) {
-  VertexPtr gate = memoryOwnerGateGr->addGate(
-      Gates::GateAnd, "Anything");
+  VertexPtr gate = memoryOwnerGateGr->addGate(Gates::GateAnd, "Anything");
   EXPECT_EQ(gate->getBaseGraph().lock(), memoryOwnerGateGr);
   EXPECT_EQ(gate->getType(), VertexTypes::gate);
   EXPECT_EQ(gate->getTypeName(), "gate");
