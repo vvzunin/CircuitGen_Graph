@@ -28,7 +28,7 @@ add_link_options(-fsanitize=address)
 
 enable_testing()
 
-if(LOGFLAG)
+if(ENABLE_LOGGING)
   configure_file(
     ../easylogging++.conf
     easylogging++.conf
@@ -47,13 +47,11 @@ function(add_new_test name)
   target_link_libraries(CircuitGenGraph_test_${name} PRIVATE GTest::gtest_main)
   target_link_libraries(CircuitGenGraph_test_${name} PRIVATE CircuitGenGraph::CircuitGenGraph)
 
-  if(LOGFLAG)
-    message("logs enabled in tests")
+  if(ENABLE_LOGGING)
     target_link_libraries(CircuitGenGraph_test_${name} PRIVATE easylogging++)
   endif()
 
   if(ENABLE_COVERAGE)
-    message(STATUS "Enabling coverage for test targets")
     target_compile_options(CircuitGenGraph_test_${name} PRIVATE -fprofile-arcs -ftest-coverage)
     target_link_options(CircuitGenGraph_test_${name} PRIVATE -fprofile-arcs -ftest-coverage)
   endif()

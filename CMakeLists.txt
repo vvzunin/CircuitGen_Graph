@@ -38,7 +38,10 @@ set(PUBLIC_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
 )
 
-add_compile_definitions(LOGFLAG=OFF)
+option(ENABLE_LOGGING "Enable logging" OFF)
+if (ENABLE_LOGGING)
+  add_compile_definitions(LOGFLAG)
+endif()
 
 if(BUILD_SHARED_LIBS)
   add_library(${PROJECT_NAME} SHARED ${SOURCES})
@@ -50,7 +53,7 @@ add_library(
   CircuitGenGraph::CircuitGenGraph ALIAS
   ${PROJECT_NAME})
 
-if(LOGFLAG)
+if(ENABLE_LOGGING)
   add_library(
     easylogging++ STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.cc
@@ -76,7 +79,7 @@ endif()
 
 include(GNUInstallDirs)
 
-if(LOGFLAG)
+if(ENABLE_LOGGING)
   target_link_libraries(
     ${PROJECT_NAME} PUBLIC
     easylogging++
@@ -136,7 +139,7 @@ set_target_properties(
 
 include(cmake/utils.cmake)
 
-if(LOGFLAG)
+if(ENABLE_LOGGING)
   message(STATUS "Logs enabled")
   install(TARGETS ${PROJECT_NAME} easylogging++
     EXPORT "${PROJECT_NAME}Targets"
