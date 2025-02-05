@@ -38,7 +38,7 @@ set(PUBLIC_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
 )
 
-add_compile_definitions(LOGFLAG=ON)
+add_compile_definitions(LOGFLAG=OFF)
 
 if(BUILD_SHARED_LIBS)
   add_library(${PROJECT_NAME} SHARED ${SOURCES})

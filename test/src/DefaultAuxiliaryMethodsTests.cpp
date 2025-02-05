@@ -4,7 +4,9 @@
 
 #include <gtest/gtest.h>
 
+#ifdef LOGFLAG
 #include "easylogging++Init.hpp"
+#endif
 
 TEST(DefaultAuxMethodsTests, TestFormat) {
   std::string_view target =
