@@ -8,7 +8,7 @@
 
 using namespace AuxMethods;
 
-static GraphPtr memoryOwnerConstGr = std::make_shared<OrientedGraph>();
+GraphPtr memoryOwnerConstGr = std::make_shared<OrientedGraph>();
 
 TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrsDefName) {
 #ifdef LOGFLAG
