@@ -137,6 +137,7 @@ set_target_properties(
 include(cmake/utils.cmake)
 
 if(LOGFLAG)
+  message(STATUS "Logs enabled")
   install(TARGETS ${PROJECT_NAME} easylogging++
     EXPORT "${PROJECT_NAME}Targets"
 
@@ -150,6 +151,7 @@ if(LOGFLAG)
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} # include
   )
 else()
+  message(STATUS "Logs disabled")
   install(TARGETS ${PROJECT_NAME}
     EXPORT "${PROJECT_NAME}Targets"
 

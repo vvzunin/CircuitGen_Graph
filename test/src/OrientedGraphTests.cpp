@@ -6,6 +6,7 @@
 
 #include <CircuitGenGraph/OrientedGraph.hpp>
 #include <gtest/gtest.h>
+
 #ifdef LOGFLAG
 #include "easylogging++Init.hpp"
 #endif
@@ -736,11 +737,11 @@ TEST(TestToDOT, Simple) {
   LOG(INFO) << "curPath: " << curPath;
 #endif
   std::string loadFile = loadStringFile(curPath + "/testSimple.dot");
-#ifdef LOGFLAG  
+#ifdef LOGFLAG
   LOG(INFO) << "loadFile: " << loadFile;
 #endif
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
-#ifdef LOGFLAG  
+#ifdef LOGFLAG
   LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
 #endif
 }
@@ -917,7 +918,7 @@ TEST(TestToDOT, SubGraphUnroll2) {
   std::string curPath = std::filesystem::current_path();
   std::string loadFile = loadStringFile(curPath + "/testSubGraphUnroll2.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
-#ifdef LOGFLAG  
+#ifdef LOGFLAG
   LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
 #endif
 }

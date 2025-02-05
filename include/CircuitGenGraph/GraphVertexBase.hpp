@@ -12,7 +12,6 @@
 #include <CircuitGenGraph/GraphMemory.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
-
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
 #endif

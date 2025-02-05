@@ -133,7 +133,7 @@ void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
   for (VertexPtr vert: d_inConnections) {
 #ifdef LOGLFLAG
     LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
-    << vert->getTypeName() << ")";
+              << vert->getTypeName() << ")";
 #endif
     vert->updateLevel(i_recalculate, tab + "  ");
     d_level = (vert->getLevel() >= d_level) ? vert->getLevel() + 1 : d_level;

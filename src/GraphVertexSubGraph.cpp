@@ -34,10 +34,10 @@ void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
   }
   d_needUpdate = 2;
   for (VertexPtr vert: d_subGraph->getVerticesByType(VertexTypes::output)) {
-#ifdef LOGFLAG    
+#ifdef LOGFLAG
     LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
-    << vert->getTypeName() << ")";
-#endif    
+              << vert->getTypeName() << ")";
+#endif
     vert->updateLevel(i_recalculate, tab + "  ");
   }
   d_needUpdate = 1;

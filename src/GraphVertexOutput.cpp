@@ -31,9 +31,9 @@ void GraphVertexOutput::updateLevel(bool i_recalculate, std::string tab) {
     return;
   }
   for (VertexPtr ptr: d_inConnections) {
-#ifdef LOGFLAG    
+#ifdef LOGFLAG
     LOG(INFO) << tab << counter++ << ". " << ptr->getName() << " ("
-    << ptr->getTypeName() << ")";
+              << ptr->getTypeName() << ")";
 #endif
     ptr->updateLevel(i_recalculate, tab + "  ");
     d_level = (ptr->getLevel() > d_level) ? ptr->getLevel() : d_level;

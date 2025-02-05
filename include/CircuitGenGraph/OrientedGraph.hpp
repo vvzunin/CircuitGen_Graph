@@ -84,7 +84,7 @@ class OrientedGraph
     , public el::Loggable
 #endif
 {
-// clang-format on
+  // clang-format on
 public:
   OrientedGraph(const std::string &i_name = "",
                 size_t buffer_size = DEFAULT_BUF,

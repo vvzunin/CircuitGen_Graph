@@ -9,7 +9,6 @@
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
-
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
 #endif

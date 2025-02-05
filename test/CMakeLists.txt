@@ -46,9 +46,12 @@ function(add_new_test name)
 
   target_link_libraries(CircuitGenGraph_test_${name} PRIVATE GTest::gtest_main)
   target_link_libraries(CircuitGenGraph_test_${name} PRIVATE CircuitGenGraph::CircuitGenGraph)
+
   if(LOGFLAG)
+    message("logs enabled in tests")
     target_link_libraries(CircuitGenGraph_test_${name} PRIVATE easylogging++)
   endif()
+
   if(ENABLE_COVERAGE)
     message(STATUS "Enabling coverage for test targets")
     target_compile_options(CircuitGenGraph_test_${name} PRIVATE -fprofile-arcs -ftest-coverage)
@@ -64,7 +67,7 @@ function(add_new_test name)
   add_test(NAME ${name} COMMAND CircuitGenGraph_test_${name})
 endfunction()
 
-# add_new_test(GraphVertexConstantTests)
+add_new_test(GraphVertexConstantTests)
 # add_new_test(GraphVertexGatesTests)
 # add_new_test(GraphVertexInputTests)
 # add_new_test(GraphVertexOutputTests)

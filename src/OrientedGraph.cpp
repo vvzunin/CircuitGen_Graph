@@ -103,16 +103,16 @@ bool OrientedGraph::needToUpdateLevel() const {
 }
 
 void OrientedGraph::updateLevels(bool i_recalculate) {
-#ifdef LOGFLAG  
+#ifdef LOGFLAG
   LOG(INFO) << "Starting level update. Wait.";
   LOG(INFO) << "Outputs for update: "
-  << d_vertexes.at(VertexTypes::output).size();
+            << d_vertexes.at(VertexTypes::output).size();
 #endif
   int counter = 0;
   for (VertexPtr vert: d_vertexes.at(VertexTypes::output)) {
-#ifdef LOGFLAG  
+#ifdef LOGFLAG
     LOG(INFO) << counter++ << ". " << vert->getRawName() << " ("
-    << vert->getTypeName() << ")";
+              << vert->getTypeName() << ")";
 #endif
     vert->updateLevel(i_recalculate, "    ");
   }
@@ -579,9 +579,9 @@ DotReturn OrientedGraph::getGraphDotInstance() {
       d_subGraphsInputsPtr[d_currentParentGraph.lock()->d_graphID].size();
   if (*dotCount == allCount) {
 #ifdef LOGFLAG
-    LOG(INFO) << "Incorrect getGraphDotInstance call. All modules of"
-    + d_currentParentGraph.lock()->getName() + " ("
-    + std::to_string(allCount) + ") were already parsed";
+    LOG(INFO) << "Incorrect getGraphDotInstance call. All modules of" +
+                     d_currentParentGraph.lock()->getName() + " (" +
+                     std::to_string(allCount) + ") were already parsed";
 #endif
     throw std::out_of_range(
         "Incorrect getGraphDotInstance call. All modules of " +
@@ -612,14 +612,14 @@ DotReturn OrientedGraph::toDOT() {
   LOG(INFO) << "      DotGraph(" << d_name << ") added to DOT";
   LOG(INFO) << "      Start adding vertices to DOT";
   LOG(INFO) << "      inputs          : "
-  << d_vertexes[VertexTypes::input].size();
+            << d_vertexes[VertexTypes::input].size();
   LOG(INFO) << "      outputs         : "
-  << d_vertexes[VertexTypes::output].size();
+            << d_vertexes[VertexTypes::output].size();
   LOG(INFO) << "      subGraphOutputs : " << d_allSubGraphsOutputs.size();
   LOG(INFO) << "      gates           : "
-  << d_vertexes[VertexTypes::gate].size();
+            << d_vertexes[VertexTypes::gate].size();
   LOG(INFO) << "      constants       : "
-  << d_vertexes[VertexTypes::constant].size();
+            << d_vertexes[VertexTypes::constant].size();
 #endif
   for (const auto &eachVertex:
        {d_vertexes[VertexTypes::input], d_vertexes[VertexTypes::output],
