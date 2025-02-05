@@ -329,8 +329,6 @@ protected:
 
   };
 
-  static std::vector<Gates> d_logicElements;
-
   static std::pair<std::string, Gates> stringToGate[8];
 
   static std::pair<VertexTypes, std::string_view> vertexToString[5];
