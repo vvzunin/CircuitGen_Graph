@@ -2,7 +2,9 @@
 
 #include <gtest/gtest.h>
 
+#ifdef LOGFLAG
 #include "easylogging++Init.hpp"
+#endif
 
 TEST(AllocatorTests, AllocateMethodTooBigStruct) {
   MultiLinearAllocator allocator(196, 128);
@@ -12,7 +14,7 @@ TEST(AllocatorTests, AllocateMethodTooBigStruct) {
   };
 
   BigStruct *ptr = allocator.allocate<BigStruct>();
-  CHECK_EQ(ptr, nullptr);
+  EXPECT_EQ(ptr, nullptr);
 }
 TEST(AllocatorTests, AllocateMethodSmallStruct) {
   MultiLinearAllocator allocator(196, 128);
@@ -22,7 +24,7 @@ TEST(AllocatorTests, AllocateMethodSmallStruct) {
   };
 
   SmallStruct *ptr1 = allocator.allocate<SmallStruct>();
-  CHECK_NE(ptr1, nullptr);
+  EXPECT_NE(ptr1, nullptr);
   ptr1 = allocator.allocate<SmallStruct>();
-  CHECK_EQ(ptr1, nullptr);
+  EXPECT_EQ(ptr1, nullptr);
 }

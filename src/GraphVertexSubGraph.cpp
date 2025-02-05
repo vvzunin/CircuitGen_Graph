@@ -5,7 +5,9 @@
 
 #include <CircuitGenGraph/GraphVertex.hpp>
 
+#ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
+#endif
 
 GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
                                          GraphPtr i_baseGraph) :
@@ -32,8 +34,10 @@ void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
   }
   d_needUpdate = 2;
   for (VertexPtr vert: d_subGraph->getVerticesByType(VertexTypes::output)) {
-    // LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
-    // << vert->getTypeName() << ")";
+#ifdef LOGFLAG
+    LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
+              << vert->getTypeName() << ")";
+#endif
     vert->updateLevel(i_recalculate, tab + "  ");
   }
   d_needUpdate = 1;
@@ -228,6 +232,7 @@ std::vector<VertexPtr> GraphVertexSubGraph::getOuterInputsByOutputBuffer(
   return inputs;
 }
 
+#ifdef LOGFLAG
 void GraphVertexSubGraph::log(el::base::type::ostream_t &os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
@@ -237,3 +242,4 @@ void GraphVertexSubGraph::log(el::base::type::ostream_t &os) const {
   os << "Vertex Hash: " << d_hashed;
   os << *d_subGraph;
 }
+#endif

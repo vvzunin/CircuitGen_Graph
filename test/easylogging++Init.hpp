@@ -1,3 +1,5 @@
+#ifdef LOGFLAG
+
 #include "easyloggingpp/easylogging++.h"
 INITIALIZE_EASYLOGGINGPP
 
@@ -14,3 +16,5 @@ void initLogging(std::string testName, std::string subtestName) {
   el::Loggers::addFlag(el::LoggingFlag::ColoredTerminalOutput);
   // LOG(INFO) << "Logging started\n\n";
 }
+
+#endif

@@ -28,11 +28,13 @@ add_link_options(-fsanitize=address)
 
 enable_testing()
 
-configure_file(
-  ../easylogging++.conf
-  easylogging++.conf
-  COPYONLY
-)
+if(ENABLE_LOGGING)
+  configure_file(
+    ../easylogging++.conf
+    easylogging++.conf
+    COPYONLY
+  )
+endif()
 
 # ---- Tests ----
 
@@ -43,10 +45,13 @@ function(add_new_test name)
   )
 
   target_link_libraries(CircuitGenGraph_test_${name} PRIVATE GTest::gtest_main)
-  target_link_libraries(CircuitGenGraph_test_${name} PRIVATE CircuitGenGraph::CircuitGenGraph easylogging++)
+  target_link_libraries(CircuitGenGraph_test_${name} PRIVATE CircuitGenGraph::CircuitGenGraph)
+
+  if(ENABLE_LOGGING)
+    target_link_libraries(CircuitGenGraph_test_${name} PRIVATE easylogging++)
+  endif()
 
   if(ENABLE_COVERAGE)
-    message(STATUS "Enabling coverage for test targets")
     target_compile_options(CircuitGenGraph_test_${name} PRIVATE -fprofile-arcs -ftest-coverage)
     target_link_options(CircuitGenGraph_test_${name} PRIVATE -fprofile-arcs -ftest-coverage)
   endif()
@@ -60,7 +65,7 @@ function(add_new_test name)
   add_test(NAME ${name} COMMAND CircuitGenGraph_test_${name})
 endfunction()
 
-# add_new_test(GraphVertexConstantTests)
+add_new_test(GraphVertexConstantTests)
 # add_new_test(GraphVertexGatesTests)
 # add_new_test(GraphVertexInputTests)
 # add_new_test(GraphVertexOutputTests)

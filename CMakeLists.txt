@@ -38,6 +38,11 @@ set(PUBLIC_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
 )
 
+option(ENABLE_LOGGING "Enable logging" OFF)
+if (ENABLE_LOGGING)
+  add_compile_definitions(LOGFLAG)
+endif()
+
 if(BUILD_SHARED_LIBS)
   add_library(${PROJECT_NAME} SHARED ${SOURCES})
 else()
@@ -48,11 +53,13 @@ add_library(
   CircuitGenGraph::CircuitGenGraph ALIAS
   ${PROJECT_NAME})
 
-add_library(
-  easylogging++ STATIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.h
-)
+if(ENABLE_LOGGING)
+  add_library(
+    easylogging++ STATIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.h
+  )
+endif()
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
@@ -72,10 +79,12 @@ endif()
 
 include(GNUInstallDirs)
 
-target_link_libraries(
-  ${PROJECT_NAME} PUBLIC
-  easylogging++
-)
+if(ENABLE_LOGGING)
+  target_link_libraries(
+    ${PROJECT_NAME} PUBLIC
+    easylogging++
+  )
+endif()
 
 find_program(CLANG_TIDY NAMES clang-tidy)
 
@@ -130,18 +139,35 @@ set_target_properties(
 
 include(cmake/utils.cmake)
 
-install(TARGETS ${PROJECT_NAME} easylogging++
-  EXPORT "${PROJECT_NAME}Targets"
+if(ENABLE_LOGGING)
+  message(STATUS "Logs enabled")
+  install(TARGETS ${PROJECT_NAME} easylogging++
+    EXPORT "${PROJECT_NAME}Targets"
 
-  # these get default values from GNUInstallDirs, no need to set them
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} # bin
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} # lib
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} # lib
+    # these get default values from GNUInstallDirs, no need to set them
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} # bin
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} # lib
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} # lib
 
-  # except for public headers, as we want them to be inside a library folder
-  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} # include/SomeLibrary
-  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} # include
-)
+    # except for public headers, as we want them to be inside a library folder
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} # include/SomeLibrary
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} # include
+  )
+else()
+  message(STATUS "Logs disabled")
+  install(TARGETS ${PROJECT_NAME}
+    EXPORT "${PROJECT_NAME}Targets"
+
+    # these get default values from GNUInstallDirs, no need to set them
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} # bin
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} # lib
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} # lib
+
+    # except for public headers, as we want them to be inside a library folder
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} # include/SomeLibrary
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} # include
+  )
+endif()
 
 # generate and install export file
 install(EXPORT "${PROJECT_NAME}Targets"

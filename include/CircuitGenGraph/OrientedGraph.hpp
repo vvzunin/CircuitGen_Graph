@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <atomic>
 #include <ctime>
 #include <iomanip>
@@ -16,7 +17,9 @@
 #include <CircuitGenGraph/GraphMemory.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
+#ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
+#endif
 
 // TODO: Добавить проверку на имена файлов при доблении новых вершин
 
@@ -74,10 +77,15 @@ class GraphVertexBase; // Проблема циклического опреде
 /// the inner map maps gate types to the count of edges between them.
 /// @param d_settings Shared pointer to DefaultSettings instance
 
-class OrientedGraph :
-    public GraphMemory,
-    public std::enable_shared_from_this<OrientedGraph>,
-    public el::Loggable {
+// clang-format off
+class OrientedGraph
+    : public GraphMemory
+    , public std::enable_shared_from_this<OrientedGraph>
+#ifdef LOGFLAG
+    , public el::Loggable
+#endif
+{
+  // clang-format on
 public:
   OrientedGraph(const std::string &i_name = "",
                 size_t buffer_size = DEFAULT_BUF,
@@ -461,7 +469,9 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
+#ifdef LOGFLAG
   virtual void log(el::base::type::ostream_t &os) const;
+#endif
 
 protected:
   /* memory management block */

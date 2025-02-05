@@ -2,7 +2,9 @@
 
 #include <CircuitGenGraph/GraphVertex.hpp>
 
+#ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
+#endif
 
 GraphVertexGates::GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph) :
     GraphVertexBase(VertexTypes::gate, i_baseGraph) {
@@ -50,7 +52,11 @@ char GraphVertexGates::updateValue() {
           table = tableXnor.at(d_value);
           break;
         default:
+#ifdef LOGFLAG
           LOG(ERROR) << "Error" << std::endl;
+#else
+          std::cerr << "Error" << std::endl;
+#endif
       }
       ptr = d_inConnections.at(i);
       d_value = table.at(ptr->getValue());
@@ -122,7 +128,11 @@ std::string GraphVertexGates::getVerilogString() const {
 
       s += " " + VertexUtils::gateToString(d_gate) + " " + name;
       if (d_gate == GateDefault)
+#ifdef LOGFLAG
         LOG(ERROR) << "Error" << std::endl;
+#else
+        std::cerr << "Error" << std::endl;
+#endif
     }
 
     if ((d_gate == Gates::GateNand) || (d_gate == Gates::GateNor) ||
@@ -135,7 +145,11 @@ std::string GraphVertexGates::getVerilogString() const {
 
 std::string GraphVertexGates::toVerilog() const {
   if (!d_inConnections.size()) {
+#ifdef LOGFLAG
     LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
+#else
+    std::cerr << "TODO: delete empty vertices: " << d_name << std::endl;
+#endif
     return "";
   }
   std::string basic = "assign " + getName() + " = ";
@@ -166,7 +180,11 @@ std::string GraphVertexGates::toVerilog() const {
 
 DotReturn GraphVertexGates::toDOT() {
   if (!d_inConnections.size()) {
+#ifdef LOGFLAG
     LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
+#else
+    std::cerr << "TODO: delete empty vertices: " << d_name << std::endl;
+#endif
     return {};
   }
 
@@ -191,6 +209,7 @@ bool GraphVertexGates::isSubgraphBuffer() const {
   return d_inConnections.front()->getType() == VertexTypes::subGraph;
 }
 
+#ifdef LOGFLAG
 void GraphVertexGates::log(el::base::type::ostream_t &os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
@@ -203,3 +222,4 @@ void GraphVertexGates::log(el::base::type::ostream_t &os) const {
   os << "Vertex Level: " << d_level << "\n";
   os << "Vertex Hash: " << d_hashed << "\n";
 }
+#endif

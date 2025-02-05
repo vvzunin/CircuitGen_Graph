@@ -13,7 +13,9 @@
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
+#ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
+#endif
 
 std::atomic_size_t OrientedGraph::d_countGraph = 0;
 std::atomic_size_t OrientedGraph::d_countNewGraphInstance = 0;
@@ -101,13 +103,17 @@ bool OrientedGraph::needToUpdateLevel() const {
 }
 
 void OrientedGraph::updateLevels(bool i_recalculate) {
-  // LOG(INFO) << "Starting level update. Wait.";
-  // LOG(INFO) << "Outputs for update: "
-  // << d_vertexes.at(VertexTypes::output).size();
+#ifdef LOGFLAG
+  LOG(INFO) << "Starting level update. Wait.";
+  LOG(INFO) << "Outputs for update: "
+            << d_vertexes.at(VertexTypes::output).size();
+#endif
   int counter = 0;
   for (VertexPtr vert: d_vertexes.at(VertexTypes::output)) {
-    // LOG(INFO) << counter++ << ". " << vert->getRawName() << " ("
-    // << vert->getTypeName() << ")";
+#ifdef LOGFLAG
+    LOG(INFO) << counter++ << ". " << vert->getRawName() << " ("
+              << vert->getTypeName() << ")";
+#endif
     vert->updateLevel(i_recalculate, "    ");
   }
 }
@@ -455,7 +461,11 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
   std::ofstream fileStream(correctPath);
 
   if (!fileStream) {
+#ifdef LOGFLAG
     LOG(ERROR) << "cannot write file to " << correctPath;
+#else
+    std::cerr << "cannot write file to " << correctPath << std::endl;
+#endif
     return std::make_pair(false, "");
   }
 
@@ -568,10 +578,11 @@ DotReturn OrientedGraph::getGraphDotInstance() {
   uint64_t allCount =
       d_subGraphsInputsPtr[d_currentParentGraph.lock()->d_graphID].size();
   if (*dotCount == allCount) {
-    // LOG(INFO) << "        Incorrect getGraphDotInstance call. All modules of
-    // "
-    //  + d_currentParentGraph.lock()->getName() + " ("
-    //  + std::to_string(allCount) + ") were already parsed";
+#ifdef LOGFLAG
+    LOG(INFO) << "Incorrect getGraphDotInstance call. All modules of" +
+                     d_currentParentGraph.lock()->getName() + " (" +
+                     std::to_string(allCount) + ") were already parsed";
+#endif
     throw std::out_of_range(
         "Incorrect getGraphDotInstance call. All modules of " +
         d_currentParentGraph.lock()->getName() + " (" +
@@ -597,17 +608,19 @@ DotReturn OrientedGraph::getGraphDotInstance() {
 
 DotReturn OrientedGraph::toDOT() {
   DotReturn dot = {{DotTypes::DotGraph, {{"name", d_name}}}};
-  // LOG(INFO) << "      DotGraph(" << d_name << ") added to DOT";
-  // LOG(INFO) << "      Start adding vertices to DOT";
-  // LOG(INFO) << "      inputs          : "
-  // << d_vertexes[VertexTypes::input].size();
-  // LOG(INFO) << "      outputs         : "
-  // << d_vertexes[VertexTypes::output].size();
-  // LOG(INFO) << "      subGraphOutputs : " << d_allSubGraphsOutputs.size();
-  // LOG(INFO) << "      gates           : "
-  // << d_vertexes[VertexTypes::gate].size();
-  // LOG(INFO) << "      constants       : "
-  // << d_vertexes[VertexTypes::constant].size();
+#ifdef LOGFLAG
+  LOG(INFO) << "      DotGraph(" << d_name << ") added to DOT";
+  LOG(INFO) << "      Start adding vertices to DOT";
+  LOG(INFO) << "      inputs          : "
+            << d_vertexes[VertexTypes::input].size();
+  LOG(INFO) << "      outputs         : "
+            << d_vertexes[VertexTypes::output].size();
+  LOG(INFO) << "      subGraphOutputs : " << d_allSubGraphsOutputs.size();
+  LOG(INFO) << "      gates           : "
+            << d_vertexes[VertexTypes::gate].size();
+  LOG(INFO) << "      constants       : "
+            << d_vertexes[VertexTypes::constant].size();
+#endif
   for (const auto &eachVertex:
        {d_vertexes[VertexTypes::input], d_vertexes[VertexTypes::output],
         d_vertexes[VertexTypes::gate], d_vertexes[VertexTypes::constant]}) {
@@ -669,7 +682,9 @@ std::pair<bool, std::string> OrientedGraph::toDOT(std::string i_path,
                                                   std::string i_filename) {
   using namespace AuxMethods;
   if (d_alreadyParsedDot && d_isSubGraph) {
-    // LOG(INFO) << "getGraphDotInstance()";
+#ifdef LOGFLAG
+    LOG(INFO) << "getGraphDotInstance()";
+#endif
     return std::make_pair(true, dotReturnToString(getGraphDotInstance()));
   }
   updateLevels();
@@ -686,7 +701,11 @@ std::pair<bool, std::string> OrientedGraph::toDOT(std::string i_path,
   std::ofstream fileStream(correctPath);
 
   if (!fileStream) {
+#ifdef LOGFLAG
     LOG(ERROR) << "cannot write file to " << path;
+#else
+    std::cerr << "cannot write file to " << path << std::endl;
+#endif
     return std::make_pair(false, "");
   }
 
@@ -1186,6 +1205,7 @@ void OrientedGraph::dfs(VertexPtr i_startVertex,
   }
 }
 
+#ifdef LOGFLAG
 void OrientedGraph::log(el::base::type::ostream_t &osStream) const {
   //   osStream << "\n";
   //   osStream << "Graph Name: " << d_name << "\n";
@@ -1256,3 +1276,4 @@ void OrientedGraph::log(el::base::type::ostream_t &osStream) const {
   //     osStream << *subGraph;
   //   }
 }
+#endif

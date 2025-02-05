@@ -4,7 +4,9 @@
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
+#ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
+#endif
 
 std::string VertexUtils::gateToString(Gates i_type) {
   switch (i_type) {
@@ -129,8 +131,10 @@ void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
   }
   d_needUpdate = 2;
   for (VertexPtr vert: d_inConnections) {
-    // LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
-    // << vert->getTypeName() << ")";
+#ifdef LOGLFLAG
+    LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
+              << vert->getTypeName() << ")";
+#endif
     vert->updateLevel(i_recalculate, tab + "  ");
     d_level = (vert->getLevel() >= d_level) ? vert->getLevel() + 1 : d_level;
   }
@@ -236,7 +240,11 @@ bool GraphVertexBase::removeVertexToOutConnections(VertexPtr i_vert) {
 
 std::string GraphVertexBase::getVerilogInstance() {
   if (!d_inConnections.size()) {
+#ifdef LOGFLAG
     LOG(ERROR) << "TODO: delete empty vertex instance: " << d_name << std::endl;
+#else
+    std::cerr << "TODO: delete empty vertex instance: " << std::endl;
+#endif
     return "";
   }
 
@@ -259,6 +267,7 @@ GraphVertexBase::toDOT() {
   return {};
 }
 
+#ifdef LOGFLAG
 void GraphVertexBase::log(el::base::type::ostream_t &os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
@@ -268,6 +277,7 @@ void GraphVertexBase::log(el::base::type::ostream_t &os) const {
   os << "Vertex Level: " << d_level << "\n";
   os << "Vertex Hash: " << d_hashed << "\n";
 }
+#endif
 
 std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex) {
   stream << vertex.toVerilog();

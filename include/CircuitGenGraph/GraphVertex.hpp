@@ -9,7 +9,9 @@
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
+#ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
+#endif
 
 /// @file GraphVertex.hpp
 /// TODO: Maybe Description some virtual methods for Graph's classes,
@@ -66,7 +68,9 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
+#ifdef LOGFLAG
   virtual void log(el::base::type::ostream_t &os) const override;
+#endif
 
 protected:
   GraphVertexInput(VertexTypes i_type);
@@ -105,7 +109,9 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
+#ifdef LOGFLAG
   virtual void log(el::base::type::ostream_t &os) const override;
+#endif
 
 private:
 };
@@ -172,7 +178,9 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
+#ifdef LOGFLAG
   virtual void log(el::base::type::ostream_t &os) const override;
+#endif
 
 private:
   GraphPtr d_subGraph;
@@ -213,7 +221,9 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
+#ifdef LOGFLAG
   virtual void log(el::base::type::ostream_t &os) const override;
+#endif
 
 private:
 };
@@ -285,7 +295,9 @@ public:
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
+#ifdef LOGFLAG
   virtual void log(el::base::type::ostream_t &os) const override;
+#endif
 
 private:
   Gates d_gate;

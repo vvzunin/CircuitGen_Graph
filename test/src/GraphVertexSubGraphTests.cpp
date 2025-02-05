@@ -5,7 +5,9 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
 
+#ifdef LOGFLAG
 #include "easylogging++Init.hpp"
+#endif
 
 GraphPtr memoryOwnerSubGr = std::make_shared<OrientedGraph>();
 
@@ -111,7 +113,9 @@ TEST(TestToVerilog, TestReturnPairCreateCorrectFile) {
   EXPECT_EQ(subGraph1.toVerilog(std::filesystem::current_path()).second, "");
   std::string loadFile = loadStringFile(curPath + '/' + fileName);
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
-  // LOG(INFO) << loadFile;
+#ifdef LOGFLAG
+  LOG(INFO) << loadFile;
+#endif
   EXPECT_EQ(loadFile, "module testGraph(\n"
                       "  \n"
                       "  );\n"

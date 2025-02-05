@@ -1,7 +1,9 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
 
+#ifdef LOGFLAG
 #include "easylogging++Init.hpp"
+#endif
 
 /*
   Need to add another UpdateValueTest
@@ -11,8 +13,7 @@
 GraphPtr memoryOwnerGateGr = std::make_shared<OrientedGraph>();
 
 TEST(TestConstructorWithoutIName, WithoutDefaultGatesParametrs) {
-  VertexPtr gate = memoryOwnerGateGr->create<GraphVertexGates>(
-      Gates::GateAnd, memoryOwnerGateGr);
+  VertexPtr gate = memoryOwnerGateGr->addGate(Gates::GateAnd);
   std::string graphNum = std::to_string(0);
   EXPECT_EQ(gate->getType(), VertexTypes::gate);
   EXPECT_EQ(gate->getTypeName(), "gate");
@@ -37,8 +38,7 @@ TEST(TestConstructorWithoutIName, WithDefaultGatesParametrs) {
 }
 
 TEST(TestConstructorWithIName, WithoutDefaultGatesParametrs) {
-  VertexPtr gate = memoryOwnerGateGr->create<GraphVertexGates>(
-      Gates::GateAnd, "Anything", memoryOwnerGateGr);
+  VertexPtr gate = memoryOwnerGateGr->addGate(Gates::GateAnd, "Anything");
   EXPECT_EQ(gate->getBaseGraph().lock(), memoryOwnerGateGr);
   EXPECT_EQ(gate->getType(), VertexTypes::gate);
   EXPECT_EQ(gate->getTypeName(), "gate");
