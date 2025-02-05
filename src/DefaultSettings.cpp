@@ -29,10 +29,6 @@ std::pair<std::string, Gates> DefaultSettings::stringToGate[] = {
     {"nor", Gates::GateNor}, {"not", Gates::GateNot},   {"buf", Gates::GateBuf},
     {"xor", Gates::GateXor}, {"xnor", Gates::GateXnor}};
 
-std::vector<Gates> DefaultSettings::d_logicElements = {
-    Gates::GateAnd, Gates::GateNand, Gates::GateOr,  Gates::GateNor,
-    Gates::GateXor, Gates::GateXnor, Gates::GateNot, Gates::GateBuf};
-
 /* end of static variable values declaration */
 
 std::shared_ptr<DefaultSettings>
@@ -74,18 +70,22 @@ DefaultSettings::getLogicOperation(const std::string &i_op) {
 }
 
 std::vector<Gates> DefaultSettings::getLogicOperationsKeys() {
-  return d_logicElements;
+  static std::vector<Gates> logicElements = {
+      Gates::GateAnd, Gates::GateNand, Gates::GateOr,  Gates::GateNor,
+      Gates::GateXor, Gates::GateXnor, Gates::GateNot, Gates::GateBuf};
+  return logicElements;
 }
 
 std::pair<std::vector<bool>, std::vector<Gates>>
 DefaultSettings::getLogicOperationsWithGates() {
   std::vector<bool> oneGate;
 
-  for (const auto &key: d_logicElements) {
+  auto &&res = getLogicOperationsKeys();
+  for (const auto &key: res) {
     oneGate.push_back(key == Gates::GateBuf || key == Gates::GateNot);
   }
 
-  return std::make_pair(oneGate, d_logicElements);
+  return std::make_pair(oneGate, res);
 }
 
 std::string_view DefaultSettings::fromOperationsToHierarchy(int32_t key) const {
