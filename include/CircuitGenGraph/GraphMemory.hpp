@@ -113,6 +113,7 @@ public:
         size_t buf_size = DEFAULT_BUF,
         size_t chunk_size = CHUNK_SIZE)
       : d_vertexMemory(buf_size, chunk_size)
+      , d_spanMemory(buf_size, chunk_size)
       , d_strings {&d_stringMemory}
   {}
 
@@ -147,10 +148,19 @@ public:
     return d_vertexMemory.allocate<T>();
   }
 
+  /// @brief allocates memory using span allocator
+  /// @tparam T type of allocated object
+  /// @return pointer to allocated object
+  template<typename T>
+  T *allocateSpan() {
+    return d_spanMemory.allocate<T>();
+  }
+
 private:
   /// @brief allocator for vertices
   MultiLinearAllocator d_vertexMemory;
-
+  /// @brief allocator for span memory
+  MultiLinearAllocator d_spanMemory;
   /// @brief resource for memory set without deallocations
   std::pmr::monotonic_buffer_resource d_stringMemory;
   /// @brief set with all vertices names

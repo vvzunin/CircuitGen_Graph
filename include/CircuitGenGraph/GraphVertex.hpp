@@ -8,6 +8,7 @@
 #include <vector>
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
+#include <CircuitGenGraph/span.hpp>
 
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
@@ -304,3 +305,20 @@ private:
   // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых
   // логических операций.
 };
+
+/// class GraphVertexDataBus Represents a data bus
+class GraphVertexDataBus : public GraphVertexBase {
+  public:
+      GraphVertexDataBus(span<VertexPtr> i_vertices, GraphPtr i_baseGraph, const VertexTypes i_type = VertexTypes::dataBus);
+      GraphVertexDataBus(span<VertexPtr> i_vertices, std::string_view i_name, GraphPtr i_baseGraph, const VertexTypes i_type = VertexTypes::dataBus);
+  
+      virtual char updateValue() override;
+      virtual void updateLevel(bool i_recalculate = false, std::string tab = "") override;
+      GraphVertexDataBus slice(size_t startBit, size_t endBit) const;
+      GraphVertexDataBus::VertexPtr operator[](size_t index) const;
+      DotReturn toDOT() override;
+  
+  private:
+      span<VertexPtr> d_vertices;
+      GraphMemory& d_memory;
+  };
