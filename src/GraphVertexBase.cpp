@@ -97,7 +97,7 @@ VertexTypes GraphVertexBase::getType() const {
 }
 
 std::string GraphVertexBase::getTypeName() const {
-  return DefaultSettings::parseVertexToString(d_type);
+  return GraphUtils::parseVertexToString(d_type);
 }
 
 void GraphVertexBase::setName(const std::string_view i_name) {
@@ -272,7 +272,7 @@ void GraphVertexBase::log(el::base::type::ostream_t &os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
-  os << "Vertex Type: " << DefaultSettings::parseVertexToString(d_type) << "\n";
+  os << "Vertex Type: " << GraphUtils::parseVertexToString(d_type) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
   os << "Vertex Hash: " << d_hashed << "\n";

@@ -5,7 +5,7 @@
 #include <string>
 #include <tuple>
 
-#include <CircuitGenGraph/DefaultSettings.hpp>
+#include <CircuitGenGraph/GraphUtils.hpp>
 
 /// @file AuxiliaryMethods.hpp
 /// TODO: ToEnum

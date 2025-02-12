@@ -66,7 +66,7 @@ void GraphVertexConstant::log(el::base::type::ostream_t &os) const {
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
   os << "Vertex Type: "
-     << DefaultSettings::parseVertexToString(VertexTypes::constant) << "\n";
+     << GraphUtils::parseVertexToString(VertexTypes::constant) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << 0 << "\n";
   os << "Vertex Hash: "

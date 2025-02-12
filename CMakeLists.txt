@@ -24,7 +24,7 @@ set(SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexOutput.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexSubGraph.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/OrientedGraph.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultSettings.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphUtils.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultAuxiliaryMethods.cpp
 )
 
@@ -33,7 +33,7 @@ set(PUBLIC_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertex.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertexBase.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/OrientedGraph.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/DefaultSettings.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphUtils.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/DefaultAuxiliaryMethods.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
 )
