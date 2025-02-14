@@ -527,7 +527,7 @@ private:
   std::map<size_t, std::vector<std::vector<VertexPtr>>> d_subGraphsInputsPtr;
 
   std::set<GraphPtr> d_subGraphs;
-  std::array<std::vector<VertexPtr>, 5> d_vertexes;
+  std::array<std::vector<VertexPtr>, output + 1> d_vertexes;
 
   static std::atomic_size_t d_countGraph;
 

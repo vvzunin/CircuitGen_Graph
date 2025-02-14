@@ -20,11 +20,11 @@
 
 enum VertexTypes : uint8_t {
   input = 0,    ///  input vertex
-  output = 4,   ///  output vertex
+  output = 5,   ///  output vertex
   constant = 1, /// constant vertex
   gate = 2,     /// vertex representing a logical element
-  subGraph = 3,  /// subgraph that makes up the vertex
-  dataBus = 5
+  subGraph = 3, /// subgraph that makes up the vertex
+  dataBus = 4
 };
 
 /// @brief Gates

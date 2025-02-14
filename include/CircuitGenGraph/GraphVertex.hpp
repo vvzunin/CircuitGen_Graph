@@ -308,16 +308,21 @@ private:
 
 /// class GraphVertexDataBus Represents a data bus
 class GraphVertexDataBus : public GraphVertexBase {
-  public:
-      GraphVertexDataBus(tcb::span<VertexPtr> i_vertices, GraphPtr i_baseGraph, const VertexTypes i_type = VertexTypes::dataBus);
-      GraphVertexDataBus(tcb::span<VertexPtr> i_vertices, std::string_view i_name, GraphPtr i_baseGraph, const VertexTypes i_type = VertexTypes::dataBus);
-      GraphVertexDataBus(tcb::span<VertexPtr> i_vertices, const GraphVertexDataBus& i_vertexDataBus);
-      virtual char updateValue() override;
-      virtual void updateLevel(bool i_recalculate = false, std::string tab = "") override;
-      GraphVertexDataBus slice(size_t startBit, size_t endBit) const;
-      GraphVertexDataBus::VertexPtr operator[](size_t index) const;
-      DotReturn toDOT() override;
-  
-  private:
-      tcb::span<VertexPtr> d_vertices;
-  };
+public:
+  GraphVertexDataBus(tcb::span<VertexPtr> i_vertices, GraphPtr i_baseGraph,
+                     const VertexTypes i_type = VertexTypes::dataBus);
+  GraphVertexDataBus(tcb::span<VertexPtr> i_vertices, std::string_view i_name,
+                     GraphPtr i_baseGraph,
+                     const VertexTypes i_type = VertexTypes::dataBus);
+  GraphVertexDataBus(tcb::span<VertexPtr> i_vertices,
+                     const GraphVertexDataBus &i_vertexDataBus);
+  virtual char updateValue() override;
+  virtual void updateLevel(bool i_recalculate = false,
+                           std::string tab = "") override;
+  GraphVertexDataBus slice(size_t startBit, size_t endBit) const;
+  GraphVertexDataBus::VertexPtr operator[](size_t index) const;
+  DotReturn toDOT() override;
+
+private:
+  tcb::span<VertexPtr> d_vertices;
+};

@@ -113,7 +113,6 @@ public:
         size_t buf_size = DEFAULT_BUF,
         size_t chunk_size = CHUNK_SIZE)
       : d_vertexMemory(buf_size, chunk_size)
-      , d_spanMemory(&d_spanMemory)
       , d_strings {&d_stringMemory}
   {}
 
