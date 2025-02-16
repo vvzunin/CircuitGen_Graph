@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include <CircuitGenGraph/DefaultSettings.hpp>
+#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/enums.hpp>
 #include <CircuitGenGraph/GraphMemory.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>

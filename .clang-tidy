@@ -1,5 +1,9 @@
+HeaderFilterRegex: ((include|src|test)/*)
+ExcludeHeaderFilterRegex: (*/build/*)
 Checks: >
     -*,
     llvm-*,
     clang-analyzer-*,
+    readability-qualified-auto,
+    -llvm-qualified-auto,
     -llvm-header-guard

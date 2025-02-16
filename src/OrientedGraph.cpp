@@ -35,7 +35,7 @@ OrientedGraph::OrientedGraph(const std::string &i_name, size_t buffer_size,
     d_name = i_name;
 
   // filling edges
-  for (auto cur_gate: d_settings->getLogicOperationsKeys()) {
+  for (auto cur_gate: GraphUtils::getLogicOperationsKeys()) {
     d_edgesGatesCount[cur_gate] = d_gatesCount;
   }
 
@@ -740,7 +740,9 @@ void OrientedGraph::parseVertexToGraphML(
       return;
     case VertexTypes::input:
     case VertexTypes::output:
-      vertexKindName = DefaultSettings::parseVertexToString(vertexType);
+      vertexKindName = GraphUtils::parseVertexToString(vertexType);
+      break;
+    default:
       break;
   }
 
@@ -751,7 +753,9 @@ void OrientedGraph::parseVertexToGraphML(
         vertexKindName = std::string(1, v->getValue());
         break;
       case VertexTypes::gate:
-        vertexKindName = DefaultSettings::parseGateToString(v->getGate());
+        vertexKindName = GraphUtils::parseGateToString(v->getGate());
+        break;
+      default:
         break;
     }
 
@@ -1229,7 +1233,7 @@ void OrientedGraph::log(el::base::type::ostream_t &osStream) const {
   //     if (pair.second.size() != 0) {
   //       flag = false;
   //       osStream << "\n\t" <<
-  //       DefaultSettings::parseVertexToString(pair.first); if (pair.first ==
+  //       GraphUtils::parseVertexToString(pair.first); if (pair.first ==
   //       VertexTypes::subGraph)
   //         osStream << "\t:\t" << pair.second.size();
   //       else
@@ -1245,7 +1249,7 @@ void OrientedGraph::log(el::base::type::ostream_t &osStream) const {
   //   for (const auto& pair : d_gatesCount) {
   //     if (pair.second != 0) {
   //       flag = false;
-  //       osStream << "\n\t" << DefaultSettings::parseGateToString(pair.first)
+  //       osStream << "\n\t" << GraphUtils::parseGateToString(pair.first)
   //       <<
   //       "\t:\t"
   //          << pair.second;
@@ -1262,9 +1266,9 @@ void OrientedGraph::log(el::base::type::ostream_t &osStream) const {
   //       if (inner_pair.second != 0) {
   //         flag = false;
   //         osStream << "\n\t" <<
-  //         DefaultSettings::parseGateToString(outer_pair.first)
+  //         GraphUtils::parseGateToString(outer_pair.first)
   //            << "\t-> " <<
-  //            DefaultSettings::parseGateToString(inner_pair.first)
+  //            GraphUtils::parseGateToString(inner_pair.first)
   //            << "\t:\t" << inner_pair.second;
   //       }
   //     }

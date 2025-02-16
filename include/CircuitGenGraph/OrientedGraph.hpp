@@ -12,7 +12,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include <CircuitGenGraph/DefaultSettings.hpp>
+#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/enums.hpp>
 #include <CircuitGenGraph/GraphMemory.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
@@ -75,7 +75,6 @@ class GraphVertexBase; // Проблема циклического опреде
 /// This map is used for quick counting of edges between different types of
 /// gates in the graph. It maps each gate type (Gates) to another map, where
 /// the inner map maps gate types to the count of edges between them.
-/// @param d_settings Shared pointer to DefaultSettings instance
 
 // clang-format off
 class OrientedGraph
@@ -538,7 +537,4 @@ private:
       {Gates::GateXor, 0}, {Gates::GateXnor, 0}};
   // used for quick edges of gate type count;
   std::map<Gates, std::map<Gates, size_t>> d_edgesGatesCount;
-
-  std::shared_ptr<DefaultSettings> d_settings =
-      DefaultSettings::getDefaultInstance("OrientedGraph");
 };
