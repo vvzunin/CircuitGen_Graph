@@ -121,10 +121,9 @@ TEST(TestUpdateValue, ReturnDValueIfDInConnectionsSizeZero) {
 // }
 
 // TEST(TestUpdateLevel, CorrectUpdate) {
-//   // TODO: Странный тест, все проверки для Input, а ожидается, что уровень не 0.
-//   GraphVertexInput input1(memoryOwnerInputGr);
-//   VertexPtr inputPtr1 = memoryOwnerInputGr->addInput();
-//   inputPtr1->setLevel(1);
+//   // TODO: Странный тест, все проверки для Input, а ожидается, что уровень не
+//   0. GraphVertexInput input1(memoryOwnerInputGr); VertexPtr inputPtr1 =
+//   memoryOwnerInputGr->addInput(); inputPtr1->setLevel(1);
 //   input1.addVertexToInConnections(inputPtr1);
 //   input1.updateLevel();
 //   EXPECT_EQ(input1.getLevel(), 0);
