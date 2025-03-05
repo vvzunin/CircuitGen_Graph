@@ -7,6 +7,8 @@
 
 #include <CircuitGenGraph/GraphUtils.hpp>
 
+#include "fmt/core.h"
+
 /// @file AuxiliaryMethods.hpp
 /// TODO: ToEnum
 /// TODO: if need LineReader
@@ -21,7 +23,7 @@
 /// TO DO: list the other functions
 /// </summary>
 
-namespace AuxMethods {
+namespace CircuitGenGraph::AuxMethods {
 
 std::string replacer(const std::string &i_s, const std::string &i_r);
 std::string dotReturnToString(DotReturn dot);
@@ -45,14 +47,10 @@ struct TuplePrinter<Tuple, 1> {
   }
 };
 
-template<class... Args>
-std::string format(const std::string &fmt, Args &&...args) {
-  std::stringstream ss;
-
-  const auto t = std::make_tuple(std::forward<Args>(args)...);
-
-  TuplePrinter<decltype(t), sizeof...(Args)>::print(fmt, ss, t);
-  return ss.str();
+template<typename... Args>
+auto format(Args &&...args)
+    -> decltype(fmt::format(std::forward<Args>(args)...)) {
+  return fmt::format(std::forward<Args>(args)...);
 }
 
-} // namespace AuxMethods
+} // namespace CircuitGenGraph::AuxMethods

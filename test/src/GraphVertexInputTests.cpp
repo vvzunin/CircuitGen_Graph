@@ -7,6 +7,8 @@
 #include "easylogging++Init.hpp"
 #endif
 
+using namespace CircuitGenGraph;
+
 /*
   Need to remake RemoveVertexToOutConnections
 */

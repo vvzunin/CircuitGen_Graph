@@ -26,6 +26,7 @@ set(SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/OrientedGraph.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphUtils.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultAuxiliaryMethods.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexSequential.cpp
 )
 
 set(PUBLIC_HEADERS
@@ -61,6 +62,14 @@ if(ENABLE_LOGGING)
   )
 endif()
 
+add_library(
+  fmt STATIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/core.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format-inl.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.cc
+)
+
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
@@ -83,7 +92,13 @@ if(ENABLE_LOGGING)
   target_link_libraries(
     ${PROJECT_NAME} PUBLIC
     easylogging++
+    fmt
   )
+else()
+target_link_libraries(
+  ${PROJECT_NAME} PUBLIC
+  fmt
+)
 endif()
 
 find_program(CLANG_TIDY NAMES clang-tidy)
@@ -141,7 +156,7 @@ include(cmake/utils.cmake)
 
 if(ENABLE_LOGGING)
   message(STATUS "Logs enabled")
-  install(TARGETS ${PROJECT_NAME} easylogging++
+  install(TARGETS ${PROJECT_NAME} easylogging++ fmt
     EXPORT "${PROJECT_NAME}Targets"
 
     # these get default values from GNUInstallDirs, no need to set them
@@ -155,7 +170,7 @@ if(ENABLE_LOGGING)
   )
 else()
   message(STATUS "Logs disabled")
-  install(TARGETS ${PROJECT_NAME}
+  install(TARGETS ${PROJECT_NAME} fmt
     EXPORT "${PROJECT_NAME}Targets"
 
     # these get default values from GNUInstallDirs, no need to set them

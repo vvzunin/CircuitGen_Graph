@@ -11,6 +11,8 @@
 #include "easylogging++Init.hpp"
 #endif
 
+using namespace CircuitGenGraph;
+
 /*
   Need to add toVerilogTest, setCurrentParentTest,
     resetCountersTest, getGraphVerilogInstanceTest

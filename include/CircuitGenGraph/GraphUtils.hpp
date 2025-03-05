@@ -1,7 +1,7 @@
 #pragma once
 
-#include <array>
 #include <algorithm>
+#include <array>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -11,20 +11,65 @@
 
 /// @file GraphUtils.hpp
 
-/// @brief VertexTypes
-/// Enumeration of vertex types
+namespace CircuitGenGraph {
 
 #ifndef DotReturn
 #define DotReturn \
   std::vector<std::pair<DotTypes, std::map<std::string, std::string>>>
 #endif
 
+/// @brief VertexTypes
+/// Enumeration of vertex types
+
 enum VertexTypes : uint8_t {
   input = 0,    ///  input vertex
-  output = 4,   ///  output vertex
+  output = 6,   ///  output vertex
   constant = 1, /// constant vertex
   gate = 2,     /// vertex representing a logical element
-  subGraph = 3  /// subgraph that makes up the vertex
+  subGraph = 3, /// subgraph that makes up the vertex
+  dataBus = 4,
+  seuqential = 5
+};
+
+// CGG - CiruitGenGraph
+#define CGG_FF_TYPE(S, V) S = V, n##S = NEGEDGE | V
+
+/// @brief Types of all sequential cells being supported
+enum SequentialTypes : uint8_t {
+  EN = 1 << 0,
+  latch = EN,
+  SET = 1 << 1,
+  CLR = 1 << 2,
+  RST = 1 << 3,
+  ASYNC = 1 << 5,
+  NEGEDGE = 1 << 6,
+  // DEFAULT TYPES
+  CGG_FF_TYPE(ff, 1 << 4),
+
+  // ASYNC
+  CGG_FF_TYPE(affr, ASYNC | ff | RST),
+  CGG_FF_TYPE(affre, ASYNC | EN | RST),
+
+  // LATCHES
+  latchr = latch | RST,
+  latchc = latch | CLR,
+  latchs = latch | SET,
+  // COMBINED
+  latchrs = latch | RST | SET,
+  latchcs = latch | CLR | SET,
+
+  // FF
+  CGG_FF_TYPE(ffe, ff | EN),
+  CGG_FF_TYPE(ffr, ff | RST),
+  CGG_FF_TYPE(ffc, ff | CLR),
+  CGG_FF_TYPE(ffs, ff | SET),
+  // COMBINED
+  CGG_FF_TYPE(ffre, ff | EN | RST),
+  CGG_FF_TYPE(ffce, ff | EN | CLR),
+  CGG_FF_TYPE(ffse, ff | EN | SET),
+  CGG_FF_TYPE(ffrse, ff | EN | RST | SET),
+  CGG_FF_TYPE(ffcse, ff | EN | CLR | SET)
+
 };
 
 /// @brief Gates
@@ -293,3 +338,5 @@ static std::pair<Gates, std::string_view> gateToString[] = {
 static constexpr size_t d_hierarchySize = 11;
 
 } // namespace GraphUtils
+
+} // namespace CircuitGenGraph

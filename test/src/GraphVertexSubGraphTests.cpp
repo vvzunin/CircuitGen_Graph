@@ -5,6 +5,8 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
 
+using namespace CircuitGenGraph;
+
 #ifdef LOGFLAG
 #include "easylogging++Init.hpp"
 #endif

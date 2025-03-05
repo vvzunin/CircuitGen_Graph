@@ -7,21 +7,24 @@
 #include <string>
 #include <vector>
 
-#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/enums.hpp>
+
 #include <CircuitGenGraph/GraphMemory.hpp>
+#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
 #endif
 
+#define GraphPtr std::shared_ptr<CircuitGenGraph::OrientedGraph>
+#define GraphPtrWeak std::weak_ptr<CircuitGenGraph::OrientedGraph>
+
+#define VertexPtr CircuitGenGraph::GraphVertexBase *
+
+namespace CircuitGenGraph {
+
 class OrientedGraph;
-
-#define GraphPtr std::shared_ptr<OrientedGraph>
-#define GraphPtrWeak std::weak_ptr<OrientedGraph>
-
-#define VertexPtr GraphVertexBase *
 
 /// @brief VertexUtils
 /// Namespace containing utility functions for working with vertices
@@ -496,3 +499,5 @@ private:
 };
 
 std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex);
+
+} // namespace CircuitGenGraph

@@ -4,6 +4,8 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
+namespace CircuitGenGraph {
+
 std::string operator*(std::string a, unsigned int b) {
   std::string output = "";
   while (b--) {
@@ -84,3 +86,5 @@ std::string AuxMethods::dotReturnToString(DotReturn dot) {
 
   return s;
 }
+
+} // namespace CircuitGenGraph

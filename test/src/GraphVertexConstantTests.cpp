@@ -6,6 +6,7 @@
 #include "easylogging++Init.hpp"
 #endif
 
+using namespace CircuitGenGraph;
 using namespace AuxMethods;
 
 GraphPtr memoryOwnerConstGr = std::make_shared<OrientedGraph>();

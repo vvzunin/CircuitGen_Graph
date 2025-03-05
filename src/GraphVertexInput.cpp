@@ -6,6 +6,8 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
+namespace CircuitGenGraph {
+
 GraphVertexInput::GraphVertexInput(GraphPtr i_baseGraph,
                                    const VertexTypes i_type) :
     GraphVertexBase(i_type, i_baseGraph) {
@@ -66,3 +68,5 @@ void GraphVertexInput::log(el::base::type::ostream_t &os) const {
      << "\n";
 }
 #endif
+
+} // namespace CircuitGenGraph

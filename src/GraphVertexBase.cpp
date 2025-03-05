@@ -8,6 +8,8 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
+namespace CircuitGenGraph {
+
 std::string VertexUtils::gateToString(Gates i_type) {
   switch (i_type) {
     case Gates::GateNot:
@@ -39,6 +41,8 @@ std::string VertexUtils::vertexTypeToVerilog(VertexTypes i_type) {
       return "localparam";
     case VertexTypes::gate:
       return "wire";
+    case VertexTypes::seuqential:
+      return "reg";
     default:
       return "Not callable";
   }
@@ -55,6 +59,8 @@ std::string VertexUtils::vertexTypeToComment(VertexTypes i_type) {
       return "// Writing consts";
     case VertexTypes::gate:
       return "// Writing gates";
+      case VertexTypes::seuqential:
+        return "// Writing registers";
     default:
       return "// Not writable vertex type";
   }
@@ -283,3 +289,5 @@ std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex) {
   stream << vertex.toVerilog();
   return stream;
 }
+
+} // namespace CircuitGenGraph
