@@ -5,29 +5,28 @@
 #include <cassert>
 
 GraphVertexDataBus::GraphVertexDataBus(
-    tcb::span<VertexPtr> i_vertices, GraphPtr i_baseGraph,
-    const VertexTypes i_type = VertexTypes::dataBus) :
-    GraphVertexBase(i_type, i_baseGraph) {
+    tcb::span<VertexPtr> i_vertices, GraphPtr i_baseGraph) :
+    GraphVertexBase(VertexTypes::dataBus, i_baseGraph) {
   assert(!i_vertices.empty() && "Data bus cannot be empty");
 
   VertexTypes firstType = i_vertices.front()->getType();
+  assert(firstType != VertexTypes::subGraph && "Subgraph cannot be in the data bus");
   for (const auto& vertex : i_vertices) {
     assert(vertex->getType() == firstType && "All vertices in the bus must be of the same type");
-    assert(vertex->getType() != VertexTypes::subGraph && "Subgraph cannot be in the data bus");
   }
   tcb::span<VertexPtr> d_vertices = i_vertices;
 }
 
 GraphVertexDataBus::GraphVertexDataBus(
     tcb::span<VertexPtr> i_vertices, std::string_view i_name,
-    GraphPtr i_baseGraph, const VertexTypes i_type = VertexTypes::dataBus) :
-    GraphVertexBase(i_type, i_name, i_baseGraph) {
+    GraphPtr i_baseGraph) :
+    GraphVertexBase(VertexTypes::dataBus, i_name, i_baseGraph) {
   assert(!i_vertices.empty() && "Data bus cannot be empty");
 
   VertexTypes firstType = i_vertices.front()->getType();
+  assert(firstType != VertexTypes::subGraph && "Subgraph cannot be in the data bus");
   for (const auto& vertex : i_vertices) {
     assert(vertex->getType() == firstType && "All vertices in the bus must be of the same type");
-    assert(vertex->getType() != VertexTypes::subGraph && "Subgraph cannot be in the data bus");
   }
   tcb::span<VertexPtr> d_vertices = i_vertices;
 }
@@ -67,38 +66,63 @@ std::string GraphVertexDataBus::toVerilog(bool flag) const {
         verilogCode << vertex->toVerilog() << "\n";  // Вызов метода toVerilog для каждой вершины
     }
   } else {
-    // Если flag == false, генерируем одну строку для всех вершин
-    verilogCode << "assign ";  // Начинаем с присваивания
+    // Определяем тип всех вершин (все они одного типа, см. конструктор)
+    VertexTypes type = d_vertices.front()->getType();
+    std::string busName = getName();
+    size_t busWidth = d_vertices.size() - 1;
 
-    bool first = true;  // Флаг, чтобы не добавлять запятую перед первым элементом
-    for (size_t i = 0; i < d_vertices.size(); ++i) {
-      if (!first) verilogCode << ", ";  // Ставим запятую, если это не первая вершина
-      verilogCode << d_vertices[i]->toVerilog();  // Используем метод toVerilog для вершины
-      first = false;
+    switch (type) {
+      case VertexTypes::constant: {
+        verilogCode << "wire [" << busWidth << ":0] " << busName << ";\n";
+        verilogCode << "assign " << busName << " = " << busWidth + 1 << "'b";
+        for (const auto& vertex : d_vertices) {
+          // Приведение типа для константных вершин
+          auto* constantVertex = dynamic_cast<GraphVertexConstant*>(vertex);
+          if (constantVertex) {
+            verilogCode << constantVertex->getValue();
+          } else {
+            std::cerr << "Error: vertex is not a GraphVertexConstant" << std::endl;
+          }
+        }
+        verilogCode << ";\n";
+        break;
+      }
+
+      case VertexTypes::input:
+      case VertexTypes::output: {
+        verilogCode << VertexUtils::vertexTypeToVerilog(type) << " [" 
+                    << busWidth << ":0] " << busName << ";\n";
+
+        // Добавляем assign для output, если есть соединения
+        if (type == VertexTypes::output) {
+          for (size_t i = 0; i < d_vertices.size(); ++i) {
+            if (!d_vertices[i]->getInConnections().empty()) {
+              verilogCode << "assign " << busName << "[" << i << "] = " 
+                          << d_vertices[i]->getInConnections().back()->getName() << ";\n";
+            }
+          }
+        }
+        break;
+      }
     }
-    verilogCode << ";\n";  // Закрываем строку присваивания
   }
 
   return verilogCode.str();  // Возвращаем сформированный Verilog код
 }
 
+
 DotReturn GraphVertexDataBus::toDOT() {
-  DotReturn dot;  // Коллекция для хранения всех элементов графа в формате DOT
-
-  // Для каждой вершины вызываем её метод toDOT
+  DotReturn dot;
   for (size_t i = 0; i < d_vertices.size(); ++i) {
-    // Вызов метода toDOT для каждой вершины
     DotReturn vertexDot = d_vertices[i]->toDOT();  // Получаем DOT-данные для вершины
-
-    // Добавляем информацию о вершине в общий результат (если требуется дополнительная информация)
-    for (auto& v : vertexDot) {
-      v["index"] = std::to_string(i);  // Добавляем индекс вершины в данные (если нужно)
-      dot.push_back(v);  // Добавляем данные вершины в результат
+    for (auto& [type, data] : vertexDot) {  
+      data["index"] = std::to_string(i);  // Добавляем индекс в map
+      dot.emplace_back(type, std::move(data));  // Перемещаем обновленные данные в результат
     }
   }
-
-  return dot;  // Возвращаем собранные данные в формате DOT
+  return dot;
 }
+
 
 // char GraphVertexDataBus::updateValue() {
 //   // if (!d_vertices.empty()) {

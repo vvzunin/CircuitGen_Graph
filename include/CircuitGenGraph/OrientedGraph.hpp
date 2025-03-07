@@ -383,7 +383,7 @@ public:
 
   std::set<GraphPtr> getSubGraphs() const;
   std::set<GraphPtr> getSetSubGraphs() const;
-  std::array<std::vector<VertexPtr>, 5> getBaseVertexes() const;
+  std::array<std::vector<VertexPtr>, output + 1> getBaseVertexes() const;
   VertexPtr getVerticeByIndex(size_t idx) const;
 
   std::string getGraphVerilogInstance();

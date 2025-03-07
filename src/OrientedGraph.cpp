@@ -253,7 +253,7 @@ std::set<GraphPtr> OrientedGraph::getSubGraphs() const {
   return d_subGraphs;
 }
 
-std::array<std::vector<VertexPtr>, 5> OrientedGraph::getBaseVertexes() const {
+std::array<std::vector<VertexPtr>, output + 1> OrientedGraph::getBaseVertexes() const {
   return d_vertexes;
 }
 

@@ -152,7 +152,7 @@ public:
   /// @return pointer to allocated object
   template<typename T>
   T *allocateSpan() {
-    return d_spanMemory.allocate<T>();
+    return static_cast<T*>(d_spanMemory.allocate(sizeof(T), alignof(T)));
   }
 
 private:
