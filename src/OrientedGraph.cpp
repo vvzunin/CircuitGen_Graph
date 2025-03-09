@@ -212,7 +212,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
 /// @param i_type
 /// @param i_clk EN for latch and CLK for FF
 /// @param i_data what to write, D
-/// @param i_wire1 RST ot CLR or SET
+/// @param i_wire1 RST or CLR or SET
 /// @param i_wire2 SET or EN
 /// @param i_name
 /// @return
