@@ -1,11 +1,35 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
 
+#include <fstream>
+#include <sstream>
+
 #ifdef LOGFLAG
 #include "easylogging++Init.hpp"
 #endif
 
+#include "TestSeqData.hpp"
+
 using namespace CircuitGenGraph;
+
+inline void testFile(const std::string &fileName, std::string_view text) {
+  std::ifstream file(fileName);
+
+  ASSERT_TRUE(file.is_open()) << "Unable to open file: " << fileName;
+
+  std::string line;
+  // skip first two lines
+  for (int i = 0; i < 2 && std::getline(file, line); ++i)
+    ;
+
+  std::stringstream buffer;
+  buffer << file.rdbuf();
+
+  EXPECT_EQ(buffer.str(), text) << "Содержимое файла не совпадает с ожидаемым.";
+  file.close();
+  ASSERT_EQ(std::remove(fileName.c_str()), 0)
+      << "Не удалось удалить файл: " << fileName;
+}
 
 TEST(SequentialTests, TestSimpleTrigger) {
   GraphPtr graph = std::make_shared<OrientedGraph>();
@@ -14,13 +38,15 @@ TEST(SequentialTests, TestSimpleTrigger) {
   auto *seq = graph->addSequential(ff, clk, data, "q");
 
   EXPECT_EQ(seq->toVerilog(), "always @(posedge clk) begin\n"
-                              "    q <= data;\n"
-                              "  end\n");
+                              "\t\tq <= data;\n"
+                              "\tend\n");
 
   auto *out = graph->addOutput("res");
   graph->addEdge(seq, out);
 
-  auto strs = graph->toVerilog("../../", "testSeq1.v");
+  const std::string fileName = "testSeq1.v";
+  graph->toVerilog("./", fileName);
+  testFile(fileName, TestData::SEQ_1_TEST);
 }
 
 TEST(SequentialTests, TestSimpleLatch) {
@@ -30,13 +56,15 @@ TEST(SequentialTests, TestSimpleLatch) {
   auto *seq = graph->addSequential(latch, en, data, "q");
 
   EXPECT_EQ(seq->toVerilog(), "always @(*) begin\n"
-                              "    if (en) q <= data;\n"
-                              "  end\n");
+                              "\t\tif (en) q <= data;\n"
+                              "\tend\n");
 
   auto *out = graph->addOutput("res");
   graph->addEdge(seq, out);
 
-  auto strs = graph->toVerilog("../../", "testSeq2.v");
+  const std::string fileName = "testSeq2.v";
+  graph->toVerilog("./", fileName);
+  testFile(fileName, TestData::SEQ_2_TEST);
 }
 
 TEST(SequentialTests, TestFullTrigger) {
@@ -49,13 +77,16 @@ TEST(SequentialTests, TestFullTrigger) {
   auto *seq = graph->addSequential(ffrse, clk, data, rst, set, en, "q");
 
   EXPECT_EQ(seq->toVerilog(), "always @(posedge clk) begin\n"
-                              "    if (!rst) q <= 1'b0;\n"
-                              "    else if (set) q <= 1'b1;\n"
-                              "    else if (en) q <= data;\n"
-                              "  end\n");
+                              "\t\tif (!rst) q <= 1'b0;\n"
+                              "\t\telse if (set) q <= 1'b1;\n"
+                              "\t\telse if (en) q <= data;\n"
+                              "\tend\n");
 
   auto *out = graph->addOutput("res");
   graph->addEdge(seq, out);
 
-  auto strs = graph->toVerilog("../../", "testSeq3.v");
+  // graph->toDOT("../../", "testSeq3.dot");
+  const std::string fileName = "testSeq3.v";
+  graph->toVerilog("./", fileName);
+  testFile(fileName, TestData::SEQ_3_TEST);
 }

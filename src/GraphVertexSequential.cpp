@@ -1,10 +1,11 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 
-#include "fmt/core.h"
+#include <iostream>
 
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
 #endif
+#include "fmt/core.h"
 
 namespace CircuitGenGraph {
 
@@ -133,6 +134,26 @@ SequentialTypes GraphVertexSequential::getSeqType() const {
   return d_seqType;
 }
 
+VertexPtr GraphVertexSequential::getClk() const {
+  return d_clk;
+}
+
+VertexPtr GraphVertexSequential::getData() const {
+  return d_data;
+}
+
+VertexPtr GraphVertexSequential::getEn() const {
+  return d_en;
+}
+
+VertexPtr GraphVertexSequential::getRst() const {
+  return d_rst;
+}
+
+VertexPtr GraphVertexSequential::getSet() const {
+  return d_set;
+}
+
 size_t GraphVertexSequential::calculateHash(bool i_recalculate) {
   if (d_hasHash && (!i_recalculate || d_hasHash == IN_PROGRESS)) {
     return d_hashed;
@@ -189,17 +210,17 @@ std::string GraphVertexSequential::toVerilog() const {
   std::string verilog;
   formatAlwaysBegin(verilog);
   std::string_view toFormat;
-  std::string_view tab = "    ";
+  std::string_view tab = "\t\t";
   bool flag = false;
   if (unsigned val = (d_seqType & RST) | (d_seqType & CLR)) {
     simpleCheckFormat(verilog, d_rst->getRawName(), d_name, val, tab);
-    verilog += "    else";
+    verilog += "\t\telse";
     flag = true;
   }
   if (d_seqType & SET) {
     simpleCheckFormat(verilog, d_set->getRawName(), d_name, SET,
                       flag ? " " : tab);
-    verilog += "    else";
+    verilog += "\t\telse";
     flag = true;
   }
   verilog += flag ? " " : tab;
@@ -207,10 +228,34 @@ std::string GraphVertexSequential::toVerilog() const {
     toFormat = "if ({}) ";
     verilog += fmt::format(toFormat, d_en->getRawName());
   }
-  toFormat = "{} <= {};\n  end\n";
+  toFormat = "{} <= {};\n\tend\n";
   verilog += fmt::format(toFormat, d_name, d_data->getRawName());
 
   return verilog;
+}
+
+DotReturn GraphVertexSequential::toDOT() {
+  if (!d_inConnections.size()) {
+#ifdef LOGFLAG
+    LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
+#else
+    std::cerr << "TODO: delete empty vertices: " << d_name << std::endl;
+#endif
+    return {};
+  }
+
+  DotReturn dot;
+
+  dot.push_back({DotTypes::DotGate,
+                 {{"name", getName()},
+                  {"label", getName()},
+                  {"level", std::to_string(d_level)}}});
+
+  for (VertexPtr ptr: d_inConnections) {
+    dot.push_back(
+        {DotTypes::DotEdge, {{"from", ptr->getName()}, {"to", getName()}}});
+  }
+  return dot;
 }
 
 } // namespace CircuitGenGraph

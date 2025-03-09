@@ -92,7 +92,7 @@ public:
   GraphVertexConstant(char i_const, std::string_view i_name,
                       GraphPtr i_baseGraph);
 
-  ~GraphVertexConstant() override {};
+  ~GraphVertexConstant() override{};
 
   size_t calculateHash(bool i_recalculate = false) override;
 
@@ -130,7 +130,7 @@ public:
   GraphVertexSubGraph(GraphPtr i_subGraph, std::string_view i_name,
                       GraphPtr i_baseGraph);
 
-  ~GraphVertexSubGraph() override {};
+  ~GraphVertexSubGraph() override{};
 
   char updateValue() override;
   void updateLevel(bool i_recalculate = false, std::string tab = "") override;
@@ -239,7 +239,7 @@ public:
 
   GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph);
 
-  ~GraphVertexGates() override {};
+  ~GraphVertexGates() override{};
 
   /// @brief updateValue
   /// Updates the value of the vertex
@@ -342,7 +342,7 @@ public:
 
   // clang-format on
 
-  ~GraphVertexSequential() override {};
+  ~GraphVertexSequential() override{};
 
   /// @brief calculateHash
   /// Calculates the hash value of the vertex
@@ -365,13 +365,19 @@ public:
   /// @throws std::invalid_argument if any input connection is invalid
 
   std::string toVerilog() const override;
-  DotReturn toDOT() override { return {}; };
-  char updateValue() override { return '\0'; };
+  DotReturn toDOT() override;
+  char updateValue() override { return '0'; };
 
   bool isFF() const;
   bool isAsync() const;
   bool isNegedge() const;
   SequentialTypes getSeqType() const;
+
+  VertexPtr getClk() const;
+  VertexPtr getData() const;
+  VertexPtr getEn() const;
+  VertexPtr getRst() const;
+  VertexPtr getSet() const;
 
 private:
   void setSignalByType(VertexPtr i_wire, SequentialTypes i_type,

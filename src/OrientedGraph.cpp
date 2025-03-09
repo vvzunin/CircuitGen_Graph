@@ -548,7 +548,7 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
     return std::make_pair(true, getGraphVerilogInstance());
   }
   // В данном методе происходит только генерация одного графа. Без подграфов.
-  std::string verilogTab = "  ";
+  std::string verilogTab = "\t";
 
   if (!i_filename.size()) {
     i_filename = d_name + ".v";
@@ -618,7 +618,8 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
       fileStream << value->getRawName()
                  << (value != eachVertex.back() ? ", " : ";\n");
     }
-    fileStream << verilogTab;
+    if (eachVertex.size())
+      fileStream << verilogTab;
 
     ++count;
   }
@@ -645,20 +646,22 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
     fileStream << val.second;
   }
 
+  if (d_vertexes[VertexTypes::seuqential].size()) {
+    fileStream << "\n";
+  }
+  // and all operations
+  for (const auto *oper: d_vertexes[VertexTypes::seuqential]) {
+    fileStream << VertexUtils::getSequentialComment(
+        static_cast<const GraphVertexSequential *>(oper));
+    fileStream << verilogTab << (*oper);
+  }
+
   if (d_vertexes[VertexTypes::gate].size()) {
     fileStream << "\n";
   }
   // and all operations
   for (auto *oper: d_vertexes[VertexTypes::gate]) {
     fileStream << verilogTab << (*oper) << "\n";
-  }
-
-  if (d_vertexes[VertexTypes::seuqential].size()) {
-    fileStream << "\n";
-  }
-  // and all operations
-  for (auto *oper: d_vertexes[VertexTypes::seuqential]) {
-    fileStream << verilogTab << (*oper);
   }
 
   fileStream << "\n";
@@ -728,9 +731,14 @@ DotReturn OrientedGraph::toDOT() {
   LOG(INFO) << "      constants       : "
             << d_vertexes[VertexTypes::constant].size();
 #endif
+  size_t sizeAll = d_allSubGraphsOutputs.size();
+  for (const auto &vec: d_vertexes)
+    sizeAll += vec.size();
+  dot.reserve(sizeAll);
   for (const auto &eachVertex:
        {d_vertexes[VertexTypes::input], d_vertexes[VertexTypes::output],
-        d_vertexes[VertexTypes::gate], d_vertexes[VertexTypes::constant]}) {
+        d_vertexes[VertexTypes::gate], d_vertexes[VertexTypes::seuqential],
+        d_vertexes[VertexTypes::constant]}) {
     int counter = 0;
     for (auto *value: eachVertex) {
       DotReturn dotVertex = value->toDOT();

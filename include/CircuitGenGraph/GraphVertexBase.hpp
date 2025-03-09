@@ -25,6 +25,7 @@
 namespace CircuitGenGraph {
 
 class OrientedGraph;
+class GraphVertexSequential;
 
 /// @brief VertexUtils
 /// Namespace containing utility functions for working with vertices
@@ -74,6 +75,9 @@ std::string vertexTypeToVerilog(VertexTypes i_type);
 /// std::cout << "Comment for input vertex type: " << comment << std::endl;
 /// @endcode
 std::string vertexTypeToComment(VertexTypes i_type);
+
+std::string getSequentialComment(const GraphVertexSequential *i_seq);
+
 } // namespace VertexUtils
 
 /// class GraphVertexBase
