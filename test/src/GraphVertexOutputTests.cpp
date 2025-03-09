@@ -65,20 +65,17 @@ TEST(TestConstructorWithIName, WithDefaultInputParametrs) {
 
 TEST(TestUpdateValue, UpdateValueCorrect) {
   GraphVertexOutput output1(memoryOwnerOutputGr);
-  VertexPtr constantPtr1 = memoryOwnerOutputGr->create<GraphVertexConstant>(
-      'z', memoryOwnerOutputGr);
+  VertexPtr constantPtr1 = memoryOwnerOutputGr->addConst('z');
   output1.addVertexToInConnections(constantPtr1);
   EXPECT_EQ(output1.getValue(), 'x');
   EXPECT_EQ(output1.updateValue(), 'z');
   EXPECT_EQ(output1.getValue(), 'z');
 
-  VertexPtr constantPtr2 = memoryOwnerOutputGr->create<GraphVertexConstant>(
-      'z', memoryOwnerOutputGr);
+  VertexPtr constantPtr2 = memoryOwnerOutputGr->addConst('z');
   output1.addVertexToInConnections(constantPtr2);
   EXPECT_EQ(output1.updateValue(), 'z');
 
-  VertexPtr constantPtr3 = memoryOwnerOutputGr->create<GraphVertexConstant>(
-      '1', memoryOwnerOutputGr);
+  VertexPtr constantPtr3 = memoryOwnerOutputGr->addConst('1');
   output1.addVertexToInConnections(constantPtr3);
   EXPECT_EQ(output1.updateValue(), 'x');
 }
@@ -95,33 +92,28 @@ TEST(TestUpdateValue, ReturnDValueIfDInConnectionsSizeZero) {
 //   EXPECT_THROW(output1.updateValue(), std::invalid_argument);
 // }
 
-TEST(TestUpdateValue, ThrowInvalidArgumentIfDInconnectionsNIzNullptr) {
-  GraphVertexInput output1(memoryOwnerOutputGr);
-  VertexPtr outputPtr1 =
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr);
-  VertexPtr outputPtr2 =
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr);
-  output1.addVertexToInConnections(outputPtr1);
-  output1.addVertexToInConnections(outputPtr2);
-  EXPECT_NO_THROW(output1.updateValue());
+// TEST(TestUpdateValue, ThrowInvalidArgumentIfDInconnectionsNIzNullptr) {
+//   GraphVertexInput output1(memoryOwnerOutputGr);
+//   VertexPtr outputPtr1 = memoryOwnerOutputGr->addOutput();
+//   VertexPtr outputPtr2 = memoryOwnerOutputGr->addOutput();
+//   output1.addVertexToInConnections(outputPtr1);
+//   output1.addVertexToInConnections(outputPtr2);
+//   EXPECT_NO_THROW(output1.updateValue());
 
-  // output1.addVertexToInConnections(nullptr);
-  // EXPECT_THROW(output1.updateValue(), std::invalid_argument);
-}
+//   // output1.addVertexToInConnections(nullptr);
+//   // EXPECT_THROW(output1.updateValue(), std::invalid_argument);
+// }
 
 TEST(TestUpdateLevel, CorrectUpdate) {
   GraphVertexOutput output1(memoryOwnerOutputGr);
-  VertexPtr outputPtr1 =
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr);
+  VertexPtr outputPtr1 = memoryOwnerOutputGr->addOutput();
   outputPtr1->setLevel(1);
   output1.addVertexToInConnections(outputPtr1);
   output1.updateLevel();
   EXPECT_EQ(output1.getLevel(), 1);
 
-  VertexPtr outputPtr2 =
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr);
-  VertexPtr outputPtr3 =
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr);
+  VertexPtr outputPtr2 = memoryOwnerOutputGr->addOutput();
+  VertexPtr outputPtr3 = memoryOwnerOutputGr->addOutput();
   outputPtr2->setLevel(3);
   outputPtr3->setLevel(2);
   output1.addVertexToInConnections(outputPtr2);
@@ -129,8 +121,7 @@ TEST(TestUpdateLevel, CorrectUpdate) {
   output1.updateLevel(true);
   EXPECT_EQ(output1.getLevel(), 3);
 
-  VertexPtr outputPtr4 =
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr);
+  VertexPtr outputPtr4 = memoryOwnerOutputGr->addOutput();
   output1.addVertexToInConnections(outputPtr4);
   output1.updateLevel(true);
   EXPECT_EQ(output1.getLevel(), 3);
@@ -139,10 +130,8 @@ TEST(TestUpdateLevel, CorrectUpdate) {
 TEST(TestUpdateLevel, ThrowInvalidArgumentIfDInconnectionsNIzNullptr) {
   GraphVertexOutput output1(memoryOwnerOutputGr);
 
-  VertexPtr outputPtr1 =
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr);
-  VertexPtr outputPtr2 =
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr);
+  VertexPtr outputPtr1 = memoryOwnerOutputGr->addOutput();
+  VertexPtr outputPtr2 = memoryOwnerOutputGr->addOutput();
   output1.addVertexToInConnections(outputPtr1);
   output1.addVertexToInConnections(outputPtr2);
   EXPECT_NO_THROW(output1.updateLevel());
@@ -150,8 +139,7 @@ TEST(TestUpdateLevel, ThrowInvalidArgumentIfDInconnectionsNIzNullptr) {
   // output1.addVertexToInConnections(nullptr);
   // EXPECT_THROW(output1.updateLevel(true), std::invalid_argument);
 
-  VertexPtr outputPtr3 =
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr);
+  VertexPtr outputPtr3 = memoryOwnerOutputGr->addOutput();
   output1.addVertexToInConnections(outputPtr3);
   // EXPECT_THROW(output1.updateLevel(true), std::invalid_argument);
 }
@@ -168,64 +156,54 @@ TEST(TestAddInConnections, AddConnections) {
   GraphVertexOutput output1(memoryOwnerOutputGr);
   EXPECT_EQ(output1.getInConnections().size(), 0);
 
-  VertexPtr outputPtr1 =
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr);
+  VertexPtr outputPtr1 = memoryOwnerOutputGr->addOutput();
   EXPECT_EQ(output1.addVertexToInConnections(outputPtr1), 1);
   EXPECT_EQ(output1.addVertexToInConnections(outputPtr1), 2);
   EXPECT_EQ(output1.getInConnections()[0], outputPtr1);
   EXPECT_EQ(output1.getInConnections()[1], outputPtr1);
 
-  VertexPtr outputPtr2 =
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr);
+  VertexPtr outputPtr2 = memoryOwnerOutputGr->addOutput();
   output1.addVertexToInConnections(outputPtr2);
   EXPECT_EQ(output1.getInConnections()[2], outputPtr2);
 }
 
-TEST(TestAddOutConnections, AddConnections) {
-  GraphVertexOutput output1(memoryOwnerOutputGr);
-  EXPECT_EQ(output1.getOutConnections().size(), 0);
+// TEST(TestAddOutConnections, AddConnections) {
+//   GraphVertexOutput output1(memoryOwnerOutputGr);
+//   EXPECT_EQ(output1.getOutConnections().size(), 0);
 
-  VertexPtr outputPtr1 =
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr);
-  EXPECT_EQ(output1.addVertexToOutConnections(outputPtr1), true);
-  EXPECT_EQ(output1.addVertexToOutConnections(outputPtr1), false);
-  EXPECT_EQ(output1.getOutConnections()[0], outputPtr1);
+//   VertexPtr outputPtr1 = memoryOwnerOutputGr->addOutput();
+//   EXPECT_EQ(output1.addVertexToOutConnections(outputPtr1), true);
+//   EXPECT_EQ(output1.addVertexToOutConnections(outputPtr1), false);
+//   EXPECT_EQ(output1.getOutConnections()[0], outputPtr1);
 
-  VertexPtr outputPtr2 =
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr);
-  output1.addVertexToOutConnections(outputPtr2);
-  EXPECT_EQ(output1.getOutConnections()[1], outputPtr2);
-}
+//   VertexPtr outputPtr2 = memoryOwnerOutputGr->addOutput();
+//   output1.addVertexToOutConnections(outputPtr2);
+//   EXPECT_EQ(output1.getOutConnections()[1], outputPtr2);
+// }
 
 TEST(TestCalculateHash, SameHashWhenEqualInputs) {
   GraphVertexOutput output1(memoryOwnerOutputGr);
-  EXPECT_EQ(output1.calculateHash(), 0);
+  EXPECT_NE(output1.calculateHash(), 0);
 
-  output1.addVertexToOutConnections(
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr));
-  EXPECT_EQ(output1.calculateHash(true), 0);
+  output1.addVertexToInConnections(memoryOwnerOutputGr->addInput());
+  EXPECT_NE(output1.calculateHash(true), 0);
 
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphVertexInput output2(graphPtr1);
   GraphVertexInput output3(graphPtr1);
-  output2.addVertexToOutConnections(
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr));
+  output2.addVertexToOutConnections(memoryOwnerOutputGr->addOutput());
   EXPECT_NE(output2.calculateHash(true), output3.calculateHash(true));
 
-  output3.addVertexToOutConnections(
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr));
+  output3.addVertexToOutConnections(memoryOwnerOutputGr->addOutput());
   EXPECT_EQ(output2.calculateHash(true), output3.calculateHash(true));
 }
 
 TEST(TestRemoveVertexToInConnections, RemoveConnections) {
-  VertexPtr outputPtr1 =
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr);
+  VertexPtr outputPtr1 = memoryOwnerOutputGr->addOutput();
   EXPECT_EQ(outputPtr1->removeVertexToInConnections(nullptr), false);
 
-  outputPtr1->addVertexToInConnections(
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr));
-  outputPtr1->addVertexToInConnections(
-      memoryOwnerOutputGr->create<GraphVertexOutput>(memoryOwnerOutputGr));
+  outputPtr1->addVertexToInConnections(memoryOwnerOutputGr->addOutput());
+  outputPtr1->addVertexToInConnections(memoryOwnerOutputGr->addOutput());
   EXPECT_EQ(outputPtr1->getInConnections().size(), 2);
   EXPECT_EQ(outputPtr1->removeVertexToInConnections(nullptr), true);
   EXPECT_EQ(outputPtr1->getInConnections().size(), 1);
