@@ -12,7 +12,7 @@ include(FetchContent)
 include(CTest)
 
 FetchContent_Declare(
-  gtest
+  googletest
 
   # Url for googletest download.
   GIT_REPOSITORY https://github.com/google/googletest
@@ -20,7 +20,7 @@ FetchContent_Declare(
 )
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
-FetchContent_MakeAvailable(gtest)
+FetchContent_MakeAvailable(googletest)
 
 # option for looking for possible memory leaks
 add_compile_options(-fsanitize=address)
@@ -73,3 +73,4 @@ add_new_test(GraphVertexConstantTests)
 add_new_test(OrientedGraphTests)
 add_new_test(MemoryManagementTests)
 add_new_test(DefaultAuxiliaryMethodsTests)
+add_new_test(GraphVertexDataBusTests)
