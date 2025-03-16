@@ -8,7 +8,7 @@
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
 #endif
-#include "fmt/core.h"
+#include <fmt/core.h>
 
 namespace CircuitGenGraph {
 
