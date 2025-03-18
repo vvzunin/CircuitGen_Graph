@@ -5,7 +5,7 @@
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
 #endif
-#include <fmt/core.h>
+#include "../lib/fmt/core.h"
 
 namespace CG_Graph {
 

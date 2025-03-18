@@ -29,6 +29,10 @@ set(SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexSequential.cpp
 )
 
+set(LIBS 
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.cc
+)
+
 set(PUBLIC_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/enums.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertex.hpp
@@ -45,9 +49,9 @@ if (ENABLE_LOGGING)
 endif()
 
 if(BUILD_SHARED_LIBS)
-  add_library(${PROJECT_NAME} SHARED ${SOURCES})
+  add_library(${PROJECT_NAME} SHARED ${SOURCES} ${LIBS})
 else()
-  add_library(${PROJECT_NAME} STATIC ${SOURCES})
+  add_library(${PROJECT_NAME} STATIC ${SOURCES} ${LIBS})
 endif()
 
 add_library(
@@ -65,17 +69,14 @@ if(ENABLE_LOGGING)
   )
 endif()
 
-add_library(
-  fmt STATIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/core.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format-inl.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.cc
-)
-
-target_include_directories(fmt PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt>
-)
+# DOED NOT WORK IN FetchContent
+# add_library(
+#   fmt STATIC
+#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/core.h
+#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format-inl.h
+#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.h
+#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.cc
+# )
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
@@ -99,13 +100,7 @@ if(ENABLE_LOGGING)
   target_link_libraries(
     ${PROJECT_NAME} PUBLIC
     easylogging++
-    fmt
   )
-else()
-target_link_libraries(
-  ${PROJECT_NAME} PUBLIC
-  fmt
-)
 endif()
 
 find_program(CLANG_TIDY NAMES clang-tidy)
@@ -143,7 +138,6 @@ target_include_directories(${PROJECT_NAME}
 
   # where top-level project will look for the library's public headers
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt>
 
   # where external projects will look for the library's public headers
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
@@ -164,7 +158,7 @@ include(cmake/utils.cmake)
 
 if(ENABLE_LOGGING)
   message(STATUS "Logs enabled")
-  install(TARGETS ${PROJECT_NAME} easylogging++ fmt
+  install(TARGETS ${PROJECT_NAME} easylogging++
     EXPORT "${PROJECT_NAME}Targets"
 
     # these get default values from GNUInstallDirs, no need to set them
@@ -178,7 +172,7 @@ if(ENABLE_LOGGING)
   )
 else()
   message(STATUS "Logs disabled")
-  install(TARGETS ${PROJECT_NAME} fmt
+  install(TARGETS ${PROJECT_NAME}
     EXPORT "${PROJECT_NAME}Targets"
 
     # these get default values from GNUInstallDirs, no need to set them
@@ -191,12 +185,6 @@ else()
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} # include
   )
 endif()
-
-install(
-  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-  FILES_MATCHING PATTERN "*.h"
-)
 
 # generate and install export file
 install(EXPORT "${PROJECT_NAME}Targets"
