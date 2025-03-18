@@ -75,7 +75,6 @@ add_library(
 
 target_include_directories(fmt PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt>
-  $<INSTALL_INTERFACE:include/fmt>
 )
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
@@ -144,6 +143,7 @@ target_include_directories(${PROJECT_NAME}
 
   # where top-level project will look for the library's public headers
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt>
 
   # where external projects will look for the library's public headers
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
