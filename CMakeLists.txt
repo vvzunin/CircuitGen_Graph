@@ -55,6 +55,7 @@ add_library(
   ${PROJECT_NAME})
 
 include_directories(lib)
+link_directories(lib)
 
 if(ENABLE_LOGGING)
   add_library(
