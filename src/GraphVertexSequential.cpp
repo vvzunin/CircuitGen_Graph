@@ -7,7 +7,7 @@
 #endif
 #include <fmt/core.h>
 
-namespace CircuitGenGraph {
+namespace CG_Graph {
 
 inline bool GraphVertexSequential::isFF() const {
   return d_seqType & ff;
@@ -258,4 +258,4 @@ DotReturn GraphVertexSequential::toDOT() {
   return dot;
 }
 
-} // namespace CircuitGenGraph
+} // namespace CG_Graph

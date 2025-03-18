@@ -10,7 +10,7 @@
 #endif
 #include <fmt/core.h>
 
-namespace CircuitGenGraph {
+namespace CG_Graph {
 
 std::string VertexUtils::gateToString(Gates i_type) {
   switch (i_type) {
@@ -337,4 +337,4 @@ std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex) {
   return stream;
 }
 
-} // namespace CircuitGenGraph
+} // namespace CG_Graph

@@ -7,7 +7,7 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
-namespace CircuitGenGraph {
+namespace CG_Graph {
 
 GraphVertexConstant::GraphVertexConstant(char i_const, GraphPtr i_baseGraph) :
     GraphVertexInput(i_baseGraph, VertexTypes::constant) {
@@ -77,4 +77,4 @@ void GraphVertexConstant::log(el::base::type::ostream_t &os) const {
 }
 #endif
 
-} // namespace CircuitGenGraph
+} // namespace CG_Graph

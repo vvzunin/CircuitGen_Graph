@@ -9,7 +9,7 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
-namespace CircuitGenGraph {
+namespace CG_Graph {
 
 GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
                                          GraphPtr i_baseGraph) :
@@ -246,4 +246,4 @@ void GraphVertexSubGraph::log(el::base::type::ostream_t &os) const {
 }
 #endif
 
-} // namespace CircuitGenGraph
+} // namespace CG_Graph

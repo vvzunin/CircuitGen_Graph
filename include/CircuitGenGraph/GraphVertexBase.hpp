@@ -17,12 +17,12 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
-#define GraphPtr std::shared_ptr<CircuitGenGraph::OrientedGraph>
-#define GraphPtrWeak std::weak_ptr<CircuitGenGraph::OrientedGraph>
+#define GraphPtr std::shared_ptr<CG_Graph::OrientedGraph>
+#define GraphPtrWeak std::weak_ptr<CG_Graph::OrientedGraph>
 
-#define VertexPtr CircuitGenGraph::GraphVertexBase *
+#define VertexPtr CG_Graph::GraphVertexBase *
 
-namespace CircuitGenGraph {
+namespace CG_Graph {
 
 class OrientedGraph;
 class GraphVertexSequential;
@@ -504,4 +504,4 @@ private:
 
 std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex);
 
-} // namespace CircuitGenGraph
+} // namespace CG_Graph

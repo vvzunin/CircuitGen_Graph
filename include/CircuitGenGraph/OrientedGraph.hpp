@@ -24,12 +24,12 @@
 
 // TODO: Добавить проверку на имена файлов при доблении новых вершин
 
-#define GraphPtr std::shared_ptr<CircuitGenGraph::OrientedGraph>
-#define GraphPtrWeak std::weak_ptr<CircuitGenGraph::OrientedGraph>
+#define GraphPtr std::shared_ptr<CG_Graph::OrientedGraph>
+#define GraphPtrWeak std::weak_ptr<CG_Graph::OrientedGraph>
 
-#define VertexPtr CircuitGenGraph::GraphVertexBase *
+#define VertexPtr CG_Graph::GraphVertexBase *
 
-namespace CircuitGenGraph {
+namespace CG_Graph {
 
 class GraphVertexBase;
 
@@ -558,4 +558,4 @@ private:
   std::map<Gates, std::map<Gates, size_t>> d_edgesGatesCount;
 };
 
-} // namespace CircuitGenGraph
+} // namespace CG_Graph

@@ -7,7 +7,7 @@
 
 /* start of static variable values declaration */
 
-namespace CircuitGenGraph::GraphUtils {
+namespace CG_Graph::GraphUtils {
 
 /* end of static variable values declaration */
 
@@ -78,4 +78,4 @@ std::string parseVertexToString(VertexTypes vertex) {
   return std::string(findPairByKey(vertexToString, vertex)->second);
 };
 
-} // namespace CircuitGenGraph::GraphUtils
+} // namespace CG_Graph::GraphUtils

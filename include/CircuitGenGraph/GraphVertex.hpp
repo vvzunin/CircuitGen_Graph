@@ -28,7 +28,7 @@
 /// a string of type std::string that identifies a vertex
 /// */
 
-namespace CircuitGenGraph {
+namespace CG_Graph {
 
 class GraphVertexInput : public GraphVertexBase {
 public:
@@ -394,4 +394,4 @@ private:
   VertexPtr d_set;
 };
 
-} // namespace CircuitGenGraph
+} // namespace CG_Graph

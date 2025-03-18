@@ -4,7 +4,7 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
-namespace CircuitGenGraph {
+namespace CG_Graph {
 
 GraphVertexOutput::GraphVertexOutput(GraphPtr i_baseGraph) :
     GraphVertexBase(VertexTypes::output, i_baseGraph) {
@@ -75,4 +75,4 @@ void GraphVertexOutput::log(el::base::type::ostream_t &os) const {
 }
 #endif
 
-} // namespace CircuitGenGraph
+} // namespace CG_Graph

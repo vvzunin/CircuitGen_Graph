@@ -6,7 +6,7 @@
 #include <string>
 #include <string_view>
 
-namespace CircuitGenGraph {
+namespace CG_Graph {
 
 constexpr int DEFAULT_BUF = 114688;
 constexpr int CHUNK_SIZE = 14336;
@@ -159,4 +159,4 @@ private:
   std::pmr::set<std::string> d_strings;
 };
 
-} // namespace CircuitGenGraph
+} // namespace CG_Graph

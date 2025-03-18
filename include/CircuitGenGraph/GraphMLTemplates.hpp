@@ -4,7 +4,7 @@
 
 #include <CircuitGenGraph/GraphUtils.hpp>
 
-namespace CircuitGenGraph::ClassicGraphML {
+namespace CG_Graph::ClassicGraphML {
 const char *mainTemplate = R"(<?xml version="1.0" encoding="UTF-8"?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
@@ -23,9 +23,9 @@ const char *rawNodeTemplate = R"({}    <node id="{}">
 
 const char *rawEdgeTemplate = R"({}    <edge source="{}" target="{}"/>
 )";
-} // namespace CircuitGenGraph::ClassicGraphML
+} // namespace CG_Graph::ClassicGraphML
 
-namespace CircuitGenGraph::OpenABCD {
+namespace CG_Graph::OpenABCD {
 const char *mainTemplate = R"(<?xml version='1.0' encoding='utf-8'?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
   <key id="d3" for="edge" attr.name="edge_type" attr.type="long" />
@@ -48,9 +48,9 @@ const char *edgeTemplate = R"(    <edge source="{}" target="{}">
       <data key="d3">{}</data>
     </edge>
 )";
-} // namespace CircuitGenGraph::OpenABCD
+} // namespace CG_Graph::OpenABCD
 
-namespace CircuitGenGraph::PseudoABCD {
+namespace CG_Graph::PseudoABCD {
 const char *mainTemplate = R"(<?xml version='1.0' encoding='utf-8'?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
   <key id="d1" for="node" attr.name="node_type" attr.type="long" />
@@ -68,9 +68,9 @@ const char *nodeTemplate = R"(    <node id="{}">
 
 const char *edgeTemplate = R"(    <edge source="{}" target="{}"/>
 )";
-} // namespace CircuitGenGraph::PseudoABCD
+} // namespace CG_Graph::PseudoABCD
 
-namespace CircuitGenGraph {
+namespace CG_Graph {
 
 std::map<Gates, std::string> gateToABCDType = {
     {Gates::GateAnd, "2"},        {Gates::GateNand, "10"},
@@ -79,4 +79,4 @@ std::map<Gates, std::string> gateToABCDType = {
     {Gates::GateXor, "15"},       {Gates::GateXnor, "16"},
     {Gates::GateDefault, "ERROR"}};
 
-} // namespace CircuitGenGraph
+} // namespace CG_Graph

@@ -11,7 +11,7 @@
 
 /// @file GraphUtils.hpp
 
-namespace CircuitGenGraph {
+namespace CG_Graph {
 
 #ifndef DotReturn
 #define DotReturn \
@@ -339,4 +339,4 @@ static constexpr size_t d_hierarchySize = 11;
 
 } // namespace GraphUtils
 
-} // namespace CircuitGenGraph
+} // namespace CG_Graph

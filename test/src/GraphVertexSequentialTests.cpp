@@ -10,7 +10,7 @@
 
 #include "TestSeqData.hpp"
 
-using namespace CircuitGenGraph;
+using namespace CG_Graph;
 
 inline void testFile(const std::string &fileName, std::string_view text) {
   std::ifstream file(fileName);

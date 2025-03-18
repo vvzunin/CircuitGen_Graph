@@ -17,7 +17,7 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
-namespace CircuitGenGraph {
+namespace CG_Graph {
 
 std::atomic_size_t OrientedGraph::d_countGraph = 0;
 std::atomic_size_t OrientedGraph::d_countNewGraphInstance = 0;
@@ -795,7 +795,7 @@ DotReturn OrientedGraph::toDOT() {
 
 std::pair<bool, std::string> OrientedGraph::toDOT(std::string i_path,
                                                   std::string i_filename) {
-  using namespace AuxMethods;
+  using namespace AuxMethodsGraph;
   if (d_alreadyParsedDot && d_isSubGraph) {
 #ifdef LOGFLAG
     LOG(INFO) << "getGraphDotInstance()";
@@ -846,7 +846,7 @@ void OrientedGraph::parseVertexToGraphML(
     const VertexTypes &vertexType, const std::vector<VertexPtr> &vertexVector,
     const std::string &nodeTemplate, const std::string &edgeTemplate,
     const std::string &i_prefix, std::string &nodes, std::string &edges) {
-  using namespace AuxMethods; // format() and replacer()
+  using namespace AuxMethodsGraph; // format() and replacer()
   std::string vertexKindName;
 
   switch (vertexType) {
@@ -888,8 +888,8 @@ void OrientedGraph::parseVertexToGraphML(
 
 std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
                                             const std::string &i_prefix) {
-  using namespace AuxMethods;     // format() and replacer()
-  using namespace ClassicGraphML; // templates
+  using namespace AuxMethodsGraph; // format() and replacer()
+  using namespace ClassicGraphML;  // templates
 
   const std::string spaces(i_indent, ' ');
 
@@ -993,8 +993,8 @@ bool OrientedGraph::toGraphMLOpenABCD(std::ofstream &fileStream) {
 }
 
 std::string OrientedGraph::toGraphMLPseudoABCD() {
-  using namespace AuxMethods; // format()
-  using namespace PseudoABCD; // templates
+  using namespace AuxMethodsGraph; // format()
+  using namespace PseudoABCD;      // templates
 
   GraphPtr graphPtr = shared_from_this();
   if (!d_vertexes.at(VertexTypes::subGraph).empty()) {
@@ -1054,8 +1054,8 @@ std::string OrientedGraph::toGraphMLPseudoABCD() {
 }
 
 std::string OrientedGraph::toGraphMLOpenABCD() {
-  using namespace AuxMethods; // format()
-  using namespace OpenABCD;   // templates
+  using namespace AuxMethodsGraph; // format()
+  using namespace OpenABCD;        // templates
 
   GraphPtr graphPtr = shared_from_this();
   if (!d_vertexes.at(VertexTypes::subGraph).empty()) {
@@ -1397,4 +1397,4 @@ void OrientedGraph::log(el::base::type::ostream_t &osStream) const {
 }
 #endif
 
-} // namespace CircuitGenGraph
+} // namespace CG_Graph

@@ -6,7 +6,7 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
-namespace CircuitGenGraph {
+namespace CG_Graph {
 
 GraphVertexGates::GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph) :
     GraphVertexBase(VertexTypes::gate, i_baseGraph) {
@@ -225,4 +225,4 @@ void GraphVertexGates::log(el::base::type::ostream_t &os) const {
 }
 #endif
 
-} // namespace CircuitGenGraph
+} // namespace CG_Graph

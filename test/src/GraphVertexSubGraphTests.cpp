@@ -5,7 +5,7 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
 
-using namespace CircuitGenGraph;
+using namespace CG_Graph;
 
 #ifdef LOGFLAG
 #include "easylogging++Init.hpp"

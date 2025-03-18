@@ -2,7 +2,7 @@
 
 #include <map>
 
-namespace CircuitGenGraph {
+namespace CG_Graph {
 
 const std::map<char, std::map<char, char>> tableAnd{
     {'0', {{'0', '0'}, {'1', '0'}, {'x', '0'}, {'z', '0'}}},
@@ -51,4 +51,4 @@ const std::map<char, char> tableBuf{
 const std::map<char, char> tableNot{
     {'0', '1'}, {'1', '0'}, {'x', 'x'}, {'z', 'x'}};
 
-} // namespace CircuitGenGraph
+} // namespace CG_Graph

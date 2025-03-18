@@ -14,7 +14,7 @@
 /// TODO: if need LineReader
 /// TODO: if need CopyDirectory
 
-/// namespace AuxMethods It was created to organize a set of auxiliary
+/// namespace AuxMethodsGraph It was created to organize a set of auxiliary
 /// functions and methods that can be used in various parts of a
 /// software project
 /// Functions: Random number generation, Reading files,
@@ -23,7 +23,7 @@
 /// TO DO: list the other functions
 /// </summary>
 
-namespace CircuitGenGraph::AuxMethods {
+namespace CG_Graph::AuxMethodsGraph {
 
 std::string replacer(const std::string &i_s, const std::string &i_r);
 std::string dotReturnToString(DotReturn dot);
@@ -53,4 +53,4 @@ auto format(Args &&...args)
   return fmt::format(std::forward<Args>(args)...);
 }
 
-} // namespace CircuitGenGraph::AuxMethods
+} // namespace CG_Graph::AuxMethodsGraph
