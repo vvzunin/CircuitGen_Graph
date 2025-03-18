@@ -54,6 +54,8 @@ add_library(
   CircuitGenGraph::CircuitGenGraph ALIAS
   ${PROJECT_NAME})
 
+include_directories(lib)
+
 if(ENABLE_LOGGING)
   add_library(
     easylogging++ STATIC
