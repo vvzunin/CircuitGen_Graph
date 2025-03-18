@@ -74,7 +74,8 @@ add_library(
 )
 
 target_include_directories(fmt PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt>
+  $<INSTALL_INTERFACE:include/fmt>
 )
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
@@ -190,6 +191,12 @@ else()
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} # include
   )
 endif()
+
+install(
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  FILES_MATCHING PATTERN "*.h"
+)
 
 # generate and install export file
 install(EXPORT "${PROJECT_NAME}Targets"
