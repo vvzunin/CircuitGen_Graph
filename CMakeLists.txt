@@ -73,6 +73,8 @@ add_library(
   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.cc
 )
 
+target_include_directories(fmt PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt)
+
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
