@@ -69,7 +69,7 @@ if(ENABLE_LOGGING)
   )
 endif()
 
-# DOED NOT WORK IN FetchContent
+# DOES NOT WORK IN FetchContent
 # add_library(
 #   fmt STATIC
 #   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/core.h
