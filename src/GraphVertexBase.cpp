@@ -2,11 +2,15 @@
 #include <iostream>
 #include <string>
 
+#include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
 #endif
+#include "../lib/fmt/core.h"
+
+namespace CG_Graph {
 
 std::string VertexUtils::gateToString(Gates i_type) {
   switch (i_type) {
@@ -39,6 +43,8 @@ std::string VertexUtils::vertexTypeToVerilog(VertexTypes i_type) {
       return "localparam";
     case VertexTypes::gate:
       return "wire";
+    case VertexTypes::seuqential:
+      return "reg";
     default:
       return "Not callable";
   }
@@ -55,10 +61,57 @@ std::string VertexUtils::vertexTypeToComment(VertexTypes i_type) {
       return "// Writing consts";
     case VertexTypes::gate:
       return "// Writing gates";
+    case VertexTypes::seuqential:
+      return "// Writing registers";
     default:
       return "// Not writable vertex type";
   }
   return "// Unknown vertex";
+}
+
+inline void format_comment(std::string &res, std::string_view to_format,
+                           std::string_view name) {
+  std::string copied = fmt::format(to_format, name);
+  res.reserve(copied.size() + res.size());
+  res += copied;
+}
+
+std::string
+VertexUtils::getSequentialComment(const GraphVertexSequential *i_seq) {
+  constexpr std::string_view en_comment =
+      "\t// EN signal \"{}\" - when it is in a logical one "
+      "state, trigger writes data to the output\n";
+  constexpr std::string_view rst_comment =
+      "\t// RST signal \"{}\" - when it is in a logical zero "
+      "state, trigger writes logical zero to the output\n";
+  constexpr std::string_view async_comment =
+      "\t// RST signal \"{}\" is async - always "
+      "block enables on negedge of RST\n";
+  constexpr std::string_view clr_comment =
+      "\t// CLR signal \"{}\" - when it is in a logical one "
+      "state, trigger writes logical zero to the output\n";
+  constexpr std::string_view set_comment =
+      "\t// SET signal \"{}\" - when it is in a logical one "
+      "state, trigger writes logical one to the output\n";
+
+  std::string res;
+  auto type = i_seq->getSeqType();
+
+  if (type & RST) {
+    format_comment(res, rst_comment, i_seq->getRst()->getRawName());
+  } else if (type & CLR) {
+    format_comment(res, clr_comment, i_seq->getRst()->getRawName());
+  }
+  if (type & ASYNC) {
+    format_comment(res, async_comment, i_seq->getRst()->getRawName());
+  }
+  if (type & SET) {
+    format_comment(res, set_comment, i_seq->getSet()->getRawName());
+  }
+  if (type & EN) {
+    format_comment(res, en_comment, i_seq->getEn()->getRawName());
+  }
+  return res;
 }
 
 GraphVertexBase::GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph) {
@@ -283,3 +336,5 @@ std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex) {
   stream << vertex.toVerilog();
   return stream;
 }
+
+} // namespace CG_Graph

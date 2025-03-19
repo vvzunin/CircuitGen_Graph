@@ -17,6 +17,8 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
+namespace CG_Graph {
+
 std::atomic_size_t OrientedGraph::d_countGraph = 0;
 std::atomic_size_t OrientedGraph::d_countNewGraphInstance = 0;
 
@@ -164,6 +166,101 @@ VertexPtr OrientedGraph::addGate(const Gates &i_gate,
   return newVertex;
 }
 
+/// @brief
+/// @param i_type
+/// @param i_clk EN for latch and CLK for FF
+/// @param i_data what to write, D
+/// @param i_name
+/// @return
+VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
+                                       VertexPtr i_clk, VertexPtr i_data,
+                                       const std::string &i_name) {
+  auto name = i_name.empty() ? "" : internalize(i_name);
+  VertexPtr newVertex = create<GraphVertexSequential>(i_type, i_clk, i_data,
+                                                      shared_from_this(), name);
+  d_vertexes[VertexTypes::seuqential].push_back(newVertex);
+  addEdge(i_clk, newVertex);
+  addEdge(i_data, newVertex);
+
+  return newVertex;
+}
+
+/// @brief
+/// @param i_type
+/// @param i_clk EN for latch and CLK for FF
+/// @param i_data what to write, D
+/// @param i_wire RST or CLR or SET (and, for ff - or EN)
+/// @param i_name
+/// @return
+VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
+                                       VertexPtr i_clk, VertexPtr i_data,
+                                       VertexPtr i_wire,
+                                       const std::string &i_name) {
+  auto name = i_name.empty() ? "" : internalize(i_name);
+  VertexPtr newVertex = create<GraphVertexSequential>(
+      i_type, i_clk, i_data, i_wire, shared_from_this(), name);
+  d_vertexes[VertexTypes::seuqential].push_back(newVertex);
+
+  addEdge(i_clk, newVertex);
+  addEdge(i_data, newVertex);
+  addEdge(i_wire, newVertex);
+
+  return newVertex;
+}
+
+/// @brief
+/// @param i_type
+/// @param i_clk EN for latch and CLK for FF
+/// @param i_data what to write, D
+/// @param i_wire1 RST or CLR or SET
+/// @param i_wire2 SET or EN
+/// @param i_name
+/// @return
+VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
+                                       VertexPtr i_clk, VertexPtr i_data,
+                                       VertexPtr i_wire1, VertexPtr i_wire2,
+                                       const std::string &i_name) {
+  auto name = i_name.empty() ? "" : internalize(i_name);
+  VertexPtr newVertex = create<GraphVertexSequential>(
+      i_type, i_clk, i_data, i_wire1, i_wire2, shared_from_this(), name);
+  d_vertexes[VertexTypes::seuqential].push_back(newVertex);
+
+  addEdge(i_clk, newVertex);
+  addEdge(i_data, newVertex);
+  addEdge(i_wire1, newVertex);
+  addEdge(i_wire2, newVertex);
+
+  return newVertex;
+}
+
+/// @brief Use with FF only!
+/// @param i_type
+/// @param i_clk CLK signal
+/// @param i_data what to write, D
+/// @param i_rst RST signal
+/// @param i_set SET signal
+/// @param i_en EN signal
+/// @param i_name
+/// @return
+VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
+                                       VertexPtr i_clk, VertexPtr i_data,
+                                       VertexPtr i_rst, VertexPtr i_set,
+                                       VertexPtr i_en,
+                                       const std::string &i_name) {
+  auto name = i_name.empty() ? "" : internalize(i_name);
+  VertexPtr newVertex = create<GraphVertexSequential>(
+      i_type, i_clk, i_data, i_rst, i_set, i_en, shared_from_this(), name);
+  d_vertexes[VertexTypes::seuqential].push_back(newVertex);
+
+  addEdge(i_clk, newVertex);
+  addEdge(i_data, newVertex);
+  addEdge(i_rst, newVertex);
+  addEdge(i_set, newVertex);
+  addEdge(i_en, newVertex);
+
+  return newVertex;
+}
+
 std::vector<VertexPtr>
 OrientedGraph::addSubGraph(GraphPtr i_subGraph,
                            std::vector<VertexPtr> i_inputs) {
@@ -253,7 +350,8 @@ std::set<GraphPtr> OrientedGraph::getSubGraphs() const {
   return d_subGraphs;
 }
 
-std::array<std::vector<VertexPtr>, 5> OrientedGraph::getBaseVertexes() const {
+std::array<std::vector<VertexPtr>, VertexTypes::output + 1>
+OrientedGraph::getBaseVertexes() const {
   return d_vertexes;
 }
 
@@ -450,7 +548,7 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
     return std::make_pair(true, getGraphVerilogInstance());
   }
   // В данном методе происходит только генерация одного графа. Без подграфов.
-  std::string verilogTab = "  ";
+  std::string verilogTab = "\t";
 
   if (!i_filename.size()) {
     i_filename = d_name + ".v";
@@ -496,7 +594,8 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
   uint8_t count = 0;
   for (auto eachVertex:
        {d_vertexes[VertexTypes::input], d_vertexes[VertexTypes::output],
-        d_allSubGraphsOutputs, d_vertexes[VertexTypes::gate]}) {
+        d_allSubGraphsOutputs, d_vertexes[VertexTypes::gate],
+        d_vertexes[VertexTypes::seuqential]}) {
     if (eachVertex.size()) {
       auto usedType = eachVertex.back()->getType();
 
@@ -519,7 +618,8 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
       fileStream << value->getRawName()
                  << (value != eachVertex.back() ? ", " : ";\n");
     }
-    fileStream << verilogTab;
+    if (eachVertex.size())
+      fileStream << verilogTab;
 
     ++count;
   }
@@ -544,6 +644,16 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
     if (!val.first)
       return std::make_pair(false, "");
     fileStream << val.second;
+  }
+
+  if (d_vertexes[VertexTypes::seuqential].size()) {
+    fileStream << "\n";
+  }
+  // and all operations
+  for (const auto *oper: d_vertexes[VertexTypes::seuqential]) {
+    fileStream << VertexUtils::getSequentialComment(
+        static_cast<const GraphVertexSequential *>(oper));
+    fileStream << verilogTab << (*oper);
   }
 
   if (d_vertexes[VertexTypes::gate].size()) {
@@ -621,9 +731,14 @@ DotReturn OrientedGraph::toDOT() {
   LOG(INFO) << "      constants       : "
             << d_vertexes[VertexTypes::constant].size();
 #endif
+  size_t sizeAll = d_allSubGraphsOutputs.size();
+  for (const auto &vec: d_vertexes)
+    sizeAll += vec.size();
+  dot.reserve(sizeAll);
   for (const auto &eachVertex:
        {d_vertexes[VertexTypes::input], d_vertexes[VertexTypes::output],
-        d_vertexes[VertexTypes::gate], d_vertexes[VertexTypes::constant]}) {
+        d_vertexes[VertexTypes::gate], d_vertexes[VertexTypes::seuqential],
+        d_vertexes[VertexTypes::constant]}) {
     int counter = 0;
     for (auto *value: eachVertex) {
       DotReturn dotVertex = value->toDOT();
@@ -680,7 +795,7 @@ DotReturn OrientedGraph::toDOT() {
 
 std::pair<bool, std::string> OrientedGraph::toDOT(std::string i_path,
                                                   std::string i_filename) {
-  using namespace AuxMethods;
+  using namespace AuxMethodsGraph;
   if (d_alreadyParsedDot && d_isSubGraph) {
 #ifdef LOGFLAG
     LOG(INFO) << "getGraphDotInstance()";
@@ -731,7 +846,7 @@ void OrientedGraph::parseVertexToGraphML(
     const VertexTypes &vertexType, const std::vector<VertexPtr> &vertexVector,
     const std::string &nodeTemplate, const std::string &edgeTemplate,
     const std::string &i_prefix, std::string &nodes, std::string &edges) {
-  using namespace AuxMethods; // format() and replacer()
+  using namespace AuxMethodsGraph; // format() and replacer()
   std::string vertexKindName;
 
   switch (vertexType) {
@@ -773,16 +888,16 @@ void OrientedGraph::parseVertexToGraphML(
 
 std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
                                             const std::string &i_prefix) {
-  using namespace AuxMethods;     // format() and replacer()
-  using namespace ClassicGraphML; // templates
+  using namespace AuxMethodsGraph; // format() and replacer()
+  using namespace ClassicGraphML;  // templates
 
   const std::string spaces(i_indent, ' ');
 
   const std::string graphTemplate =
-      format(rawGraphTemplate, spaces, i_indent ? "%:" : "%", "%", spaces);
+      format(rawGraphTemplate, spaces, i_indent ? "{}:" : "{}", "{}", spaces);
   const std::string nodeTemplate =
-      format(rawNodeTemplate, spaces, "%", spaces, "%", "%%", spaces);
-  const std::string edgeTemplate = format(rawEdgeTemplate, spaces, "%", "%");
+      format(rawNodeTemplate, spaces, "{}", spaces, "{}", "{}{}", spaces);
+  const std::string edgeTemplate = format(rawEdgeTemplate, spaces, "{}", "{}");
 
   std::string nodes, edges, graphs, vertexKindName;
 
@@ -801,8 +916,8 @@ std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
   for (const auto &sg: d_subGraphs) {
     // preparing template for subGraphs as vertices
     currentSubGraphTemplate =
-        format(nodeTemplate, "%", "subGraph", "\n",
-               sg->toGraphMLClassic(i_indent + 4, i_prefix + "%::"));
+        format(nodeTemplate, "{}", "subGraph", "\n",
+               sg->toGraphMLClassic(i_indent + 4, i_prefix + "{}::"));
 
     // graphInputs, graphOutputs, verticesInputs, verticesOutputs
     const auto &gInputs = sg->d_vertexes.at(VertexTypes::input);
@@ -834,7 +949,7 @@ std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
     }
   }
 
-  std::string finalGraph = format(graphTemplate, "%", nodes + graphs + edges);
+  std::string finalGraph = format(graphTemplate, "{}", nodes + graphs + edges);
   if (i_indent != 0) {
     return finalGraph;
   }
@@ -878,8 +993,8 @@ bool OrientedGraph::toGraphMLOpenABCD(std::ofstream &fileStream) {
 }
 
 std::string OrientedGraph::toGraphMLPseudoABCD() {
-  using namespace AuxMethods; // format()
-  using namespace PseudoABCD; // templates
+  using namespace AuxMethodsGraph; // format()
+  using namespace PseudoABCD;      // templates
 
   GraphPtr graphPtr = shared_from_this();
   if (!d_vertexes.at(VertexTypes::subGraph).empty()) {
@@ -939,8 +1054,8 @@ std::string OrientedGraph::toGraphMLPseudoABCD() {
 }
 
 std::string OrientedGraph::toGraphMLOpenABCD() {
-  using namespace AuxMethods; // format()
-  using namespace OpenABCD;   // templates
+  using namespace AuxMethodsGraph; // format()
+  using namespace OpenABCD;        // templates
 
   GraphPtr graphPtr = shared_from_this();
   if (!d_vertexes.at(VertexTypes::subGraph).empty()) {
@@ -1281,3 +1396,5 @@ void OrientedGraph::log(el::base::type::ostream_t &osStream) const {
   //   }
 }
 #endif
+
+} // namespace CG_Graph

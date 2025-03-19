@@ -102,7 +102,7 @@ target_link_libraries(
 #include <DefaultAuxilaryMethods.hpp>
 ```
 
-Где они все находятся в namespace `AuxMethods`. Также есть экспортный хедер:
+Где они все находятся в namespace `AuxMethodsGraph`. Также есть экспортный хедер:
 
 ```
 #include <CircuitGenGraph/GraphUtils.hpp>

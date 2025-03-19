@@ -6,6 +6,8 @@
 #include "easylogging++Init.hpp"
 #endif
 
+using namespace CG_Graph;
+
 TEST(AllocatorTests, AllocateMethodTooBigStruct) {
   MultiLinearAllocator allocator(196, 128);
   struct BigStruct {

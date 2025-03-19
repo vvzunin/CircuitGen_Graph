@@ -28,6 +28,8 @@
 /// a string of type std::string that identifies a vertex
 /// */
 
+namespace CG_Graph {
+
 class GraphVertexInput : public GraphVertexBase {
 public:
   /// @brief GraphVertexInput
@@ -304,3 +306,92 @@ private:
   // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых
   // логических операций.
 };
+
+class GraphVertexSequential : public GraphVertexBase {
+public:
+  // clang-format off
+  GraphVertexSequential(SequentialTypes i_type,
+                        VertexPtr i_clk,
+                        VertexPtr i_data,
+                        GraphPtr i_baseGraph,
+                        std::string_view i_name);
+
+  GraphVertexSequential(SequentialTypes i_type,
+                        VertexPtr i_clk,
+                        VertexPtr i_data,
+                        VertexPtr wire,
+                        GraphPtr i_baseGraph,
+                        std::string_view i_name);
+
+  GraphVertexSequential(SequentialTypes i_type,
+                        VertexPtr i_clk,
+                        VertexPtr i_data,
+                        VertexPtr wire1,
+                        VertexPtr wire2,
+                        GraphPtr i_baseGraph,
+                        std::string_view i_name);
+
+  GraphVertexSequential(SequentialTypes i_type,
+                        VertexPtr i_clk,
+                        VertexPtr i_data,
+                        VertexPtr wire1,
+                        VertexPtr wire2,
+                        VertexPtr wire3,
+                        GraphPtr i_baseGraph,
+                        std::string_view i_name);
+
+  // clang-format on
+
+  ~GraphVertexSequential() override{};
+
+  /// @brief calculateHash
+  /// Calculates the hash value of the vertex
+  /// @param i_recalculate Flag indicating whether to i_recalculate the hash
+  /// value (default false)
+  /// @throws None.
+  /// @code
+  /// TO DO:
+  /// @endcode
+  /// @return The calculated hash value as a string
+
+  size_t calculateHash(bool i_recalculate = false) override;
+
+  /// @brief toVerilog
+  /// generates a string in Verilog format for the current vertex,
+  /// representing the valve according to its type and input connections.
+  /// If a vertex has no input connections, an empty string is returned.
+  /// If any input connection is invalid, an exception is thrown.
+  /// @return A Verilog format string for the current vertex
+  /// @throws std::invalid_argument if any input connection is invalid
+
+  std::string toVerilog() const override;
+  DotReturn toDOT() override;
+  char updateValue() override { return '0'; };
+
+  bool isFF() const;
+  bool isAsync() const;
+  bool isNegedge() const;
+  SequentialTypes getSeqType() const;
+
+  VertexPtr getClk() const;
+  VertexPtr getData() const;
+  VertexPtr getEn() const;
+  VertexPtr getRst() const;
+  VertexPtr getSet() const;
+
+private:
+  void setSignalByType(VertexPtr i_wire, SequentialTypes i_type,
+                       unsigned &factType);
+  void formatAlwaysBegin(std::string &verilog) const;
+
+private:
+  SequentialTypes d_seqType;
+
+  VertexPtr d_clk;
+  VertexPtr d_data;
+  VertexPtr d_en;
+  VertexPtr d_rst;
+  VertexPtr d_set;
+};
+
+} // namespace CG_Graph

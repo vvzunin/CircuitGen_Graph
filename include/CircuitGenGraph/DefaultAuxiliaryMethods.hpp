@@ -7,12 +7,14 @@
 
 #include <CircuitGenGraph/GraphUtils.hpp>
 
+#include "../../lib/fmt/core.h"
+
 /// @file AuxiliaryMethods.hpp
 /// TODO: ToEnum
 /// TODO: if need LineReader
 /// TODO: if need CopyDirectory
 
-/// namespace AuxMethods It was created to organize a set of auxiliary
+/// namespace AuxMethodsGraph It was created to organize a set of auxiliary
 /// functions and methods that can be used in various parts of a
 /// software project
 /// Functions: Random number generation, Reading files,
@@ -21,7 +23,7 @@
 /// TO DO: list the other functions
 /// </summary>
 
-namespace AuxMethods {
+namespace CG_Graph::AuxMethodsGraph {
 
 std::string replacer(const std::string &i_s, const std::string &i_r);
 std::string dotReturnToString(DotReturn dot);
@@ -45,14 +47,10 @@ struct TuplePrinter<Tuple, 1> {
   }
 };
 
-template<class... Args>
-std::string format(const std::string &fmt, Args &&...args) {
-  std::stringstream ss;
-
-  const auto t = std::make_tuple(std::forward<Args>(args)...);
-
-  TuplePrinter<decltype(t), sizeof...(Args)>::print(fmt, ss, t);
-  return ss.str();
+template<typename... Args>
+auto format(Args &&...args)
+    -> decltype(fmt::format(std::forward<Args>(args)...)) {
+  return fmt::format(std::forward<Args>(args)...);
 }
 
-} // namespace AuxMethods
+} // namespace CG_Graph::AuxMethodsGraph

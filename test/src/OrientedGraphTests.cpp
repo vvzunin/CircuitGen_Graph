@@ -11,6 +11,8 @@
 #include "easylogging++Init.hpp"
 #endif
 
+using namespace CG_Graph;
+
 /*
   Need to add toVerilogTest, setCurrentParentTest,
     resetCountersTest, getGraphVerilogInstanceTest

@@ -6,6 +6,8 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
+namespace CG_Graph {
+
 GraphVertexGates::GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph) :
     GraphVertexBase(VertexTypes::gate, i_baseGraph) {
   d_gate = i_gate;
@@ -222,3 +224,5 @@ void GraphVertexGates::log(el::base::type::ostream_t &os) const {
   os << "Vertex Hash: " << d_hashed << "\n";
 }
 #endif
+
+} // namespace CG_Graph
