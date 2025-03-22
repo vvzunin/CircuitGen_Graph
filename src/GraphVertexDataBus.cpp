@@ -123,6 +123,10 @@ DotReturn GraphVertexDataBus::toDOT() {
   return dot;
 }
 
+size_t GraphVertexDataBus::getWidth() const {
+  return d_vertices.size(); // Пример реализации
+}
+
 
 // char GraphVertexDataBus::updateValue() {
 //   // if (!d_vertices.empty()) {

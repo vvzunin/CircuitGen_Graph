@@ -321,6 +321,7 @@ public:
   GraphVertexDataBus::VertexPtr operator[](size_t index) const;
   std::string toVerilog(bool flag = true) const;
   DotReturn toDOT() override;
+  size_t getWidth() const;
 
 private:
   tcb::span<VertexPtr> d_vertices;
