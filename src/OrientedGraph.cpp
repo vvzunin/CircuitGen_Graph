@@ -179,6 +179,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
   VertexPtr newVertex = create<GraphVertexSequential>(i_type, i_clk, i_data,
                                                       shared_from_this(), name);
   d_vertexes[VertexTypes::seuqential].push_back(newVertex);
+  newVertex->reserveInConnections(2ul);
   addEdge(i_clk, newVertex);
   addEdge(i_data, newVertex);
 
@@ -201,6 +202,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
       i_type, i_clk, i_data, i_wire, shared_from_this(), name);
   d_vertexes[VertexTypes::seuqential].push_back(newVertex);
 
+  newVertex->reserveInConnections(3ul);
   addEdge(i_clk, newVertex);
   addEdge(i_data, newVertex);
   addEdge(i_wire, newVertex);
@@ -225,6 +227,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
       i_type, i_clk, i_data, i_wire1, i_wire2, shared_from_this(), name);
   d_vertexes[VertexTypes::seuqential].push_back(newVertex);
 
+  newVertex->reserveInConnections(4ul);
   addEdge(i_clk, newVertex);
   addEdge(i_data, newVertex);
   addEdge(i_wire1, newVertex);
@@ -252,6 +255,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
       i_type, i_clk, i_data, i_rst, i_set, i_en, shared_from_this(), name);
   d_vertexes[VertexTypes::seuqential].push_back(newVertex);
 
+  newVertex->reserveInConnections(5ul);
   addEdge(i_clk, newVertex);
   addEdge(i_data, newVertex);
   addEdge(i_rst, newVertex);
@@ -284,7 +288,9 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
   // adding edges for subGraphs
   addEdges(i_inputs, newGraph);
 
-  for (int i = 0; i < i_subGraph->getVerticesByType(VertexTypes::output).size();
+  size_t outSize = i_subGraph->getVerticesByType(VertexTypes::output).size();
+  newGraph->reserveOutConnections(outSize);
+  for (int i = 0; i < outSize;
        ++i) {
     VertexPtr newVertex =
         create<GraphVertexGates>(Gates::GateBuf, shared_from_this());
@@ -341,6 +347,7 @@ bool OrientedGraph::addEdge(VertexPtr from, VertexPtr to) {
 
 bool OrientedGraph::addEdges(std::vector<VertexPtr> from1, VertexPtr to) {
   bool f = true;
+  to->reserveInConnections(from1.size());
   for (VertexPtr vert: from1)
     f &= this->addEdge(vert, to);
   return f;
@@ -1207,6 +1214,8 @@ GraphPtr OrientedGraph::unrollGraph() {
   unroller(shared_from_this(), "", unroller);
 
   for (const auto &pair: vPairs) {
+    size_t size = pair.first->getOutConnections().size();
+    pair.second->reserveOutConnections(size);
     for (const auto &v: pair.first->getOutConnections()) {
       // if v is not subGraph and if v is not output from subGraph
       if (v->getType() != VertexTypes::subGraph &&

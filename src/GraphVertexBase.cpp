@@ -232,6 +232,14 @@ size_t GraphVertexBase::calculateHash(bool i_recalculate) {
   return d_hashed;
 }
 
+void GraphVertexBase::reserveInConnections(size_t i_size) {
+  d_inConnections.reserve(d_inConnections.size() + i_size);
+}
+
+void GraphVertexBase::reserveOutConnections(size_t i_size) {
+  d_outConnections.reserve(d_outConnections.size() + i_size);
+}
+
 std::vector<VertexPtr> GraphVertexBase::getInConnections() const {
   return d_inConnections;
 }

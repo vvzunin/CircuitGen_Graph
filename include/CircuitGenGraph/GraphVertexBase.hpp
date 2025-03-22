@@ -255,6 +255,9 @@ public:
 
   GraphPtrWeak getBaseGraph() const;
 
+  void reserveInConnections(size_t i_size);
+  void reserveOutConnections(size_t i_size);
+
   /// @brief getInConnections
   /// @return A vector of weak pointers to the input connections of this vertex
   /// @code
