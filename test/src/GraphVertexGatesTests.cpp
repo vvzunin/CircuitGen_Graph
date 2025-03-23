@@ -80,16 +80,12 @@ TEST(TestUpdateValue, ReturnDValueIfDInConnectionsSizeZero) {
 TEST(TestUpdateLevel, CorrectUpdate) {
   GraphVertexGates gate1(Gates::GateAnd, memoryOwnerGateGr);
   VertexPtr gatePtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd);
-  gatePtr1->setLevel(1);
   gate1.addVertexToInConnections(gatePtr1);
   gate1.updateLevel(true);
   EXPECT_EQ(gate1.getLevel(), 2);
 
   VertexPtr gatePtr2 = memoryOwnerGateGr->addGate(Gates::GateAnd);
   VertexPtr gatePtr3 = memoryOwnerGateGr->addGate(Gates::GateAnd);
-  gatePtr2->setLevel(3);
-  gatePtr3->setLevel(2);
-  gate1.addVertexToInConnections(gatePtr2);
   gate1.addVertexToInConnections(gatePtr3);
   gate1.updateLevel(true);
   EXPECT_EQ(gate1.getLevel(), 4);

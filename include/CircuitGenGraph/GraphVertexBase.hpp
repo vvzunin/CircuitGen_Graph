@@ -198,17 +198,6 @@ public:
 
   // Get-Set для уровня
 
-  /// @brief setLevel
-  /// Sets the level of the vertex
-  /// @param i_level The new level for the vertex
-  /// @code
-  /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
-  /// vertex.setLevel(2);
-  /// std::cout << "New level of the vertex: " << vertex.getLevel() << '\n';
-  /// @endcode
-
-  void setLevel(const uint32_t i_level);
-
   /// @brief getLevel
   /// Returns the level of the vertex
   /// @return The level of the vertex
@@ -486,18 +475,18 @@ public:
 #endif
 
 protected:
+  std::vector<VertexPtr> d_inConnections;
+  std::vector<VertexPtr> d_outConnections;
   GraphPtrWeak d_baseGraph;
 
   std::string_view d_name;
+
+  size_t d_hashed = 0;
+  uint32_t d_level;
+
   char d_value;
   char d_needUpdate = 0;
   HASH_CONDITION d_hasHash = NOT_CALC;
-  uint32_t d_level;
-
-  std::vector<VertexPtr> d_inConnections;
-  std::vector<VertexPtr> d_outConnections;
-
-  size_t d_hashed = 0;
 
 private:
   // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых

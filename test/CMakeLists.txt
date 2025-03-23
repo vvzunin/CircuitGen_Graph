@@ -67,7 +67,7 @@ endfunction()
 
 add_new_test(GraphVertexConstantTests)
 # add_new_test(GraphVertexGatesTests)
-# add_new_test(GraphVertexInputTests)
+add_new_test(GraphVertexInputTests)
 # add_new_test(GraphVertexOutputTests)
 # add_new_test(GraphVertexSubGraphTests)
 add_new_test(OrientedGraphTests)

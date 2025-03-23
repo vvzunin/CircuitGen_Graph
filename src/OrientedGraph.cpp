@@ -290,8 +290,7 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
 
   size_t outSize = i_subGraph->getVerticesByType(VertexTypes::output).size();
   newGraph->reserveOutConnections(outSize);
-  for (int i = 0; i < outSize;
-       ++i) {
+  for (int i = 0; i < outSize; ++i) {
     VertexPtr newVertex =
         create<GraphVertexGates>(Gates::GateBuf, shared_from_this());
 
@@ -390,7 +389,13 @@ std::vector<VertexPtr>
 OrientedGraph::getVerticesByLevel(const uint32_t &i_level) {
   this->updateLevels();
   std::vector<VertexPtr> a;
-  // TODO: Реализовать
+  if (!i_level) {
+    a.reserve(d_vertexes[input].size() + d_vertexes[constant].size());
+    a.insert(a.end(), d_vertexes[input].begin(), d_vertexes[input].end());
+    a.insert(a.end(), d_vertexes[constant].begin(), d_vertexes[constant].end());
+  } else {
+    // TODO: Реализовать
+  }
   return a;
 }
 

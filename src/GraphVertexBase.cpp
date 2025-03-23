@@ -169,15 +169,16 @@ std::string GraphVertexBase::getName(const std::string &i_prefix) const {
   return i_prefix + std::string(d_name);
 }
 
-void GraphVertexBase::setLevel(const uint32_t i_level) {
-  d_level = i_level;
-}
-
 uint32_t GraphVertexBase::getLevel() const {
   return d_level;
 }
 
 void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
+  // 2 - IN PROGRESS, 1 - CALC
+  // 2 == 010
+  // 1 == 001
+  // d_needUpdate = static_cast<MY_ENUM>(CALC | ADDED); // ADDED = 4 // 100
+  // 101
   int counter = 0;
   if (d_needUpdate && (!i_recalculate || d_needUpdate == 2)) {
     return;

@@ -107,15 +107,12 @@ TEST(TestUpdateValue, ReturnDValueIfDInConnectionsSizeZero) {
 TEST(TestUpdateLevel, CorrectUpdate) {
   GraphVertexOutput output1(memoryOwnerOutputGr);
   VertexPtr outputPtr1 = memoryOwnerOutputGr->addOutput();
-  outputPtr1->setLevel(1);
   output1.addVertexToInConnections(outputPtr1);
   output1.updateLevel();
   EXPECT_EQ(output1.getLevel(), 1);
 
   VertexPtr outputPtr2 = memoryOwnerOutputGr->addOutput();
   VertexPtr outputPtr3 = memoryOwnerOutputGr->addOutput();
-  outputPtr2->setLevel(3);
-  outputPtr3->setLevel(2);
   output1.addVertexToInConnections(outputPtr2);
   output1.addVertexToInConnections(outputPtr3);
   output1.updateLevel(true);

@@ -122,29 +122,6 @@ TEST(TestUpdateValue, ReturnDValueIfDInConnectionsSizeZero) {
 //   // EXPECT_THROW(input1.updateValue(), std::invalid_argument);
 // }
 
-// TEST(TestUpdateLevel, CorrectUpdate) {
-//   // TODO: Странный тест, все проверки для Input, а ожидается, что уровень не
-//   0. GraphVertexInput input1(memoryOwnerInputGr); VertexPtr inputPtr1 =
-//   memoryOwnerInputGr->addInput(); inputPtr1->setLevel(1);
-//   input1.addVertexToInConnections(inputPtr1);
-//   input1.updateLevel();
-//   EXPECT_EQ(input1.getLevel(), 0);
-
-//   VertexPtr inputPtr2 = memoryOwnerInputGr->addInput();
-//   VertexPtr inputPtr3 = memoryOwnerInputGr->addInput();
-//   inputPtr2->setLevel(3);
-//   inputPtr3->setLevel(2);
-//   input1.addVertexToInConnections(inputPtr2);
-//   input1.addVertexToInConnections(inputPtr3);
-//   input1.updateLevel();
-//   EXPECT_EQ(input1.getLevel(), 0);
-
-//   VertexPtr inputPtr4 = memoryOwnerInputGr->addInput();
-//   input1.addVertexToInConnections(inputPtr4);
-//   input1.updateLevel();
-//   EXPECT_EQ(input1.getLevel(), 0);
-// }
-
 TEST(TestUpdateLevel, ThrowInvalidArgumentIfDInconnectionsNIsNullptr) {
   // Странный тест с подключение input to input
   // GraphVertexInput input1;

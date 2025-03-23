@@ -516,10 +516,10 @@ private:
 
   // TODO check if can be zero. If it is possible, add flag
   size_t d_hashed = 0;
-  bool d_isSubGraph = false;
 
   std::string d_name;
 
+  bool d_isSubGraph = false;
   // Пока не реализован функционал.
   bool d_needLevelUpdate = true;
 
