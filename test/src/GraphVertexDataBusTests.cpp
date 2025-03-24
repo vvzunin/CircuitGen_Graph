@@ -2,11 +2,13 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
 #include "span.hpp"
+#include <memory>
+#include <vector>
+#include <fstream>
+
 #ifdef LOGFLAG
 #include "easylogging++Init.hpp"
 #endif
-#include <memory>
-#include <vector>
 
 // Указатель на граф, который владеет памятью
 GraphPtr memoryOwnerGraph = std::make_shared<OrientedGraph>();
@@ -338,4 +340,131 @@ TEST(GraphVertexDataBusTest, ToVerilogOutputBusFlagTrue) {
 
   // Проверяем, что метод toVerilog возвращает ожидаемый результат
   EXPECT_EQ(verilogCode, expected);
+}
+
+inline void testFile(const std::string &fileName, std::string_view text) {
+  std::ifstream file(fileName);
+
+  ASSERT_TRUE(file.is_open()) << "Unable to open file: " << fileName;
+
+  std::string line;
+  // Пропустить первые две строки (если нужно)
+  for (int i = 0; i < 2 && std::getline(file, line); ++i)
+    ;
+
+  std::stringstream buffer;
+  buffer << file.rdbuf();
+
+  EXPECT_EQ(buffer.str(), text) << "Содержимое файла не совпадает с ожидаемым.";
+  file.close();
+  ASSERT_EQ(std::remove(fileName.c_str()), 0)
+      << "Не удалось удалить файл: " << fileName;
+}
+
+TEST(GraphVertexDataBusTest, ToVerilogConstantBusFlagTrue) {
+  // Создаем массив константных вершин
+  std::vector<std::shared_ptr<GraphVertexBase>> constants;
+  constants.push_back(std::make_shared<GraphVertexConstant>('0'));
+  constants.push_back(std::make_shared<GraphVertexConstant>('1'));
+  constants.push_back(std::make_shared<GraphVertexConstant>('0'));
+
+  // Создаем массив сырых указателей
+  std::vector<GraphVertexBase *> raw_constants;
+  for (const auto &ptr: constants) {
+    raw_constants.push_back(
+        ptr.get()); // Преобразуем std::shared_ptr в сырой указатель
+  }
+
+  // Преобразуем std::vector в tcb::span
+  tcb::span<VertexPtr> constants_span(raw_constants.data(),
+                                      raw_constants.size());
+
+  // Создаем шину данных с константами
+  GraphVertexDataBus bus(constants_span, "const_bus", nullptr);
+
+  // Генерируем Verilog код с flag = true
+  std::string verilogCode = bus.toVerilog(true);
+
+  // Сохраняем Verilog код в файл
+  const std::string fileName = "testDataBusConstFlagTrue.v";
+  std::ofstream outFile(fileName);
+  ASSERT_TRUE(outFile.is_open())
+      << "Unable to open file for writing: " << fileName;
+  outFile << verilogCode;
+  outFile.close();
+
+  // Сравниваем содержимое файла с ожидаемым результатом
+  testFile(fileName, "wire const_bus_0;\nassign const_bus_0 = 1'b0;\n"
+                     "wire const_bus_1;\nassign const_bus_1 = 1'b1;\n"
+                     "wire const_bus_2;\nassign const_bus_2 = 1'b0;\n");
+}
+
+TEST(GraphVertexDataBusTest, ToVerilogInputBusFlagTrue) {
+  // Создаем массив входных вершин
+  std::vector<std::shared_ptr<GraphVertexBase>> inputs;
+  inputs.push_back(std::make_shared<GraphVertexInput>("input1"));
+  inputs.push_back(std::make_shared<GraphVertexInput>("input2"));
+
+  // Создаем массив сырых указателей
+  std::vector<GraphVertexBase *> raw_inputs;
+  for (const auto &ptr: inputs) {
+    raw_inputs.push_back(
+        ptr.get()); // Преобразуем std::shared_ptr в сырой указатель
+  }
+
+  // Преобразуем std::vector в tcb::span
+  tcb::span<VertexPtr> inputs_span(raw_inputs.data(), raw_inputs.size());
+
+  // Создаем шину данных с входами
+  GraphVertexDataBus bus(inputs_span, "input_bus", nullptr);
+
+  // Генерируем Verilog код с flag = true
+  std::string verilogCode = bus.toVerilog(true);
+
+  // Сохраняем Verilog код в файл
+  const std::string fileName = "testDataBusInputFlagTrue.v";
+  std::ofstream outFile(fileName);
+  ASSERT_TRUE(outFile.is_open())
+      << "Unable to open file for writing: " << fileName;
+  outFile << verilogCode;
+  outFile.close();
+
+  // Сравниваем содержимое файла с ожидаемым результатом
+  testFile(fileName, "input input_bus_0;\n"
+                     "input input_bus_1;\n");
+}
+
+TEST(GraphVertexDataBusTest, ToVerilogOutputBusFlagTrue) {
+  // Создаем массив выходных вершин
+  std::vector<std::shared_ptr<GraphVertexBase>> outputs;
+  outputs.push_back(std::make_shared<GraphVertexOutput>("output1"));
+  outputs.push_back(std::make_shared<GraphVertexOutput>("output2"));
+
+  // Создаем массив сырых указателей
+  std::vector<GraphVertexBase *> raw_outputs;
+  for (const auto &ptr: outputs) {
+    raw_outputs.push_back(
+        ptr.get()); // Преобразуем std::shared_ptr в сырой указатель
+  }
+
+  // Преобразуем std::vector в tcb::span
+  tcb::span<VertexPtr> outputs_span(raw_outputs.data(), raw_outputs.size());
+
+  // Создаем шину данных с выходами
+  GraphVertexDataBus bus(outputs_span, "output_bus", nullptr);
+
+  // Генерируем Verilog код с flag = true
+  std::string verilogCode = bus.toVerilog(true);
+
+  // Сохраняем Verilog код в файл
+  const std::string fileName = "testDataBusOutputFlagTrue.v";
+  std::ofstream outFile(fileName);
+  ASSERT_TRUE(outFile.is_open())
+      << "Unable to open file for writing: " << fileName;
+  outFile << verilogCode;
+  outFile.close();
+
+  // Сравниваем содержимое файла с ожидаемым результатом
+  testFile(fileName, "output output_bus_0;\n"
+                     "output output_bus_1;\n");
 }
