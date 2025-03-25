@@ -7,21 +7,25 @@
 #include <string>
 #include <vector>
 
-#include <CircuitGenGraph/DefaultSettings.hpp>
 #include <CircuitGenGraph/enums.hpp>
+
 #include <CircuitGenGraph/GraphMemory.hpp>
+#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
 #endif
 
+#define GraphPtr std::shared_ptr<CG_Graph::OrientedGraph>
+#define GraphPtrWeak std::weak_ptr<CG_Graph::OrientedGraph>
+
+#define VertexPtr CG_Graph::GraphVertexBase *
+
+namespace CG_Graph {
+
 class OrientedGraph;
-
-#define GraphPtr std::shared_ptr<OrientedGraph>
-#define GraphPtrWeak std::weak_ptr<OrientedGraph>
-
-#define VertexPtr GraphVertexBase *
+class GraphVertexSequential;
 
 /// @brief VertexUtils
 /// Namespace containing utility functions for working with vertices
@@ -71,6 +75,9 @@ std::string vertexTypeToVerilog(VertexTypes i_type);
 /// std::cout << "Comment for input vertex type: " << comment << std::endl;
 /// @endcode
 std::string vertexTypeToComment(VertexTypes i_type);
+
+std::string getSequentialComment(const GraphVertexSequential *i_seq);
+
 } // namespace VertexUtils
 
 /// class GraphVertexBase
@@ -496,3 +503,5 @@ private:
 };
 
 std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex);
+
+} // namespace CG_Graph

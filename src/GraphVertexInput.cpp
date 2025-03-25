@@ -6,6 +6,8 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
+namespace CG_Graph {
+
 GraphVertexInput::GraphVertexInput(GraphPtr i_baseGraph,
                                    const VertexTypes i_type) :
     GraphVertexBase(i_type, i_baseGraph) {
@@ -57,8 +59,8 @@ void GraphVertexInput::log(el::base::type::ostream_t &os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
-  os << "Vertex Type: "
-     << DefaultSettings::parseVertexToString(VertexTypes::input) << "\n";
+  os << "Vertex Type: " << GraphUtils::parseVertexToString(VertexTypes::input)
+     << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << 0 << "\n";
   os << "Vertex Hash: "
@@ -66,3 +68,5 @@ void GraphVertexInput::log(el::base::type::ostream_t &os) const {
      << "\n";
 }
 #endif
+
+} // namespace CG_Graph

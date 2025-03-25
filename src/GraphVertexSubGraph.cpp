@@ -9,6 +9,8 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
+namespace CG_Graph {
+
 GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
                                          GraphPtr i_baseGraph) :
     GraphVertexBase(VertexTypes::subGraph, i_baseGraph) {
@@ -238,8 +240,10 @@ void GraphVertexSubGraph::log(el::base::type::ostream_t &os) const {
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
   os << "Vertex Type: "
-     << DefaultSettings::parseVertexToString(VertexTypes::subGraph) << "\n";
+     << GraphUtils::parseVertexToString(VertexTypes::subGraph) << "\n";
   os << "Vertex Hash: " << d_hashed;
   os << *d_subGraph;
 }
 #endif
+
+} // namespace CG_Graph

@@ -29,6 +29,8 @@
 /// a string of type std::string that identifies a vertex
 /// */
 
+namespace CG_Graph {
+
 class GraphVertexInput : public GraphVertexBase {
 public:
   /// @brief GraphVertexInput
@@ -318,7 +320,7 @@ public:
   virtual void updateLevel(bool i_recalculate = false,
                            std::string tab = "") override;
   GraphVertexDataBus slice(size_t startBit, size_t endBit) const;
-  GraphVertexDataBus::VertexPtr operator[](size_t index) const;
+  VertexPtr operator[](size_t index) const;
   std::string toVerilog(bool flag = true) const;
   DotReturn toDOT() override;
   size_t getWidth() const;
@@ -326,3 +328,4 @@ public:
 private:
   tcb::span<VertexPtr> d_vertices;
 };
+} // namespace CG_Graph

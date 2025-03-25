@@ -12,9 +12,10 @@
 #include <unordered_set>
 #include <vector>
 
-#include <CircuitGenGraph/DefaultSettings.hpp>
 #include <CircuitGenGraph/enums.hpp>
+
 #include <CircuitGenGraph/GraphMemory.hpp>
+#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
 #ifdef LOGFLAG
@@ -23,12 +24,14 @@
 
 // TODO: Добавить проверку на имена файлов при доблении новых вершин
 
-class GraphVertexBase; // Проблема циклического определения
+#define GraphPtr std::shared_ptr<CG_Graph::OrientedGraph>
+#define GraphPtrWeak std::weak_ptr<CG_Graph::OrientedGraph>
 
-#define GraphPtr std::shared_ptr<OrientedGraph>
-#define GraphPtrWeak std::weak_ptr<OrientedGraph>
+#define VertexPtr CG_Graph::GraphVertexBase *
 
-#define VertexPtr GraphVertexBase *
+namespace CG_Graph {
+
+class GraphVertexBase;
 
 /// class OrientedGraph
 ///
@@ -75,7 +78,6 @@ class GraphVertexBase; // Проблема циклического опреде
 /// This map is used for quick counting of edges between different types of
 /// gates in the graph. It maps each gate type (Gates) to another map, where
 /// the inner map maps gate types to the count of edges between them.
-/// @param d_settings Shared pointer to DefaultSettings instance
 
 // clang-format off
 class OrientedGraph
@@ -283,6 +285,21 @@ public:
 
   VertexPtr addGate(const Gates &i_gate, const std::string &i_name = "");
 
+  VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
+                          VertexPtr i_data, const std::string &i_name = "");
+
+  VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
+                          VertexPtr i_data, VertexPtr i_wire,
+                          const std::string &i_name = "");
+
+  VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
+                          VertexPtr i_data, VertexPtr i_wire1,
+                          VertexPtr i_wire2, const std::string &i_name = "");
+
+  VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
+                          VertexPtr i_data, VertexPtr i_rst, VertexPtr i_set,
+                          VertexPtr i_en, const std::string &i_name = "");
+
   /// @brief addSubGraph
   /// Adds a subgraph to the current graph
   /// @param i_subGraph A shared pointer to the subgraph to be added
@@ -383,7 +400,8 @@ public:
 
   std::set<GraphPtr> getSubGraphs() const;
   std::set<GraphPtr> getSetSubGraphs() const;
-  std::array<std::vector<VertexPtr>, output + 1> getBaseVertexes() const;
+  std::array<std::vector<VertexPtr>, VertexTypes::output + 1>
+  getBaseVertexes() const;
   VertexPtr getVerticeByIndex(size_t idx) const;
 
   std::string getGraphVerilogInstance();
@@ -527,7 +545,7 @@ private:
   std::map<size_t, std::vector<std::vector<VertexPtr>>> d_subGraphsInputsPtr;
 
   std::set<GraphPtr> d_subGraphs;
-  std::array<std::vector<VertexPtr>, output + 1> d_vertexes;
+  std::array<std::vector<VertexPtr>, VertexTypes::output + 1> d_vertexes;
 
   static std::atomic_size_t d_countGraph;
 
@@ -538,7 +556,6 @@ private:
       {Gates::GateXor, 0}, {Gates::GateXnor, 0}};
   // used for quick edges of gate type count;
   std::map<Gates, std::map<Gates, size_t>> d_edgesGatesCount;
-
-  std::shared_ptr<DefaultSettings> d_settings =
-      DefaultSettings::getDefaultInstance("OrientedGraph");
 };
+
+} // namespace CG_Graph

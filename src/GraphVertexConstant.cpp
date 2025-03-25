@@ -7,6 +7,8 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
+namespace CG_Graph {
+
 GraphVertexConstant::GraphVertexConstant(char i_const, GraphPtr i_baseGraph) :
     GraphVertexInput(i_baseGraph, VertexTypes::constant) {
   d_value = i_const;
@@ -66,7 +68,7 @@ void GraphVertexConstant::log(el::base::type::ostream_t &os) const {
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
   os << "Vertex Type: "
-     << DefaultSettings::parseVertexToString(VertexTypes::constant) << "\n";
+     << GraphUtils::parseVertexToString(VertexTypes::constant) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << 0 << "\n";
   os << "Vertex Hash: "
@@ -74,3 +76,5 @@ void GraphVertexConstant::log(el::base::type::ostream_t &os) const {
      << "\n";
 }
 #endif
+
+} // namespace CG_Graph

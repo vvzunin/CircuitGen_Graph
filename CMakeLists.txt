@@ -24,8 +24,13 @@ set(SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexOutput.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexSubGraph.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/OrientedGraph.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultSettings.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphUtils.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultAuxiliaryMethods.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexSequential.cpp
+)
+
+set(LIBS 
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.cc
 )
 
 set(PUBLIC_HEADERS
@@ -33,7 +38,7 @@ set(PUBLIC_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertex.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertexBase.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/OrientedGraph.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/DefaultSettings.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphUtils.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/DefaultAuxiliaryMethods.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
 )
@@ -44,14 +49,17 @@ if (ENABLE_LOGGING)
 endif()
 
 if(BUILD_SHARED_LIBS)
-  add_library(${PROJECT_NAME} SHARED ${SOURCES})
+  add_library(${PROJECT_NAME} SHARED ${SOURCES} ${LIBS})
 else()
-  add_library(${PROJECT_NAME} STATIC ${SOURCES})
+  add_library(${PROJECT_NAME} STATIC ${SOURCES} ${LIBS})
 endif()
 
 add_library(
   CircuitGenGraph::CircuitGenGraph ALIAS
   ${PROJECT_NAME})
+
+include_directories(lib)
+link_directories(lib)
 
 if(ENABLE_LOGGING)
   add_library(
@@ -60,6 +68,15 @@ if(ENABLE_LOGGING)
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.h
   )
 endif()
+
+# DOES NOT WORK IN FetchContent
+# add_library(
+#   fmt STATIC
+#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/core.h
+#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format-inl.h
+#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.h
+#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.cc
+# )
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 

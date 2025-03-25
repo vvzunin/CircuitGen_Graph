@@ -6,6 +6,8 @@
 #include <string>
 #include <string_view>
 
+namespace CG_Graph {
+
 constexpr int DEFAULT_BUF = 114688;
 constexpr int CHUNK_SIZE = 14336;
 
@@ -41,7 +43,7 @@ struct MultiLinearAllocator {
   MultiLinearAllocator(const MultiLinearAllocator &other) = delete;
 
   ~MultiLinearAllocator() {
-    for (auto block: blocks) {
+    for (auto *block: blocks) {
       delete[] block;
     }
   }
@@ -165,3 +167,5 @@ private:
   /// @brief set with all vertices names
   std::pmr::set<std::string> d_strings;
 };
+
+} // namespace CG_Graph

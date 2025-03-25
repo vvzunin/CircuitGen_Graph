@@ -152,10 +152,10 @@ int main()
 ```
 - 5: Для описание классов, пространств имён указывается тег class, namespace
 ```hpp
-/// namespace AuxMethods
+/// namespace AuxMethodsGraph
 /// <описание пространства имён>
 
-namespace AuxMethods
+namespace AuxMethodsGraph
 {
     ...
 }

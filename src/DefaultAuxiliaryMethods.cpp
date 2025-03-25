@@ -4,6 +4,8 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
+namespace CG_Graph {
+
 std::string operator*(std::string a, unsigned int b) {
   std::string output = "";
   while (b--) {
@@ -12,8 +14,8 @@ std::string operator*(std::string a, unsigned int b) {
   return output;
 }
 
-std::string AuxMethods::replacer(const std::string &i_fmt,
-                                 const std::string &i_val) {
+std::string AuxMethodsGraph::replacer(const std::string &i_fmt,
+                                      const std::string &i_val) {
   std::string res;
   std::string::size_type pos = 0, prev_pos = 0;
 
@@ -30,7 +32,7 @@ std::string AuxMethods::replacer(const std::string &i_fmt,
   return res;
 }
 
-std::string AuxMethods::dotReturnToString(DotReturn dot) {
+std::string AuxMethodsGraph::dotReturnToString(DotReturn dot) {
   unsigned int tab = 0;
   std::string dotTab = "  ";
   std::string s = "";
@@ -84,3 +86,5 @@ std::string AuxMethods::dotReturnToString(DotReturn dot) {
 
   return s;
 }
+
+} // namespace CG_Graph
