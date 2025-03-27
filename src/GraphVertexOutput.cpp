@@ -40,7 +40,7 @@ void GraphVertexOutput::updateLevel(bool i_recalculate, std::string tab) {
     ptr->updateLevel(i_recalculate, tab + "  ");
     d_level = (ptr->getLevel() > d_level) ? ptr->getLevel() : d_level;
   }
-  d_needUpdate = 1;
+  d_needUpdate = VS_IN_PROGRESS;
 }
 
 DotReturn GraphVertexOutput::toDOT() {
