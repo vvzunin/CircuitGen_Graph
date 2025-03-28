@@ -21,12 +21,12 @@ GraphVertexConstant::GraphVertexConstant(char i_const, std::string_view i_name,
 }
 
 size_t GraphVertexConstant::calculateHash(bool i_recalculate) {
-  if (d_hasHash && (!i_recalculate || d_hasHash == IN_PROGRESS)) {
+  if (d_hasHash && (!i_recalculate || d_hasHash == HC_IN_PROGRESS)) {
     return d_hashed;
   }
   d_hashed = std::hash<std::string>{}(std::to_string(d_value) +
                                       std::to_string(d_outConnections.size()));
-  d_hasHash = CALC;
+  d_hasHash = HC_CALC;
 
   return d_hashed;
 }
@@ -39,7 +39,7 @@ void GraphVertexConstant::updateLevel(bool i_recalculate, std::string tab) {
   LOG(INFO) << tab << "0. " << d_name << " (" << getTypeName() << ")";
 #endif
   d_level = 0;
-  d_needUpdate = 1;
+  d_needUpdate = VS_IN_PROGRESS;
 }
 
 std::string GraphVertexConstant::getVerilogInstance() {

@@ -97,7 +97,22 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
 
 class GraphVertexBase {
 public:
-  enum HASH_CONDITION : char { NOT_CALC = 0, IN_PROGRESS = 1, CALC = 2 };
+  enum HASH_CONDITION : char { HC_NOT_CALC = 0, HC_IN_PROGRESS = 1, HC_CALC = 2 };
+
+  enum VERTEX_STATE: char { VS_NOT_CALC = 0, VS_IN_PROGRESS = 1, VS_CALC = 2};
+
+  void ResetStates() {
+    d_needUpdate = VS_NOT_CALC;
+    d_hasHash = HC_NOT_CALC;
+  }
+
+  void ResetNeedUpdateState() {
+    d_needUpdate = VS_NOT_CALC;
+  }
+
+  void ResetHashState() {
+    d_hasHash = HC_NOT_CALC;
+  }
 
   /// @brief GraphVertexBase
   /// Constructs a GraphVertexBase object with the specified vertex type and
@@ -220,6 +235,8 @@ public:
   /// (i.e., null pointers)
 
   virtual void updateLevel(bool i_recalculate = false, std::string tab = "");
+
+  virtual void findVerticesByLevel(uint32_t targetLevel, std::vector<VertexPtr>& result);
 
   /// @brief getGate
   /// Returns the type of the basic logic gate represented by this vertex. If
@@ -485,8 +502,8 @@ protected:
   uint32_t d_level;
 
   char d_value;
-  char d_needUpdate = 0;
-  HASH_CONDITION d_hasHash = NOT_CALC;
+  VERTEX_STATE d_needUpdate = VS_NOT_CALC;
+  HASH_CONDITION d_hasHash = HC_NOT_CALC;
 
 private:
   // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых

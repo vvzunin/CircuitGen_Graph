@@ -127,6 +127,10 @@ public:
   // Имеются ли gate в схеме, включая подграфы
   bool isEmpty() const;
 
+  void ClearAllStates();
+  void ClearHashStates();
+  void ClearNeedUpdateStates();
+
   /// @brief isEmptyFull It is used to check the emptiness of a graph,
   /// including all its subgraphs. It recursively traverses all the subgraphs
   /// and checks if they are empty

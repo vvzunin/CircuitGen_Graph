@@ -180,10 +180,10 @@ void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
   // d_needUpdate = static_cast<MY_ENUM>(CALC | ADDED); // ADDED = 4 // 100
   // 101
   int counter = 0;
-  if (d_needUpdate && (!i_recalculate || d_needUpdate == 2)) {
+  if (d_needUpdate && (!i_recalculate || d_needUpdate == VS_CALC)) {
     return;
   }
-  d_needUpdate = 2;
+  d_needUpdate = VS_CALC;
   for (VertexPtr vert: d_inConnections) {
 #ifdef LOGLFLAG
     LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
@@ -192,7 +192,30 @@ void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
     vert->updateLevel(i_recalculate, tab + "  ");
     d_level = (vert->getLevel() >= d_level) ? vert->getLevel() + 1 : d_level;
   }
-  d_needUpdate = 1;
+  d_needUpdate = VS_IN_PROGRESS;
+}
+
+void GraphVertexBase::findVerticesByLevel(uint32_t targetLevel, std::vector<VertexPtr>& result) {
+  if (d_needUpdate == VS_CALC) return;  
+  d_needUpdate = VS_CALC;
+
+  
+  if (d_level == targetLevel) {
+      result.push_back(this);
+      return;
+  }
+
+  if (d_level < targetLevel) {
+      for (auto* vert : d_outConnections) {
+          vert->findVerticesByLevel(targetLevel, result);
+      }
+  }
+  
+  else {
+      for (auto* vert : d_inConnections) {
+          vert->findVerticesByLevel(targetLevel, result);
+      }
+  }
 }
 
 char GraphVertexBase::getValue() const {
@@ -204,15 +227,15 @@ GraphPtrWeak GraphVertexBase::getBaseGraph() const {
 }
 
 size_t GraphVertexBase::calculateHash(bool i_recalculate) {
-  if (d_hasHash && (!i_recalculate || d_hasHash == IN_PROGRESS)) {
+  if (d_hasHash && (!i_recalculate || d_hasHash == HC_IN_PROGRESS)) {
     return d_hashed;
   }
   if (d_type == VertexTypes::input) {
     d_hashed = std::hash<size_t>{}(d_outConnections.size());
-    d_hasHash = CALC;
+    d_hasHash = HC_CALC;
     return d_hashed;
   }
-  d_hasHash = IN_PROGRESS;
+  d_hasHash = HC_IN_PROGRESS;
   std::vector<size_t> hashed_data;
   hashed_data.reserve(d_inConnections.size());
   std::string hashedStr;
@@ -228,7 +251,7 @@ size_t GraphVertexBase::calculateHash(bool i_recalculate) {
     hashedStr += sub;
   }
   d_hashed = std::hash<std::string>{}(hashedStr);
-  d_hasHash = CALC;
+  d_hasHash = HC_CALC;
 
   return d_hashed;
 }

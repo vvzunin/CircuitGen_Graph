@@ -394,7 +394,17 @@ OrientedGraph::getVerticesByLevel(const uint32_t &i_level) {
     a.insert(a.end(), d_vertexes[input].begin(), d_vertexes[input].end());
     a.insert(a.end(), d_vertexes[constant].begin(), d_vertexes[constant].end());
   } else {
-    // TODO: Реализовать
+    for (auto &verticesVector : d_vertexes) {
+      for (auto *vertex : verticesVector) {
+          vertex->ResetNeedUpdateState();
+      }
+    }
+  
+    for (auto &verticesVector : d_vertexes) {
+      for (auto *vertex : verticesVector) {
+          vertex->findVerticesByLevel(i_level, a);
+      }
+    }
   }
   return a;
 }
