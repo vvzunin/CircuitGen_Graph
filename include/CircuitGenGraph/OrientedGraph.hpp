@@ -478,6 +478,10 @@ public:
 
   std::map<Gates, std::map<Gates, size_t>> getEdgesGatesCount() const;
 
+  void reserve(VertexTypes i_type, size_t i_capacity) {
+    d_vertexes[i_type].reserve(i_capacity);
+  }
+
   bool isConnected(bool i_recalculate = false);
 
   std::map<size_t, std::vector<std::vector<VertexPtr>>>
