@@ -22,6 +22,8 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(gtest)
 
+add_compile_options(-fno-rtti)
+add_compile_options(-g3 -Wall -Wignored-qualifiers -DYYERROR_VERBOSE)
 # option for looking for possible memory leaks
 add_compile_options(-fsanitize=address)
 add_link_options(-fsanitize=address)
@@ -38,39 +40,36 @@ endif()
 
 # ---- Tests ----
 
-function(add_new_test name)
-  add_executable(
-    CircuitGenGraph_test_${name}
-    src/${name}.cpp
-  )
+# Collect all test source files into a single executable
+add_executable(CircuitGenGraph_tests
+  # src/GraphVertexGatesTests.cpp
+  # src/GraphVertexOutputTests.cpp
+  # src/GraphVertexSubGraphTests.cpp
 
-  target_link_libraries(CircuitGenGraph_test_${name} PRIVATE GTest::gtest_main)
-  target_link_libraries(CircuitGenGraph_test_${name} PRIVATE CircuitGenGraph::CircuitGenGraph)
+  src/GraphVertexConstantTests.cpp
+  src/GraphVertexInputTests.cpp
+  src/OrientedGraphTests.cpp
+  src/MemoryManagementTests.cpp
+  src/DefaultAuxiliaryMethodsTests.cpp
+  src/GraphVertexSequentialTests.cpp
+)
 
-  if(ENABLE_LOGGING)
-    target_link_libraries(CircuitGenGraph_test_${name} PRIVATE easylogging++)
-  endif()
+# Include directories
+target_include_directories(CircuitGenGraph_tests PUBLIC
+  ${PROJECT_SOURCE_DIR}
+)
 
-  if(ENABLE_COVERAGE)
-    target_compile_options(CircuitGenGraph_test_${name} PRIVATE -fprofile-arcs -ftest-coverage)
-    target_link_options(CircuitGenGraph_test_${name} PRIVATE -fprofile-arcs -ftest-coverage)
-  endif()
+# Link test target
+target_link_libraries(CircuitGenGraph_tests PUBLIC
+  GTest::gtest_main
+  CircuitGenGraph::CircuitGenGraph
+)
 
-  target_include_directories(
-    CircuitGenGraph_test_${name} ${warning_guard}
-    PUBLIC
-      "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/../src>"
-      "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>"
-  )
-  add_test(NAME ${name} COMMAND CircuitGenGraph_test_${name})
-endfunction()
+if(ENABLE_LOGGING)
+  target_link_libraries(CircuitGenGraph_tests PRIVATE easylogging++)
+endif()
 
-add_new_test(GraphVertexConstantTests)
-# add_new_test(GraphVertexGatesTests)
-add_new_test(GraphVertexInputTests)
-# add_new_test(GraphVertexOutputTests)
-# add_new_test(GraphVertexSubGraphTests)
-add_new_test(OrientedGraphTests)
-add_new_test(MemoryManagementTests)
-add_new_test(DefaultAuxiliaryMethodsTests)
-add_new_test(GraphVertexSequentialTests)
+# Register one CTest test
+include(GoogleTest)
+gtest_discover_tests(CircuitGenGraph_tests PROPERTIES DISCOVERY_TIMEOUT 60)
+

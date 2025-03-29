@@ -155,14 +155,14 @@ VertexPtr GraphVertexSequential::getSet() const {
 }
 
 size_t GraphVertexSequential::calculateHash(bool i_recalculate) {
-  if (d_hasHash && (!i_recalculate || d_hasHash == IN_PROGRESS)) {
+  if (d_hasHash && (!i_recalculate || d_hasHash == HC_IN_PROGRESS)) {
     return d_hashed;
   }
   // same as in gate, but adds type of a sequential vertex
   std::string hashedStr = std::to_string(d_outConnections.size()) +
                           std::to_string(getType()) + std::to_string(d_seqType);
 
-  d_hasHash = IN_PROGRESS;
+  d_hasHash = HC_IN_PROGRESS;
   std::vector<size_t> hashed_data;
   hashed_data.reserve(d_inConnections.size());
 
@@ -177,7 +177,7 @@ size_t GraphVertexSequential::calculateHash(bool i_recalculate) {
     hashedStr += sub;
   }
   d_hashed = std::hash<std::string>{}(hashedStr);
-  d_hasHash = CALC;
+  d_hasHash = HC_CALC;
 
   return d_hashed;
 }

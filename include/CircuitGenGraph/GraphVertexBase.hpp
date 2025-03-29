@@ -32,9 +32,6 @@ class GraphVertexSequential;
 
 namespace VertexUtils {
 
-// Счетчик вершин для именования и подобного
-static std::atomic_uint64_t d_count;
-
 /// @brief gateToString
 /// Converts a gate type enum value to its string representation
 /// @param i_type The gate type enum value
@@ -96,6 +93,16 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
 /// @param d_hashed A string containing the calculated hash value for the vertex
 
 class GraphVertexBase {
+
+public:
+  static void resetRounter() {
+    d_count = 0ul;
+  }
+
+private:
+  // Счетчик вершин для именования и подобного
+  static std::atomic_uint64_t d_count;
+
 public:
   enum HASH_CONDITION : char { HC_NOT_CALC = 0, HC_IN_PROGRESS = 1, HC_CALC = 2 };
 
@@ -510,6 +517,8 @@ private:
   // логических операций.
   VertexTypes d_type;
 };
+
+static_assert(sizeof(GraphVertexBase) <= 104u);
 
 std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex);
 

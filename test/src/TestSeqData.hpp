@@ -19,7 +19,7 @@ constexpr std::string_view SEQ_1_TEST = "module graph_0(\n"
                                         "endmodule\n";
 
 constexpr std::string_view SEQ_2_TEST =
-    "module graph_1(\n"
+    "module graph_0(\n"
     "\ten, data, \n"
     "\tres\n"
     ");\n"
@@ -38,7 +38,7 @@ constexpr std::string_view SEQ_2_TEST =
     "endmodule\n";
 
 constexpr std::string_view SEQ_3_TEST =
-    "module graph_2(\n"
+    "module graph_0(\n"
     "\tclk, data, rst, set, en, \n"
     "\tres\n"
     ");\n"

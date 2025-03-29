@@ -12,6 +12,8 @@
 
 namespace CG_Graph {
 
+std::atomic_uint64_t GraphVertexBase::d_count = 0ul;
+
 std::string VertexUtils::gateToString(Gates i_type) {
   switch (i_type) {
     case Gates::GateNot:
@@ -118,7 +120,7 @@ GraphVertexBase::GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph) {
   d_baseGraph = i_graph;
   d_type = i_type;
   d_name = i_graph->internalize(this->getTypeName() + "_" +
-                                std::to_string(VertexUtils::d_count++));
+                                std::to_string(d_count++));
   d_value = 'x';
   d_level = 0;
 }
@@ -136,7 +138,7 @@ GraphVertexBase::GraphVertexBase(const VertexTypes i_type,
           "name cannot be created");
     }
     d_name = i_graph->internalize(this->getTypeName() + "_" +
-                                  std::to_string(VertexUtils::d_count++));
+                                  std::to_string(d_count++));
   }
   d_value = 'x';
   d_level = 0;
@@ -174,10 +176,10 @@ uint32_t GraphVertexBase::getLevel() const {
 }
 
 void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
-  // 2 - IN PROGRESS, 1 - CALC
+  // 2 - IN PROGRESS, 1 - HC_CALC
   // 2 == 010
   // 1 == 001
-  // d_needUpdate = static_cast<MY_ENUM>(CALC | ADDED); // ADDED = 4 // 100
+  // d_needUpdate = static_cast<MY_ENUM>(HC_CALC | ADDED); // ADDED = 4 // 100
   // 101
   int counter = 0;
   if (d_needUpdate && (!i_recalculate || d_needUpdate == VS_CALC)) {

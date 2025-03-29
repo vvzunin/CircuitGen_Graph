@@ -24,7 +24,7 @@ using namespace CG_Graph;
     TestIsEmptyAndIsEmptyFull
     TestGetEdgesCount
     TestGetVerticesByName
-    TestCalculateHash
+    TestCalculateHash_Output
 */
 
 std::string loadStringFile(const std::filesystem::path &p) {
@@ -41,6 +41,7 @@ std::string loadStringFile(const std::filesystem::path &p) {
 // Test is on top because it needs to contain the graph_0
 
 TEST(TestSetNameAndGetName, ReturnCorrectName) {
+  OrientedGraph::resetCounter();
 #ifdef LOGFLAG
   initLogging("TestSetNameAndGetName", "ReturnCorrectName");
 #endif
@@ -207,8 +208,8 @@ TEST(TestGetEdgesCount, ReturnCorrectCount) {
   // EXPECT_THROW()
 
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
-  VertexPtr gate2 = graphPtr2->addGate(Gates::GateAnd, "And");
-  VertexPtr gate3 = graphPtr2->addGate(Gates::GateAnd, "And");
+  // VertexPtr gate2 = graphPtr2->addGate(Gates::GateAnd, "And");
+  // VertexPtr gate3 = graphPtr2->addGate(Gates::GateAnd, "And");
 
   // There is no check to the same objects in Edge
   // graph2.addEdge(gate2, gate2);
@@ -504,7 +505,7 @@ TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreSubEdges) {
 //   EXPECT_EQ(stringF, graphPtr1->toGraphMLClassic(0));
 // }
 
-TEST(TestCalculateHash, GraphsWithTheSameStructureHaveEqualHash) {
+TEST(TestCalculateHash_Output, GraphsWithTheSameStructureHaveEqualHash) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
 
@@ -540,7 +541,7 @@ TEST(TestCalculateHash, GraphsWithTheSameStructureHaveEqualHash) {
   EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
 }
 
-TEST(TestCalculateHash, GraphsWithTheSameStructureButDifferentConst) {
+TEST(TestCalculateHash_Output, GraphsWithTheSameStructureButDifferentConst) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
 
@@ -981,8 +982,8 @@ TEST(TestToDOT, SubGraphUnroll3) {
   LOG(INFO) << "SubGraphs added!";
 #endif
 
-  VertexPtr gateAnd2 = graphPtr->addGate(Gates::GateAnd, "andAB2");
-  VertexPtr gateAnd3 = graphPtr->addGate(Gates::GateAnd, "andAB3");
+  // VertexPtr gateAnd2 = graphPtr->addGate(Gates::GateAnd, "andAB2");
+  // VertexPtr gateAnd3 = graphPtr->addGate(Gates::GateAnd, "andAB3");
 #ifdef LOGFLAG
   LOG(INFO) << "Two AND gate added";
 #endif

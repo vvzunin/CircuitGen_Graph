@@ -51,7 +51,7 @@ TEST(TestConstructorWithoutIName, WithDefaultInputParametrs) {
   EXPECT_EQ(subGraph1.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
+TEST(TestConstructorWithIName_SubGraph, WithoutDefaultInputParametrs) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphVertexSubGraph subGraph1(graphPtr1, "Anything", memoryOwnerSubGr);
   EXPECT_EQ(subGraph1.getBaseGraph().lock(), memoryOwnerSubGr);
@@ -63,7 +63,7 @@ TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
   EXPECT_EQ(subGraph1.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithIName, WithDefaultInputParametrs) {
+TEST(TestConstructorWithIName_SubGraph, WithDefaultInputParametrs) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
   GraphVertexSubGraph subGraph1(graphPtr1, "Anything", graphPtr2);
@@ -150,7 +150,7 @@ TEST(TestToGraphML, Test) {
             "</graphml>\n");
 }
 // TEST(TestgGetVerilogInstance, Test) {}
-TEST(TestCalculateHash, Test) {
+TEST(TestCalculateHash_SubGraph, Test) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("testGraph");
   graphPtr1->addConst('x', "testConst");
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
@@ -175,7 +175,7 @@ TEST(TestSetSubGrahGetSubgraph, Test) {
 }
 // -------------------------------------
 
-TEST(TestSetName, InputCorrectName) {
+TEST(TestSetName_SubGraph, InputCorrectName) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSubGr);
   subGraph1.setName("Anything");
