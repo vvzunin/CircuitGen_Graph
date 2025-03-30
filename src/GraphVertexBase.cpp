@@ -182,10 +182,10 @@ void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
   // d_needUpdate = static_cast<MY_ENUM>(HC_CALC | ADDED); // ADDED = 4 // 100
   // 101
   int counter = 0;
-  if (d_needUpdate && (!i_recalculate || d_needUpdate == VS_CALC)) {
+  if (d_needUpdate && (!i_recalculate || d_needUpdate == VS_IN_PROGRESS)) {
     return;
   }
-  d_needUpdate = VS_CALC;
+  d_needUpdate = VS_IN_PROGRESS;
   for (VertexPtr vert: d_inConnections) {
 #ifdef LOGLFLAG
     LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
@@ -194,30 +194,36 @@ void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
     vert->updateLevel(i_recalculate, tab + "  ");
     d_level = (vert->getLevel() >= d_level) ? vert->getLevel() + 1 : d_level;
   }
-  d_needUpdate = VS_IN_PROGRESS;
+  d_needUpdate = VS_CALC;
 }
 
-void GraphVertexBase::findVerticesByLevel(uint32_t targetLevel, std::vector<VertexPtr>& result) {
-  if (d_needUpdate == VS_CALC) return;  
-  d_needUpdate = VS_CALC;
-
-  
-  if (d_level == targetLevel) {
-      result.push_back(this);
-      return;
+bool GraphVertexBase::getVerticesByLevel(
+    uint32_t i_level,
+    std::vector<VertexPtr> &i_result,
+    bool i_fromOut) {
+  if (d_needUpdate & VS_USED_LEVEL) return true;
+  if (!(d_needUpdate & VS_CALC)) {
+    return false;
   }
+  d_needUpdate = VS_USED_CALC;
 
-  if (d_level < targetLevel) {
-      for (auto* vert : d_outConnections) {
-          vert->findVerticesByLevel(targetLevel, result);
-      }
+  printf("Here %d\n", d_level);
+  if (d_level == i_level) {
+    i_result.push_back(this);
+    return true;
   }
-  
+  bool flag = true;
+  if (i_fromOut) {
+    for (auto* vert : d_inConnections) {
+      flag &= vert->getVerticesByLevel(i_level, i_result, i_fromOut);
+    }
+  }
   else {
-      for (auto* vert : d_inConnections) {
-          vert->findVerticesByLevel(targetLevel, result);
-      }
+    for (auto* vert : d_outConnections) {
+      flag &= vert->getVerticesByLevel(i_level, i_result, i_fromOut);
+    }
   }
+  return flag;
 }
 
 char GraphVertexBase::getValue() const {

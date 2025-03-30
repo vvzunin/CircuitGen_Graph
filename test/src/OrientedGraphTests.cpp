@@ -1078,3 +1078,32 @@ TEST(TestToDOT, SubGraph3) {
   LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
 #endif
 }
+
+TEST(OrientedGraphTests, SimpleGetByLevel) {
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+  // level = 0
+  VertexPtr vert = graph->addInput();
+  for (int i = 0; i < 5; ++i) {
+    VertexPtr another = graph->addGate(GateBuf);
+
+    graph->addEdge(vert, another);
+    vert = another;
+  }
+  // vert level is 5
+
+  std::vector<VertexPtr> upperPart;
+  upperPart.reserve(6);
+  for (int i = 0; i < 6; ++i) {
+    upperPart.push_back(graph->addGate(GateNot));
+  }
+  for (VertexPtr ptr: upperPart) {
+    VertexPtr another = graph->addOutput();
+    // level is 6
+    graph->addEdge(vert, ptr);
+    // maxLevel is 7
+    graph->addEdge(ptr, another);
+  }
+  graph->updateLevels();
+  auto result = graph->getVerticesByLevel(6);
+  EXPECT_EQ(upperPart, result);
+}

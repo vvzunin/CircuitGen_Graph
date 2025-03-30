@@ -34,7 +34,7 @@ void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
   if (d_needUpdate && !i_recalculate) {
     return;
   }
-  d_needUpdate = VS_CALC;
+  d_needUpdate = VS_IN_PROGRESS;
   for (VertexPtr vert: d_subGraph->getVerticesByType(VertexTypes::output)) {
 #ifdef LOGFLAG
     LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
@@ -42,7 +42,7 @@ void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
 #endif
     vert->updateLevel(i_recalculate, tab + "  ");
   }
-  d_needUpdate = VS_IN_PROGRESS;
+  d_needUpdate = VS_CALC;
 }
 
 // In fact is not needed

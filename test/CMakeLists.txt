@@ -46,6 +46,7 @@ add_executable(CircuitGenGraph_tests
   # src/GraphVertexOutputTests.cpp
   # src/GraphVertexSubGraphTests.cpp
 
+  src/GraphVertexBaseTests.cpp
   src/GraphVertexConstantTests.cpp
   src/GraphVertexInputTests.cpp
   src/OrientedGraphTests.cpp
