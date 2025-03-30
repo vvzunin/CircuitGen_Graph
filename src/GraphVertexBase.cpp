@@ -197,11 +197,11 @@ void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
   d_needUpdate = VS_CALC;
 }
 
-bool GraphVertexBase::getVerticesByLevel(
-    uint32_t i_level,
-    std::vector<VertexPtr> &i_result,
-    bool i_fromOut) {
-  if (d_needUpdate & VS_USED_LEVEL) return true;
+bool GraphVertexBase::getVerticesByLevel(uint32_t i_level,
+                                         std::vector<VertexPtr> &i_result,
+                                         bool i_fromOut) {
+  if (d_needUpdate & VS_USED_LEVEL)
+    return true;
   if (!(d_needUpdate & VS_CALC)) {
     return false;
   }
@@ -214,12 +214,11 @@ bool GraphVertexBase::getVerticesByLevel(
   }
   bool flag = true;
   if (i_fromOut) {
-    for (auto* vert : d_inConnections) {
+    for (auto *vert: d_inConnections) {
       flag &= vert->getVerticesByLevel(i_level, i_result, i_fromOut);
     }
-  }
-  else {
-    for (auto* vert : d_outConnections) {
+  } else {
+    for (auto *vert: d_outConnections) {
       flag &= vert->getVerticesByLevel(i_level, i_result, i_fromOut);
     }
   }

@@ -487,9 +487,7 @@ public:
     d_vertexes[i_type].reserve(d_vertexes[i_type].size() + i_capacity);
   }
 
-  static void resetCounter() {
-    d_countGraph = 0ul;
-  }
+  static void resetCounter() { d_countGraph = 0ul; }
 
   bool isConnected(bool i_recalculate = false);
 

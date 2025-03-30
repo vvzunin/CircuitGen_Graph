@@ -129,10 +129,10 @@ uint32_t OrientedGraph::getMaxLevel() {
   return mx;
 }
 
-#define SIMPLE_VERT_ITER(verticies, methodName)       \
-  for (auto &vec: verticies)                          \
-    for (auto *vertex: vec)                           \
-      vertex->methodName()                            \
+#define SIMPLE_VERT_ITER(verticies, methodName) \
+  for (auto &vec: verticies) \
+    for (auto *vertex: vec) \
+  vertex->methodName()
 
 void OrientedGraph::clearHashStates() {
   SIMPLE_VERT_ITER(d_vertexes, resetHashState);
@@ -408,8 +408,7 @@ VertexPtr OrientedGraph::getVerticeByIndex(size_t idx) const {
   return d_vertexes.at(VertexTypes::output).at(idx);
 }
 
-std::vector<VertexPtr>
-OrientedGraph::getVerticesByLevel(uint32_t i_level) {
+std::vector<VertexPtr> OrientedGraph::getVerticesByLevel(uint32_t i_level) {
   updateLevels();
   std::vector<VertexPtr> a;
   if (!i_level) {
