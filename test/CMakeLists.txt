@@ -52,6 +52,7 @@ add_executable(CircuitGenGraph_tests
   src/MemoryManagementTests.cpp
   src/DefaultAuxiliaryMethodsTests.cpp
   src/GraphVertexSequentialTests.cpp
+  src/GraphUtilsTests.cpp
 )
 
 # Include directories
