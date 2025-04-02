@@ -129,8 +129,8 @@ uint32_t OrientedGraph::getMaxLevel() {
   return mx;
 }
 
-#define SIMPLE_VERT_ITER(verticies, methodName) \
-  for (auto &vec: verticies) \
+#define SIMPLE_VERT_ITER(vertices, methodName) \
+  for (auto &vec: vertices) \
     for (auto *vertex: vec) \
   vertex->methodName()
 
