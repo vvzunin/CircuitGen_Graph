@@ -41,7 +41,7 @@ void GraphVertexInput::updateLevel(bool i_recalculate, std::string tab) {
   LOG(INFO) << tab << "0. " << d_name << " (" << getTypeName() << ")";
 #endif
   d_level = 0;
-  d_needUpdate = 1;
+  d_needUpdate = VS_CALC;
 }
 
 DotReturn GraphVertexInput::toDOT() {

@@ -9,7 +9,7 @@
 using namespace CG_Graph;
 
 TEST(AllocatorTests, AllocateMethodTooBigStruct) {
-  MultiLinearAllocator allocator(196, 128);
+  MultiLinearAllocator allocator(196, 154);
   struct BigStruct {
     // will take 256 bytes
     bytea many[256];
@@ -19,7 +19,7 @@ TEST(AllocatorTests, AllocateMethodTooBigStruct) {
   EXPECT_EQ(ptr, nullptr);
 }
 TEST(AllocatorTests, AllocateMethodSmallStruct) {
-  MultiLinearAllocator allocator(196, 128);
+  MultiLinearAllocator allocator(196, 154);
   struct SmallStruct {
     // will take 196 bytes
     bytea many[196];

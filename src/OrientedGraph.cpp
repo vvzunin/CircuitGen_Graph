@@ -129,6 +129,29 @@ uint32_t OrientedGraph::getMaxLevel() {
   return mx;
 }
 
+#define SIMPLE_VERT_ITER(vertices, methodName) \
+  for (auto &vec: vertices) \
+    for (auto *vertex: vec) \
+  vertex->methodName()
+
+void OrientedGraph::clearHashStates() {
+  SIMPLE_VERT_ITER(d_vertexes, resetHashState);
+}
+
+void OrientedGraph::clearNeedUpdateStates() {
+  SIMPLE_VERT_ITER(d_vertexes, resetNeedUpdateState);
+}
+
+void OrientedGraph::clearUsedLevelStates() {
+  SIMPLE_VERT_ITER(d_vertexes, resetUsedLevelState);
+}
+
+void OrientedGraph::clearAllStates() {
+  SIMPLE_VERT_ITER(d_vertexes, resetAllStates);
+}
+
+#undef SIMPLE_VERT_ITER
+
 VertexPtr OrientedGraph::addInput(const std::string &i_name) {
   VertexPtr newVertex = create<GraphVertexInput>(
       i_name.empty() ? "" : internalize(i_name), shared_from_this());
@@ -179,6 +202,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
   VertexPtr newVertex = create<GraphVertexSequential>(i_type, i_clk, i_data,
                                                       shared_from_this(), name);
   d_vertexes[VertexTypes::seuqential].push_back(newVertex);
+  newVertex->reserveInConnections(2ul);
   addEdge(i_clk, newVertex);
   addEdge(i_data, newVertex);
 
@@ -201,6 +225,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
       i_type, i_clk, i_data, i_wire, shared_from_this(), name);
   d_vertexes[VertexTypes::seuqential].push_back(newVertex);
 
+  newVertex->reserveInConnections(3ul);
   addEdge(i_clk, newVertex);
   addEdge(i_data, newVertex);
   addEdge(i_wire, newVertex);
@@ -225,6 +250,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
       i_type, i_clk, i_data, i_wire1, i_wire2, shared_from_this(), name);
   d_vertexes[VertexTypes::seuqential].push_back(newVertex);
 
+  newVertex->reserveInConnections(4ul);
   addEdge(i_clk, newVertex);
   addEdge(i_data, newVertex);
   addEdge(i_wire1, newVertex);
@@ -252,6 +278,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
       i_type, i_clk, i_data, i_rst, i_set, i_en, shared_from_this(), name);
   d_vertexes[VertexTypes::seuqential].push_back(newVertex);
 
+  newVertex->reserveInConnections(5ul);
   addEdge(i_clk, newVertex);
   addEdge(i_data, newVertex);
   addEdge(i_rst, newVertex);
@@ -284,8 +311,9 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
   // adding edges for subGraphs
   addEdges(i_inputs, newGraph);
 
-  for (int i = 0; i < i_subGraph->getVerticesByType(VertexTypes::output).size();
-       ++i) {
+  size_t outSize = i_subGraph->getVerticesByType(VertexTypes::output).size();
+  newGraph->reserveOutConnections(outSize);
+  for (int i = 0; i < outSize; ++i) {
     VertexPtr newVertex =
         create<GraphVertexGates>(Gates::GateBuf, shared_from_this());
 
@@ -341,6 +369,7 @@ bool OrientedGraph::addEdge(VertexPtr from, VertexPtr to) {
 
 bool OrientedGraph::addEdges(std::vector<VertexPtr> from1, VertexPtr to) {
   bool f = true;
+  to->reserveInConnections(from1.size());
   for (VertexPtr vert: from1)
     f &= this->addEdge(vert, to);
   return f;
@@ -379,11 +408,30 @@ VertexPtr OrientedGraph::getVerticeByIndex(size_t idx) const {
   return d_vertexes.at(VertexTypes::output).at(idx);
 }
 
-std::vector<VertexPtr>
-OrientedGraph::getVerticesByLevel(const uint32_t &i_level) {
-  this->updateLevels();
+std::vector<VertexPtr> OrientedGraph::getVerticesByLevel(uint32_t i_level) {
+  updateLevels();
   std::vector<VertexPtr> a;
-  // TODO: Реализовать
+  if (!i_level) {
+    a.reserve(d_vertexes[input].size() + d_vertexes[constant].size());
+    a.insert(a.end(), d_vertexes[input].begin(), d_vertexes[input].end());
+    a.insert(a.end(), d_vertexes[constant].begin(), d_vertexes[constant].end());
+  } else {
+    // maxLevel / 2 <= i_level -> output is more close to level target
+    // ( maxLevel / 2 <= i_level ) * 2 = maxLevel <= i_level << 1
+    if (getMaxLevel() <= (i_level << 1u)) {
+      for (VertexPtr vertex: d_vertexes[output]) {
+        vertex->getVerticesByLevel(i_level, a);
+      }
+    } else {
+      for (VertexPtr vertex: d_vertexes[input]) {
+        vertex->getVerticesByLevel(i_level, a, false);
+      }
+      for (VertexPtr vertex: d_vertexes[constant]) {
+        vertex->getVerticesByLevel(i_level, a, false);
+      }
+    }
+    clearUsedLevelStates();
+  }
   return a;
 }
 
@@ -1207,6 +1255,8 @@ GraphPtr OrientedGraph::unrollGraph() {
   unroller(shared_from_this(), "", unroller);
 
   for (const auto &pair: vPairs) {
+    size_t size = pair.first->getOutConnections().size();
+    pair.second->reserveOutConnections(size);
     for (const auto &v: pair.first->getOutConnections()) {
       // if v is not subGraph and if v is not output from subGraph
       if (v->getType() != VertexTypes::subGraph &&

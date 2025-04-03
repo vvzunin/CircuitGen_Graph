@@ -32,6 +32,7 @@ inline void testFile(const std::string &fileName, std::string_view text) {
 }
 
 TEST(SequentialTests, TestSimpleTrigger) {
+  OrientedGraph::resetCounter();
   GraphPtr graph = std::make_shared<OrientedGraph>();
   auto *clk = graph->addInput("clk");
   auto *data = graph->addInput("data");
@@ -50,6 +51,7 @@ TEST(SequentialTests, TestSimpleTrigger) {
 }
 
 TEST(SequentialTests, TestSimpleLatch) {
+  OrientedGraph::resetCounter();
   GraphPtr graph = std::make_shared<OrientedGraph>();
   auto *en = graph->addInput("en");
   auto *data = graph->addInput("data");
@@ -68,6 +70,7 @@ TEST(SequentialTests, TestSimpleLatch) {
 }
 
 TEST(SequentialTests, TestFullTrigger) {
+  OrientedGraph::resetCounter();
   GraphPtr graph = std::make_shared<OrientedGraph>();
   auto *clk = graph->addInput("clk");
   auto *data = graph->addInput("data");

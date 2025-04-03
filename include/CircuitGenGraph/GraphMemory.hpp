@@ -8,8 +8,8 @@
 
 namespace CG_Graph {
 
-constexpr int DEFAULT_BUF = 114688;
-constexpr int CHUNK_SIZE = 14336;
+constexpr int DEFAULT_BUF = 106496;
+constexpr int CHUNK_SIZE = 13312;
 
 typedef unsigned char bytea;
 
@@ -21,7 +21,7 @@ typedef unsigned char bytea;
 struct MultiLinearAllocator {
   // clang-format off
 
-  /// @brief buf_size should be more than 128 bytes,
+  /// @brief buf_size should be more than 154 bytes,
   /// as the biggest vertex has such size
   /// @param buf_size size for the first allocation
   /// @param chunk_size size for further allocations (usually is less
@@ -29,8 +29,8 @@ struct MultiLinearAllocator {
   MultiLinearAllocator(size_t buf_size, size_t chunk_size)
       : buf_size(buf_size)
       , chunk_size(chunk_size) {
-    assert(buf_size >= 128);
-    assert(chunk_size >= 128);
+    assert(buf_size >= 154);
+    assert(chunk_size >= 154);
     blocks.reserve(5);
     blocks.push_back(offset = new bytea[buf_size]);
   }

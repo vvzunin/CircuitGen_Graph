@@ -38,9 +38,10 @@ void GraphVertexOutput::updateLevel(bool i_recalculate, std::string tab) {
               << ptr->getTypeName() << ")";
 #endif
     ptr->updateLevel(i_recalculate, tab + "  ");
-    d_level = (ptr->getLevel() > d_level) ? ptr->getLevel() : d_level;
+    uint32_t lvl = ptr->getLevel() + 1;
+    d_level = (lvl > d_level) ? lvl : d_level;
   }
-  d_needUpdate = 1;
+  d_needUpdate = VS_CALC;
 }
 
 DotReturn GraphVertexOutput::toDOT() {
