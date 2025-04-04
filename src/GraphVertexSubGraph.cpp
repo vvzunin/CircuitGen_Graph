@@ -34,7 +34,7 @@ void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
   if (d_needUpdate && !i_recalculate) {
     return;
   }
-  d_needUpdate = 2;
+  d_needUpdate = VS_IN_PROGRESS;
   for (VertexPtr vert: d_subGraph->getVerticesByType(VertexTypes::output)) {
 #ifdef LOGFLAG
     LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
@@ -42,7 +42,7 @@ void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
 #endif
     vert->updateLevel(i_recalculate, tab + "  ");
   }
-  d_needUpdate = 1;
+  d_needUpdate = VS_CALC;
 }
 
 // In fact is not needed
@@ -104,14 +104,14 @@ GraphPtr GraphVertexSubGraph::getSubGraph() const {
 }
 
 size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
-  if (d_hasHash && (!i_recalculate || d_hasHash == IN_PROGRESS)) {
+  if (d_hasHash && (!i_recalculate || d_hasHash == HC_IN_PROGRESS)) {
     return d_hashed;
   }
   // calc hash from subgraph
   std::string hashedStr =
       d_subGraph->calculateHash() + std::to_string(d_outConnections.size());
 
-  d_hasHash = IN_PROGRESS;
+  d_hasHash = HC_IN_PROGRESS;
   std::vector<size_t> hashed_data;
   hashed_data.reserve(d_inConnections.size());
 
@@ -126,7 +126,7 @@ size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
     hashedStr += sub;
   }
   d_hashed = std::hash<std::string>{}(hashedStr);
-  d_hasHash = CALC;
+  d_hasHash = HC_CALC;
 
   return d_hashed;
 }

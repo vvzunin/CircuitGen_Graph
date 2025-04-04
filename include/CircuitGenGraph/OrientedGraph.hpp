@@ -127,6 +127,11 @@ public:
   // Имеются ли gate в схеме, включая подграфы
   bool isEmpty() const;
 
+  void clearAllStates();
+  void clearHashStates();
+  void clearNeedUpdateStates();
+  void clearUsedLevelStates();
+
   /// @brief isEmptyFull It is used to check the emptiness of a graph,
   /// including all its subgraphs. It recursively traverses all the subgraphs
   /// and checks if they are empty
@@ -443,7 +448,7 @@ public:
   std::vector<VertexPtr>
   getVerticesByType(const VertexTypes &i_type, std::string_view i_name = "",
                     const bool &i_addSubGraphs = false) const;
-  std::vector<VertexPtr> getVerticesByLevel(const uint32_t &i_level);
+  std::vector<VertexPtr> getVerticesByLevel(uint32_t i_level);
 
   std::vector<VertexPtr>
   getVerticesByName(std::string_view i_name,
@@ -477,6 +482,12 @@ public:
   /// edges between different types of gates in the graph
 
   std::map<Gates, std::map<Gates, size_t>> getEdgesGatesCount() const;
+
+  void reserve(VertexTypes i_type, size_t i_capacity) {
+    d_vertexes[i_type].reserve(d_vertexes[i_type].size() + i_capacity);
+  }
+
+  static void resetCounter() { d_countGraph = 0ul; }
 
   bool isConnected(bool i_recalculate = false);
 
@@ -516,10 +527,10 @@ private:
 
   // TODO check if can be zero. If it is possible, add flag
   size_t d_hashed = 0;
-  bool d_isSubGraph = false;
 
   std::string d_name;
 
+  bool d_isSubGraph = false;
   // Пока не реализован функционал.
   bool d_needLevelUpdate = true;
 

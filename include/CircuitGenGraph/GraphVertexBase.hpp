@@ -32,9 +32,6 @@ class GraphVertexSequential;
 
 namespace VertexUtils {
 
-// Счетчик вершин для именования и подобного
-static std::atomic_uint64_t d_count;
-
 /// @brief gateToString
 /// Converts a gate type enum value to its string representation
 /// @param i_type The gate type enum value
@@ -96,8 +93,42 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
 /// @param d_hashed A string containing the calculated hash value for the vertex
 
 class GraphVertexBase {
+
 public:
-  enum HASH_CONDITION : char { NOT_CALC = 0, IN_PROGRESS = 1, CALC = 2 };
+  static void resetRounter() { d_count = 0ul; }
+
+private:
+  // Счетчик вершин для именования и подобного
+  static std::atomic_uint64_t d_count;
+
+public:
+  enum HASH_CONDITION : uint8_t {
+    HC_NOT_CALC = 0,
+    HC_IN_PROGRESS = 1,
+    HC_CALC = 2
+  };
+
+  enum VERTEX_STATE : uint8_t {
+    VS_NOT_CALC = 0u,
+    VS_IN_PROGRESS = 1u << 0,
+    VS_CALC = 1u << 1,
+    VS_USED_LEVEL = 1u << 2,
+    VS_USED_CALC = VS_CALC | VS_USED_LEVEL
+  };
+
+  void resetAllStates() {
+    d_needUpdate = VS_NOT_CALC;
+    d_hasHash = HC_NOT_CALC;
+  }
+
+  void resetNeedUpdateState() { d_needUpdate = VS_NOT_CALC; }
+
+  void resetHashState() { d_hasHash = HC_NOT_CALC; }
+
+  void resetUsedLevelState() {
+    // remove flag using bitwise operations
+    d_needUpdate = static_cast<VERTEX_STATE>(d_needUpdate & ~VS_USED_LEVEL);
+  }
 
   /// @brief GraphVertexBase
   /// Constructs a GraphVertexBase object with the specified vertex type and
@@ -198,17 +229,6 @@ public:
 
   // Get-Set для уровня
 
-  /// @brief setLevel
-  /// Sets the level of the vertex
-  /// @param i_level The new level for the vertex
-  /// @code
-  /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
-  /// vertex.setLevel(2);
-  /// std::cout << "New level of the vertex: " << vertex.getLevel() << '\n';
-  /// @endcode
-
-  void setLevel(const uint32_t i_level);
-
   /// @brief getLevel
   /// Returns the level of the vertex
   /// @return The level of the vertex
@@ -232,6 +252,10 @@ public:
 
   virtual void updateLevel(bool i_recalculate = false, std::string tab = "");
 
+  bool getVerticesByLevel(uint32_t i_targetLevel,
+                          std::vector<VertexPtr> &i_result,
+                          bool i_fromOut = true);
+
   /// @brief getGate
   /// Returns the type of the basic logic gate represented by this vertex. If
   /// the vertex does not correspond to any basic logic gate, it returns Gate
@@ -254,6 +278,9 @@ public:
   /// @endcode
 
   GraphPtrWeak getBaseGraph() const;
+
+  void reserveInConnections(size_t i_size);
+  void reserveOutConnections(size_t i_size);
 
   /// @brief getInConnections
   /// @return A vector of weak pointers to the input connections of this vertex
@@ -483,24 +510,26 @@ public:
 #endif
 
 protected:
+  std::vector<VertexPtr> d_inConnections;
+  std::vector<VertexPtr> d_outConnections;
   GraphPtrWeak d_baseGraph;
 
   std::string_view d_name;
-  char d_value;
-  char d_needUpdate = 0;
-  HASH_CONDITION d_hasHash = NOT_CALC;
-  uint32_t d_level;
-
-  std::vector<VertexPtr> d_inConnections;
-  std::vector<VertexPtr> d_outConnections;
 
   size_t d_hashed = 0;
+  uint32_t d_level;
+
+  char d_value;
+  VERTEX_STATE d_needUpdate = VS_NOT_CALC;
+  HASH_CONDITION d_hasHash = HC_NOT_CALC;
 
 private:
   // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых
   // логических операций.
   VertexTypes d_type;
 };
+
+static_assert(sizeof(GraphVertexBase) <= 104u);
 
 std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex);
 

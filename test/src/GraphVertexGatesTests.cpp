@@ -39,7 +39,7 @@ TEST(TestConstructorWithoutIName, WithDefaultGatesParametrs) {
   EXPECT_EQ(gate.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithIName, WithoutDefaultGatesParametrs) {
+TEST(TestConstructorWithIName_Gate, WithoutDefaultGatesParametrs) {
   VertexPtr gate = memoryOwnerGateGr->addGate(Gates::GateAnd, "Anything");
   EXPECT_EQ(gate->getBaseGraph().lock(), memoryOwnerGateGr);
   EXPECT_EQ(gate->getType(), VertexTypes::gate);
@@ -50,7 +50,7 @@ TEST(TestConstructorWithIName, WithoutDefaultGatesParametrs) {
   EXPECT_EQ(gate->getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithIName, WithDefaultGatesParametrs) {
+TEST(TestConstructorWithIName_Gate, WithDefaultGatesParametrs) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
   std::string graphNum = std::to_string(1);
   GraphVertexGates gate(Gates::GateAnd, "Anything", graphPtr);
@@ -80,16 +80,12 @@ TEST(TestUpdateValue, ReturnDValueIfDInConnectionsSizeZero) {
 TEST(TestUpdateLevel, CorrectUpdate) {
   GraphVertexGates gate1(Gates::GateAnd, memoryOwnerGateGr);
   VertexPtr gatePtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd);
-  gatePtr1->setLevel(1);
   gate1.addVertexToInConnections(gatePtr1);
   gate1.updateLevel(true);
   EXPECT_EQ(gate1.getLevel(), 2);
 
   VertexPtr gatePtr2 = memoryOwnerGateGr->addGate(Gates::GateAnd);
   VertexPtr gatePtr3 = memoryOwnerGateGr->addGate(Gates::GateAnd);
-  gatePtr2->setLevel(3);
-  gatePtr3->setLevel(2);
-  gate1.addVertexToInConnections(gatePtr2);
   gate1.addVertexToInConnections(gatePtr3);
   gate1.updateLevel(true);
   EXPECT_EQ(gate1.getLevel(), 4);
@@ -412,7 +408,7 @@ TEST(TestToVerilog, ReturnCorrectVerilogStringWhenUseGateXor) {
 
 // -------------------------------------
 
-TEST(TestSetName, GatesCorrectName) {
+TEST(TestSetName_Gate, GatesCorrectName) {
   GraphVertexGates gate(Gates::GateAnd, memoryOwnerGateGr);
   gate.setName("Anything");
   EXPECT_EQ(gate.getRawName(), "Anything");
@@ -453,7 +449,7 @@ TEST(TestAddOutConnections, AddConnections) {
   EXPECT_EQ(gate1->getOutConnections()[1], ptr2);
 }
 
-TEST(TestCalculateHash, SameHashWhenEqualInputs) {
+TEST(TestCalculateHash_Gate, SameHashWhenEqualInputs) {
   GraphVertexGates gate1(Gates::GateAnd, memoryOwnerGateGr);
   GraphVertexGates gate2(Gates::GateAnd, memoryOwnerGateGr);
   EXPECT_EQ(gate1.calculateHash(), gate2.calculateHash());

@@ -16,6 +16,7 @@ using namespace CG_Graph;
 GraphPtr memoryOwnerInputGr = std::make_shared<OrientedGraph>();
 
 TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrs) {
+  GraphVertexBase::resetRounter();
   GraphVertexInput input(memoryOwnerInputGr);
   std::string graphNum = std::to_string(0);
   EXPECT_EQ(input.getType(), VertexTypes::input);
@@ -28,8 +29,9 @@ TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrs) {
 }
 
 TEST(TestConstructorWithoutIName, WithDefaultInputParametrs) {
+  GraphVertexBase::resetRounter();
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
-  std::string graphNum = std::to_string(1);
+  std::string graphNum = std::to_string(0);
   GraphVertexInput input(graphPtr, VertexTypes::input);
   EXPECT_EQ(input.getType(), VertexTypes::input);
   EXPECT_EQ(input.getTypeName(), "input");
@@ -40,7 +42,7 @@ TEST(TestConstructorWithoutIName, WithDefaultInputParametrs) {
   EXPECT_EQ(input.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
+TEST(TestConstructorWithIName_Input, WithoutDefaultInputParametrs) {
   GraphVertexInput input("Anything", memoryOwnerInputGr);
   EXPECT_EQ(input.getBaseGraph().lock(), memoryOwnerInputGr);
   EXPECT_EQ(input.getType(), VertexTypes::input);
@@ -51,7 +53,7 @@ TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
   EXPECT_EQ(input.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithIName, WithDefaultInputParametrs) {
+TEST(TestConstructorWithIName_Input, WithDefaultInputParametrs) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
   GraphVertexInput input("Anything", graphPtr, VertexTypes::input);
   EXPECT_EQ(input.getType(), VertexTypes::input);
@@ -122,29 +124,6 @@ TEST(TestUpdateValue, ReturnDValueIfDInConnectionsSizeZero) {
 //   // EXPECT_THROW(input1.updateValue(), std::invalid_argument);
 // }
 
-// TEST(TestUpdateLevel, CorrectUpdate) {
-//   // TODO: Странный тест, все проверки для Input, а ожидается, что уровень не
-//   0. GraphVertexInput input1(memoryOwnerInputGr); VertexPtr inputPtr1 =
-//   memoryOwnerInputGr->addInput(); inputPtr1->setLevel(1);
-//   input1.addVertexToInConnections(inputPtr1);
-//   input1.updateLevel();
-//   EXPECT_EQ(input1.getLevel(), 0);
-
-//   VertexPtr inputPtr2 = memoryOwnerInputGr->addInput();
-//   VertexPtr inputPtr3 = memoryOwnerInputGr->addInput();
-//   inputPtr2->setLevel(3);
-//   inputPtr3->setLevel(2);
-//   input1.addVertexToInConnections(inputPtr2);
-//   input1.addVertexToInConnections(inputPtr3);
-//   input1.updateLevel();
-//   EXPECT_EQ(input1.getLevel(), 0);
-
-//   VertexPtr inputPtr4 = memoryOwnerInputGr->addInput();
-//   input1.addVertexToInConnections(inputPtr4);
-//   input1.updateLevel();
-//   EXPECT_EQ(input1.getLevel(), 0);
-// }
-
 TEST(TestUpdateLevel, ThrowInvalidArgumentIfDInconnectionsNIsNullptr) {
   // Странный тест с подключение input to input
   // GraphVertexInput input1;
@@ -168,7 +147,7 @@ TEST(TestUpdateLevel, ThrowInvalidArgumentIfDInconnectionsNIsNullptr) {
 
 // -------------------------------------
 
-TEST(TestSetName, InputCorrectName) {
+TEST(TestSetName_Input, InputCorrectName) {
   GraphVertexInput input(memoryOwnerInputGr);
   input.setName("Anything");
   EXPECT_EQ(input.getRawName(), "Anything");
@@ -203,7 +182,7 @@ TEST(TestAddOutConnections, AddConnections) {
   EXPECT_EQ(input1.getOutConnections()[1], inputPtr2);
 }
 
-TEST(TestCalculateHash, SameHashWhenEqualInputs) {
+TEST(TestCalculateHash_Input, SameHashWhenEqualInputs) {
   GraphVertexInput input1(memoryOwnerInputGr);
   GraphVertexInput input2(memoryOwnerInputGr);
   EXPECT_EQ(input1.calculateHash(), input2.calculateHash());

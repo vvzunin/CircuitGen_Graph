@@ -39,7 +39,7 @@ TEST(TestConstructorWithoutIName, WithDefaultInputParametrs) {
   EXPECT_EQ(output.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
+TEST(TestConstructorWithIName_Output, WithoutDefaultInputParametrs) {
   GraphVertexOutput output("Anything", memoryOwnerOutputGr);
   EXPECT_EQ(output.getBaseGraph().lock(), memoryOwnerOutputGr);
   EXPECT_EQ(output.getType(), VertexTypes::output);
@@ -50,7 +50,7 @@ TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
   EXPECT_EQ(output.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithIName, WithDefaultInputParametrs) {
+TEST(TestConstructorWithIName_Output, WithDefaultInputParametrs) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
   GraphVertexOutput output("Anything", graphPtr);
   EXPECT_EQ(output.getType(), VertexTypes::output);
@@ -107,15 +107,12 @@ TEST(TestUpdateValue, ReturnDValueIfDInConnectionsSizeZero) {
 TEST(TestUpdateLevel, CorrectUpdate) {
   GraphVertexOutput output1(memoryOwnerOutputGr);
   VertexPtr outputPtr1 = memoryOwnerOutputGr->addOutput();
-  outputPtr1->setLevel(1);
   output1.addVertexToInConnections(outputPtr1);
   output1.updateLevel();
   EXPECT_EQ(output1.getLevel(), 1);
 
   VertexPtr outputPtr2 = memoryOwnerOutputGr->addOutput();
   VertexPtr outputPtr3 = memoryOwnerOutputGr->addOutput();
-  outputPtr2->setLevel(3);
-  outputPtr3->setLevel(2);
   output1.addVertexToInConnections(outputPtr2);
   output1.addVertexToInConnections(outputPtr3);
   output1.updateLevel(true);
@@ -146,7 +143,7 @@ TEST(TestUpdateLevel, ThrowInvalidArgumentIfDInconnectionsNIzNullptr) {
 
 // -------------------------------------
 
-TEST(TestSetName, InputCorrectName) {
+TEST(TestSetName_Output, InputCorrectName) {
   GraphVertexOutput output(memoryOwnerOutputGr);
   output.setName("Anything");
   EXPECT_EQ(output.getRawName(), "Anything");
@@ -181,7 +178,7 @@ TEST(TestAddInConnections, AddConnections) {
 //   EXPECT_EQ(output1.getOutConnections()[1], outputPtr2);
 // }
 
-TEST(TestCalculateHash, SameHashWhenEqualInputs) {
+TEST(TestCalculateHash_Output, SameHashWhenEqualInputs) {
   GraphVertexOutput output1(memoryOwnerOutputGr);
   EXPECT_NE(output1.calculateHash(), 0);
 

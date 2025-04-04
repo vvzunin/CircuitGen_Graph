@@ -12,6 +12,7 @@ using namespace AuxMethodsGraph;
 GraphPtr memoryOwnerConstGr = std::make_shared<OrientedGraph>();
 
 TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrsDefName) {
+  GraphVertexBase::resetRounter();
 #ifdef LOGFLAG
   initLogging("TestConstructorWithoutIName",
               "WithoutDefaultInputParametrsDefName");
@@ -31,13 +32,14 @@ TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrsDefName) {
 }
 
 TEST(TestConstructorWithoutIName, WithDefaultInputParametrsDefName) {
+  GraphVertexBase::resetRounter();
 #ifdef LOGFLAG
   initLogging("TestConstructorWithoutIName",
               "WithDefaultInputParametrsDefName");
 #endif
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
 
-  std::string graphNum = std::to_string(1);
+  std::string graphNum = std::to_string(0);
   GraphVertexConstant constant('z', graphPtr);
   EXPECT_EQ(constant.getType(), VertexTypes::constant);
   EXPECT_EQ(constant.getTypeName(), "const");
@@ -48,7 +50,7 @@ TEST(TestConstructorWithoutIName, WithDefaultInputParametrsDefName) {
   EXPECT_EQ(constant.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
+TEST(TestConstructorWithIName_Const, WithoutDefaultInputParametrs) {
 #ifdef LOGFLAG
   initLogging("TestConstructorWithIName", "WithoutDefaultInputParametrs");
 #endif
@@ -62,7 +64,7 @@ TEST(TestConstructorWithIName, WithoutDefaultInputParametrs) {
   EXPECT_EQ(constant.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithIName, WithDefaultInputParametrs) {
+TEST(TestConstructorWithIName_Const, WithDefaultInputParametrs) {
 #ifdef LOGFLAG
   initLogging("TestConstructorWithIName", "WithDefaultInputParametrs");
 #endif
@@ -100,7 +102,7 @@ TEST(TestGetVerilogInstance, ReturnCorrectInstance) {
 
 // -------------------------------------
 
-TEST(TestSetName, InputCorrectName) {
+TEST(TestSetName_Const, InputCorrectName) {
 #ifdef LOGFLAG
   initLogging("TestSetName", "InputCorrectName");
 #endif
@@ -137,21 +139,21 @@ TEST(TestAddVertexToOutConnections, AddConnections2) {
   VertexPtr constant1 = memoryOwnerConstGr->addConst('z');
   EXPECT_EQ(constant1->getOutConnections().size(), 0);
 
-  VertexPtr constant2 = memoryOwnerConstGr->addConst('z');
+  // VertexPtr constant2 = memoryOwnerConstGr->addConst('z');
   VertexPtr ptr1 = memoryOwnerConstGr->addConst('z');
   EXPECT_EQ(constant1->addVertexToOutConnections(ptr1), true);
   EXPECT_EQ(constant1->addVertexToOutConnections(ptr1), false);
   EXPECT_EQ(constant1->getOutConnections()[0], ptr1);
 
-  VertexPtr constant3 = memoryOwnerConstGr->addConst('z');
+  // VertexPtr constant3 = memoryOwnerConstGr->addConst('z');
   VertexPtr ptr2 = memoryOwnerConstGr->addConst('z');
   constant1->addVertexToOutConnections(ptr2);
   EXPECT_EQ(constant1->getOutConnections()[1], ptr2);
 }
 
-TEST(TestCalculateHash, SameHashWhenEqualInputs) {
+TEST(TestCalculateHash_Const, SameHashWhenEqualInputs) {
 #ifdef LOGFLAG
-  initLogging("TestCalculateHash", "SameHashWhenEqualInputs");
+  initLogging("TestCalculateHash_Const", "SameHashWhenEqualInputs");
 #endif
   GraphVertexConstant constant1('z', memoryOwnerConstGr);
   GraphVertexConstant constant2('z', memoryOwnerConstGr);
@@ -162,9 +164,9 @@ TEST(TestCalculateHash, SameHashWhenEqualInputs) {
   constant2.addVertexToOutConnections(memoryOwnerConstGr->addConst('z'));
   EXPECT_EQ(constant1.calculateHash(true), constant2.calculateHash(true));
 }
-TEST(TestCalculateHash, SameGraphDifferentValues) {
+TEST(TestCalculateHash_Const, SameGraphDifferentValues) {
 #ifdef LOGFLAG
-  initLogging("TestCalculateHash", "SameHashWhenEqualInputs");
+  initLogging("TestCalculateHash_Const", "SameHashWhenEqualInputs");
 #endif
   GraphVertexConstant constant1('z', memoryOwnerConstGr);
   GraphVertexConstant constant2('x', memoryOwnerConstGr);
