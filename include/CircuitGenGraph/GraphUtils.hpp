@@ -28,7 +28,7 @@ enum VertexTypes : uint8_t {
   gate = 2,     /// vertex representing a logical element
   subGraph = 3, /// subgraph that makes up the vertex
   dataBus = 4,
-  seuqential = 5
+  sequential = 5
 };
 
 // CGG - CiruitGenGraph

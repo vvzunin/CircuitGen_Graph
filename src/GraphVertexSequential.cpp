@@ -52,7 +52,7 @@ GraphVertexSequential::GraphVertexSequential(
     VertexPtr i_data,
     GraphPtr i_baseGraph,
     std::string_view i_name)
-    : GraphVertexBase(VertexTypes::seuqential, i_name, i_baseGraph)
+    : GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph)
     , d_data(i_data) {
   // NOT ALLOWED TO USE BOTH RST AND CLR
   assert(!((i_type & RST) && (i_type & CLR)));
