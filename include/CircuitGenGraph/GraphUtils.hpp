@@ -124,13 +124,13 @@ namespace GraphUtils {
 /// @brief getLogicOperation Gets information about a logical operation by
 /// its name
 /// @param i_op A string containing the name of the logical operation
-/// @return std::pair<std::string, int32_t> A pair containing the name and ID
+/// @return std::pair<std::string_view, int32_t> A pair containing the name and ID
 /// of the logical operation
 /// @code
 /// GraphUtils settingsInstance;
 /// try {
 /// // Get information about the logical operation "and"
-/// std::pair<std::string, int32_t> operationInfo =
+/// std::pair<std::string_view, int32_t> operationInfo =
 /// settingsInstance.getLogicOperation("and");
 /// // Output information about the logical operation
 /// std::cout << "Operation name: " << operationInfo.first << std::endl;

@@ -1,3 +1,4 @@
+#include <cassert>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -16,6 +17,7 @@ getLogicOperation(const std::string &i_op) {
   const auto *iter =
       std::find_if(d_logicOperations.begin(), d_logicOperations.end(),
                    [&](const auto &x) { return x.first == i_op; });
+  assert(iter != d_logicOperations.end() && "value not found in operations' container");
   return iter->second;
 }
 
@@ -63,6 +65,7 @@ std::string fromOperationsToName(std::string_view i_op) {
   auto *iter =
       std::find_if(std::begin(operationsToName), std::end(operationsToName),
                    [&](const auto &x) { return x.first == i_op; });
+  assert(iter != std::end(operationsToName) && "name not found in operations' container");
   return std::string(iter->second);
 }
 
