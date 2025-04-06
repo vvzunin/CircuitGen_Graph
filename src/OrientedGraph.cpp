@@ -201,7 +201,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
   auto name = i_name.empty() ? "" : internalize(i_name);
   VertexPtr newVertex = create<GraphVertexSequential>(i_type, i_clk, i_data,
                                                       shared_from_this(), name);
-  d_vertexes[VertexTypes::seuqential].push_back(newVertex);
+  d_vertexes[VertexTypes::sequential].push_back(newVertex);
   newVertex->reserveInConnections(2ul);
   addEdge(i_clk, newVertex);
   addEdge(i_data, newVertex);
@@ -223,7 +223,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
   auto name = i_name.empty() ? "" : internalize(i_name);
   VertexPtr newVertex = create<GraphVertexSequential>(
       i_type, i_clk, i_data, i_wire, shared_from_this(), name);
-  d_vertexes[VertexTypes::seuqential].push_back(newVertex);
+  d_vertexes[VertexTypes::sequential].push_back(newVertex);
 
   newVertex->reserveInConnections(3ul);
   addEdge(i_clk, newVertex);
@@ -248,7 +248,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
   auto name = i_name.empty() ? "" : internalize(i_name);
   VertexPtr newVertex = create<GraphVertexSequential>(
       i_type, i_clk, i_data, i_wire1, i_wire2, shared_from_this(), name);
-  d_vertexes[VertexTypes::seuqential].push_back(newVertex);
+  d_vertexes[VertexTypes::sequential].push_back(newVertex);
 
   newVertex->reserveInConnections(4ul);
   addEdge(i_clk, newVertex);
@@ -276,7 +276,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
   auto name = i_name.empty() ? "" : internalize(i_name);
   VertexPtr newVertex = create<GraphVertexSequential>(
       i_type, i_clk, i_data, i_rst, i_set, i_en, shared_from_this(), name);
-  d_vertexes[VertexTypes::seuqential].push_back(newVertex);
+  d_vertexes[VertexTypes::sequential].push_back(newVertex);
 
   newVertex->reserveInConnections(5ul);
   addEdge(i_clk, newVertex);
@@ -643,7 +643,7 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
   for (auto eachVertex:
        {d_vertexes[VertexTypes::input], d_vertexes[VertexTypes::output],
         d_allSubGraphsOutputs, d_vertexes[VertexTypes::gate],
-        d_vertexes[VertexTypes::seuqential]}) {
+        d_vertexes[VertexTypes::sequential]}) {
     if (eachVertex.size()) {
       auto usedType = eachVertex.back()->getType();
 
@@ -694,11 +694,11 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
     fileStream << val.second;
   }
 
-  if (d_vertexes[VertexTypes::seuqential].size()) {
+  if (d_vertexes[VertexTypes::sequential].size()) {
     fileStream << "\n";
   }
   // and all operations
-  for (const auto *oper: d_vertexes[VertexTypes::seuqential]) {
+  for (const auto *oper: d_vertexes[VertexTypes::sequential]) {
     fileStream << VertexUtils::getSequentialComment(
         static_cast<const GraphVertexSequential *>(oper));
     fileStream << verilogTab << (*oper);
@@ -785,7 +785,7 @@ DotReturn OrientedGraph::toDOT() {
   dot.reserve(sizeAll);
   for (const auto &eachVertex:
        {d_vertexes[VertexTypes::input], d_vertexes[VertexTypes::output],
-        d_vertexes[VertexTypes::gate], d_vertexes[VertexTypes::seuqential],
+        d_vertexes[VertexTypes::gate], d_vertexes[VertexTypes::sequential],
         d_vertexes[VertexTypes::constant]}) {
     int counter = 0;
     for (auto *value: eachVertex) {

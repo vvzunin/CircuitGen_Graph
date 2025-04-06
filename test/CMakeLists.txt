@@ -54,6 +54,7 @@ add_executable(CircuitGenGraph_tests
   src/DefaultAuxiliaryMethodsTests.cpp
   src/GraphVertexSequentialTests.cpp
   src/GraphUtilsTests.cpp
+  src/GraphVertexDataBusTests.cpp
 )
 
 # Include directories
@@ -75,13 +76,13 @@ endif()
 include(GoogleTest)
 gtest_discover_tests(CircuitGenGraph_tests PROPERTIES DISCOVERY_TIMEOUT 60)
 
-add_new_test(GraphVertexConstantTests)
+# add_new_test(GraphVertexConstantTests)
 # add_new_test(GraphVertexGatesTests)
 # add_new_test(GraphVertexInputTests)
 # add_new_test(GraphVertexOutputTests)
 # add_new_test(GraphVertexSubGraphTests)
-add_new_test(OrientedGraphTests)
-add_new_test(MemoryManagementTests)
-add_new_test(DefaultAuxiliaryMethodsTests)
-add_new_test(GraphVertexDataBusTests)
-add_new_test(GraphVertexSequentialTests)
+# add_new_test(OrientedGraphTests)
+# add_new_test(MemoryManagementTests)
+# add_new_test(DefaultAuxiliaryMethodsTests)
+# add_new_test(GraphVertexDataBusTests)
+# add_new_test(GraphVertexSequentialTests)

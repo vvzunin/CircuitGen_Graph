@@ -1,471 +1,167 @@
-#include <sstream>
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <gtest/gtest.h>
-#include "span.hpp"
 #include <memory>
 #include <vector>
 #include <fstream>
+#include <sstream>
 
 #ifdef LOGFLAG
 #include "easylogging++Init.hpp"
 #endif
-namespace CG_Graph {
-// Указатель на граф, который владеет памятью
-GraphPtr memoryOwnerGraph = std::make_shared<OrientedGraph>();
 
-// // Тесты для конструктора GraphVertexDataBus с вертексами
-// TEST(TestGraphVertexDataBusConstructor, ConstructorWithVertices) {
-//   // Инициализация вектора вертексов
-//   std::vector<VertexPtr> vertices = {
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph),
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph)};
-//   // Создание объекта GraphVertexDataBus и проверка его ширины
-//   GraphVertexDataBus bus(vertices, memoryOwnerGraph);
-//   EXPECT_EQ(bus.getWidth(), vertices.size());
-// }
+using namespace CG_Graph;
 
-// // Тесты для конструктора GraphVertexDataBus с вертексами и именем
-// TEST(TestGraphVertexDataBusConstructor, ConstructorWithVerticesAndName) {
-//   // Инициализация вектора вертексов
-//   std::vector<VertexPtr> vertices = {
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph),
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph)};
-//   // Создание объекта GraphVertexDataBus с заданным именем
-//   GraphVertexDataBus bus(vertices, "test_bus", memoryOwnerGraph);
-//   // Проверка ширины и имени шины
-//   EXPECT_EQ(bus.getWidth(), vertices.size());
-//   EXPECT_EQ(bus.getName(), "test_bus");
-// }
-// // Тесты для конструктора GraphVertexDataBus с копированием
-// TEST(TestGraphVertexDataBusConstructor, ConstructorWithVerticesAndCopy) {
-//   // Инициализация вектора вертексов
-//   std::vector<VertexPtr> vertices = {
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph),
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph)};
-//   // Создание оригинальной шины
-//   GraphVertexDataBus originalBus(vertices, memoryOwnerGraph);
-//   // Создание копии шины
-//   GraphVertexDataBus copiedBus(vertices, originalBus);
-//   // Проверка ширины оригинальной и скопированной шин
-//   EXPECT_EQ(copiedBus.getWidth(), originalBus.getWidth());
-// }
+class DataBusTest : public ::testing::Test {
+protected:
+  void SetUp() override {
+    graph = std::make_shared<OrientedGraph>();
 
-// // Тесты для метода slice в GraphVertexDataBus
-// TEST(TestGraphVertexDataBusMethods, SliceMethod) {
-//   // Инициализация вектора вертексов
-//   std::vector<VertexPtr> vertices = {
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph),
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph),
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph)};
-//   // Создание объекта GraphVertexDataBus
-//   GraphVertexDataBus bus(vertices, memoryOwnerGraph);
-//   // Вырезка части шины и проверка ширины
-//   auto slicedBus = bus.slice(1, 3);
-//   EXPECT_EQ(slicedBus.getWidth(), 2);
-// }
+    input1 = graph->addInput("input1");
+    input2 = graph->addInput("input2");
+    input3 = graph->addInput("input3");
 
-// // Тесты для оператора доступа в GraphVertexDataBus
-// TEST(TestGraphVertexDataBusMethods, OperatorAccess) {
-//   // Инициализация вектора вертексов
-//   std::vector<VertexPtr> vertices = {
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph),
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph)};
-//   // Создание объекта GraphVertexDataBus
-//   GraphVertexDataBus bus(vertices, memoryOwnerGraph);
-//   // Проверка доступа через оператор []
-//   EXPECT_NO_THROW(bus[1]);
-//   EXPECT_THROW(bus[2], std::out_of_range); // Проверка выхода за пределы
-// }
+    const1 = graph->addConst('1', "const1");
+    const2 = graph->addConst('0', "const2");
+    const3 = graph->addConst('1', "const3");
 
-// // Тесты для метода toVerilog в GraphVertexDataBus
-// TEST(TestGraphVertexDataBusMethods, ToVerilog) {
-//   // Инициализация вектора вертексов
-//   std::vector<VertexPtr> vertices = {
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph),
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph)};
-//   // Создание объекта GraphVertexDataBus с именем
-//   GraphVertexDataBus bus(vertices, "test_bus", memoryOwnerGraph);
-//   // Генерация кода для Verilog и проверка его непустоты
-//   std::string verilogCode = bus.toVerilog(false);
-//   EXPECT_FALSE(verilogCode.empty());
-// }
+    output1 = graph->addOutput("output1");
+    output2 = graph->addOutput("output2");
 
-// // Тесты для метода toDOT в GraphVertexDataBus
-// TEST(TestGraphVertexDataBusMethods, ToDOT) {
-//   // Инициализация вектора вертексов
-//   std::vector<VertexPtr> vertices = {
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph),
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph)};
-//   // Создание объекта GraphVertexDataBus
-//   GraphVertexDataBus bus(vertices, memoryOwnerGraph);
-//   // Генерация DOT представления и проверка его непустоты
-//   DotReturn dot = bus.toDOT();
-//   EXPECT_FALSE(dot.empty());
-// }
-
-// // Тесты для ошибок в GraphVertexDataBus (пустой вектор вертексов)
-// TEST(TestGraphVertexDataBusErrors, EmptyVertices) {
-//   std::vector<VertexPtr> vertices;
-//   // Проверка на выброс исключения при пустом векторе вертексов
-//   EXPECT_THROW(GraphVertexDataBus(vertices, memoryOwnerGraph),
-//                std::invalid_argument);
-// }
-
-// // Тесты для ошибок в GraphVertexDataBus (невалидный диапазон для slice)
-// TEST(TestGraphVertexDataBusErrors, InvalidSliceRange) {
-//   // Инициализация вектора вертексов
-//   std::vector<VertexPtr> vertices = {
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph),
-//       std::make_shared<GraphVertexBase>(memoryOwnerGraph)};
-//   // Создание объекта GraphVertexDataBus
-//   GraphVertexDataBus bus(vertices, memoryOwnerGraph);
-//   // Проверка на выброс исключений при некорректных диапазонах
-//   EXPECT_THROW(bus.slice(2, 1), std::out_of_range);
-//   EXPECT_THROW(bus.slice(1, 3), std::out_of_range);
-// }
-
-TEST(GraphVertexDataBusTest, ToVerilogConstantBus) {
-  // Создаем массив константных вершин
-  std::vector<std::shared_ptr<GraphVertexBase>> constants;
-  constants.push_back(std::make_shared<GraphVertexConstant>('0'));
-  constants.push_back(std::make_shared<GraphVertexConstant>('1'));
-  constants.push_back(std::make_shared<GraphVertexConstant>('0'));
-
-  // Создаем массив сырых указателей
-  std::vector<GraphVertexBase *> raw_constants;
-  for (const auto &ptr: constants) {
-    raw_constants.push_back(
-        ptr.get()); // Преобразуем std::shared_ptr в сырой указатель
+    clk = graph->addInput("clk");
+    data = graph->addInput("data");
+    rst = graph->addInput("rst");
+    set = graph->addInput("set");
+    en = graph->addInput("en");
+    seq = graph->addSequential(ffrse, clk, data, rst, set, en, "q");
+    seq_out = graph->addOutput("seq_out");
+    graph->addEdge(seq, seq_out);
   }
 
-  // Преобразуем std::vector в tcb::span
-  tcb::span<VertexPtr> constants_span(raw_constants.data(),
-                                      raw_constants.size());
+  GraphPtr graph;
+  VertexPtr input1;
+  VertexPtr input2;
+  VertexPtr input3;
+  VertexPtr const1;
+  VertexPtr const2;
+  VertexPtr const3;
+  VertexPtr output1;
+  VertexPtr output2;
+  VertexPtr clk;
+  VertexPtr data;
+  VertexPtr rst;
+  VertexPtr set;
+  VertexPtr en;
+  VertexPtr seq;
+  VertexPtr seq_out;
+};
 
-  // Создаем шину данных с константами
-  GraphVertexDataBus bus(constants_span, "const_bus", nullptr);
-
-  // Ожидаемый Verilog код
-  std::string expected = "wire [2:0] const_bus;\nassign const_bus = 3'b010;\n";
-
-  // Проверяем, что метод toVerilog возвращает ожидаемый результат
-  EXPECT_EQ(bus.toVerilog(false), expected);
+TEST_F(DataBusTest, TestEmptyBusCreation) {
+  std::vector<VertexPtr> emptyVec;
+  EXPECT_THROW(GraphVertexDataBus(tcb::span<VertexPtr>(emptyVec), graph),
+               std::invalid_argument);
 }
 
-TEST(GraphVertexDataBusTest, ToVerilogInputBus) {
-  // Создаем массив входных вершин
-  std::vector<std::shared_ptr<GraphVertexBase>> inputs;
-  inputs.push_back(std::make_shared<GraphVertexInput>("input1"));
-  inputs.push_back(std::make_shared<GraphVertexInput>("input2"));
-
-  // Создаем массив сырых указателей
-  std::vector<GraphVertexBase *> raw_inputs;
-  for (const auto &ptr: inputs) {
-    raw_inputs.push_back(
-        ptr.get()); // Преобразуем std::shared_ptr в сырой указатель
-  }
-
-  // Преобразуем std::vector в tcb::span
-  tcb::span<VertexPtr> inputs_span(raw_inputs.data(), raw_inputs.size());
-
-  // Создаем шину данных с входами
-  GraphVertexDataBus bus(inputs_span, "input_bus", nullptr);
-
-  // Ожидаемый Verilog код
-  std::string expected = "input [1:0] input_bus;\n";
-
-  // Проверяем, что метод toVerilog возвращает ожидаемый результат
-  EXPECT_EQ(bus.toVerilog(false), expected);
+TEST_F(DataBusTest, TestMixedTypeBusCreation) {
+  std::vector<VertexPtr> mixedVec = {input1, const1};
+  EXPECT_THROW(GraphVertexDataBus(tcb::span<VertexPtr>(mixedVec), graph),
+               std::invalid_argument);
 }
 
-TEST(GraphVertexDataBusTest, ToVerilogOutputBus) {
-  // Создаем массив выходных вершин
-  std::vector<std::shared_ptr<GraphVertexBase>> outputs;
-  outputs.push_back(std::make_shared<GraphVertexOutput>("output1"));
-  outputs.push_back(std::make_shared<GraphVertexOutput>("output2"));
+TEST_F(DataBusTest, TestInputBusCreation) {
+  std::vector<VertexPtr> inputs = {input1, input2, input3};
+  GraphVertexDataBus inputBus(tcb::span<VertexPtr>(inputs), "input_bus", graph);
 
-  // Создаем массив сырых указателей
-  std::vector<GraphVertexBase *> raw_outputs;
-  for (const auto &ptr: outputs) {
-    raw_outputs.push_back(
-        ptr.get()); // Преобразуем std::shared_ptr в сырой указатель
-  }
-
-  // Преобразуем std::vector в tcb::span
-  tcb::span<VertexPtr> outputs_span(raw_outputs.data(), raw_outputs.size());
-
-  // Создаем шину данных с выходами
-  GraphVertexDataBus bus(outputs_span, "output_bus", nullptr);
-
-  // Ожидаемый Verilog код
-  std::string expected = "output [1:0] output_bus;\n";
-
-  // Проверяем, что метод toVerilog возвращает ожидаемый результат
-  EXPECT_EQ(bus.toVerilog(false), expected);
+  EXPECT_EQ(inputBus.getType(), VertexTypes::dataBus);
+  EXPECT_EQ(inputBus.getWidth(), 3);
+  EXPECT_EQ(inputBus.getName(), "input_bus");
 }
 
-TEST(GraphVertexDataBusTest, ToVerilogConstantBus) {
-  // Создаем массив константных вершин
-  std::vector<std::shared_ptr<GraphVertexBase>> constants;
-  constants.push_back(std::make_shared<GraphVertexConstant>('0'));
-  constants.push_back(std::make_shared<GraphVertexConstant>('1'));
-  constants.push_back(std::make_shared<GraphVertexConstant>('0'));
+TEST_F(DataBusTest, TestBusOperations) {
+  std::vector<VertexPtr> inputs = {input1, input2, input3, const1, const2};
+  GraphVertexDataBus bus(tcb::span<VertexPtr>(inputs), "test_bus", graph);
 
-  // Создаем массив сырых указателей
-  std::vector<GraphVertexBase *> raw_constants;
-  for (const auto &ptr: constants) {
-    raw_constants.push_back(
-        ptr.get()); // Преобразуем std::shared_ptr в сырой указатель
-  }
+  // Test operator[]
+  EXPECT_EQ(bus[0], input1);
+  EXPECT_EQ(bus[3], const1);
+  EXPECT_THROW(bus[5], std::out_of_range);
 
-  // Преобразуем std::vector в tcb::span
-  tcb::span<VertexPtr> constants_span(raw_constants.data(),
-                                      raw_constants.size());
+  // Test slice
+  auto sliced = bus.slice(1, 4);
+  EXPECT_EQ(sliced.getWidth(), 3);
+  EXPECT_EQ(sliced[0], input2);
+  EXPECT_EQ(sliced[2], const1);
 
-  // Создаем шину данных с константами
-  GraphVertexDataBus bus(constants_span, "const_bus", nullptr);
-
-  // Получаем результат работы toVerilog
-  std::string verilogCode = bus.toVerilog(false);
-
-  // Выводим результат в терминал
-  // std::cout << "Generated Verilog code:\n" << verilogCode << std::endl;
-  // Ожидаемый Verilog код
-  std::string expected = "wire [2:0] const_bus;\nassign const_bus = 3'b010;\n";
-
-  // Проверяем, что метод toVerilog возвращает ожидаемый результат
-  EXPECT_EQ(verilogCode, expected);
+  // Test invalid slice
+  EXPECT_THROW(bus.slice(3, 2), std::out_of_range);
+  EXPECT_THROW(bus.slice(0, 6), std::out_of_range);
 }
 
-TEST(GraphVertexDataBusTest, ToVerilogConstantBusFlagTrue) {
-  // Создаем массив константных вершин
-  std::vector<std::shared_ptr<GraphVertexBase>> constants;
-  constants.push_back(std::make_shared<GraphVertexConstant>('0'));
-  constants.push_back(std::make_shared<GraphVertexConstant>('1'));
-  constants.push_back(std::make_shared<GraphVertexConstant>('0'));
+TEST_F(DataBusTest, TestVerilogGeneration) {
+  std::vector<VertexPtr> inputs = {input1, input2, input3};
+  GraphVertexDataBus inputBus(tcb::span<VertexPtr>(inputs), "input_bus", graph);
 
-  // Создаем массив сырых указателей
-  std::vector<GraphVertexBase *> raw_constants;
-  for (const auto &ptr: constants) {
-    raw_constants.push_back(
-        ptr.get()); // Преобразуем std::shared_ptr в сырой указатель
-  }
+  std::string expectedInput = "input [2:0] input_bus;\n";
+  EXPECT_EQ(inputBus.toVerilog(false), expectedInput);
 
-  // Преобразуем std::vector в tcb::span
-  tcb::span<VertexPtr> constants_span(raw_constants.data(),
-                                      raw_constants.size());
+  std::vector<VertexPtr> consts = {const1, const2, const3};
+  GraphVertexDataBus constBus(tcb::span<VertexPtr>(consts), "const_bus", graph);
 
-  // Создаем шину данных с константами
-  GraphVertexDataBus bus(constants_span, "const_bus", nullptr);
-
-  // Получаем результат работы toVerilog с flag = true
-  std::string verilogCode = bus.toVerilog(true);
-
-  // Ожидаемый Verilog код
-  std::string expected = "wire const_bus_0;\nassign const_bus_0 = 1'b0;\n"
-                         "wire const_bus_1;\nassign const_bus_1 = 1'b1;\n"
-                         "wire const_bus_2;\nassign const_bus_2 = 1'b0;\n";
-
-  // Выводим результат в терминал для отладки
-  // std::cout << "Generated Verilog code (flag = true):\n" << verilogCode <<
-  // std::endl;
-
-  // Проверяем, что метод toVerilog возвращает ожидаемый результат
-  EXPECT_EQ(verilogCode, expected);
+  std::string expectedConst = "wire [2:0] const_bus;\n"
+                              "assign const_bus = 3'b101;\n";
+  EXPECT_EQ(constBus.toVerilog(false), expectedConst);
 }
 
-TEST(GraphVertexDataBusTest, ToVerilogInputBusFlagTrue) {
-  // Создаем массив входных вершин
-  std::vector<std::shared_ptr<GraphVertexBase>> inputs;
-  inputs.push_back(std::make_shared<GraphVertexInput>("input1"));
-  inputs.push_back(std::make_shared<GraphVertexInput>("input2"));
+TEST_F(DataBusTest, TestSequentialBus) {
+  std::vector<VertexPtr> seqs = {seq, seq, seq};
+  GraphVertexDataBus seqBus(tcb::span<VertexPtr>(seqs), "seq_bus", graph);
 
-  // Создаем массив сырых указателей
-  std::vector<GraphVertexBase *> raw_inputs;
-  for (const auto &ptr: inputs) {
-    raw_inputs.push_back(
-        ptr.get()); // Преобразуем std::shared_ptr в сырой указатель
-  }
-
-  // Преобразуем std::vector в tcb::span
-  tcb::span<VertexPtr> inputs_span(raw_inputs.data(), raw_inputs.size());
-
-  // Создаем шину данных с входами
-  GraphVertexDataBus bus(inputs_span, "input_bus", nullptr);
-
-  // Получаем результат работы toVerilog с flag = true
-  std::string verilogCode = bus.toVerilog(true);
-
-  // Ожидаемый Verilog код
-  std::string expected = "input input_bus_0;\n"
-                         "input input_bus_1;\n";
-
-  // Выводим результат в терминал для отладки
-  // std::cout << "Generated Verilog code (flag = true):\n" << verilogCode <<
-  // std::endl;
-
-  // Проверяем, что метод toVerilog возвращает ожидаемый результат
-  EXPECT_EQ(verilogCode, expected);
+  std::string expectedSeq = "reg [2:0] seq_bus;\n"
+                            "always @(posedge clk) begin\n"
+                            "\t\tif (!rst) seq_bus <= 3'b000;\n"
+                            "\t\telse if (set) seq_bus <= 3'b111;\n"
+                            "\t\telse if (en) seq_bus <= {data, data, data};\n"
+                            "\tend\n";
+  EXPECT_EQ(seqBus.toVerilog(false), expectedSeq);
 }
 
-TEST(GraphVertexDataBusTest, ToVerilogOutputBusFlagTrue) {
-  // Создаем массив выходных вершин
-  std::vector<std::shared_ptr<GraphVertexBase>> outputs;
-  outputs.push_back(std::make_shared<GraphVertexOutput>("output1"));
-  outputs.push_back(std::make_shared<GraphVertexOutput>("output2"));
+TEST_F(DataBusTest, TestToVerilog) {
+  // Test 1: Пустая шина
+  std::vector<VertexPtr> emptyVec;
+  GraphVertexDataBus emptyBus(tcb::span<VertexPtr>(emptyVec), "empty_bus",
+                              graph);
+  EXPECT_THROW(emptyBus.toVerilog(false), std::invalid_argument);
 
-  // Создаем массив сырых указателей
-  std::vector<GraphVertexBase *> raw_outputs;
-  for (const auto &ptr: outputs) {
-    raw_outputs.push_back(
-        ptr.get()); // Преобразуем std::shared_ptr в сырой указатель
-  }
+  // Test 2: Множество выходных элементов
+  std::vector<VertexPtr> outputs = {output1, output2};
+  GraphVertexDataBus outputBus(tcb::span<VertexPtr>(outputs), "output_bus",
+                               graph);
+  std::string expectedOutput = "output [1:0] output_bus;\n"
+                               "assign output_bus[0] = output1;\n"
+                               "assign output_bus[1] = output2;\n";
+  EXPECT_EQ(outputBus.toVerilog(false), expectedOutput);
 
-  // Преобразуем std::vector в tcb::span
-  tcb::span<VertexPtr> outputs_span(raw_outputs.data(), raw_outputs.size());
+  // Test 3: Последовательная шина
+  std::vector<VertexPtr> seqs = {seq, seq, seq};
+  GraphVertexDataBus seqBus(tcb::span<VertexPtr>(seqs), "seq_bus", graph);
+  std::string expectedSeq = "reg [2:0] seq_bus;\n"
+                            "always @(posedge clk) begin\n"
+                            "\t\tif (!rst) seq_bus <= 3'b000;\n"
+                            "\t\telse if (set) seq_bus <= 3'b111;\n"
+                            "\t\telse if (en) seq_bus <= {data, data, data};\n"
+                            "\tend\n";
+  EXPECT_EQ(seqBus.toVerilog(false), expectedSeq);
 
-  // Создаем шину данных с выходами
-  GraphVertexDataBus bus(outputs_span, "output_bus", nullptr);
+  // Test 4: Шина с флагом true
+  std::vector<VertexPtr> inputs = {input1, input2, input3};
+  GraphVertexDataBus inputBus(tcb::span<VertexPtr>(inputs), "input_bus", graph);
+  std::string expectedInput = "input input1;\n"
+                              "input input2;\n"
+                              "input input3;\n";
+  EXPECT_EQ(inputBus.toVerilog(true), expectedInput);
 
-  // Получаем результат работы toVerilog с flag = true
-  std::string verilogCode = bus.toVerilog(true);
-
-  // Ожидаемый Verilog код
-  std::string expected = "output output_bus_0;\n"
-                         "output output_bus_1;\n";
-
-  // Выводим результат в терминал для отладки
-  // std::cout << "Generated Verilog code (flag = true):\n" << verilogCode <<
-  // std::endl;
-
-  // Проверяем, что метод toVerilog возвращает ожидаемый результат
-  EXPECT_EQ(verilogCode, expected);
-}
-
-inline void testFile(const std::string &fileName, std::string_view text) {
-  std::ifstream file(fileName);
-
-  ASSERT_TRUE(file.is_open()) << "Unable to open file: " << fileName;
-
-  std::string line;
-  // Пропустить первые две строки (если нужно)
-  for (int i = 0; i < 2 && std::getline(file, line); ++i)
-    ;
-
-  std::stringstream buffer;
-  buffer << file.rdbuf();
-
-  EXPECT_EQ(buffer.str(), text) << "Содержимое файла не совпадает с ожидаемым.";
-  file.close();
-  ASSERT_EQ(std::remove(fileName.c_str()), 0)
-      << "Не удалось удалить файл: " << fileName;
-}
-
-TEST(GraphVertexDataBusTest, ToVerilogConstantBusFlagTrue) {
-  // Создаем массив константных вершин
-  std::vector<std::shared_ptr<GraphVertexBase>> constants;
-  constants.push_back(std::make_shared<GraphVertexConstant>('0'));
-  constants.push_back(std::make_shared<GraphVertexConstant>('1'));
-  constants.push_back(std::make_shared<GraphVertexConstant>('0'));
-
-  // Создаем массив сырых указателей
-  std::vector<GraphVertexBase *> raw_constants;
-  for (const auto &ptr: constants) {
-    raw_constants.push_back(
-        ptr.get()); // Преобразуем std::shared_ptr в сырой указатель
-  }
-
-  // Преобразуем std::vector в tcb::span
-  tcb::span<VertexPtr> constants_span(raw_constants.data(),
-                                      raw_constants.size());
-
-  // Создаем шину данных с константами
-  GraphVertexDataBus bus(constants_span, "const_bus", nullptr);
-
-  // Генерируем Verilog код с flag = true
-  std::string verilogCode = bus.toVerilog(true);
-
-  // Сохраняем Verilog код в файл
-  const std::string fileName = "testDataBusConstFlagTrue.v";
-  std::ofstream outFile(fileName);
-  ASSERT_TRUE(outFile.is_open())
-      << "Unable to open file for writing: " << fileName;
-  outFile << verilogCode;
-  outFile.close();
-
-  // Сравниваем содержимое файла с ожидаемым результатом
-  testFile(fileName, "wire const_bus_0;\nassign const_bus_0 = 1'b0;\n"
-                     "wire const_bus_1;\nassign const_bus_1 = 1'b1;\n"
-                     "wire const_bus_2;\nassign const_bus_2 = 1'b0;\n");
-}
-
-TEST(GraphVertexDataBusTest, ToVerilogInputBusFlagTrue) {
-  // Создаем массив входных вершин
-  std::vector<std::shared_ptr<GraphVertexBase>> inputs;
-  inputs.push_back(std::make_shared<GraphVertexInput>("input1"));
-  inputs.push_back(std::make_shared<GraphVertexInput>("input2"));
-
-  // Создаем массив сырых указателей
-  std::vector<GraphVertexBase *> raw_inputs;
-  for (const auto &ptr: inputs) {
-    raw_inputs.push_back(
-        ptr.get()); // Преобразуем std::shared_ptr в сырой указатель
-  }
-
-  // Преобразуем std::vector в tcb::span
-  tcb::span<VertexPtr> inputs_span(raw_inputs.data(), raw_inputs.size());
-
-  // Создаем шину данных с входами
-  GraphVertexDataBus bus(inputs_span, "input_bus", nullptr);
-
-  // Генерируем Verilog код с flag = true
-  std::string verilogCode = bus.toVerilog(true);
-
-  // Сохраняем Verilog код в файл
-  const std::string fileName = "testDataBusInputFlagTrue.v";
-  std::ofstream outFile(fileName);
-  ASSERT_TRUE(outFile.is_open())
-      << "Unable to open file for writing: " << fileName;
-  outFile << verilogCode;
-  outFile.close();
-
-  // Сравниваем содержимое файла с ожидаемым результатом
-  testFile(fileName, "input input_bus_0;\n"
-                     "input input_bus_1;\n");
-}
-
-TEST(GraphVertexDataBusTest, ToVerilogOutputBusFlagTrue) {
-  // Создаем массив выходных вершин
-  std::vector<std::shared_ptr<GraphVertexBase>> outputs;
-  outputs.push_back(std::make_shared<GraphVertexOutput>("output1"));
-  outputs.push_back(std::make_shared<GraphVertexOutput>("output2"));
-
-  // Создаем массив сырых указателей
-  std::vector<GraphVertexBase *> raw_outputs;
-  for (const auto &ptr: outputs) {
-    raw_outputs.push_back(
-        ptr.get()); // Преобразуем std::shared_ptr в сырой указатель
-  }
-
-  // Преобразуем std::vector в tcb::span
-  tcb::span<VertexPtr> outputs_span(raw_outputs.data(), raw_outputs.size());
-
-  // Создаем шину данных с выходами
-  GraphVertexDataBus bus(outputs_span, "output_bus", nullptr);
-
-  // Генерируем Verilog код с flag = true
-  std::string verilogCode = bus.toVerilog(true);
-
-  // Сохраняем Verilog код в файл
-  const std::string fileName = "testDataBusOutputFlagTrue.v";
-  std::ofstream outFile(fileName);
-  ASSERT_TRUE(outFile.is_open())
-      << "Unable to open file for writing: " << fileName;
-  outFile << verilogCode;
-  outFile.close();
-
-  // Сравниваем содержимое файла с ожидаемым результатом
-  testFile(fileName, "output output_bus_0;\n"
-                     "output output_bus_1;\n");
-}
+  // Test 5: Несколько операторов assign
+  std::string expectedAssigns = "assign input_bus[0] = input1;\n"
+                                "assign input_bus[1] = input2;\n"
+                                "assign input_bus[2] = input3;\n";
+  EXPECT_EQ(inputBus.toVerilog(false), expectedAssigns);
 }
