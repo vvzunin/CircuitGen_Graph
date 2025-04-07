@@ -79,6 +79,8 @@ endif()
 # )
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+add_compile_options(-fno-rtti)
+add_compile_options(-g3 -Wall -Wignored-qualifiers -DYYERROR_VERBOSE)
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 
