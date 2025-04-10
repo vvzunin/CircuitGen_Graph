@@ -40,8 +40,10 @@ endif()
 
 # ---- Tests ----
 
+set(TEST_NAME CircuitGenGraph_tests)
+
 # Collect all test source files into a single executable
-add_executable(CircuitGenGraph_tests
+add_executable(${TEST_NAME}
   # src/GraphVertexGatesTests.cpp
   # src/GraphVertexOutputTests.cpp
   # src/GraphVertexSubGraphTests.cpp
@@ -57,21 +59,26 @@ add_executable(CircuitGenGraph_tests
 )
 
 # Include directories
-target_include_directories(CircuitGenGraph_tests PUBLIC
+target_include_directories(${TEST_NAME} PUBLIC
   ${PROJECT_SOURCE_DIR}
 )
 
 # Link test target
-target_link_libraries(CircuitGenGraph_tests PUBLIC
+target_link_libraries(${TEST_NAME} PUBLIC
   GTest::gtest_main
   CircuitGenGraph::CircuitGenGraph
 )
 
 if(ENABLE_LOGGING)
-  target_link_libraries(CircuitGenGraph_tests PRIVATE easylogging++)
+  target_link_libraries( PRIVATE easylogging++)
+endif()
+
+if(ENABLE_COVERAGE)
+  target_compile_options(${TEST_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
+  target_link_options(${TEST_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
 endif()
 
 # Register one CTest test
 include(GoogleTest)
-gtest_discover_tests(CircuitGenGraph_tests PROPERTIES DISCOVERY_TIMEOUT 60)
+gtest_discover_tests(${TEST_NAME} PROPERTIES DISCOVERY_TIMEOUT 60)
 
