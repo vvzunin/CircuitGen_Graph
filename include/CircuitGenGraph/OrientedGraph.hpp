@@ -496,7 +496,8 @@ public:
 
   GraphPtr unrollGraph();
 
-  VertexPtr generateMajority(GraphPtr targetGraph, VertexPtr a, VertexPtr b, VertexPtr c);
+  VertexPtr generateMajority(GraphPtr targetGraph, VertexPtr a, VertexPtr b,
+                             VertexPtr c);
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
@@ -520,7 +521,6 @@ protected:
   }
 
 private:
-
   static std::atomic_size_t d_countNewGraphInstance;
   size_t d_graphID;
   // as we can have multiple parents, we save
