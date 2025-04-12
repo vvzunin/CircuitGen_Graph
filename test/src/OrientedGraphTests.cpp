@@ -1107,3 +1107,15 @@ TEST(OrientedGraphTests, SimpleGetByLevel) {
   auto result = graph->getVerticesByLevel(6);
   EXPECT_EQ(upperPart, result);
 }
+
+TEST(GraphTest, MajorityLogicTestSimple) {
+  auto graph = std::make_shared<OrientedGraph>("MajorityTest");
+
+  VertexPtr a = graph->addConst('1');
+  VertexPtr b = graph->addConst('1');
+  VertexPtr c = graph->addConst('0');
+
+  VertexPtr result = graph->generateMajority(graph, a, b, c);
+
+  EXPECT_TRUE(result);
+}
