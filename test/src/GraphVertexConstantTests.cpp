@@ -52,7 +52,8 @@ TEST(TestConstructorWithoutIName, ConstantWithDefaultInputParametrsDefName) {
 
 TEST(TestConstructorWithIName_Const, ConstantWithoutDefaultInputParametrs) {
 #ifdef LOGFLAG
-  initLogging("TestConstructorWithIName", "ConstantWithoutDefaultInputParametrs");
+  initLogging("TestConstructorWithIName",
+              "ConstantWithoutDefaultInputParametrs");
 #endif
   GraphVertexConstant constant('z', "Anything", memoryOwnerConstGr);
   EXPECT_EQ(constant.getType(), VertexTypes::constant);

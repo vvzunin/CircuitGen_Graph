@@ -26,10 +26,10 @@ TEST(TestConstructorWithoutIName, WithoutDefaultGatesParametrs) {
   EXPECT_EQ(gate->getOutConnections().size(), 0);
 }
 
-
 /*NeedToExplain
-Ask for EXPECT_EQ(gate.getRawName(), "gate_" + graphNum); (it was '1' as graphNum)
-*/ 
+Ask for EXPECT_EQ(gate.getRawName(), "gate_" + graphNum); (it was '1' as
+graphNum)
+*/
 
 TEST(TestConstructorWithoutIName, WithDefaultGatesParametrs) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
@@ -82,11 +82,10 @@ TEST(TestUpdateValue, GatesReturnDValueIfDInConnectionsSizeZero) {
 //   EXPECT_EQ(gate1.updateValue(), 'x');
 // }
 
-
-//Ruined
+// Ruined
 
 /*NeedToExplain
-*/ 
+ */
 
 TEST(TestUpdateLevel, GatesCorrectUpdate) {
   GraphVertexGates gate1(Gates::GateAnd, memoryOwnerGateGr);

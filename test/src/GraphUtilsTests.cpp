@@ -50,15 +50,13 @@ TEST(GraphUtTests, fromOperToNameDeathTest) {
 }
 
 TEST(GraphUtTests, ConvertsAllGatesCorrectly) {
-    // Проверяем все возможные значения Gates
-    EXPECT_EQ(GraphUtils::parseStringToGate("and"), Gates::GateAnd);
-    EXPECT_EQ(GraphUtils::parseStringToGate("nand"), Gates::GateNand);
-    EXPECT_EQ(GraphUtils::parseStringToGate("or"), Gates::GateOr);
-    EXPECT_EQ(GraphUtils::parseStringToGate("nor"), Gates::GateNor);
-    EXPECT_EQ(GraphUtils::parseStringToGate("xor"), Gates::GateXor);
-    EXPECT_EQ(GraphUtils::parseStringToGate("xnor"), Gates::GateXnor);
-    EXPECT_EQ(GraphUtils::parseStringToGate("not"), Gates::GateNot);
-    EXPECT_EQ(GraphUtils::parseStringToGate("buf"), Gates::GateBuf);
+  // Проверяем все возможные значения Gates
+  EXPECT_EQ(GraphUtils::parseStringToGate("and"), Gates::GateAnd);
+  EXPECT_EQ(GraphUtils::parseStringToGate("nand"), Gates::GateNand);
+  EXPECT_EQ(GraphUtils::parseStringToGate("or"), Gates::GateOr);
+  EXPECT_EQ(GraphUtils::parseStringToGate("nor"), Gates::GateNor);
+  EXPECT_EQ(GraphUtils::parseStringToGate("xor"), Gates::GateXor);
+  EXPECT_EQ(GraphUtils::parseStringToGate("xnor"), Gates::GateXnor);
+  EXPECT_EQ(GraphUtils::parseStringToGate("not"), Gates::GateNot);
+  EXPECT_EQ(GraphUtils::parseStringToGate("buf"), Gates::GateBuf);
 }
-
-

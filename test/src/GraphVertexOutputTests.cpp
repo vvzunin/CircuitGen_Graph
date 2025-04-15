@@ -26,7 +26,7 @@ TEST(TestConstructorWithoutIName, OutputWithoutDefaultInputParametrs) {
   EXPECT_EQ(output.getOutConnections().size(), 0);
 }
 
-//Ruined
+// Ruined
 
 // TEST(TestConstructorWithoutIName, OutputWithDefaultInputParametrs) {
 //   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
@@ -106,7 +106,7 @@ TEST(TestUpdateValue, OutputReturnDValueIfDInConnectionsSizeZero) {
 //   // EXPECT_THROW(output1.updateValue(), std::invalid_argument);
 // }
 
-//Ruined
+// Ruined
 
 // TEST(TestUpdateLevel, OutputCorrectUpdate) {
 //   GraphVertexOutput output1(memoryOwnerOutputGr);
