@@ -37,7 +37,7 @@ TEST(TestConstructorWithoutIName, WithoutDefaulParametrs) {
   EXPECT_EQ(subGraph1.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithoutIName, WithDefaultInputParametrs) {
+TEST(TestConstructorWithoutIName, SubGraphWithDefaultInputParametrs) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
   GraphVertexSubGraph subGraph1(graphPtr1, graphPtr2);
@@ -63,7 +63,7 @@ TEST(TestConstructorWithIName_SubGraph, WithoutDefaultInputParametrs) {
   EXPECT_EQ(subGraph1.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithIName_SubGraph, WithDefaultInputParametrs) {
+TEST(TestConstructorWithIName_SubGraph, SubGraphWithDefaultInputParametrs) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
   GraphVertexSubGraph subGraph1(graphPtr1, "Anything", graphPtr2);
@@ -201,7 +201,7 @@ TEST(TestAddInConnections, AddConnections) {
   EXPECT_EQ(subGraph1.getInConnections()[2], subGraphPtr2);
 }
 
-TEST(TestAddOutConnections, AddConnections) {
+TEST(TestAddOutConnections, SubGraphAddConnections) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
   GraphPtr graphPtr3 = std::make_shared<OrientedGraph>();
@@ -220,7 +220,7 @@ TEST(TestAddOutConnections, AddConnections) {
   EXPECT_EQ(subGraph1.getOutConnections()[1], subGraphPtr2);
 }
 
-TEST(TestRemoveVertexToInConnections, RemoveConnections) {
+TEST(TestRemoveVertexToInConnections, SubGraphRemoveConnections) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
   GraphPtr graphPtr3 = std::make_shared<OrientedGraph>();

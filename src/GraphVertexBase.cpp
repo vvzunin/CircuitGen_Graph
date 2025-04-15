@@ -185,7 +185,7 @@ void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
   if (d_needUpdate && (!i_recalculate || d_needUpdate == VS_CALC)) {
     return;
   }
-  d_needUpdate = VS_CALC;
+  d_needUpdate = VS_IN_PROGRESS;
   for (VertexPtr vert: d_inConnections) {
 #ifdef LOGLFLAG
     LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
@@ -194,7 +194,7 @@ void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
     vert->updateLevel(i_recalculate, tab + "  ");
     d_level = (vert->getLevel() >= d_level) ? vert->getLevel() + 1 : d_level;
   }
-  d_needUpdate = VS_IN_PROGRESS;
+  d_needUpdate = VS_CALC;
 }
 
 void GraphVertexBase::findVerticesByLevel(uint32_t targetLevel, std::vector<VertexPtr>& result) {

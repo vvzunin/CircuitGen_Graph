@@ -42,8 +42,8 @@ endif()
 
 # Collect all test source files into a single executable
 add_executable(CircuitGenGraph_tests
-  # src/GraphVertexGatesTests.cpp
-  # src/GraphVertexOutputTests.cpp
+  src/GraphVertexGatesTests.cpp
+  src/GraphVertexOutputTests.cpp
   # src/GraphVertexSubGraphTests.cpp
 
   src/GraphVertexConstantTests.cpp

@@ -11,11 +11,11 @@ using namespace AuxMethodsGraph;
 
 GraphPtr memoryOwnerConstGr = std::make_shared<OrientedGraph>();
 
-TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrsDefName) {
+TEST(TestConstructorWithoutIName, ConstantWithoutDefaultInputParametrsDefName) {
   GraphVertexBase::resetRounter();
 #ifdef LOGFLAG
   initLogging("TestConstructorWithoutIName",
-              "WithoutDefaultInputParametrsDefName");
+              "ConstantWithoutDefaultInputParametrsDefName");
 #endif
   GraphVertexConstant constant('z', memoryOwnerConstGr);
 #ifdef LOGFLAG
@@ -31,11 +31,11 @@ TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrsDefName) {
   EXPECT_EQ(constant.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithoutIName, WithDefaultInputParametrsDefName) {
+TEST(TestConstructorWithoutIName, ConstantWithDefaultInputParametrsDefName) {
   GraphVertexBase::resetRounter();
 #ifdef LOGFLAG
   initLogging("TestConstructorWithoutIName",
-              "WithDefaultInputParametrsDefName");
+              "ConstantWithDefaultInputParametrsDefName");
 #endif
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
 
@@ -50,9 +50,9 @@ TEST(TestConstructorWithoutIName, WithDefaultInputParametrsDefName) {
   EXPECT_EQ(constant.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithIName_Const, WithoutDefaultInputParametrs) {
+TEST(TestConstructorWithIName_Const, ConstantWithoutDefaultInputParametrs) {
 #ifdef LOGFLAG
-  initLogging("TestConstructorWithIName", "WithoutDefaultInputParametrs");
+  initLogging("TestConstructorWithIName", "ConstantWithoutDefaultInputParametrs");
 #endif
   GraphVertexConstant constant('z', "Anything", memoryOwnerConstGr);
   EXPECT_EQ(constant.getType(), VertexTypes::constant);
@@ -64,9 +64,9 @@ TEST(TestConstructorWithIName_Const, WithoutDefaultInputParametrs) {
   EXPECT_EQ(constant.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithIName_Const, WithDefaultInputParametrs) {
+TEST(TestConstructorWithIName_Const, ConstantWithDefaultInputParametrs) {
 #ifdef LOGFLAG
-  initLogging("TestConstructorWithIName", "WithDefaultInputParametrs");
+  initLogging("TestConstructorWithIName", "ConstantWithDefaultInputParametrs");
 #endif
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
 
@@ -83,9 +83,9 @@ TEST(TestConstructorWithIName_Const, WithDefaultInputParametrs) {
 // ------------------OverrideMethodsTests
 
 // it returns 0 does it correct?
-TEST(TestUpdateLevel, CorrectUpdate) {
+TEST(TestUpdateLevel, ConstantCorrectUpdate) {
 #ifdef LOGFLAG
-  initLogging("TestUpdateLevel", "CorrectUpdate");
+  initLogging("TestUpdateLevel", "ConstantCorrectUpdate");
 #endif
   GraphVertexConstant constant1('z', memoryOwnerConstGr);
   constant1.updateLevel();
