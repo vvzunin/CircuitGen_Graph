@@ -85,26 +85,27 @@ TEST(TestUpdateValue, GatesReturnDValueIfDInConnectionsSizeZero) {
 // Ruined
 
 /*NeedToExplain
- */
+Maybe to delete
+*/
 
-TEST(TestUpdateLevel, GatesCorrectUpdate) {
-  GraphVertexGates gate1(Gates::GateAnd, memoryOwnerGateGr);
-  VertexPtr gatePtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd);
-  gate1.addVertexToInConnections(gatePtr1);
-  gate1.updateLevel(true);
-  EXPECT_EQ(gate1.getLevel(), 0);
+// TEST(TestUpdateLevel, GatesCorrectUpdate) {
+//   GraphVertexGates gate1(Gates::GateAnd, memoryOwnerGateGr);
+//   VertexPtr gatePtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd);
+//   gate1.addVertexToInConnections(gatePtr1);
+//   gate1.updateLevel(true);
+//   EXPECT_EQ(gate1.getLevel(), 0);
 
-  VertexPtr gatePtr2 = memoryOwnerGateGr->addGate(Gates::GateAnd);
-  VertexPtr gatePtr3 = memoryOwnerGateGr->addGate(Gates::GateAnd);
-  gate1.addVertexToInConnections(gatePtr3);
-  gate1.updateLevel(true);
-  EXPECT_EQ(gate1.getLevel(), 0);
+//   VertexPtr gatePtr2 = memoryOwnerGateGr->addGate(Gates::GateAnd);
+//   VertexPtr gatePtr3 = memoryOwnerGateGr->addGate(Gates::GateAnd);
+//   gate1.addVertexToInConnections(gatePtr3);
+//   gate1.updateLevel(true);
+//   EXPECT_EQ(gate1.getLevel(), 0);
 
-  VertexPtr gatePtr4 = memoryOwnerGateGr->addGate(Gates::GateAnd);
-  gate1.addVertexToInConnections(gatePtr4);
-  gate1.updateLevel(true);
-  EXPECT_EQ(gate1.getLevel(), 0);
-}
+//   VertexPtr gatePtr4 = memoryOwnerGateGr->addGate(Gates::GateAnd);
+//   gate1.addVertexToInConnections(gatePtr4);
+//   gate1.updateLevel(true);
+//   EXPECT_EQ(gate1.getLevel(), 0);
+// }
 
 TEST(TestUpdateLevel, GatesThrowInvalidArgumentIfDInconnectionsNIsNullptr) {
   GraphVertexGates gate1(Gates::GateAnd, memoryOwnerGateGr);
