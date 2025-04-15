@@ -95,30 +95,39 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
 class GraphVertexBase {
 
 public:
-  static void resetRounter() {
-    d_count = 0ul;
-  }
+  static void resetRounter() { d_count = 0ul; }
 
 private:
   // Счетчик вершин для именования и подобного
   static std::atomic_uint64_t d_count;
 
 public:
-  enum HASH_CONDITION : char { HC_NOT_CALC = 0, HC_IN_PROGRESS = 1, HC_CALC = 2 };
+  enum HASH_CONDITION : uint8_t {
+    HC_NOT_CALC = 0,
+    HC_IN_PROGRESS = 1,
+    HC_CALC = 2
+  };
 
-  enum VERTEX_STATE: char { VS_NOT_CALC = 0, VS_IN_PROGRESS = 1, VS_CALC = 2};
+  enum VERTEX_STATE : uint8_t {
+    VS_NOT_CALC = 0u,
+    VS_IN_PROGRESS = 1u << 0,
+    VS_CALC = 1u << 1,
+    VS_USED_LEVEL = 1u << 2,
+    VS_USED_CALC = VS_CALC | VS_USED_LEVEL
+  };
 
-  void ResetStates() {
+  void resetAllStates() {
     d_needUpdate = VS_NOT_CALC;
     d_hasHash = HC_NOT_CALC;
   }
 
-  void ResetNeedUpdateState() {
-    d_needUpdate = VS_NOT_CALC;
-  }
+  void resetNeedUpdateState() { d_needUpdate = VS_NOT_CALC; }
 
-  void ResetHashState() {
-    d_hasHash = HC_NOT_CALC;
+  void resetHashState() { d_hasHash = HC_NOT_CALC; }
+
+  void resetUsedLevelState() {
+    // remove flag using bitwise operations
+    d_needUpdate = static_cast<VERTEX_STATE>(d_needUpdate & ~VS_USED_LEVEL);
   }
 
   /// @brief GraphVertexBase
@@ -243,7 +252,9 @@ public:
 
   virtual void updateLevel(bool i_recalculate = false, std::string tab = "");
 
-  virtual void findVerticesByLevel(uint32_t targetLevel, std::vector<VertexPtr>& result);
+  bool getVerticesByLevel(uint32_t i_targetLevel,
+                          std::vector<VertexPtr> &i_result,
+                          bool i_fromOut = true);
 
   /// @brief getGate
   /// Returns the type of the basic logic gate represented by this vertex. If

@@ -39,7 +39,7 @@ void GraphVertexConstant::updateLevel(bool i_recalculate, std::string tab) {
   LOG(INFO) << tab << "0. " << d_name << " (" << getTypeName() << ")";
 #endif
   d_level = 0;
-  d_needUpdate = VS_IN_PROGRESS;
+  d_needUpdate = VS_CALC;
 }
 
 std::string GraphVertexConstant::getVerilogInstance() {

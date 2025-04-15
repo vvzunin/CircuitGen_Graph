@@ -129,6 +129,29 @@ uint32_t OrientedGraph::getMaxLevel() {
   return mx;
 }
 
+#define SIMPLE_VERT_ITER(vertices, methodName) \
+  for (auto &vec: vertices) \
+    for (auto *vertex: vec) \
+  vertex->methodName()
+
+void OrientedGraph::clearHashStates() {
+  SIMPLE_VERT_ITER(d_vertexes, resetHashState);
+}
+
+void OrientedGraph::clearNeedUpdateStates() {
+  SIMPLE_VERT_ITER(d_vertexes, resetNeedUpdateState);
+}
+
+void OrientedGraph::clearUsedLevelStates() {
+  SIMPLE_VERT_ITER(d_vertexes, resetUsedLevelState);
+}
+
+void OrientedGraph::clearAllStates() {
+  SIMPLE_VERT_ITER(d_vertexes, resetAllStates);
+}
+
+#undef SIMPLE_VERT_ITER
+
 VertexPtr OrientedGraph::addInput(const std::string &i_name) {
   VertexPtr newVertex = create<GraphVertexInput>(
       i_name.empty() ? "" : internalize(i_name), shared_from_this());
@@ -385,26 +408,29 @@ VertexPtr OrientedGraph::getVerticeByIndex(size_t idx) const {
   return d_vertexes.at(VertexTypes::output).at(idx);
 }
 
-std::vector<VertexPtr>
-OrientedGraph::getVerticesByLevel(const uint32_t &i_level) {
-  this->updateLevels();
+std::vector<VertexPtr> OrientedGraph::getVerticesByLevel(uint32_t i_level) {
+  updateLevels();
   std::vector<VertexPtr> a;
   if (!i_level) {
     a.reserve(d_vertexes[input].size() + d_vertexes[constant].size());
     a.insert(a.end(), d_vertexes[input].begin(), d_vertexes[input].end());
     a.insert(a.end(), d_vertexes[constant].begin(), d_vertexes[constant].end());
   } else {
-    for (auto &verticesVector : d_vertexes) {
-      for (auto *vertex : verticesVector) {
-          vertex->ResetNeedUpdateState();
+    // maxLevel / 2 <= i_level -> output is more close to level target
+    // ( maxLevel / 2 <= i_level ) * 2 = maxLevel <= i_level << 1
+    if (getMaxLevel() <= (i_level << 1u)) {
+      for (VertexPtr vertex: d_vertexes[output]) {
+        vertex->getVerticesByLevel(i_level, a);
+      }
+    } else {
+      for (VertexPtr vertex: d_vertexes[input]) {
+        vertex->getVerticesByLevel(i_level, a, false);
+      }
+      for (VertexPtr vertex: d_vertexes[constant]) {
+        vertex->getVerticesByLevel(i_level, a, false);
       }
     }
-  
-    for (auto &verticesVector : d_vertexes) {
-      for (auto *vertex : verticesVector) {
-          vertex->findVerticesByLevel(i_level, a);
-      }
-    }
+    clearUsedLevelStates();
   }
   return a;
 }
