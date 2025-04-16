@@ -26,6 +26,10 @@ inline void GraphVertexSequential::setSignalByType(VertexPtr i_wire,
                                                    unsigned &factType) {
   if ((i_type & RST) && !d_rst) {
     factType |= RST;
+    // d_clk has trigger only
+    if (d_clk) {
+      factType |= i_type & ASYNC;
+    }
     d_rst = i_wire;
   } else if ((i_type & CLR) && !d_rst) {
     factType |= CLR;
@@ -57,11 +61,11 @@ GraphVertexSequential::GraphVertexSequential(
   // NOT ALLOWED TO USE BOTH RST AND CLR
   assert(!((i_type & RST) && (i_type & CLR)));
 
-  d_clk = i_clk;
   if (i_type & ff) {
+    d_clk = i_clk;
     d_seqType = static_cast<SequentialTypes>(i_type & nff);
   } else {
-    d_en = d_clk;
+    d_en = i_clk;
     // without ff flag it is just a latch
     d_seqType = latch;
   }

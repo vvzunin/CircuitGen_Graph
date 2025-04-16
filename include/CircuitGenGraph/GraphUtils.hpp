@@ -48,7 +48,9 @@ enum SequentialTypes : uint8_t {
 
   // ASYNC
   CGG_FF_TYPE(affr, ASYNC | ff | RST),
-  CGG_FF_TYPE(affre, ASYNC | EN | RST),
+  CGG_FF_TYPE(affre, ASYNC | ff | EN | RST),
+  CGG_FF_TYPE(affrs, ASYNC | ff | RST | SET),
+  CGG_FF_TYPE(affrse, ASYNC | ff | EN | RST | SET),
 
   // LATCHES
   latchr = latch | RST,
@@ -67,6 +69,10 @@ enum SequentialTypes : uint8_t {
   CGG_FF_TYPE(ffre, ff | EN | RST),
   CGG_FF_TYPE(ffce, ff | EN | CLR),
   CGG_FF_TYPE(ffse, ff | EN | SET),
+
+  CGG_FF_TYPE(ffrs, ff | RST | SET),
+  CGG_FF_TYPE(ffcs, ff | CLR | SET),
+
   CGG_FF_TYPE(ffrse, ff | EN | RST | SET),
   CGG_FF_TYPE(ffcse, ff | EN | CLR | SET)
 

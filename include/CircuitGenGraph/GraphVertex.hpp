@@ -387,11 +387,11 @@ private:
 private:
   SequentialTypes d_seqType;
 
-  VertexPtr d_clk;
-  VertexPtr d_data;
-  VertexPtr d_en;
-  VertexPtr d_rst;
-  VertexPtr d_set;
+  VertexPtr d_clk = nullptr;
+  VertexPtr d_data = nullptr;
+  VertexPtr d_en = nullptr;
+  VertexPtr d_rst = nullptr;
+  VertexPtr d_set = nullptr;
 };
 
 } // namespace CG_Graph
