@@ -27,8 +27,8 @@ inline void testFile(const std::string &fileName, std::string_view text) {
 
   EXPECT_EQ(buffer.str(), text) << "Содержимое файла не совпадает с ожидаемым.";
   file.close();
-  // ASSERT_EQ(std::remove(fileName.c_str()), 0)
-  //     << "Не удалось удалить файл: " << fileName;
+  ASSERT_EQ(std::remove(fileName.c_str()), 0)
+      << "Не удалось удалить файл: " << fileName;
 }
 
 TEST(SequentialTests, TestSimpleTrigger) {
