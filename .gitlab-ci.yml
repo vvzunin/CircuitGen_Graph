@@ -1,5 +1,5 @@
 # Описание для сборки при коммите в main
-image: ubuntu:22.04
+image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest
 
 stages:
   - lint
