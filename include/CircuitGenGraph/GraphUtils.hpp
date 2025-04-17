@@ -36,14 +36,21 @@ enum VertexTypes : uint8_t {
 
 /// @brief Types of all sequential cells being supported
 enum SequentialTypes : uint8_t {
+  // enable signal, writes data to output if is equal to 1'b1
   EN = 1 << 0,
-  latch = EN,
+  // set signal, writes 1'b1 to output if is equal to 1'b1
   SET = 1 << 1,
+  // clear signal, writes 1'b0 to output if is equal to 1'b1
   CLR = 1 << 2,
+  // reset signal, writes 1'b0 to output if is equal to 1'b0
   RST = 1 << 3,
+  // use with reset only, makes ff async (adds negedge rst to signals list)
   ASYNC = 1 << 5,
+  // is is used, activates always on negedge of clk signal (ff-only)
   NEGEDGE = 1 << 6,
+
   // DEFAULT TYPES
+  latch = EN,
   CGG_FF_TYPE(ff, 1 << 4),
 
   // ASYNC

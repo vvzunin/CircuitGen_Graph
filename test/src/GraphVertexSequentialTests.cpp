@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 
 #include <fstream>
+#include <iostream>
 #include <sstream>
 
 #ifdef LOGFLAG
@@ -241,4 +242,23 @@ TEST(SequentialTests, TestTriggerAsyncRstN_En) {
   graph->addEdge(seq2, out2);
 
   EXPECT_TRUE(graph->calculateHash().size());
+}
+
+TEST(ErrorOutputTest, CapturesCerr) {
+  std::stringstream buffer;
+  // перенаправляем cerr
+  std::streambuf* old = std::cerr.rdbuf(buffer.rdbuf());
+
+  OrientedGraph::resetCounter();
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+  auto *en = graph->addInput("en");
+  auto *data = graph->addInput("data");
+  auto *rst = graph->addInput("rst");
+  auto *seq = graph->addSequential(latchrs, en, data, rst, "q");
+
+  // возвращаем старый буфер
+  std::cerr.rdbuf(old);
+
+  std::string output = buffer.str();
+  EXPECT_EQ(output, "Invalid flag found in used type: SET\n");
 }
