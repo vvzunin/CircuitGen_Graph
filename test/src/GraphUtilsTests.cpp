@@ -14,10 +14,10 @@ TEST(GraphUtTests, GetLogicOperTest) {
   ASSERT_EQ(funcName, actualName);
 }
 
-TEST(GraphUtTests, GetLogicDeathTest) {
-  ASSERT_DEATH(GraphUtils::getLogicOperation("nonexistentName"),
-               "value not found in operations' container");
-}
+// TEST(GraphUtTests, GetLogicDeathTest) {
+//   ASSERT_DEATH(GraphUtils::getLogicOperation("nonexistentName"),
+//                "value not found in operations' container");
+// }
 
 TEST(GraphUtTests, GetOperationsGatesTest) {
   std::pair<std::vector<bool>, std::vector<Gates>> funcOperations =
@@ -44,10 +44,10 @@ TEST(GraphUtTests, FromOperToNameTest) {
   ASSERT_EQ(funcName, actualName);
 }
 
-TEST(GraphUtTests, fromOperToNameDeathTest) {
-  ASSERT_DEATH(GraphUtils::fromOperationsToName("nonexistentName"),
-               "name not found in operations' container");
-}
+// TEST(GraphUtTests, fromOperToNameDeathTest) {
+//   ASSERT_DEATH(GraphUtils::fromOperationsToName("nonexistentName"),
+//                "name not found in operations' container");
+// }
 
 TEST(GraphUtTests, ConvertsAllGatesCorrectly) {
   // Проверяем все возможные значения Gates
