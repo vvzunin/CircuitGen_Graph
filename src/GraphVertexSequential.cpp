@@ -109,6 +109,13 @@ GraphVertexSequential::GraphVertexSequential(
   validateSignal(i_type, d_seqType);
 }
 
+/// @brief 
+/// @param i_type 
+/// @param i_clk is clock signal for a ff and enable signal for a latch
+/// @param i_data 
+/// @param i_wire RST or CLR or SET or EN
+/// @param i_baseGraph 
+/// @param i_name 
 GraphVertexSequential::GraphVertexSequential(
     SequentialTypes i_type,
     VertexPtr i_clk,
@@ -128,12 +135,12 @@ GraphVertexSequential::GraphVertexSequential(
 }
 
 /// @brief 
-/// @param i_type 
+/// @param i_type
 /// @param i_clk EN for latch and CLK for ff
-/// @param i_data 
+/// @param i_data
 /// @param i_wire1 RST or CLR or SET
 /// @param i_wire2 SET or EN
-/// @param i_baseGraph 
+/// @param i_baseGraph
 GraphVertexSequential::GraphVertexSequential(
     SequentialTypes i_type,
     VertexPtr i_clk,

@@ -56,8 +56,8 @@ enum SequentialTypes : uint8_t {
   // ASYNC
   CGG_FF_TYPE(affr, ASYNC | ff | RST),
   CGG_FF_TYPE(affre, ASYNC | ff | EN | RST),
-  CGG_FF_TYPE(affrs, ASYNC | ff | RST | SET),
-  CGG_FF_TYPE(affrse, ASYNC | ff | EN | RST | SET),
+  CGG_FF_TYPE(affrs, ASYNC | ff | SET | RST),
+  CGG_FF_TYPE(affrse, ASYNC | ff | EN | SET | RST),
 
   // LATCHES
   latchr = latch | RST,
