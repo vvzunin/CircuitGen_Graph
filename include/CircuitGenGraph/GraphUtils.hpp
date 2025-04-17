@@ -124,8 +124,8 @@ namespace GraphUtils {
 /// @brief getLogicOperation Gets information about a logical operation by
 /// its name
 /// @param i_op A string containing the name of the logical operation
-/// @return std::pair<std::string_view, int32_t> A pair containing the name and ID
-/// of the logical operation
+/// @return std::pair<std::string_view, int32_t> A pair containing the name and
+/// ID of the logical operation
 /// @code
 /// GraphUtils settingsInstance;
 /// try {
