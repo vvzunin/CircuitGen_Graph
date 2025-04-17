@@ -37,7 +37,6 @@ constexpr std::string_view SEQ_2_TEST =
     "\tassign res = q;\n"
     "endmodule\n";
 
-
 constexpr std::string_view SEQ_3_TEST =
     "module graph_0(\n"
     "\ten, data, rst, \n"
@@ -50,7 +49,8 @@ constexpr std::string_view SEQ_3_TEST =
     "\t// Writing registers\n"
     "\treg q;\n\t\n"
     "\t// RST signal \"rst\""
-    " - when it is in a logical zero state, trigger writes logical zero to the output\n"
+    " - when it is in a logical zero state, trigger writes logical zero to the "
+    "output\n"
     "\t// EN signal \"en\""
     " - when it is in a logical one state, trigger writes data to the output\n"
     "\talways @(*) begin\n"
@@ -72,9 +72,11 @@ constexpr std::string_view SEQ_4_TEST =
     "\t// Writing registers\n"
     "\treg q;\n\t\n"
     "\t// CLR signal \"clr\""
-    " - when it is in a logical one state, trigger writes logical zero to the output\n"
+    " - when it is in a logical one state, trigger writes logical zero to the "
+    "output\n"
     "\t// SET signal \"set\""
-    " - when it is in a logical one state, trigger writes logical one to the output\n"
+    " - when it is in a logical one state, trigger writes logical one to the "
+    "output\n"
     "\t// EN signal \"en\""
     " - when it is in a logical one state, trigger writes data to the output\n"
     "\talways @(*) begin\n"
@@ -123,7 +125,8 @@ constexpr std::string_view SEQ_6_TEST =
     "\treg q;\n\t\n"
     "\t// RST signal \"rst_n\" - when it is in a logical zero state, trigger "
     "writes logical zero to the output\n"
-    "\t// RST signal \"rst_n\" is async - always block enables on negedge of RST\n"
+    "\t// RST signal \"rst_n\" is async - always block enables on negedge of "
+    "RST\n"
     "\t// SET signal \"set\" - when it is in a logical one state, trigger "
     "writes logical one to the output\n"
     "\talways @(negedge clk or negedge rst_n) begin\n"
@@ -133,7 +136,6 @@ constexpr std::string_view SEQ_6_TEST =
     "\tend\n\n"
     "\tassign res = q;\n"
     "endmodule\n";
-
 
 constexpr std::string_view SEQ_7_TEST =
     "module graph_0(\n"
@@ -148,7 +150,8 @@ constexpr std::string_view SEQ_7_TEST =
     "\treg q;\n\t\n"
     "\t// RST signal \"rst_n\" - when it is in a logical zero state, trigger "
     "writes logical zero to the output\n"
-    "\t// RST signal \"rst_n\" is async - always block enables on negedge of RST\n"
+    "\t// RST signal \"rst_n\" is async - always block enables on negedge of "
+    "RST\n"
     "\t// EN signal \"en\" - when it is in a logical one state, trigger writes "
     "data to the output\n"
     "\talways @(posedge clk or negedge rst_n) begin\n"

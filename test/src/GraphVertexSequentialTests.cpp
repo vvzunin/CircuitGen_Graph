@@ -216,7 +216,6 @@ TEST(SequentialTests, TestTriggerHash) {
   EXPECT_NE(graph1->calculateHash(), graph2->calculateHash());
 }
 
-
 TEST(SequentialTests, TestTriggerAsyncRstN_En) {
   OrientedGraph::resetCounter();
   GraphPtr graph = std::make_shared<OrientedGraph>();
