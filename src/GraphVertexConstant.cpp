@@ -31,17 +31,6 @@ size_t GraphVertexConstant::calculateHash(bool i_recalculate) {
   return d_hashed;
 }
 
-void GraphVertexConstant::updateLevel(bool i_recalculate, std::string tab) {
-  if (d_needUpdate && !i_recalculate) {
-    return;
-  }
-#ifdef LOGFLAG
-  LOG(INFO) << tab << "0. " << d_name << " (" << getTypeName() << ")";
-#endif
-  d_level = 0;
-  d_needUpdate = VS_CALC;
-}
-
 std::string GraphVertexConstant::getVerilogInstance() {
   return "wire " + getName() + ";";
 }

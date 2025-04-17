@@ -28,7 +28,7 @@ TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrs) {
   EXPECT_EQ(input.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithoutIName, WithDefaultInputParametrs) {
+TEST(TestConstructorWithoutIName, InputWithDefaultInputParametrs) {
   GraphVertexBase::resetRounter();
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
   std::string graphNum = std::to_string(0);
@@ -42,7 +42,7 @@ TEST(TestConstructorWithoutIName, WithDefaultInputParametrs) {
   EXPECT_EQ(input.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithIName_Input, WithoutDefaultInputParametrs) {
+TEST(TestConstructorWithIName_Input, InputWithoutDefaultInputParametrs) {
   GraphVertexInput input("Anything", memoryOwnerInputGr);
   EXPECT_EQ(input.getBaseGraph().lock(), memoryOwnerInputGr);
   EXPECT_EQ(input.getType(), VertexTypes::input);
@@ -53,7 +53,7 @@ TEST(TestConstructorWithIName_Input, WithoutDefaultInputParametrs) {
   EXPECT_EQ(input.getOutConnections().size(), 0);
 }
 
-TEST(TestConstructorWithIName_Input, WithDefaultInputParametrs) {
+TEST(TestConstructorWithIName_Input, InputWithDefaultInputParametrs) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
   GraphVertexInput input("Anything", graphPtr, VertexTypes::input);
   EXPECT_EQ(input.getType(), VertexTypes::input);
@@ -83,7 +83,7 @@ TEST(TestConstructorWithIName_Input, WithDefaultInputParametrs) {
 //   EXPECT_EQ(input1.updateValue(), 'x');
 // }
 
-TEST(TestUpdateValue, ReturnDValueIfDInConnectionsSizeZero) {
+TEST(TestUpdateValue, InputReturnDValueIfDInConnectionsSizeZero) {
   GraphVertexInput input(memoryOwnerInputGr);
   const char c = input.getValue();
   EXPECT_EQ(input.updateValue(), c);
@@ -124,7 +124,7 @@ TEST(TestUpdateValue, ReturnDValueIfDInConnectionsSizeZero) {
 //   // EXPECT_THROW(input1.updateValue(), std::invalid_argument);
 // }
 
-TEST(TestUpdateLevel, ThrowInvalidArgumentIfDInconnectionsNIsNullptr) {
+TEST(TestUpdateLevel, InputThrowInvalidArgumentIfDInconnectionsNIsNullptr) {
   // Странный тест с подключение input to input
   // GraphVertexInput input1;
 
@@ -168,7 +168,7 @@ TEST(TestSetName_Input, InputCorrectName) {
 //   EXPECT_EQ(input1.getInConnections()[2], inputPtr2);
 // }
 
-TEST(TestAddOutConnections, AddConnections) {
+TEST(TestAddOutConnections, InputAddConnections) {
   GraphVertexInput input1(memoryOwnerInputGr);
   EXPECT_EQ(input1.getOutConnections().size(), 0);
 
