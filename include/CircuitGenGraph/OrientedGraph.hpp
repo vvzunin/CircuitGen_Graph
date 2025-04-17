@@ -496,6 +496,9 @@ public:
 
   GraphPtr unrollGraph();
 
+  VertexPtr generateMajority(GraphPtr targetGraph, VertexPtr a, VertexPtr b,
+                             VertexPtr c);
+
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
 #ifdef LOGFLAG
