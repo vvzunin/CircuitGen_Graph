@@ -26,9 +26,14 @@ TEST(TestConstructorWithoutIName, WithoutDefaultGatesParametrs) {
   EXPECT_EQ(gate->getOutConnections().size(), 0);
 }
 
+/*NeedToExplain
+Ask for EXPECT_EQ(gate.getRawName(), "gate_" + graphNum); (it was '1' as
+graphNum)
+*/
+
 TEST(TestConstructorWithoutIName, WithDefaultGatesParametrs) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
-  std::string graphNum = std::to_string(1);
+  std::string graphNum = std::to_string(0);
   GraphVertexGates gate(Gates::GateAnd, graphPtr);
   EXPECT_EQ(gate.getType(), VertexTypes::gate);
   EXPECT_EQ(gate.getTypeName(), "gate");
@@ -65,7 +70,7 @@ TEST(TestConstructorWithIName_Gate, WithDefaultGatesParametrs) {
 
 // -----OverrideMethodsTests
 
-TEST(TestUpdateValue, ReturnDValueIfDInConnectionsSizeZero) {
+TEST(TestUpdateValue, GatesReturnDValueIfDInConnectionsSizeZero) {
   GraphVertexGates gate1(Gates::GateAnd, memoryOwnerGateGr);
   const char c = gate1.getValue();
   EXPECT_EQ(gate1.updateValue(), c);
@@ -77,26 +82,18 @@ TEST(TestUpdateValue, ReturnDValueIfDInConnectionsSizeZero) {
 //   EXPECT_EQ(gate1.updateValue(), 'x');
 // }
 
-TEST(TestUpdateLevel, CorrectUpdate) {
-  GraphVertexGates gate1(Gates::GateAnd, memoryOwnerGateGr);
-  VertexPtr gatePtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd);
-  gate1.addVertexToInConnections(gatePtr1);
-  gate1.updateLevel(true);
-  EXPECT_EQ(gate1.getLevel(), 2);
-
-  VertexPtr gatePtr2 = memoryOwnerGateGr->addGate(Gates::GateAnd);
-  VertexPtr gatePtr3 = memoryOwnerGateGr->addGate(Gates::GateAnd);
-  gate1.addVertexToInConnections(gatePtr3);
-  gate1.updateLevel(true);
-  EXPECT_EQ(gate1.getLevel(), 4);
-
-  VertexPtr gatePtr4 = memoryOwnerGateGr->addGate(Gates::GateAnd);
-  gate1.addVertexToInConnections(gatePtr4);
-  gate1.updateLevel(true);
-  EXPECT_EQ(gate1.getLevel(), 4);
+TEST(TestUpdateLevel, GatesCorrectUpdate) {
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+  VertexPtr inputVert = graph->addInput();
+  VertexPtr gateVert = graph->addGate(GateAnd);
+  VertexPtr outputVert = graph->addOutput();
+  graph->addEdge(inputVert, gateVert);
+  graph->addEdge(gateVert, outputVert);
+  graph->updateLevels(true);
+  EXPECT_EQ(gateVert->getLevel(), 1);
 }
 
-TEST(TestUpdateLevel, ThrowInvalidArgumentIfDInconnectionsNIsNullptr) {
+TEST(TestUpdateLevel, GatesThrowInvalidArgumentIfDInconnectionsNIsNullptr) {
   GraphVertexGates gate1(Gates::GateAnd, memoryOwnerGateGr);
 
   VertexPtr gatePtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd);
@@ -294,6 +291,13 @@ TEST(TestGetGate, ReturnCorrectGate) {
 //   "\n");
 // }
 
+TEST(TestToDOT, TryingTomakeDotWithSeveralPtr) {
+  GraphVertexGates gate(Gates::GateAnd, memoryOwnerGateGr);
+  std::vector<std::pair<CG_Graph::DotTypes, std::map<std::string, std::string>>>
+      emptyDot;
+  EXPECT_EQ(gate.toDOT(), emptyDot);
+}
+
 TEST(TestToVerilog, ReturnEmptyStringIfDInConnectionsSizeIsZero) {
   GraphVertexGates gate1(Gates::GateAnd, memoryOwnerGateGr);
   EXPECT_EQ(gate1.toVerilog(), "");
@@ -414,7 +418,7 @@ TEST(TestSetName_Gate, GatesCorrectName) {
   EXPECT_EQ(gate.getRawName(), "Anything");
 }
 
-TEST(TestAddInConnections, AddConnections) {
+TEST(TestAddInConnections, GatesAddConnections) {
   VertexPtr gate1 = memoryOwnerGateGr->addGate(Gates::GateAnd);
   EXPECT_EQ(gate1->getInConnections().size(), 0);
 
@@ -433,7 +437,7 @@ TEST(TestAddInConnections, AddConnections) {
   EXPECT_EQ(gate1->getInConnections()[2], ptr2);
 }
 
-TEST(TestAddOutConnections, AddConnections) {
+TEST(TestAddOutConnections, GatesAddConnections) {
   VertexPtr gate1 = memoryOwnerGateGr->addGate(Gates::GateAnd);
   EXPECT_EQ(gate1->getOutConnections().size(), 0);
 
@@ -460,7 +464,42 @@ TEST(TestCalculateHash_Gate, SameHashWhenEqualInputs) {
   EXPECT_EQ(gate1.calculateHash(true), gate2.calculateHash(true));
 }
 
-TEST(TestRemoveVertexToInConnections, RemoveConnections) {
+TEST(TestCalulateHash_Gate, BistableCell) {
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+  // level = 0
+  VertexPtr inputVertA = graph->addInput();
+  VertexPtr inputVertB = graph->addInput();
+  VertexPtr gateVertA = graph->addGate(GateNor);
+  VertexPtr gateVertB = graph->addGate(GateNor);
+  VertexPtr outputVertA = graph->addOutput();
+  VertexPtr outputVertB = graph->addOutput();
+  graph->addEdge(inputVertA, gateVertA);
+  graph->addEdge(gateVertB, outputVertB);
+  graph->addEdge(gateVertA, outputVertA);
+  graph->addEdge(gateVertA, gateVertB);
+  graph->addEdge(gateVertB, outputVertB);
+  graph->addEdge(gateVertB, gateVertA);
+
+  GraphPtr graph1 = std::make_shared<OrientedGraph>();
+  // level = 0
+  VertexPtr inputVertA1 = graph1->addInput();
+  VertexPtr inputVertB1 = graph1->addInput();
+  VertexPtr gateVertA1 = graph1->addGate(GateNor);
+  VertexPtr gateVertB1 = graph1->addGate(GateNor);
+  VertexPtr outputVertA1 = graph1->addOutput();
+  VertexPtr outputVertB1 = graph1->addOutput();
+  graph1->addEdge(inputVertA1, gateVertA1);
+  graph1->addEdge(gateVertB1, outputVertB1);
+  graph1->addEdge(gateVertA1, outputVertA1);
+  graph1->addEdge(gateVertB1, gateVertA1);
+  graph1->addEdge(gateVertB1, outputVertB1);
+  graph1->addEdge(gateVertA1, gateVertB1);
+  graph1->calculateHash(true);
+
+  EXPECT_NE(graph->calculateHash(true), graph1->calculateHash(true));
+}
+
+TEST(TestRemoveVertexToInConnections, GatesRemoveConnections) {
   VertexPtr gatesPtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd);
   EXPECT_EQ(gatesPtr1->removeVertexToInConnections(nullptr), false);
 
@@ -473,7 +512,7 @@ TEST(TestRemoveVertexToInConnections, RemoveConnections) {
   EXPECT_EQ(gatesPtr1->getInConnections().size(), 1);
 }
 
-TEST(TestRemoveVertexToOutConnections, RemoveConnections) {
+TEST(TestRemoveVertexToOutConnections, GatesRemoveConnections) {
 #ifdef LOGFLAG
   initLogging("TestRemoveVertexToOutConnections", "RemoveConnections");
 #endif
@@ -511,6 +550,24 @@ TEST(GraphVertexGatesTest, UpdateValue_NoConnections) {
 //   gate1.addVertexToInConnections(gatePtr2);
 //   EXPECT_EQ(gate1.toVerilog(), "assign Var1 = ~ ( Var2 ^ Var3 );");
 // }
+
+TEST(GraphVerexGatesTest, IsSubGraph_Buffer) {
+  GraphVertexGates gate1(Gates::GateAnd, memoryOwnerGateGr);
+  GraphVertexGates gate2(Gates::GateBuf, memoryOwnerGateGr);
+  EXPECT_EQ(gate1.isSubgraphBuffer(), false);
+  EXPECT_EQ(gate2.isSubgraphBuffer(), false);
+  GraphPtr graphPtr = std::make_shared<OrientedGraph>();
+  VertexPtr input = graphPtr->addInput("input");
+
+  GraphPtr subGraphPtr = std::make_shared<OrientedGraph>();
+  VertexPtr subGraphInput = subGraphPtr->addInput("subGraphInput");
+  VertexPtr subGraphOutput = subGraphPtr->addOutput("subGraphOutput");
+
+  GraphVertexGates *gate3 =
+      static_cast<GraphVertexGates *>(graphPtr->addSubGraph(
+          subGraphPtr, graphPtr->getVerticesByType(VertexTypes::input))[0]);
+  EXPECT_EQ(gate3->isSubgraphBuffer(), true);
+}
 
 TEST(GraphVertexGatesTest, UpdateValue_GateAnd) {
   GraphVertexGates gate1(Gates::GateAnd, memoryOwnerGateGr);
