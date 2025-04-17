@@ -12,10 +12,10 @@ BUILD_TYPE=${1:-Debug} # По умолчанию Debug
 echo "*** Starting coverage generation ***"
 
 # Удаляем старую сборку
-if [ -d "$BUILD_DIR" ]; then
-    echo "*** Removing old build directory ***"
-    rm -rf "$BUILD_DIR"
-fi
+# if [ -d "$BUILD_DIR" ]; then
+#     echo "*** Removing old build directory ***"
+#     rm -rf "$BUILD_DIR"
+# fi
 
 echo "*** Configuring project with coverage enabled ***"
 cmake --preset=dev -DENABLE_COVERAGE=ON -DCMAKE_BUILD_TYPE="$BUILD_TYPE"

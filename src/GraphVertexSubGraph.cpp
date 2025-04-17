@@ -24,30 +24,40 @@ GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
   d_subGraph = i_subGraph;
 }
 
-// TODO add normal calculation
+//Simulation rework
+
 char GraphVertexSubGraph::updateValue() {
   return 'x';
 }
 
+// char GraphVertexSubGraph::updateValue() {
+//   std::vector<VertexPtr> output_verts = d_subGraph->getVerticesByType(VertexTypes::output);
+//   for (int i = 0; i < d_outConnections.size(); ++i) {
+//     assert(d_outConnections[i]->getType() == gate);
+//     GraphVertexGates *out_connectionVert = static_cast<GraphVertexGates *>(d_outConnections[i]);
+//     VertexPtr output_vert = output_verts[i];
+//     out_connectionVert->d_value = output_vert->getValue();
+//   }
+// }
+
 void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
-  int counter = 0;
+  int counter = 0, max_inLevel = 0;
   if (d_needUpdate && !i_recalculate) {
     return;
   }
   d_needUpdate = VS_IN_PROGRESS;
-  for (VertexPtr vert: d_subGraph->getVerticesByType(VertexTypes::output)) {
-#ifdef LOGFLAG
-    LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
-              << vert->getTypeName() << ")";
-#endif
-    vert->updateLevel(i_recalculate, tab + "  ");
+  d_subGraph->updateLevels(i_recalculate);
+  std::vector<VertexPtr> output_verts = d_subGraph->getVerticesByType(VertexTypes::output);
+  for (VertexPtr vert: d_inConnections){
+    max_inLevel = (vert->getLevel() > max_inLevel) ? vert->getLevel() : max_inLevel;
+  }
+  for (int i = 0; i < d_outConnections.size(); ++i) {
+    assert(d_outConnections[i]->getType() == gate);
+    GraphVertexGates *out_connectionVert = static_cast<GraphVertexGates *>(d_outConnections[i]);
+    VertexPtr output_vert = output_verts[i];
+    out_connectionVert->d_level = output_vert->getLevel() + max_inLevel - 2;
   }
   d_needUpdate = VS_CALC;
-}
-
-// In fact is not needed
-std::string GraphVertexSubGraph::getVerilogInstance() {
-  return d_subGraph->getGraphVerilogInstance();
 }
 
 std::pair<bool, std::string>

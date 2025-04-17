@@ -207,7 +207,6 @@ bool GraphVertexBase::getVerticesByLevel(uint32_t i_level,
   }
   d_needUpdate = VS_USED_CALC;
 
-  printf("Here %d\n", d_level);
   if (d_level == i_level) {
     i_result.push_back(this);
     return true;
