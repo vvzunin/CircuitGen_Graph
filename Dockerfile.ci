@@ -28,4 +28,4 @@ RUN pip3 install codespell
 RUN pip3 install jinja2 Pygments
 
 # Создаем рабочую директорию
-WORKDIR /app
+WORKDIR /graph
