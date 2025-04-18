@@ -111,10 +111,10 @@ docker-ci:
   variables:
     DOCKERFILE_NAME: "Dockerfile.ci"
   before_script:
-    - docker login registry-hub.mos.ru
+    - docker login registry-hub.mos.ru -u vvzunin -p $moshub_token_docker_ci
   script:
     - docker build --pull --rm -f '$DOCKERFILE_NAME' -t 'registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest' '.'
-    - docker image push registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest -u vvzunin -p $moshub_token_docker_ci
+    - docker image push registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
