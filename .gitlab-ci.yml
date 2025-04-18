@@ -1,15 +1,19 @@
 stages:
-  - lint
-  - coverage
-  - sanitize
+  - docker
+  - check
   - test
   - docs
-  - docker
   - release
 
+variables:
+  DOCKERFILE_CI_NAME: Dockerfile.ci
+  DOCKER_CI_SYSTEM: ubuntu:22.04
+  DOCKER_CI_TAG: latest
+  REGISTRY_URL: registry-hub.mos.ru
+
 lint:
-  stage: lint
-  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest
+  stage: check
+  image: $REGISTRY_URL/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
   before_script:
     - python3 --version
   script:
@@ -17,27 +21,12 @@ lint:
     - cmake -P cmake/spell.cmake
   tags:
     - docker
-
-coverage:
-  stage: coverage
-  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest
-  needs:
-    - job: lint
-  script:
-    - cmake --preset=ci-coverage
-    - cmake --build build/coverage -j $(nproc)
-    - cd build/coverage
-    - ctest --output-on-failure --no-tests=error -j $(nproc)
-    - cd ../..
-    - cmake --build build/coverage -t coverage
-  tags:
-    - docker
+  rules:
+  - if: $CI_COMMIT_TAG == null
 
 sanitize:
-  stage: sanitize
-  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest
-  needs:
-    - job: lint
+  stage: check
+  image: $REGISTRY_URL/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
   variables: 
     CXX: 'clang++-14'
     ASAN_OPTIONS: 'strict_string_checks=1:detect_stack_use_after_return=1:check_initialization_order=1:strict_init_order=1:detect_leaks=1:detect_odr_violation=1'
@@ -49,12 +38,33 @@ sanitize:
     - ctest --output-on-failure --no-tests=error -j $(nproc)
   tags:
     - docker
+  rules:
+  - if: $CI_COMMIT_TAG == null
 
-test:
+coverage:
   stage: test
-  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest
+  image: $REGISTRY_URL/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
   needs:
-    - job: lint
+    - lint
+    - sanitize
+  script:
+    - cmake --preset=ci-coverage
+    - cmake --build build/coverage -j $(nproc)
+    - cd build/coverage
+    - ctest --output-on-failure --no-tests=error -j $(nproc)
+    - cd ../..
+    - cmake --build build/coverage -t coverage
+  tags:
+    - docker
+  rules:
+  - if: $CI_COMMIT_TAG == null
+
+tests:
+  stage: test
+  image: $REGISTRY_URL/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
+  needs:
+    - lint
+    - sanitize
   script:
     - cmake --preset=ci-ubuntu
     - cmake --build build --config Release -j $(nproc)
@@ -70,12 +80,15 @@ test:
       junit: build/ctest_results.xml
   tags:
     - docker
+  rules:
+  - if: $CI_COMMIT_TAG == null
 
 docs:
   stage: docs
+  image: $REGISTRY_URL/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
   needs:
-    - job: sanitize
-    - job: test
+    - coverage
+    - tests
   before_script:
     - python3 --version
   script:
@@ -89,35 +102,38 @@ docs:
     paths:
       - build/docs
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: ($CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH) && ($CI_COMMIT_TAG == null)
   tags:
     - docker
 
 release-from-tag:
   stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
   script:
     - echo "Creating release $CI_COMMIT_TAG"
-  rules:
-    - if: $CI_COMMIT_TAG
   release:
     tag_name: $CI_COMMIT_TAG
+    name: 'Release $CI_COMMIT_TAG'
     description: "Release $CI_COMMIT_TAG of components in $CI_PROJECT_PATH"
   tags:
-    - shell
+    - docker
+  rules:
+    - if: $CI_COMMIT_TAG
 
 docker-ci:
   stage: docker
-  image: ubuntu:22.04
-  variables:
-    DOCKERFILE_NAME: "Dockerfile.ci"
   before_script:
-    - docker login registry-hub.mos.ru -u vvzunin -p $moshub_token_docker_ci
+    - docker login "$REGISTRY_URL" -u vvzunin -p "$moshub_token_docker_ci"
   script:
-    - docker build --pull --rm -f '$DOCKERFILE_NAME' -t 'registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest' '.'
-    - docker image push registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest
+    - echo "Creating docker image with tag ci_$DOCKER_CI_TAG"
+    - docker build --pull --rm --build-arg system=$DOCKER_CI_SYSTEM -f $DOCKERFILE_CI_NAME -t $REGISTRY_URL/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG .
+    - docker image push $REGISTRY_URL/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
-        - $DOCKERFILE_NAME
+        - $DOCKERFILE_CI_NAME
+    - if: $CI_COMMIT_TAG
+      variables:
+        DOCKER_CI_TAG: $CI_COMMIT_TAG
   tags:
-    - shell
+    - powershell

@@ -1,13 +1,23 @@
-# Используем официальный образ Ubuntu как базовый
-FROM ubuntu:22.04
+# Считываем аргумент из командной строки. 
+# Если он не задан, то выбираем систему по умолчанию.
+# По-умолчанию: ubuntu:22.04
+ARG system=ubuntu:22.04
+
+# Используем базовую систему, заданную аргументом system.
+FROM $system
+
+# Обновляем системные пакеты
+RUN apt-get update && \
+  apt-get upgrade -y
 
 # Устанавливаем необходимые инструменты и зависимости
-RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+RUN apt-get install -y \
   build-essential \
   clang \
   clang-tidy \
   clang-format-15 \
   cmake \
+  cppcheck \
   doxygen \
   g++ \
   gcc \
@@ -24,8 +34,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
   && apt-get clean
 
 # Устанавливаем Python-зависимости
-RUN pip3 install codespell
-RUN pip3 install jinja2 Pygments
+RUN pip3 install codespell jinja2 Pygments
 
 # Создаем рабочую директорию
 WORKDIR /graph
