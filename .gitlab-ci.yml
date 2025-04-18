@@ -79,7 +79,7 @@ docs:
   before_script:
     - python3 --version
   script:
-    - echo "Commit recieved. Building docs for $CI_DEFAULT_BRANCH"
+    - echo "Commit received. Building docs for $CI_DEFAULT_BRANCH"
     - mkdir -p build/docs
     - cd build/docs
     - cmake "-DPROJECT_SOURCE_DIR=$PWD/../.." "-DPROJECT_BINARY_DIR=$PWD/.." -P ../../cmake/docs-ci.cmake
