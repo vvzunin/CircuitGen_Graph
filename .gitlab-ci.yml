@@ -1,23 +1,26 @@
-# Описание для сборки при коммите в main
-image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest
-
 stages:
   - lint
   - coverage
   - sanitize
   - test
   - docs
+  - docker
+  - release
 
 lint:
   stage: lint
+  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest
   before_script:
     - python3 --version
   script:
     - cmake -D FORMAT_COMMAND=clang-format-15 -P cmake/lint.cmake
     - cmake -P cmake/spell.cmake
+  tags:
+    - docker
 
 coverage:
   stage: coverage
+  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest
   needs:
     - job: lint
   script:
@@ -27,9 +30,12 @@ coverage:
     - ctest --output-on-failure --no-tests=error -j $(nproc)
     - cd ../..
     - cmake --build build/coverage -t coverage
+  tags:
+    - docker
 
 sanitize:
   stage: sanitize
+  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest
   needs:
     - job: lint
   variables: 
@@ -41,9 +47,12 @@ sanitize:
     - cmake --build build/sanitize -j $(nproc)
     - cd build/sanitize
     - ctest --output-on-failure --no-tests=error -j $(nproc)
+  tags:
+    - docker
 
 test:
   stage: test
+  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest
   needs:
     - job: lint
   script:
@@ -59,6 +68,8 @@ test:
       - build/ctest_results.xml
     reports:
       junit: build/ctest_results.xml
+  tags:
+    - docker
 
 docs:
   stage: docs
@@ -68,6 +79,7 @@ docs:
   before_script:
     - python3 --version
   script:
+    - echo "Commit recieved. Building docs for $CI_DEFAULT_BRANCH"
     - mkdir -p build/docs
     - cd build/docs
     - cmake "-DPROJECT_SOURCE_DIR=$PWD/../.." "-DPROJECT_BINARY_DIR=$PWD/.." -P ../../cmake/docs-ci.cmake
@@ -76,3 +88,36 @@ docs:
     expire_in: 30 days
     paths:
       - build/docs
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  tags:
+    - docker
+
+release-from-tag:
+  stage: release
+  script:
+    - echo "Creating release $CI_COMMIT_TAG"
+  rules:
+    - if: $CI_COMMIT_TAG
+  release:
+    tag_name: $CI_COMMIT_TAG
+    description: "Release $CI_COMMIT_TAG of components in $CI_PROJECT_PATH"
+  tags:
+    - shell
+
+docker-ci:
+  stage: docker
+  image: ubuntu:22.04
+  variables:
+    DOCKERFILE_NAME: "Dockerfile.ci"
+  before_script:
+    - docker login registry-hub.mos.ru
+  script:
+    - docker build --pull --rm -f '$DOCKERFILE_NAME' -t 'registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest' '.'
+    - docker image push registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest -u vvzunin -p $moshub_token_docker_ci
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      changes:
+        - $DOCKERFILE_NAME
+  tags:
+    - shell
