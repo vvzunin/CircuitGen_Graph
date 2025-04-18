@@ -1,0 +1,31 @@
+# Используем официальный образ Ubuntu как базовый
+FROM ubuntu:22.04
+
+# Устанавливаем необходимые инструменты и зависимости
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+  build-essential \
+  clang \
+  clang-tidy \
+  clang-format-15 \
+  cmake \
+  doxygen \
+  g++ \
+  gcc \
+  ghostscript \
+  git \
+  graphviz \
+  lcov \
+  make \
+  ninja-build \
+  openssl \
+  python3.10 \
+  python3.10-dev \
+  python3-pip \
+  && apt-get clean
+
+# Устанавливаем Python-зависимости
+RUN pip3 install codespell
+RUN pip3 install jinja2 Pygments
+
+# Создаем рабочую директорию
+WORKDIR /app
