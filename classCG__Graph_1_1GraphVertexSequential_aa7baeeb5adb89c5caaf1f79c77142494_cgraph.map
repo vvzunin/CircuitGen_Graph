@@ -1,0 +1,5 @@
+<map id="CG_Graph::GraphVertexSequential::calculateHash" name="CG_Graph::GraphVertexSequential::calculateHash">
+<area shape="rect" id="node1" title="calculateHash Calculates the hash value of the vertex" alt="" coords="5,35,251,76"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1GraphVertexBase.html#a3914667b1d70695287fec6dc95df1895" title="getType This method returns the type of the vertex as a value of the VertexTypes enum" alt="" coords="299,5,507,47"/>
+<area shape="rect" id="node3" href="$format_8h.html#aa1899efcee92a5f5ca77b11423b256c5" title="\rst Converts value to std::string using the default format for type T." alt="" coords="363,71,442,98"/>
+</map>

@@ -76,15 +76,17 @@ var NAVTREE =
         [ "Правила документирования кода", "md_docs_HACKING.html#autotoc_md36", null ]
       ] ]
     ] ],
+    [ "Последовательностная логика", "md_docs_Sequential.html", null ],
     [ "Todo List", "todo.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
-        [ "All", "namespacemembers.html", null ],
-        [ "Functions", "namespacemembers_func.html", null ],
+        [ "All", "namespacemembers.html", "namespacemembers_dup" ],
+        [ "Functions", "namespacemembers_func.html", "namespacemembers_func" ],
         [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ],
-        [ "Enumerations", "namespacemembers_enum.html", null ]
+        [ "Enumerations", "namespacemembers_enum.html", null ],
+        [ "Enumerator", "namespacemembers_eval.html", null ]
       ] ]
     ] ],
     [ "Classes", "annotated.html", [
@@ -94,8 +96,10 @@ var NAVTREE =
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", null ],
+        [ "Variables", "functions_vars.html", "functions_vars" ],
         [ "Typedefs", "functions_type.html", null ],
+        [ "Enumerations", "functions_enum.html", null ],
+        [ "Enumerator", "functions_eval.html", null ],
         [ "Related Functions", "functions_rela.html", null ]
       ] ]
     ] ],
@@ -103,7 +107,7 @@ var NAVTREE =
       [ "File List", "files.html", "files_dup" ],
       [ "File Members", "globals.html", [
         [ "All", "globals.html", "globals_dup" ],
-        [ "Functions", "globals_func.html", null ],
+        [ "Functions", "globals_func.html", "globals_func" ],
         [ "Variables", "globals_vars.html", null ],
         [ "Typedefs", "globals_type.html", null ],
         [ "Enumerations", "globals_enum.html", null ],
@@ -117,12 +121,19 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "CMakePresets_8json.html",
-"classGraphVertexBase.html#a2c41cf1fd75e3acfe7241eb29bfeded9",
-"classel_1_1LogDispatchData.html#aa7f834fbd4c8440d25ba1958ccf51ea7",
-"classel_1_1base_1_1SubsecondPrecision.html#a7b6681bcf8457b97da6d2ad5da4b45c3",
-"easylogging_09_09_8h.html#a2784aacd04cb7816ac1c0b20fcbf83cbabff7a37f020193c055a5e32b294d408f",
-"easylogging_09_09_8h.html#ad8b1f825524e153099348cf8afaf8902",
-"namespaceel_1_1base.html#a28939c5a884e67fcf12259f4b8848e00a9d8794d3178b4df3b87654adbed5c846"
+"MemoryManagementTests_8cpp.html#a3402ecf5ff7fc375fc6b5a3aa67650c3",
+"classCG__Graph_1_1OrientedGraph.html#a7ed08aaacef3df2a9e2fd43cf8e12e06",
+"classdetail_1_1counting__iterator.html#a0b562ff1f148e906556351f5f8e5fad9",
+"classel_1_1LogDispatchCallback.html#a6d501ca4bc6082c4c021a929d72badb7",
+"classel_1_1base_1_1Storage.html#aeaadb83c15bd787804193d62571534d9",
+"core_8h.html#a30a1db5861e720de256f3bf735ab351b",
+"easylogging_09_09_8h.html#a2784aacd04cb7816ac1c0b20fcbf83cba34620f140246d3c3b68c17fdf7b8ada7",
+"easylogging_09_09_8h.html#ad46a08530382193c3620eeb1fee2f2b7",
+"format_8h.html#a84740d6d1b1ad9b243c02ee4ec87ac50",
+"md_docs_HACKING.html",
+"namespacedetail.html#a6dd56e6605bbb87fe5e05d147a9f84a4",
+"namespaceel_1_1base.html#a28939c5a884e67fcf12259f4b8848e00a693e7589872f7acd3e69d831d022d6ea",
+"structdetail_1_1dragonbox_1_1decimal__fp.html#a77c491ed8ef6cc88d11a9eaa41d43a2d"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

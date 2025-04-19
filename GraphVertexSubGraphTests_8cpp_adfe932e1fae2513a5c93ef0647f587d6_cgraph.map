@@ -1,0 +1,5 @@
+<map id="TEST" name="TEST">
+<area shape="rect" id="node1" title=" " alt="" coords="5,46,60,73"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1GraphVertexBase.html#a5bfa47be96861a5bc6a89c4da844bf61" title=" " alt="" coords="108,5,316,47"/>
+<area shape="rect" id="node3" href="$classCG__Graph_1_1GraphVertexBase.html#acd5cca5a4256aef1454d546d67110af2" title="setName This method sets the name of the vertex to the specified string." alt="" coords="108,71,316,112"/>
+</map>

@@ -1,0 +1,12 @@
+<map id="detail::utf8_to_utf16::utf8_to_utf16" name="detail::utf8_to_utf16::utf8_to_utf16">
+<area shape="rect" id="node1" title=" " alt="" coords="5,179,160,221"/>
+<area shape="rect" id="node2" href="$namespacedetail.html#ac7952761a4b6255293c82b7fb3a61d50" title=" " alt="" coords="208,132,403,159"/>
+<area shape="rect" id="node8" href="$classdetail_1_1buffer.html#a08e276fab23911bbf1ff0a6c121720cf" title=" " alt="" coords="214,212,397,239"/>
+<area shape="rect" id="node3" href="$classbasic__string__view.html#a39cdfe061dc6d64a3adc230b62d8a026" title="Returns a pointer to the string data." alt="" coords="451,5,625,32"/>
+<area shape="rect" id="node4" href="$format_8h.html#adb6e274f8eb0b74b2865215e1b49c535" title="\rst Converts p to const void* for pointer formatting." alt="" coords="518,56,558,83"/>
+<area shape="rect" id="node5" href="$classbasic__string__view.html#a216bbe1b012b590698d7bb4e96d1af3f" title="Returns the string size." alt="" coords="453,107,623,133"/>
+<area shape="rect" id="node6" href="$namespacedetail.html#ad64642bb9b2374fba5526c132a751951" title=" " alt="" coords="465,157,611,184"/>
+<area shape="rect" id="node7" href="$namespacedetail.html#a9cd935fa9e8ecf106e59bee1411440b9" title=" " alt="" coords="465,208,611,235"/>
+<area shape="rect" id="node9" href="$classdetail_1_1buffer.html#a49f14bffd0dc654fc32dab0e00a5e0c6" title=" " alt="" coords="473,259,603,301"/>
+<area shape="rect" id="node10" href="$classdetail_1_1buffer.html#ae1afeec5148a94656c7deaaad19d7da6" title="Increases the buffer capacity to hold at least capacity elements." alt="" coords="673,267,819,293"/>
+</map>

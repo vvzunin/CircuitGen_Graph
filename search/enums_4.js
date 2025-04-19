@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['level_1766',['Level',['../namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36',1,'el']]],
-  ['loggingflag_1767',['LoggingFlag',['../namespaceel.html#a2784aacd04cb7816ac1c0b20fcbf83cb',1,'el']]]
+  ['gates_3272',['Gates',['../namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637',1,'CG_Graph']]]
 ];

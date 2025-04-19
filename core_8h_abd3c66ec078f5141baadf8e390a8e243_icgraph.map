@@ -1,0 +1,4 @@
+<map id="println" name="println">
+<area shape="rect" id="node1" title="Formats args according to specifications in fmt and writes the output to the file f followed by a new..." alt="" coords="117,5,181,32"/>
+<area shape="rect" id="node2" href="$core_8h.html#a9b66047da81f80fda144420cb6415bf1" title="Formats args according to specifications in fmt and writes the output to stdout followed by a newline..." alt="" coords="5,5,69,32"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="detail::bigint::operator*=" name="detail::bigint::operator*=">
+<area shape="rect" id="node1" title=" " alt="" coords="5,38,191,65"/>
+<area shape="rect" id="node2" href="$classdetail_1_1bigint.html#a3050b4f6ba52d519821195205c3adf9e" title=" " alt="" coords="239,38,405,65"/>
+<area shape="rect" id="node3" href="$classdetail_1_1buffer.html#a08e276fab23911bbf1ff0a6c121720cf" title=" " alt="" coords="453,13,636,39"/>
+<area shape="rect" id="node6" href="$classdetail_1_1buffer.html#a8685285932360c284d19003fc4ba3edc" title="Returns the size of this buffer." alt="" coords="475,63,614,90"/>
+<area shape="rect" id="node4" href="$classdetail_1_1buffer.html#a49f14bffd0dc654fc32dab0e00a5e0c6" title=" " alt="" coords="684,5,815,47"/>
+<area shape="rect" id="node5" href="$classdetail_1_1buffer.html#ae1afeec5148a94656c7deaaad19d7da6" title="Increases the buffer capacity to hold at least capacity elements." alt="" coords="863,13,1008,39"/>
+</map>

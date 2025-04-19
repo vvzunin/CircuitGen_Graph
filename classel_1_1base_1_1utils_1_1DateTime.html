@@ -32,7 +32,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo_1.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CircuitGenGraph
-   &#160;<span id="projectnumber">1.3.1</span>
+   &#160;<span id="projectnumber">1.5.0</span>
    </div>
    <div id="projectbrief">Desc of Backeknd</div>
   </td>
@@ -131,10 +131,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a7197976eff45378efdca75ae070492e7"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classel_1_1base_1_1utils_1_1DateTime.html#a7197976eff45378efdca75ae070492e7">gettimeofday</a> (struct timeval *tv)</td></tr>
 <tr class="memdesc:a7197976eff45378efdca75ae070492e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cross platform gettimeofday for Windows and unix platform.  <a href="classel_1_1base_1_1utils_1_1DateTime.html#a7197976eff45378efdca75ae070492e7">More...</a><br /></td></tr>
 <tr class="separator:a7197976eff45378efdca75ae070492e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc31fad280188b0b0e8f04dec0e21310"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classel_1_1base_1_1utils_1_1DateTime.html#acc31fad280188b0b0e8f04dec0e21310">getDateTime</a> (const char *format, const <a class="el" href="classel_1_1base_1_1SubsecondPrecision.html">base::SubsecondPrecision</a> *ssPrec)</td></tr>
+<tr class="memitem:acc31fad280188b0b0e8f04dec0e21310"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classel_1_1base_1_1utils_1_1DateTime.html#acc31fad280188b0b0e8f04dec0e21310">getDateTime</a> (const char *<a class="el" href="format_8h.html#ab5e334342978e8c898e32e5b4f7d08fa">format</a>, const <a class="el" href="classel_1_1base_1_1SubsecondPrecision.html">base::SubsecondPrecision</a> *ssPrec)</td></tr>
 <tr class="memdesc:acc31fad280188b0b0e8f04dec0e21310"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets current date and time with a subsecond part.  <a href="classel_1_1base_1_1utils_1_1DateTime.html#acc31fad280188b0b0e8f04dec0e21310">More...</a><br /></td></tr>
 <tr class="separator:acc31fad280188b0b0e8f04dec0e21310"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a535546a91e5fa6cd30d2ac2a980d442a"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classel_1_1base_1_1utils_1_1DateTime.html#a535546a91e5fa6cd30d2ac2a980d442a">timevalToString</a> (struct timeval tval, const char *format, const <a class="el" href="classel_1_1base_1_1SubsecondPrecision.html">el::base::SubsecondPrecision</a> *ssPrec)</td></tr>
+<tr class="memitem:a535546a91e5fa6cd30d2ac2a980d442a"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classel_1_1base_1_1utils_1_1DateTime.html#a535546a91e5fa6cd30d2ac2a980d442a">timevalToString</a> (struct timeval tval, const char *<a class="el" href="format_8h.html#ab5e334342978e8c898e32e5b4f7d08fa">format</a>, const <a class="el" href="classel_1_1base_1_1SubsecondPrecision.html">el::base::SubsecondPrecision</a> *ssPrec)</td></tr>
 <tr class="memdesc:a535546a91e5fa6cd30d2ac2a980d442a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts timeval (struct from ctime) to string using specified format and subsecond precision.  <a href="classel_1_1base_1_1utils_1_1DateTime.html#a535546a91e5fa6cd30d2ac2a980d442a">More...</a><br /></td></tr>
 <tr class="separator:a535546a91e5fa6cd30d2ac2a980d442a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f19da20362c685d32be922a06faf586"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceel_1_1base_1_1type.html#a67e406cd213c231f1d135b5a4eda64b5">base::type::string_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classel_1_1base_1_1utils_1_1DateTime.html#a9f19da20362c685d32be922a06faf586">formatTime</a> (unsigned long long time, <a class="el" href="namespaceel_1_1base.html#a1b886858c6409097395b24b1bdf03c39">base::TimestampUnit</a> timestampUnit)</td></tr>
@@ -148,7 +148,7 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:ae9e46f004059acb5447885e1103c3ea8"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classel_1_1base_1_1utils_1_1DateTime.html#ae9e46f004059acb5447885e1103c3ea8">parseFormat</a> (char *buf, std::size_t bufSz, const char *format, const struct tm *tInfo, std::size_t msec, const <a class="el" href="classel_1_1base_1_1SubsecondPrecision.html">base::SubsecondPrecision</a> *ssPrec)</td></tr>
+<tr class="memitem:ae9e46f004059acb5447885e1103c3ea8"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classel_1_1base_1_1utils_1_1DateTime.html#ae9e46f004059acb5447885e1103c3ea8">parseFormat</a> (char *buf, std::size_t bufSz, const char *<a class="el" href="format_8h.html#ab5e334342978e8c898e32e5b4f7d08fa">format</a>, const struct tm *tInfo, std::size_t msec, const <a class="el" href="classel_1_1base_1_1SubsecondPrecision.html">base::SubsecondPrecision</a> *ssPrec)</td></tr>
 <tr class="separator:ae9e46f004059acb5447885e1103c3ea8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -291,12 +291,12 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classel_1_1base_1_1utils_1_1DateTime_acc31fad280188b0b0e8f04dec0e21310_cgraph.png" border="0" usemap="#aclassel_1_1base_1_1utils_1_1DateTime_acc31fad280188b0b0e8f04dec0e21310_cgraph" alt=""/></div>
 <map name="aclassel_1_1base_1_1utils_1_1DateTime_acc31fad280188b0b0e8f04dec0e21310_cgraph" id="aclassel_1_1base_1_1utils_1_1DateTime_acc31fad280188b0b0e8f04dec0e21310_cgraph">
-<area shape="rect" title="Gets current date and time with a subsecond part." alt="" coords="5,26,187,67"/>
-<area shape="rect" href="namespaceAuxMethods.html#a8738e9101771c74cd269945157e64a69" title=" " alt="" coords="693,32,848,59"/>
-<area shape="rect" href="classel_1_1base_1_1utils_1_1DateTime.html#a7197976eff45378efdca75ae070492e7" title="Cross platform gettimeofday for Windows and unix platform." alt="" coords="235,26,416,67"/>
-<area shape="rect" href="classel_1_1base_1_1utils_1_1DateTime.html#a535546a91e5fa6cd30d2ac2a980d442a" title="Converts timeval (struct from ctime) to string using specified format and subsecond precision." alt="" coords="235,91,416,133"/>
-<area shape="rect" href="classel_1_1base_1_1utils_1_1DateTime.html#ad0b327f1a8512fbccaee6788f942e717" title=" " alt="" coords="464,83,645,125"/>
-<area shape="rect" href="classel_1_1base_1_1utils_1_1DateTime.html#ae9e46f004059acb5447885e1103c3ea8" title=" " alt="" coords="464,149,645,190"/>
+<area shape="rect" title="Gets current date and time with a subsecond part." alt="" coords="5,27,187,68"/>
+<area shape="rect" href="namespaceCG__Graph_1_1AuxMethodsGraph.html#a148573721e2fb19aa7d548a16bb74b04" title=" " alt="" coords="693,25,908,67"/>
+<area shape="rect" href="classel_1_1base_1_1utils_1_1DateTime.html#a7197976eff45378efdca75ae070492e7" title="Cross platform gettimeofday for Windows and unix platform." alt="" coords="235,27,416,68"/>
+<area shape="rect" href="classel_1_1base_1_1utils_1_1DateTime.html#a535546a91e5fa6cd30d2ac2a980d442a" title="Converts timeval (struct from ctime) to string using specified format and subsecond precision." alt="" coords="235,92,416,133"/>
+<area shape="rect" href="classel_1_1base_1_1utils_1_1DateTime.html#ad0b327f1a8512fbccaee6788f942e717" title=" " alt="" coords="464,84,645,125"/>
+<area shape="rect" href="classel_1_1base_1_1utils_1_1DateTime.html#ae9e46f004059acb5447885e1103c3ea8" title=" " alt="" coords="464,149,645,191"/>
 </map>
 </div>
 <div class="dynheader">
@@ -471,7 +471,7 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="classel_1_1base_1_1utils_1_1DateTime_ae9e46f004059acb5447885e1103c3ea8_cgraph.png" border="0" usemap="#aclassel_1_1base_1_1utils_1_1DateTime_ae9e46f004059acb5447885e1103c3ea8_cgraph" alt=""/></div>
 <map name="aclassel_1_1base_1_1utils_1_1DateTime_ae9e46f004059acb5447885e1103c3ea8_cgraph" id="aclassel_1_1base_1_1utils_1_1DateTime_ae9e46f004059acb5447885e1103c3ea8_cgraph">
 <area shape="rect" title=" " alt="" coords="5,5,187,47"/>
-<area shape="rect" href="namespaceAuxMethods.html#a8738e9101771c74cd269945157e64a69" title=" " alt="" coords="235,13,389,39"/>
+<area shape="rect" href="namespaceCG__Graph_1_1AuxMethodsGraph.html#a148573721e2fb19aa7d548a16bb74b04" title=" " alt="" coords="235,5,449,47"/>
 </map>
 </div>
 <div class="dynheader">
@@ -540,7 +540,7 @@ Here is the call graph for this function:</div>
 <map name="aclassel_1_1base_1_1utils_1_1DateTime_a535546a91e5fa6cd30d2ac2a980d442a_cgraph" id="aclassel_1_1base_1_1utils_1_1DateTime_a535546a91e5fa6cd30d2ac2a980d442a_cgraph">
 <area shape="rect" title="Converts timeval (struct from ctime) to string using specified format and subsecond precision." alt="" coords="5,64,187,105"/>
 <area shape="rect" href="classel_1_1base_1_1utils_1_1DateTime.html#ad0b327f1a8512fbccaee6788f942e717" title=" " alt="" coords="235,5,416,47"/>
-<area shape="rect" href="namespaceAuxMethods.html#a8738e9101771c74cd269945157e64a69" title=" " alt="" coords="464,101,619,127"/>
+<area shape="rect" href="namespaceCG__Graph_1_1AuxMethodsGraph.html#a148573721e2fb19aa7d548a16bb74b04" title=" " alt="" coords="464,93,679,135"/>
 <area shape="rect" href="classel_1_1base_1_1utils_1_1DateTime.html#ae9e46f004059acb5447885e1103c3ea8" title=" " alt="" coords="235,123,416,164"/>
 </map>
 </div>

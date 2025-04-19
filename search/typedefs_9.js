@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['scopedlock_1756',['ScopedLock',['../namespaceel_1_1base_1_1threading.html#a84bb1940fe98386c8907c1f4ceac5718',1,'el::base::threading']]],
-  ['storagepointer_1757',['StoragePointer',['../namespaceel_1_1base_1_1type.html#a3c34822c3825018aca1526f2289b7976',1,'el::base::type']]],
-  ['string_5ft_1758',['string_t',['../namespaceel_1_1base_1_1type.html#a67e406cd213c231f1d135b5a4eda64b5',1,'el::base::type']]],
-  ['stringstream_5ft_1759',['stringstream_t',['../namespaceel_1_1base_1_1type.html#a3492908c4b80f97b6c4b346d394f1302',1,'el::base::type']]]
+  ['make_5funsigned_5fchar_3223',['make_unsigned_char',['../namespacedetail.html#aee8fb5a4b1778dad718576b2cc838a60',1,'detail']]],
+  ['mapped_5ftype_5fconstant_3224',['mapped_type_constant',['../namespacedetail.html#a339c84659505dbd2276f8496a77f6669',1,'detail']]],
+  ['memory_5fbuffer_3225',['memory_buffer',['../format_8h.html#aaba5427d5f788f71959666ba2a3bf167',1,'format.h']]],
+  ['millisecondswidth_3226',['MillisecondsWidth',['../namespaceel_1_1base.html#abbc234f4907eccec2673dfc6efaa5925',1,'el::base']]],
+  ['mutex_3227',['Mutex',['../namespaceel_1_1base_1_1threading.html#ab9400eb234a82878e8458a65f9774320',1,'el::base::threading']]]
 ];

@@ -1,0 +1,4 @@
+<map id="basic_memory_buffer&lt; T, SIZE, Allocator &gt;" name="basic_memory_buffer&lt; T, SIZE, Allocator &gt;">
+<area shape="rect" id="node1" title="\rst A dynamically growing memory buffer for trivially copyable/constructible types with the first SI..." alt="" coords="5,395,204,648"/>
+<area shape="rect" id="node2" href="$classdetail_1_1buffer.html" title="\rst A contiguous memory buffer with an optional growing ability." alt="" coords="33,5,176,347"/>
+</map>

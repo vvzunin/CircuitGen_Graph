@@ -1,0 +1,7 @@
+<map id="detail::write_significand" name="detail::write_significand">
+<area shape="rect" id="node1" title=" " alt="" coords="5,56,183,83"/>
+<area shape="rect" id="node2" href="$classdetail_1_1buffer.html#aeb33e0a2d2be2bbca9e0236c148089c8" title="Returns a pointer to the buffer data (not null&#45;terminated)." alt="" coords="231,5,373,32"/>
+<area shape="rect" id="node3" href="$namespacedetail.html#a818b390bd30ad25b638f7b067cb50f15" title=" " alt="" coords="253,56,351,83"/>
+<area shape="rect" id="node5" href="$classdetail_1_1buffer.html#a8685285932360c284d19003fc4ba3edc" title="Returns the size of this buffer." alt="" coords="233,107,371,133"/>
+<area shape="rect" id="node4" href="$namespacedetail.html#a9bef8d727daadab62ef98688a6825c89" title=" " alt="" coords="421,56,524,83"/>
+</map>

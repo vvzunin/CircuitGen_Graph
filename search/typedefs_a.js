@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['verboselevel_1760',['VerboseLevel',['../namespaceel_1_1base_1_1type.html#a379652fdd9386faa5e26bf1f2493bffa',1,'el::base::type']]]
+  ['ostream_5ft_3228',['ostream_t',['../namespaceel_1_1base_1_1type.html#a74ea109bf34d1c44926837fb0830f445',1,'el::base::type']]]
 ];

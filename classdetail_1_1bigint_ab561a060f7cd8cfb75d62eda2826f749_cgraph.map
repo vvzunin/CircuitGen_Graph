@@ -1,0 +1,13 @@
+<map id="detail::bigint::divmod_assign" name="detail::bigint::divmod_assign">
+<area shape="rect" id="node1" title=" " alt="" coords="5,254,167,295"/>
+<area shape="rect" id="node2" href="$classdetail_1_1bigint.html#ab3ca9eb9d3e27c8fa43c2ceebabd1a0b" title=" " alt="" coords="439,152,583,179"/>
+<area shape="rect" id="node9" href="$classdetail_1_1bigint.html#a11d63125bbe1226b8a68ef4ba926e81a" title=" " alt="" coords="215,283,380,325"/>
+<area shape="rect" id="node3" href="$classdetail_1_1buffer.html#aeb33e0a2d2be2bbca9e0236c148089c8" title="Returns a pointer to the buffer data (not null&#45;terminated)." alt="" coords="651,5,794,32"/>
+<area shape="rect" id="node4" href="$classdetail_1_1bigint.html#a51fb1f372c57b51076abf2c75d0706af" title=" " alt="" coords="652,174,793,215"/>
+<area shape="rect" id="node5" href="$classdetail_1_1buffer.html#a8685285932360c284d19003fc4ba3edc" title="Returns the size of this buffer." alt="" coords="852,236,991,263"/>
+<area shape="rect" id="node6" href="$classbasic__memory__buffer.html#a153c47788d6d1a76ec97780748755ea1" title="Resizes the buffer to contain count elements." alt="" coords="641,57,804,98"/>
+<area shape="rect" id="node8" href="$namespacedetail.html#ad64642bb9b2374fba5526c132a751951" title=" " alt="" coords="649,240,796,267"/>
+<area shape="rect" id="node7" href="$namespacedetail.html#a9bef8d727daadab62ef98688a6825c89" title=" " alt="" coords="870,64,973,91"/>
+<area shape="rect" id="node10" href="$classdetail_1_1bigint.html#a315d081560942c5584159aed7c519d6f" title=" " alt="" coords="429,233,592,274"/>
+<area shape="rect" id="node11" href="$classdetail_1_1bigint.html#afbf6df62c465afc7153b488d9a72187e" title=" " alt="" coords="428,393,593,434"/>
+</map>

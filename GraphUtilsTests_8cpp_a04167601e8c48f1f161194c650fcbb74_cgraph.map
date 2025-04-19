@@ -1,0 +1,5 @@
+<map id="TEST" name="TEST">
+<area shape="rect" id="node1" title=" " alt="" coords="5,13,60,39"/>
+<area shape="rect" id="node2" href="$namespaceCG__Graph_1_1GraphUtils.html#a2100e840adfd5ab0a7b1cdea344d441c" title="getLogicOperationsWithGates Returns logical operations along with information about the presence of a..." alt="" coords="108,5,332,47"/>
+<area shape="rect" id="node3" href="$namespaceCG__Graph_1_1GraphUtils.html#af175868b714b6534c6da12fad4504f19" title="getLogicOperationsKeys Returns the keys of logical operations" alt="" coords="380,5,567,47"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="detail::get_dynamic_spec" name="detail::get_dynamic_spec">
+<area shape="rect" id="node1" title=" " alt="" coords="5,35,193,61"/>
+<area shape="rect" id="node2" href="$core_8h.html#a2c8e80c1b1c8b7747e99b8e9a24a0429" title="\rst Returns a named argument to be used in a formatting function." alt="" coords="485,5,528,32"/>
+<area shape="rect" id="node3" href="$namespacedetail.html#ad64642bb9b2374fba5526c132a751951" title=" " alt="" coords="241,35,388,61"/>
+<area shape="rect" id="node4" href="$core_8h.html#ad5abd8a19682a28f103233267fd8f87a" title="\rst Visits an argument dispatching to the appropriate visit method based on the argument type." alt="" coords="250,85,379,112"/>
+<area shape="rect" id="node5" href="$namespacedetail.html#a49b6442202d11af60b96dc09859dd027" title=" " alt="" coords="436,78,577,119"/>
+</map>

@@ -1,14 +1,12 @@
 var searchData=
 [
-  ['levelhelper_1072',['LevelHelper',['../classel_1_1LevelHelper.html',1,'el']]],
-  ['logbuilder_1073',['LogBuilder',['../classel_1_1LogBuilder.html',1,'el']]],
-  ['logdispatchcallback_1074',['LogDispatchCallback',['../classel_1_1LogDispatchCallback.html',1,'el']]],
-  ['logdispatchdata_1075',['LogDispatchData',['../classel_1_1LogDispatchData.html',1,'el']]],
-  ['logdispatcher_1076',['LogDispatcher',['../classel_1_1base_1_1LogDispatcher.html',1,'el::base']]],
-  ['logformat_1077',['LogFormat',['../classel_1_1base_1_1LogFormat.html',1,'el::base']]],
-  ['loggable_1078',['Loggable',['../classel_1_1Loggable.html',1,'el']]],
-  ['logger_1079',['Logger',['../classel_1_1Logger.html',1,'el']]],
-  ['loggerregistrationcallback_1080',['LoggerRegistrationCallback',['../classel_1_1LoggerRegistrationCallback.html',1,'el']]],
-  ['loggers_1081',['Loggers',['../classel_1_1Loggers.html',1,'el']]],
-  ['logmessage_1082',['LogMessage',['../classel_1_1LogMessage.html',1,'el']]]
+  ['graphmemory_1955',['GraphMemory',['../classCG__Graph_1_1GraphMemory.html',1,'CG_Graph']]],
+  ['graphvertexbase_1956',['GraphVertexBase',['../classCG__Graph_1_1GraphVertexBase.html',1,'CG_Graph']]],
+  ['graphvertexconstant_1957',['GraphVertexConstant',['../classCG__Graph_1_1GraphVertexConstant.html',1,'CG_Graph']]],
+  ['graphvertexgates_1958',['GraphVertexGates',['../classCG__Graph_1_1GraphVertexGates.html',1,'CG_Graph']]],
+  ['graphvertexinput_1959',['GraphVertexInput',['../classCG__Graph_1_1GraphVertexInput.html',1,'CG_Graph']]],
+  ['graphvertexoutput_1960',['GraphVertexOutput',['../classCG__Graph_1_1GraphVertexOutput.html',1,'CG_Graph']]],
+  ['graphvertexsequential_1961',['GraphVertexSequential',['../classCG__Graph_1_1GraphVertexSequential.html',1,'CG_Graph']]],
+  ['graphvertexsubgraph_1962',['GraphVertexSubGraph',['../classCG__Graph_1_1GraphVertexSubGraph.html',1,'CG_Graph']]],
+  ['group_5fdigits_5fview_1963',['group_digits_view',['../structgroup__digits__view.html',1,'']]]
 ];

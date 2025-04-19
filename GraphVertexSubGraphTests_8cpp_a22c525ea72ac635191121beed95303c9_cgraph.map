@@ -1,0 +1,11 @@
+<map id="TEST" name="TEST">
+<area shape="rect" id="node1" title=" " alt="" coords="5,209,60,235"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1GraphVertexBase.html#a4ebd0edfc61877c4b6c7a28f3b60a078" title="getBaseGraph" alt="" coords="108,5,316,47"/>
+<area shape="rect" id="node3" href="$classCG__Graph_1_1GraphVertexBase.html#abf1d9d3c81863db23d135307212e1b73" title="getLevel Returns the level of the vertex" alt="" coords="108,71,316,112"/>
+<area shape="rect" id="node4" href="$classCG__Graph_1_1GraphVertexBase.html#ac599c7ca7d88eee564770d21d5084cdf" title="getOutConnections" alt="" coords="108,136,316,177"/>
+<area shape="rect" id="node5" href="$classCG__Graph_1_1GraphVertexBase.html#a5bfa47be96861a5bc6a89c4da844bf61" title=" " alt="" coords="108,201,316,243"/>
+<area shape="rect" id="node6" href="$classCG__Graph_1_1GraphVertexBase.html#a3914667b1d70695287fec6dc95df1895" title="getType This method returns the type of the vertex as a value of the VertexTypes enum" alt="" coords="108,267,316,308"/>
+<area shape="rect" id="node7" href="$classCG__Graph_1_1GraphVertexBase.html#ab5f6e855cbc0fbf3c0e519b1827f47aa" title="getTypeName This method returns the string representation of the vertex type by parsing the vertex ty..." alt="" coords="108,332,316,373"/>
+<area shape="rect" id="node9" href="$classCG__Graph_1_1GraphVertexBase.html#ab74c4a4617154de8f2af85816301cfc4" title="getValue Returns the value of the vertex." alt="" coords="108,397,316,439"/>
+<area shape="rect" id="node8" href="$namespaceCG__Graph_1_1GraphUtils.html#acd3e3a4198309e4b11d407043490ce52" title="parseVertexToString Converts an enum value of a vertex type to its corresponding string representatio..." alt="" coords="364,332,528,373"/>
+</map>

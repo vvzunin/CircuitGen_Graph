@@ -1,0 +1,6 @@
+<map id="detail::buffer::capacity" name="detail::buffer::capacity">
+<area shape="rect" id="node1" title="Returns the capacity of this buffer." alt="" coords="276,137,444,163"/>
+<area shape="rect" id="node2" href="$classdetail_1_1iterator__buffer_3_01std_1_1back__insert__iterator_3_01Container_01_4_00_01enablea2d579bc6466b5382e01854ff6e2d68f.html#a1af4b95b03d67cfc8254f10ec8592b46" title="Increases the buffer capacity to hold at least capacity elements." alt="" coords="5,5,228,105"/>
+<area shape="rect" id="node3" href="$classbasic__memory__buffer.html#ab453ecfd2d4b4b5cfdc4afa4e17c6a3a" title=" " alt="" coords="35,129,198,171"/>
+<area shape="rect" id="node4" href="$namespacedetail.html#afc6912e82b1994b010e00e77b3ee486e" title=" " alt="" coords="50,195,183,222"/>
+</map>

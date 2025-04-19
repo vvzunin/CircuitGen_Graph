@@ -1,0 +1,6 @@
+<map id="CG_Graph::OrientedGraph::getVerticesByLevel" name="CG_Graph::OrientedGraph::getVerticesByLevel">
+<area shape="rect" id="node1" title=" " alt="" coords="5,71,196,112"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1OrientedGraph.html#a7471f5de011ba056cbec5dcdc6effc4d" title=" " alt="" coords="244,5,435,47"/>
+<area shape="rect" id="node3" href="$classCG__Graph_1_1OrientedGraph.html#a02d52dcae05ffa83526679ac082038f4" title="getMaxLevel Calculates and returns the maximum level of the output vertices in the graph" alt="" coords="244,71,435,112"/>
+<area shape="rect" id="node4" href="$classCG__Graph_1_1OrientedGraph.html#a0ada23d86d1c2a66f24282439fc87c78" title="updateLevels TO DO: the method body is commented out!!!" alt="" coords="483,100,673,141"/>
+</map>

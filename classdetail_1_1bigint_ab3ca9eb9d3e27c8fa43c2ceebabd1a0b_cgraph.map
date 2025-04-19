@@ -1,0 +1,9 @@
+<map id="detail::bigint::align" name="detail::bigint::align">
+<area shape="rect" id="node1" title=" " alt="" coords="5,123,149,149"/>
+<area shape="rect" id="node2" href="$classdetail_1_1buffer.html#aeb33e0a2d2be2bbca9e0236c148089c8" title="Returns a pointer to the buffer data (not null&#45;terminated)." alt="" coords="207,5,350,32"/>
+<area shape="rect" id="node3" href="$classdetail_1_1bigint.html#a51fb1f372c57b51076abf2c75d0706af" title=" " alt="" coords="208,57,349,98"/>
+<area shape="rect" id="node4" href="$classdetail_1_1buffer.html#a8685285932360c284d19003fc4ba3edc" title="Returns the size of this buffer." alt="" coords="408,93,547,120"/>
+<area shape="rect" id="node5" href="$classbasic__memory__buffer.html#a153c47788d6d1a76ec97780748755ea1" title="Resizes the buffer to contain count elements." alt="" coords="197,174,360,215"/>
+<area shape="rect" id="node7" href="$namespacedetail.html#ad64642bb9b2374fba5526c132a751951" title=" " alt="" coords="205,240,352,267"/>
+<area shape="rect" id="node6" href="$namespacedetail.html#a9bef8d727daadab62ef98688a6825c89" title=" " alt="" coords="426,181,529,208"/>
+</map>

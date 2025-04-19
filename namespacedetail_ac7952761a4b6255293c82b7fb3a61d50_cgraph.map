@@ -1,0 +1,8 @@
+<map id="detail::for_each_codepoint" name="detail::for_each_codepoint">
+<area shape="rect" id="node1" title=" " alt="" coords="5,107,200,133"/>
+<area shape="rect" id="node2" href="$classbasic__string__view.html#a39cdfe061dc6d64a3adc230b62d8a026" title="Returns a pointer to the string data." alt="" coords="248,5,423,32"/>
+<area shape="rect" id="node3" href="$format_8h.html#adb6e274f8eb0b74b2865215e1b49c535" title="\rst Converts p to const void* for pointer formatting." alt="" coords="315,56,355,83"/>
+<area shape="rect" id="node4" href="$classbasic__string__view.html#a216bbe1b012b590698d7bb4e96d1af3f" title="Returns the string size." alt="" coords="250,107,421,133"/>
+<area shape="rect" id="node5" href="$namespacedetail.html#ad64642bb9b2374fba5526c132a751951" title=" " alt="" coords="262,157,409,184"/>
+<area shape="rect" id="node6" href="$namespacedetail.html#a9cd935fa9e8ecf106e59bee1411440b9" title=" " alt="" coords="262,208,409,235"/>
+</map>

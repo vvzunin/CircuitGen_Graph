@@ -1,0 +1,9 @@
+<map id="basic_memory_buffer::move" name="basic_memory_buffer::move">
+<area shape="rect" id="node1" title=" " alt="" coords="5,125,168,166"/>
+<area shape="rect" id="node2" href="$classdetail_1_1buffer.html#ac7ff14268d6b32d3d878291445ff4dd3" title="Returns the capacity of this buffer." alt="" coords="216,5,384,32"/>
+<area shape="rect" id="node3" href="$classdetail_1_1buffer.html#a8174757a0d86698229670044730dc59b" title="Clears this buffer." alt="" coords="227,56,373,83"/>
+<area shape="rect" id="node4" href="$classdetail_1_1buffer.html#aeb33e0a2d2be2bbca9e0236c148089c8" title="Returns a pointer to the buffer data (not null&#45;terminated)." alt="" coords="229,107,371,133"/>
+<area shape="rect" id="node5" href="$classdetail_1_1buffer.html#a5c82aec716b07079ac88194eb9aa7feb" title="Sets the buffer data and capacity." alt="" coords="233,157,367,184"/>
+<area shape="rect" id="node6" href="$namespacedetail.html#ab484cd4186e1780becdc7f3118c29902" title=" " alt="" coords="257,208,343,235"/>
+<area shape="rect" id="node7" href="$classdetail_1_1buffer.html#a8685285932360c284d19003fc4ba3edc" title="Returns the size of this buffer." alt="" coords="231,259,369,285"/>
+</map>

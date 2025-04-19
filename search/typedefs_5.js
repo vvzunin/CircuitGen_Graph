@@ -1,9 +1,16 @@
 var searchData=
 [
-  ['linenumber_1744',['LineNumber',['../namespaceel_1_1base_1_1type.html#a7be44abab4288b1ea29962a059737347',1,'el::base::type']]],
-  ['logbuilderptr_1745',['LogBuilderPtr',['../namespaceel.html#ad4c4b2f7d70a4b02568a9f70724a6b39',1,'el']]],
-  ['logdispatchcallbackptr_1746',['LogDispatchCallbackPtr',['../namespaceel_1_1base_1_1type.html#a887283511935c7a6d5ca99df8099f33f',1,'el::base::type']]],
-  ['loggerregistrationcallbackptr_1747',['LoggerRegistrationCallbackPtr',['../namespaceel_1_1base_1_1type.html#ab9e009b0511ba22eed263c8ced700bb6',1,'el::base::type']]],
-  ['logstreamsreferencemap_1748',['LogStreamsReferenceMap',['../namespaceel_1_1base.html#a6f440ada16117d20b5b5fc75b2f3a80f',1,'el::base']]],
-  ['logstreamsreferencemapptr_1749',['LogStreamsReferenceMapPtr',['../namespaceel_1_1base.html#aff0a4f2494ed737ffa5e45c9abb57e97',1,'el::base']]]
+  ['filestreamptr_3193',['FileStreamPtr',['../namespaceel_1_1base.html#a8b10bcfd674533f8340cd8c39fbf5233',1,'el::base']]],
+  ['float128_3194',['float128',['../namespacedetail.html#a4676862dadff4edac75e53f73e3a185b',1,'detail']]],
+  ['format_5farg_3195',['format_arg',['../classbasic__format__context.html#a6453d86fefbd8d297e7c19c88dfc22b3',1,'basic_format_context::format_arg()'],['../classbasic__format__args.html#af22c7ecd69cc9c3dc2a9a113b5ff5088',1,'basic_format_args::format_arg()']]],
+  ['format_5fargs_3196',['format_args',['../classbasic__format__context.html#abebe41282e16bbd7c3e0c4b216ac0104',1,'basic_format_context::format_args()'],['../core_8h.html#abd8c737296655b44480da4fb422add24',1,'format_args():&#160;core.h']]],
+  ['format_5fas_5ft_3197',['format_as_t',['../namespacedetail.html#a7c8d1e6ded5bd8f55bfc64da8ad15805',1,'detail']]],
+  ['format_5fcontext_3198',['format_context',['../core_8h.html#a3e6224930832371a8c75d3e519873a9e',1,'core.h']]],
+  ['format_5ffunc_3199',['format_func',['../namespacedetail.html#a310a84154f0fab33e403678a97907ee9',1,'detail']]],
+  ['format_5fparse_5fcontext_3200',['format_parse_context',['../core_8h.html#a7f31f076b2eb408741895533f9222baa',1,'core.h']]],
+  ['format_5fstring_3201',['format_string',['../core_8h.html#a56a828fb91283babdb0eef8e0d9010cb',1,'core.h']]],
+  ['formatspecifiervalueresolver_3202',['FormatSpecifierValueResolver',['../namespaceel.html#a7127f2de2769e2a199a3665f42028a16',1,'el']]],
+  ['formatter_5ftype_3203',['formatter_type',['../classbasic__format__context.html#a2d604d7052e298ffc4cd72514bf576a8',1,'basic_format_context']]],
+  ['fp_3204',['fp',['../namespacedetail.html#a78e9adc134e946fa445015f8a7e29a89',1,'detail']]],
+  ['fstream_5ft_3205',['fstream_t',['../namespaceel_1_1base_1_1type.html#a620c830ead75d26b45c060c211ee2685',1,'el::base::type']]]
 ];

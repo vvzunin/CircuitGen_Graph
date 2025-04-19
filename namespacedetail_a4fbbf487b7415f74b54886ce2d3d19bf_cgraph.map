@@ -1,0 +1,5 @@
+<map id="detail::report_error" name="detail::report_error">
+<area shape="rect" id="node1" title=" " alt="" coords="5,31,149,57"/>
+<area shape="rect" id="node2" href="$classdetail_1_1buffer.html#aeb33e0a2d2be2bbca9e0236c148089c8" title="Returns a pointer to the buffer data (not null&#45;terminated)." alt="" coords="197,5,340,32"/>
+<area shape="rect" id="node3" href="$classdetail_1_1buffer.html#a8685285932360c284d19003fc4ba3edc" title="Returns the size of this buffer." alt="" coords="199,56,338,83"/>
+</map>

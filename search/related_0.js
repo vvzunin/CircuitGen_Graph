@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['logdispatcher_1851',['LogDispatcher',['../classel_1_1LogDispatchData.html#a84d22f9ad5b796e49ff5f15a8c32773d',1,'el::LogDispatchData::LogDispatcher()'],['../classel_1_1LogDispatchCallback.html#a84d22f9ad5b796e49ff5f15a8c32773d',1,'el::LogDispatchCallback::LogDispatcher()']]],
-  ['performancetracker_1852',['PerformanceTracker',['../classel_1_1PerformanceTrackingCallback.html#a05f271f9cc2531409fe682c6ce0d9feb',1,'el::PerformanceTrackingCallback']]],
-  ['registeredloggers_1853',['RegisteredLoggers',['../classel_1_1LoggerRegistrationCallback.html#a5b2ecdd0901cd8ea80e03a3a6e2a9f17',1,'el::LoggerRegistrationCallback']]]
+  ['add_5fcompare_3462',['add_compare',['../classdetail_1_1bigint.html#a7bd684152457f6d907eb639ca0f6de78',1,'detail::bigint']]]
 ];

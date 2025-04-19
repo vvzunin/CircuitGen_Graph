@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['filestreamptr_1740',['FileStreamPtr',['../namespaceel_1_1base.html#a8b10bcfd674533f8340cd8c39fbf5233',1,'el::base']]],
-  ['formatspecifiervalueresolver_1741',['FormatSpecifierValueResolver',['../namespaceel.html#a7127f2de2769e2a199a3665f42028a16',1,'el']]],
-  ['fstream_5ft_1742',['fstream_t',['../namespaceel_1_1base_1_1type.html#a620c830ead75d26b45c060c211ee2685',1,'el::base::type']]]
+  ['difference_5ftype_3189',['difference_type',['../classdetail_1_1counting__iterator.html#ab38fb05009ff6d308e752fe82bb2ae9d',1,'detail::counting_iterator']]],
+  ['double_5fbigit_3190',['double_bigit',['../classdetail_1_1bigint.html#a8a8b30d253c2346fdd71eb4536a6890d',1,'detail::bigint']]]
 ];

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['iterator_1743',['iterator',['../classel_1_1base_1_1utils_1_1AbstractRegistry.html#a58d0536c748633afd3f7c237b63a9a7c',1,'el::base::utils::AbstractRegistry::iterator()'],['../classel_1_1base_1_1utils_1_1Registry.html#a31f3d725285e6b65f1f9e990066f96ed',1,'el::base::utils::Registry::iterator()'],['../classel_1_1base_1_1utils_1_1RegistryWithPred.html#afc03d2d0a72f5ebf03e1e3b37bd9932d',1,'el::base::utils::RegistryWithPred::iterator()']]]
+  ['enable_5fif_5ft_3191',['enable_if_t',['../core_8h.html#a012819c9e8b5e04872a271f50f8b8196',1,'core.h']]],
+  ['enumtype_3192',['EnumType',['../namespaceel_1_1base_1_1type.html#aa7dbdfaaff779b8e3d338e1b31707098',1,'el::base::type']]]
 ];

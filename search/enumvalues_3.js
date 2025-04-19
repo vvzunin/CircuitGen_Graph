@@ -1,5 +1,22 @@
 var searchData=
 [
-  ['enabled_1791',['Enabled',['../namespaceel.html#a281f5db6d6163678bc68a8b23b59e124a00d23a76e43b46dae9ec7aa9dcbebb32',1,'el']]],
-  ['error_1792',['Error',['../namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36a902b0d55fddef6f8d651fe1035b7d4bd',1,'el']]]
+  ['databus_3309',['dataBus',['../namespaceCG__Graph.html#a28a42afa74ee91d31d437b68f44f9b68aa955fbe209aad1b19a52bc4c3e81b3d5',1,'CG_Graph']]],
+  ['datetime_3310',['DateTime',['../namespaceel_1_1base.html#a28939c5a884e67fcf12259f4b8848e00a8cf10d2341ed01492506085688270c1e',1,'el::base']]],
+  ['day_3311',['Day',['../namespaceel_1_1base.html#a1b886858c6409097395b24b1bdf03c39a03727ac48595a24daed975559c944a44',1,'el::base']]],
+  ['debug_3312',['Debug',['../namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36aa603905470e2a5b8c13e96b579ef0dba',1,'el']]],
+  ['debug_3313',['debug',['../core_8h.html#adfa139c9a1902753b3696794759b2c48aad42f6697b035b7580e4fef93be20b4d',1,'core.h']]],
+  ['dec_3314',['dec',['../core_8h.html#adfa139c9a1902753b3696794759b2c48a1feea25ecb958229287f885aebe7c49b',1,'core.h']]],
+  ['disableapplicationabortonfatallog_3315',['DisableApplicationAbortOnFatalLog',['../namespaceel.html#a2784aacd04cb7816ac1c0b20fcbf83cba8dd9782f8a19cf7a41e4ec38d1c6a4ae',1,'el']]],
+  ['disableperformancetrackingcheckpointcomparison_3316',['DisablePerformanceTrackingCheckpointComparison',['../namespaceel.html#a2784aacd04cb7816ac1c0b20fcbf83cba18ea5964e8caa7c476dd5eee8e4f74a0',1,'el']]],
+  ['disablevmodules_3317',['DisableVModules',['../namespaceel.html#a2784aacd04cb7816ac1c0b20fcbf83cba22cae5066e8e0623cb90e20a18abb631',1,'el']]],
+  ['disablevmodulesextensions_3318',['DisableVModulesExtensions',['../namespaceel.html#a2784aacd04cb7816ac1c0b20fcbf83cba18a8e65b84ca0cc82451b5e155d7aeb4',1,'el']]],
+  ['dotconstant_3319',['DotConstant',['../namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255ad5f04c5d435c5e114d1eb04a901c536d',1,'CG_Graph']]],
+  ['dotedge_3320',['DotEdge',['../namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255acddad1f534dd10a41443b00d6fe7b2fe',1,'CG_Graph']]],
+  ['dotexit_3321',['DotExit',['../namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255a7e46f2cc0a9626313cf6251438dfd0c3',1,'CG_Graph']]],
+  ['dotgate_3322',['DotGate',['../namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255aa5a478d3174801506d52554e157dc465',1,'CG_Graph']]],
+  ['dotgraph_3323',['DotGraph',['../namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255a5f3f2535c73500fefd992778de565534',1,'CG_Graph']]],
+  ['dotinput_3324',['DotInput',['../namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255a454ac54a5910ce1062d26f16d8987288',1,'CG_Graph']]],
+  ['dotoutput_3325',['DotOutput',['../namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255a890d72ed83e1120ff9c494a86598889c',1,'CG_Graph']]],
+  ['dotsubgraph_3326',['DotSubGraph',['../namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255a365cab8e6e876a5f83eb7383f4109782',1,'CG_Graph']]],
+  ['double_5ftype_3327',['double_type',['../namespacedetail.html#ad46d232fb6116de4dac0c43dbde8e7a9aaaacacbe6cfde1582c36c02ebed184cc',1,'detail']]]
 ];

@@ -1,0 +1,4 @@
+<map id="CG_Graph::GraphVertexGates::calculateHash" name="CG_Graph::GraphVertexGates::calculateHash">
+<area shape="rect" id="node1" title="calculateHash Calculates the hash value of the vertex" alt="" coords="5,5,220,47"/>
+<area shape="rect" id="node2" href="$format_8h.html#aa1899efcee92a5f5ca77b11423b256c5" title="\rst Converts value to std::string using the default format for type T." alt="" coords="268,13,347,39"/>
+</map>

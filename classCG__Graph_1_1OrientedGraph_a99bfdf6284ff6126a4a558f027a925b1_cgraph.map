@@ -1,0 +1,4 @@
+<map id="CG_Graph::OrientedGraph::addOutput" name="CG_Graph::OrientedGraph::addOutput">
+<area shape="rect" id="node1" title="addOutput Adds an output vertex to the current graph" alt="" coords="5,5,196,47"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1GraphMemory.html#a36228e6cc2a95e45cb8a91a06ee78698" title="puts string_view to strings set and returns a string_view on the added string" alt="" coords="244,5,432,47"/>
+</map>

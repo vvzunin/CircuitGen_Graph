@@ -1,0 +1,13 @@
+<map id="system_error" name="system_error">
+<area shape="rect" id="node1" title="\rst Constructs :class:std::system_error with a message formatted with fmt::format(fmt,..." alt="" coords="955,81,1063,108"/>
+<area shape="rect" id="node2" href="$format-inl_8h.html#a7f93bbdee51ea567c2cdf8532c0c1fc1" title="\rst Formats an error message for an error returned by an operating system or a language runtime,..." alt="" coords="748,5,907,32"/>
+<area shape="rect" id="node4" href="$namespacedetail.html#ab8325f67f4d101ee49823d332c8f7421" title=" " alt="" coords="757,56,897,83"/>
+<area shape="rect" id="node11" href="$format-inl_8h.html#a659fde31a1ada9d39f4dcbc040d87750" title=" " alt="" coords="769,107,885,133"/>
+<area shape="rect" id="node3" href="$format-inl_8h.html#af135c0ecc93e827e4ef51b18a4b0da74" title=" " alt="" coords="545,5,700,32"/>
+<area shape="rect" id="node5" href="$namespacedetail.html#a4b7c06a301760f9866b4d66f5c9386a9" title=" " alt="" coords="574,56,671,83"/>
+<area shape="rect" id="node6" href="$core_8h.html#a9ecd9e6c1688eb3aa54cdf85a873103c" title=" " alt="" coords="437,56,497,83"/>
+<area shape="rect" id="node7" href="$core_8h.html#a429465d7a760d1cdc8380415d815d41d" title=" " alt="" coords="329,56,389,83"/>
+<area shape="rect" id="node8" href="$core_8h.html#a59025bfaf390e425b4e274c966a77557" title="\rst Formats args according to specifications in fmt and writes the output to stdout." alt="" coords="229,56,281,83"/>
+<area shape="rect" id="node9" href="$core_8h.html#abd3c66ec078f5141baadf8e390a8e243" title="Formats args according to specifications in fmt and writes the output to the file f followed by a new..." alt="" coords="117,56,181,83"/>
+<area shape="rect" id="node10" href="$core_8h.html#a9b66047da81f80fda144420cb6415bf1" title="Formats args according to specifications in fmt and writes the output to stdout followed by a newline..." alt="" coords="5,56,69,83"/>
+</map>

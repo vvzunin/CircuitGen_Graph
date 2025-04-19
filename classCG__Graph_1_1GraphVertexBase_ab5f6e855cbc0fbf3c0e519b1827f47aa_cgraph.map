@@ -1,0 +1,4 @@
+<map id="CG_Graph::GraphVertexBase::getTypeName" name="CG_Graph::GraphVertexBase::getTypeName">
+<area shape="rect" id="node1" title="getTypeName This method returns the string representation of the vertex type by parsing the vertex ty..." alt="" coords="5,5,213,47"/>
+<area shape="rect" id="node2" href="$namespaceCG__Graph_1_1GraphUtils.html#acd3e3a4198309e4b11d407043490ce52" title="parseVertexToString Converts an enum value of a vertex type to its corresponding string representatio..." alt="" coords="261,5,425,47"/>
+</map>

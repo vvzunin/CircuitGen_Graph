@@ -1,0 +1,6 @@
+<map id="CG_Graph::GraphVertexBase::getType" name="CG_Graph::GraphVertexBase::getType">
+<area shape="rect" id="node1" title="getType This method returns the type of the vertex as a value of the VertexTypes enum" alt="" coords="299,64,507,105"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1GraphVertexSequential.html#aa7baeeb5adb89c5caaf1f79c77142494" title="calculateHash Calculates the hash value of the vertex" alt="" coords="5,5,251,47"/>
+<area shape="rect" id="node3" href="$GraphVertexSubGraphTests_8cpp.html#af16dddfd7feb5743f8c59d495cc6de0c" title=" " alt="" coords="101,71,155,98"/>
+<area shape="rect" id="node4" href="$classCG__Graph_1_1GraphVertexSubGraph.html#ad7ec926e4e321461a27a2d10de5deb8f" title="updateLevel This method updates the level of the vertex based on the levels of its input connections." alt="" coords="28,123,228,164"/>
+</map>

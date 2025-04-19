@@ -1,0 +1,5 @@
+<map id="detail::iterator_buffer&lt; std::back_insert_iterator&lt; Container &gt;, enable_if_t&lt; is_contiguous&lt; Container &gt;::value, typename Container::value_type &gt; &gt;::grow" name="detail::iterator_buffer&lt; std::back_insert_iterator&lt; Container &gt;, enable_if_t&lt; is_contiguous&lt; Container &gt;::value, typename Container::value_type &gt; &gt;::grow">
+<area shape="rect" id="node1" title="Increases the buffer capacity to hold at least capacity elements." alt="" coords="5,5,228,105"/>
+<area shape="rect" id="node2" href="$classdetail_1_1buffer.html#ac7ff14268d6b32d3d878291445ff4dd3" title="Returns the capacity of this buffer." alt="" coords="276,17,444,43"/>
+<area shape="rect" id="node3" href="$classdetail_1_1buffer.html#a5c82aec716b07079ac88194eb9aa7feb" title="Sets the buffer data and capacity." alt="" coords="293,67,427,94"/>
+</map>

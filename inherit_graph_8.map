@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classel_1_1base_1_1SubsecondPrecision.html" title="A subsecond precision class containing actual width and offset of the subsecond part." alt="" coords="5,5,216,32"/>
+<area shape="rect" id="node1" href="$classbasic__format__parse__context.html" title="\rst Parsing context consisting of a format string range being parsed and an argument counter for aut..." alt="" coords="5,5,156,47"/>
+<area shape="rect" id="node2" href="$classdetail_1_1compile__parse__context.html" title=" " alt="" coords="204,5,367,47"/>
 </map>

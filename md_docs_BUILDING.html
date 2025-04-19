@@ -32,7 +32,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo_1.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CircuitGenGraph
-   &#160;<span id="projectnumber">1.3.1</span>
+   &#160;<span id="projectnumber">1.5.0</span>
    </div>
    <div id="projectbrief">Desc of Backeknd</div>
   </td>
@@ -144,23 +144,23 @@ $(document).ready(function(){initNavTree('md_docs_BUILDING.html',''); initResiza
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md19"></a>
 Дальнейшее использование</h2>
 <p>После подключения библиотеки для использования доступны следующие типы данных:</p><ul>
-<li><a class="el" href="classGraphVertexBase.html" title="class GraphVertexBase">GraphVertexBase</a></li>
-<li><a class="el" href="classGraphVertexInput.html" title="class GraphVertexInput Represents a vertex in a directed graph that serves as an input vertex.">GraphVertexInput</a></li>
-<li><a class="el" href="classGraphVertexOutput.html" title="class GraphVertexOutput It is a vertex of the graph, specially designed for data output.">GraphVertexOutput</a></li>
+<li>GraphVertexBase</li>
+<li>GraphVertexInput</li>
+<li>GraphVertexOutput</li>
 <li>GraphVertexGate</li>
-<li><a class="el" href="classGraphVertexConstant.html" title="class GraphVertexConstant TO DO: Description">GraphVertexConstant</a></li>
-<li><a class="el" href="classGraphVertexSubGraph.html" title="class GraphVertexSubGraph It is a class, having a subGruph pointer inside.">GraphVertexSubGraph</a></li>
-<li><a class="el" href="classOrientedGraph.html" title="class OrientedGraph">OrientedGraph</a></li>
+<li>GraphVertexConstant</li>
+<li>GraphVertexSubGraph</li>
+<li>OrientedGraph</li>
 </ul>
-<p>Основным классом является граф, он же <a class="el" href="classOrientedGraph.html" title="class OrientedGraph">OrientedGraph</a>. Для его подключения требуется указать данный хедер в подключении всех заголовочных файлов:</p>
+<p>Основным классом является граф, он же OrientedGraph. Для его подключения требуется указать данный хедер в подключении всех заголовочных файлов:</p>
 <div class="fragment"><div class="line">#include &lt;CircuitGenGraph/OrientedGraph.hpp&gt;</div>
 </div><!-- fragment --><p>Для работы же с вершинами графа вам потребуются следующие хедеры:</p>
 <div class="fragment"><div class="line">#include &lt;CircuitGenGraph/GraphVertexBase.hpp&gt;</div>
 <div class="line">#include &lt;CircuitGenGraph/GraphVertex.hpp&gt;</div>
 </div><!-- fragment --><p>Различные полезные функции находятся в хедере:</p>
 <div class="fragment"><div class="line">#include &lt;DefaultAuxilaryMethods.hpp&gt;</div>
-</div><!-- fragment --><p>Где они все находятся в namespace <code><a class="el" href="namespaceAuxMethods.html" title="namespace AuxMethods It was created to organize a set of auxiliary functions and methods that can be ...">AuxMethods</a></code>. Также есть экспортный хедер:</p>
-<div class="fragment"><div class="line">#include &lt;CircuitGenGraph/DefaultSettings.hpp&gt;</div>
+</div><!-- fragment --><p>Где они все находятся в namespace <code>AuxMethodsGraph</code>. Также есть экспортный хедер:</p>
+<div class="fragment"><div class="line">#include &lt;CircuitGenGraph/GraphUtils.hpp&gt;</div>
 </div><!-- fragment --><p>В котором находятся нумераторы для типов логических элементов, а также нумераторы с основными типами вершин (<code>input</code>, <code>output</code> и так далее) и некоторое количество полезных функций для работы с данными нумераторами, более подробное описание функций которых находится в документации, генерируемой с помощью <b>Doxygen</b>.</p>
 <h2><a class="anchor" id="autotoc_md20"></a>
 Note to packagers</h2>

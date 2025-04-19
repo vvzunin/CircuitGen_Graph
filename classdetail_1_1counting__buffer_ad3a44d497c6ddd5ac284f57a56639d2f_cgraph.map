@@ -1,0 +1,5 @@
+<map id="detail::counting_buffer::grow" name="detail::counting_buffer::grow">
+<area shape="rect" id="node1" title="Increases the buffer capacity to hold at least capacity elements." alt="" coords="5,39,173,80"/>
+<area shape="rect" id="node2" href="$classdetail_1_1buffer.html#a8174757a0d86698229670044730dc59b" title="Clears this buffer." alt="" coords="221,5,369,47"/>
+<area shape="rect" id="node3" href="$classdetail_1_1buffer.html#a8685285932360c284d19003fc4ba3edc" title="Returns the size of this buffer." alt="" coords="221,71,369,112"/>
+</map>

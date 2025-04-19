@@ -1,0 +1,6 @@
+<map id="CG_Graph::GraphUtils::getLogicOperationsKeys" name="CG_Graph::GraphUtils::getLogicOperationsKeys">
+<area shape="rect" id="node1" title="getLogicOperationsKeys Returns the keys of logical operations" alt="" coords="380,39,567,80"/>
+<area shape="rect" id="node2" href="$namespaceCG__Graph_1_1GraphUtils.html#a2100e840adfd5ab0a7b1cdea344d441c" title="getLogicOperationsWithGates Returns logical operations along with information about the presence of a..." alt="" coords="108,5,332,47"/>
+<area shape="rect" id="node4" href="$classCG__Graph_1_1OrientedGraph.html#a599213267e040f40446e382488c7d160" title=" " alt="" coords="125,71,315,112"/>
+<area shape="rect" id="node3" href="$GraphUtilsTests_8cpp.html#a04167601e8c48f1f161194c650fcbb74" title=" " alt="" coords="5,13,60,39"/>
+</map>

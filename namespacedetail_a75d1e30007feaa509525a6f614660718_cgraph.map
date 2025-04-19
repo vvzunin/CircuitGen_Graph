@@ -1,0 +1,7 @@
+<map id="detail::reserve" name="detail::reserve">
+<area shape="rect" id="node1" title=" " alt="" coords="5,56,121,83"/>
+<area shape="rect" id="node2" href="$namespacedetail.html#a94110770c66cc3dbfecb25b59d92ca5c" title=" " alt="" coords="169,5,325,32"/>
+<area shape="rect" id="node3" href="$classdetail_1_1buffer.html#a8685285932360c284d19003fc4ba3edc" title="Returns the size of this buffer." alt="" coords="178,56,317,83"/>
+<area shape="rect" id="node4" href="$classdetail_1_1buffer.html#a49f14bffd0dc654fc32dab0e00a5e0c6" title=" " alt="" coords="182,107,313,149"/>
+<area shape="rect" id="node5" href="$classdetail_1_1buffer.html#ae1afeec5148a94656c7deaaad19d7da6" title="Increases the buffer capacity to hold at least capacity elements." alt="" coords="373,115,519,141"/>
+</map>

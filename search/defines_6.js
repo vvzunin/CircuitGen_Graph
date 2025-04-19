@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['make_5fcontainerelpp_5ffriendly_2097',['MAKE_CONTAINERELPP_FRIENDLY',['../easylogging_09_09_8h.html#acfe4ecefe188aefd631553c17bbff483',1,'easylogging++.h']]],
-  ['make_5floggable_2098',['MAKE_LOGGABLE',['../easylogging_09_09_8h.html#a719418837be76f9b6d1a3fb3e13bf879',1,'easylogging++.h']]]
+  ['log_3786',['LOG',['../easylogging_09_09_8h.html#acecfb113caaa2f52fe8e764fe04476bc',1,'easylogging++.h']]],
+  ['log_5fafter_5fn_3787',['LOG_AFTER_N',['../easylogging_09_09_8h.html#ac364203bd0697cbdd69ea7b67d4c6308',1,'easylogging++.h']]],
+  ['log_5fevery_5fn_3788',['LOG_EVERY_N',['../easylogging_09_09_8h.html#af0e94c66f305df244e47ffea2bb87ddf',1,'easylogging++.h']]],
+  ['log_5fif_3789',['LOG_IF',['../easylogging_09_09_8h.html#a7653cdff7e16b34fd407218c487d3d71',1,'easylogging++.h']]],
+  ['log_5fn_5ftimes_3790',['LOG_N_TIMES',['../easylogging_09_09_8h.html#a2d56c301af20eb0f182006f56b97a46b',1,'easylogging++.h']]]
 ];

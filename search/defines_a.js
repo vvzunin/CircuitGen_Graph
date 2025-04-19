@@ -1,10 +1,8 @@
 var searchData=
 [
-  ['vertexptr_2120',['VertexPtr',['../GraphVertexBase_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d',1,'VertexPtr():&#160;GraphVertexBase.hpp'],['../OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d',1,'VertexPtr():&#160;OrientedGraph.hpp']]],
-  ['vlog_2121',['VLOG',['../easylogging_09_09_8h.html#a750887f0bcc287a4ac8da4d52e558332',1,'easylogging++.h']]],
-  ['vlog_5fafter_5fn_2122',['VLOG_AFTER_N',['../easylogging_09_09_8h.html#a565f938b480c4f8b0af46cc467cc9ad0',1,'easylogging++.h']]],
-  ['vlog_5fevery_5fn_2123',['VLOG_EVERY_N',['../easylogging_09_09_8h.html#ab0d350dc67b0f3e56afed545ca75cfa6',1,'easylogging++.h']]],
-  ['vlog_5fif_2124',['VLOG_IF',['../easylogging_09_09_8h.html#a9e0b817e339bb14ae312973bb55227c9',1,'easylogging++.h']]],
-  ['vlog_5fis_5fon_2125',['VLOG_IS_ON',['../easylogging_09_09_8h.html#a38ad5c4c2d876138a58d941db60e6893',1,'easylogging++.h']]],
-  ['vlog_5fn_5ftimes_2126',['VLOG_N_TIMES',['../easylogging_09_09_8h.html#a67a981cfd8ffd5e145689d999819ebd0',1,'easylogging++.h']]]
+  ['timed_5fblock_3811',['TIMED_BLOCK',['../easylogging_09_09_8h.html#ab2246418a3c1264aac8d24504cbd4d72',1,'easylogging++.h']]],
+  ['timed_5ffunc_3812',['TIMED_FUNC',['../easylogging_09_09_8h.html#acf5e8558f413f8ecc44231a562bc8bf0',1,'easylogging++.h']]],
+  ['timed_5ffunc_5fif_3813',['TIMED_FUNC_IF',['../easylogging_09_09_8h.html#a5dcfce39a374c368c08aa7c2e95d76f5',1,'easylogging++.h']]],
+  ['timed_5fscope_3814',['TIMED_SCOPE',['../easylogging_09_09_8h.html#abb8dc8f7caabb002e7b0f7c0b36e138f',1,'easylogging++.h']]],
+  ['timed_5fscope_5fif_3815',['TIMED_SCOPE_IF',['../easylogging_09_09_8h.html#a54df686ae242849f40005c81cd344949',1,'easylogging++.h']]]
 ];

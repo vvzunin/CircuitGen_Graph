@@ -1,0 +1,7 @@
+<map id="CG_Graph::GraphVertexBase::getTypeName" name="CG_Graph::GraphVertexBase::getTypeName">
+<area shape="rect" id="node1" title="getTypeName This method returns the string representation of the vertex type by parsing the vertex ty..." alt="" coords="365,64,573,105"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1GraphVertexBase.html#adb11afe8c89c39852bab134de46e94e4" title="GraphVertexBase Constructs a GraphVertexBase object with the specified vertex type and optional graph..." alt="" coords="109,5,317,47"/>
+<area shape="rect" id="node3" href="$GraphVertexSubGraphTests_8cpp.html#af16dddfd7feb5743f8c59d495cc6de0c" title=" " alt="" coords="185,71,240,98"/>
+<area shape="rect" id="node4" href="$classCG__Graph_1_1GraphVertexInput.html#ab77ff76df71a44d77561c42afa556b18" title="updateLevel It is designed to update the level of the current vertex in a directed graph based on the..." alt="" coords="108,123,317,164"/>
+<area shape="rect" id="node5" href="$GraphVertexConstantTests_8cpp.html#ae6f0cad61d54bd285aaa67186c52842d" title=" " alt="" coords="5,130,60,157"/>
+</map>

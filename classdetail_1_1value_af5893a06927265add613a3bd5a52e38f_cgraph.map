@@ -1,0 +1,5 @@
+<map id="detail::value::value" name="detail::value::value">
+<area shape="rect" id="node1" title=" " alt="" coords="5,31,152,57"/>
+<area shape="rect" id="node2" href="$classbasic__string__view.html#a39cdfe061dc6d64a3adc230b62d8a026" title="Returns a pointer to the string data." alt="" coords="200,5,375,32"/>
+<area shape="rect" id="node3" href="$classbasic__string__view.html#a216bbe1b012b590698d7bb4e96d1af3f" title="Returns the string size." alt="" coords="202,56,373,83"/>
+</map>

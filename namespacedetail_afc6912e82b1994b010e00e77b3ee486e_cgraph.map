@@ -1,0 +1,11 @@
+<map id="detail::to_pointer" name="detail::to_pointer">
+<area shape="rect" id="node1" title=" " alt="" coords="5,107,139,133"/>
+<area shape="rect" id="node2" href="$classdetail_1_1buffer.html#ac7ff14268d6b32d3d878291445ff4dd3" title="Returns the capacity of this buffer." alt="" coords="187,5,355,32"/>
+<area shape="rect" id="node3" href="$classdetail_1_1buffer.html#aeb33e0a2d2be2bbca9e0236c148089c8" title="Returns a pointer to the buffer data (not null&#45;terminated)." alt="" coords="199,56,342,83"/>
+<area shape="rect" id="node4" href="$namespacedetail.html#a94110770c66cc3dbfecb25b59d92ca5c" title=" " alt="" coords="193,107,349,133"/>
+<area shape="rect" id="node5" href="$classdetail_1_1buffer.html#a8685285932360c284d19003fc4ba3edc" title="Returns the size of this buffer." alt="" coords="201,157,340,184"/>
+<area shape="rect" id="node6" href="$classdetail_1_1buffer.html#a549bc583bc03ed34b32162948e2b80e8" title=" " alt="" coords="205,209,336,250"/>
+<area shape="rect" id="node7" href="$namespacedetail.html#a9bef8d727daadab62ef98688a6825c89" title=" " alt="" coords="417,187,519,213"/>
+<area shape="rect" id="node8" href="$classdetail_1_1buffer.html#a49f14bffd0dc654fc32dab0e00a5e0c6" title=" " alt="" coords="403,238,533,279"/>
+<area shape="rect" id="node9" href="$classdetail_1_1buffer.html#ae1afeec5148a94656c7deaaad19d7da6" title="Increases the buffer capacity to hold at least capacity elements." alt="" coords="581,245,727,272"/>
+</map>

@@ -1,0 +1,6 @@
+var searchData=
+[
+  ['traits_5ftype_3252',['traits_type',['../classdetail_1_1formatbuf.html#a0dd12e7b5b26416eceb2888840c9897d',1,'detail::formatbuf']]],
+  ['type_3253',['type',['../structtype__identity.html#abe86f80604d12518b04a2195d56136ed',1,'type_identity::type()'],['../structdetail_1_1char__t__impl_3_01S_00_01enable__if__t_3_01is__string_3_01S_01_4_1_1value_01_4_01_4.html#ab4d37774990a914de9dcde80c584948b',1,'detail::char_t_impl&lt; S, enable_if_t&lt; is_string&lt; S &gt;::value &gt; &gt;::type()'],['../structdetail_1_1format__as__result.html#a3db8c5b7eb76e749316535d82fb1ef49',1,'detail::format_as_result::type()'],['../structdetail_1_1strip__named__arg.html#a5de03487718183fe42f0bb4caed08d22',1,'detail::strip_named_arg::type()'],['../structdetail_1_1strip__named__arg_3_01T_00_01true_01_4.html#aa33036b138340295b40f8b0e6364593e',1,'detail::strip_named_arg&lt; T, true &gt;::type()'],['../structdetail_1_1vformat__args.html#abe996fde7226f35b4df2e39b6851140d',1,'detail::vformat_args::type()'],['../structdetail_1_1vformat__args_3_01char_01_4.html#ac13c93f178b55ae02d674812ca8b1ae8',1,'detail::vformat_args&lt; char &gt;::type()']]],
+  ['type_5fidentity_5ft_3254',['type_identity_t',['../core_8h.html#aca42c1976d1b12998afcabf8f39e8c23',1,'core.h']]]
+];

@@ -1,0 +1,9 @@
+<map id="detail::buffer&lt; T &gt;" name="detail::buffer&lt; T &gt;">
+<area shape="rect" id="node1" title="\rst A contiguous memory buffer with an optional growing ability." alt="" coords="581,5,724,347"/>
+<area shape="rect" id="node2" href="$classbasic__memory__buffer.html" title=" " alt="" coords="5,395,204,648"/>
+<area shape="rect" id="node3" href="$classbasic__memory__buffer.html" title=" " alt="" coords="228,395,427,648"/>
+<area shape="rect" id="node4" href="$classbasic__memory__buffer.html" title="\rst A dynamically growing memory buffer for trivially copyable/constructible types with the first SI..." alt="" coords="451,395,649,648"/>
+<area shape="rect" id="node5" href="$classdetail_1_1iterator__buffer.html" title=" " alt="" coords="673,424,837,619"/>
+<area shape="rect" id="node6" href="$classdetail_1_1iterator__buffer_3_01T_01_5_00_01T_01_4.html" title=" " alt="" coords="862,461,1022,582"/>
+<area shape="rect" id="node7" href="$classdetail_1_1iterator__buffer_3_01T_01_5_00_01T_00_01fixed__buffer__traits_01_4.html" title=" " alt="" coords="1046,417,1206,626"/>
+</map>

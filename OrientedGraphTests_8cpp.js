@@ -1,9 +1,11 @@
 var OrientedGraphTests_8cpp =
 [
-    [ "loadStringFile", "OrientedGraphTests_8cpp.html#ad0ded344614ed5f90ffaa3cfa7bbcae1", null ],
+    [ "loadStringFileOrientedGraph", "OrientedGraphTests_8cpp.html#a79877c4e168e73330baf2a0c8ae1e0ae", null ],
+    [ "TEST", "OrientedGraphTests_8cpp.html#a4e07344ed9735dd31083c4e66a084e46", null ],
+    [ "TEST", "OrientedGraphTests_8cpp.html#ab6792269ccf3f8b3eec184bab364eadd", null ],
     [ "TEST", "OrientedGraphTests_8cpp.html#a502faa3aca89fe6e71247df737f59238", null ],
-    [ "TEST", "OrientedGraphTests_8cpp.html#a44d9ea0b46354da6a9fbe41431f766b6", null ],
-    [ "TEST", "OrientedGraphTests_8cpp.html#a2c3252976f1bffac315f9213ee45dbc9", null ],
+    [ "TEST", "OrientedGraphTests_8cpp.html#a1b3770d050b761a35d3853402f542143", null ],
+    [ "TEST", "OrientedGraphTests_8cpp.html#a570daac90f15573d72ea04cf99ac0925", null ],
     [ "TEST", "OrientedGraphTests_8cpp.html#a2d22af0a82eb56724a322b0ec88316f5", null ],
     [ "TEST", "OrientedGraphTests_8cpp.html#ab16b16433196cb3972cedfc0349d2f90", null ],
     [ "TEST", "OrientedGraphTests_8cpp.html#a085fb4692d561aa8c916fc7a9913ca72", null ],

@@ -1,3 +1,0 @@
-<map id="MultiLinearAllocator" name="MultiLinearAllocator">
-<area shape="rect" id="node1" title="This is a custom allocator, which allocates firstly buf_size bytes, and than, if requires,..." alt="" coords="5,5,195,244"/>
-</map>

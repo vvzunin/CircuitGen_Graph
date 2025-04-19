@@ -1,0 +1,52 @@
+<map id="detail::write_float" name="detail::write_float">
+<area shape="rect" id="node1" title=" " alt="" coords="5,1263,141,1290"/>
+<area shape="rect" id="node2" href="$namespacedetail.html#aab936a181565355566e95b41bc9f80ba" title=" " alt="" coords="633,1549,787,1575"/>
+<area shape="rect" id="node3" href="$namespacedetail.html#ad515c47b3812d4a81e7708d8790ccb23" title=" " alt="" coords="201,241,348,267"/>
+<area shape="rect" id="node4" href="$namespacedetail.html#ab378866dca64d15fbf7b02be69ed9cb4" title=" " alt="" coords="413,73,565,99"/>
+<area shape="rect" id="node5" href="$classdetail_1_1buffer.html#aeb33e0a2d2be2bbca9e0236c148089c8" title="Returns a pointer to the buffer data (not null&#45;terminated)." alt="" coords="639,414,781,441"/>
+<area shape="rect" id="node6" href="$namespacedetail.html#a75bbe30bcd4f6c5be4c6be5f0172d66c" title=" " alt="" coords="201,535,348,562"/>
+<area shape="rect" id="node22" href="$classdetail_1_1buffer.html#a08e276fab23911bbf1ff0a6c121720cf" title=" " alt="" coords="619,814,801,841"/>
+<area shape="rect" id="node34" href="$namespacedetail.html#a711ced7ae97de49b46c33f1db2392cbf" title=" " alt="" coords="189,991,360,1018"/>
+<area shape="rect" id="node37" href="$namespacedetail.html#a7ec8da6356ce251cdb9d8e576e291b92" title=" " alt="" coords="219,1406,330,1433"/>
+<area shape="rect" id="node39" href="$namespacedetail.html#ac5c66e9e562cfe0500b746d0825487b9" title=" " alt="" coords="659,1447,761,1474"/>
+<area shape="rect" id="node40" href="$namespacedetail.html#a93b705614843c24239a64240f27183e7" title=" " alt="" coords="205,1340,344,1381"/>
+<area shape="rect" id="node41" href="$namespacedetail.html#a3d76b4eefc71a79419021398b3703644" title=" " alt="" coords="652,1599,768,1626"/>
+<area shape="rect" id="node44" href="$namespacedetail.html#affd76c003bf7d45550c7c1af304a3d8c" title=" " alt="" coords="219,1178,330,1205"/>
+<area shape="rect" id="node45" href="$classdetail_1_1buffer.html#a8685285932360c284d19003fc4ba3edc" title="Returns the size of this buffer." alt="" coords="205,1507,344,1534"/>
+<area shape="rect" id="node46" href="$namespacedetail.html#a6a4a175ed2175e4da7b988e021175317" title=" " alt="" coords="197,1559,352,1600"/>
+<area shape="rect" id="node47" href="$namespacedetail.html#a4b04cfd0c48c52712b4f5d22e9239853" title=" " alt="" coords="207,1238,343,1265"/>
+<area shape="rect" id="node49" href="$namespacedetail.html#aa83e6020da3a87d926d0a352864b4300" title=" " alt="" coords="193,1457,357,1483"/>
+<area shape="rect" id="node7" href="$namespacedetail.html#a44758fbcb25a6fc3967fdc79e987fb93" title=" " alt="" coords="623,515,797,542"/>
+<area shape="rect" id="node8" href="$namespacedetail.html#a6722ee11f6c9f8a7a92cd6aae34c2c4e" title=" " alt="" coords="436,713,543,739"/>
+<area shape="rect" id="node9" href="$namespacedetail.html#aeb63dd474812d21836ab91a29224f27d" title=" " alt="" coords="639,1013,781,1055"/>
+<area shape="rect" id="node11" href="$namespacedetail.html#af252d1b8eaeab79d234b012c14fd58b0" title=" " alt="" coords="418,915,561,942"/>
+<area shape="rect" id="node13" href="$namespacedetail.html#acf583da3e81492b23c7157d745f2dcf2" title=" " alt="" coords="434,611,545,638"/>
+<area shape="rect" id="node14" href="$namespacedetail.html#a818b390bd30ad25b638f7b067cb50f15" title=" " alt="" coords="661,962,759,989"/>
+<area shape="rect" id="node16" href="$namespacedetail_1_1dragonbox.html#acf2898495222bfe6ba5ea85d687f507b" title=" " alt="" coords="638,217,782,259"/>
+<area shape="rect" id="node17" href="$namespacedetail_1_1dragonbox.html#a56d7cb9d2ac6fbbf75838a8928c5e841" title=" " alt="" coords="638,283,782,324"/>
+<area shape="rect" id="node18" href="$namespacedetail.html#af3eae8fdebff07dc2edca668eaf2f8bd" title=" " alt="" coords="408,561,571,587"/>
+<area shape="rect" id="node24" href="$namespacedetail.html#ad64642bb9b2374fba5526c132a751951" title=" " alt="" coords="637,1198,783,1225"/>
+<area shape="rect" id="node26" href="$namespacedetail_1_1dragonbox.html#a2fd56a55e5a85d5e8aea0db8a7da9d98" title=" " alt="" coords="638,5,782,47"/>
+<area shape="rect" id="node27" href="$namespacedetail_1_1dragonbox.html#a36b70042c65bd6723596a7990c7b0f05" title=" " alt="" coords="417,175,561,216"/>
+<area shape="rect" id="node30" href="$namespacedetail_1_1dragonbox.html#a6e844b75d05fc57f2db3e3425e693083" title=" " alt="" coords="638,348,782,389"/>
+<area shape="rect" id="node33" href="$namespacedetail_1_1dragonbox.html#ace933887b1bbb4fd1739282bd7e56d21" title=" " alt="" coords="416,444,563,485"/>
+<area shape="rect" id="node10" href="$namespacedetail.html#a1fe84ebaf96215ce0665d95b3124c2df" title=" " alt="" coords="855,1021,1018,1047"/>
+<area shape="rect" id="node12" href="$namespacedetail.html#ad00fda1ba244e2bc2ee99476eb1d57a0" title=" " alt="" coords="639,896,781,937"/>
+<area shape="rect" id="node15" href="$namespacedetail.html#a9bef8d727daadab62ef98688a6825c89" title=" " alt="" coords="885,915,988,942"/>
+<area shape="rect" id="node19" href="$classdetail_1_1bigint.html#a8d4967e07b84b133970c82116dd36d0f" title=" " alt="" coords="633,566,787,593"/>
+<area shape="rect" id="node20" href="$classdetail_1_1bigint.html#a8351139b55eb772c8f1c9f86e8e66e8f" title=" " alt="" coords="633,617,787,659"/>
+<area shape="rect" id="node21" href="$classdetail_1_1bigint.html#ab561a060f7cd8cfb75d62eda2826f749" title=" " alt="" coords="629,683,791,724"/>
+<area shape="rect" id="node25" href="$classdetail_1_1buffer.html#a549bc583bc03ed34b32162948e2b80e8" title=" " alt="" coords="645,748,775,789"/>
+<area shape="rect" id="node23" href="$classdetail_1_1buffer.html#a49f14bffd0dc654fc32dab0e00a5e0c6" title=" " alt="" coords="871,777,1002,819"/>
+<area shape="rect" id="node28" href="$namespacedetail_1_1dragonbox.html#a2377d6e1580adf9bbe82fc7c3732f7fe" title=" " alt="" coords="623,137,797,193"/>
+<area shape="rect" id="node29" href="$namespacedetail_1_1dragonbox.html#a8d87f6c965998f492af756574b3c015d" title=" " alt="" coords="627,71,793,112"/>
+<area shape="rect" id="node31" href="$classdetail_1_1uint128__fallback.html#afdf5176006375ac893dca89d50382c80" title=" " alt="" coords="849,348,1024,389"/>
+<area shape="rect" id="node32" href="$namespacedetail.html#a074dd81d4d0e2e4ced8947c242ca7b77" title=" " alt="" coords="875,439,999,466"/>
+<area shape="rect" id="node35" href="$classdetail_1_1buffer.html#a28f51acf32e61f37558f6c7b8d200c05" title="Appends data to the end of the buffer." alt="" coords="409,1118,570,1145"/>
+<area shape="rect" id="node36" href="$namespacedetail.html#ae970ad8cf6b25d7896f788089ca1b0eb" title=" " alt="" coords="416,1017,563,1043"/>
+<area shape="rect" id="node38" href="$namespacedetail.html#ac054a71ad69962d1f38fa854e644825b" title=" " alt="" coords="434,1422,545,1449"/>
+<area shape="rect" id="node42" href="$namespacedetail.html#a94110770c66cc3dbfecb25b59d92ca5c" title=" " alt="" coords="859,1625,1015,1651"/>
+<area shape="rect" id="node43" href="$namespacedetail.html#abe21519d80f72cd6da979929ce5b0b60" title=" " alt="" coords="875,1574,999,1601"/>
+<area shape="rect" id="node48" href="$namespacedetail.html#a0fed0d99ca2da1c474c05095682d0b7c" title=" " alt="" coords="410,1321,569,1347"/>
+<area shape="rect" id="node50" href="$namespacedetail.html#a31de4abc62676fa9058080e5b78f7155" title=" " alt="" coords="412,1574,567,1601"/>
+</map>

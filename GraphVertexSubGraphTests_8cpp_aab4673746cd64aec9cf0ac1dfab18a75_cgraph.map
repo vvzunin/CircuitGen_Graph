@@ -1,5 +1,5 @@
 <map id="TEST" name="TEST">
 <area shape="rect" id="node1" title=" " alt="" coords="5,35,60,61"/>
-<area shape="rect" id="node2" href="$GraphVertexSubGraphTests_8cpp.html#ad0ded344614ed5f90ffaa3cfa7bbcae1" title=" " alt="" coords="136,5,247,32"/>
-<area shape="rect" id="node3" href="$classGraphVertexSubGraph.html#a3ef7ccb93efd390c6f90aba11eee2c88" title="toVerilog Generates Verilog code for the vertex" alt="" coords="108,57,275,98"/>
+<area shape="rect" id="node2" href="$GraphVertexSubGraphTests_8cpp.html#ad04e11c79da9c309425c23061f2e6b23" title=" " alt="" coords="121,5,295,32"/>
+<area shape="rect" id="node3" href="$classCG__Graph_1_1GraphVertexSubGraph.html#a5f6e6a34426de76e5d8cea5267424ea1" title="toVerilog Generates Verilog code for the vertex" alt="" coords="108,57,308,98"/>
 </map>

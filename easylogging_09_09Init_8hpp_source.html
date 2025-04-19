@@ -32,7 +32,7 @@
   <td id="projectlogo"><img alt="Logo" src="logo_1.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">CircuitGenGraph
-   &#160;<span id="projectnumber">1.3.1</span>
+   &#160;<span id="projectnumber">1.5.0</span>
    </div>
    <div id="projectbrief">Desc of Backeknd</div>
   </td>
@@ -98,27 +98,29 @@ $(document).ready(function(){initNavTree('easylogging_09_09Init_8hpp_source.html
 <div class="title">easylogging++Init.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="easylogging_09_09Init_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="easylogging_09_09_8h.html">easyloggingpp/easylogging++.h</a>&quot;</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<a class="code" href="easylogging_09_09_8h.html#a0680b16a06b8c74f1ce4165cb3c14c12">INITIALIZE_EASYLOGGINGPP</a></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;string.h&quot;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">using namespace </span><a class="code" href="namespacestd.html">std</a>;</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
-<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="easylogging_09_09Init_8hpp.html#ad5a9a3e6b41d4f000b043681440a1419">    7</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="easylogging_09_09Init_8hpp.html#ad5a9a3e6b41d4f000b043681440a1419">initLogging</a>(<span class="keywordtype">string</span> testName, <span class="keywordtype">string</span> subtestName) {</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;  <a class="code" href="classel_1_1Configurations.html">el::Configurations</a> <a class="code" href="namespaceconf.html">conf</a>(<span class="stringliteral">&quot;easylogging++.conf&quot;</span>);</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;  <a class="code" href="classel_1_1Loggers.html#a42f99e79d72d391df563df8d09272194">el::Loggers::reconfigureAllLoggers</a>(<a class="code" href="namespaceconf.html">conf</a>);</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;  <a class="code" href="classel_1_1Loggers.html#a42f99e79d72d391df563df8d09272194">el::Loggers::reconfigureAllLoggers</a>(<a class="code" href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124a1351017ac6423911223bc19a8cb7c653">el::ConfigurationType::Filename</a>,</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;                                     <span class="stringliteral">&quot;logs/&quot;</span> + testName + <span class="stringliteral">&quot;/&quot;</span> + subtestName +</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                                         <span class="stringliteral">&quot;.log&quot;</span>);</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;  <a class="code" href="classel_1_1Loggers.html#aedd2de02dd701b0f20ddaa10f1f728f1">el::Loggers::addFlag</a>(<a class="code" href="namespaceel.html#a2784aacd04cb7816ac1c0b20fcbf83cba8246f93d9afd63f87632d2d718cabca8">el::LoggingFlag::NewLineForContainer</a>);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;  <a class="code" href="classel_1_1Loggers.html#aedd2de02dd701b0f20ddaa10f1f728f1">el::Loggers::addFlag</a>(<a class="code" href="namespaceel.html#a2784aacd04cb7816ac1c0b20fcbf83cba81ac37ef3ee37a01bf853be6abeb4ede">el::LoggingFlag::LogDetailedCrashReason</a>);</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  <a class="code" href="classel_1_1Loggers.html#aedd2de02dd701b0f20ddaa10f1f728f1">el::Loggers::addFlag</a>(<a class="code" href="namespaceel.html#a2784aacd04cb7816ac1c0b20fcbf83cbaeececaef2fc38e4f3c91f9f6b6fb6d49">el::LoggingFlag::ColoredTerminalOutput</a>);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <span class="comment">// LOG(INFO) &lt;&lt; &quot;Logging started\n\n&quot;;</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;}</div>
+<a href="easylogging_09_09Init_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifdef LOGFLAG</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="easylogging_09_09_8h.html">easyloggingpp/easylogging++.h</a>&quot;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<a class="code" href="easylogging_09_09_8h.html#a0680b16a06b8c74f1ce4165cb3c14c12">INITIALIZE_EASYLOGGINGPP</a></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;string.h&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keywordtype">void</span> initLogging(std::string testName, std::string subtestName) {</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;  <a class="code" href="classel_1_1Configurations.html">el::Configurations</a> <a class="code" href="namespaceconf.html">conf</a>(<span class="stringliteral">&quot;easylogging++.conf&quot;</span>);</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;  <a class="code" href="classel_1_1Loggers.html#a42f99e79d72d391df563df8d09272194">el::Loggers::reconfigureAllLoggers</a>(<a class="code" href="namespaceconf.html">conf</a>);</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;  <a class="code" href="classel_1_1Loggers.html#a42f99e79d72d391df563df8d09272194">el::Loggers::reconfigureAllLoggers</a>(<a class="code" href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124a1351017ac6423911223bc19a8cb7c653">el::ConfigurationType::Filename</a>,</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                                     <span class="stringliteral">&quot;logs/&quot;</span> + testName + <span class="stringliteral">&quot;/&quot;</span> + subtestName +</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;                                         <span class="stringliteral">&quot;.log&quot;</span>);</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;  <a class="code" href="classel_1_1Loggers.html#aedd2de02dd701b0f20ddaa10f1f728f1">el::Loggers::addFlag</a>(<a class="code" href="namespaceel.html#a2784aacd04cb7816ac1c0b20fcbf83cba8246f93d9afd63f87632d2d718cabca8">el::LoggingFlag::NewLineForContainer</a>);</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  <a class="code" href="classel_1_1Loggers.html#aedd2de02dd701b0f20ddaa10f1f728f1">el::Loggers::addFlag</a>(<a class="code" href="namespaceel.html#a2784aacd04cb7816ac1c0b20fcbf83cba81ac37ef3ee37a01bf853be6abeb4ede">el::LoggingFlag::LogDetailedCrashReason</a>);</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <a class="code" href="classel_1_1Loggers.html#aedd2de02dd701b0f20ddaa10f1f728f1">el::Loggers::addFlag</a>(<a class="code" href="namespaceel.html#a2784aacd04cb7816ac1c0b20fcbf83cbaeececaef2fc38e4f3c91f9f6b6fb6d49">el::LoggingFlag::ColoredTerminalOutput</a>);</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <span class="comment">// LOG(INFO) &lt;&lt; &quot;Logging started\n\n&quot;;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;}</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassel_1_1Configurations_html"><div class="ttname"><a href="classel_1_1Configurations.html">el::Configurations</a></div><div class="ttdoc">Thread-safe Configuration repository.</div><div class="ttdef"><b>Definition:</b> easylogging++.h:1729</div></div>
 <div class="ttc" id="aclassel_1_1Loggers_html_a42f99e79d72d391df563df8d09272194"><div class="ttname"><a href="classel_1_1Loggers.html#a42f99e79d72d391df563df8d09272194">el::Loggers::reconfigureAllLoggers</a></div><div class="ttdeci">static void reconfigureAllLoggers(const Configurations &amp;configurations)</div><div class="ttdoc">Reconfigures all the existing loggers with new configurations.</div><div class="ttdef"><b>Definition:</b> easylogging++.cc:2984</div></div>
 <div class="ttc" id="aclassel_1_1Loggers_html_aedd2de02dd701b0f20ddaa10f1f728f1"><div class="ttname"><a href="classel_1_1Loggers.html#aedd2de02dd701b0f20ddaa10f1f728f1">el::Loggers::addFlag</a></div><div class="ttdeci">static void addFlag(LoggingFlag flag)</div><div class="ttdoc">Adds logging flag used internally.</div><div class="ttdef"><b>Definition:</b> easylogging++.h:3846</div></div>
-<div class="ttc" id="aeasylogging_09_09Init_8hpp_html_ad5a9a3e6b41d4f000b043681440a1419"><div class="ttname"><a href="easylogging_09_09Init_8hpp.html#ad5a9a3e6b41d4f000b043681440a1419">initLogging</a></div><div class="ttdeci">void initLogging(string testName, string subtestName)</div><div class="ttdef"><b>Definition:</b> easylogging++Init.hpp:7</div></div>
 <div class="ttc" id="aeasylogging_09_09_8h_html"><div class="ttname"><a href="easylogging_09_09_8h.html">easylogging++.h</a></div></div>
 <div class="ttc" id="aeasylogging_09_09_8h_html_a0680b16a06b8c74f1ce4165cb3c14c12"><div class="ttname"><a href="easylogging_09_09_8h.html#a0680b16a06b8c74f1ce4165cb3c14c12">INITIALIZE_EASYLOGGINGPP</a></div><div class="ttdeci">#define INITIALIZE_EASYLOGGINGPP</div><div class="ttdef"><b>Definition:</b> easylogging++.h:4550</div></div>
 <div class="ttc" id="anamespaceconf_html"><div class="ttname"><a href="namespaceconf.html">conf</a></div><div class="ttdef"><b>Definition:</b> conf.py:1</div></div>
@@ -126,7 +128,6 @@ $(document).ready(function(){initNavTree('easylogging_09_09Init_8hpp_source.html
 <div class="ttc" id="anamespaceel_html_a2784aacd04cb7816ac1c0b20fcbf83cba8246f93d9afd63f87632d2d718cabca8"><div class="ttname"><a href="namespaceel.html#a2784aacd04cb7816ac1c0b20fcbf83cba8246f93d9afd63f87632d2d718cabca8">el::LoggingFlag::NewLineForContainer</a></div><div class="ttdeci">@ NewLineForContainer</div><div class="ttdoc">Makes sure we have new line for each container log entry.</div></div>
 <div class="ttc" id="anamespaceel_html_a2784aacd04cb7816ac1c0b20fcbf83cbaeececaef2fc38e4f3c91f9f6b6fb6d49"><div class="ttname"><a href="namespaceel.html#a2784aacd04cb7816ac1c0b20fcbf83cbaeececaef2fc38e4f3c91f9f6b6fb6d49">el::LoggingFlag::ColoredTerminalOutput</a></div><div class="ttdeci">@ ColoredTerminalOutput</div><div class="ttdoc">Make terminal output colorful for supported terminals.</div></div>
 <div class="ttc" id="anamespaceel_html_a281f5db6d6163678bc68a8b23b59e124a1351017ac6423911223bc19a8cb7c653"><div class="ttname"><a href="namespaceel.html#a281f5db6d6163678bc68a8b23b59e124a1351017ac6423911223bc19a8cb7c653">el::ConfigurationType::Filename</a></div><div class="ttdeci">@ Filename</div><div class="ttdoc">Determines log file (full path) to write logs to for corresponding level and logger.</div></div>
-<div class="ttc" id="anamespacestd_html"><div class="ttname"><a href="namespacestd.html">std</a></div><div class="ttdef"><b>Definition:</b> easylogging++.h:594</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

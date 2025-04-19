@@ -1,11 +1,12 @@
 var searchData=
 [
-  ['scopedaddflag_1102',['ScopedAddFlag',['../classel_1_1Loggers_1_1ScopedAddFlag.html',1,'el::Loggers']]],
-  ['scopedremoveflag_1103',['ScopedRemoveFlag',['../classel_1_1Loggers_1_1ScopedRemoveFlag.html',1,'el::Loggers']]],
-  ['staticclass_1104',['StaticClass',['../classel_1_1base_1_1StaticClass.html',1,'el::base']]],
-  ['storage_1105',['Storage',['../classel_1_1base_1_1Storage.html',1,'el::base']]],
-  ['str_1106',['Str',['../classel_1_1base_1_1utils_1_1Str.html',1,'el::base::utils']]],
-  ['stringtolevelitem_1107',['StringToLevelItem',['../structel_1_1StringToLevelItem.html',1,'el']]],
-  ['subsecondprecision_1108',['SubsecondPrecision',['../classel_1_1base_1_1SubsecondPrecision.html',1,'el::base']]],
-  ['sysloginitializer_1109',['SysLogInitializer',['../classel_1_1SysLogInitializer.html',1,'el']]]
+  ['named_5farg_2010',['named_arg',['../structdetail_1_1named__arg.html',1,'detail']]],
+  ['named_5farg_5finfo_2011',['named_arg_info',['../structdetail_1_1named__arg__info.html',1,'detail']]],
+  ['named_5farg_5fvalue_2012',['named_arg_value',['../structdetail_1_1named__arg__value.html',1,'detail']]],
+  ['named_5farg_5fvalue_3c_20char_5ftype_20_3e_2013',['named_arg_value&lt; char_type &gt;',['../structdetail_1_1named__arg__value.html',1,'detail']]],
+  ['next_5fstate_2014',['next_state',['../structdetail_1_1digit__grouping_1_1next__state.html',1,'detail::digit_grouping']]],
+  ['nocopy_2015',['NoCopy',['../classel_1_1base_1_1NoCopy.html',1,'el::base']]],
+  ['nomutex_2016',['NoMutex',['../classel_1_1base_1_1threading_1_1internal_1_1NoMutex.html',1,'el::base::threading::internal']]],
+  ['noscopedlock_2017',['NoScopedLock',['../classel_1_1base_1_1threading_1_1internal_1_1NoScopedLock.html',1,'el::base::threading::internal']]],
+  ['nullwriter_2018',['NullWriter',['../classel_1_1base_1_1NullWriter.html',1,'el::base']]]
 ];

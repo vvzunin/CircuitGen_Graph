@@ -1,0 +1,6 @@
+<map id="detail::buffer::try_resize" name="detail::buffer::try_resize">
+<area shape="rect" id="node1" title=" " alt="" coords="5,27,136,69"/>
+<area shape="rect" id="node2" href="$namespacedetail.html#a9bef8d727daadab62ef98688a6825c89" title=" " alt="" coords="198,5,301,32"/>
+<area shape="rect" id="node3" href="$classdetail_1_1buffer.html#a49f14bffd0dc654fc32dab0e00a5e0c6" title=" " alt="" coords="184,57,315,98"/>
+<area shape="rect" id="node4" href="$classdetail_1_1buffer.html#ae1afeec5148a94656c7deaaad19d7da6" title="Increases the buffer capacity to hold at least capacity elements." alt="" coords="363,64,508,91"/>
+</map>

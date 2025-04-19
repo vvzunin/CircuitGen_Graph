@@ -1,0 +1,4 @@
+<map id="CG_Graph::OrientedGraph::fullSize" name="CG_Graph::OrientedGraph::fullSize">
+<area shape="rect" id="node1" title="fullSize returns the total number of vertices in the graph, including vertices from all subgraphs." alt="" coords="5,5,196,47"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1OrientedGraph.html#a07f3c1e04280c7f10bc1611125f842d1" title="baseSize returns the number of &quot;gate&quot; type vertices in the graph" alt="" coords="244,5,435,47"/>
+</map>

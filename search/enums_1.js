@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['dispatchaction_1762',['DispatchAction',['../namespaceel_1_1base.html#a3aa2563d38e47388ba242a1694fc2839',1,'el::base']]],
-  ['dottypes_1763',['DotTypes',['../DefaultSettings_8hpp.html#ab3c2c7a5bc571a3e5c16d9bc055f78f2',1,'DefaultSettings.hpp']]]
+  ['char8_5ftype_3265',['char8_type',['../namespacedetail.html#af2d1c9abcf61fc5c29bb85fdbd0c0153',1,'detail']]],
+  ['configurationtype_3266',['ConfigurationType',['../namespaceel.html#a281f5db6d6163678bc68a8b23b59e124',1,'el']]]
 ];

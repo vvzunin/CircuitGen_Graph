@@ -1,0 +1,4 @@
+<map id="TEST" name="TEST">
+<area shape="rect" id="node1" title=" " alt="" coords="5,13,60,39"/>
+<area shape="rect" id="node2" href="$namespaceCG__Graph_1_1GraphUtils.html#a80ae38c15249e44fad97f12438b8501b" title="parseStringToGate Converts a string representation of a gate to its corresponding enum value" alt="" coords="108,5,272,47"/>
+</map>
