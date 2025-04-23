@@ -27,8 +27,7 @@ using namespace CG_Graph;
     TestCalculateHash_Output
 */
 
-std::string
-      loadStringFileOrientedGraph(const std::filesystem::path &p) {
+std::string loadStringFileOrientedGraph(const std::filesystem::path &p) {
   std::string str;
   std::ifstream file;
   file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -677,8 +676,7 @@ TEST(TestToVerilog, Simple) {
   graphPtr->addEdge(gateOr1, out);
   auto strs = graphPtr->toVerilog(".", "testSimple.v");
   std::string curPath = std::filesystem::current_path();
-  std::string loadFile =
-      loadStringFileOrientedGraph(curPath + "/testSimple.v");
+  std::string loadFile = loadStringFileOrientedGraph(curPath + "/testSimple.v");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
   LOG(INFO) << "Printing Verilog file: " << strs.first << "\n" << loadFile;
