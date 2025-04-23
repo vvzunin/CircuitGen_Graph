@@ -454,22 +454,6 @@ public:
 
   virtual size_t calculateHash(bool i_recalculate = false);
 
-  /// @brief getVerilogInstance
-  /// Generates an instance declaration for the vertex in Verilog format.
-  /// @return A string containing the instance declaration for the vertex
-  /// in Verilog format.
-  /// @code
-  /// // Creating an instance of the GraphVertexBase class
-  /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
-  /// // Generating an instance for a vertex in Verilog format
-  /// std::string instanceDeclaration = vertex.getVerilogInstance();
-  /// // Displaying the instance on the screen
-  /// std::cout << "Instance declaration for vertex: " << instanceDeclaration <<
-  /// std::endl;
-  /// @endcode
-
-  virtual std::string getVerilogInstance();
-
   /// @brief toVerilog
   /// Generates Verilog code for the vertex
   /// @return A string containing Verilog code for the vertex, or an empty
