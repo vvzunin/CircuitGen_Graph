@@ -247,7 +247,7 @@ TEST(SequentialTests, TestTriggerAsyncRstN_En) {
 TEST(ErrorOutputTest, CapturesCerr) {
   std::stringstream buffer;
   // перенаправляем cerr
-  std::streambuf* old = std::cerr.rdbuf(buffer.rdbuf());
+  std::streambuf *old = std::cerr.rdbuf(buffer.rdbuf());
 
   OrientedGraph::resetCounter();
   GraphPtr graph = std::make_shared<OrientedGraph>();
