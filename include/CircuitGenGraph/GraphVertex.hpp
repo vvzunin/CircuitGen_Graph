@@ -99,8 +99,6 @@ public:
   /// @brief updateLevel updates the level of the current vertex in the graph
   /// based on the levels of its incoming connections
 
-  virtual void updateLevel(bool i_recalculate = false,
-                           std::string tab = "") override;
   std::string toVerilog() const override;
   DotReturn toDOT() override;
 
@@ -158,7 +156,7 @@ public:
   /// @return TO DO:
   bool toGraphML(std::ofstream &i_fileStream) const;
 
-  /// @brief This method is used as a substructure for
+  /// @brief This method is used as a substructureS for
   /// OrientedGraph methods
   /// @param i_indent
   /// @return
@@ -167,7 +165,6 @@ public:
   /// @brief This method is used as a substructure for
   /// OrientedGraph methods
   /// @return
-  std::string getVerilogInstance() override;
 
   size_t calculateHash(bool i_recalculate = false) override;
 
@@ -305,6 +302,8 @@ private:
   Gates d_gate;
   // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых
   // логических операций.
+
+  friend class GraphVertexSubGraph;
 };
 
 class GraphVertexSequential : public GraphVertexBase {

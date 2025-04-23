@@ -44,9 +44,9 @@ set(TEST_NAME CircuitGenGraph_tests)
 
 # Collect all test source files into a single executable
 add_executable(${TEST_NAME}
-  # src/GraphVertexGatesTests.cpp
-  # src/GraphVertexOutputTests.cpp
-  # src/GraphVertexSubGraphTests.cpp
+  src/GraphVertexGatesTests.cpp
+  src/GraphVertexOutputTests.cpp
+  src/GraphVertexSubGraphTests.cpp
 
   src/GraphVertexBaseTests.cpp
   src/GraphVertexConstantTests.cpp

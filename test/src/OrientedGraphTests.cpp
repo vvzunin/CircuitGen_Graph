@@ -1117,14 +1117,14 @@ TEST(GraphTest, MajorityLogicTestSimple) {
 
   VertexPtr result = graph->generateMajority(a, b, c);
 
-  // 1. ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ°, Ñ‡Ñ‚Ð¾ Ñ€ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚ Ð½Ðµ nullptr
+  // 1. Ïðîâåðêà, ÷òî ðåçóëüòàò íå nullptr
   EXPECT_TRUE(result);
 
-  // 2. ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ°, Ñ‡Ñ‚Ð¾ Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½ Ñ€Ð¾Ð²Ð½Ð¾ Ð¾Ð´Ð¸Ð½ Ð¿Ð¾Ð´Ð³Ñ€Ð°Ñ„
+  // 2. Ïðîâåðêà, ÷òî äîáàâëåí ðîâíî îäèí ïîäãðàô
   auto subGraphs = graph->getSubGraphs();
   EXPECT_EQ(subGraphs.size(), 1);
 
-  // 3. ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ°, Ñ‡Ñ‚Ð¾ Ð¼Ð°Ð¶Ð¾Ñ€Ð¸Ñ‚Ð°Ñ€Ð½Ñ‹Ð¹ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚ Ð½Ðµ Ð´ÑƒÐ±Ð»Ð¸Ñ€ÑƒÐµÑ‚ÑÑ
+  // 3. Ïðîâåðêà, ÷òî ìàæîðèòàðíûé ýëåìåíò íå äóáëèðóåòñÿ
   VertexPtr r2 = graph->generateMajority(a, b, c);
   EXPECT_TRUE(r2 != nullptr);
   EXPECT_EQ(graph->getSubGraphs().size(), 1);

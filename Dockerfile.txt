@@ -3,17 +3,22 @@ FROM ubuntu:22.04
 
 # Устанавливаем необходимые инструменты и зависимости
 RUN apt-get update && apt-get install -y \
-build-essential \
-clang \
-clang-tidy \
-clang-format-15 \
-cmake \
-python3 \
-python3-pip \
-lcov \
-ninja-build \
-git \
-&& apt-get clean
+  build-essential \
+  clang \
+  clang-tidy \
+  clang-format-15 \
+  cmake \
+  doxygen \
+  g++ \
+  gcc \
+  git \
+  lcov \
+  make \
+  ninja-build \
+  openssl \
+  python3 \
+  python3-pip \
+  && apt-get clean
 
 # Устанавливаем Python-зависимости
 RUN pip3 install codespell
@@ -26,40 +31,40 @@ COPY . .
 
 # Создаем файл CMakeUserPresets.json с указанным содержимым
 RUN echo '{ \
-"version": 2, \
-"cmakeMinimumRequired": { \
-"major": 3, \
-"minor": 14, \
-"patch": 0 \
-}, \
-"configurePresets": [ \
-{ \
-"name": "dev", \
-"binaryDir": "${sourceDir}/build/dev", \
-"inherits": ["dev-mode", "ci-linux"], \
-"cacheVariables": { \
-"CMAKE_BUILD_TYPE": "Debug" \
-} \
-} \
-], \
-"buildPresets": [ \
-{ \
-"name": "dev", \
-"configurePreset": "dev", \
-"configuration": "Debug" \
-} \
-], \
-"testPresets": [ \
-{ \
-"name": "dev", \
-"configurePreset": "dev", \
-"configuration": "Debug", \
-"output": { \
-"outputOnFailure": true \
-} \
-} \
-] \
-}' > /app/CMakeUserPresets.json
+  "version": 2, \
+  "cmakeMinimumRequired": { \
+  "major": 3, \
+  "minor": 14, \
+  "patch": 0 \
+  }, \
+  "configurePresets": [ \
+  { \
+  "name": "dev", \
+  "binaryDir": "${sourceDir}/build/dev", \
+  "inherits": ["dev-mode", "ci-linux"], \
+  "cacheVariables": { \
+  "CMAKE_BUILD_TYPE": "Debug" \
+  } \
+  } \
+  ], \
+  "buildPresets": [ \
+  { \
+  "name": "dev", \
+  "configurePreset": "dev", \
+  "configuration": "Debug" \
+  } \
+  ], \
+  "testPresets": [ \
+  { \
+  "name": "dev", \
+  "configurePreset": "dev", \
+  "configuration": "Debug", \
+  "output": { \
+  "outputOnFailure": true \
+  } \
+  } \
+  ] \
+  }' > /app/CMakeUserPresets.json
 
 # Делаем скрипт сборки исполняемым
 RUN chmod +x buildGraph.sh

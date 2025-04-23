@@ -1,0 +1,40 @@
+# Считываем аргумент из командной строки. 
+# Если он не задан, то выбираем систему по умолчанию.
+# По-умолчанию: ubuntu:22.04
+ARG system=ubuntu:22.04
+
+# Используем базовую систему, заданную аргументом system.
+FROM $system
+
+# Обновляем системные пакеты
+RUN apt-get update && \
+  apt-get upgrade -y
+
+# Устанавливаем необходимые инструменты и зависимости
+RUN apt-get install -y \
+  build-essential \
+  clang \
+  clang-tidy \
+  clang-format-15 \
+  cmake \
+  cppcheck \
+  doxygen \
+  g++ \
+  gcc \
+  ghostscript \
+  git \
+  graphviz \
+  lcov \
+  make \
+  ninja-build \
+  openssl \
+  python3.10 \
+  python3.10-dev \
+  python3-pip \
+  && apt-get clean
+
+# Устанавливаем Python-зависимости
+RUN pip3 install codespell jinja2 Pygments
+
+# Создаем рабочую директорию
+WORKDIR /graph
