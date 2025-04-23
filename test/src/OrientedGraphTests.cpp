@@ -27,7 +27,7 @@ using namespace CG_Graph;
     TestCalculateHash_Output
 */
 
-std::string loadStringFile(const std::filesystem::path &p) {
+std::string loadStringFileOrientedGraph(const std::filesystem::path &p) {
   std::string str;
   std::ifstream file;
   file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -1117,14 +1117,11 @@ TEST(GraphTest, MajorityLogicTestSimple) {
 
   VertexPtr result = graph->generateMajority(a, b, c);
 
-  // 1. Проверка, что результат не nullptr
   EXPECT_TRUE(result);
 
-  // 2. Проверка, что добавлен ровно один подграф
   auto subGraphs = graph->getSubGraphs();
   EXPECT_EQ(subGraphs.size(), 1);
 
-  // 3. Проверка, что мажоритарный элемент не дублируется
   VertexPtr r2 = graph->generateMajority(a, b, c);
   EXPECT_TRUE(r2 != nullptr);
   EXPECT_EQ(graph->getSubGraphs().size(), 1);

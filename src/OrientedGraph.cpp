@@ -713,7 +713,9 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
   }
   // writing consts
   for (auto *oper: d_vertexes[VertexTypes::constant]) {
-    fileStream << verilogTab << oper->getVerilogInstance() << "\n";
+    fileStream << verilogTab
+               << static_cast<GraphVertexConstant *>(oper)->getVerilogInstance()
+               << "\n";
     fileStream << verilogTab << (*oper) << "\n";
   }
 
