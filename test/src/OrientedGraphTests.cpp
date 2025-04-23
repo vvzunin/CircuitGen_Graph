@@ -27,7 +27,8 @@ using namespace CG_Graph;
     TestCalculateHash_Output
 */
 
-std::string loadStringFileOrientedGraph(const std::filesystem::path &p) {
+std::string
+      loadStringFileOrientedGraph(const std::filesystem::path &p) {
   std::string str;
   std::ifstream file;
   file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -676,7 +677,8 @@ TEST(TestToVerilog, Simple) {
   graphPtr->addEdge(gateOr1, out);
   auto strs = graphPtr->toVerilog(".", "testSimple.v");
   std::string curPath = std::filesystem::current_path();
-  std::string loadFile = loadStringFile(curPath + "/testSimple.v");
+  std::string loadFile =
+      loadStringFileOrientedGraph(curPath + "/testSimple.v");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
   LOG(INFO) << "Printing Verilog file: " << strs.first << "\n" << loadFile;
@@ -710,7 +712,8 @@ TEST(TestToVerilog, SubGraph) {
   std::filesystem::create_directories("./submodules");
   auto strs = graphPtr->toVerilog(".", "testSubGraph.v");
   std::string curPath = std::filesystem::current_path();
-  std::string loadFile = loadStringFile(curPath + "/testSubGraph.v");
+  std::string loadFile =
+      loadStringFileOrientedGraph(curPath + "/testSubGraph.v");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
   LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
@@ -739,7 +742,8 @@ TEST(TestToDOT, Simple) {
 #ifdef LOGFLAG
   LOG(INFO) << "curPath: " << curPath;
 #endif
-  std::string loadFile = loadStringFile(curPath + "/testSimple.dot");
+  std::string loadFile =
+      loadStringFileOrientedGraph(curPath + "/testSimple.dot");
 #ifdef LOGFLAG
   LOG(INFO) << "loadFile: " << loadFile;
 #endif
@@ -781,7 +785,8 @@ TEST(TestToDOT, SubGraph) {
   std::filesystem::create_directories("./submodulesDOT");
   auto strs = graphPtr->toDOT(".", "testSubGraph.dot");
   std::string curPath = std::filesystem::current_path();
-  std::string loadFile = loadStringFile(curPath + "/testSubGraph.dot");
+  std::string loadFile =
+      loadStringFileOrientedGraph(curPath + "/testSubGraph.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
   LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
@@ -823,7 +828,8 @@ TEST(TestToDOT, SubGraphUnroll) {
   std::filesystem::create_directories("./submodulesDOT");
   auto strs = unrollGraphPtr->toDOT(".", "testSubGraphUnroll.dot");
   std::string curPath = std::filesystem::current_path();
-  std::string loadFile = loadStringFile(curPath + "/testSubGraphUnroll.dot");
+  std::string loadFile =
+      loadStringFileOrientedGraph(curPath + "/testSubGraphUnroll.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
   LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
@@ -919,7 +925,8 @@ TEST(TestToDOT, SubGraphUnroll2) {
   std::filesystem::create_directories("./submodulesDOT");
   auto strs = unrollGraphPtr->toDOT(".", "testSubGraphUnroll2.dot");
   std::string curPath = std::filesystem::current_path();
-  std::string loadFile = loadStringFile(curPath + "/testSubGraphUnroll2.dot");
+  std::string loadFile =
+      loadStringFileOrientedGraph(curPath + "/testSubGraphUnroll2.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
   LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
@@ -1001,7 +1008,8 @@ TEST(TestToDOT, SubGraphUnroll3) {
   std::filesystem::create_directories("./submodulesDOT");
   auto strs = unrollGraphPtr->toDOT(".", "testSubGraphUnroll3.dot");
   std::string curPath = std::filesystem::current_path();
-  std::string loadFile = loadStringFile(curPath + "/testSubGraphUnroll3.dot");
+  std::string loadFile =
+      loadStringFileOrientedGraph(curPath + "/testSubGraphUnroll3.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
   LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
@@ -1072,7 +1080,8 @@ TEST(TestToDOT, SubGraph3) {
   std::filesystem::create_directories("./submodulesDOT");
   auto strs = graphPtr->toDOT(".", "testSubGraph3.dot");
   std::string curPath = std::filesystem::current_path();
-  std::string loadFile = loadStringFile(curPath + "/testSubGraph3.dot");
+  std::string loadFile =
+      loadStringFileOrientedGraph(curPath + "/testSubGraph3.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
   LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
