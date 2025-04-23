@@ -1,5 +1,7 @@
+#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
 
+#include <cassert>
 #include <iostream>
 
 #ifdef LOGFLAG
@@ -21,11 +23,47 @@ inline bool GraphVertexSequential::isNegedge() const {
   return d_seqType & NEGEDGE;
 }
 
+inline std::string convertSequentialFlag(SequentialTypes i_type) {
+  static std::pair<SequentialTypes, std::string_view> types_seq[] = {
+    {EN, "EN"},
+    {RST, "RST"},
+    {RST, "CLR"},
+    {SET, "SET"},
+    {ASYNC, "ASYNC"},
+    {NEGEDGE, "NEGEDGE"}
+  };
+  return std::string(GraphUtils::findPairByKey(types_seq, i_type)->second);
+}
+
+inline bool validateSignal(SequentialTypes current, SequentialTypes found) {
+  unsigned delta = current ^ found;
+  if (!delta) {
+    return true;
+  }
+  for (const auto &flag: {EN, RST, CLR, SET, NEGEDGE, ASYNC}) {
+    if (delta & flag) {
+      SequentialTypes foundFlag = static_cast<SequentialTypes>(delta & flag);
+      #ifdef LOGFLAG
+        LOG(ERROR) << "Invalid flag found in used type: "
+                   << convertSequentialFlag(foundFlag) << '\n';
+      #else
+        std::cerr << "Invalid flag found in used type: "
+                  << convertSequentialFlag(foundFlag) << '\n';
+      #endif
+    }
+  }
+  return false;
+}
+
 inline void GraphVertexSequential::setSignalByType(VertexPtr i_wire,
                                                    SequentialTypes i_type,
                                                    unsigned &factType) {
   if ((i_type & RST) && !d_rst) {
     factType |= RST;
+    // d_clk has trigger only
+    if (d_clk) {
+      factType |= i_type & ASYNC;
+    }
     d_rst = i_wire;
   } else if ((i_type & CLR) && !d_rst) {
     factType |= CLR;
@@ -41,6 +79,19 @@ inline void GraphVertexSequential::setSignalByType(VertexPtr i_wire,
 
 // clang-format off
 
+#define SET_DEFAULT do {                                        \
+  /* NOT ALLOWED TO USE BOTH RST AND CLR */                     \
+  assert(!((i_type & RST) && (i_type & CLR)));                  \
+  if (i_type & ff) {                                            \
+    d_clk = i_clk;                                              \
+    d_seqType = static_cast<SequentialTypes>(i_type & nff);     \
+  } else {                                                      \
+    d_en = i_clk;                                               \
+    /* without ff flag it is just a latch */                    \
+    d_seqType = latch;                                          \
+  }                                                             \
+} while (0)
+
 /// @brief Constructor for default types
 /// @param i_type type of sequential vertex (can be only (n)ff or latch = EN)
 /// @param i_clk is clock signal for a ff and enable signal for a latch
@@ -54,19 +105,17 @@ GraphVertexSequential::GraphVertexSequential(
     std::string_view i_name)
     : GraphVertexBase(VertexTypes::seuqential, i_name, i_baseGraph)
     , d_data(i_data) {
-  // NOT ALLOWED TO USE BOTH RST AND CLR
-  assert(!((i_type & RST) && (i_type & CLR)));
-
-  d_clk = i_clk;
-  if (i_type & ff) {
-    d_seqType = static_cast<SequentialTypes>(i_type & nff);
-  } else {
-    d_en = d_clk;
-    // without ff flag it is just a latch
-    d_seqType = latch;
-  }
+  SET_DEFAULT;
+  validateSignal(i_type, d_seqType);
 }
 
+/// @brief 
+/// @param i_type 
+/// @param i_clk is clock signal for a ff and enable signal for a latch
+/// @param i_data 
+/// @param i_wire RST or CLR or SET or EN
+/// @param i_baseGraph 
+/// @param i_name 
 GraphVertexSequential::GraphVertexSequential(
     SequentialTypes i_type,
     VertexPtr i_clk,
@@ -74,21 +123,24 @@ GraphVertexSequential::GraphVertexSequential(
     VertexPtr i_wire,
     GraphPtr i_baseGraph,
     std::string_view i_name)
-    : GraphVertexSequential(i_type, i_clk, i_data, i_baseGraph, i_name) {
+    : GraphVertexBase(VertexTypes::seuqential, i_name, i_baseGraph)
+    , d_data(i_data) {
+  SET_DEFAULT;
   unsigned factType = 0u;
 
   setSignalByType(i_wire, i_type, factType);
 
   d_seqType = static_cast<SequentialTypes>(d_seqType | factType);
+  validateSignal(i_type, d_seqType);
 }
 
 /// @brief 
-/// @param i_type 
+/// @param i_type
 /// @param i_clk EN for latch and CLK for ff
-/// @param i_data 
+/// @param i_data
 /// @param i_wire1 RST or CLR or SET
 /// @param i_wire2 SET or EN
-/// @param i_baseGraph 
+/// @param i_baseGraph
 GraphVertexSequential::GraphVertexSequential(
     SequentialTypes i_type,
     VertexPtr i_clk,
@@ -97,13 +149,16 @@ GraphVertexSequential::GraphVertexSequential(
     VertexPtr i_wire2,
     GraphPtr i_baseGraph,
     std::string_view i_name)
-    : GraphVertexSequential(i_type, i_clk, i_data, i_baseGraph, i_name) {
+    : GraphVertexBase(VertexTypes::seuqential, i_name, i_baseGraph)
+    , d_data(i_data) {
+  SET_DEFAULT;
   unsigned factType = 0u;
 
   setSignalByType(i_wire1, i_type, factType);
   setSignalByType(i_wire2, i_type, factType);
 
   d_seqType = static_cast<SequentialTypes>(d_seqType | factType);
+  validateSignal(i_type, d_seqType);
 }
 
 GraphVertexSequential::GraphVertexSequential(
@@ -115,18 +170,23 @@ GraphVertexSequential::GraphVertexSequential(
     VertexPtr i_en,
     GraphPtr i_baseGraph,
     std::string_view i_name)
-    : GraphVertexSequential(i_type, i_clk, i_data, i_baseGraph, i_name) {
+    : GraphVertexBase(VertexTypes::seuqential, i_name, i_baseGraph)
+    , d_data(i_data) {
+  SET_DEFAULT;
   // cannot have 3 input wires and be a latch - latch has only 3 signals at all
   assert(isFF());
   unsigned factType = SET | EN;
   d_rst = i_rst;
   d_set = i_set;
   d_en = i_en;
-  
-  factType |= i_type & (RST | CLR);
+
+  factType |= i_type & (RST | CLR | NEGEDGE | ASYNC);
 
   d_seqType = static_cast<SequentialTypes>(d_seqType | factType);
+  validateSignal(i_type, d_seqType);
 }
+
+#undef SET_DEFAULT
 
 // clang-format on
 
