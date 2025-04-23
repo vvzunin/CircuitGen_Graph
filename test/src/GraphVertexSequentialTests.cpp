@@ -258,7 +258,7 @@ TEST(ErrorOutputTest, CapturesCerr) {
   auto *en = graph->addInput("en");
   auto *data = graph->addInput("data");
   auto *rst = graph->addInput("rst");
-  auto *seq = graph->addSequential(latchrs, en, data, rst, "q");
+  graph->addSequential(latchrs, en, data, rst, "q");
 
   // возвращаем старый буфер
   std::cerr.rdbuf(old);

@@ -1122,7 +1122,14 @@ TEST(GraphTest, MajorityLogicTestSimple) {
   VertexPtr b = graph->addConst('1');
   VertexPtr c = graph->addConst('0');
 
-  VertexPtr result = graph->generateMajority(graph, a, b, c);
+  VertexPtr result = graph->generateMajority(a, b, c);
 
   EXPECT_TRUE(result);
+
+  auto subGraphs = graph->getSubGraphs();
+  EXPECT_EQ(subGraphs.size(), 1);
+
+  VertexPtr r2 = graph->generateMajority(a, b, c);
+  EXPECT_TRUE(r2 != nullptr);
+  EXPECT_EQ(graph->getSubGraphs().size(), 1);
 }
