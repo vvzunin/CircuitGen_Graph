@@ -25,13 +25,8 @@ inline bool GraphVertexSequential::isNegedge() const {
 
 inline std::string convertSequentialFlag(SequentialTypes i_type) {
   static std::pair<SequentialTypes, std::string_view> types_seq[] = {
-    {EN, "EN"},
-    {RST, "RST"},
-    {RST, "CLR"},
-    {SET, "SET"},
-    {ASYNC, "ASYNC"},
-    {NEGEDGE, "NEGEDGE"}
-  };
+      {EN, "EN"},   {RST, "RST"},     {RST, "CLR"},
+      {SET, "SET"}, {ASYNC, "ASYNC"}, {NEGEDGE, "NEGEDGE"}};
   return std::string(GraphUtils::findPairByKey(types_seq, i_type)->second);
 }
 
@@ -43,13 +38,13 @@ inline bool validateSignal(SequentialTypes current, SequentialTypes found) {
   for (const auto &flag: {EN, RST, CLR, SET, NEGEDGE, ASYNC}) {
     if (delta & flag) {
       SequentialTypes foundFlag = static_cast<SequentialTypes>(delta & flag);
-      #ifdef LOGFLAG
-        LOG(ERROR) << "Invalid flag found in used type: "
-                   << convertSequentialFlag(foundFlag) << '\n';
-      #else
-        std::cerr << "Invalid flag found in used type: "
-                  << convertSequentialFlag(foundFlag) << '\n';
-      #endif
+#ifdef LOGFLAG
+      LOG(ERROR) << "Invalid flag found in used type: "
+                 << convertSequentialFlag(foundFlag) << '\n';
+#else
+      std::cerr << "Invalid flag found in used type: "
+                << convertSequentialFlag(foundFlag) << '\n';
+#endif
     }
   }
   return false;
