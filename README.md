@@ -89,7 +89,11 @@ sudo rm -rf cmake-3.28.1
 ```
 
 ### Установка Doxygen 1.13.2
-Для установки Doxygen 1.13.2 необходимо собрать программу из исходного кода:
+Для сборки Doxygen необходимо предварительно установить bison и flex.
+```
+sudo apt-get install flex bison
+```
+Для установки Doxygen необходимо собрать программу из исходного кода.
 ```
 wget https://www.doxygen.nl/files/doxygen-1.13.2.src.tar.gz 
 tar xf doxygen-1.13.2.src.tar.gz
