@@ -46,12 +46,12 @@
 
 #### С помощью apt
 ```
-sudo apt install clang clang-tidy clang-format-15 doxygen g++ gcc make openssl cmake lcov ninja-build
+sudo apt install clang clang-tidy clang-format-15 g++ gcc make openssl cmake lcov ninja-build
 ```
 
 #### С помощью dnf (для rpm ветки)
 ```
-sudo dnf install clang clang-tools-extra doxygen g++ gcc make openssl cmake lcov ninja-build
+sudo dnf install clang clang-tools-extra g++ gcc make openssl cmake lcov ninja-build
 ```
 Так как в проекте используется `clang-format-15`, предлагается два возможных решения. 
 1) Так как критических отличий между различными версиями clang нет, 
@@ -86,6 +86,21 @@ make -j$(nproc)
 sudo make install
 cd ..
 sudo rm -rf cmake-3.28.1
+```
+
+### Установка Doxygen 1.13.2
+Для установки Doxygen 1.13.2 необходимо собрать программу из исходного кода:
+```
+wget https://www.doxygen.nl/files/doxygen-1.13.2.src.tar.gz 
+tar xf doxygen-1.13.2.src.tar.gz
+cd doxygen-1.13.2
+mkdir build
+cd build
+cmake -G "Unix Makefiles" ..
+make -j $(nproc)
+sudo make install
+cd ../..
+rm -r doxygen-1.13.2
 ```
 
 ## Режим разработчика
