@@ -336,43 +336,41 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
   return outputs;
 }
 
-VertexPtr OrientedGraph::generateMajority(GraphPtr targetGraph, VertexPtr a,
-                                          VertexPtr b, VertexPtr c) {
-  static GraphPtr majoritySubgraph = nullptr;
+GraphPtr OrientedGraph::createMajoritySubgraph() {
+  auto majority = std::make_shared<CG_Graph::OrientedGraph>("Majority3");
 
-  if (!majoritySubgraph) {
-    majoritySubgraph = std::make_shared<CG_Graph::OrientedGraph>("Majority3");
+  VertexPtr in1 = majority->addInput("a");
+  VertexPtr in2 = majority->addInput("b");
+  VertexPtr in3 = majority->addInput("c");
 
-    // Входы
-    VertexPtr in1 = majoritySubgraph->addInput("a");
-    VertexPtr in2 = majoritySubgraph->addInput("b");
-    VertexPtr in3 = majoritySubgraph->addInput("c");
+  VertexPtr and_ab = majority->addGate(Gates::GateAnd, "and_ab");
+  majority->addEdges({in1, in2}, and_ab);
 
-    // AND'ы
-    VertexPtr and_ab = majoritySubgraph->addGate(Gates::GateAnd, "and_ab");
-    majoritySubgraph->addEdges({in1, in2}, and_ab);
+  VertexPtr and_ac = majority->addGate(Gates::GateAnd, "and_ac");
+  majority->addEdges({in1, in3}, and_ac);
 
-    VertexPtr and_ac = majoritySubgraph->addGate(Gates::GateAnd, "and_ac");
-    majoritySubgraph->addEdges({in1, in3}, and_ac);
+  VertexPtr and_bc = majority->addGate(Gates::GateAnd, "and_bc");
+  majority->addEdges({in2, in3}, and_bc);
 
-    VertexPtr and_bc = majoritySubgraph->addGate(Gates::GateAnd, "and_bc");
-    majoritySubgraph->addEdges({in2, in3}, and_bc);
+  VertexPtr or1 = majority->addGate(Gates::GateOr, "or1");
+  majority->addEdges({and_ab, and_ac}, or1);
 
-    // OR'ы
-    VertexPtr or1 = majoritySubgraph->addGate(Gates::GateOr, "or1");
-    majoritySubgraph->addEdges({and_ab, and_ac}, or1);
+  VertexPtr or2 = majority->addGate(Gates::GateOr, "or2");
+  majority->addEdges({or1, and_bc}, or2);
 
-    VertexPtr or2 = majoritySubgraph->addGate(Gates::GateOr, "or2");
-    majoritySubgraph->addEdges({or1, and_bc}, or2);
+  VertexPtr out = majority->addOutput("result");
+  majority->addEdge(or2, out);
 
-    // Выход
-    VertexPtr out = majoritySubgraph->addOutput("result");
-    majoritySubgraph->addEdge(or2, out);
-  }
+  return majority;
+}
 
-  // Добавляем подграф в нужный граф
+VertexPtr OrientedGraph::generateMajority(VertexPtr a, VertexPtr b,
+                                          VertexPtr c) {
+  static GraphPtr majoritySubgraph =
+      createMajoritySubgraph(); // создаётся один раз
+
   std::vector<VertexPtr> outputs =
-      targetGraph->addSubGraph(majoritySubgraph, {a, b, c});
+      this->addSubGraph(majoritySubgraph, {a, b, c});
   return outputs.back();
 }
 
@@ -717,7 +715,9 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
   }
   // writing consts
   for (auto *oper: d_vertexes[VertexTypes::constant]) {
-    fileStream << verilogTab << static_cast<GraphVertexConstant *>(oper)->getVerilogInstance() << "\n";
+    fileStream << verilogTab
+               << static_cast<GraphVertexConstant *>(oper)->getVerilogInstance()
+               << "\n";
     fileStream << verilogTab << (*oper) << "\n";
   }
 

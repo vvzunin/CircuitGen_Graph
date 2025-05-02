@@ -329,19 +329,6 @@ bool GraphVertexBase::removeVertexToOutConnections(VertexPtr i_vert) {
   return false;
 }
 
-std::string GraphVertexBase::getVerilogInstance() {
-  if (!d_inConnections.size()) {
-#ifdef LOGFLAG
-    LOG(ERROR) << "TODO: delete empty vertex instance: " << d_name << std::endl;
-#else
-    std::cerr << "TODO: delete empty vertex instance: " << std::endl;
-#endif
-    return "";
-  }
-
-  return VertexUtils::vertexTypeToVerilog(d_type) + " " + getName() + ";";
-}
-
 // TODO: what if some (more than 1) connected to output?
 std::string GraphVertexBase::toVerilog() const {
   if (d_type == VertexTypes::output) {

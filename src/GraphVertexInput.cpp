@@ -19,17 +19,7 @@ GraphVertexInput::GraphVertexInput(std::string_view i_name,
     GraphVertexBase(i_type, i_name, i_baseGraph) {
 }
 
-// TODO: Он здесь нужен?
 char GraphVertexInput::updateValue() {
-  if (d_inConnections.size() > 0) {
-    d_value = d_inConnections.front()->getValue();
-
-    for (size_t i = 1; i < d_inConnections.size(); i++) {
-      if (d_inConnections.at(i)->getValue() != d_value) {
-        d_value = 'x';
-      }
-    }
-  }
   return d_value;
 }
 

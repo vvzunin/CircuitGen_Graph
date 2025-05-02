@@ -254,11 +254,11 @@ TEST(TestIsConnectedWithSubGraphsTrivial, ConnectedSubGraphIsConnected) {
 
 TEST(TestIsConnectedWithSubGraphsTrivial, DisconnectedSubGraphIsNotConnected) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
-  VertexPtr input = graphPtr->addInput("input");
+  graphPtr->addInput("input");
 
   GraphPtr subGraphPtr = std::make_shared<OrientedGraph>();
-  VertexPtr subGraphInput = subGraphPtr->addInput("subGraphInput");
-  VertexPtr subGraphOutput = subGraphPtr->addOutput("subGraphOutput");
+  subGraphPtr->addInput("subGraphInput");
+  subGraphPtr->addOutput("subGraphOutput");
 
   graphPtr->addSubGraph(subGraphPtr,
                         graphPtr->getVerticesByType(VertexTypes::input));
@@ -279,18 +279,18 @@ TEST(TestIsConnectedWithSubGraphsNontrivial,
   lvl2->addEdge(lvl2Input1, lvl2Output2);
   lvl2->addEdge(lvl2Input2, lvl2Output1);
 
-  VertexPtr lvl1Input1 = lvl1->addInput("lvl1Input1");
+  lvl1->addInput("lvl1Input1");
   VertexPtr lvl1Output1 = lvl1->addOutput("lvl1Output1");
-  VertexPtr lvl1Input2 = lvl1->addInput("lvl1Input2");
+  lvl1->addInput("lvl1Input2");
   VertexPtr lvl1Output2 = lvl1->addOutput("lvl1Output2");
   auto bufsLvl1 =
       lvl1->addSubGraph(lvl2, lvl1->getVerticesByType(VertexTypes::input));
   lvl1->addEdge(bufsLvl1[0], lvl1Output1);
   lvl1->addEdge(bufsLvl1[1], lvl1Output2);
 
-  VertexPtr lvl0Input1 = lvl0->addInput("lvl0Input1");
+  lvl0->addInput("lvl0Input1");
   VertexPtr lvl0Output1 = lvl0->addOutput("lvl0Output1");
-  VertexPtr lvl0Input2 = lvl0->addInput("lvl0Input2");
+  lvl0->addInput("lvl0Input2");
   VertexPtr lvl0Output2 = lvl0->addOutput("lvl0Output2");
   auto bufsLvl0 =
       lvl0->addSubGraph(lvl1, lvl0->getVerticesByType(VertexTypes::input));
@@ -315,18 +315,18 @@ TEST(TestIsConnectedWithSubGraphsNontrivial, ConnectedSubGraphLvl2IsConnected) {
   lvl2->addEdge(lvl2Input2, lvl2Output2); // <-- different from upper test
   lvl2->addEdge(lvl2Input2, lvl2Output1);
 
-  VertexPtr lvl1Input1 = lvl1->addInput("lvl1Input1");
+  lvl1->addInput("lvl1Input1");
   VertexPtr lvl1Output1 = lvl1->addOutput("lvl1Output1");
-  VertexPtr lvl1Input2 = lvl1->addInput("lvl1Input2");
+  lvl1->addInput("lvl1Input2");
   VertexPtr lvl1Output2 = lvl1->addOutput("lvl1Output2");
   auto bufsLvl1 =
       lvl1->addSubGraph(lvl2, lvl1->getVerticesByType(VertexTypes::input));
   lvl1->addEdge(bufsLvl1[0], lvl1Output1);
   lvl1->addEdge(bufsLvl1[1], lvl1Output2);
 
-  VertexPtr lvl0Input1 = lvl0->addInput("lvl0Input1");
+  lvl0->addInput("lvl0Input1");
   VertexPtr lvl0Output1 = lvl0->addOutput("lvl0Output1");
-  VertexPtr lvl0Input2 = lvl0->addInput("lvl0Input2");
+  lvl0->addInput("lvl0Input2");
   VertexPtr lvl0Output2 = lvl0->addOutput("lvl0Output2");
   auto bufsLvl0 =
       lvl0->addSubGraph(lvl1, lvl0->getVerticesByType(VertexTypes::input));
@@ -351,7 +351,7 @@ TEST(TestIsConnectedWithSubGraphsNontrivial,
   lvl2->addEdge(lvl2Input1, lvl2Output2);
   lvl2->addEdge(lvl2Input2, lvl2Output1);
 
-  VertexPtr lvl1Input1 = lvl1->addInput("lvl1Input1");
+  lvl1->addInput("lvl1Input1");
   VertexPtr lvl1Output1 = lvl1->addOutput("lvl1Output1");
   VertexPtr lvl1Input2 = lvl1->addInput("lvl1Input2");
   VertexPtr lvl1Output2 = lvl1->addOutput("lvl1Output2");
@@ -363,9 +363,9 @@ TEST(TestIsConnectedWithSubGraphsNontrivial,
   lvl1->addEdge(lvl1Input2, lvl1And);
   lvl1->addEdge(lvl1And, lvl1Output2);
 
-  VertexPtr lvl0Input1 = lvl0->addInput("lvl0Input1");
+  lvl0->addInput("lvl0Input1");
   VertexPtr lvl0Output1 = lvl0->addOutput("lvl0Output1");
-  VertexPtr lvl0Input2 = lvl0->addInput("lvl0Input2");
+  lvl0->addInput("lvl0Input2");
   VertexPtr lvl0Output2 = lvl0->addOutput("lvl0Output2");
   auto bufsLvl0 =
       lvl0->addSubGraph(lvl1, lvl0->getVerticesByType(VertexTypes::input));
@@ -390,8 +390,7 @@ TEST(TestIsConnectedWithSubGraphsNontrivial,
   lvl2->addEdge(lvl2Input1, lvl2Output2);
   lvl2->addEdge(lvl2Input2, lvl2Output1);
 
-  VertexPtr lvl1Input2 =
-      lvl1->addInput("lvl1Input2"); // <-- different from upper test
+  lvl1->addInput("lvl1Input2"); // <-- different from upper test
   VertexPtr lvl1Input1 = lvl1->addInput("lvl1Input1");
   VertexPtr lvl1Output1 = lvl1->addOutput("lvl1Output1");
   VertexPtr lvl1Output2 = lvl1->addOutput("lvl1Output2");
@@ -403,9 +402,9 @@ TEST(TestIsConnectedWithSubGraphsNontrivial,
   lvl1->addEdge(lvl1Input1, lvl1And); // <-- different from upper test
   lvl1->addEdge(lvl1And, lvl1Output2);
 
-  VertexPtr lvl0Input1 = lvl0->addInput("lvl0Input1");
+  lvl0->addInput("lvl0Input1");
   VertexPtr lvl0Output1 = lvl0->addOutput("lvl0Output1");
-  VertexPtr lvl0Input2 = lvl0->addInput("lvl0Input2");
+  lvl0->addInput("lvl0Input2");
   VertexPtr lvl0Output2 = lvl0->addOutput("lvl0Output2");
   auto bufsLvl0 =
       lvl0->addSubGraph(lvl1, lvl0->getVerticesByType(VertexTypes::input));
@@ -430,16 +429,16 @@ TEST(TestIsConnectedWithSubGraphsNontrivial,
   lvl2->addEdge(lvl2Input1, lvl2Output2);
   lvl2->addEdge(lvl2Input2, lvl2Output1);
 
-  VertexPtr lvl1Input1 = lvl1->addInput("lvl1Input1");
+  lvl1->addInput("lvl1Input1");
   VertexPtr lvl1Output1 = lvl1->addOutput("lvl1Output1");
-  VertexPtr lvl1Input2 = lvl1->addInput("lvl1Input2");
+  lvl1->addInput("lvl1Input2");
   VertexPtr lvl1Output2 = lvl1->addOutput("lvl1Output2");
   auto bufsLvl1 =
       lvl1->addSubGraph(lvl2, lvl1->getVerticesByType(VertexTypes::input));
   lvl1->addEdge(bufsLvl1[0], lvl1Output1);
   lvl1->addEdge(bufsLvl1[1], lvl1Output2);
 
-  VertexPtr lvl0Input1 = lvl0->addInput("lvl0Input1");
+  lvl0->addInput("lvl0Input1");
   VertexPtr lvl0Output1 = lvl0->addOutput("lvl0Output1");
   VertexPtr lvl0Input2 = lvl0->addInput("lvl0Input2");
   VertexPtr lvl0Output2 = lvl0->addOutput("lvl0Output2");
@@ -469,17 +468,16 @@ TEST(TestIsConnectedWithSubGraphsNontrivial,
   lvl2->addEdge(lvl2Input1, lvl2Output2);
   lvl2->addEdge(lvl2Input2, lvl2Output1);
 
-  VertexPtr lvl1Input1 = lvl1->addInput("lvl1Input1");
+  lvl1->addInput("lvl1Input1");
   VertexPtr lvl1Output1 = lvl1->addOutput("lvl1Output1");
-  VertexPtr lvl1Input2 = lvl1->addInput("lvl1Input2");
+  lvl1->addInput("lvl1Input2");
   VertexPtr lvl1Output2 = lvl1->addOutput("lvl1Output2");
   auto bufsLvl1 =
       lvl1->addSubGraph(lvl2, lvl1->getVerticesByType(VertexTypes::input));
   lvl1->addEdge(bufsLvl1[0], lvl1Output1);
   lvl1->addEdge(bufsLvl1[1], lvl1Output2);
 
-  VertexPtr lvl0Input2 =
-      lvl0->addInput("lvl0Input2"); // <-- different from upper test
+  lvl0->addInput("lvl0Input2"); // <-- different from upper test
   VertexPtr lvl0Input1 = lvl0->addInput("lvl0Input1");
   VertexPtr lvl0Output1 = lvl0->addOutput("lvl0Output1");
   VertexPtr lvl0Output2 = lvl0->addOutput("lvl0Output2");

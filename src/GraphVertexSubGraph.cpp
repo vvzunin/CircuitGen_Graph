@@ -24,18 +24,19 @@ GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
   d_subGraph = i_subGraph;
 }
 
-//Simulation rework
+// Simulation rework
 
 char GraphVertexSubGraph::updateValue() {
   return 'x';
 }
 
 // char GraphVertexSubGraph::updateValue() {
-//   std::vector<VertexPtr> output_verts = d_subGraph->getVerticesByType(VertexTypes::output);
-//   for (int i = 0; i < d_outConnections.size(); ++i) {
+//   std::vector<VertexPtr> output_verts =
+//   d_subGraph->getVerticesByType(VertexTypes::output); for (int i = 0; i <
+//   d_outConnections.size(); ++i) {
 //     assert(d_outConnections[i]->getType() == gate);
-//     GraphVertexGates *out_connectionVert = static_cast<GraphVertexGates *>(d_outConnections[i]);
-//     VertexPtr output_vert = output_verts[i];
+//     GraphVertexGates *out_connectionVert = static_cast<GraphVertexGates
+//     *>(d_outConnections[i]); VertexPtr output_vert = output_verts[i];
 //     out_connectionVert->d_value = output_vert->getValue();
 //   }
 // }
@@ -47,13 +48,16 @@ void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
   }
   d_needUpdate = VS_IN_PROGRESS;
   d_subGraph->updateLevels(i_recalculate);
-  std::vector<VertexPtr> output_verts = d_subGraph->getVerticesByType(VertexTypes::output);
-  for (VertexPtr vert: d_inConnections){
-    max_inLevel = (vert->getLevel() > max_inLevel) ? vert->getLevel() : max_inLevel;
+  std::vector<VertexPtr> output_verts =
+      d_subGraph->getVerticesByType(VertexTypes::output);
+  for (VertexPtr vert: d_inConnections) {
+    max_inLevel =
+        (vert->getLevel() > max_inLevel) ? vert->getLevel() : max_inLevel;
   }
   for (int i = 0; i < d_outConnections.size(); ++i) {
     assert(d_outConnections[i]->getType() == gate);
-    GraphVertexGates *out_connectionVert = static_cast<GraphVertexGates *>(d_outConnections[i]);
+    GraphVertexGates *out_connectionVert =
+        static_cast<GraphVertexGates *>(d_outConnections[i]);
     VertexPtr output_vert = output_verts[i];
     out_connectionVert->d_level = output_vert->getLevel() + max_inLevel - 2;
   }

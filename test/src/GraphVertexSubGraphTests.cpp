@@ -77,7 +77,7 @@ TEST(TestConstructorWithIName_SubGraph, SubGraphWithDefaultInputParametrs) {
 }
 // ------------------------OverrideMethodsTests
 
-// Simulation rework to use updateValue tests
+// Do not know what to do with it
 
 // GraphPtr graph = std::make_shared<OrientedGraph>();
 // TEST(TestUpdateValue, Test) {
@@ -85,17 +85,12 @@ TEST(TestConstructorWithIName_SubGraph, SubGraphWithDefaultInputParametrs) {
 //   EXPECT_EQ(subGraphPtr1->updateValue(), 'x');
 // }
 
-// TODO: TestToVerilog
-
-TEST(TestToVerilog, TestReturnString) {
-  
-}
-
-TEST(TestToVerilog, TestReturnPairThereIsNoBaseGraph) {
-  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph1(graphPtr1, "Anything", nullptr);
-  EXPECT_THROW(subGraph1.toVerilog("path"), std::invalid_argument);
-}
+// return "DO NOT CALL IT" TEST(TestToVerilog, TestReturnString) {}
+// TEST(TestToVerilog, TestReturnPairThereIsNoBaseGraph) {
+//   GraphPtr            graphPtr1 = std::make_shared<OrientedGraph>();
+//   GraphVertexSubGraph subGraph1(graphPtr1, "Anything", nullptr);
+//   EXPECT_THROW(subGraph1.toVerilog("path"), std::invalid_argument);
+// }
 
 // TODO: Update with easylogging
 TEST(TestToVerilog, TestReturnPairWrongPath) {

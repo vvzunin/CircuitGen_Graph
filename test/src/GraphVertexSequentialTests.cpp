@@ -14,7 +14,7 @@
 using namespace CG_Graph;
 
 /*
-need to realise updateLevel
+need to realize updateLevel
 */
 
 inline void testFile(const std::string &fileName, std::string_view text) {
@@ -258,7 +258,7 @@ TEST(ErrorOutputTest, CapturesCerr) {
   auto *en = graph->addInput("en");
   auto *data = graph->addInput("data");
   auto *rst = graph->addInput("rst");
-  auto *seq = graph->addSequential(latchrs, en, data, rst, "q");
+  graph->addSequential(latchrs, en, data, rst, "q");
 
   // возвращаем старый буфер
   std::cerr.rdbuf(old);

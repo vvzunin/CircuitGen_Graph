@@ -1,5 +1,5 @@
 # Генератор комбинационных схем
-
+<!--
 ![License: MIT](https://img.shields.io/github/license/vvzunin/CircuitGen_Graph)
 ![GitHub forks](https://img.shields.io/github/forks/vvzunin/CircuitGen_Graph)
 ![GitHub Repo stars](https://img.shields.io/github/stars/vvzunin/CircuitGen_Graph)
@@ -18,6 +18,11 @@
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr/vvzunin/CircuitGen_Graph)
 
 ![Alt](https://repobeats.axiom.co/api/embed/96480623d3ed662877d25bdc40716dbc9d20ec95.svg "Repobeats analytics image")
+-->
+
+[![pipeline status](https://hub.mos.ru/circuitgen/CircuitGen_Graph/badges/main/pipeline.svg)](https://hub.mos.ru/circuitgen/CircuitGen_Graph/-/commits/main)
+[![coverage report](https://hub.mos.ru/circuitgen/CircuitGen_Graph/badges/main/coverage.svg)](https://hub.mos.ru/circuitgen/CircuitGen_Graph/-/commits/main)
+[![Latest Release](https://hub.mos.ru/circuitgen/CircuitGen_Graph/-/badges/release.svg)](https://hub.mos.ru/circuitgen/CircuitGen_Graph/-/releases)
 
 <font size="5">**Оглавление:**</font>
 <a name="content_rus"></a> 
@@ -25,14 +30,12 @@
 - [Сборка программы](#generator_build_rus)
 - [Лицензия](#license)
 
-> [!IMPORTANT]  
-> Главный репозиторий проекта: https://github.com/vvzunin/CircuitGen
+> Главный репозиторий проекта: https://hub.mos.ru/circuitgen/CircuitGen
 
 Сборка и запуск производятся из операционной системы Linux.
 
 Программа запускалась на Ubuntu 22.04 с использованием WSL (Windows Subsystem for Linux).
 
-> [!IMPORTANT]  
 > В проект добавлена система логирования. Для корректной работы библиотеки необходимо инициализировать библиотеку командой:
 > #include "easyloggingpp/easylogging++.h"
 > INITIALIZE_EASYLOGGINGPP
@@ -43,12 +46,12 @@
 
 #### С помощью apt
 ```
-sudo apt install clang clang-tidy clang-format-15 doxygen g++ gcc make openssl cmake lcov ninja-build
+sudo apt install clang clang-tidy clang-format-15 g++ gcc make openssl cmake lcov ninja-build
 ```
 
 #### С помощью dnf (для rpm ветки)
 ```
-sudo dnf install clang clang-tools-extra doxygen g++ gcc make openssl cmake lcov ninja-build
+sudo dnf install clang clang-tools-extra g++ gcc make openssl cmake lcov ninja-build
 ```
 Так как в проекте используется `clang-format-15`, предлагается два возможных решения. 
 1) Так как критических отличий между различными версиями clang нет, 
@@ -83,6 +86,25 @@ make -j$(nproc)
 sudo make install
 cd ..
 sudo rm -rf cmake-3.28.1
+```
+
+### Установка Doxygen 1.13.2
+Для сборки Doxygen необходимо предварительно установить bison и flex.
+```
+sudo apt-get install flex bison
+```
+Для установки Doxygen необходимо собрать программу из исходного кода.
+```
+wget https://www.doxygen.nl/files/doxygen-1.13.2.src.tar.gz 
+tar xf doxygen-1.13.2.src.tar.gz
+cd doxygen-1.13.2
+mkdir build
+cd build
+cmake -G "Unix Makefiles" ..
+make -j $(nproc)
+sudo make install
+cd ../..
+rm -r doxygen-1.13.2
 ```
 
 ## Режим разработчика
