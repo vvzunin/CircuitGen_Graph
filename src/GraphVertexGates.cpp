@@ -159,9 +159,17 @@ std::string GraphVertexGates::toVerilog() const {
   std::string oper = VertexUtils::gateToString(d_gate);
   VertexPtr ptr = d_inConnections.back();
   if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
+    if (d_inConnections.size() > 1) {
+      std::cerr << "Invalid: one-input vertex \"" << d_name
+                << "\" has inputs: " << d_inConnections.size() << '\n';
+    }
     basic += oper + ptr->getName() + ";";
 
     return basic;
+  }
+  if (d_inConnections.size() == 1) {
+    std::cerr << "Invalid: multiple-input vertex \"" << d_name
+              << "\" has one input\n";
   }
 
   std::string end = "";

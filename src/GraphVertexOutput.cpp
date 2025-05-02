@@ -16,11 +16,13 @@ GraphVertexOutput::GraphVertexOutput(std::string_view i_name,
 }
 
 char GraphVertexOutput::updateValue() {
-  if (d_inConnections.size() > 0) {
-    d_value = d_inConnections.front()->getValue();
+  if (d_inConnections.empty()) {
+    return (d_value = 'x');
   }
+  d_value = d_inConnections.front()->updateValue();
+
   for (size_t i = 1; i < d_inConnections.size(); i++) {
-    if (d_inConnections.at(i)->getValue() != d_value) {
+    if (d_inConnections.at(i)->updateValue() != d_value) {
       d_value = 'x';
     }
   }

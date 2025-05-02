@@ -338,6 +338,7 @@ static std::pair<VertexTypes, std::string_view> vertexToString[] = {
     {VertexTypes::output, "output"},
     {VertexTypes::constant, "const"},
     {VertexTypes::subGraph, "subGraph"},
+    {VertexTypes::seuqential, "sequential"},
     {VertexTypes::gate, "gate"}};
 
 static std::pair<Gates, std::string_view> gateToString[] = {
