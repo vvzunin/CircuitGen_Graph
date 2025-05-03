@@ -63,7 +63,7 @@ RUN echo '{ \
   } \
   } \
   ] \
-  }' > /app/CMakeUserPresets.json
+  }' > /circuitgen/graph/CMakeUserPresets.json
 
 
 USER $USERNAME
