@@ -72,4 +72,4 @@ ENV PATH="/usr/local/bin:$PATH"
 ENV CC=/usr/bin/gcc
 ENV CXX=/usr/bin/g++
 
-CMD ./TEST_BEFORE_PUSH.sh
+RUN /circuitgen/graph/TEST_BEFORE_PUSH.sh
