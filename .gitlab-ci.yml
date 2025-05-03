@@ -13,10 +13,11 @@ variables:
   REGISTRY_URL: registry-hub.mos.ru
   GROUP_NAME: circuitgen
   REPO_NAME: circuitgen_graph
+  DOCKER_URL: $REGISTRY_URL/$GROUP_NAME/$REPO_NAME
 
 lint:
   stage: check
-  image: $REGISTRY_URL/$GROUP_NAME/$REPO_NAME:ci_$DOCKER_CI_TAG
+  image: $DOCKER_URL:ci_$DOCKER_CI_TAG
   before_script:
     - python3 --version
   script:
@@ -29,7 +30,7 @@ lint:
 
 sanitize:
   stage: check
-  image: $REGISTRY_URL/$GROUP_NAME/$REPO_NAME:ci_$DOCKER_CI_TAG
+  image: $DOCKER_URL:ci_$DOCKER_CI_TAG
   variables: 
     CXX: 'clang++-14'
     ASAN_OPTIONS: 'strict_string_checks=1:detect_stack_use_after_return=1:check_initialization_order=1:strict_init_order=1:detect_leaks=1:detect_odr_violation=1'
@@ -46,7 +47,7 @@ sanitize:
 
 coverage:
   stage: test
-  image: $REGISTRY_URL/$GROUP_NAME/$REPO_NAME:ci_$DOCKER_CI_TAG
+  image: $DOCKER_URL:ci_$DOCKER_CI_TAG
   needs:
     - lint
     - sanitize
@@ -64,7 +65,7 @@ coverage:
 
 tests:
   stage: test
-  image: $REGISTRY_URL/$GROUP_NAME/$REPO_NAME:ci_$DOCKER_CI_TAG
+  image: $DOCKER_URL:ci_$DOCKER_CI_TAG
   needs:
     - lint
     - sanitize
@@ -88,7 +89,7 @@ tests:
 
 docs:
   stage: docs
-  image: $REGISTRY_URL/$GROUP_NAME/$REPO_NAME:ci_$DOCKER_CI_TAG
+  image: $DOCKER_URL:ci_$DOCKER_CI_TAG
   needs:
     - coverage
     - tests
@@ -132,8 +133,8 @@ docker-ci:
     - docker buildx build --pull --rm --provenance=false --no-cache 
       --build-arg system=$DOCKER_CI_SYSTEM 
       -f $DOCKERFILE_CI_NAME 
-      -t $REGISTRY_URL/$GROUP_NAME/$REPO_NAME:ci_$DOCKER_CI_TAG .
-    - docker image push $REGISTRY_URL/$GROUP_NAME/$REPO_NAME:ci_$DOCKER_CI_TAG
+      -t $DOCKER_URL:ci_$DOCKER_CI_TAG .
+    - docker image push $DOCKER_URL:ci_$DOCKER_CI_TAG
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
@@ -152,10 +153,10 @@ docker-dev:
   script:
     - echo "Creating docker image with tag dev_$DOCKER_CI_TAG"
     - docker buildx build --pull --rm --provenance=false --no-cache 
-      --build-arg system=$REGISTRY_URL/$GROUP_NAME/$REPO_NAME:ci_$DOCKER_CI_TAG 
+      --build-arg system=$DOCKER_URL:ci_$DOCKER_CI_TAG 
       -f $DOCKERFILE_DEV_NAME 
-      -t $REGISTRY_URL/$GROUP_NAME/$REPO_NAME:dev_$DOCKER_CI_TAG .
-    - docker image push $REGISTRY_URL/$GROUP_NAME/$REPO_NAME:dev_$DOCKER_CI_TAG
+      -t $DOCKER_URL:dev_$DOCKER_CI_TAG .
+    - docker image push $DOCKER_URL:dev_$DOCKER_CI_TAG
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
