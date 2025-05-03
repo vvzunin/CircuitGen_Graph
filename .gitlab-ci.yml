@@ -11,8 +11,8 @@ variables:
   DOCKER_CI_SYSTEM: ubuntu:22.04
   DOCKER_CI_TAG: latest
   REGISTRY_URL: registry-hub.mos.ru
-  GROUP_NAME: $GROUP_NAME
-  REPO_NAME: $REPO_NAME
+  GROUP_NAME: circuitgen
+  REPO_NAME: circuitgen_graph
 
 lint:
   stage: check
