@@ -7,6 +7,7 @@ stages:
 
 variables:
   DOCKERFILE_CI_NAME: Dockerfile.ci
+  DOCKERFILE_DEV_NAME: Dockerfile.dev
   DOCKER_CI_SYSTEM: ubuntu:22.04
   DOCKER_CI_TAG: latest
   REGISTRY_URL: registry-hub.mos.ru
@@ -132,6 +133,25 @@ docker-ci:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
         - $DOCKERFILE_CI_NAME
+        - .gitlab-ci.yml
+    - if: $CI_COMMIT_TAG
+      variables:
+        DOCKER_CI_TAG: $CI_COMMIT_TAG
+  tags:
+    - powershell
+
+docker-dev:
+  stage: docker
+  before_script:
+    - docker login "$REGISTRY_URL" -u vvzunin -p "$moshub_token_docker_ci"
+  script:
+    - echo "Creating docker image with tag dev_$DOCKER_CI_TAG"
+    - docker buildx build --pull --rm --provenance=false --no-cache --build-arg system=$DOCKER_CI_SYSTEM -f $DOCKERFILE_DEV_NAME -t $REGISTRY_URL/circuitgen/circuitgen_graph:dev_$DOCKER_CI_TAG .
+    - docker image push $REGISTRY_URL/circuitgen/circuitgen_graph:dev_$DOCKER_CI_TAG
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      changes:
+        - $DOCKERFILE_DEV_NAME
         - .gitlab-ci.yml
     - if: $CI_COMMIT_TAG
       variables:
