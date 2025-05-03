@@ -66,4 +66,4 @@ RUN wget https://www.doxygen.nl/files/doxygen-${doxygen_version}.src.tar.gz && \
 RUN pip3 install codespell jinja2 Pygments
 
 # Создаем рабочую директорию
-WORKDIR /workdir
+WORKDIR /circuitgen
