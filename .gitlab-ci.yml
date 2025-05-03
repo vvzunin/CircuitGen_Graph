@@ -145,8 +145,6 @@ docker-ci:
 
 docker-dev:
   stage: docker
-  needs:
-    - docker-ci
   before_script:
     - docker login "$REGISTRY_URL" -u vvzunin -p "$moshub_token_docker_ci"
   script:
