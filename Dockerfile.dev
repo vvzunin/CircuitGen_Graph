@@ -22,10 +22,49 @@ RUN groupadd --gid $USER_GID $USERNAME \
   && echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/$USERNAME \
   && chmod 0440 /etc/sudoers.d/$USERNAME
 
-WORKDIR /workspace
-RUN chown -R $USERNAME:$USERNAME /workspace
+WORKDIR /circuitgen
+RUN chown -R $USERNAME:$USERNAME /circuitgen
 
-RUN git clone https://hub.mos.ru/circuitgen/CircuitGen_Graph.git
+WORKDIR /circuitgen/graph
+
+COPY . .
+
+RUN echo '{ \
+  "version": 2, \
+  "cmakeMinimumRequired": { \
+  "major": 3, \
+  "minor": 14, \
+  "patch": 0 \
+  }, \
+  "configurePresets": [ \
+  { \
+  "name": "dev", \
+  "binaryDir": "${sourceDir}/build/dev", \
+  "inherits": ["dev-mode", "ci-linux"], \
+  "cacheVariables": { \
+  "CMAKE_BUILD_TYPE": "Debug" \
+  } \
+  } \
+  ], \
+  "buildPresets": [ \
+  { \
+  "name": "dev", \
+  "configurePreset": "dev", \
+  "configuration": "Debug" \
+  } \
+  ], \
+  "testPresets": [ \
+  { \
+  "name": "dev", \
+  "configurePreset": "dev", \
+  "configuration": "Debug", \
+  "output": { \
+  "outputOnFailure": true \
+  } \
+  } \
+  ] \
+  }' > /app/CMakeUserPresets.json
+
 
 USER $USERNAME
 
