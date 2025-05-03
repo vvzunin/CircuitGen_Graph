@@ -130,8 +130,8 @@ docker-ci:
     - docker login "$REGISTRY_URL" -u vvzunin -p "$moshub_token_docker_ci"
   script:
     - echo "Creating docker image with tag ci_$DOCKER_CI_TAG" && echo "Image will push to $DOCKER_URL"
-    - docker buildx build --pull --rm --provenance=false --no-cache --build-arg system=$DOCKER_CI_SYSTEM -f $DOCKERFILE_CI_NAME -t registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest .
-    - docker image push registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_latest
+    - docker buildx build --pull --rm --provenance=false --no-cache --build-arg system=$DOCKER_CI_SYSTEM -f $DOCKERFILE_CI_NAME -t $DOCKER_URL:ci_$DOCKER_CI_TAG .
+    - docker image push $DOCKER_URL:ci_$DOCKER_CI_TAG
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
