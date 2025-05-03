@@ -17,7 +17,7 @@ variables:
 
 lint:
   stage: check
-  image: $DOCKER_URL:ci_$DOCKER_CI_TAG
+  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
   before_script:
     - python3 --version
   script:
@@ -30,7 +30,7 @@ lint:
 
 sanitize:
   stage: check
-  image: $DOCKER_URL:ci_$DOCKER_CI_TAG
+  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
   variables: 
     CXX: 'clang++-14'
     ASAN_OPTIONS: 'strict_string_checks=1:detect_stack_use_after_return=1:check_initialization_order=1:strict_init_order=1:detect_leaks=1:detect_odr_violation=1'
@@ -47,7 +47,7 @@ sanitize:
 
 coverage:
   stage: test
-  image: $DOCKER_URL:ci_$DOCKER_CI_TAG
+  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
   needs:
     - lint
     - sanitize
@@ -65,7 +65,7 @@ coverage:
 
 tests:
   stage: test
-  image: $DOCKER_URL:ci_$DOCKER_CI_TAG
+  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
   needs:
     - lint
     - sanitize
@@ -89,7 +89,7 @@ tests:
 
 docs:
   stage: docs
-  image: $DOCKER_URL:ci_$DOCKER_CI_TAG
+  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
   needs:
     - coverage
     - tests
@@ -130,8 +130,8 @@ docker-ci:
     - docker login "$REGISTRY_URL" -u vvzunin -p "$moshub_token_docker_ci"
   script:
     - echo "Creating docker image with tag ci_$DOCKER_CI_TAG" && echo "Image will push to $DOCKER_URL"
-    - docker buildx build --pull --rm --provenance=false --no-cache --build-arg system=$DOCKER_CI_SYSTEM -f $DOCKERFILE_CI_NAME -t $DOCKER_URL:ci_$DOCKER_CI_TAG .
-    - docker image push $DOCKER_URL:ci_$DOCKER_CI_TAG
+    - docker buildx build --pull --rm --provenance=false --no-cache --build-arg system=$DOCKER_CI_SYSTEM -f $DOCKERFILE_CI_NAME -t registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG .
+    - docker image push registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
@@ -149,8 +149,8 @@ docker-dev:
     - docker login "$REGISTRY_URL" -u vvzunin -p "$moshub_token_docker_ci"
   script:
     - echo "Creating docker image with tag dev_$DOCKER_CI_TAG" && echo "Image will push to $DOCKER_URL"
-    - docker buildx build --pull --rm --provenance=false --no-cache --build-arg system=$DOCKER_URL:ci_$DOCKER_CI_TAG -f $DOCKERFILE_DEV_NAME -t $DOCKER_URL:dev_$DOCKER_CI_TAG .
-    - docker image push $DOCKER_URL:dev_$DOCKER_CI_TAG
+    - docker buildx build --pull --rm --provenance=false --no-cache --build-arg system=registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG -f $DOCKERFILE_DEV_NAME -t registry-hub.mos.ru/circuitgen/circuitgen_graph:dev_$DOCKER_CI_TAG .
+    - docker image push registry-hub.mos.ru/circuitgen/circuitgen_graph:dev_$DOCKER_CI_TAG
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
