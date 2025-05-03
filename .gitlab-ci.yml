@@ -13,7 +13,7 @@ variables:
   REGISTRY_URL: registry-hub.mos.ru
   GROUP_NAME: circuitgen
   REPO_NAME: circuitgen_graph
-  DOCKER_URL: registry-hub.mos.ru/circuitgen/circuitgen_graph
+  DOCKER_URL: $REGISTRY_URL/$GROUP_NAME/$REPO_NAME
 
 lint:
   stage: check
