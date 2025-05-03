@@ -142,11 +142,13 @@ docker-ci:
 
 docker-dev:
   stage: docker
+  needs:
+    - docker-ci
   before_script:
     - docker login "$REGISTRY_URL" -u vvzunin -p "$moshub_token_docker_ci"
   script:
     - echo "Creating docker image with tag dev_$DOCKER_CI_TAG"
-    - docker buildx build --pull --rm --provenance=false --no-cache --build-arg system=$DOCKER_CI_SYSTEM -f $DOCKERFILE_DEV_NAME -t $REGISTRY_URL/circuitgen/circuitgen_graph:dev_$DOCKER_CI_TAG .
+    - docker buildx build --pull --rm --provenance=false --no-cache --build-arg system=$REGISTRY_URL/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG -f $DOCKERFILE_DEV_NAME -t $REGISTRY_URL/circuitgen/circuitgen_graph:dev_$DOCKER_CI_TAG .
     - docker image push $REGISTRY_URL/circuitgen/circuitgen_graph:dev_$DOCKER_CI_TAG
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
