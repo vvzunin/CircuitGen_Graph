@@ -246,7 +246,7 @@ public:
   /// @endcode
   /// @throws std::invalid_argument if any of the input connections point
   /// to a nullptr
-
+  uint32_t addVertexToInConnections(VertexPtr i_vert);
   virtual char updateValue() override;
 
   /// @brief calculateHash

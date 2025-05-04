@@ -1,0 +1,32 @@
+// This file was generated automatically using CircuitGen_Graph at 04-05-2025 23-35-40.
+
+digraph testGraph_unrolled {
+  a [shape=triangle, label="a\nlevel: 0"];
+  b [shape=triangle, label="b\nlevel: 0"];
+  c [shape=invtriangle, label="c\nlevel: 4"];
+  andAB2 -> c;
+  d [shape=invtriangle, label="d\nlevel: 4"];
+  andAB3 -> d;
+  e [shape=invtriangle, label="e\nlevel: 1"];
+  b -> e;
+  andAB2 [label="andAB2\nlevel: 3"];
+  subGraph_60__orAnd11 -> andAB2;
+  subGraph_60__andAB -> andAB2;
+  andAB3 [label="andAB3\nlevel: 3"];
+  subGraph_63__orAnd11 -> andAB3;
+  subGraph_63__andAB -> andAB3;
+  subGraph_60__andAB [label="subGraph_60__andAB\nlevel: 1"];
+  a -> subGraph_60__andAB;
+  b -> subGraph_60__andAB;
+  subGraph_60__orAnd11 [label="subGraph_60__orAnd11\nlevel: 2"];
+  subGraph_60__andAB -> subGraph_60__orAnd11;
+  subGraph_60__const1 -> subGraph_60__orAnd11;
+  subGraph_63__andAB [label="subGraph_63__andAB\nlevel: 1"];
+  a -> subGraph_63__andAB;
+  b -> subGraph_63__andAB;
+  subGraph_63__orAnd11 [label="subGraph_63__orAnd11\nlevel: 2"];
+  subGraph_63__andAB -> subGraph_63__orAnd11;
+  subGraph_63__const1 -> subGraph_63__orAnd11;
+  subGraph_60__const1 [shape=cds, label="subGraph_60__const1\n1'b1"];
+  subGraph_63__const1 [shape=cds, label="subGraph_63__const1\n1'b1"];
+}

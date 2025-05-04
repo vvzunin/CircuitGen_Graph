@@ -332,7 +332,7 @@ public:
 
   std::vector<VertexPtr> addSubGraph(GraphPtr i_subGraph,
                                      std::vector<VertexPtr> i_inputs);
-
+  void removeWasteVertices();
   /// @brief addEdge
   /// Adds an edge between two vertices in the current graph
   /// @param from A shared pointer to the vertex where the edge originates
@@ -398,11 +398,12 @@ public:
 
   bool addEdges(std::vector<VertexPtr> from1, VertexPtr to);
 
+  bool removeEdge(VertexPtr from1, VertexPtr to);
+  void updateAfterEdgeRemoving(VertexPtr from1, VertexPtr to);
   /// @brief getEdgesCount
   /// Retrieves the total number of edges in the graph
   /// @return The total number of edges in the graph
   size_t getEdgesCount() { return d_edgesCount; }
-
   std::set<GraphPtr> getSubGraphs() const;
   std::set<GraphPtr> getSetSubGraphs() const;
   std::array<std::vector<VertexPtr>, VertexTypes::output + 1>

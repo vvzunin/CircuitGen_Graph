@@ -1,0 +1,15 @@
+// This file was generated automatically using CircuitGen_Graph at 04-05-2025 23-35-40.
+
+digraph testGraph {
+  a [shape=triangle, label="a\nlevel: 0"];
+  b [shape=triangle, label="b\nlevel: 0"];
+  c [shape=invtriangle, label="c\nlevel: 3"];
+  orAnd11 -> c;
+  andAB [label="andAB\nlevel: 1"];
+  a -> andAB;
+  b -> andAB;
+  orAnd11 [label="orAnd11\nlevel: 2"];
+  andAB -> orAnd11;
+  const1 -> orAnd11;
+  const1 [shape=cds, label="const1\n1'b1"];
+}

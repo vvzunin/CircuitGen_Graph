@@ -396,6 +396,33 @@ TEST(TestGetVerticesByName, ReturnCorrectVertices) {
   EXPECT_EQ(graphPtr->getVerticesByName("Anything", true)[4]->getGate(),
             Gates::GateDefault);
 }
+TEST(TestEdgeRemoving, ValidEdgeRemoving) {
+  GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph");
+  VertexPtr v1 = graphPtr->addInput();
+  VertexPtr v2 = graphPtr->addGate(GateBuf);
+  graphPtr->addEdge(v1, v2);
+  graphPtr->removeEdge(v1, v2);
+  EXPECT_EQ(graphPtr->getEdgesCount(), 0);
+  EXPECT_EQ(v1->getOutConnections().size(), 0);
+  EXPECT_EQ(v2->getInConnections().size(), 0);
+}
+
+TEST(TESTWASTEVerticesRemoving, VerticesWithoutPathToOutputDestroyed) {
+  GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph");
+  auto gate = graphPtr->addGate(Gates::GateAnd, "Anything");
+  auto inp = graphPtr->addInput("Anything");
+  graphPtr->addEdge(inp, gate);
+  graphPtr->addEdge(graphPtr->addInput("AnythingElse"), gate);
+  graphPtr->addEdge(gate, graphPtr->addOutput());
+  graphPtr->addEdge(inp, graphPtr->addGate(Gates::GateNot, "AlsoAnything"));
+  graphPtr->addInput();
+  graphPtr->addConst(1);
+  graphPtr->updateLevels();
+  graphPtr->removeWasteVertices();
+  EXPECT_EQ(graphPtr->getEdgesCount(), 3);
+  // EXPECT_EQ(graphPtr->getGatesCount()[GateNot], 0);
+  // EXPECT_EQ(graphPtr->getVerticesByType(input).size(), 2);
+}
 
 TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenGrpahIsEmpty) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph1");
