@@ -246,7 +246,6 @@ public:
   /// @endcode
   /// @throws std::invalid_argument if any of the input connections point
   /// to a nullptr
-  uint32_t addVertexToInConnections(VertexPtr i_vert);
   virtual char updateValue() override;
 
   /// @brief calculateHash
@@ -278,6 +277,18 @@ public:
   /// @endcode
 
   Gates getGate() const;
+
+  /// @brief  addVertexToInConnections
+  /// Buffer and Not types of gates must have only one element in
+  /// d_inConnections, so realisation for GraphVertexGates has a
+  /// check before adding
+  /// @param i_vert Vertex that will be added to d_inConnections of this 
+  /// @return The count of occurrences of the given vertex in the input
+  /// connections after adding it
+  /// @throws std::overflow_error in case of connecting more than one 
+  /// vertex in d_inConnections
+
+  uint32_t addVertexToInConnections(VertexPtr i_vert);
 
   /// @brief toVerilog
   /// generates a string in Verilog format for the current vertex,

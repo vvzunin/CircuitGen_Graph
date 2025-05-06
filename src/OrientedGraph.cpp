@@ -338,25 +338,23 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
 
 void OrientedGraph::removeWasteVertices(){
 
-  auto removingEdgesForInnerVertices =[this](VertexTypes type, GraphVertexBase* vert){
-    for (auto* inConnVert : vert->getInConnections()){
-      if (inConnVert->getLevel() != 0 || inConnVert->getType() == constant 
-      || inConnVert->getType() == input){
-        removeEdge(inConnVert,vert);
-        if (type == VertexTypes::gate) {
-          this->d_gatesCount[vert->getGate()]-=1;
-        }
-      }
-    }
-  };
-
-  auto removingForType = [this, removingEdgesForInnerVertices](VertexTypes type){
+  auto removingForType = [this](VertexTypes type){
     uint8_t counterForResize = 1;
   for(auto* vert : d_vertexes[type]){
     if (!vert->getLevel()){
       if(vert->getType()!=input && vert->getType()!=constant){
-        removingEdgesForInnerVertices(type, vert);
+
+        for (auto* inConnVert : vert->getInConnections()){
+          if (inConnVert->getLevel() != 0 || inConnVert->getType() == constant 
+          || inConnVert->getType() == input){
+            removeEdge(inConnVert,vert);
+            if (type == VertexTypes::gate) {
+              this->d_gatesCount[vert->getGate()]-=1;
+            }
+          }
+        }
       }
+
       if(vert->getOutConnections().empty() || !(vert->getType()==constant||vert->getType()==input)){
       std::swap(vert, *(d_vertexes[type].end()-(counterForResize)));
       vert->~GraphVertexBase();
