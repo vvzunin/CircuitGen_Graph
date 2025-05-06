@@ -340,37 +340,35 @@ void OrientedGraph::removeWasteVertices(){
 
   auto removingForType = [this](VertexTypes type){
     uint8_t counterForResize = 1;
-  for(auto* vert : d_vertexes[type]){
-    if (!vert->getLevel()){
-      if(vert->getType()!=input && vert->getType()!=constant){
-
-        for (auto* inConnVert : vert->getInConnections()){
-          if (inConnVert->getLevel() != 0 || inConnVert->getType() == constant 
-          || inConnVert->getType() == input){
-            removeEdge(inConnVert,vert);
-            if (type == VertexTypes::gate) {
-              this->d_gatesCount[vert->getGate()]-=1;
+    for(auto* vert : d_vertexes[type]){
+      if (!vert->getLevel()){
+        if(vert->getType() != input && vert->getType() != constant){
+          for (auto* inConnVert : vert->getInConnections()){
+            if (inConnVert->getLevel() != 0 || inConnVert->getType() == constant 
+            || inConnVert->getType() == input){
+              removeEdge(inConnVert, vert);
+              if (type == VertexTypes::gate) 
+              this->d_gatesCount[vert->getGate()] -= 1;
             }
           }
         }
-      }
-
-      if(vert->getOutConnections().empty() || !(vert->getType()==constant||vert->getType()==input)){
-      std::swap(vert, *(d_vertexes[type].end()-(counterForResize)));
-      vert->~GraphVertexBase();
-      ++counterForResize;
+        if(vert->getOutConnections().empty() || !(vert->getType() == constant
+        || vert->getType() == input)){
+          std::swap(vert, *(d_vertexes[type].end() - (counterForResize)));
+          vert->~GraphVertexBase();
+          ++counterForResize;
+        }
       }
     }
-  }
-  if(counterForResize-1==d_vertexes[type].size())d_vertexes[type].clear();
-  else if (counterForResize>1)
-  d_vertexes[type].resize(d_vertexes[type].size()-counterForResize+1);
-};
-removingForType(gate);
-removingForType(seuqential);
-removingForType(subGraph);
-removingForType(input);
-removingForType(constant);
+    if(counterForResize - 1 == d_vertexes[type].size())d_vertexes[type].clear();
+    else if (counterForResize > 1)
+    d_vertexes[type].resize(d_vertexes[type].size() - counterForResize+1);
+  };
+  removingForType(gate);
+  removingForType(seuqential);
+  removingForType(subGraph);
+  removingForType(input);
+  removingForType(constant);
 }
 
 GraphPtr OrientedGraph::createMajoritySubgraph() {
@@ -453,11 +451,11 @@ bool OrientedGraph::addEdges(std::vector<VertexPtr> from1, VertexPtr to) {
 bool OrientedGraph::removeEdge(VertexPtr from1, VertexPtr to){
   bool deleted = false;
   deleted = from1->removeVertexToOutConnections(to);
-  deleted = deleted&&to->removeVertexToInConnections(from1);
+  deleted = deleted && to->removeVertexToInConnections(from1);
   if(deleted){
     d_edgesCount -= 1;
-  if (from1->getType()==gate && to->getType()==gate){
-    d_edgesGatesCount[from1->getGate()][to->getGate()]-=1;  
+  if (from1->getType() == gate && to->getType() == gate){
+    d_edgesGatesCount[from1->getGate()][to->getGate()] -= 1;  
   }
 }
   return deleted;

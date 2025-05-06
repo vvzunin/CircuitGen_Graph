@@ -196,19 +196,6 @@ TEST(TestGetVerilogString, ReturnCorrectStringExpressionWhenUsedGateNor) {
   EXPECT_EQ(gate1.getVerilogString(), "~(Var1 | Var2 | Var3)");
 }
 
-// TEST(TestGetVerilogString, ReturnCorrectStrinExpressionWhenUseGateNot) {
-//   GraphVertexGates gate1(Gates::GateNot, memoryOwnerGateGr);
-//   VertexPtr gatePtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var1");
-//   gate1.addVertexToInConnections(gatePtr1);
-//   EXPECT_EQ(gate1.getVerilogString(), "~Var1");
-
-//   VertexPtr gatePtr2 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var2");
-//   VertexPtr gatePtr3 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var3");
-//   gate1.addVertexToInConnections(gatePtr2);
-//   gate1.addVertexToInConnections(gatePtr3);
-//   EXPECT_EQ(gate1.getVerilogString(), "~Var1 ~ Var2 ~ Var3");
-// }
-
 TEST(TestGetVerilogString, ReturnCorrectStringExpressionWhenUsedGateOr) {
   GraphVertexGates gate1(Gates::GateOr, memoryOwnerGateGr);
   VertexPtr gatePtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var1");
@@ -365,18 +352,6 @@ TEST(TestToVerilog, ReturnCorrectVerilogStringWhenUseGateNor) {
   EXPECT_EQ(gate1.toVerilog(), "assign Var1 = ~ ( Var2 | Var3 );");
 }
 
-// TEST(TestToVerilog, ReturnCorrectVerilogStringWhenUseGateNot) {
-//   GraphVertexGates gate1(Gates::GateNot, "Var1", memoryOwnerGateGr);
-//   VertexPtr gatePtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var2");
-//   gate1.addVertexToInConnections(gatePtr1);
-//   EXPECT_EQ(gate1.toVerilog(), "assign Var1 = ~Var2;");
-
-//   // Does it correct eq?
-//   VertexPtr gatePtr2 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var3");
-//   gate1.addVertexToInConnections(gatePtr2);
-//   EXPECT_EQ(gate1.toVerilog(), "assign Var1 = ~Var3;");
-// }
-
 TEST(TestToVerilog, ReturnCorrectVerilogStringWhenUseGateOr) {
   GraphVertexGates gate1(Gates::GateOr, "Var1", memoryOwnerGateGr);
   VertexPtr gatePtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var2");
@@ -443,7 +418,7 @@ TEST(TestAddInConnectionsEdgeNumber, ThrowExceptionWhenManyInputsForNotOrBuf) {
   EXPECT_EQ(gate1.getVerilogString(), "~Var1");
 
   VertexPtr gatePtr2 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var2");
-  EXPECT_THROW(gate1.addVertexToInConnections(gatePtr2), std::overflow_error);
+  EXPECT_THROW(gate1.addVertexToInConnections(gatePtr2), std::length_error);
   GraphVertexGates gate2(Gates::GateAnd, memoryOwnerGateGr);
   VertexPtr gatePtr3 = memoryOwnerGateGr->addInput("Var3");
   VertexPtr gatePtr4 = memoryOwnerGateGr->addInput("Var4");

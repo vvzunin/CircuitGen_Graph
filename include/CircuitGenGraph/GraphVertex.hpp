@@ -280,12 +280,12 @@ public:
 
   /// @brief  addVertexToInConnections
   /// Buffer and Not types of gates must have only one element in
-  /// d_inConnections, so realisation for GraphVertexGates has a
+  /// d_inConnections, so realization for GraphVertexGates has a
   /// check before adding
-  /// @param i_vert Vertex that will be added to d_inConnections of this 
+  /// @param i_vert Vertex that will be added to d_inConnections of this
   /// @return The count of occurrences of the given vertex in the input
   /// connections after adding it
-  /// @throws std::overflow_error in case of connecting more than one 
+  /// @throws std::overflow_error in case of connecting more than one
   /// vertex in d_inConnections
 
   uint32_t addVertexToInConnections(VertexPtr i_vert);

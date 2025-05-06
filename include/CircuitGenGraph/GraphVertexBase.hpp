@@ -432,18 +432,6 @@ public:
 #endif
 
 protected:
-  std::vector<VertexPtr> d_inConnections;
-  std::vector<VertexPtr> d_outConnections;
-  GraphPtrWeak d_baseGraph;
-
-  std::string_view d_name;
-
-  size_t d_hashed = 0;
-  uint32_t d_level;
-
-  char d_value;
-  VERTEX_STATE d_needUpdate = VS_NOT_CALC;
-  HASH_CONDITION d_hasHash = HC_NOT_CALC;
   /// @brief removeVertexToOutConnections
   /// Removes a vertex from the output connections of this vertex.
   /// @param i_vert The vertex to be removed from the output connections.
@@ -505,6 +493,18 @@ protected:
   /// @endcode
 
   bool removeVertexToInConnections(VertexPtr i_vert);
+  std::vector<VertexPtr> d_inConnections;
+  std::vector<VertexPtr> d_outConnections;
+  GraphPtrWeak d_baseGraph;
+
+  std::string_view d_name;
+
+  size_t d_hashed = 0;
+  uint32_t d_level;
+
+  char d_value;
+  VERTEX_STATE d_needUpdate = VS_NOT_CALC;
+  HASH_CONDITION d_hasHash = HC_NOT_CALC;
 
 private:
   // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых

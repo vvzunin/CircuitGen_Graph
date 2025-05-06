@@ -337,11 +337,11 @@ public:
   /// Some generated graphs have vertices which have not any path
   /// to outputs of scheme. The method deletes these ones.
   /// Firstly, it is removing all inner (gates, sequental, subgraph)
-  /// vertices which d_level == 0 (good criterion because of 
+  /// vertices which d_level == 0 (good criterion because of
   /// OrientedGraph::updateLevel() algorithm specificity)
   /// and all edges from normal vertices to current wrong.
-  /// After removing of inner ones, some inputs or constants 
-  /// can have not any element in d_outConnections(), these 
+  /// After removing of inner ones, some inputs or constants
+  /// can have not any element in d_outConnections(), these
   /// also will be removed.
   void removeWasteVertices();
   /// @brief addEdge
@@ -409,11 +409,11 @@ public:
 
   bool addEdges(std::vector<VertexPtr> from1, VertexPtr to);
 
-/// @brief removeEdge
+  /// @brief removeEdge
   /// Remove an edge from graph if it exists.
   /// @param from1 The vertex to be deleted to the input connections of "to"
   /// @param to The vertex to be deleted to the output connections of "from"
-  /// @return True if edge was found and deleted, false otherwise 
+  /// @return True if edge was found and deleted, false otherwise
   /// @code
   /// // Creating an instance of the OrientedGraph and two vertices
   /// GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph");
