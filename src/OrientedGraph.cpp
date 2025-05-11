@@ -48,9 +48,6 @@ OrientedGraph::OrientedGraph(const std::string &i_name, size_t buffer_size,
 
 OrientedGraph::~OrientedGraph() {
   for (auto sub: d_subGraphs) {
-    sub->d_subGraphsInputsPtr.erase(d_graphID);
-    sub->d_subGraphsOutputsPtr.erase(d_graphID);
-
     sub->d_currentParentGraph.lock() = nullptr;
   }
 
@@ -323,10 +320,6 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
     addEdge(newGraph, newVertex);
   }
 
-  // here we save our inputs and outputs to instance number
-  i_subGraph->d_subGraphsInputsPtr[d_graphID].push_back(i_inputs);
-  i_subGraph->d_subGraphsOutputsPtr[d_graphID].push_back(outputs);
-
   // here we use i_subGraph like an instance of BasicType,
   // and we call it's toVerilog, having in multiple instance
   // of one i_subGraph, so we can have many times "moduleName name (inp, out);"
@@ -513,11 +506,6 @@ OrientedGraph::getVerticesByName(std::string_view i_name,
   return resVert;
 }
 
-std::map<size_t, std::vector<std::vector<VertexPtr>>>
-OrientedGraph::getSubGraphsOutputsPtr() {
-  return d_subGraphsOutputsPtr;
-}
-
 size_t OrientedGraph::sumFullSize() const {
   return d_vertexes.at(VertexTypes::input).size() +
          d_vertexes.at(VertexTypes::constant).size() +
@@ -576,62 +564,10 @@ void OrientedGraph::resetCounters(GraphPtr i_where) {
   d_graphInstanceToDotCount[i_where->d_graphID] = 0;
 }
 
-std::string OrientedGraph::getGraphVerilogInstance() {
-  uint64_t *verilogCount =
-      &d_graphInstanceToVerilogCount[d_currentParentGraph.lock()->d_graphID];
-  uint64_t allCount =
-      d_subGraphsInputsPtr[d_currentParentGraph.lock()->d_graphID].size();
-
-  if (*verilogCount == allCount) {
-    throw std::out_of_range(
-        "Incorrect getGraphVerilogInstance call. All modules of " +
-        d_currentParentGraph.lock()->getName() + " (" +
-        std::to_string(allCount) + ") were already parsed");
-  }
-
-  std::string verilogTab = "  ";
-  // module_name module_name_inst_1 (
-  std::string module_ver = verilogTab + d_name + " " + d_name + "_inst_" +
-                           std::to_string(*verilogCount) + " (\n";
-
-  for (size_t i = 0; i < d_vertexes[VertexTypes::input].size(); ++i) {
-    auto *inp = d_subGraphsInputsPtr[d_currentParentGraph.lock()->d_graphID]
-                                    [*verilogCount][i];
-    std::string inp_name = d_vertexes[VertexTypes::input][i]->getName();
-
-    module_ver += verilogTab + verilogTab + "." + inp_name + "( ";
-    module_ver += inp->getName() + " ),\n";
-  }
-
-  for (size_t i = 0; i < d_vertexes[VertexTypes::output].size() - 1; ++i) {
-    VertexPtr out =
-        d_subGraphsOutputsPtr[d_currentParentGraph.lock()->d_graphID]
-                             [*verilogCount][i];
-    std::string out_name = d_vertexes[VertexTypes::output][i]->getName();
-
-    module_ver += verilogTab + verilogTab + "." + out_name + "( ";
-    module_ver += out->getName() + " ),\n";
-  }
-
-  std::string out_name = d_vertexes[VertexTypes::output].back()->getName();
-
-  module_ver += verilogTab + verilogTab + "." + out_name + "( ";
-  module_ver += d_subGraphsOutputsPtr[d_currentParentGraph.lock()->d_graphID]
-                                     [*verilogCount]
-                                         .back()
-                                         ->getName() +
-                " )\n";
-  module_ver += verilogTab + "); \n";
-
-  ++(*verilogCount);
-
-  return module_ver;
-}
-
 std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
                                                       std::string i_filename) {
   if (d_alreadyParsedVerilog && d_isSubGraph) {
-    return std::make_pair(true, getGraphVerilogInstance());
+    return std::make_pair(true, "");
   }
   // В данном методе происходит только генерация одного графа. Без подграфов.
   std::string verilogTab = "\t";
@@ -728,10 +664,10 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
   for (auto *subPtr: d_vertexes[VertexTypes::subGraph]) {
     auto *sub = static_cast<GraphVertexSubGraph *>(subPtr);
 
-    std::pair<bool, std::string> val = sub->toVerilog(i_path);
-    if (!val.first)
+    if (!sub->toVerilog(i_path).first) {
       return std::make_pair(false, "");
-    fileStream << val.second;
+    }
+    fileStream << sub->toVerilog();
   }
 
   if (d_vertexes[VertexTypes::seuqential].size()) {
@@ -763,45 +699,11 @@ std::pair<bool, std::string> OrientedGraph::toVerilog(std::string i_path,
   d_alreadyParsedVerilog = true;
 
   if (d_isSubGraph) {
-    return std::make_pair(true, getGraphVerilogInstance());
+    return std::make_pair(true, "");
   }
 
   fileStream.close();
   return std::make_pair(true, "");
-}
-
-DotReturn OrientedGraph::getGraphDotInstance() {
-  uint64_t *dotCount =
-      &d_graphInstanceToDotCount[d_currentParentGraph.lock()->d_graphID];
-  uint64_t allCount =
-      d_subGraphsInputsPtr[d_currentParentGraph.lock()->d_graphID].size();
-  if (*dotCount == allCount) {
-#ifdef LOGFLAG
-    LOG(INFO) << "Incorrect getGraphDotInstance call. All modules of" +
-                     d_currentParentGraph.lock()->getName() + " (" +
-                     std::to_string(allCount) + ") were already parsed";
-#endif
-    throw std::out_of_range(
-        "Incorrect getGraphDotInstance call. All modules of " +
-        d_currentParentGraph.lock()->getName() + " (" +
-        std::to_string(allCount) + ") were already parsed");
-  }
-
-  std::string instName = d_name + "_inst_" + std::to_string(*dotCount);
-  DotReturn dot = toDOT();
-
-  dot[0].first = DotTypes::DotSubGraph;
-  dot[0].second["instName"] = instName;
-  for (int i = 0; i < dot.size(); i++) {
-    dot[i].second["name"] = instName + "_" + dot[i].second["name"];
-    if (dot[i].second.find("from") != dot[i].second.end()) {
-      dot[i].second["from"] = instName + "_" + dot[i].second["from"];
-      dot[i].second["to"] = instName + "_" + dot[i].second["to"];
-    }
-  }
-
-  ++(*dotCount);
-  return dot;
 }
 
 DotReturn OrientedGraph::toDOT() {
@@ -845,12 +747,9 @@ DotReturn OrientedGraph::toDOT() {
     subDotResults.push_back({sub, val});
 
     auto subGraph = sub->getSubGraph();
-    uint64_t *dotCount = &d_graphInstanceToDotCount[d_graphID];
     for (size_t i = 0;
          i < subGraph->getBaseVertexes()[VertexTypes::input].size(); ++i) {
-      for (auto const &tt: subGraph->d_subGraphsInputsPtr) {
-      }
-      auto *inp = subGraph->d_subGraphsInputsPtr[d_graphID][*dotCount][i];
+      auto *inp = subPtr->getInConnections()[i];
       std::string inp_name =
           subGraph->getBaseVertexes()[VertexTypes::input][i]->getName();
 
@@ -888,7 +787,7 @@ std::pair<bool, std::string> OrientedGraph::toDOT(std::string i_path,
 #ifdef LOGFLAG
     LOG(INFO) << "getGraphDotInstance()";
 #endif
-    return std::make_pair(true, dotReturnToString(getGraphDotInstance()));
+    return std::make_pair(true, "");
   }
   updateLevels();
   DotReturn dot = toDOT();
@@ -923,7 +822,7 @@ std::pair<bool, std::string> OrientedGraph::toDOT(std::string i_path,
   d_alreadyParsedDot = true;
 
   if (d_isSubGraph) {
-    return std::make_pair(true, dotReturnToString(getGraphDotInstance()));
+    return std::make_pair(true, "");
   }
 
   fileStream.close();
@@ -1007,34 +906,35 @@ std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
         format(nodeTemplate, "{}", "subGraph", "\n",
                sg->toGraphMLClassic(i_indent + 4, i_prefix + "{}::"));
 
+    // FIXME: Why inputs and outpus of graph are connected with verticies of the same graph....
     // graphInputs, graphOutputs, verticesInputs, verticesOutputs
-    const auto &gInputs = sg->d_vertexes.at(VertexTypes::input);
-    const auto &gOutputs = sg->d_vertexes.at(VertexTypes::output);
-    const auto &vInputs = sg->d_subGraphsInputsPtr.at(d_graphID);
-    const auto &vOutputs = sg->d_subGraphsOutputsPtr.at(d_graphID);
+    // const auto &gInputs = sg->d_vertexes.at(VertexTypes::input);
+    // const auto &gOutputs = sg->d_vertexes.at(VertexTypes::output);
+    // const auto &vInputs = sg->d_subGraphsInputsPtr.at(d_graphID);
+    // const auto &vOutputs = sg->d_subGraphsOutputsPtr.at(d_graphID);
 
-    for (size_t i = 0; i < vOutputs.size(); ++i) {
-      // getting name of current subGraph vertex
-      sgName = vOutputs[i][0]->getInConnections()[0]->getName(i_prefix);
+    // for (size_t i = 0; i < vOutputs.size(); ++i) {
+    //   // getting name of current subGraph vertex
+    //   sgName = vOutputs[i][0]->getInConnections()[0]->getName(i_prefix);
 
-      // element->subGraph edges
-      for (size_t j = 0; j < gInputs.size(); ++j) {
-        edges += format(edgeTemplate, vInputs[i][j]->getName(i_prefix),
-                        gInputs[j]->getName(sgName + "::"));
-      }
-      // subGraph->element edges (skipping buffer)
-      for (size_t j = 0; j < gOutputs.size(); ++j) {
-        if (vOutputs[i][j]->getOutConnections().empty()) {
-          continue;
-        }
-        edges +=
-            format(edgeTemplate, gOutputs[j]->getName(sgName + "::"),
-                   vOutputs[i][j]->getOutConnections()[0]->getName(i_prefix));
-      }
+    //   // element->subGraph edges
+    //   for (size_t j = 0; j < gInputs.size(); ++j) {
+    //     edges += format(edgeTemplate, vInputs[i][j]->getName(i_prefix),
+    //                     gInputs[j]->getName(sgName + "::"));
+    //   }
+    //   // subGraph->element edges (skipping buffer)
+    //   for (size_t j = 0; j < gOutputs.size(); ++j) {
+    //     if (vOutputs[i][j]->getOutConnections().empty()) {
+    //       continue;
+    //     }
+    //     edges +=
+    //         format(edgeTemplate, gOutputs[j]->getName(sgName + "::"),
+    //                vOutputs[i][j]->getOutConnections()[0]->getName(i_prefix));
+    //   }
 
-      // parsing subGraphs as vertices
-      graphs += replacer(currentSubGraphTemplate, sgName);
-    }
+    //   // parsing subGraphs as vertices
+    //   graphs += replacer(currentSubGraphTemplate, sgName);
+    // }
   }
 
   std::string finalGraph = format(graphTemplate, "{}", nodes + graphs + edges);

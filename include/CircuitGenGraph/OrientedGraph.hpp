@@ -93,6 +93,8 @@ public:
                 size_t buffer_size = DEFAULT_BUF,
                 size_t chunk_size = CHUNK_SIZE);
 
+  using GraphID = std::size_t;
+
   // TODO: Добавить использование gates_inputs_info.
 
   ~OrientedGraph();
@@ -409,11 +411,9 @@ public:
   getBaseVertexes() const;
   VertexPtr getVerticeByIndex(size_t idx) const;
 
-  std::string getGraphVerilogInstance();
   std::pair<bool, std::string> toVerilog(std::string i_path,
                                          std::string i_filename = "");
 
-  DotReturn getGraphDotInstance();
   DotReturn toDOT();
   std::pair<bool, std::string> toDOT(std::string i_path,
                                      std::string i_filename = "");
@@ -491,8 +491,17 @@ public:
 
   bool isConnected(bool i_recalculate = false);
 
-  std::map<size_t, std::vector<std::vector<VertexPtr>>>
-  getSubGraphsOutputsPtr();
+  std::uint64_t getGraphInstVerilog(GraphID i_id) {
+    return d_graphInstanceToVerilogCount[i_id]++;
+  } 
+
+  std::uint64_t getGraphInstDOT(GraphID i_id) {
+    return d_graphInstanceToDotCount[i_id]++;
+  }
+
+  GraphID getID() {
+    return d_graphID;
+  }
 
   GraphPtr unrollGraph();
 
@@ -522,7 +531,7 @@ protected:
 
 private:
   static std::atomic_size_t d_countNewGraphInstance;
-  size_t d_graphID;
+  GraphID d_graphID;
   // as we can have multiple parents, we save
   // for toVerilog current parent graph
   GraphPtrWeak d_currentParentGraph;
@@ -548,15 +557,12 @@ private:
   // We can add a subgraph multiple times
   // so we need to count instances to verilog.
   // We are counting to know, which inputs and outputs should we use now
-  std::map<size_t, uint64_t> d_graphInstanceToVerilogCount;
-  std::map<size_t, uint64_t> d_graphInstanceToDotCount;
+  std::map<GraphID, uint64_t> d_graphInstanceToVerilogCount;
+  std::map<GraphID, uint64_t> d_graphInstanceToDotCount;
 
   // each subgraph has one or more outputs. We save them,
   // depending on subgraph instance number
-  std::map<size_t, std::vector<std::vector<VertexPtr>>> d_subGraphsOutputsPtr;
   std::vector<VertexPtr> d_allSubGraphsOutputs;
-  // we have such pairs: number of subgraph instances,
-  std::map<size_t, std::vector<std::vector<VertexPtr>>> d_subGraphsInputsPtr;
 
   std::set<GraphPtr> d_subGraphs;
   std::array<std::vector<VertexPtr>, VertexTypes::output + 1> d_vertexes;

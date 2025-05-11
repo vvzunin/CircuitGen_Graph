@@ -76,13 +76,27 @@ GraphVertexSubGraph::toVerilog(std::string i_path, std::string i_filename) {
 }
 
 DotReturn GraphVertexSubGraph::toDOT() {
-  if (auto parentPtr = d_baseGraph.lock()) {
+  auto parentPtr = d_baseGraph.lock();
+  if (parentPtr) {
     d_subGraph->setCurrentParent(parentPtr);
   } else {
     throw std::invalid_argument("Dead pointer!");
   }
+  uint64_t dotCount = parentPtr->getGraphInstDOT(d_subGraph->getID());
+  std::string instName = parentPtr->getName() + "_inst_" + std::to_string(dotCount);
+  DotReturn dot = d_subGraph->toDOT();
 
-  return d_subGraph->getGraphDotInstance();
+  dot[0].first = DotTypes::DotSubGraph;
+  dot[0].second["instName"] = instName;
+  for (int i = 0; i < dot.size(); i++) {
+    dot[i].second["name"] = instName + "_" + dot[i].second["name"];
+    if (dot[i].second.find("from") != dot[i].second.end()) {
+      dot[i].second["from"] = instName + "_" + dot[i].second["from"];
+      dot[i].second["to"] = instName + "_" + dot[i].second["to"];
+    }
+  }
+
+  return dot;
 }
 
 std::pair<bool, std::string>
@@ -106,7 +120,41 @@ std::string GraphVertexSubGraph::toGraphML(uint16_t i_indent,
 }
 
 std::string GraphVertexSubGraph::toVerilog() const {
-  return "DO NOT CALL IT";
+  auto base = d_baseGraph.lock();
+  uint64_t verilogCount =
+      base->getGraphInstVerilog(d_subGraph->getID());
+
+  std::string verilogTab = "  ";
+  std::string nameSub = base->getName();
+  // module_name module_name_inst_1 (
+  std::string module_ver = verilogTab + nameSub + " " + nameSub + "_inst_" +
+                        std::to_string(verilogCount) + " (\n";
+
+  auto &&inputs = d_subGraph->getVerticesByType(VertexTypes::input);
+  auto &&outputs = d_subGraph->getVerticesByType(VertexTypes::output);
+  for (size_t i = 0; i < inputs.size(); ++i) {
+    VertexPtr inp = d_inConnections[i];
+    std::string inp_name = inputs[i]->getName();
+
+    module_ver += verilogTab + verilogTab + "." + inp_name + "( ";
+    module_ver += inp->getName() + " ),\n";
+  }
+
+  for (size_t i = 0; i < outputs.size() - 1; ++i) {
+    VertexPtr out = d_outConnections[i];
+    std::string out_name = outputs[i]->getName();
+
+    module_ver += verilogTab + verilogTab + "." + out_name + "( ";
+    module_ver += out->getName() + " ),\n";
+  }
+
+  std::string out_name = outputs.back()->getName();
+
+  module_ver += verilogTab + verilogTab + "." + out_name + "( ";
+  module_ver += d_outConnections.back()->getName() + " )\n";
+  module_ver += verilogTab + "); \n";
+
+  return module_ver;
 }
 
 void GraphVertexSubGraph::setSubGraph(GraphPtr i_subGraph) {
