@@ -335,6 +335,17 @@ public:
   std::vector<VertexPtr> addSubGraph(GraphPtr i_subGraph,
                                      std::vector<VertexPtr> i_inputs);
 
+  /// @brief removeWasteVertices()
+  /// Some generated graphs have vertices which have not any path
+  /// to outputs of scheme. The method deletes these ones.
+  /// Firstly, it is removing all inner (gates, sequental, subgraph)
+  /// vertices which d_level == 0 (good criterion because of
+  /// OrientedGraph::updateLevel() algorithm specificity)
+  /// and all edges from normal vertices to current wrong.
+  /// After removing of inner ones, some inputs or constants
+  /// can have not any element in d_outConnections(), these
+  /// also will be removed.
+  void removeWasteVertices();
   /// @brief addEdge
   /// Adds an edge between two vertices in the current graph
   /// @param from A shared pointer to the vertex where the edge originates
@@ -400,11 +411,30 @@ public:
 
   bool addEdges(std::vector<VertexPtr> from1, VertexPtr to);
 
+  /// @brief removeEdge
+  /// Remove an edge from graph if it exists.
+  /// @param from1 The vertex to be deleted to the input connections of "to"
+  /// @param to The vertex to be deleted to the output connections of "from"
+  /// @return True if edge was found and deleted, false otherwise
+  /// @code
+  /// // Creating an instance of the OrientedGraph and two vertices
+  /// GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph");
+  /// VertexPtr v1 = graphPtr->addInput();
+  /// VertexPtr v2 = graphPtr->addGate(GateBuf);
+  /// // Creating an edge
+  /// graphPtr->addEdge(v1, v2);
+  /// // remove the edge and check of result
+  /// bool deleted = graphPtr->removeEdge(v1, v2);
+  /// if (deleted) cout << "Edge removed successfully";
+  /// else cout << "Edge from v1 to v2 is not exist";
+  /// @endcode
+
+  bool removeEdge(VertexPtr from1, VertexPtr to);
+
   /// @brief getEdgesCount
   /// Retrieves the total number of edges in the graph
   /// @return The total number of edges in the graph
   size_t getEdgesCount() { return d_edgesCount; }
-
   std::set<GraphPtr> getSubGraphs() const;
   std::set<GraphPtr> getSetSubGraphs() const;
   std::array<std::vector<VertexPtr>, VertexTypes::output + 1>

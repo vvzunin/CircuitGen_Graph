@@ -277,30 +277,12 @@ std::vector<VertexPtr> GraphVertexBase::getInConnections() const {
 uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
   assert(i_vert != this);
   assert(d_type != input && d_type != constant);
-
-  d_inConnections.push_back(i_vert);
   uint32_t n = 0;
+  d_inConnections.push_back(i_vert);
   // TODO is rly needed?
   for (VertexPtr vert: d_inConnections)
     n += (vert == i_vert);
   return n;
-}
-
-bool GraphVertexBase::removeVertexToInConnections(VertexPtr i_vert,
-                                                  bool i_full) {
-  if (i_full) {
-    bool f = false;
-    for (int64_t i = d_inConnections.size() - 1; i >= 0; i--) {
-      d_inConnections.erase(d_inConnections.begin() + i);
-      f = true;
-    }
-    return f;
-  }
-  for (size_t i = 0; i < d_inConnections.size(); i++) {
-    d_inConnections.erase(d_inConnections.begin() + i);
-    return true;
-  }
-  return false;
 }
 
 std::vector<VertexPtr> GraphVertexBase::getOutConnections() const {
@@ -316,14 +298,6 @@ bool GraphVertexBase::addVertexToOutConnections(VertexPtr i_vert) {
     n += (vert == i_vert);
   if (n == 0) {
     d_outConnections.push_back(i_vert);
-    return true;
-  }
-  return false;
-}
-
-bool GraphVertexBase::removeVertexToOutConnections(VertexPtr i_vert) {
-  for (size_t i = 0; i < d_outConnections.size(); i++) {
-    d_outConnections.erase(d_outConnections.begin() + i);
     return true;
   }
   return false;
@@ -360,6 +334,26 @@ void GraphVertexBase::log(el::base::type::ostream_t &os) const {
 std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex) {
   stream << vertex.toVerilog();
   return stream;
+}
+
+bool GraphVertexBase::removeVertexToInConnections(VertexPtr i_vert) {
+  auto vertToRemove =
+      std::find(d_inConnections.begin(), d_inConnections.end(), i_vert);
+  if (vertToRemove == d_inConnections.end())
+    return false;
+  std::swap(*vertToRemove, *d_inConnections.rbegin());
+  d_inConnections.resize(d_inConnections.size() - 1);
+  return true;
+}
+
+bool GraphVertexBase::removeVertexToOutConnections(VertexPtr i_vert) {
+  auto vertToRemove =
+      std::find(d_outConnections.begin(), d_outConnections.end(), i_vert);
+  if (vertToRemove == d_outConnections.end())
+    return false;
+  std::swap(*vertToRemove, *d_outConnections.rbegin());
+  d_outConnections.resize(d_outConnections.size() - 1);
+  return true;
 }
 
 } // namespace CG_Graph

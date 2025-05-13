@@ -93,6 +93,7 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
 /// @param d_hashed A string containing the calculated hash value for the vertex
 
 class GraphVertexBase {
+  friend class OrientedGraph;
 
 public:
   /// @brief resetes counter of unique id-s for vertices
@@ -334,41 +335,7 @@ public:
   /// connections of the first vertex: " << occurrences << std::endl;
   /// @endcode
 
-  uint32_t addVertexToInConnections(VertexPtr i_vert);
-
-  /// @brief removeVertexToInConnections
-  /// Removes a vertex from the input connections of this vertex.
-  /// @param i_vert The vertex to be removed from the input connections.
-  /// @param i_full lag indicating whether to remove all occurrences of the
-  /// vertex from the input connections.
-  /// If true, all occurrences will be removed. If false, only the first
-  /// occurrence will be removed. Default - false
-  /// @return true if the vertex was successfully removed, false otherwise.
-  /// @code
-  /// // Creating an instance of the GraphVertexBase class
-  /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
-  /// // Creating another vertex
-  /// VertexPtr anotherVertex =
-  /// std::make_shared<GraphVertexBase>(VertexTypes::input, "vertex2");
-  /// // Adding a second vertex to the input connections of the first vertex
-  /// vertex.addVertexToInConnections(anotherVertex);
-  /// // Removing the second vertex from the input connections of the first
-  /// vertex bool removed = vertex.removeVertexToInConnections(anotherVertex,
-  /// false);
-  /// // Output of the result
-  /// if (removed)
-  /// {
-  ///    std::cout << "The second vertex has been successfully removed from the
-  ///    input connections of the first vertex" << std::endl;
-  /// }
-  /// else
-  /// {
-  ///    std::cout << "The second vertex was not found in the input connections
-  ///    of the first vertex" << std::endl;
-  /// }
-  /// @endcode
-
-  bool removeVertexToInConnections(VertexPtr i_vert, bool i_full = false);
+  virtual uint32_t addVertexToInConnections(VertexPtr i_vert);
 
   /// @brief getOutConnections
   /// @return A vector of shared pointers to the output connections of this
@@ -404,35 +371,6 @@ public:
   /// @endcode
 
   bool addVertexToOutConnections(VertexPtr i_vert);
-
-  /// @brief removeVertexToOutConnections
-  /// Removes a vertex from the output connections of this vertex.
-  /// @param i_vert The vertex to be removed from the output connections.
-  /// @return true if the vertex was successfully removed, false otherwise.
-  /// @code
-  /// // Creating an instance of the GraphVertexBase class
-  /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
-  /// // Creating another vertex
-  /// VertexPtr anotherVertex =
-  /// std::make_shared<GraphVertexBase>(VertexTypes::output, "vertex2");
-  /// // Adding the second vertex to the output connections of the first vertex
-  /// vertex.addVertexToOutConnections(anotherVertex);
-  /// // Removing the second vertex from the output connections of the first
-  /// vertex bool removed = vertex.removeVertexToOutConnections(anotherVertex);
-  /// // Output of the result
-  /// if (removed)
-  /// {
-  ///   std::cout << "Вторая вершина успешно удалена из выходных соединений
-  ///   первой вершины." << std::endl;
-  /// }
-  /// else
-  /// {
-  ///   std::cout << "Вторая вершина не найдена в выходных соединениях первой
-  ///   вершины." << std::endl;
-  /// }
-  /// @endcode
-
-  bool removeVertexToOutConnections(VertexPtr i_vert);
 
   /// @brief calculateHash
   /// Calculates the hash value for the vertex based on its outgoing
@@ -497,6 +435,67 @@ public:
 #endif
 
 protected:
+  /// @brief removeVertexToOutConnections
+  /// Removes a vertex from the output connections of this vertex.
+  /// @param i_vert The vertex to be removed from the output connections.
+  /// @return true if the vertex was successfully removed, false otherwise.
+  /// @code
+  /// // Creating an instance of the GraphVertexBase class
+  /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
+  /// // Creating another vertex
+  /// VertexPtr anotherVertex =
+  /// std::make_shared<GraphVertexBase>(VertexTypes::output, "vertex2");
+  /// // Adding the second vertex to the output connections of the first vertex
+  /// vertex.addVertexToOutConnections(anotherVertex);
+  /// // Removing the second vertex from the output connections of the first
+  /// vertex bool removed = vertex.removeVertexToOutConnections(anotherVertex);
+  /// // Output of the result
+  /// if (removed)
+  /// {
+  ///   std::cout << "Вторая вершина успешно удалена из выходных соединений
+  ///   первой вершины." << std::endl;
+  /// }
+  /// else
+  /// {
+  ///   std::cout << "Вторая вершина не найдена в выходных соединениях первой
+  ///   вершины." << std::endl;
+  /// }
+  /// @endcode
+
+  bool removeVertexToOutConnections(VertexPtr i_vert);
+  /// @brief removeVertexToInConnections
+  /// Removes a vertex from the input connections of this vertex.
+  /// @param i_vert The vertex to be removed from the input connections.
+  /// @param i_full lag indicating whether to remove all occurrences of the
+  /// vertex from the input connections. (Not available in current version)
+  /// If true, all occurrences will be removed. If false, only the first
+  /// occurrence will be removed. Default - false
+  /// @return true if the vertex was successfully removed, false otherwise.
+  /// @code
+  /// // Creating an instance of the GraphVertexBase class
+  /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
+  /// // Creating another vertex
+  /// VertexPtr anotherVertex =
+  /// std::make_shared<GraphVertexBase>(VertexTypes::input, "vertex2");
+  /// // Adding a second vertex to the input connections of the first vertex
+  /// vertex.addVertexToInConnections(anotherVertex);
+  /// // Removing the second vertex from the input connections of the first
+  /// vertex bool removed = vertex.removeVertexToInConnections(anotherVertex,
+  /// false);
+  /// // Output of the result
+  /// if (removed)
+  /// {
+  ///    std::cout << "The second vertex has been successfully removed from the
+  ///    input connections of the first vertex" << std::endl;
+  /// }
+  /// else
+  /// {
+  ///    std::cout << "The second vertex was not found in the input connections
+  ///    of the first vertex" << std::endl;
+  /// }
+  /// @endcode
+
+  bool removeVertexToInConnections(VertexPtr i_vert);
   std::vector<VertexPtr> d_inConnections;
   std::vector<VertexPtr> d_outConnections;
   GraphPtrWeak d_baseGraph;
