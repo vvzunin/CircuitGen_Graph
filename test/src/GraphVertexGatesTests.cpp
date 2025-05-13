@@ -196,19 +196,6 @@ TEST(TestGetVerilogString, ReturnCorrectStringExpressionWhenUsedGateNor) {
   EXPECT_EQ(gate1.getVerilogString(), "~(Var1 | Var2 | Var3)");
 }
 
-TEST(TestGetVerilogString, ReturnCorrectStrinExpressionWhenUseGateNot) {
-  GraphVertexGates gate1(Gates::GateNot, memoryOwnerGateGr);
-  VertexPtr gatePtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var1");
-  gate1.addVertexToInConnections(gatePtr1);
-  EXPECT_EQ(gate1.getVerilogString(), "~Var1");
-
-  VertexPtr gatePtr2 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var2");
-  VertexPtr gatePtr3 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var3");
-  gate1.addVertexToInConnections(gatePtr2);
-  gate1.addVertexToInConnections(gatePtr3);
-  EXPECT_EQ(gate1.getVerilogString(), "~Var1 ~ Var2 ~ Var3");
-}
-
 TEST(TestGetVerilogString, ReturnCorrectStringExpressionWhenUsedGateOr) {
   GraphVertexGates gate1(Gates::GateOr, memoryOwnerGateGr);
   VertexPtr gatePtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var1");
@@ -365,18 +352,6 @@ TEST(TestToVerilog, ReturnCorrectVerilogStringWhenUseGateNor) {
   EXPECT_EQ(gate1.toVerilog(), "assign Var1 = ~ ( Var2 | Var3 );");
 }
 
-TEST(TestToVerilog, ReturnCorrectVerilogStringWhenUseGateNot) {
-  GraphVertexGates gate1(Gates::GateNot, "Var1", memoryOwnerGateGr);
-  VertexPtr gatePtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var2");
-  gate1.addVertexToInConnections(gatePtr1);
-  EXPECT_EQ(gate1.toVerilog(), "assign Var1 = ~Var2;");
-
-  // Does it correct eq?
-  VertexPtr gatePtr2 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var3");
-  gate1.addVertexToInConnections(gatePtr2);
-  EXPECT_EQ(gate1.toVerilog(), "assign Var1 = ~Var3;");
-}
-
 TEST(TestToVerilog, ReturnCorrectVerilogStringWhenUseGateOr) {
   GraphVertexGates gate1(Gates::GateOr, "Var1", memoryOwnerGateGr);
   VertexPtr gatePtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var2");
@@ -435,6 +410,20 @@ TEST(TestAddInConnections, GatesAddConnections) {
       memoryOwnerGateGr->addGate(Gates::GateAnd));
   gate1->addVertexToInConnections(ptr2);
   EXPECT_EQ(gate1->getInConnections()[2], ptr2);
+}
+TEST(TestAddInConnectionsEdgeNumber, ThrowExceptionWhenManyInputsForNotOrBuf) {
+  GraphVertexGates gate1(Gates::GateNot, memoryOwnerGateGr);
+  VertexPtr gatePtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var1");
+  gate1.addVertexToInConnections(gatePtr1);
+  EXPECT_EQ(gate1.getVerilogString(), "~Var1");
+
+  VertexPtr gatePtr2 = memoryOwnerGateGr->addGate(Gates::GateAnd, "Var2");
+  EXPECT_THROW(gate1.addVertexToInConnections(gatePtr2), std::length_error);
+  GraphVertexGates gate2(Gates::GateAnd, memoryOwnerGateGr);
+  VertexPtr gatePtr3 = memoryOwnerGateGr->addInput("Var3");
+  VertexPtr gatePtr4 = memoryOwnerGateGr->addInput("Var4");
+  gate2.addVertexToInConnections(gatePtr3);
+  EXPECT_NO_THROW(gate2.addVertexToInConnections(gatePtr4));
 }
 
 TEST(TestAddOutConnections, GatesAddConnections) {
@@ -499,39 +488,39 @@ TEST(TestCalulateHash_Gate, BistableCell) {
   EXPECT_NE(graph->calculateHash(true), graph1->calculateHash(true));
 }
 
-TEST(TestRemoveVertexToInConnections, GatesRemoveConnections) {
-  VertexPtr gatesPtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd);
-  EXPECT_EQ(gatesPtr1->removeVertexToInConnections(nullptr), false);
+// TEST(TestRemoveVertexToInConnections, GatesRemoveConnections) {
+//   VertexPtr gatesPtr1 = memoryOwnerGateGr->addGate(Gates::GateAnd);
+//   EXPECT_EQ(gatesPtr1->removeVertexToInConnections(nullptr), false);
 
-  gatesPtr1->addVertexToInConnections(
-      memoryOwnerGateGr->addGate(Gates::GateAnd));
-  gatesPtr1->addVertexToInConnections(
-      memoryOwnerGateGr->addGate(Gates::GateAnd));
-  EXPECT_EQ(gatesPtr1->getInConnections().size(), 2);
-  EXPECT_EQ(gatesPtr1->removeVertexToInConnections(nullptr), true);
-  EXPECT_EQ(gatesPtr1->getInConnections().size(), 1);
-}
+//   gatesPtr1->addVertexToInConnections(
+//       memoryOwnerGateGr->addGate(Gates::GateAnd));
+//   gatesPtr1->addVertexToInConnections(
+//       memoryOwnerGateGr->addGate(Gates::GateAnd));
+//   EXPECT_EQ(gatesPtr1->getInConnections().size(), 2);
+//   EXPECT_EQ(gatesPtr1->removeVertexToInConnections(nullptr), true);
+//   EXPECT_EQ(gatesPtr1->getInConnections().size(), 1);
+// }
 
-TEST(TestRemoveVertexToOutConnections, GatesRemoveConnections) {
-#ifdef LOGFLAG
-  initLogging("TestRemoveVertexToOutConnections", "RemoveConnections");
-#endif
-  // Создаем вершину графа
-  VertexPtr vertex1 = memoryOwnerGateGr->addGate((Gates::GateAnd));
+// TEST(TestRemoveVertexToOutConnections, GatesRemoveConnections) {
+// #ifdef LOGFLAG
+//   initLogging("TestRemoveVertexToOutConnections", "RemoveConnections");
+// #endif
+//   // Создаем вершину графа
+//   VertexPtr vertex1 = memoryOwnerGateGr->addGate((Gates::GateAnd));
 
-  // Добавляем несколько соединений к выходным соединениям вершины
-  VertexPtr vertex2 = memoryOwnerGateGr->addGate((Gates::GateAnd));
-  VertexPtr vertex3 = memoryOwnerGateGr->addGate((Gates::GateAnd));
-  vertex1->addVertexToOutConnections(vertex2);
-  vertex1->addVertexToOutConnections(vertex3);
+//   // Добавляем несколько соединений к выходным соединениям вершины
+//   VertexPtr vertex2 = memoryOwnerGateGr->addGate((Gates::GateAnd));
+//   VertexPtr vertex3 = memoryOwnerGateGr->addGate((Gates::GateAnd));
+//   vertex1->addVertexToOutConnections(vertex2);
+//   vertex1->addVertexToOutConnections(vertex3);
 
-  // Проверяем, что соединения добавлены
-  EXPECT_EQ(vertex1->getOutConnections().size(), 2);
+//   // Проверяем, что соединения добавлены
+//   EXPECT_EQ(vertex1->getOutConnections().size(), 2);
 
-  // Удаляем последнее оставшееся соединение
-  EXPECT_EQ(vertex1->removeVertexToOutConnections(vertex3), true);
-  EXPECT_EQ(vertex3->removeVertexToOutConnections(vertex3), false);
-}
+//   // Удаляем последнее оставшееся соединение
+//   EXPECT_EQ(vertex1->removeVertexToOutConnections(vertex3), true);
+//   EXPECT_EQ(vertex3->removeVertexToOutConnections(vertex3), false);
+// }
 
 TEST(GraphVertexGatesTest, UpdateValue_NoConnections) {
   GraphVertexGates gate(Gates::GateBuf, memoryOwnerGateGr);

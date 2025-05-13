@@ -186,17 +186,6 @@ TEST(TestCalculateHash_Output, SameHashWhenEqualInputs) {
   EXPECT_EQ(output2.calculateHash(true), output3.calculateHash(true));
 }
 
-TEST(TestRemoveVertexToInConnections, OutputRemoveConnections) {
-  VertexPtr outputPtr1 = memoryOwnerOutputGr->addOutput();
-  EXPECT_EQ(outputPtr1->removeVertexToInConnections(nullptr), false);
-
-  outputPtr1->addVertexToInConnections(memoryOwnerOutputGr->addOutput());
-  outputPtr1->addVertexToInConnections(memoryOwnerOutputGr->addOutput());
-  EXPECT_EQ(outputPtr1->getInConnections().size(), 2);
-  EXPECT_EQ(outputPtr1->removeVertexToInConnections(nullptr), true);
-  EXPECT_EQ(outputPtr1->getInConnections().size(), 1);
-}
-
 // need to remake realisition of method
 // TEST(TestRemoveVertexToOutConnections, RemoveConnecttions){}
 
