@@ -175,14 +175,14 @@ uint32_t GraphVertexBase::getLevel() const {
   return d_level;
 }
 
-void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
+void GraphVertexBase::updateLevel(std::string tab) {
   // 2 - IN PROGRESS, 1 - HC_CALC
   // 2 == 010
   // 1 == 001
   // d_needUpdate = static_cast<MY_ENUM>(HC_CALC | ADDED); // ADDED = 4 // 100
   // 101
   int counter = 0;
-  if (d_needUpdate && (!i_recalculate || d_needUpdate == VS_IN_PROGRESS)) {
+  if (d_needUpdate && d_needUpdate == VS_IN_PROGRESS) {
     return;
   }
   d_needUpdate = VS_IN_PROGRESS;
@@ -191,7 +191,7 @@ void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
     LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
               << vert->getTypeName() << ")";
 #endif
-    vert->updateLevel(i_recalculate, tab + "  ");
+    vert->updateLevel(tab + "  ");
     d_level = (vert->getLevel() >= d_level) ? vert->getLevel() + 1 : d_level;
   }
   d_needUpdate = VS_CALC;
@@ -232,8 +232,8 @@ GraphPtrWeak GraphVertexBase::getBaseGraph() const {
   return d_baseGraph;
 }
 
-size_t GraphVertexBase::calculateHash(bool i_recalculate) {
-  if (d_hasHash && (!i_recalculate || d_hasHash == HC_IN_PROGRESS)) {
+size_t GraphVertexBase::calculateHash() {
+  if (d_hasHash) {
     return d_hashed;
   }
   if (d_type == VertexTypes::input) {
@@ -247,7 +247,7 @@ size_t GraphVertexBase::calculateHash(bool i_recalculate) {
   std::string hashedStr;
 
   for (auto *child: d_inConnections) {
-    hashed_data.push_back(child->calculateHash(i_recalculate));
+    hashed_data.push_back(child->calculateHash());
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 

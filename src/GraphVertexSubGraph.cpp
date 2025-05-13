@@ -41,13 +41,13 @@ char GraphVertexSubGraph::updateValue() {
 //   }
 // }
 
-void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
+void GraphVertexSubGraph::updateLevel(std::string tab) {
   int counter = 0, max_inLevel = 0;
-  if (d_needUpdate && !i_recalculate) {
+  if (d_needUpdate) {
     return;
   }
   d_needUpdate = VS_IN_PROGRESS;
-  d_subGraph->updateLevels(i_recalculate);
+  d_subGraph->updateLevels();
   std::vector<VertexPtr> output_verts =
       d_subGraph->getVerticesByType(VertexTypes::output);
   for (VertexPtr vert: d_inConnections) {
@@ -64,8 +64,8 @@ void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
   d_needUpdate = VS_CALC;
 }
 
-std::pair<bool, std::string>
-GraphVertexSubGraph::toVerilog(std::string i_path, std::string i_filename) {
+bool GraphVertexSubGraph::toVerilog(std::string i_path,
+                                    std::string i_filename) {
   if (auto parentPtr = d_baseGraph.lock()) {
     d_subGraph->setCurrentParent(parentPtr);
   } else {
@@ -83,7 +83,8 @@ DotReturn GraphVertexSubGraph::toDOT() {
     throw std::invalid_argument("Dead pointer!");
   }
   uint64_t dotCount = parentPtr->getGraphInstDOT(d_subGraph->getID());
-  std::string instName = parentPtr->getName() + "_inst_" + std::to_string(dotCount);
+  std::string instName =
+      parentPtr->getName() + "_inst_" + std::to_string(dotCount);
   DotReturn dot = d_subGraph->toDOT();
 
   dot[0].first = DotTypes::DotSubGraph;
@@ -99,8 +100,7 @@ DotReturn GraphVertexSubGraph::toDOT() {
   return dot;
 }
 
-std::pair<bool, std::string>
-GraphVertexSubGraph::toDOT(std::string i_path, std::string i_filename) {
+bool GraphVertexSubGraph::toDOT(std::string i_path, std::string i_filename) {
   if (auto parentPtr = d_baseGraph.lock()) {
     d_subGraph->setCurrentParent(parentPtr);
   } else {
@@ -121,14 +121,13 @@ std::string GraphVertexSubGraph::toGraphML(uint16_t i_indent,
 
 std::string GraphVertexSubGraph::toVerilog() const {
   auto base = d_baseGraph.lock();
-  uint64_t verilogCount =
-      base->getGraphInstVerilog(d_subGraph->getID());
+  uint64_t verilogCount = base->getGraphInstVerilog(d_subGraph->getID());
 
   std::string verilogTab = "  ";
   std::string nameSub = base->getName();
   // module_name module_name_inst_1 (
   std::string module_ver = verilogTab + nameSub + " " + nameSub + "_inst_" +
-                        std::to_string(verilogCount) + " (\n";
+                           std::to_string(verilogCount) + " (\n";
 
   auto &&inputs = d_subGraph->getVerticesByType(VertexTypes::input);
   auto &&outputs = d_subGraph->getVerticesByType(VertexTypes::output);
@@ -165,8 +164,8 @@ GraphPtr GraphVertexSubGraph::getSubGraph() const {
   return d_subGraph;
 }
 
-size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
-  if (d_hasHash && (!i_recalculate || d_hasHash == HC_IN_PROGRESS)) {
+size_t GraphVertexSubGraph::calculateHash() {
+  if (d_hasHash) {
     return d_hashed;
   }
   // calc hash from subgraph
@@ -178,7 +177,7 @@ size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
   hashed_data.reserve(d_inConnections.size());
 
   for (auto *child: d_inConnections) {
-    hashed_data.push_back(child->calculateHash(i_recalculate));
+    hashed_data.push_back(child->calculateHash());
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 

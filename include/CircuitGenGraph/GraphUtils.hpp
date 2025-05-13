@@ -91,11 +91,11 @@ enum SequentialTypes : uint8_t {
 /// used in digital circuits.
 
 enum Gates : uint8_t {
-  GateAnd,    /// logical element - "AND" (AND)
-  GateNand,   /// logical element "AND-NOT" (NAND)
-  GateOr,     /// logical element - "OR" (OR)
+  GateAnd,    /// logical element - AND
+  GateNand,   /// logical element - "AND-NOT" (NAND)
+  GateOr,     /// logical element - OR
   GateNor,    /// logical element - "OR-NOT" (NOR)
-  GateXor,    /// lofical element - "Exclusive OR" (XOR)
+  GateXor,    /// lofical element - XOR (Exclusive OR)
   GateXnor,   /// logical element - XNOR
   GateNot,    /// logical element - NOT
   GateBuf,    /// logical element - Buffer
@@ -306,6 +306,15 @@ std::string parseVertexToString(VertexTypes vertex);
 
 std::string parseGateToString(Gates gate);
 
+/// @brief Looks for a std::pair with a given key (pair - <key, value>).
+/// Most of all functions in GraphUtils use arrays of pairs, and looking
+/// for a value with key is one of the most frequently used operations.
+/// @tparam T key type in pairs array
+/// @tparam M value type in pairs array
+/// @tparam N number elements in an array
+/// @param iterable array of pairs, in which value should be found
+/// @param key the key that must contain the required pair (pair.first)
+/// @return found pair or std::end(iterable)
 template<typename T, typename M, size_t N>
 static std::pair<T, M> *findPairByKey(std::pair<T, M> (&iterable)[N],
                                       const T &key) {
@@ -314,8 +323,12 @@ static std::pair<T, M> *findPairByKey(std::pair<T, M> (&iterable)[N],
   return iter;
 }
 
+// Here is located max value + 1 from the array d_logicOperations
+static constexpr size_t d_hierarchySize = 11;
+
 static constexpr std::array<
-    std::pair<std::string_view, std::pair<std::string_view, int32_t>>, 11>
+    std::pair<std::string_view, std::pair<std::string_view, int32_t>>,
+    d_hierarchySize>
     d_logicOperations = {{{"input", {"", 10}},
                           {"output", {"=", 0}},
                           {"const", {"1'b0", 9}},
@@ -347,9 +360,6 @@ static std::pair<Gates, std::string_view> gateToString[] = {
     {Gates::GateNot, "not"},      {Gates::GateBuf, "buf"},
     {Gates::GateXor, "xor"},      {Gates::GateXnor, "xnor"},
     {Gates::GateDefault, "ERROR"}};
-
-// Here is located max value + 1 from the array d_logicOperations
-static constexpr size_t d_hierarchySize = 11;
 
 } // namespace GraphUtils
 

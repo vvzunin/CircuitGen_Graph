@@ -95,7 +95,8 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
 class GraphVertexBase {
 
 public:
-  static void resetRounter() { d_count = 0ul; }
+  /// @brief resetes counter of unique id-s for verticies
+  static void resetCounter() { d_count = 0ul; }
 
 private:
   // Счетчик вершин для именования и подобного
@@ -116,15 +117,19 @@ public:
     VS_USED_CALC = VS_CALC | VS_USED_LEVEL
   };
 
+  /// @brief used for reset for all states being used (hash, updateValue, etc)
   void resetAllStates() {
     d_needUpdate = VS_NOT_CALC;
     d_hasHash = HC_NOT_CALC;
   }
 
+  /// @brief required before recalculation of the levels of graph
   void resetNeedUpdateState() { d_needUpdate = VS_NOT_CALC; }
 
+  /// @brief required before hash recalculation
   void resetHashState() { d_hasHash = HC_NOT_CALC; }
 
+  /// @brief required before get verticies by level
   void resetUsedLevelState() {
     // remove flag using bitwise operations
     d_needUpdate = static_cast<VERTEX_STATE>(d_needUpdate & ~VS_USED_LEVEL);
@@ -244,13 +249,15 @@ public:
   /// This method updates the level of the vertex based on the levels of its
   /// input connections. It iterates through each input connection and sets
   /// the vertex level to the maximum level of its input connections plus one.
+  /// If you are going to call this method for a second time, please, set
+  /// all flags, used in updateLevel to their default state.
   /// @code
-  /// TO DO:
+  /// TODO:
   /// @endcode
   /// @throws std::invalid_argument if any of the input connections are invalid
   /// (i.e., null pointers)
 
-  virtual void updateLevel(bool i_recalculate = false, std::string tab = "");
+  virtual void updateLevel(std::string tab = "");
 
   bool getVerticesByLevel(uint32_t i_targetLevel,
                           std::vector<VertexPtr> &i_result,
@@ -430,11 +437,7 @@ public:
   /// @brief calculateHash
   /// Calculates the hash value for the vertex based on its outgoing
   /// connections.
-  /// @param i_recalculate Flag indicating whether to i_recalculate the hash
-  /// value even if it has already been calculated.
-  /// If true, the hash value will be recalculated.
-  /// If false and the hash value has already been calculated,
-  /// the cached hash value will be returned without recalculation.
+  ///  When running for a second time, set hash flags to default state
   /// @return The hash value of the vertex based on its outgoing connections.
   /// @code
   /// // Creating an instance of the GraphVertexBase class
@@ -452,7 +455,7 @@ public:
   /// std::cout << "Hash for the first vertex: " << hashValue << std::endl;
   /// @endcode
 
-  virtual size_t calculateHash(bool i_recalculate = false);
+  virtual size_t calculateHash();
 
   /// @brief toVerilog
   /// Generates Verilog code for the vertex

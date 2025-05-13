@@ -29,9 +29,9 @@ char GraphVertexOutput::updateValue() {
   return d_value;
 }
 
-void GraphVertexOutput::updateLevel(bool i_recalculate, std::string tab) {
+void GraphVertexOutput::updateLevel(std::string tab) {
   int counter = 0;
-  if (d_needUpdate && !i_recalculate) {
+  if (d_needUpdate) {
     return;
   }
   for (VertexPtr ptr: d_inConnections) {
@@ -39,7 +39,7 @@ void GraphVertexOutput::updateLevel(bool i_recalculate, std::string tab) {
     LOG(INFO) << tab << counter++ << ". " << ptr->getName() << " ("
               << ptr->getTypeName() << ")";
 #endif
-    ptr->updateLevel(i_recalculate, tab + "  ");
+    ptr->updateLevel(tab + "  ");
     uint32_t lvl = ptr->getLevel() + 1;
     d_level = (lvl > d_level) ? lvl : d_level;
   }

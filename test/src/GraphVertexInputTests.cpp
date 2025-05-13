@@ -16,7 +16,7 @@ using namespace CG_Graph;
 GraphPtr memoryOwnerInputGr = std::make_shared<OrientedGraph>();
 
 TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrs) {
-  GraphVertexBase::resetRounter();
+  GraphVertexBase::resetCounter();
   GraphVertexInput input(memoryOwnerInputGr);
   std::string graphNum = std::to_string(0);
   EXPECT_EQ(input.getType(), VertexTypes::input);
@@ -29,7 +29,7 @@ TEST(TestConstructorWithoutIName, WithoutDefaultInputParametrs) {
 }
 
 TEST(TestConstructorWithoutIName, InputWithDefaultInputParametrs) {
-  GraphVertexBase::resetRounter();
+  GraphVertexBase::resetCounter();
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
   std::string graphNum = std::to_string(0);
   GraphVertexInput input(graphPtr, VertexTypes::input);
@@ -188,9 +188,14 @@ TEST(TestCalculateHash_Input, SameHashWhenEqualInputs) {
   EXPECT_EQ(input1.calculateHash(), input2.calculateHash());
 
   input1.addVertexToOutConnections(memoryOwnerInputGr->addOutput());
-  EXPECT_NE(input1.calculateHash(true), input2.calculateHash(true));
+  input1.resetHashState();
+  input2.resetHashState();
+  EXPECT_NE(input1.calculateHash(), input2.calculateHash());
+
   input2.addVertexToOutConnections(memoryOwnerInputGr->addOutput());
-  EXPECT_EQ(input1.calculateHash(true), input2.calculateHash(true));
+  input1.resetHashState();
+  input2.resetHashState();
+  EXPECT_EQ(input1.calculateHash(), input2.calculateHash());
 }
 
 // TEST(TestRemoveVertexToInConnections, RemoveConnections) {

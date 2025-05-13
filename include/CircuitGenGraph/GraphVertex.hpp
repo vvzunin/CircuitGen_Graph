@@ -61,10 +61,11 @@ public:
   virtual char updateValue() override;
 
   /// @brief updateLevel It is designed to update the level of the current
-  /// vertex in a directed graph based on the levels of its input connections
+  /// vertex in a directed graph based on the levels of its input connections.
+  /// When running it for a second time, set updateLevel flags to their init
+  /// state
 
-  virtual void updateLevel(bool i_recalculate = false,
-                           std::string tab = "") override;
+  virtual void updateLevel(std::string tab = "") override;
 
   DotReturn toDOT() override;
 
@@ -94,7 +95,7 @@ public:
 
   ~GraphVertexConstant() override{};
 
-  size_t calculateHash(bool i_recalculate = false) override;
+  size_t calculateHash() override;
 
   /// @brief updateLevel updates the level of the current vertex in the graph
   /// based on the levels of its incoming connections
@@ -131,7 +132,7 @@ public:
   ~GraphVertexSubGraph() override{};
 
   char updateValue() override;
-  void updateLevel(bool i_recalculate = false, std::string tab = "") override;
+  void updateLevel(std::string tab = "") override;
 
   std::string toVerilog() const override;
   DotReturn toDOT() override;
@@ -142,13 +143,10 @@ public:
   /// folder would be created there
   /// @param i_filename name of file to be created (default is same as graph
   /// name)
-  /// @return pair, first is bool, meaning was file writing successful or not
-  /// and second is string, for graph is empty, for subgraph is module instance
-  std::pair<bool, std::string> toVerilog(std::string i_path,
-                                         std::string i_filename = "");
+  /// @return bool, meaning was file writing successful or not
+  bool toVerilog(std::string i_path, std::string i_filename = "");
 
-  std::pair<bool, std::string> toDOT(std::string i_path,
-                                     std::string i_filename = "");
+  bool toDOT(std::string i_path, std::string i_filename = "");
 
   /// @brief This method is used as a substructure for
   /// OrientedGraph methods
@@ -163,10 +161,10 @@ public:
   std::string toGraphML(uint16_t i_indent = 0, std::string i_prefix = "") const;
 
   /// @brief This method is used as a substructure for
-  /// OrientedGraph methods
+  /// OrientedGraph methods. When running it for a second time, clear hash flags
   /// @return
 
-  size_t calculateHash(bool i_recalculate = false) override;
+  size_t calculateHash() override;
 
   void setSubGraph(GraphPtr i_subGraph);
   GraphPtr getSubGraph() const;
@@ -213,8 +211,7 @@ public:
   /// vertices to which it is connected, and sets the level of the current
   /// vertex to one higher than the highest level
 
-  virtual void updateLevel(bool i_recalculate = false,
-                           std::string tab = "") override;
+  virtual void updateLevel(std::string tab = "") override;
 
   DotReturn toDOT() override;
 
@@ -250,16 +247,15 @@ public:
   virtual char updateValue() override;
 
   /// @brief calculateHash
-  /// Calculates the hash value of the vertex
-  /// @param i_recalculate Flag indicating whether to i_recalculate the hash
-  /// value (default false)
+  /// Calculates the hash value of the vertex. When running for a second time,
+  /// set hash flags to default state
   /// @throws None.
   /// @code
   /// TO DO:
   /// @endcode
   /// @return The calculated hash value as a string
 
-  size_t calculateHash(bool i_recalculate = false) override;
+  size_t calculateHash() override;
 
   /// @brief getVerilogString
   /// Gets a string in Verilog format representing the current vertex
@@ -344,16 +340,15 @@ public:
   ~GraphVertexSequential() override{};
 
   /// @brief calculateHash
-  /// Calculates the hash value of the vertex
-  /// @param i_recalculate Flag indicating whether to i_recalculate the hash
-  /// value (default false)
+  /// Calculates the hash value of the vertex. When running for a second time,
+  /// set hash flags to default state
   /// @throws None.
   /// @code
   /// TO DO:
   /// @endcode
   /// @return The calculated hash value as a string
 
-  size_t calculateHash(bool i_recalculate = false) override;
+  size_t calculateHash() override;
 
   /// @brief toVerilog
   /// generates a string in Verilog format for the current vertex,
