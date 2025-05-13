@@ -69,7 +69,7 @@ class GraphVertexBase;
 /// @param d_subGraphs Set of subgraphs
 /// This set stores the subgraphs present in the graph. It is used to keep
 /// track of all the subgraphs associated with the current graph instance
-/// @param d_vertexes Map of vertex types to vectors of vertex pointers
+/// @param d_vertices Map of vertex types to vectors of vertex pointers
 /// @param d_countGraph Static counter for the total number of graphs
 /// @param d_gatesCount Map for quick gates count
 /// This map is used for quick counting of gates in the graph. It maps each
@@ -92,6 +92,8 @@ public:
   OrientedGraph(const std::string &i_name = "",
                 size_t buffer_size = DEFAULT_BUF,
                 size_t chunk_size = CHUNK_SIZE);
+
+  using GraphID = std::size_t;
 
   // TODO: Добавить использование gates_inputs_info.
 
@@ -161,7 +163,7 @@ public:
   ///
   /// */
 
-  void updateLevels(bool i_recalculate = false);
+  void updateLevels();
 
   /// @brief getMaxLevel
   /// Calculates and returns the maximum level of the output vertices in the
@@ -439,14 +441,21 @@ public:
   getBaseVertexes() const;
   VertexPtr getVerticeByIndex(size_t idx) const;
 
-  std::string getGraphVerilogInstance();
-  std::pair<bool, std::string> toVerilog(std::string i_path,
-                                         std::string i_filename = "");
+  /// @brief method used for translating graph to verilog
+  /// @param i_path folder, in which file should be created
+  /// @param i_filename name of a file, which should be created
+  /// @return flag, if file was correctly vreated or not
+  bool toVerilog(std::string i_path, std::string i_filename = "");
 
-  DotReturn getGraphDotInstance();
+  /// @brief
+  /// @return
   DotReturn toDOT();
-  std::pair<bool, std::string> toDOT(std::string i_path,
-                                     std::string i_filename = "");
+
+  /// @brief
+  /// @param i_path
+  /// @param i_filename
+  /// @return
+  bool toDOT(std::string i_path, std::string i_filename = "");
 
   /// @brief toGraphML Writes the graph structure in GraphML format to the
   /// specified output stream
@@ -475,6 +484,11 @@ public:
 
   // Сделать матрицу смежности для хранения и быстрого поиска связей?
 
+  /// @brief used for looking for a vector of all vertices with required type
+  /// @param i_type
+  /// @param i_name
+  /// @param i_addSubGraphs
+  /// @return
   std::vector<VertexPtr>
   getVerticesByType(const VertexTypes &i_type, std::string_view i_name = "",
                     const bool &i_addSubGraphs = false) const;
@@ -485,18 +499,16 @@ public:
                     const bool &i_addSubGraphs = false) const;
 
   /// @brief Call calculateHash before this check!!!!
-  /// @param rhs
-  /// @return
+  /// @param rhs another value to be compared
+  /// @return returns true, if hashes are equal
   bool operator==(const OrientedGraph &rhs);
 
   /// @brief calculateHash calculates hash values for a graph based on the hash
   /// values of its vertices
-  /// @param i_recalculate A Boolean value indicating whether the hash value
-  /// should be recalculated even if it has already been previously calculated.
-  /// By default, false.
+  /// When running for a second time, set hash flags to default state
   /// @return A string representing the hash value of the graph
 
-  std::string calculateHash(bool i_recalculate = false);
+  std::string calculateHash();
 
   // @brief getGatesCount Returns a display containing the number of each gate
   /// type in the graph
@@ -514,15 +526,25 @@ public:
   std::map<Gates, std::map<Gates, size_t>> getEdgesGatesCount() const;
 
   void reserve(VertexTypes i_type, size_t i_capacity) {
-    d_vertexes[i_type].reserve(d_vertexes[i_type].size() + i_capacity);
+    d_vertices[i_type].reserve(d_vertices[i_type].size() + i_capacity);
   }
 
+  /// @brief resets counter for graph IDs
   static void resetCounter() { d_countGraph = 0ul; }
 
   bool isConnected(bool i_recalculate = false);
 
-  std::map<size_t, std::vector<std::vector<VertexPtr>>>
-  getSubGraphsOutputsPtr();
+  std::uint64_t getGraphInstVerilog(GraphID i_id) {
+    return d_graphInstanceToVerilogCount[i_id]++;
+  }
+
+  std::uint64_t getGraphInstDOT(GraphID i_id) {
+    return d_graphInstanceToDotCount[i_id]++;
+  }
+
+  /// @brief getter for unique graph ID
+  /// @return id of graph (size_t)
+  GraphID getID() { return d_graphID; }
 
   GraphPtr unrollGraph();
 
@@ -550,18 +572,52 @@ protected:
     return new (allocate<T>()) T(std::forward<Args>(args)...);
   }
 
+  void dfs(VertexPtr i_startVertex, std::unordered_set<VertexPtr> &i_visited,
+           std::unordered_set<VertexPtr> &i_dsg);
+
 private:
   static std::atomic_size_t d_countNewGraphInstance;
-  size_t d_graphID;
+  static std::atomic_size_t d_countGraph;
+
+private:
+  enum HASH_STATE : uint8_t {
+    HC_NOT_CALC = 0,
+    HC_IN_PROGRESS = 1,
+    HC_CALC = 2
+  };
+
+  // used for quick gates count
+  std::map<Gates, size_t> d_gatesCount = {
+      {Gates::GateAnd, 0}, {Gates::GateNand, 0}, {Gates::GateOr, 0},
+      {Gates::GateNor, 0}, {Gates::GateNot, 0},  {Gates::GateBuf, 0},
+      {Gates::GateXor, 0}, {Gates::GateXnor, 0}};
+  // used for quick edges of gate type count;
+  std::map<Gates, std::map<Gates, size_t>> d_edgesGatesCount;
+
+  // We can add a subgraph multiple times
+  // so we need to count instances to verilog.
+  // We are counting to know, which inputs and outputs should we use now
+  std::map<GraphID, uint64_t> d_graphInstanceToVerilogCount;
+  std::map<GraphID, uint64_t> d_graphInstanceToDotCount;
+
+  // each subgraph has one or more outputs. We save them,
+  // depending on subgraph instance number
+  std::vector<VertexPtr> d_allSubGraphsOutputs;
+
+  std::set<GraphPtr> d_subGraphs;
+  std::array<std::vector<VertexPtr>, VertexTypes::output + 1> d_vertices;
+
   // as we can have multiple parents, we save
   // for toVerilog current parent graph
   GraphPtrWeak d_currentParentGraph;
-  size_t d_edgesCount = 0;
-
-  // TODO check if can be zero. If it is possible, add flag
-  size_t d_hashed = 0;
 
   std::string d_name;
+
+  GraphID d_graphID;
+  size_t d_edgesCount = 0;
+
+  size_t d_hashed = 0;
+  HASH_STATE d_hashState = HC_NOT_CALC;
 
   bool d_isSubGraph = false;
   // Пока не реализован функционал.
@@ -573,33 +629,6 @@ private:
 
   // -1 if false, 0 if undefined, 1 if true
   int8_t d_connected = 0;
-  void dfs(VertexPtr i_startVertex, std::unordered_set<VertexPtr> &i_visited,
-           std::unordered_set<VertexPtr> &i_dsg);
-  // We can add a subgraph multiple times
-  // so we need to count instances to verilog.
-  // We are counting to know, which inputs and outputs should we use now
-  std::map<size_t, uint64_t> d_graphInstanceToVerilogCount;
-  std::map<size_t, uint64_t> d_graphInstanceToDotCount;
-
-  // each subgraph has one or more outputs. We save them,
-  // depending on subgraph instance number
-  std::map<size_t, std::vector<std::vector<VertexPtr>>> d_subGraphsOutputsPtr;
-  std::vector<VertexPtr> d_allSubGraphsOutputs;
-  // we have such pairs: number of subgraph instances,
-  std::map<size_t, std::vector<std::vector<VertexPtr>>> d_subGraphsInputsPtr;
-
-  std::set<GraphPtr> d_subGraphs;
-  std::array<std::vector<VertexPtr>, VertexTypes::output + 1> d_vertexes;
-
-  static std::atomic_size_t d_countGraph;
-
-  // used for quick gates count
-  std::map<Gates, size_t> d_gatesCount = {
-      {Gates::GateAnd, 0}, {Gates::GateNand, 0}, {Gates::GateOr, 0},
-      {Gates::GateNor, 0}, {Gates::GateNot, 0},  {Gates::GateBuf, 0},
-      {Gates::GateXor, 0}, {Gates::GateXnor, 0}};
-  // used for quick edges of gate type count;
-  std::map<Gates, std::map<Gates, size_t>> d_edgesGatesCount;
 };
 
 } // namespace CG_Graph

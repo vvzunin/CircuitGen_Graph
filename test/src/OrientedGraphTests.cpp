@@ -570,6 +570,10 @@ TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreSubEdges) {
 //   EXPECT_EQ(stringF, graphPtr1->toGraphMLClassic(0));
 // }
 
+#define RESET_HASH() \
+  graphPtr1->clearHashStates(); \
+  graphPtr2->clearHashStates()
+
 TEST(TestCalculateHash_Output, GraphsWithTheSameStructureHaveEqualHash) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
@@ -578,32 +582,44 @@ TEST(TestCalculateHash_Output, GraphsWithTheSameStructureHaveEqualHash) {
 
   VertexPtr vert1 = graphPtr1->addGate(Gates::GateNot, "Anything");
   VertexPtr vert2 = graphPtr2->addGate(Gates::GateNot, "Anything");
-  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+
+  RESET_HASH();
+  EXPECT_EQ(graphPtr1->calculateHash(), graphPtr2->calculateHash());
 
   graphPtr1->addGate(Gates::GateNand, "Anything");
+  RESET_HASH();
   // Should hash be the same if there are differences in Gates (without edges)
-  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  EXPECT_EQ(graphPtr1->calculateHash(), graphPtr2->calculateHash());
 
   VertexPtr inp1 = graphPtr1->addInput("Anything");
-  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  RESET_HASH();
+  EXPECT_EQ(graphPtr1->calculateHash(), graphPtr2->calculateHash());
+
   VertexPtr inp2 = graphPtr2->addInput("Anything");
-  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  RESET_HASH();
+  EXPECT_EQ(graphPtr1->calculateHash(), graphPtr2->calculateHash());
 
   VertexPtr out1 = graphPtr1->addOutput("Anything");
+  RESET_HASH();
   // Should hash be not the same if there are differences in Outputs
-  EXPECT_NE(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  EXPECT_NE(graphPtr1->calculateHash(), graphPtr2->calculateHash());
 
   VertexPtr out2 = graphPtr2->addOutput("Anything");
-  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  RESET_HASH();
+  EXPECT_EQ(graphPtr1->calculateHash(), graphPtr2->calculateHash());
 
   graphPtr1->addEdge(inp1, vert1);
-  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  RESET_HASH();
+  EXPECT_EQ(graphPtr1->calculateHash(), graphPtr2->calculateHash());
   graphPtr2->addEdge(inp2, vert2);
 
   graphPtr1->addEdge(vert1, out1);
-  EXPECT_NE(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  RESET_HASH();
+  EXPECT_NE(graphPtr1->calculateHash(), graphPtr2->calculateHash());
+
   graphPtr2->addEdge(vert2, out2);
-  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  RESET_HASH();
+  EXPECT_EQ(graphPtr1->calculateHash(), graphPtr2->calculateHash());
 }
 
 TEST(TestCalculateHash_Output, GraphsWithTheSameStructureButDifferentConst) {
@@ -616,7 +632,8 @@ TEST(TestCalculateHash_Output, GraphsWithTheSameStructureButDifferentConst) {
   VertexPtr inp2 = graphPtr2->addInput();
   VertexPtr inp11 = graphPtr1->addInput();
   VertexPtr inp22 = graphPtr2->addInput();
-  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  RESET_HASH();
+  EXPECT_EQ(graphPtr1->calculateHash(), graphPtr2->calculateHash());
 
   VertexPtr gate1 = graphPtr1->addGate(Gates::GateAnd);
   VertexPtr gate2 = graphPtr2->addGate(Gates::GateAnd);
@@ -624,26 +641,32 @@ TEST(TestCalculateHash_Output, GraphsWithTheSameStructureButDifferentConst) {
   graphPtr1->addEdge(inp11, gate1);
   graphPtr2->addEdge(inp2, gate2);
   graphPtr2->addEdge(inp22, gate2);
-  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  RESET_HASH();
+  EXPECT_EQ(graphPtr1->calculateHash(), graphPtr2->calculateHash());
 
   VertexPtr gate3 = graphPtr1->addGate(Gates::GateNot);
   VertexPtr gate4 = graphPtr2->addGate(Gates::GateNot);
   graphPtr1->addEdge(gate1, gate3);
   graphPtr2->addEdge(gate2, gate4);
-  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  RESET_HASH();
+  EXPECT_EQ(graphPtr1->calculateHash(), graphPtr2->calculateHash());
 
   VertexPtr out1 = graphPtr1->addOutput();
   VertexPtr out2 = graphPtr2->addOutput();
   graphPtr1->addEdge(gate1, out1);
   graphPtr2->addEdge(gate2, out2);
-  EXPECT_EQ(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  RESET_HASH();
+  EXPECT_EQ(graphPtr1->calculateHash(), graphPtr2->calculateHash());
 
   VertexPtr const1 = graphPtr1->addConst('0');
   VertexPtr const2 = graphPtr2->addConst('1');
   graphPtr1->addEdge(const1, gate1);
   graphPtr2->addEdge(const2, gate2);
-  EXPECT_NE(graphPtr1->calculateHash(true), graphPtr2->calculateHash(true));
+  RESET_HASH();
+  EXPECT_NE(graphPtr1->calculateHash(), graphPtr2->calculateHash());
 }
+
+#undef RESET_HASH
 
 TEST(TestGetGatesCount, ReturnCorrectGates) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
@@ -739,7 +762,7 @@ TEST(TestToVerilog, Simple) {
   graphPtr->addEdges({inA, inB}, gateAnd1);
   graphPtr->addEdges({gateAnd1, const1}, gateOr1);
   graphPtr->addEdge(gateOr1, out);
-  auto strs = graphPtr->toVerilog(".", "testSimple.v");
+  graphPtr->toVerilog(".", "testSimple.v");
   std::string curPath = std::filesystem::current_path();
   std::string loadFile = loadStringFileOrientedGraph(curPath + "/testSimple.v");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
@@ -773,7 +796,7 @@ TEST(TestToVerilog, SubGraph) {
   graphPtr->addEdge(outs[0], out);
 
   std::filesystem::create_directories("./submodules");
-  auto strs = graphPtr->toVerilog(".", "testSubGraph.v");
+  graphPtr->toVerilog(".", "testSubGraph.v");
   std::string curPath = std::filesystem::current_path();
   std::string loadFile =
       loadStringFileOrientedGraph(curPath + "/testSubGraph.v");
@@ -797,7 +820,7 @@ TEST(TestToDOT, Simple) {
   graphPtr->addEdges({inA, inB}, gateAnd1);
   graphPtr->addEdges({gateAnd1, const1}, gateOr1);
   graphPtr->addEdge(gateOr1, out);
-  auto strs = graphPtr->toDOT(".", "testSimple.dot");
+  graphPtr->toDOT(".", "testSimple.dot");
 #ifdef LOGFLAG
   LOG(INFO) << "toDot complete!";
 #endif
@@ -846,7 +869,7 @@ TEST(TestToDOT, SubGraph) {
   graphPtr->addEdge(outs[1], outD);
   graphPtr->addEdge(inB, outE);
   std::filesystem::create_directories("./submodulesDOT");
-  auto strs = graphPtr->toDOT(".", "testSubGraph.dot");
+  graphPtr->toDOT(".", "testSubGraph.dot");
   std::string curPath = std::filesystem::current_path();
   std::string loadFile =
       loadStringFileOrientedGraph(curPath + "/testSubGraph.dot");
@@ -889,7 +912,7 @@ TEST(TestToDOT, SubGraphUnroll) {
   GraphPtr unrollGraphPtr = graphPtr->unrollGraph();
 
   std::filesystem::create_directories("./submodulesDOT");
-  auto strs = unrollGraphPtr->toDOT(".", "testSubGraphUnroll.dot");
+  unrollGraphPtr->toDOT(".", "testSubGraphUnroll.dot");
   std::string curPath = std::filesystem::current_path();
   std::string loadFile =
       loadStringFileOrientedGraph(curPath + "/testSubGraphUnroll.dot");
@@ -986,7 +1009,7 @@ TEST(TestToDOT, SubGraphUnroll2) {
 #endif
 
   std::filesystem::create_directories("./submodulesDOT");
-  auto strs = unrollGraphPtr->toDOT(".", "testSubGraphUnroll2.dot");
+  unrollGraphPtr->toDOT(".", "testSubGraphUnroll2.dot");
   std::string curPath = std::filesystem::current_path();
   std::string loadFile =
       loadStringFileOrientedGraph(curPath + "/testSubGraphUnroll2.dot");
@@ -1069,7 +1092,7 @@ TEST(TestToDOT, SubGraphUnroll3) {
 #endif
 
   std::filesystem::create_directories("./submodulesDOT");
-  auto strs = unrollGraphPtr->toDOT(".", "testSubGraphUnroll3.dot");
+  unrollGraphPtr->toDOT(".", "testSubGraphUnroll3.dot");
   std::string curPath = std::filesystem::current_path();
   std::string loadFile =
       loadStringFileOrientedGraph(curPath + "/testSubGraphUnroll3.dot");
@@ -1141,7 +1164,7 @@ TEST(TestToDOT, SubGraph3) {
   graphPtr->addEdge(inB, outE);
 
   std::filesystem::create_directories("./submodulesDOT");
-  auto strs = graphPtr->toDOT(".", "testSubGraph3.dot");
+  graphPtr->toDOT(".", "testSubGraph3.dot");
   std::string curPath = std::filesystem::current_path();
   std::string loadFile =
       loadStringFileOrientedGraph(curPath + "/testSubGraph3.dot");

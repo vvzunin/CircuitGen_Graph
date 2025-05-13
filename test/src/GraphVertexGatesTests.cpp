@@ -89,7 +89,7 @@ TEST(TestUpdateLevel, GatesCorrectUpdate) {
   VertexPtr outputVert = graph->addOutput();
   graph->addEdge(inputVert, gateVert);
   graph->addEdge(gateVert, outputVert);
-  graph->updateLevels(true);
+  graph->updateLevels();
   EXPECT_EQ(gateVert->getLevel(), 1);
 }
 
@@ -448,44 +448,92 @@ TEST(TestCalculateHash_Gate, SameHashWhenEqualInputs) {
   EXPECT_EQ(gate1.calculateHash(), gate2.calculateHash());
 
   gate1.addVertexToOutConnections(memoryOwnerGateGr->addGate(Gates::GateAnd));
-  EXPECT_NE(gate1.calculateHash(true), gate2.calculateHash(true));
+  gate1.resetHashState();
+  gate2.resetHashState();
+  EXPECT_NE(gate1.calculateHash(), gate2.calculateHash());
+
   gate2.addVertexToOutConnections(memoryOwnerGateGr->addGate(Gates::GateAnd));
-  EXPECT_EQ(gate1.calculateHash(true), gate2.calculateHash(true));
+  gate1.resetHashState();
+  gate2.resetHashState();
+  EXPECT_EQ(gate1.calculateHash(), gate2.calculateHash());
 }
 
 TEST(TestCalulateHash_Gate, BistableCell) {
   GraphPtr graph = std::make_shared<OrientedGraph>();
   // level = 0
   VertexPtr inputVertA = graph->addInput();
-  graph->addInput();
-  VertexPtr gateVertA = graph->addGate(GateNor);
-  VertexPtr gateVertB = graph->addGate(GateNor);
+  VertexPtr inputVertB = graph->addInput();
+  VertexPtr gateVertA = graph->addGate(GateNand);
+  VertexPtr gateVertB = graph->addGate(GateNand);
   VertexPtr outputVertA = graph->addOutput();
   VertexPtr outputVertB = graph->addOutput();
   graph->addEdge(inputVertA, gateVertA);
-  graph->addEdge(gateVertB, outputVertB);
-  graph->addEdge(gateVertA, outputVertA);
+  graph->addEdge(inputVertB, gateVertB);
+
   graph->addEdge(gateVertA, gateVertB);
-  graph->addEdge(gateVertB, outputVertB);
   graph->addEdge(gateVertB, gateVertA);
+
+  graph->addEdge(gateVertA, outputVertA);
+  graph->addEdge(gateVertB, outputVertB);
 
   GraphPtr graph1 = std::make_shared<OrientedGraph>();
   // level = 0
   VertexPtr inputVertA1 = graph1->addInput();
-  graph1->addInput();
-  VertexPtr gateVertA1 = graph1->addGate(GateNor);
+  VertexPtr inputVertB1 = graph1->addInput();
+  VertexPtr gateVertA1 = graph1->addGate(GateNand);
+  VertexPtr gateVertB1 = graph1->addGate(GateNand);
+  VertexPtr outputVertA1 = graph1->addOutput();
+  VertexPtr outputVertB1 = graph1->addOutput();
+  graph1->addEdge(inputVertA1, gateVertA1);
+  graph1->addEdge(inputVertB1, gateVertB1);
+
+  // Order does not make any sens
+  graph1->addEdge(gateVertB1, gateVertA1);
+  graph1->addEdge(gateVertA1, gateVertB1);
+
+  graph1->addEdge(gateVertA1, outputVertB1);
+  graph1->addEdge(gateVertB1, outputVertA1);
+
+  EXPECT_EQ(graph->calculateHash(), graph1->calculateHash());
+}
+
+TEST(TestCalulateHash_Gate, PseudoBistableCell) {
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+  // level = 0
+  VertexPtr inputVertA = graph->addInput();
+  VertexPtr inputVertB = graph->addInput();
+  VertexPtr gateVertA = graph->addGate(GateNand);
+  VertexPtr gateVertB = graph->addGate(GateNor);
+  VertexPtr outputVertA = graph->addOutput();
+  VertexPtr outputVertB = graph->addOutput();
+  graph->addEdge(inputVertA, gateVertA);
+  graph->addEdge(inputVertB, gateVertB);
+
+  graph->addEdge(gateVertA, gateVertB);
+  graph->addEdge(gateVertB, gateVertA);
+
+  graph->addEdge(gateVertA, outputVertA);
+  graph->addEdge(gateVertB, outputVertB);
+
+  GraphPtr graph1 = std::make_shared<OrientedGraph>();
+  // level = 0
+  VertexPtr inputVertA1 = graph1->addInput();
+  VertexPtr inputVertB1 = graph1->addInput();
+  VertexPtr gateVertA1 = graph1->addGate(GateNand);
   VertexPtr gateVertB1 = graph1->addGate(GateNor);
   VertexPtr outputVertA1 = graph1->addOutput();
   VertexPtr outputVertB1 = graph1->addOutput();
   graph1->addEdge(inputVertA1, gateVertA1);
-  graph1->addEdge(gateVertB1, outputVertB1);
-  graph1->addEdge(gateVertA1, outputVertA1);
-  graph1->addEdge(gateVertB1, gateVertA1);
-  graph1->addEdge(gateVertB1, outputVertB1);
-  graph1->addEdge(gateVertA1, gateVertB1);
-  graph1->calculateHash(true);
+  graph1->addEdge(inputVertB1, gateVertB1);
 
-  EXPECT_NE(graph->calculateHash(true), graph1->calculateHash(true));
+  graph1->addEdge(gateVertB1, gateVertA1);
+  graph1->addEdge(gateVertA1, gateVertB1);
+
+  // outputs are sorted, so connection to the same as before gives equal hash
+  graph1->addEdge(gateVertA1, outputVertB1);
+  graph1->addEdge(gateVertB1, outputVertA1);
+
+  EXPECT_NE(graph->calculateHash(), graph1->calculateHash());
 }
 
 // TEST(TestRemoveVertexToInConnections, GatesRemoveConnections) {

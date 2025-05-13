@@ -75,8 +75,8 @@ char GraphVertexGates::updateValue() {
   return d_value;
 }
 
-size_t GraphVertexGates::calculateHash(bool i_recalculate) {
-  if (d_hasHash && (!i_recalculate || d_hasHash == HC_IN_PROGRESS)) {
+size_t GraphVertexGates::calculateHash() {
+  if (d_hasHash) {
     return d_hashed;
   }
   std::string hashedStr =
@@ -87,7 +87,7 @@ size_t GraphVertexGates::calculateHash(bool i_recalculate) {
   hashed_data.reserve(d_inConnections.size());
 
   for (auto &child: d_inConnections) {
-    hashed_data.push_back(child->calculateHash(i_recalculate));
+    hashed_data.push_back(child->calculateHash());
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 

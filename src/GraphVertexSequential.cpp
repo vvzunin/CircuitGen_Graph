@@ -209,8 +209,8 @@ VertexPtr GraphVertexSequential::getSet() const {
   return d_set;
 }
 
-size_t GraphVertexSequential::calculateHash(bool i_recalculate) {
-  if (d_hasHash && (!i_recalculate || d_hasHash == HC_IN_PROGRESS)) {
+size_t GraphVertexSequential::calculateHash() {
+  if (d_hasHash) {
     return d_hashed;
   }
   // same as in gate, but adds type of a sequential vertex
@@ -222,7 +222,7 @@ size_t GraphVertexSequential::calculateHash(bool i_recalculate) {
   hashed_data.reserve(d_inConnections.size());
 
   for (auto &child: d_inConnections) {
-    hashed_data.push_back(child->calculateHash(i_recalculate));
+    hashed_data.push_back(child->calculateHash());
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
