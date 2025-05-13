@@ -896,7 +896,7 @@ std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
         format(nodeTemplate, "{}", "subGraph", "\n",
                sg->toGraphMLClassic(i_indent + 4, i_prefix + "{}::"));
 
-    /// FIXME: Why inputs and outpus of graph are connected with verticies of
+    /// FIXME: Why inputs and outputs of graph are connected with vertices of
     /// the same graph....
     // graphInputs, graphOutputs, verticesInputs, verticesOutputs
     // const auto &gInputs = sg->d_vertices.at(VertexTypes::input);

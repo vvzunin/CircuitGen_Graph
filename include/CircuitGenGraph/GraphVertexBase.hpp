@@ -95,7 +95,7 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
 class GraphVertexBase {
 
 public:
-  /// @brief resetes counter of unique id-s for verticies
+  /// @brief resetes counter of unique id-s for vertices
   static void resetCounter() { d_count = 0ul; }
 
 private:
@@ -129,7 +129,7 @@ public:
   /// @brief required before hash recalculation
   void resetHashState() { d_hasHash = HC_NOT_CALC; }
 
-  /// @brief required before get verticies by level
+  /// @brief required before get vertices by level
   void resetUsedLevelState() {
     // remove flag using bitwise operations
     d_needUpdate = static_cast<VERTEX_STATE>(d_needUpdate & ~VS_USED_LEVEL);
