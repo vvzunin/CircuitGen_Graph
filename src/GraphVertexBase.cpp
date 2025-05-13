@@ -337,18 +337,22 @@ std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex) {
 }
 
 bool GraphVertexBase::removeVertexToInConnections(VertexPtr i_vert) {
-  auto vertToRemove = std::find(d_inConnections.begin(),d_inConnections.end(),i_vert);
-  if (vertToRemove == d_inConnections.end()) return false;
+  auto vertToRemove =
+      std::find(d_inConnections.begin(), d_inConnections.end(), i_vert);
+  if (vertToRemove == d_inConnections.end())
+    return false;
   std::swap(*vertToRemove, *d_inConnections.rbegin());
-  d_inConnections.resize(d_inConnections.size()-1);
+  d_inConnections.resize(d_inConnections.size() - 1);
   return true;
 }
 
 bool GraphVertexBase::removeVertexToOutConnections(VertexPtr i_vert) {
-  auto vertToRemove = std::find(d_outConnections.begin(),d_outConnections.end(),i_vert);
-  if (vertToRemove == d_outConnections.end()) return false;
+  auto vertToRemove =
+      std::find(d_outConnections.begin(), d_outConnections.end(), i_vert);
+  if (vertToRemove == d_outConnections.end())
+    return false;
   std::swap(*vertToRemove, *d_outConnections.rbegin());
-  d_outConnections.resize(d_outConnections.size()-1);
+  d_outConnections.resize(d_outConnections.size() - 1);
   return true;
 }
 

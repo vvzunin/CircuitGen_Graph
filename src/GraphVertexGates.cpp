@@ -23,8 +23,10 @@ Gates GraphVertexGates::getGate() const {
   return d_gate;
 }
 uint32_t GraphVertexGates::addVertexToInConnections(VertexPtr i_vert) {
-  if ((getGate() == Gates::GateBuf || getGate() == Gates::GateNot) && !d_inConnections.empty()){
-    throw std::length_error("Buf and Not gate types can not obtain more than one input connection.");
+  if ((getGate() == Gates::GateBuf || getGate() == Gates::GateNot) &&
+      !d_inConnections.empty()) {
+    throw std::length_error("Buf and Not gate types can not obtain more than "
+                            "one input connection.");
   }
   return GraphVertexBase::addVertexToInConnections(i_vert);
 }

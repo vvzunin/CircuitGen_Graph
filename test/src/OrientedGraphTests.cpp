@@ -400,30 +400,68 @@ TEST(TestEdgeRemoving, ValidEdgeRemoving) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph");
   VertexPtr v1 = graphPtr->addInput();
   VertexPtr v2 = graphPtr->addGate(GateBuf);
+  VertexPtr v3 = graphPtr->addGate(GateBuf);
   graphPtr->addEdge(v1, v2);
   graphPtr->removeEdge(v1, v2);
+  graphPtr->addEdge(v2, v3);
+  EXPECT_EQ(graphPtr->removeEdge(v1, v3), false);
+  EXPECT_EQ(graphPtr->removeEdge(v2, v3), true);
+  EXPECT_EQ(graphPtr->getEdgesGatesCount()[GateBuf][GateBuf], 0);
   EXPECT_EQ(graphPtr->getEdgesCount(), 0);
   EXPECT_EQ(v1->getOutConnections().size(), 0);
   EXPECT_EQ(v2->getInConnections().size(), 0);
 }
 
-TEST(TESTWASTEVerticesRemoving, VerticesWithoutPathToOutputDestroyed) {
+TEST(TestWasteVerticesRemoving, VerticesWithoutPathToOutputDestroyed) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph");
-  auto gate = graphPtr->addGate(Gates::GateAnd, "Anything");
+  graphPtr->updateLevels();
+  auto gate1 = graphPtr->addGate(Gates::GateAnd, "And");
+  auto alsoGate = graphPtr->addGate(Gates::GateNot, "FirstNot");
   auto inp = graphPtr->addInput("Anything");
-  graphPtr->addEdge(inp, gate);
-  graphPtr->addEdge(graphPtr->addInput("AnythingElse"), gate);
-  graphPtr->addEdge(gate, graphPtr->addOutput());
-  graphPtr->addEdge(inp, graphPtr->addGate(Gates::GateNot, "AlsoAnything"));
+  graphPtr->addEdge(inp, gate1);
+  graphPtr->addEdge(graphPtr->addInput("AnythingElse"), gate1);
+  graphPtr->addEdge(gate1, alsoGate);
+  graphPtr->addEdge(alsoGate, graphPtr->addGate(GateBuf, "Buf"));
+  EXPECT_EQ(graphPtr->getEdgesGatesCount()[GateNot][GateBuf], 1);
+  graphPtr->addEdge(alsoGate, graphPtr->addOutput());
+  VertexPtr secondNot = graphPtr->addGate(Gates::GateNot, "SecondNot");
+  graphPtr->addEdge(inp, secondNot);
+  VertexPtr secondBuf = graphPtr->addGate(Gates::GateBuf, "SecondBuf");
+  graphPtr->addEdge(inp, secondBuf);
   graphPtr->addInput();
   graphPtr->addConst(1);
-  graphPtr->updateLevels();
+  auto *clk = graphPtr->addInput("clk");
+  auto *data = graphPtr->addInput("data");
+  graphPtr->addSequential(ff, clk, data, "q");
+  graphPtr->addSequential(ff, secondBuf, inp, "q");
+  EXPECT_EQ(graphPtr->getVerticesByName("SecondNot")[0]->getGate(), GateNot);
   graphPtr->removeWasteVertices();
-  EXPECT_EQ(graphPtr->getEdgesCount(), 3);
-  // EXPECT_EQ(graphPtr->getGatesCount()[GateNot], 0);
-  // EXPECT_EQ(graphPtr->getVerticesByType(input).size(), 2);
+  EXPECT_EQ(graphPtr->getEdgesGatesCount()[GateNot][GateBuf], 0);
+  EXPECT_EQ(graphPtr->getEdgesCount(), 4);
+  EXPECT_EQ(graphPtr->getGatesCount()[GateNot], 1);
+  EXPECT_EQ(graphPtr->getGatesCount()[GateAnd], 1);
+  EXPECT_EQ(graphPtr->getGatesCount()[GateBuf], 0);
+  EXPECT_EQ(graphPtr->getVerticesByType(gate).size(), 2);
+  EXPECT_EQ(graphPtr->getVerticesByType(input).size(), 2);
+  EXPECT_EQ(graphPtr->getVerticesByType(seuqential).size(), 0);
 }
-
+TEST(TestWasteVerticesRemoving, DontChangeCorrectGraph) {
+  GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph");
+  graphPtr->updateLevels();
+  EXPECT_NO_THROW(graphPtr->removeWasteVertices());
+  auto gate = graphPtr->addGate(Gates::GateNot, "Anything");
+  auto inp = graphPtr->addInput("Anything");
+  graphPtr->addEdge(inp, gate);
+  graphPtr->addEdge(gate, graphPtr->addOutput());
+  GraphPtr graphPtr2 = std::make_shared<OrientedGraph>("Graph");
+  auto gate2 = graphPtr2->addGate(Gates::GateNot, "Anything");
+  auto inp2 = graphPtr2->addInput("Anything");
+  graphPtr2->addEdge(inp2, gate2);
+  graphPtr2->addEdge(gate2, graphPtr2->addOutput());
+  graphPtr2->updateLevels();
+  graphPtr->removeWasteVertices();
+  EXPECT_EQ(graphPtr->calculateHash(), graphPtr2->calculateHash());
+}
 TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenGrpahIsEmpty) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph1");
   EXPECT_EQ(graphPtr->isEmptyFull(), true);
