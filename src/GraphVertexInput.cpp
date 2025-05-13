@@ -19,6 +19,10 @@ GraphVertexInput::GraphVertexInput(std::string_view i_name,
     GraphVertexBase(i_type, i_name, i_baseGraph) {
 }
 
+void GraphVertexInput::setValue(const char value) {
+  d_value = value;
+}
+
 char GraphVertexInput::updateValue() {
   return d_value;
 }

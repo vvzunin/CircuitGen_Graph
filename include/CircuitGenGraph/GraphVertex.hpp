@@ -57,6 +57,8 @@ public:
   /// TO DO:
   /// @endcode
   /// @throws std::invalid_argument if any input connection is invalid
+  
+  void setValue(const char value);
 
   virtual char updateValue() override;
 
