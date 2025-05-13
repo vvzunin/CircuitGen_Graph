@@ -41,13 +41,13 @@ char GraphVertexSubGraph::updateValue() {
 //   }
 // }
 
-void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
+void GraphVertexSubGraph::updateLevel(std::string tab) {
   int counter = 0, max_inLevel = 0;
-  if (d_needUpdate && !i_recalculate) {
+  if (d_needUpdate) {
     return;
   }
   d_needUpdate = VS_IN_PROGRESS;
-  d_subGraph->updateLevels(i_recalculate);
+  d_subGraph->updateLevels();
   std::vector<VertexPtr> output_verts =
       d_subGraph->getVerticesByType(VertexTypes::output);
   for (VertexPtr vert: d_inConnections) {
@@ -64,8 +64,8 @@ void GraphVertexSubGraph::updateLevel(bool i_recalculate, std::string tab) {
   d_needUpdate = VS_CALC;
 }
 
-std::pair<bool, std::string>
-GraphVertexSubGraph::toVerilog(std::string i_path, std::string i_filename) {
+bool GraphVertexSubGraph::toVerilog(std::string i_path,
+                                    std::string i_filename) {
   if (auto parentPtr = d_baseGraph.lock()) {
     d_subGraph->setCurrentParent(parentPtr);
   } else {
@@ -76,17 +76,31 @@ GraphVertexSubGraph::toVerilog(std::string i_path, std::string i_filename) {
 }
 
 DotReturn GraphVertexSubGraph::toDOT() {
-  if (auto parentPtr = d_baseGraph.lock()) {
+  auto parentPtr = d_baseGraph.lock();
+  if (parentPtr) {
     d_subGraph->setCurrentParent(parentPtr);
   } else {
     throw std::invalid_argument("Dead pointer!");
   }
+  uint64_t dotCount = parentPtr->getGraphInstDOT(d_subGraph->getID());
+  std::string instName =
+      parentPtr->getName() + "_inst_" + std::to_string(dotCount);
+  DotReturn dot = d_subGraph->toDOT();
 
-  return d_subGraph->getGraphDotInstance();
+  dot[0].first = DotTypes::DotSubGraph;
+  dot[0].second["instName"] = instName;
+  for (int i = 0; i < dot.size(); i++) {
+    dot[i].second["name"] = instName + "_" + dot[i].second["name"];
+    if (dot[i].second.find("from") != dot[i].second.end()) {
+      dot[i].second["from"] = instName + "_" + dot[i].second["from"];
+      dot[i].second["to"] = instName + "_" + dot[i].second["to"];
+    }
+  }
+
+  return dot;
 }
 
-std::pair<bool, std::string>
-GraphVertexSubGraph::toDOT(std::string i_path, std::string i_filename) {
+bool GraphVertexSubGraph::toDOT(std::string i_path, std::string i_filename) {
   if (auto parentPtr = d_baseGraph.lock()) {
     d_subGraph->setCurrentParent(parentPtr);
   } else {
@@ -106,7 +120,40 @@ std::string GraphVertexSubGraph::toGraphML(uint16_t i_indent,
 }
 
 std::string GraphVertexSubGraph::toVerilog() const {
-  return "DO NOT CALL IT";
+  auto base = d_baseGraph.lock();
+  uint64_t verilogCount = base->getGraphInstVerilog(d_subGraph->getID());
+
+  std::string verilogTab = "  ";
+  std::string nameSub = base->getName();
+  // module_name module_name_inst_1 (
+  std::string module_ver = verilogTab + nameSub + " " + nameSub + "_inst_" +
+                           std::to_string(verilogCount) + " (\n";
+
+  auto &&inputs = d_subGraph->getVerticesByType(VertexTypes::input);
+  auto &&outputs = d_subGraph->getVerticesByType(VertexTypes::output);
+  for (size_t i = 0; i < inputs.size(); ++i) {
+    VertexPtr inp = d_inConnections[i];
+    std::string inp_name = inputs[i]->getName();
+
+    module_ver += verilogTab + verilogTab + "." + inp_name + "( ";
+    module_ver += inp->getName() + " ),\n";
+  }
+
+  for (size_t i = 0; i < outputs.size() - 1; ++i) {
+    VertexPtr out = d_outConnections[i];
+    std::string out_name = outputs[i]->getName();
+
+    module_ver += verilogTab + verilogTab + "." + out_name + "( ";
+    module_ver += out->getName() + " ),\n";
+  }
+
+  std::string out_name = outputs.back()->getName();
+
+  module_ver += verilogTab + verilogTab + "." + out_name + "( ";
+  module_ver += d_outConnections.back()->getName() + " )\n";
+  module_ver += verilogTab + "); \n";
+
+  return module_ver;
 }
 
 void GraphVertexSubGraph::setSubGraph(GraphPtr i_subGraph) {
@@ -117,8 +164,8 @@ GraphPtr GraphVertexSubGraph::getSubGraph() const {
   return d_subGraph;
 }
 
-size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
-  if (d_hasHash && (!i_recalculate || d_hasHash == HC_IN_PROGRESS)) {
+size_t GraphVertexSubGraph::calculateHash() {
+  if (d_hasHash) {
     return d_hashed;
   }
   // calc hash from subgraph
@@ -130,7 +177,7 @@ size_t GraphVertexSubGraph::calculateHash(bool i_recalculate) {
   hashed_data.reserve(d_inConnections.size());
 
   for (auto *child: d_inConnections) {
-    hashed_data.push_back(child->calculateHash(i_recalculate));
+    hashed_data.push_back(child->calculateHash());
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 

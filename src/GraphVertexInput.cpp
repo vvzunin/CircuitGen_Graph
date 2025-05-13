@@ -27,8 +27,8 @@ char GraphVertexInput::updateValue() {
   return d_value;
 }
 
-void GraphVertexInput::updateLevel(bool i_recalculate, std::string tab) {
-  if (d_needUpdate && !i_recalculate) {
+void GraphVertexInput::updateLevel(std::string tab) {
+  if (d_needUpdate) {
     return;
   }
 #ifdef LOGFLAG

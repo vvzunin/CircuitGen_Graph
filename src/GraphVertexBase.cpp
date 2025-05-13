@@ -175,14 +175,14 @@ uint32_t GraphVertexBase::getLevel() const {
   return d_level;
 }
 
-void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
+void GraphVertexBase::updateLevel(std::string tab) {
   // 2 - IN PROGRESS, 1 - HC_CALC
   // 2 == 010
   // 1 == 001
   // d_needUpdate = static_cast<MY_ENUM>(HC_CALC | ADDED); // ADDED = 4 // 100
   // 101
   int counter = 0;
-  if (d_needUpdate && (!i_recalculate || d_needUpdate == VS_IN_PROGRESS)) {
+  if (d_needUpdate && d_needUpdate == VS_IN_PROGRESS) {
     return;
   }
   d_needUpdate = VS_IN_PROGRESS;
@@ -191,7 +191,7 @@ void GraphVertexBase::updateLevel(bool i_recalculate, std::string tab) {
     LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
               << vert->getTypeName() << ")";
 #endif
-    vert->updateLevel(i_recalculate, tab + "  ");
+    vert->updateLevel(tab + "  ");
     d_level = (vert->getLevel() >= d_level) ? vert->getLevel() + 1 : d_level;
   }
   d_needUpdate = VS_CALC;
@@ -232,8 +232,8 @@ GraphPtrWeak GraphVertexBase::getBaseGraph() const {
   return d_baseGraph;
 }
 
-size_t GraphVertexBase::calculateHash(bool i_recalculate) {
-  if (d_hasHash && (!i_recalculate || d_hasHash == HC_IN_PROGRESS)) {
+size_t GraphVertexBase::calculateHash() {
+  if (d_hasHash) {
     return d_hashed;
   }
   if (d_type == VertexTypes::input) {
@@ -247,7 +247,7 @@ size_t GraphVertexBase::calculateHash(bool i_recalculate) {
   std::string hashedStr;
 
   for (auto *child: d_inConnections) {
-    hashed_data.push_back(child->calculateHash(i_recalculate));
+    hashed_data.push_back(child->calculateHash());
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
@@ -277,30 +277,12 @@ std::vector<VertexPtr> GraphVertexBase::getInConnections() const {
 uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
   assert(i_vert != this);
   assert(d_type != input && d_type != constant);
-
-  d_inConnections.push_back(i_vert);
   uint32_t n = 0;
+  d_inConnections.push_back(i_vert);
   // TODO is rly needed?
   for (VertexPtr vert: d_inConnections)
     n += (vert == i_vert);
   return n;
-}
-
-bool GraphVertexBase::removeVertexToInConnections(VertexPtr i_vert,
-                                                  bool i_full) {
-  if (i_full) {
-    bool f = false;
-    for (int64_t i = d_inConnections.size() - 1; i >= 0; i--) {
-      d_inConnections.erase(d_inConnections.begin() + i);
-      f = true;
-    }
-    return f;
-  }
-  for (size_t i = 0; i < d_inConnections.size(); i++) {
-    d_inConnections.erase(d_inConnections.begin() + i);
-    return true;
-  }
-  return false;
 }
 
 std::vector<VertexPtr> GraphVertexBase::getOutConnections() const {
@@ -316,14 +298,6 @@ bool GraphVertexBase::addVertexToOutConnections(VertexPtr i_vert) {
     n += (vert == i_vert);
   if (n == 0) {
     d_outConnections.push_back(i_vert);
-    return true;
-  }
-  return false;
-}
-
-bool GraphVertexBase::removeVertexToOutConnections(VertexPtr i_vert) {
-  for (size_t i = 0; i < d_outConnections.size(); i++) {
-    d_outConnections.erase(d_outConnections.begin() + i);
     return true;
   }
   return false;
@@ -360,6 +334,26 @@ void GraphVertexBase::log(el::base::type::ostream_t &os) const {
 std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex) {
   stream << vertex.toVerilog();
   return stream;
+}
+
+bool GraphVertexBase::removeVertexToInConnections(VertexPtr i_vert) {
+  auto vertToRemove =
+      std::find(d_inConnections.begin(), d_inConnections.end(), i_vert);
+  if (vertToRemove == d_inConnections.end())
+    return false;
+  std::swap(*vertToRemove, *d_inConnections.rbegin());
+  d_inConnections.resize(d_inConnections.size() - 1);
+  return true;
+}
+
+bool GraphVertexBase::removeVertexToOutConnections(VertexPtr i_vert) {
+  auto vertToRemove =
+      std::find(d_outConnections.begin(), d_outConnections.end(), i_vert);
+  if (vertToRemove == d_outConnections.end())
+    return false;
+  std::swap(*vertToRemove, *d_outConnections.rbegin());
+  d_outConnections.resize(d_outConnections.size() - 1);
+  return true;
 }
 
 } // namespace CG_Graph

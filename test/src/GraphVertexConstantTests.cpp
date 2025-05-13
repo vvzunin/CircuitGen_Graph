@@ -12,7 +12,7 @@ using namespace AuxMethodsGraph;
 GraphPtr memoryOwnerConstGr = std::make_shared<OrientedGraph>();
 
 TEST(TestConstructorWithoutIName, ConstantWithoutDefaultInputParametrsDefName) {
-  GraphVertexBase::resetRounter();
+  GraphVertexBase::resetCounter();
 #ifdef LOGFLAG
   initLogging("TestConstructorWithoutIName",
               "ConstantWithoutDefaultInputParametrsDefName");
@@ -32,7 +32,7 @@ TEST(TestConstructorWithoutIName, ConstantWithoutDefaultInputParametrsDefName) {
 }
 
 TEST(TestConstructorWithoutIName, ConstantWithDefaultInputParametrsDefName) {
-  GraphVertexBase::resetRounter();
+  GraphVertexBase::resetCounter();
 #ifdef LOGFLAG
   initLogging("TestConstructorWithoutIName",
               "ConstantWithDefaultInputParametrsDefName");
@@ -161,9 +161,13 @@ TEST(TestCalculateHash_Const, SameHashWhenEqualInputs) {
   EXPECT_EQ(constant1.calculateHash(), constant2.calculateHash());
 
   constant1.addVertexToOutConnections(memoryOwnerConstGr->addConst('z'));
-  EXPECT_NE(constant1.calculateHash(true), constant2.calculateHash(true));
+  constant1.resetHashState();
+  constant2.resetHashState();
+  EXPECT_NE(constant1.calculateHash(), constant2.calculateHash());
   constant2.addVertexToOutConnections(memoryOwnerConstGr->addConst('z'));
-  EXPECT_EQ(constant1.calculateHash(true), constant2.calculateHash(true));
+  constant1.resetHashState();
+  constant2.resetHashState();
+  EXPECT_EQ(constant1.calculateHash(), constant2.calculateHash());
 }
 TEST(TestCalculateHash_Const, SameGraphDifferentValues) {
 #ifdef LOGFLAG
@@ -174,9 +178,14 @@ TEST(TestCalculateHash_Const, SameGraphDifferentValues) {
   EXPECT_NE(constant1.calculateHash(), constant2.calculateHash());
 
   constant1.addVertexToOutConnections(memoryOwnerConstGr->addConst('z'));
-  EXPECT_NE(constant1.calculateHash(true), constant2.calculateHash(true));
+  constant1.resetHashState();
+  constant2.resetHashState();
+  EXPECT_NE(constant1.calculateHash(), constant2.calculateHash());
+
   constant2.addVertexToOutConnections(memoryOwnerConstGr->addConst('z'));
-  EXPECT_NE(constant1.calculateHash(true), constant2.calculateHash(true));
+  constant1.resetHashState();
+  constant2.resetHashState();
+  EXPECT_NE(constant1.calculateHash(), constant2.calculateHash());
 }
 
 // TEST(TestRemoveVertexToInConnections, RemoveConnections) {

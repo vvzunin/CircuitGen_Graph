@@ -111,7 +111,7 @@ TEST(TestUpdateLevel, OutputCorrectUpdate) {
   VertexPtr outputVert = graph->addOutput();
   graph->addEdge(inputVert, gateVert);
   graph->addEdge(gateVert, outputVert);
-  graph->updateLevels(true);
+  graph->updateLevels();
   EXPECT_EQ(outputVert->getLevel(), 2);
 }
 
@@ -174,27 +174,22 @@ TEST(TestCalculateHash_Output, SameHashWhenEqualInputs) {
   EXPECT_NE(output1.calculateHash(), 0);
 
   output1.addVertexToInConnections(memoryOwnerOutputGr->addInput());
-  EXPECT_NE(output1.calculateHash(true), 0);
+  output1.resetHashState();
+  EXPECT_NE(output1.calculateHash(), 0);
 
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphVertexInput output2(graphPtr1);
   GraphVertexInput output3(graphPtr1);
+
   output2.addVertexToOutConnections(memoryOwnerOutputGr->addOutput());
-  EXPECT_NE(output2.calculateHash(true), output3.calculateHash(true));
+  output2.resetHashState();
+  output3.resetHashState();
+  EXPECT_NE(output2.calculateHash(), output3.calculateHash());
 
   output3.addVertexToOutConnections(memoryOwnerOutputGr->addOutput());
-  EXPECT_EQ(output2.calculateHash(true), output3.calculateHash(true));
-}
-
-TEST(TestRemoveVertexToInConnections, OutputRemoveConnections) {
-  VertexPtr outputPtr1 = memoryOwnerOutputGr->addOutput();
-  EXPECT_EQ(outputPtr1->removeVertexToInConnections(nullptr), false);
-
-  outputPtr1->addVertexToInConnections(memoryOwnerOutputGr->addOutput());
-  outputPtr1->addVertexToInConnections(memoryOwnerOutputGr->addOutput());
-  EXPECT_EQ(outputPtr1->getInConnections().size(), 2);
-  EXPECT_EQ(outputPtr1->removeVertexToInConnections(nullptr), true);
-  EXPECT_EQ(outputPtr1->getInConnections().size(), 1);
+  output2.resetHashState();
+  output3.resetHashState();
+  EXPECT_EQ(output2.calculateHash(), output3.calculateHash());
 }
 
 // need to remake realisition of method

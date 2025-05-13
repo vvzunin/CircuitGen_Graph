@@ -22,6 +22,14 @@ GraphVertexGates::GraphVertexGates(Gates i_gate, std::string_view i_name,
 Gates GraphVertexGates::getGate() const {
   return d_gate;
 }
+uint32_t GraphVertexGates::addVertexToInConnections(VertexPtr i_vert) {
+  if ((getGate() == Gates::GateBuf || getGate() == Gates::GateNot) &&
+      !d_inConnections.empty()) {
+    throw std::length_error("Buf and Not gate types can not obtain more than "
+                            "one input connection.");
+  }
+  return GraphVertexBase::addVertexToInConnections(i_vert);
+}
 
 char GraphVertexGates::updateValue() {
   std::map<char, char> table;
@@ -67,8 +75,8 @@ char GraphVertexGates::updateValue() {
   return d_value;
 }
 
-size_t GraphVertexGates::calculateHash(bool i_recalculate) {
-  if (d_hasHash && (!i_recalculate || d_hasHash == HC_IN_PROGRESS)) {
+size_t GraphVertexGates::calculateHash() {
+  if (d_hasHash) {
     return d_hashed;
   }
   std::string hashedStr =
@@ -79,7 +87,7 @@ size_t GraphVertexGates::calculateHash(bool i_recalculate) {
   hashed_data.reserve(d_inConnections.size());
 
   for (auto &child: d_inConnections) {
-    hashed_data.push_back(child->calculateHash(i_recalculate));
+    hashed_data.push_back(child->calculateHash());
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 

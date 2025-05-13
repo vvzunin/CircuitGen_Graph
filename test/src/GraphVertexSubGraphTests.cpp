@@ -114,8 +114,7 @@ TEST(TestToVerilog, TestReturnPairCreateCorrectFile) {
   GraphVertexSubGraph subGraph1(graphPtr1, "Anything", graphPtr2);
   std::string curPath = std::filesystem::current_path();
   std::string fileName = "testGraph.v";
-  EXPECT_EQ(subGraph1.toVerilog(curPath, fileName).first, true);
-  EXPECT_EQ(subGraph1.toVerilog(std::filesystem::current_path()).second, "");
+  EXPECT_TRUE(subGraph1.toVerilog(curPath, fileName));
   std::string loadFile = loadStringFileSubGraph(curPath + '/' + fileName);
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
   // LOG(INFO) << loadFile;
