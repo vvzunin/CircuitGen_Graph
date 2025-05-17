@@ -27,6 +27,7 @@ set(SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphUtils.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultAuxiliaryMethods.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexSequential.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexDataBus.cpp
 )
 
 set(LIBS 

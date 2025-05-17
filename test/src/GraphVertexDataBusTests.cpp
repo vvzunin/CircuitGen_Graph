@@ -1,6 +1,7 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
-#include <gtest/gtest.h>
 #include <CircuitGenGraph/OrientedGraph.hpp>
+
+#include <gtest/gtest.h>
 
 #ifdef LOGFLAG
 #include "easylogging++Init.hpp"
@@ -148,7 +149,7 @@ TEST(DataBusTests, TestDataBusToVerilog) {
                                                   "bus", graph);
 
   // Проверка результата toVerilog с флагом форматирования true
-  EXPECT_EQ(bus->toVerilog(true), "input [2:0] bus;\n");
+  EXPECT_EQ(bus->toVerilog(), "input [2:0] bus;\n");
 
   // Проверка результата toVerilog с флагом форматирования false
   EXPECT_EQ(bus->toVerilog(false), "input [2:0] bus;");
@@ -158,7 +159,7 @@ TEST(DataBusTests, TestDataBusToVerilog) {
                                                      "out", graph);
 
   // Проверка результата toVerilog с флагом форматирования true
-  EXPECT_EQ(outBus->toVerilog(true), "output [2:0] out;\n");
+  EXPECT_EQ(outBus->toVerilog(), "output [2:0] out;\n");
 
   // Проверка результата toVerilog с флагом форматирования false
   EXPECT_EQ(outBus->toVerilog(false), "output [2:0] out;");

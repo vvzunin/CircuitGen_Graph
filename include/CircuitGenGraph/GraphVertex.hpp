@@ -8,6 +8,7 @@
 #include <vector>
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
+
 #include "span.hpp"
 
 #ifdef LOGFLAG
@@ -316,21 +317,28 @@ public:
                      GraphPtr i_baseGraph);
   GraphVertexDataBus(tcb::span<VertexPtr> i_vertices,
                      const GraphVertexDataBus &i_vertexDataBus);
-  char updateValue() override;
+
+  virtual ~GraphVertexDataBus() override {}
+
+  char updateValue() override { return 'x'; };
   void updateLevel(bool i_recalculate = false,
-                           std::string tab = "") override;
+                           std::string tab = "") override {};
+
+  DotReturn toDOT() override;
+  std::string toVerilog() const override;
+
+  size_t calculateHash(bool i_recalculate = false) override {
+    return 0ul;
+  };
+
   GraphVertexDataBus slice(size_t startBit, size_t endBit) const;
   VertexPtr operator[](size_t index) const;
   std::string toVerilog(bool flag) const;
-  DotReturn toDOT() override;
   size_t getWidth() const;
-  std::string toVerilog() const override;
-  ~GraphVertexDataBus() override{};
-  size_t calculateHash(bool i_recalculate = false) override {return 0;};
 
-  #ifdef LOGFLAG
+#ifdef LOGFLAG
   virtual void log(el::base::type::ostream_t &os) const override;
-  #endif
+#endif
 
 private:
   tcb::span<VertexPtr> d_vertices;
@@ -371,7 +379,7 @@ public:
 
   // clang-format on
 
-  ~GraphVertexSequential() override{};
+  ~GraphVertexSequential() override {}
 
   /// @brief calculateHash
   /// Calculates the hash value of the vertex
