@@ -305,6 +305,17 @@ public:
                           VertexPtr i_data, VertexPtr i_rst, VertexPtr i_set,
                           VertexPtr i_en, const std::string &i_name = "");
 
+  /// @brief Adds a new data bus to the graph, connecting a set of elements
+  /// (vertices).
+  /// @param elements A vector of vertices that will form the data bus.
+  /// @param i_name The optional name for the data bus. If not provided, an
+  /// empty string will be used.
+  /// @return A pointer to the newly created data bus vertex.
+  /// @throws std::invalid_argument If no elements are provided for the data
+  /// bus.
+  VertexPtr addDataBus(const std::vector<VertexPtr> &elements,
+                       const std::string &i_name);
+
   /// @brief addSubGraph
   /// Adds a subgraph to the current graph
   /// @param i_subGraph A shared pointer to the subgraph to be added

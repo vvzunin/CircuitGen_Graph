@@ -45,7 +45,7 @@ std::string VertexUtils::vertexTypeToVerilog(VertexTypes i_type) {
       return "localparam";
     case VertexTypes::gate:
       return "wire";
-    case VertexTypes::seuqential:
+    case VertexTypes::sequential:
       return "reg";
     default:
       return "Not callable";
@@ -63,7 +63,7 @@ std::string VertexUtils::vertexTypeToComment(VertexTypes i_type) {
       return "// Writing consts";
     case VertexTypes::gate:
       return "// Writing gates";
-    case VertexTypes::seuqential:
+    case VertexTypes::sequential:
       return "// Writing registers";
     default:
       return "// Not writable vertex type";

@@ -316,14 +316,21 @@ public:
                      GraphPtr i_baseGraph);
   GraphVertexDataBus(tcb::span<VertexPtr> i_vertices,
                      const GraphVertexDataBus &i_vertexDataBus);
-  virtual char updateValue() override;
-  virtual void updateLevel(bool i_recalculate = false,
+  char updateValue() override;
+  void updateLevel(bool i_recalculate = false,
                            std::string tab = "") override;
   GraphVertexDataBus slice(size_t startBit, size_t endBit) const;
   VertexPtr operator[](size_t index) const;
-  std::string toVerilog(bool flag = true) const;
+  std::string toVerilog(bool flag) const;
   DotReturn toDOT() override;
   size_t getWidth() const;
+  std::string toVerilog() const override;
+  ~GraphVertexDataBus() override{};
+  size_t calculateHash(bool i_recalculate = false) override {return 0;};
+
+  #ifdef LOGFLAG
+  virtual void log(el::base::type::ostream_t &os) const override;
+  #endif
 
 private:
   tcb::span<VertexPtr> d_vertices;

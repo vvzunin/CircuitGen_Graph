@@ -56,6 +56,10 @@ namespace CG_Graph {
     return d_vertices[index];
   }
 
+  std::string GraphVertexDataBus::toVerilog() const {
+    return toVerilog(true);
+  }
+
   std::string GraphVertexDataBus::toVerilog(bool flag) const {
     std::ostringstream verilogCode;  // Поток для формирования итогового Verilog кода
 
