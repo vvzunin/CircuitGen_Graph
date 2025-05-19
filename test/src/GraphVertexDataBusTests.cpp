@@ -113,7 +113,7 @@ TEST_F(DataBusTest, ToVerilogInputBus) {
       graph->addDataBus(tcb::span<VertexPtr>(inputs), "input_bus");
   GraphVertexDataBus &bus = getDataBus(bus_ptr);
   std::string result = bus.toVerilog(false);
-  std::cout << "Generated Verilog:\n" << result << std::endl;
+  // std::cout << "Generated Verilog:\n" << result << std::endl;
   // Проверяем основные элементы вывода
   EXPECT_NE(result.find("input [" + std::to_string(inputs.size() - 1) +
                         ":0] input_bus;"),
@@ -125,7 +125,7 @@ TEST_F(DataBusTest, ToVerilogConstantBus) {
       graph->addDataBus(tcb::span<VertexPtr>(constants), "const_bus");
   GraphVertexDataBus &bus = getDataBus(bus_ptr);
   std::string result = bus.toVerilog(false);
-  std::cout << "Generated Verilog:\n" << result << std::endl;
+  // std::cout << "Generated Verilog:\n" << result << std::endl;
   // Проверяем основные элементы вывода
   EXPECT_NE(result.find("wire [" + std::to_string(constants.size() - 1) +
                         ":0] const_bus;"),
@@ -147,7 +147,7 @@ TEST_F(DataBusTest, ToVerilogOutputBus) {
       graph->addDataBus(tcb::span<VertexPtr>(outputs), "output_bus");
   GraphVertexDataBus &bus = getDataBus(bus_ptr);
   std::string result = bus.toVerilog(false);
-  std::cout << "Generated Verilog:\n" << result << std::endl;
+  // std::cout << "Generated Verilog:\n" << result << std::endl;
   // Проверяем основные элементы вывода
   EXPECT_NE(result.find("output [" + std::to_string(outputs.size() - 1) +
                         ":0] output_bus;"),
