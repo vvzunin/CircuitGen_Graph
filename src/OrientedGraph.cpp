@@ -189,6 +189,23 @@ VertexPtr OrientedGraph::addGate(const Gates &i_gate,
   return newVertex;
 }
 
+VertexPtr OrientedGraph::addDataBus(tcb::span<VertexPtr> i_vertices, const std::string &i_name) {
+  // Проверка: пустой вектор недопустим
+  assert(!i_vertices.empty() && "Cannot add empty data bus");
+
+  // Создаем объект GraphVertexDataBus
+  VertexPtr newVertex = create<GraphVertexDataBus>(
+      i_vertices,
+      i_name.empty() ? "" : internalize(i_name),
+      shared_from_this()
+  );
+
+  // Добавляем вершину в контейнер по типу
+  d_vertexes[VertexTypes::dataBus].push_back(newVertex);
+
+  return newVertex;
+}
+
 /// @brief
 /// @param i_type
 /// @param i_clk EN for latch and CLK for FF

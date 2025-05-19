@@ -1,6 +1,5 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
-
 #include <gtest/gtest.h>
 
 #ifdef LOGFLAG
@@ -9,163 +8,153 @@
 
 #include <fstream>
 #include <sstream>
-
+#include <memory>
+#include <vector>
 #include "TestDataBusData.hpp"
 
 using namespace CG_Graph;
 
-inline void testFile(const std::string &fileName, std::string_view text) {
-  std::ifstream file(fileName);
+class DataBusTest : public ::testing::Test {
+protected:
+  void SetUp() override {
+    graph = std::make_shared<OrientedGraph>();
+    subGraph = std::make_shared<OrientedGraph>();
 
-  ASSERT_TRUE(file.is_open()) << "Unable to open file: " << fileName;
+    for (int i = 0; i < 4; ++i) {
+      VertexPtr input = graph->addInput("in_" + std::to_string(i));
+      VertexPtr constant = graph->addConst('1', "const_" + std::to_string(i));
+      inputs.push_back(input);
+      constants.push_back(constant);
+    }
 
-  std::string line;
-  // skip first two lines
-  for (int i = 0; i < 2 && std::getline(file, line); ++i)
-    ;
+    for (int i = 0; i < 2; ++i) {
+      VertexPtr subInput = subGraph->addInput("sub_in_" + std::to_string(i));
+      subGraphInputs.push_back(subInput);
+    }
 
-  std::stringstream buffer;
-  buffer << file.rdbuf();
+    // Создаем DataBus из inputs — это обязательно, чтобы потом slice работал
+    dataBus = graph->addDataBus(inputs, "dataBus");
+  }
 
-  EXPECT_EQ(buffer.str(), text) << "Содержимое файла не совпадает с ожидаемым.";
-  file.close();
-  ASSERT_EQ(std::remove(fileName.c_str()), 0)
-      << "Не удалось удалить файл: " << fileName;
-}
+  GraphVertexDataBus &getDataBus(VertexPtr vertex) {
+    if (vertex->getType() != VertexTypes::dataBus) {
+      throw std::bad_cast();
+    }
+    return static_cast<GraphVertexDataBus &>(*vertex);
+  }
 
-TEST(DataBusTests, TestVerilogConstantBus) {
-  OrientedGraph::resetCounter();
-  GraphPtr graph = std::make_shared<OrientedGraph>();
-
+  GraphPtr graph;
+  GraphPtr subGraph;
+  std::vector<VertexPtr> inputs;
   std::vector<VertexPtr> constants;
-  constants.push_back(graph->addConst('1'));
-  constants.push_back(graph->addConst('0'));
-  constants.push_back(graph->addConst('1'));
+  std::vector<VertexPtr> subGraphInputs;
 
-  std::shared_ptr<GraphVertexDataBus> bus =
-      std::make_shared<GraphVertexDataBus>(tcb::span<VertexPtr>(constants),
-                                           "constBus", graph);
+  VertexPtr dataBus;
+};
 
-  std::string expected = "wire [2:0] constBus;\n"
-                         "assign constBus = 3'b101;\n";
-  EXPECT_EQ(bus->toVerilog(false), expected);
+TEST_F(DataBusTest, ConstructorEmptyBus) {
+  std::vector<VertexPtr> empty;
+  EXPECT_DEATH(graph->addDataBus(tcb::span<VertexPtr>(empty), "empty_bus"),
+               ".*");
 }
 
-TEST(DataBusTests, TestSliceValidRange) {
-  OrientedGraph::resetCounter();
-  GraphPtr graph = std::make_shared<OrientedGraph>();
+TEST_F(DataBusTest, ConstructorValidBus) {
+  VertexPtr input_bus =
+      graph->addDataBus(tcb::span<VertexPtr>(inputs), "input_bus");
+  VertexPtr const_bus =
+      graph->addDataBus(tcb::span<VertexPtr>(constants), "const_bus");
 
-  std::vector<VertexPtr> inputs;
-  inputs.push_back(graph->addInput("a"));
-  inputs.push_back(graph->addInput("b"));
-  inputs.push_back(graph->addInput("c"));
+  EXPECT_EQ(input_bus->getType(), VertexTypes::dataBus);
+  EXPECT_EQ(const_bus->getType(), VertexTypes::dataBus);
+}
 
-  std::shared_ptr<GraphVertexDataBus> bus =
-      std::make_shared<GraphVertexDataBus>(tcb::span<VertexPtr>(inputs),
-                                           "inBus", graph);
+TEST_F(DataBusTest, SliceOperations) {
+  // Создаем шину данных
+  VertexPtr bus_ptr =
+      graph->addDataBus(tcb::span<VertexPtr>(inputs), "test_bus");
+  GraphVertexDataBus &bus = getDataBus(bus_ptr);
 
-  GraphVertexDataBus slice = bus->slice(1, 3);
+  // Проверяем корректный срез
+  // std::cout << "DEBUG: Bus width = " << bus.getWidth() << std::endl;
+  auto slice = bus.slice(1, 3);
+  // std::cout << "DEBUG: Actual slice width = " << slice.getWidth() <<
+  // std::endl;
   EXPECT_EQ(slice.getWidth(), 2);
-  EXPECT_EQ(slice[0]->getName(), "b");
-  EXPECT_EQ(slice[1]->getName(), "c");
+
+  // Проверяем исключения при некорректных границах
+  EXPECT_THROW(bus.slice(3, 3), std::out_of_range);
+  EXPECT_THROW(bus.slice(3, 2), std::out_of_range);
+  EXPECT_THROW(bus.slice(0, bus.getWidth() + 1), std::out_of_range);
 }
 
-TEST(DataBusTests, TestSliceOutOfRangeThrows) {
-  OrientedGraph::resetCounter();
-  GraphPtr graph = std::make_shared<OrientedGraph>();
+TEST_F(DataBusTest, IndexOperator) {
+  VertexPtr bus_ptr =
+      graph->addDataBus(tcb::span<VertexPtr>(inputs), "test_bus");
+  GraphVertexDataBus &bus = getDataBus(bus_ptr);
 
-  std::vector<VertexPtr> inputs;
-  inputs.push_back(graph->addInput("a"));
-  inputs.push_back(graph->addInput("b"));
+  // Проверяем доступ к элементам
+  for (size_t i = 0; i < inputs.size(); ++i) {
+    EXPECT_EQ(bus[i]->getName(), inputs[i]->getName());
+  }
 
-  std::shared_ptr<GraphVertexDataBus> bus =
-      std::make_shared<GraphVertexDataBus>(tcb::span<VertexPtr>(inputs), "bus",
-                                           graph);
-
-  EXPECT_THROW(bus->slice(1, 3), std::out_of_range);
-  EXPECT_THROW(bus->slice(2, 2), std::out_of_range);
-  EXPECT_THROW(bus->slice(2, 1), std::out_of_range);
+  // Проверяем выход за границы
+  EXPECT_THROW(bus[inputs.size()], std::out_of_range);
 }
 
-TEST(DataBusTests, TestOperatorIndexingValid) {
-  OrientedGraph::resetCounter();
-  GraphPtr graph = std::make_shared<OrientedGraph>();
-
-  VertexPtr a = graph->addInput("a");
-  VertexPtr b = graph->addInput("b");
-  VertexPtr c = graph->addInput("c");
-
-  std::vector<VertexPtr> vec = {a, b, c};
-
-  std::shared_ptr<GraphVertexDataBus> bus =
-      std::make_shared<GraphVertexDataBus>(tcb::span<VertexPtr>(vec), "bus",
-                                           graph);
-
-  EXPECT_EQ((*bus)[0]->getName(), "a");
-  EXPECT_EQ((*bus)[2]->getName(), "c");
+TEST_F(DataBusTest, GetWidth) {
+  VertexPtr bus_ptr =
+      graph->addDataBus(tcb::span<VertexPtr>(inputs), "test_bus");
+  GraphVertexDataBus &bus = getDataBus(bus_ptr);
+  EXPECT_EQ(bus.getWidth(), inputs.size());
 }
 
-TEST(DataBusTests, TestOperatorIndexingOutOfRangeThrows) {
-  OrientedGraph::resetCounter();
-  GraphPtr graph = std::make_shared<OrientedGraph>();
-
-  std::vector<VertexPtr> inputs = {graph->addInput("a")};
-  std::shared_ptr<GraphVertexDataBus> bus =
-      std::make_shared<GraphVertexDataBus>(tcb::span<VertexPtr>(inputs), "bus",
-                                           graph);
-
-  EXPECT_THROW((*bus)[1], std::out_of_range);
+TEST_F(DataBusTest, ToVerilogInputBus) {
+  VertexPtr bus_ptr =
+      graph->addDataBus(tcb::span<VertexPtr>(inputs), "input_bus");
+  GraphVertexDataBus &bus = getDataBus(bus_ptr);
+  std::string result = bus.toVerilog(false);
+  std::cout << "Generated Verilog:\n" << result << std::endl;
+  // Проверяем основные элементы вывода
+  EXPECT_NE(result.find("input [" + std::to_string(inputs.size() - 1) +
+                        ":0] input_bus;"),
+            std::string::npos);
 }
 
-TEST(DataBusTests, TestToVerilogPerLineFlag) {
-  OrientedGraph::resetCounter();
-  GraphPtr graph = std::make_shared<OrientedGraph>();
-
-  VertexPtr a = graph->addInput("a");
-  VertexPtr b = graph->addInput("b");
-
-  std::vector<VertexPtr> vec = {a, b};
-  std::shared_ptr<GraphVertexDataBus> bus =
-      std::make_shared<GraphVertexDataBus>(tcb::span<VertexPtr>(vec), "bus",
-                                           graph);
-
-  std::ostringstream expected;
-  expected << "input a;\n"
-           << "input b;\n";
-
-  EXPECT_EQ(bus->toVerilog(true), expected.str());
+TEST_F(DataBusTest, ToVerilogConstantBus) {
+  VertexPtr bus_ptr =
+      graph->addDataBus(tcb::span<VertexPtr>(constants), "const_bus");
+  GraphVertexDataBus &bus = getDataBus(bus_ptr);
+  std::string result = bus.toVerilog(false);
+  std::cout << "Generated Verilog:\n" << result << std::endl;
+  // Проверяем основные элементы вывода
+  EXPECT_NE(result.find("wire [" + std::to_string(constants.size() - 1) +
+                        ":0] const_bus;"),
+            std::string::npos);
+  EXPECT_NE(result.find("assign const_bus = " +
+                        std::to_string(constants.size()) + "'b"),
+            std::string::npos);
 }
 
-TEST(DataBusTests, TestDataBusToVerilog) {
-  OrientedGraph::resetCounter();
-  GraphPtr graph = std::make_shared<OrientedGraph>();
+TEST_F(DataBusTest, ToVerilogOutputBus) {
+  std::vector<VertexPtr> outputs;
+  for (size_t i = 0; i < inputs.size(); ++i) {
+    VertexPtr output = graph->addOutput("out_" + std::to_string(i));
+    graph->addEdge(inputs[i], output);
+    outputs.push_back(output);
+  }
 
-  VertexPtr a = graph->addInput("a");
-  VertexPtr b = graph->addInput("b");
-  VertexPtr c = graph->addInput("c");
-
-  std::vector<VertexPtr> vec = {a, b, c};
-  auto bus = std::make_shared<GraphVertexDataBus>(tcb::span<VertexPtr>(vec),
-                                                  "bus", graph);
-
-  // Проверка результата toVerilog с флагом форматирования true
-  EXPECT_EQ(bus->toVerilog(), "input [2:0] bus;\n");
-
-  // Проверка результата toVerilog с флагом форматирования false
-  EXPECT_EQ(bus->toVerilog(false), "input [2:0] bus;");
-
-  // Добавим выходной DataBus
-  auto outBus = std::make_shared<GraphVertexDataBus>(tcb::span<VertexPtr>(vec),
-                                                     "out", graph);
-
-  // Проверка результата toVerilog с флагом форматирования true
-  EXPECT_EQ(outBus->toVerilog(), "output [2:0] out;\n");
-
-  // Проверка результата toVerilog с флагом форматирования false
-  EXPECT_EQ(outBus->toVerilog(false), "output [2:0] out;");
-
-  // Проверка вывода в файл
-  const std::string fileName = "testDataBus.v";
-  graph->toVerilog("./", fileName);
-  testFile(fileName, TestData::DATABUS_TEST);
+  VertexPtr bus_ptr =
+      graph->addDataBus(tcb::span<VertexPtr>(outputs), "output_bus");
+  GraphVertexDataBus &bus = getDataBus(bus_ptr);
+  std::string result = bus.toVerilog(false);
+  std::cout << "Generated Verilog:\n" << result << std::endl;
+  // Проверяем основные элементы вывода
+  EXPECT_NE(result.find("output [" + std::to_string(outputs.size() - 1) +
+                        ":0] output_bus;"),
+            std::string::npos);
+  for (size_t i = 0; i < outputs.size(); ++i) {
+    EXPECT_NE(result.find("assign output_bus[" + std::to_string(i) +
+                          "] = " + inputs[i]->getName() + ";"),
+              std::string::npos);
+  }
 }

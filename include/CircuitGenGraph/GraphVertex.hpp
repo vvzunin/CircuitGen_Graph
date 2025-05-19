@@ -321,15 +321,12 @@ public:
   virtual ~GraphVertexDataBus() override {}
 
   char updateValue() override { return 'x'; };
-  void updateLevel(bool i_recalculate = false,
-                           std::string tab = "") override {};
+  void updateLevel(bool i_recalculate = false, std::string tab = "") override{};
 
   DotReturn toDOT() override;
   std::string toVerilog() const override;
 
-  size_t calculateHash(bool i_recalculate = false) override {
-    return 0ul;
-  };
+  size_t calculateHash(bool i_recalculate = false) override { return 0ul; };
 
   GraphVertexDataBus slice(size_t startBit, size_t endBit) const;
   VertexPtr operator[](size_t index) const;

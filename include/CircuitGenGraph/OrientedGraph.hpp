@@ -17,6 +17,7 @@
 #include <CircuitGenGraph/GraphMemory.hpp>
 #include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
+#include <span.hpp>
 
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
@@ -290,6 +291,9 @@ public:
 
   VertexPtr addGate(const Gates &i_gate, const std::string &i_name = "");
 
+  VertexPtr addDataBus(tcb::span<VertexPtr> i_vertices,
+                       const std::string &i_name);
+
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, const std::string &i_name = "");
 
@@ -304,17 +308,6 @@ public:
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_rst, VertexPtr i_set,
                           VertexPtr i_en, const std::string &i_name = "");
-
-  /// @brief Adds a new data bus to the graph, connecting a set of elements
-  /// (vertices).
-  /// @param elements A vector of vertices that will form the data bus.
-  /// @param i_name The optional name for the data bus. If not provided, an
-  /// empty string will be used.
-  /// @return A pointer to the newly created data bus vertex.
-  /// @throws std::invalid_argument If no elements are provided for the data
-  /// bus.
-  VertexPtr addDataBus(const std::vector<VertexPtr> &elements,
-                       const std::string &i_name);
 
   /// @brief addSubGraph
   /// Adds a subgraph to the current graph

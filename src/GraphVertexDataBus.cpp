@@ -12,41 +12,36 @@
 namespace CG_Graph {
 
 GraphVertexDataBus::GraphVertexDataBus(tcb::span<VertexPtr> i_vertices,
-                                       GraphPtr i_baseGraph) :
-    GraphVertexBase(VertexTypes::dataBus, i_baseGraph) {
+                                       GraphPtr i_baseGraph)
+    : GraphVertexBase(VertexTypes::dataBus, i_baseGraph),
+      d_vertices(i_vertices.begin(), i_vertices.end()) {
   assert(!i_vertices.empty() && "Data bus cannot be empty");
 
   VertexTypes firstType = i_vertices.front()->getType();
-  assert(firstType != VertexTypes::subGraph &&
-         "Subgraph cannot be in the data bus");
+  assert(firstType != VertexTypes::subGraph && "Subgraph cannot be in the data bus");
   for (const auto &vertex: i_vertices) {
-    assert(vertex->getType() == firstType &&
-           "All vertices in the bus must be of the same type");
+    assert(vertex->getType() == firstType && "All vertices in the bus must be of the same type");
   }
-  tcb::span<VertexPtr> d_vertices = i_vertices;
 }
 
 GraphVertexDataBus::GraphVertexDataBus(tcb::span<VertexPtr> i_vertices,
                                        std::string_view i_name,
-                                       GraphPtr i_baseGraph) :
-    GraphVertexBase(VertexTypes::dataBus, i_name, i_baseGraph) {
+                                       GraphPtr i_baseGraph)
+    : GraphVertexBase(VertexTypes::dataBus, i_name, i_baseGraph),
+      d_vertices(i_vertices.begin(), i_vertices.end()) {
   assert(!i_vertices.empty() && "Data bus cannot be empty");
 
   VertexTypes firstType = i_vertices.front()->getType();
-  assert(firstType != VertexTypes::subGraph &&
-         "Subgraph cannot be in the data bus");
+  assert(firstType != VertexTypes::subGraph && "Subgraph cannot be in the data bus");
   for (const auto &vertex: i_vertices) {
-    assert(vertex->getType() == firstType &&
-           "All vertices in the bus must be of the same type");
+    assert(vertex->getType() == firstType && "All vertices in the bus must be of the same type");
   }
-  tcb::span<VertexPtr> d_vertices = i_vertices;
 }
 
-GraphVertexDataBus::GraphVertexDataBus(
-    tcb::span<VertexPtr> i_vertices,
-    const GraphVertexDataBus &i_vertexDataBus) :
-    GraphVertexBase(VertexTypes::dataBus, i_vertexDataBus.d_baseGraph.lock()) {
-  tcb::span<VertexPtr> d_vertices = i_vertices;
+GraphVertexDataBus::GraphVertexDataBus(tcb::span<VertexPtr> i_vertices,
+                                       const GraphVertexDataBus &i_vertexDataBus)
+    : GraphVertexBase(VertexTypes::dataBus, i_vertexDataBus.d_baseGraph.lock()),
+      d_vertices(i_vertices.begin(), i_vertices.end()) {
 }
 
 GraphVertexDataBus GraphVertexDataBus::slice(size_t startBit,
@@ -213,28 +208,3 @@ size_t GraphVertexDataBus::getWidth() const {
 }
 
 } // namespace CG_Graph
-
-// char GraphVertexDataBus::updateValue() {
-//   // if (!d_vertices.empty()) {
-//   //     char value = d_vertices.front()->updateValue();
-//   //     for (size_t i = 1; i < d_vertices.size(); i++) {
-//   //         if (d_vertices[i]->updateValue() != value) {
-//   //             return 'x'; // неопределенное состояние
-//   //         }
-//   //     }
-//   //     return value;
-//   // }
-//   // return '0'; // Значение по умолчанию
-// }
-
-// void GraphVertexDataBus::updateLevel(bool i_recalculate, std::string tab) {
-//   // if (d_needUpdate && !i_recalculate) {
-//   //     return;
-//   // }
-//   // d_level = 0;
-//   // for (auto& vertex : d_vertices) {
-//   //     vertex->updateLevel(i_recalculate, tab + "  ");
-//   //     d_level = std::max(d_level, vertex->getLevel());
-//   // }
-//   // d_needUpdate = true;
-// }
