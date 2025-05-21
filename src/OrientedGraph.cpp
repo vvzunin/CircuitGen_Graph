@@ -27,6 +27,7 @@
 #include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
 #include <CircuitGenGraph/GraphReader.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
+#include <CircuitGenGraph/GraphReader.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
@@ -598,6 +599,11 @@ bool OrientedGraph::removeEdge(VertexPtr from1, VertexPtr to) {
     }
   }
   return deleted;
+}
+GraphPtr OrientedGraph::readVerilog(std::string i_path, std::string i_topName = "") {
+  if (graphReader == nullptr) *graphReader = GraphReader();
+  lorina::read_verilog(i_path, *graphReader);
+  return graphReader->getGraphByName(i_topName);
 }
 
 void OrientedGraph::readVerilog(std::string i_path, Context &context) {
