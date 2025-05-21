@@ -1,4 +1,3 @@
-
 # Минимальная версия CMake для сборки
 cmake_minimum_required(VERSION 3.26)
 
@@ -35,8 +34,10 @@ option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
 
 # Подключаем папку с исходниками (новый формат)
 add_subdirectory(src)
+
 if(ENABLE_COVERAGE)
   message(STATUS "Code coverage enabled")
+
   if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_options(${PROJECT_NAME} PRIVATE -fprofile-arcs -ftest-coverage -O0)
     target_link_options(${PROJECT_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
@@ -51,6 +52,7 @@ if(ENABLE_LOGGING)
     easylogging++
   )
 endif()
+
 include_directories(lib)
 link_directories(lib)
 
@@ -59,6 +61,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Lorina)
 target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 
 find_program(CLANG_TIDY NAMES clang-tidy)
+
 if(PROJECT_IS_TOP_LEVEL)
   option(CircuitGenGraph_ENABLE_CLANG_TIDY "Run clang-tidy during build" OFF)
 endif()
@@ -123,12 +126,14 @@ install(FILES
 )
 
 include(CTest)
+
 if(BUILD_TESTING)
   add_subdirectory(test)
 endif()
 
 if(PROJECT_IS_TOP_LEVEL)
   option(CircuitGenGraph_BUILD_EXAMPLES "Build examples tree." "${CircuitGenGraph_DEVELOPER_MODE}")
+
   if(CircuitGenGraph_BUILD_EXAMPLES)
     add_subdirectory(examples)
   endif()
@@ -136,9 +141,11 @@ endif()
 
 if(PROJECT_IS_TOP_LEVEL)
   option(BUILD_MCSS_DOCS "Build documentation using Doxygen and m.css" OFF)
+
   if(BUILD_MCSS_DOCS)
     include(cmake/docs.cmake)
   endif()
+
   if(ENABLE_COVERAGE)
     include(cmake/coverage.cmake)
   endif()

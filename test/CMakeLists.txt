@@ -19,10 +19,11 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(googletest)
 
-#add_compile_options(-fno-rtti)
+# add_compile_options(-fno-rtti)
 add_compile_options(-g3 -Wall -Wignored-qualifiers -DYYERROR_VERBOSE)
 
 option(CircuitGenGraph_TESTS_ENABLE_ASAN "Enable AddressSanitizer for tests" ON)
+
 if(CircuitGenGraph_TESTS_ENABLE_ASAN AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   add_compile_options(-fsanitize=address)
   add_link_options(-fsanitize=address)
@@ -37,7 +38,6 @@ if(ENABLE_LOGGING)
 endif()
 
 # ---- Tests ----
-
 set(TEST_NAME CircuitGenGraph_tests)
 
 # Collect all test source files into a single executable
@@ -82,4 +82,3 @@ endif()
 # Register one CTest test
 include(GoogleTest)
 gtest_discover_tests(${TEST_NAME} PROPERTIES DISCOVERY_TIMEOUT 60)
-
