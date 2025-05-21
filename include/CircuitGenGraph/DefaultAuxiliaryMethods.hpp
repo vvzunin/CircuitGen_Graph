@@ -12,7 +12,7 @@
 
 #include <CircuitGenGraph/GraphUtils.hpp>
 
-#include "../../lib/fmt/core.h"
+#include "fmt/core.h"
 
 /// @todo ToEnum
 /// @todo if need LineReader
