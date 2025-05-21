@@ -11,9 +11,11 @@
 #include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
 #include <CircuitGenGraph/GraphMLTemplates.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
+#include <CircuitGenGraph/GraphReader.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
+#include <lorina/lorina.hpp>
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
 #endif
@@ -455,6 +457,11 @@ bool OrientedGraph::removeEdge(VertexPtr from1, VertexPtr to) {
     }
   }
   return deleted;
+}
+GraphPtr OrientedGraph::readVerilog(std::string i_path, std::string i_topName = "") {
+  if (graphReader == nullptr) *graphReader = GraphReader();
+  lorina::read_verilog(i_path, *graphReader);
+  return graphReader->getGraphByName(i_topName);
 }
 
 std::set<GraphPtr> OrientedGraph::getSubGraphs() const {

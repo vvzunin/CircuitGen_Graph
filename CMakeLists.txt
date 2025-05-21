@@ -28,10 +28,7 @@ set(SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphUtils.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultAuxiliaryMethods.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexSequential.cpp
-)
-
-set(LIBS 
-  ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphReader.cpp
 )
 
 set(PUBLIC_HEADERS
@@ -50,9 +47,9 @@ if (ENABLE_LOGGING)
 endif()
 
 if(BUILD_SHARED_LIBS)
-  add_library(${PROJECT_NAME} SHARED ${SOURCES} ${LIBS})
+  add_library(${PROJECT_NAME} SHARED ${SOURCES})
 else()
-  add_library(${PROJECT_NAME} STATIC ${SOURCES} ${LIBS})
+  add_library(${PROJECT_NAME} STATIC ${SOURCES})
 endif()
 
 add_library(
@@ -69,16 +66,9 @@ if(ENABLE_LOGGING)
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.h
   )
 endif()
-
-# DOES NOT WORK IN FetchContent
-# add_library(
-#   fmt STATIC
-#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/core.h
-#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format-inl.h
-#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.h
-#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.cc
-# )
-
+add_subdirectory(lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE Lorina)
+target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 add_compile_options(-fno-rtti)
 add_compile_options(-g3 -Wall -Wignored-qualifiers -DYYERROR_VERBOSE)
