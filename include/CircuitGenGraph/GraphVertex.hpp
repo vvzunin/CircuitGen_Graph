@@ -57,7 +57,7 @@ public:
   /// TO DO:
   /// @endcode
   /// @throws std::invalid_argument if any input connection is invalid
-  
+
   void setValue(const char value);
 
   virtual char updateValue() override;
@@ -136,7 +136,7 @@ public:
   ~GraphVertexSubGraph() override{};
 
   char updateValue() override;
-  
+
   void removeValue() override;
 
   void updateLevel(std::string tab = "") override;
@@ -210,9 +210,7 @@ public:
   /// updating based on the values of its incoming connections and the type of
   /// logical element (or "gate").
 
-  virtual char updateValue() override;
-
-  virtual void removeValue() override;
+  char updateValue() override;
 
   /// @brief updateLevel updates the level of the current vertex in the graph
   /// based on the levels of its incoming connections. If a vertex has incoming
@@ -220,7 +218,7 @@ public:
   /// vertices to which it is connected, and sets the level of the current
   /// vertex to one higher than the highest level
 
-  virtual void updateLevel(std::string tab = "") override;
+  void updateLevel(std::string tab = "") override;
 
   DotReturn toDOT() override;
 
@@ -252,9 +250,9 @@ public:
   /// @endcode
   /// @throws std::invalid_argument if any of the input connections point
   /// to a nullptr
-  virtual char updateValue() override;
+  char updateValue() override;
 
-  virtual void removeValue() override;
+  void removeValue() override;
 
   /// @brief calculateHash
   /// Calculates the hash value of the vertex. When running for a second time,

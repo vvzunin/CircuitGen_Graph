@@ -175,6 +175,16 @@ uint32_t GraphVertexBase::getLevel() const {
   return d_level;
 }
 
+void GraphVertexBase::removeValue() {
+  d_value = ValueStates::UndefindedState;
+  if (d_inConnections.empty()) {
+    return;
+  }
+  for (VertexPtr ptr: d_inConnections) {
+    ptr->removeValue();
+  }
+}
+
 void GraphVertexBase::updateLevel(std::string tab) {
   // 2 - IN PROGRESS, 1 - HC_CALC
   // 2 == 010

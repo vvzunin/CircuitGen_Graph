@@ -233,7 +233,7 @@ public:
 
   virtual char updateValue() = 0;
 
-  virtual void removeValue() = 0;
+  virtual void removeValue();
 
   // Get-Set для уровня
 

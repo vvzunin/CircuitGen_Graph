@@ -29,16 +29,6 @@ char GraphVertexOutput::updateValue() {
   return d_value;
 }
 
-void GraphVertexOutput::removeValue() {
-  d_value = ValueStates::UndefindedState;
-  if (d_inConnections.empty()) {
-    return;
-  }
-  for (VertexPtr ptr: d_inConnections) {
-    ptr->removeValue();
-  }
-}
-
 void GraphVertexOutput::updateLevel(std::string tab) {
   int counter = 0;
   if (d_needUpdate) {

@@ -24,9 +24,6 @@ GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
   d_subGraph = i_subGraph;
 }
 
-// Simulation rework
-// Simulation rework
-
 char GraphVertexSubGraph::updateValue() {
   if (d_inConnections.size() > 0) {
     std::vector<char> inputsValues, outputsValues;
@@ -46,14 +43,12 @@ char GraphVertexSubGraph::updateValue() {
     }
     return outputsValues.at(0);
   }
-  else {
 #ifdef LOGFLAG
-    LOG(ERROR) << "Error, SubGraph without inputs" << std::endl;
+  LOG(ERROR) << "Error, SubGraph without inputs" << std::endl;
 #else
-    std::cerr << "Error, SubGraph without inputs" << std::endl;
+  std::cerr << "Error, SubGraph without inputs" << std::endl;
 #endif
-    return ValueStates::NoSignal;
-  } 
+  return ValueStates::NoSignal;
 }
 
 void GraphVertexSubGraph::removeValue() {
