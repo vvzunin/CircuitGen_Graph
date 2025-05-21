@@ -311,17 +311,26 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
   addEdges(i_inputs, newGraph);
 
   size_t outSize = i_subGraph->getVerticesByType(VertexTypes::output).size();
-  newGraph->reserveOutConnections(outSize);
-  for (int i = 0; i < outSize; ++i) {
-    VertexPtr newVertex =
-        create<GraphVertexGates>(Gates::GateBuf, shared_from_this());
 
-    outputs.push_back(newVertex);
-    d_allSubGraphsOutputs.push_back(newVertex);
+  if (outSize > 0) {
+    newGraph->reserveOutConnections(outSize);
+    for (int i = 0; i < outSize; ++i) {
+      VertexPtr newVertex =
+          create<GraphVertexGates>(Gates::GateBuf, shared_from_this());
 
-    addEdge(newGraph, newVertex);
+      outputs.push_back(newVertex);
+      d_allSubGraphsOutputs.push_back(newVertex);
+
+      addEdge(newGraph, newVertex);
+    }
   }
-
+  else {
+#ifdef LOGFLAG
+    LOG(ERROR) << "Error, SubGraph without outputs" << std::endl;
+#else
+    std::cerr << "Error, SubGraph without outputs" << std::endl;
+#endif
+  }
   // here we use i_subGraph like an instance of BasicType,
   // and we call it's toVerilog, having in multiple instance
   // of one i_subGraph, so we can have many times "moduleName name (inp, out);"
@@ -329,6 +338,25 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
   d_subGraphs.insert(i_subGraph);
 
   return outputs;
+}
+
+std::vector<char> OrientedGraph::graphSimulation(std::vector<char> inputsValues) {
+  std::vector<char> outputsValues;
+  for (size_t i = 0; i < d_vertices[VertexTypes::input].size(); ++i) {
+    GraphVertexInput *inputVert =
+        static_cast<GraphVertexInput *>(d_vertices[VertexTypes::input].at(i));
+    inputVert->setValue(inputsValues.at(i));
+  }
+  for (VertexPtr outputVert: d_vertices[VertexTypes::output]) {
+    outputsValues.push_back(outputVert->updateValue());
+  }
+  return outputsValues;
+}
+
+void OrientedGraph::simulationRemove() {
+  for (VertexPtr ptr: d_vertices[VertexTypes::output]){
+    ptr->removeValue();
+  }
 }
 
 void OrientedGraph::removeWasteVertices() {

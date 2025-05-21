@@ -33,16 +33,23 @@ uint32_t GraphVertexGates::addVertexToInConnections(VertexPtr i_vert) {
 
 char GraphVertexGates::updateValue() {
   std::map<char, char> table;
+  d_value = ValueStates::NoSignal;
   if (d_inConnections.size() > 0) {
-    VertexPtr ptr = d_inConnections.at(0);
-
-    d_value = ptr->getValue();
-    if (d_gate == Gates::GateBuf)
-      d_value = tableBuf.at(ptr->getValue());
-    if (d_gate == Gates::GateNot)
-      d_value = tableNot.at(ptr->getValue());
+    if (d_inConnections.front()->getValue() == ValueStates::UndefindedState) {
+        d_inConnections.front()->updateValue();
+    }
+    d_value = d_inConnections.front()->getValue();
     for (size_t i = 1; i < d_inConnections.size(); i++) {
+      if (d_inConnections.at(i)->getValue() == ValueStates::UndefindedState) {
+        d_inConnections.at(i)->updateValue();
+      }
       switch (d_gate) {
+        case (Gates::GateBuf):
+          table = tableBuf;
+          break;
+        case (Gates::GateNot):
+          table = tableNot;
+          break;
         case (Gates::GateAnd):
           table = tableAnd.at(d_value);
           break;
@@ -68,11 +75,21 @@ char GraphVertexGates::updateValue() {
           std::cerr << "Error" << std::endl;
 #endif
       }
-      ptr = d_inConnections.at(i);
-      d_value = table.at(ptr->getValue());
+      d_value = table.at(d_inConnections.at(i)->getValue());
     }
   }
   return d_value;
+}
+
+void GraphVertexGates::removeValue() {
+  d_value = ValueStates::UndefindedState;
+  if (d_inConnections.size() > 0) {
+    for (VertexPtr ptr: d_inConnections) {
+      if (ptr->getValue() != ValueStates::UndefindedState) {
+        ptr->removeValue();
+      }
+    }
+  }
 }
 
 size_t GraphVertexGates::calculateHash() {

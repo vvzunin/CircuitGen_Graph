@@ -27,6 +27,10 @@ char GraphVertexInput::updateValue() {
   return d_value;
 }
 
+void GraphVertexInput::removeValue() {
+  d_value = ValueStates::UndefindedState;
+}
+
 void GraphVertexInput::updateLevel(std::string tab) {
   if (d_needUpdate) {
     return;

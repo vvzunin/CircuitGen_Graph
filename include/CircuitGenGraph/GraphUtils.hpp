@@ -115,6 +115,14 @@ enum DotTypes : uint8_t {
   DotExit = 7
 };
 
+enum ValueStates : char {
+  UndefindedState = 'n',
+  TrueValue = '1',
+  FalseValue = '0',
+  HighImpedance = 'z',
+  NoSignal = 'x'
+};
+
 /// @todo: To add Description some fields
 /// class GraphUtils
 ///

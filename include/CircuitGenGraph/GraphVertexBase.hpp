@@ -233,6 +233,8 @@ public:
 
   virtual char updateValue() = 0;
 
+  virtual void removeValue() = 0;
+
   // Get-Set для уровня
 
   /// @brief getLevel
@@ -505,7 +507,7 @@ protected:
   size_t d_hashed = 0;
   uint32_t d_level;
 
-  char d_value;
+  char d_value = ValueStates::UndefindedState;
   VERTEX_STATE d_needUpdate = VS_NOT_CALC;
   HASH_CONDITION d_hasHash = HC_NOT_CALC;
 

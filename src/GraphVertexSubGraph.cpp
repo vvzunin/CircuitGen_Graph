@@ -27,19 +27,51 @@ GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
 // Simulation rework
 
 char GraphVertexSubGraph::updateValue() {
-  return 'x';
+  if (d_inConnections.size() > 0) {
+    std::vector<char> inputsValues, outputsValues;
+    if (d_inConnections.front()->getValue() == ValueStates::UndefindedState) {
+        inputsValues.push_back(d_inConnections.front()->updateValue());
+    }
+    for (size_t i = 1; i < d_inConnections.size(); ++i) {
+      if (d_inConnections.at(i)->getValue() == ValueStates::UndefindedState) {
+        inputsValues.push_back(d_inConnections.at(i)->updateValue());
+      }
+    }
+    outputsValues = d_subGraph->graphSimulation(inputsValues);
+    for (size_t i = 1; i < d_outConnections.size(); ++i) {
+      GraphVertexGates *out_connectionVert = 
+          static_cast<GraphVertexGates *>(d_outConnections.at(i));
+      out_connectionVert->d_value = outputsValues.at(i);
+    }
+    return outputsValues.at(0);
+  }
+  else {
+#ifdef LOGFLAG
+    LOG(ERROR) << "Error, SubGraph without inputs" << std::endl;
+#else
+    std::cerr << "Error, SubGraph without inputs" << std::endl;
+#endif
+    return ValueStates::NoSignal;
+  } 
 }
 
-// char GraphVertexSubGraph::updateValue() {
-//   std::vector<VertexPtr> output_verts =
-//   d_subGraph->getVerticesByType(VertexTypes::output); for (int i = 0; i <
-//   d_outConnections.size(); ++i) {
-//     assert(d_outConnections[i]->getType() == gate);
-//     GraphVertexGates *out_connectionVert = static_cast<GraphVertexGates
-//     *>(d_outConnections[i]); VertexPtr output_vert = output_verts[i];
-//     out_connectionVert->d_value = output_vert->getValue();
-//   }
-// }
+void GraphVertexSubGraph::removeValue() {
+  if (d_inConnections.size() > 0) { 
+    d_subGraph->simulationRemove();
+    for (VertexPtr ptr: d_inConnections) {
+      if (ptr->getValue() != ValueStates::UndefindedState) {
+        ptr->removeValue();
+      }
+    }
+  }
+  else {
+#ifdef LOGFLAG
+    LOG(ERROR) << "Error, SubGraph without inputs" << std::endl;
+#else
+    std::cerr << "Error, SubGraph without inputs" << std::endl;
+#endif
+  } 
+}
 
 void GraphVertexSubGraph::updateLevel(std::string tab) {
   int counter = 0, max_inLevel = 0;
@@ -55,10 +87,10 @@ void GraphVertexSubGraph::updateLevel(std::string tab) {
         (vert->getLevel() > max_inLevel) ? vert->getLevel() : max_inLevel;
   }
   for (int i = 0; i < d_outConnections.size(); ++i) {
-    assert(d_outConnections[i]->getType() == gate);
+    assert(d_outConnections.at(i)->getType() == gate);
     GraphVertexGates *out_connectionVert =
-        static_cast<GraphVertexGates *>(d_outConnections[i]);
-    VertexPtr output_vert = output_verts[i];
+        static_cast<GraphVertexGates *>(d_outConnections.at(i));
+    VertexPtr output_vert = output_verts.at(i);
     out_connectionVert->d_level = output_vert->getLevel() + max_inLevel - 2;
   }
   d_needUpdate = VS_CALC;

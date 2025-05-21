@@ -62,6 +62,8 @@ public:
 
   virtual char updateValue() override;
 
+  virtual void removeValue() override;
+
   /// @brief updateLevel It is designed to update the level of the current
   /// vertex in a directed graph based on the levels of its input connections.
   /// When running it for a second time, set updateLevel flags to their init
@@ -134,6 +136,9 @@ public:
   ~GraphVertexSubGraph() override{};
 
   char updateValue() override;
+  
+  void removeValue() override;
+
   void updateLevel(std::string tab = "") override;
 
   std::string toVerilog() const override;
@@ -207,6 +212,8 @@ public:
 
   virtual char updateValue() override;
 
+  virtual void removeValue() override;
+
   /// @brief updateLevel updates the level of the current vertex in the graph
   /// based on the levels of its incoming connections. If a vertex has incoming
   /// connections, the method determines the highest level among all the
@@ -246,6 +253,8 @@ public:
   /// @throws std::invalid_argument if any of the input connections point
   /// to a nullptr
   virtual char updateValue() override;
+
+  virtual void removeValue() override;
 
   /// @brief calculateHash
   /// Calculates the hash value of the vertex. When running for a second time,
@@ -373,7 +382,7 @@ public:
 
   std::string toVerilog() const override;
   DotReturn toDOT() override;
-  char updateValue() override { return '0'; };
+  char updateValue() override { return ValueStates::FalseValue; };
 
   bool isFF() const;
   bool isAsync() const;

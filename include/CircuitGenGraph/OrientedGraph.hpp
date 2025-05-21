@@ -345,6 +345,10 @@ public:
   /// After removing of inner ones, some inputs or constants
   /// can have not any element in d_outConnections(), these
   /// also will be removed.
+  std::vector<char> graphSimulation(std::vector<char> values);
+
+  void simulationRemove();
+
   void removeWasteVertices();
   /// @brief addEdge
   /// Adds an edge between two vertices in the current graph
