@@ -25,6 +25,7 @@ GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
 }
 
 // Simulation rework
+// Simulation rework
 
 char GraphVertexSubGraph::updateValue() {
   if (d_inConnections.size() > 0) {
