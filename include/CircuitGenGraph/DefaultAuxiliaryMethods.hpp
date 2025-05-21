@@ -6,7 +6,7 @@
 
 #include <CircuitGenGraph/GraphUtils.hpp>
 
-#include "../../lib/fmt/core.h"
+#include "fmt/core.h"
 
 /// @file AuxiliaryMethods.hpp
 /// TODO: ToEnum
