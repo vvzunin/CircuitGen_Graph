@@ -33,12 +33,12 @@ set(SOURCES
 
 set(PUBLIC_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/enums.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphReader.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertex.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertexBase.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/OrientedGraph.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphUtils.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/DefaultAuxiliaryMethods.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
 )
 
 option(ENABLE_LOGGING "Enable logging" OFF)
@@ -52,23 +52,24 @@ else()
   add_library(${PROJECT_NAME} STATIC ${SOURCES})
 endif()
 
+include_directories(lib)
+link_directories(lib)
+
+add_subdirectory(lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE Lorina)
+target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
+
+if(ENABLE_LOGGING)
+  target_link_libraries(
+    ${PROJECT_NAME} PUBLIC
+    easylogging++
+  )
+endif()
+
 add_library(
   CircuitGenGraph::CircuitGenGraph ALIAS
   ${PROJECT_NAME})
 
-include_directories(lib)
-link_directories(lib)
-
-if(ENABLE_LOGGING)
-  add_library(
-    easylogging++ STATIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.h
-  )
-endif()
-add_subdirectory(lib)
-target_link_libraries(${PROJECT_NAME} PRIVATE Lorina)
-target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 add_compile_options(-fno-rtti)
 add_compile_options(-g3 -Wall -Wignored-qualifiers -DYYERROR_VERBOSE)
@@ -88,13 +89,6 @@ if(ENABLE_COVERAGE)
 endif()
 
 include(GNUInstallDirs)
-
-if(ENABLE_LOGGING)
-  target_link_libraries(
-    ${PROJECT_NAME} PUBLIC
-    easylogging++
-  )
-endif()
 
 find_program(CLANG_TIDY NAMES clang-tidy)
 
