@@ -13,11 +13,12 @@
 #include <vector>
 
 #include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
-#include <CircuitGenGraph/GraphMLTemplates.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphReader.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
+
+#include "GraphMLTemplates.hpp"
 
 #include <lorina/lorina.hpp>
 #ifdef LOGFLAG
@@ -462,7 +463,7 @@ bool OrientedGraph::removeEdge(VertexPtr from1, VertexPtr to) {
   }
   return deleted;
 }
-GraphPtr OrientedGraph::readVerilog(std::string i_path, std::string i_topName = "") {
+GraphPtr OrientedGraph::readVerilog(std::string i_path, std::string i_topName) {
   if (graphReader == nullptr) *graphReader = GraphReader();
   lorina::read_verilog(i_path, *graphReader);
   return graphReader->getGraphByName(i_topName);
@@ -574,6 +575,10 @@ std::map<Gates, size_t> OrientedGraph::getGatesCount() const {
 std::map<Gates, std::map<Gates, size_t>>
 OrientedGraph::getEdgesGatesCount() const {
   return d_edgesGatesCount;
+}
+
+void OrientedGraph::reserve(VertexTypes i_type, size_t i_capacity) {
+  d_vertices[i_type].reserve(d_vertices[i_type].size() + i_capacity);
 }
 
 std::string OrientedGraph::calculateHash() {
