@@ -501,7 +501,7 @@ public:
   /// @throw out_of_range if idx is bigger than number of all vertices in graph
   VertexPtr getVerticeByIndex(size_t idx) const;
 
-  static GraphPtr readVerilog(std::string i_path, std::string i_topName = ""); 
+  static GraphPtr readVerilog(std::string i_path, std::string i_topName = "");
 
   /// @brief method used for translating graph to verilog
   /// @param i_path folder, in which file should be created
@@ -738,7 +738,7 @@ private:
 
   // -1 if false, 0 if undefined, 1 if true
   int8_t d_connected = 0;
-  static GraphReader* graphReader;
+  static GraphReader *graphReader;
 };
 
 } // namespace CG_Graph
