@@ -442,7 +442,7 @@ public:
   getBaseVertexes() const;
   VertexPtr getVerticeByIndex(size_t idx) const;
 
-  static GraphPtr readVerilog(std::string i_path, std::string i_topName = ""); 
+  static GraphPtr readVerilog(std::string i_path, std::string i_topName = "");
 
   /// @brief method used for translating graph to verilog
   /// @param i_path folder, in which file should be created
@@ -528,9 +528,7 @@ public:
 
   std::map<Gates, std::map<Gates, size_t>> getEdgesGatesCount() const;
 
-  void reserve(VertexTypes i_type, size_t i_capacity) {
-    d_vertices[i_type].reserve(d_vertices[i_type].size() + i_capacity);
-  }
+  void reserve(VertexTypes i_type, size_t i_capacity);
 
   /// @brief resets counter for graph IDs
   static void resetCounter() { d_countGraph = 0ul; }
@@ -632,7 +630,7 @@ private:
 
   // -1 if false, 0 if undefined, 1 if true
   int8_t d_connected = 0;
-  static GraphReader* graphReader;
+  static GraphReader *graphReader;
 };
 
 } // namespace CG_Graph
