@@ -83,7 +83,7 @@ target_link_libraries(
 #include <CircuitGenGraph/OrientedGraph.hpp>
 ```
 
-Для работы с вершинами графа вам потребуются следующий хедер:
+Для работы с вершинами графа вам потребуются следующие хедеры:
 
 ```
 #include <CircuitGenGraph/GraphVertex.hpp>
