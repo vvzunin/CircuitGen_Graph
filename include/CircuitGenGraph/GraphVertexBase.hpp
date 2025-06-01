@@ -60,9 +60,11 @@ std::string vertexTypeToVerilog(VertexTypes i_type);
 
 /// @brief vertexTypeToComment
 /// Converts a vertex type enum value to its comment representation
-/// This function takes a vertex type enum value (from the VertexTypes enum) and
-/// returns its corresponding comment representation. The comment representation
-/// is based on the vertex type and is used for generating comments or
+/// This function takes a vertex type 
+/// enum value (from the VertexTypes enum) and
+/// returns its corresponding comment representation. 
+/// The comment representation is based on 
+/// the vertex type and is used for generating comments or
 /// documentation
 /// @param i_type The vertex type enum value (from the VertexTypes enum)
 /// @return The comment representation of the vertex type.
@@ -73,13 +75,30 @@ std::string vertexTypeToVerilog(VertexTypes i_type);
 /// @endcode
 std::string vertexTypeToComment(VertexTypes i_type);
 
+/// @brief getSequentialComment
+/// Converts a Sequential vertex object to its comment representation
+/// This function takes a GraphVertexSequental object and
+/// returns its corresponding comment 
+/// representation. The comment representation
+/// is based on the signals, included for current element (enable, reset,
+/// clear and some more) and is used for generating comments or documentation
+/// @param i_seq Sequential element to getting information
+/// @return The comment representation of the GraphVertexSequental object.
+/// @code
+/// GraphPtr graph = std::make_shared<OrientedGraph>();
+/// auto *clk = graph->addInput("clk");
+/// auto *data = graph->addInput("data");
+/// auto *seq = graph->addSequential(ff, clk, data, "q");
+/// std::string comment = VertexUtils::getSequentialComment(seq);
+/// std::cout << "Comment for input vertex type: " << comment << std::endl;
+/// @endcode
 std::string getSequentialComment(const GraphVertexSequential *i_seq);
 
 } // namespace VertexUtils
 
 /// class GraphVertexBase
 /// @param d_baseGraph A weak pointer to the base graph containing this vertex
-/// @param i_name The name of the vertex. It is a string containing the name
+/// @param d_name The name of the vertex. It is a string containing the name
 /// of a vertex
 /// @param d_value The value of the vertex
 /// @param d_level The vertex level is represented by the uint32_t type
@@ -90,7 +109,12 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
 /// @param d_type Vertex Type - Defined by the VertexTypes enumeration
 /// @param d_count Vertex counter for naming and other purposes.
 /// Represented by the uint_fast64_t type
-/// @param d_hashed A string containing the calculated hash value for the vertex
+/// @param d_hashed A string containing the calculated
+/// hash value for the vertex
+/// @param d_hasHash A HASH_CONDITION value containing hashing status
+/// @see HASH_CONDITION
+/// @param d_needUpdate A VERTEX_STATE value containing status in the
+/// context of level calculating @see VERTEX_STATE
 
 class GraphVertexBase {
   friend class OrientedGraph;
@@ -105,17 +129,23 @@ private:
 
 public:
   enum HASH_CONDITION : uint8_t {
-    HC_NOT_CALC = 0,
-    HC_IN_PROGRESS = 1,
-    HC_CALC = 2
+    HC_NOT_CALC = 0,    // not calculated
+    HC_IN_PROGRESS = 1, // in progress
+    HC_CALC = 2         // correct value saved in d_hashed
   };
 
   enum VERTEX_STATE : uint8_t {
-    VS_NOT_CALC = 0u,
-    VS_IN_PROGRESS = 1u << 0,
-    VS_CALC = 1u << 1,
-    VS_USED_LEVEL = 1u << 2,
-    VS_USED_CALC = VS_CALC | VS_USED_LEVEL
+    VS_NOT_CALC = 0u,         // not calculated
+    VS_IN_PROGRESS = 1u << 0, // in progress
+    VS_CALC = 1u << 1,        // correct level saved in d_level
+    VS_USED_LEVEL = 1u << 2,  // flag for method @see getVerticesByLevel()
+                              // called with possibly wrong levels for vertexes
+                              // and current vertex is used in the search
+    VS_USED_CALC =
+        VS_CALC |
+        VS_USED_LEVEL // flag for method @see getVerticesByLevel() called
+                      //  in correct mode and current vertex is
+                      //  used in the search
   };
 
   /// @brief used for reset for all states being used (hash, updateValue, etc)
@@ -156,7 +186,14 @@ public:
       default; // оператор копирующего присваивания
   GraphVertexBase &operator=(GraphVertexBase &&other) =
       default; // оператор перемещающего присваивания
+  /// @brief GraphVertexBase
+  /// Constructs a GraphVertexBase object with parameters similar
+  /// to other GraphVertexBase object
+  /// @param other The other vertex
   GraphVertexBase(const GraphVertexBase &other) = default;
+  /// @brief GraphVertexBase
+  /// Move constructor for the class
+  /// @param other Vertex to move or copy
   GraphVertexBase(GraphVertexBase &&other) = default;
 
   virtual ~GraphVertexBase();
@@ -212,7 +249,25 @@ public:
   /// @endcode
 
   std::string getName() const;
+  /// @brief getName
+  /// Returns concatenation of the name of the vertex and i_prefix
+  /// @return The concatenation of name of the vertex and i_prefix
+  /// @code
+  /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
+  /// std::string s = vertex.getName("some prefix");
+  /// std::cout << "Name of the vertex: " << s << std::endl;
+  /// @endcode
+
   std::string getName(const std::string &i_prefix) const;
+
+  /// @brief getRawName
+  /// Returns string_view object with name of the vertex
+  /// @return The string_view object with name of the vertex
+  /// @code
+  /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
+  /// std::string s = vertex.getName("some prefix");
+  /// std::cout << "Name of the vertex: " << std::string(s) << std::endl;
+  /// @endcode
 
   std::string_view getRawName() const;
 
@@ -228,8 +283,13 @@ public:
 
   char getValue() const;
 
-  /// @brief updateValue
+  /// @brief updateValue A virtual function for updating the vertex value.
+  /// The implementation is provided in derived classes
+  /// @return the value of the vertex after its update
+  /// @code
   /// TO DO:
+  /// @endcode
+  /// @throws std::invalid_argument if any input connection is invalid
 
   virtual char updateValue() = 0;
 
@@ -262,6 +322,12 @@ public:
 
   virtual void updateLevel(std::string tab = "");
 
+  /// @brief getVerticesByLevel Support method for
+  /// OrientedGraph::getVerticesByLevel() calculating
+  /// @return
+  /// @code
+  /// TO DO:
+  /// @endcode
   bool getVerticesByLevel(uint32_t i_targetLevel,
                           std::vector<VertexPtr> &i_result,
                           bool i_fromOut = true);
@@ -289,7 +355,19 @@ public:
 
   GraphPtrWeak getBaseGraph() const;
 
+  /// @brief reserveInConnections
+  /// reserving memory in d_inConnections for i_size other vertices
+  /// @code
+  /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
+  /// vertex.reserveInConnections(5);
+  /// @endcode
   void reserveInConnections(size_t i_size);
+  /// @brief reserveInConnections
+  /// reserving memory in d_outConnections for i_size other vertices
+  /// @code
+  /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
+  /// vertex.reserveOutConnections(5);
+  /// @endcode
   void reserveOutConnections(size_t i_size);
 
   /// @brief getInConnections
