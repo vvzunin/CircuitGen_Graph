@@ -60,10 +60,10 @@ std::string vertexTypeToVerilog(VertexTypes i_type);
 
 /// @brief vertexTypeToComment
 /// Converts a vertex type enum value to its comment representation
-/// This function takes a vertex type 
+/// This function takes a vertex type
 /// enum value (from the VertexTypes enum) and
-/// returns its corresponding comment representation. 
-/// The comment representation is based on 
+/// returns its corresponding comment representation.
+/// The comment representation is based on
 /// the vertex type and is used for generating comments or
 /// documentation
 /// @param i_type The vertex type enum value (from the VertexTypes enum)
@@ -78,7 +78,7 @@ std::string vertexTypeToComment(VertexTypes i_type);
 /// @brief getSequentialComment
 /// Converts a Sequential vertex object to its comment representation
 /// This function takes a GraphVertexSequental object and
-/// returns its corresponding comment 
+/// returns its corresponding comment
 /// representation. The comment representation
 /// is based on the signals, included for current element (enable, reset,
 /// clear and some more) and is used for generating comments or documentation
@@ -139,7 +139,7 @@ public:
     VS_IN_PROGRESS = 1u << 0, // in progress
     VS_CALC = 1u << 1,        // correct level saved in d_level
     VS_USED_LEVEL = 1u << 2,  // flag for method @see getVerticesByLevel()
-                              // called with possibly wrong levels for vertexes
+                              // called with possibly wrong levels for vertices
                               // and current vertex is used in the search
     VS_USED_CALC =
         VS_CALC |
