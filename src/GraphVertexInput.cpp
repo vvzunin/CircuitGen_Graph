@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <CircuitGenGraph/GraphVertex.hpp>
 
 #ifdef LOGFLAG

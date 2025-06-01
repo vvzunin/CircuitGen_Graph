@@ -17,3 +17,5 @@ logs/
 
 coverage.info
 coverage_report/
+
+.cache/

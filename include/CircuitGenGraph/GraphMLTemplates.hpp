@@ -4,6 +4,8 @@
 
 #include <CircuitGenGraph/GraphUtils.hpp>
 
+/// \namespace This namespaece ClassicGraphML contains all templates,
+/// used for graph to classic graphML translation
 namespace CG_Graph::ClassicGraphML {
 const char *mainTemplate = R"(<?xml version="1.0" encoding="UTF-8"?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -25,6 +27,8 @@ const char *rawEdgeTemplate = R"({}    <edge source="{}" target="{}"/>
 )";
 } // namespace CG_Graph::ClassicGraphML
 
+/// \namespace This namespaece ClassicGraphML contains all templates,
+/// used for graph to openABCD graphML translation
 namespace CG_Graph::OpenABCD {
 const char *mainTemplate = R"(<?xml version='1.0' encoding='utf-8'?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
@@ -50,6 +54,8 @@ const char *edgeTemplate = R"(    <edge source="{}" target="{}">
 )";
 } // namespace CG_Graph::OpenABCD
 
+/// \namespace This namespaece ClassicGraphML contains all templates,
+/// used for graph to pseudo ABCD graphML translation
 namespace CG_Graph::PseudoABCD {
 const char *mainTemplate = R"(<?xml version='1.0' encoding='utf-8'?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
@@ -72,6 +78,7 @@ const char *edgeTemplate = R"(    <edge source="{}" target="{}"/>
 
 namespace CG_Graph {
 
+/// \var Lookup table for specific type codes in ABCD graphML
 std::map<Gates, std::string> gateToABCDType = {
     {Gates::GateAnd, "2"},        {Gates::GateNand, "10"},
     {Gates::GateOr, "13"},        {Gates::GateNor, "14"},

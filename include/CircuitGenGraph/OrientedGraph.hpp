@@ -3,11 +3,9 @@
 #include <array>
 #include <atomic>
 #include <ctime>
-#include <iomanip>
 #include <map>
 #include <memory>
 #include <set>
-#include <sstream>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -22,7 +20,7 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
-// TODO: Добавить проверку на имена файлов при доблении новых вершин
+/// TODO: Добавить проверку на имена файлов при доблении новых вершин
 
 #define GraphPtr std::shared_ptr<CG_Graph::OrientedGraph>
 #define GraphPtrWeak std::weak_ptr<CG_Graph::OrientedGraph>
@@ -33,10 +31,10 @@ namespace CG_Graph {
 
 class GraphVertexBase;
 
-/// class OrientedGraph
+/// \class OrientedGraph
 ///
 /// @param d_countNewGraphInstance Static variable to count new graph instances
-/// @param d_currentInstance Current instance count
+/// @param d_countGraph Current instance counter. Is used for setting a graphID
 /// @param d_currentParentGraph Weak pointer to the current parent graph
 /// @param d_edgesCount The number of edges in the graph
 /// @param d_hashed Hashed value of the graph
@@ -44,7 +42,6 @@ class GraphVertexBase;
 /// @param d_name The name of the graph
 /// @param d_needLevelUpdate A flag indicating whether the vertex levels in
 /// the graph need to be updated
-/// @param d_alreadyParsed TO DO:
 /// @param d_graphInstanceToVerilogCount Map to count instances to Verilog
 /// This map is used to count how many times each subgraph instance has been
 /// converted to Verilog. The key represents the instance number of the
@@ -55,17 +52,7 @@ class GraphVertexBase;
 /// converted to DOT. The key represents the instance number of the
 /// subgraph, and the value represents the count of how many times it has been
 /// converted to DOT
-/// @param d_subGraphsOutputsPtr Map storing outputs of subgraphs
-/// This map stores the outputs of subgraphs. It maps the instance number of
-/// the subgraph to a vector of vectors of VertexPtr. The outer vector
-/// represents the subgraph instances, and the inner vector represents the
-/// outputs of each instance of the subgraph.
 /// @param d_allSubGraphsOutputs Vector storing all outputs of subgraphs
-/// @param d_subGraphsInputsPtr Map storing inputs of subgraphs
-/// This map stores the inputs of subgraphs. It maps the instance number of
-/// the subgraph to a vector of vectors of VertexPtr. The outer vector
-/// represents the subgraph instances, and the inner vector represents the
-/// inputs of each instance of the subgraph.
 /// @param d_subGraphs Set of subgraphs
 /// This set stores the subgraphs present in the graph. It is used to keep
 /// track of all the subgraphs associated with the current graph instance
@@ -127,11 +114,21 @@ public:
   size_t sumFullSize() const;
 
   // Имеются ли gate в схеме, включая подграфы
+  /// @brief Checks, if there are any gates in graph (including subrapgs).
+  /// In fact checks, if fullSize is equal to zero
   bool isEmpty() const;
 
+  /// @brief Resets all internal states for all types of vertices
   void clearAllStates();
+  /// @brief Resets hash states for all vertices of current graph
+  /// (including subgraphs). Should be called before each hash recalculation
   void clearHashStates();
+  /// @brief Resets update for all vertices of current graph
+  /// (including subgraphs). Should be called before each level recalculation
   void clearNeedUpdateStates();
+  /// @brief Sets for all vertices state, that shows, that all vertices
+  /// were not used for for `getVerticesByLevel`. Is called by
+  /// `getVerticesByLevel`.
   void clearUsedLevelStates();
 
   /// @brief isEmptyFull It is used to check the emptiness of a graph,
@@ -159,9 +156,11 @@ public:
 
   bool needToUpdateLevel() const;
 
-  /// @brief updateLevels TO DO: the method body is commented out!!!
-  ///
-  /// */
+  /// @brief updateLevels Calculates level for all vertices inside graph.
+  /// Level show, how far is vertex from an input, Inputs has level 0,
+  /// vertices, which inConnections contains inputs only - 1 level, etc.
+  /// Outputs (1 or more) always has max possible level, but
+  /// not **all** outputs have max possible level.
 
   void updateLevels();
 
@@ -179,36 +178,6 @@ public:
   /// @endcode
 
   uint32_t getMaxLevel();
-
-  // /// @brief addParentGraph
-  // /// Adds a parent graph to the current graph
-  // /// @param i_baseGraph A shared pointer to the parent graph to be added
-  // /// @code
-  // /// // Create the first OrientedGraph instance
-  // /// auto graph1 = std::make_shared<OrientedGraph>("Graph1");
-  // /// // Create the second OrientedGraph instance
-  // /// auto graph2 = std::make_shared<OrientedGraph>("Graph2");
-  // /// // Add graph1 as a parent to graph2
-  // /// graph2->addParentGraph(graph1);
-  // /// // Now graph2 has graph1 as one of its parent graphs
-  // /// @endcode
-  // void                      addParentGraph(GraphPtr i_baseGraph);
-
-  // /// @brief getParentGraphs
-  // /// Retrieves the parent graphs of the current graph
-  // /// @return A vector containing weak pointers to the parent graphs
-  // /// @code
-  // /// // Create an instance of OrientedGraph
-  // /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
-  // /// // Add some parent graphs to the current graph (omitted for brevity)
-  // /// // Retrieve the parent graphs of the current graph
-  // /// std::vector<std::weak_ptr<OrientedGraph>> parentGraphs =
-  // /// graph->getParentGraphs();
-  // /// // Iterate over the parent graphs and perform operations (omitted for
-  // /// brevity)
-  // /// @endcode
-
-  // std::vector<GraphPtrWeak> getParentGraphs() const;
 
   /// @brief setCurrentParent
   /// Sets the current parent graph of the current graph
@@ -230,8 +199,6 @@ public:
   /// @param where A shared pointer to the subgraph whose counters need to be
   /// reset
   void resetCounters(GraphPtr where);
-
-  // TODO: Заменить все const на const &
 
   /// @brief addInput
   /// Adds an input vertex to the current graph
@@ -292,17 +259,90 @@ public:
 
   VertexPtr addGate(const Gates &i_gate, const std::string &i_name = "");
 
+  /// @brief addSequential Adds a sequential vertex to the current graph.
+  /// @param i_type The type of the gsequential to be added;
+  /// can be flip-flop (ff) or latch only
+  /// @param i_clk Vertex, that is used as clock (or enable for latch)
+  /// @param i_data Data vertex, should be written to a reg
+  /// @param i_name The name of the gate vertex to be added
+  /// @return A shared pointer to the newly created gate vertex
+  /// @code
+  /// // Create an instance of OrientedGraph
+  /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
+  /// auto *clk = graph->addInput("clk");
+  /// auto *data = graph->addInput("data");
+  /// // Creates a simple d flip-flop
+  /// auto *seq = graph->addSequential(ff, clk, data, "q");
+  /// @endcode
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, const std::string &i_name = "");
 
+  /// @brief addSequential Adds a sequential vertex to the current graph.
+  /// @param i_type The type of the gsequential to be added;
+  /// can be any type, that need one additional signal.
+  /// @param i_clk Vertex, that is used as clock (or enable for latch)
+  /// EN for latch and CLK for FF
+  /// @param i_data Data vertex, should be written to a reg
+  /// @param i_wire RST or CLR or SET or EN (enable only if flip-flop)
+  /// @param i_name The name of the gate vertex to be added
+  /// @return A shared pointer to the newly created gate vertex
+  /// @code
+  /// // Create an instance of OrientedGraph
+  /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
+  /// auto *clk = graph->addInput("clk");
+  /// auto *data = graph->addInput("data");
+  /// auto *rst_n = graph->addInput("rst_n");
+  /// // Creates a simple d flip-flop with async reset
+  /// auto *seq = graph->addSequential(affr, clk, data, rst_n, "q");
+  /// @endcode
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_wire,
                           const std::string &i_name = "");
 
+  /// @brief addSequential Adds a sequential vertex to the current graph.
+  /// @param i_type The type of the gsequential to be added;
+  /// can be flip-flop (ff) or latch only
+  /// @param i_clk Vertex, that is used as clock (or enable for latch)
+  /// @param i_data Data vertex, should be written to a reg
+  /// @param i_wire1 RST or CLR or SET
+  /// @param i_wire2 SET (double set is not allowed, for sure)
+  /// or EN (en for flip-flop only)
+  /// @param i_name The name of the gate vertex to be added
+  /// @return A shared pointer to the newly created gate vertex
+  /// @code
+  /// // Create an instance of OrientedGraph
+  /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
+  /// auto *clk = graph->addInput("clk");
+  /// auto *data = graph->addInput("data");
+  /// auto *clr = graph->addInput("clr");
+  /// auto *set = graph->addInput("set");
+  /// // Creates a latch with clr and set signals
+  /// auto *seq = graph->addSequential(latchcs, clk, data, clr, set, "q");
+  /// @endcode
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_wire1,
                           VertexPtr i_wire2, const std::string &i_name = "");
 
+  /// @brief addSequential Adds a sequential vertex to the current graph.
+  /// Use with FF only!
+  /// @param i_clk CLK signal
+  /// @param i_data what to write, D
+  /// @param i_rst RST (or CLR) signal
+  /// @param i_set SET signal
+  /// @param i_en EN signal
+  /// @param i_name The name of the gate vertex to be added
+  /// @return A shared pointer to the newly created gate vertex
+  /// @code
+  /// // Create an instance of OrientedGraph
+  /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
+  /// auto *clk = graph->addInput("clk");
+  /// auto *data = graph->addInput("data");
+  /// auto *rst = graph->addInput("rst");
+  /// auto *set = graph->addInput("set");
+  /// auto *en = graph->addInput("en");
+  /// // Flip-flop with negedge clk, sync reset signal, set and enable signals
+  /// auto *seq = graph->addSequential(nffrse, clk, data, rst, set, en, "q");
+  /// @endcode
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_rst, VertexPtr i_set,
                           VertexPtr i_en, const std::string &i_name = "");
@@ -439,10 +479,23 @@ public:
   /// Retrieves the total number of edges in the graph
   /// @return The total number of edges in the graph
   size_t getEdgesCount() { return d_edgesCount; }
+
+  /// @brief Returns set af all subGraphs (graphs, which instances has current
+  /// graph)
+  /// @return set of subGrpahs
   std::set<GraphPtr> getSubGraphs() const;
-  std::set<GraphPtr> getSetSubGraphs() const;
+
+  /// @brief returns all vertices (as an array of vectors of pointers to the
+  /// base class)
+  /// @return d_vertices field
   std::array<std::vector<VertexPtr>, VertexTypes::output + 1>
   getBaseVertexes() const;
+
+  /// @brief getVerticeByIndex returns a vertex from graph. Index should be
+  /// smaller, that number of all vertices inside current graph. Index firstly
+  /// is used for inputs, than - constants, than - gates, sequential, subGraphs
+  /// and than - outputs.
+  /// @throw out_of_range if idx is bigger than number of all vertices in graph
   VertexPtr getVerticeByIndex(size_t idx) const;
 
   /// @brief method used for translating graph to verilog
@@ -469,24 +522,45 @@ public:
   /// @return bool: Returns true if the graph structure has been successfully
   /// written in GraphML format, and false otherwise. In this case, it always
   /// returns true.
-
   bool toGraphMLClassic(std::ofstream &i_fileStream);
+
+  /// @brief toGraphMLPseudoABCD Writes the graph structure in GraphML format to
+  /// the specified output stream
+  /// @param i_fileStream A reference to the std::ofstream object, which
+  /// represents the file in which the graph structure will be written in
+  /// GraphML format
+  /// @return bool: Returns true if the graph structure has been successfully
+  /// written in GraphML format, and false otherwise. In this case, it always
+  /// returns true.
   bool toGraphMLPseudoABCD(std::ofstream &i_fileStream);
+
+  /// @brief toGraphMLOpenABCD Writes the graph structure in GraphML format to
+  /// the specified output stream
+  /// @param i_fileStream A reference to the std::ofstream object, which
+  /// represents the file in which the graph structure will be written in
+  /// GraphML format
+  /// @return bool: Returns true if the graph structure has been successfully
+  /// written in GraphML format, and false otherwise. In this case, it always
+  /// returns true.
   bool toGraphMLOpenABCD(std::ofstream &i_fileStream);
+
+  /// TODO: add description
   void parseVertexToGraphML(const VertexTypes &vertexType,
                             const std::vector<VertexPtr> &vertexVector,
                             const std::string &nodeTemplate,
                             const std::string &edgeTemplate,
                             const std::string &i_prefix, std::string &nodes,
                             std::string &edges);
+
+  /// @brief Is called by toGraphMLClassic. TODO: add description
   std::string toGraphMLClassic(uint16_t i_indent = 0,
                                const std::string &i_prefix = "");
-  std::string toGraphMLPseudoABCD();
-  std::string toGraphMLOpenABCD();
-  // visualize
-  // calcGraph
 
-  // Сделать матрицу смежности для хранения и быстрого поиска связей?
+  /// @brief Is called by toGraphMLPseudoABCD. TODO: add description
+  std::string toGraphMLPseudoABCD();
+
+  /// @brief Is called by toGraphMLOpenABCD. TODO: add description
+  std::string toGraphMLOpenABCD();
 
   /// @brief used for looking for a vector of all vertices with required type
   /// @param i_type
@@ -498,9 +572,15 @@ public:
                     const bool &i_addSubGraphs = false) const;
   std::vector<VertexPtr> getVerticesByLevel(uint32_t i_level);
 
+  /// @brief Looks for all vertices with given name in graph
+  /// and subGrpahs (if required)
+  /// @param i_name name, which should have vertices
+  /// @param i_addSubGraphs if true, looks inside subGraphs for vertices.
+  /// Is false by default.
+  /// @return vector with all found vertices.
   std::vector<VertexPtr>
   getVerticesByName(std::string_view i_name,
-                    const bool &i_addSubGraphs = false) const;
+                    const bool i_addSubGraphs = false) const;
 
   /// @brief Call calculateHash before this check!!!!
   /// @param rhs another value to be compared
@@ -529,6 +609,10 @@ public:
 
   std::map<Gates, std::map<Gates, size_t>> getEdgesGatesCount() const;
 
+  /// @brief reserve additional place in vector for given number of VertexPtr,
+  /// where are located vertices of given type.
+  /// @param i_type Type, for which place should be reserved
+  /// @param i_capacity Number of vertices, which would be added later
   void reserve(VertexTypes i_type, size_t i_capacity) {
     d_vertices[i_type].reserve(d_vertices[i_type].size() + i_capacity);
   }
@@ -536,12 +620,22 @@ public:
   /// @brief resets counter for graph IDs
   static void resetCounter() { d_countGraph = 0ul; }
 
+  /// @brief Checks graph connectivity
+  /// @return bool, true if the graph is connected, and false if not.
   bool isConnected(bool i_recalculate = false);
 
+  /// @brief A simple counter for subGrpah instances to give
+  /// them unique names in Verilog
+  /// @param i_id GraphID of subGraph, instance of which is being created.
+  /// @return new index for new unique name.
   std::uint64_t getGraphInstVerilog(GraphID i_id) {
     return d_graphInstanceToVerilogCount[i_id]++;
   }
 
+  /// @brief A simple counter for subGrpah instances to give
+  /// them unique names in DOT format
+  /// @param i_id GraphID of subGraph, instance of which is being created.
+  /// @return new index for new unique name.
   std::uint64_t getGraphInstDOT(GraphID i_id) {
     return d_graphInstanceToDotCount[i_id]++;
   }
@@ -550,9 +644,13 @@ public:
   /// @return id of graph (size_t)
   GraphID getID() { return d_graphID; }
 
+  /// @brief Unrolls graph. TODO: add normal description
   GraphPtr unrollGraph();
 
-  GraphPtr createMajoritySubgraph();
+  /// @brief creates a majority element, represented by a graph.
+  /// @return GraphPtr to created graph
+  static GraphPtr createMajoritySubgraph();
+  /// @brief creates majority element inside current graph
   VertexPtr generateMajority(VertexPtr a, VertexPtr b, VertexPtr c);
 
   /// @brief log Used for easylogging++

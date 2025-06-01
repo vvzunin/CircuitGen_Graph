@@ -3,7 +3,6 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <tuple>
 
 #include <CircuitGenGraph/GraphUtils.hpp>
 
@@ -14,13 +13,11 @@
 /// TODO: if need LineReader
 /// TODO: if need CopyDirectory
 
-/// namespace AuxMethodsGraph It was created to organize a set of auxiliary
-/// functions and methods that can be used in various parts of a
-/// software project
-/// Functions: Random number generation, Reading files,
-/// Data sorting and processing (includes methods for sorting
-/// dictionaries by their values and for working with spaces in strings)
-/// TO DO: list the other functions
+/// namespace CG_Graph::AuxMethodsGraph was created to organize a set
+/// of auxiliary functions and methods that can be used
+/// in various parts of a software project.
+/// Functions: print to an string stream, used to replace % to str,
+/// format, needed for for backward compatibility (now fmt is used)
 /// </summary>
 
 namespace CG_Graph::AuxMethodsGraph {
@@ -47,6 +44,8 @@ struct TuplePrinter<Tuple, 1> {
   }
 };
 
+/// @brief A simple function, which calls fmt
+/// @return formatted string
 template<typename... Args>
 auto format(Args &&...args)
     -> decltype(fmt::format(std::forward<Args>(args)...)) {

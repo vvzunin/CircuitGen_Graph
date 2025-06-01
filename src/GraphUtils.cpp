@@ -1,8 +1,4 @@
 #include <cassert>
-#include <filesystem>
-#include <fstream>
-#include <iostream>
-#include <memory>
 
 #include <CircuitGenGraph/GraphUtils.hpp>
 
@@ -40,19 +36,26 @@ std::pair<std::vector<bool>, std::vector<Gates>> getLogicOperationsWithGates() {
   return std::make_pair(oneGate, res);
 }
 
-std::string_view fromOperationsToHierarchy(int32_t i_key) {
-  static std::string_view operationsToHierarchy[d_hierarchySize];
+std::string_view fromHierarchyToOperation(int32_t i_key) {
+  /// \var d_operationsToHierarchy This is an associative std::map container
+  /// that maps integers to string vectors. It is used to store a hierarchy of
+  /// logical operations
+  static std::string_view operationByHierarchy[d_hierarchySize];
   static bool filled = false;
   if (!filled) {
     for (size_t i = 0; i < d_logicOperations.size(); ++i) {
-      operationsToHierarchy[d_logicOperations[i].second.second] =
+      operationByHierarchy[d_logicOperations[i].second.second] =
           d_logicOperations[i].second.first;
     }
+    filled = true;
   }
-  return operationsToHierarchy[i_key];
+  assert(i_key < d_hierarchySize);
+  return operationByHierarchy[i_key];
 }
 
 std::string fromOperationsToName(std::string_view i_op) {
+  /// \var d_operationsToName It is used to match symbolic representations of
+  /// logical operations and their names.
   static std::pair<std::string_view, std::string_view>
       operationsToName[d_hierarchySize];
   static bool filled = false;

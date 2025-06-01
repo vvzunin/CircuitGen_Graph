@@ -2,9 +2,8 @@
 
 #include <algorithm>
 #include <array>
+#include <cstdint>
 #include <map>
-#include <memory>
-#include <mutex>
 #include <string>
 #include <utility>
 #include <vector>
@@ -22,13 +21,14 @@ namespace CG_Graph {
 /// Enumeration of vertex types
 
 enum VertexTypes : uint8_t {
-  input = 0,    ///  input vertex
-  output = 6,   ///  output vertex
-  constant = 1, /// constant vertex
-  gate = 2,     /// vertex representing a logical element
-  subGraph = 3, /// subgraph that makes up the vertex
-  dataBus = 4,
-  seuqential = 5
+  input = 0,  ///  input vertex
+  output = 6, ///  output vertex
+
+  constant = 1,  /// constant vertex
+  gate = 2,      /// vertex representing a logical element
+  subGraph = 3,  /// subgraph that makes up the vertex
+  dataBus = 4,   /// Bus vertex type. Not supported yet
+  sequential = 5 /// sequential vertex type (d-latch or d-flip-flop)
 };
 
 // CGG - CiruitGenGraph
@@ -36,43 +36,43 @@ enum VertexTypes : uint8_t {
 
 /// @brief Types of all sequential cells being supported
 enum SequentialTypes : uint8_t {
-  // enable signal, writes data to output if is equal to 1'b1
+  /// enable signal, writes data to output if is equal to 1'b1
   EN = 1 << 0,
-  // set signal, writes 1'b1 to output if is equal to 1'b1
+  /// set signal, writes 1'b1 to output if is equal to 1'b1
   SET = 1 << 1,
-  // clear signal, writes 1'b0 to output if is equal to 1'b1
+  /// clear signal, writes 1'b0 to output if is equal to 1'b1
   CLR = 1 << 2,
-  // reset signal, writes 1'b0 to output if is equal to 1'b0
+  /// reset signal, writes 1'b0 to output if is equal to 1'b0
   RST = 1 << 3,
-  // use with reset only, makes ff async (adds negedge rst to signals list)
+  /// use with reset only, makes ff async (adds negedge rst to signals list)
   ASYNC = 1 << 5,
-  // is is used, activates always on negedge of clk signal (ff-only)
+  /// is is used, activates always on negedge of clk signal (ff-only)
   NEGEDGE = 1 << 6,
 
-  // DEFAULT TYPES
+  /// DEFAULT TYPES
   latch = EN,
   CGG_FF_TYPE(ff, 1 << 4),
 
-  // ASYNC
+  /// ASYNC
   CGG_FF_TYPE(affr, ASYNC | ff | RST),
   CGG_FF_TYPE(affre, ASYNC | ff | EN | RST),
   CGG_FF_TYPE(affrs, ASYNC | ff | SET | RST),
   CGG_FF_TYPE(affrse, ASYNC | ff | EN | SET | RST),
 
-  // LATCHES
+  /// LATCHES
   latchr = latch | RST,
   latchc = latch | CLR,
   latchs = latch | SET,
-  // COMBINED
+  /// COMBINED
   latchrs = latch | RST | SET,
   latchcs = latch | CLR | SET,
 
-  // FF
+  /// FF
   CGG_FF_TYPE(ffe, ff | EN),
   CGG_FF_TYPE(ffr, ff | RST),
   CGG_FF_TYPE(ffc, ff | CLR),
   CGG_FF_TYPE(ffs, ff | SET),
-  // COMBINED
+  /// COMBINED
   CGG_FF_TYPE(ffre, ff | EN | RST),
   CGG_FF_TYPE(ffce, ff | EN | CLR),
   CGG_FF_TYPE(ffse, ff | EN | SET),
@@ -105,14 +105,14 @@ enum Gates : uint8_t {
 /// @brief DotTypes
 /// Enumeration for DOT generation
 enum DotTypes : uint8_t {
-  DotGraph = 0,
-  DotInput = 1,
-  DotConstant = 2,
-  DotOutput = 3,
-  DotGate = 4,
-  DotEdge = 5,
-  DotSubGraph = 6,
-  DotExit = 7
+  DotGraph = 0,    /// DOT type, representing graph
+  DotInput = 1,    /// DOT type, representing input of a graph
+  DotConstant = 2, /// DOT type, representing constant value
+  DotOutput = 3,   /// DOT type, representing output of a graph
+  DotGate = 4,     /// DOT type, representing logic value in DOT format
+  DotEdge = 5,     /// DOT type, representing an edge between vertices
+  DotSubGraph = 6, /// DOT type, representing subraph inside a graph
+  DotExit = 7      /// DOT type, representing end of graph
 };
 
 enum ValueStates : char {
@@ -123,22 +123,21 @@ enum ValueStates : char {
   NoSignal = 'x'
 };
 
-/// @todo: To add Description some fields
-/// class GraphUtils
-///
-/// This is the detailed one. More details. Private...
-/// @param d_singleton Singleton ensures that only one instance of the class
-/// exists in the application
 /// @param d_logicOperations This is an associative std::map container that maps
 /// strings (keys) into pairs of strings and integers. It is used to store
 /// logical operations and their associated parameters, such as the symbolic
 /// representation of the operation and its priority
-/// @param d_operationsToHierarchy This is an associative std::map container
-/// that maps integers to string vectors. It is used to store a hierarchy of
-/// logical operations
-/// @param d_operationsToName It is used to match symbolic representations of
-/// logical operations and their names.
-///
+/// @param d_hierarchySize Number of all possible operations being used.
+/// @param stringToGate A static arrays of pairs with gates and strings.
+/// key is a std::string, value - value from enum `Gates`. Use function
+/// findPairByKey to iterate through it, if necessary.
+/// @param gateToString A static array, which is quite similar to
+/// `stringToGate`, but now key is a value from `Gates` enum, not string.
+/// Contains std::string_view, not std::string. String values all
+/// are hardcoded, so you do not need to care about memory
+/// @param vertexToString A static array of pairs, vertex from enum
+/// to its string representation. Use function
+/// findPairByKey to iterate through it, if necessary.
 
 namespace GraphUtils {
 
@@ -148,21 +147,14 @@ namespace GraphUtils {
 /// @return std::pair<std::string_view, int32_t> A pair containing the name and
 /// ID of the logical operation
 /// @code
-/// GraphUtils settingsInstance;
-/// try {
-/// // Get information about the logical operation "and"
 /// std::pair<std::string_view, int32_t> operationInfo =
-/// settingsInstance.getLogicOperation("and");
+/// GraphUtils::getLogicOperation("and");
 /// // Output information about the logical operation
 /// std::cout << "Operation name: " << operationInfo.first << std::endl;
 /// std::cout << "Operation ID: " << operationInfo.second << std::endl;
-/// } catch (const std::out_of_range& e) {
-/// // Handle an exception if the operation is not found
-/// LOG(ERROR) << "Error: " << e.what() << std::endl;
-/// }
 /// @endcode
-/// @throws std::out_of_range If the passed operation name does not exist
-/// in the list of logical operations
+/// @throws makes an assert, if values is out of range
+/// (it is a non-excepted behavior)
 
 std::pair<std::string_view, int32_t> getLogicOperation(const std::string &i_op);
 
@@ -183,19 +175,15 @@ std::vector<Gates> getLogicOperationsKeys();
 /// vectors: information about the presence of a single input and the keys
 /// of logical operations
 /// @code
-/// // Creating an instance of the GraphUtils class or getting it from an
-/// // existing object
-/// std::shared_ptr<GraphUtils>        settingsInstance =
-/// GraphUtils::getDefaultInstance("/path/to/settings");
 /// // Get logical operations together with information about the presence
 /// // of a single input
 /// std::pair<std::vector<bool>, std::vector<Gates>> logicOperationsInfo =
-/// settingsInstance->getLogicOperationsWithGates();
+/// GraphUtils::getLogicOperationsWithGates();
 /// // Output information about each logical operation
 /// for (size_t i = 0; i < logicOperationsInfo.second.size(); ++i)
 /// {
 /// std::string operationName =
-/// settingsInstance->parseGateToString(logicOperationsInfo.second[i]);
+/// GraphUtils::parseGateToString(logicOperationsInfo.second[i]);
 /// bool hasOneInput = logicOperationsInfo.first[i];
 /// std::cout << "Operation: " << operationName;
 /// if (hasOneInput)
@@ -216,48 +204,33 @@ std::pair<std::vector<bool>, std::vector<Gates>> getLogicOperationsWithGates();
 /// @param i_op a string representing the operation
 /// @return std::string Operation name
 /// @code
-/// // Creating an instance of the GraphUtils class or getting it from
-/// an existing object
-/// std::shared_ptr<GraphUtils> settingsInstance =
-/// GraphUtils::getDefaultInstance("/path/to/settings");
-/// Convert the operation to its name
+/// // Convert the operation to its name
 /// std::string operationName;
-/// try
-/// {
-/// operationName = settingsInstance->fromOperationsToName("and");
+/// operationName = GraphUtils::fromOperationsToName("and");
 /// std::cout << "Operation name: " << operationName << std::endl;
-/// } catch (const std::out_of_range& e) {
-/// LOG(ERROR) << "Error: " << e.what() << std::endl;
-/// }
 /// @endcode
-/// @throw std::out_of_range If the passed operation does not exist in the
+/// @throw has an assert if the passed operation does not exist in the
 /// list of operations
 
 std::string fromOperationsToName(std::string_view i_op);
 
-/// @brief fromOperationsToHierarchy Converts an operation key to its
-/// corresponding hierarchy
-/// @param key The key representing the operation
-/// @return std::vector<std::string> The hierarchy associated with the
-/// operation key
+/// @brief fromHierarchyToOperation Converts hierarchy key to its
+/// corresponding operation value
+/// @param key Required hierarchy key
+/// @return std::string_view The value representing the operation. As
+/// string_view refers to hardcoded strings, you do not need to care about
+/// lifetime
 /// @code
-/// // Creating an instance of the GraphUtils class or getting it from an
-/// existing object std::shared_ptr<GraphUtils> settingsInstance =
-/// GraphUtils::getDefaultInstance("/path/to/settings");
 /// // Get the hierarchy associated with the operation key 5
-/// std::vector<std::string> operationHierarchy =
-/// settingsInstance->fromOperationsToHierarchy(5);
-/// // Output the hierarchy
-/// for(const auto& element : operationHierarchy)
-/// {
-///     std::cout << element << " ";
-/// }
-/// std::cout << std::endl;
+/// std::string_view element =
+/// GraphUtils::fromHierarchyToOperation(5);
+/// // Output the element
+/// std::cout << element << " ";
 /// @endcode
-/// @throws std::out_of_range If the provided key does not exist in the
-/// internal map of operation keys to hierarchies
+/// @throws assert if the provided key does not exist in the
+/// internal array of operation keys to hierarchies
 
-std::string_view fromOperationsToHierarchy(int32_t key);
+std::string_view fromHierarchyToOperation(int32_t key);
 
 /// @brief parseStringToGate Converts a string representation of a gate to
 /// its corresponding enum value
@@ -265,11 +238,8 @@ std::string_view fromOperationsToHierarchy(int32_t key);
 /// @return Gates The enum value corresponding to the provided string
 /// representation of the gate
 /// @code
-/// // Creating an instance of the GraphUtils class or getting it from an
-/// existing object std::shared_ptr<GraphUtils> settingsInstance =
-/// GraphUtils::getDefaultInstance("/path/to/settings");
 /// // Convert the string representation "and" to its corresponding enum value
-/// Gates gate = settingsInstance->parseStringToGate("and");
+/// Gates gate = GraphUtils::parseStringToGate("and");
 /// std::cout << "Enum value of 'and': " << gate << std::endl;
 /// @endcode
 
@@ -282,11 +252,9 @@ Gates parseStringToGate(std::string i_gate);
 /// enum value
 /// @code
 /// // Creating an instance of the GraphUtils class or getting it from an
-/// existing object std::shared_ptr<GraphUtils> settingsInstance =
-/// GraphUtils::getDefaultInstance("/path/to/settings");
 /// // Convert the enum value VertexTypes::input to its corresponding string
 /// representation std::string vertexString =
-/// settingsInstance->parseVertexToString(VertexTypes::input); std::cout <<
+/// GraphUtils::parseVertexToString(VertexTypes::input); std::cout <<
 /// "String representation of VertexTypes::input: " << vertexString <<
 /// std::endl;
 /// @endcode
@@ -304,11 +272,9 @@ std::string parseVertexToString(VertexTypes vertex);
 /// representations.
 /// @code
 /// // Creating an instance of the GraphUtils class or getting it from an
-/// existing object std::shared_ptr<GraphUtils> settingsInstance =
-/// GraphUtils::getDefaultInstance("/path/to/settings");
 /// // Convert the enum value Gates::GateAnd to its corresponding string
 /// representation std::string gateString =
-/// settingsInstance->parseGateToString(Gates::GateAnd); std::cout << "String
+/// GraphUtils::parseGateToString(Gates::GateAnd); std::cout << "String
 /// representation of Gates::GateAnd: " << gateString << std::endl;
 /// @endcode
 
@@ -359,14 +325,15 @@ static std::pair<VertexTypes, std::string_view> vertexToString[] = {
     {VertexTypes::output, "output"},
     {VertexTypes::constant, "const"},
     {VertexTypes::subGraph, "subGraph"},
-    {VertexTypes::seuqential, "sequential"},
+    {VertexTypes::sequential, "sequential"},
     {VertexTypes::gate, "gate"}};
 
+/// TODO: we can use Gate type as an index
 static std::pair<Gates, std::string_view> gateToString[] = {
     {Gates::GateAnd, "and"},      {Gates::GateNand, "nand"},
     {Gates::GateOr, "or"},        {Gates::GateNor, "nor"},
-    {Gates::GateNot, "not"},      {Gates::GateBuf, "buf"},
     {Gates::GateXor, "xor"},      {Gates::GateXnor, "xnor"},
+    {Gates::GateNot, "not"},      {Gates::GateBuf, "buf"},
     {Gates::GateDefault, "ERROR"}};
 
 } // namespace GraphUtils

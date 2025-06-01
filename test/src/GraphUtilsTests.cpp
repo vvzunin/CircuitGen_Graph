@@ -33,7 +33,7 @@ TEST(GraphUtTests, GetOperationsGatesTest) {
 }
 
 TEST(GraphUtTests, HierarchyTest) {
-  std::string_view funcSign = GraphUtils::fromOperationsToHierarchy(0);
+  std::string_view funcSign = GraphUtils::fromHierarchyToOperation(0);
   std::string_view actualSign = "=";
   EXPECT_EQ(funcSign, actualSign);
 }

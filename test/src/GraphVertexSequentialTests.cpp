@@ -1,13 +1,13 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
+
 #include <gtest/gtest.h>
+#ifdef LOGFLAG
+#include "easylogging++Init.hpp"
+#endif
 
 #include <fstream>
 #include <iostream>
 #include <sstream>
-
-#ifdef LOGFLAG
-#include "easylogging++Init.hpp"
-#endif
 
 #include "TestSeqData.hpp"
 

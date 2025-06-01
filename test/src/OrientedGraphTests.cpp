@@ -338,9 +338,9 @@ TEST(TestGetVerticeByIndex, ReturnCorrectGate) {
 TEST(TestGetVerticeByIndex, ThrowExceptionWhenWrongIndex) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
 
-  EXPECT_THROW(graphPtr->getVerticeByIndex(0), std::invalid_argument);
+  EXPECT_THROW(graphPtr->getVerticeByIndex(0), std::out_of_range);
   graphPtr->addGate(Gates::GateAnd, "Anything");
-  EXPECT_THROW(graphPtr->getVerticeByIndex(1), std::invalid_argument);
+  EXPECT_THROW(graphPtr->getVerticeByIndex(1), std::out_of_range);
 }
 // // TEST(TestGetVerticesByLevel, ReturnCorrectVertices) {
 // //   // OrientedGraph graph;
@@ -443,7 +443,7 @@ TEST(TestWasteVerticesRemoving, VerticesWithoutPathToOutputDestroyed) {
   EXPECT_EQ(graphPtr->getGatesCount()[GateBuf], 0);
   EXPECT_EQ(graphPtr->getVerticesByType(gate).size(), 2);
   EXPECT_EQ(graphPtr->getVerticesByType(input).size(), 2);
-  EXPECT_EQ(graphPtr->getVerticesByType(seuqential).size(), 0);
+  EXPECT_EQ(graphPtr->getVerticesByType(sequential).size(), 0);
 }
 TEST(TestWasteVerticesRemoving, DontChangeCorrectGraph) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph");

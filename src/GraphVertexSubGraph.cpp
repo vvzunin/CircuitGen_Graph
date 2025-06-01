@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <stack>
+#include <stdexcept>
 #include <unordered_set>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
