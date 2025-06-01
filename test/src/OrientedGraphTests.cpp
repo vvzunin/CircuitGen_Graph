@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <CircuitGenGraph/OrientedGraph.hpp>
+
 #include <gtest/gtest.h>
 
 #ifdef LOGFLAG
@@ -415,9 +416,9 @@ TEST(TestEdgeRemoving, ValidEdgeRemoving) {
 TEST(TestWasteVerticesRemoving, VerticesWithoutPathToOutputDestroyed) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph");
   graphPtr->updateLevels();
-  auto gate1 = graphPtr->addGate(Gates::GateAnd, "And");
-  auto alsoGate = graphPtr->addGate(Gates::GateNot, "FirstNot");
-  auto inp = graphPtr->addInput("Anything");
+  auto *gate1 = graphPtr->addGate(Gates::GateAnd, "And");
+  auto *alsoGate = graphPtr->addGate(Gates::GateNot, "FirstNot");
+  auto *inp = graphPtr->addInput("Anything");
   graphPtr->addEdge(inp, gate1);
   graphPtr->addEdge(graphPtr->addInput("AnythingElse"), gate1);
   graphPtr->addEdge(gate1, alsoGate);
@@ -449,13 +450,13 @@ TEST(TestWasteVerticesRemoving, DontChangeCorrectGraph) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph");
   graphPtr->updateLevels();
   EXPECT_NO_THROW(graphPtr->removeWasteVertices());
-  auto gate = graphPtr->addGate(Gates::GateNot, "Anything");
-  auto inp = graphPtr->addInput("Anything");
+  auto *gate = graphPtr->addGate(Gates::GateNot, "Anything");
+  auto *inp = graphPtr->addInput("Anything");
   graphPtr->addEdge(inp, gate);
   graphPtr->addEdge(gate, graphPtr->addOutput());
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>("Graph");
-  auto gate2 = graphPtr2->addGate(Gates::GateNot, "Anything");
-  auto inp2 = graphPtr2->addInput("Anything");
+  auto *gate2 = graphPtr2->addGate(Gates::GateNot, "Anything");
+  auto *inp2 = graphPtr2->addInput("Anything");
   graphPtr2->addEdge(inp2, gate2);
   graphPtr2->addEdge(gate2, graphPtr2->addOutput());
   graphPtr2->updateLevels();

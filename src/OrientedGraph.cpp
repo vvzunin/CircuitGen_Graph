@@ -238,15 +238,6 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
   return newVertex;
 }
 
-/// @brief 
-/// @param i_type
-/// @param i_clk CLK signal
-/// @param i_data what to write, D
-/// @param i_rst RST signal
-/// @param i_set SET signal
-/// @param i_en EN signal
-/// @param i_name
-/// @return
 VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
                                        VertexPtr i_clk, VertexPtr i_data,
                                        VertexPtr i_rst, VertexPtr i_set,

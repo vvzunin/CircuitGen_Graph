@@ -114,6 +114,7 @@ ALLOW_UNICODE_NAMES    = NO
 # The default value is: English.
 
 OUTPUT_LANGUAGE        = Russian
+ENCODING              = UTF-8
 
 # If the BRIEF_MEMBER_DESC tag is set to YES, doxygen will include brief member
 # descriptions after the members that are listed in the file and class
@@ -1506,19 +1507,18 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = . \
-                         @PROJECT_SOURCE_DIR@/src \
-                         @PROJECT_SOURCE_DIR@/docs/pages \
-                         @PROJECT_SOURCE_DIR@/README.md \
-                         @PROJECT_SOURCE_DIR@/HACKING.md \
-                         @PROJECT_SOURCE_DIR@/CONTRIBUTING.md \
-                         @PROJECT_SOURCE_DIR@CODE_OF_CONDUCT.md \
-                         @PROJECT_SOURCE_DIR@NewGenerator.md \
-                         @PROJECT_SOURCE_DIR@json.md \
-                         @PROJECT_SOURCE_DIR@ \
-                         @PROJECT_SOURCE_DIR@BUILDING.md \
-                         @PROJECT_SOURCE_DIR@/docs/CodeStyle.md \
-                         @PROJECT_SOURCE_DIR@/README.md \
+INPUT                  = \
+        "@PROJECT_SOURCE_DIR@/include" \
+        "@PROJECT_SOURCE_DIR@/src" \
+        "@PROJECT_SOURCE_DIR@/docs/pages" \
+        "@PROJECT_SOURCE_DIR@/docs/BUILDING.md" \
+        "@PROJECT_SOURCE_DIR@/docs/CODESTYLE.md" \
+        "@PROJECT_SOURCE_DIR@/docs/FORMAT.md" \
+        "@PROJECT_SOURCE_DIR@/docs/HACKING.md" \
+        "@PROJECT_SOURCE_DIR@/docs/Sequential.md" \
+        "@PROJECT_SOURCE_DIR@/docs/MEMORY_MANAGEMENT.md" \
+        "@PROJECT_SOURCE_DIR@/CONTRIBUTING.md" \
+        "@PROJECT_SOURCE_DIR@/README.md" \
 
 
 # This tag can be used to specify the character encoding of the source files
@@ -3159,7 +3159,7 @@ LATEX_OUTPUT           = latex
 # the output language.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
-LATEX_CMD_NAME         = xelatex
+LATEX_CMD_NAME         = pdflatex
 
 # The MAKEINDEX_CMD_NAME tag can be used to specify the command name to generate
 # index for LaTeX.
@@ -3225,7 +3225,7 @@ EXTRA_PACKAGES         =
 # description of the possible markers and block names see the documentation.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
-LATEX_HEADER           =
+LATEX_HEADER           = 
 
 # The LATEX_FOOTER tag can be used to specify a user-defined LaTeX footer for
 # the generated LaTeX document. The footer should contain everything after the
@@ -3237,7 +3237,7 @@ LATEX_HEADER           =
 # doing!
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
-LATEX_FOOTER           =
+LATEX_FOOTER           = @PROJECT_SOURCE_DIR@/docs/latex_header.tex
 
 # The LATEX_EXTRA_STYLESHEET tag can be used to specify additional user-defined
 # LaTeX style sheets that are included after the standard style sheets created
@@ -3275,7 +3275,7 @@ PDF_HYPERLINKS         = YES
 # The default value is: YES.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
-USE_PDFLATEX         = NO
+USE_PDFLATEX         = YES
 LATEX_SOURCE_CODE    = YES
 
 

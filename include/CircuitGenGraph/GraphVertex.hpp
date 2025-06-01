@@ -406,11 +406,12 @@ class GraphVertexSequential : public GraphVertexBase {
 public:
   // clang-format off
 
-  /// @brief Constructor for default types
+  /// @brief GraphVertexSequential Constructor for default types
   /// @param i_type type of sequential vertex (can be only (n)ff or latch = EN)
   /// @param i_clk is clock signal for a ff and enable signal for a latch
   /// @param i_data 
   /// @param i_baseGraph 
+  /// @param i_name 
   GraphVertexSequential(SequentialTypes i_type,
                         VertexPtr i_clk,
                         VertexPtr i_data,
@@ -427,11 +428,11 @@ public:
   GraphVertexSequential(SequentialTypes i_type,
                         VertexPtr i_clk,
                         VertexPtr i_data,
-                        VertexPtr wire,
+                        VertexPtr i_wire,
                         GraphPtr i_baseGraph,
                         std::string_view i_name);
 
-  /// @brief 
+  /// @brief GraphVertexSequential
   /// @param i_type
   /// @param i_clk EN for latch and CLK for ff
   /// @param i_data
@@ -441,12 +442,12 @@ public:
   GraphVertexSequential(SequentialTypes i_type,
                         VertexPtr i_clk,
                         VertexPtr i_data,
-                        VertexPtr wire1,
-                        VertexPtr wire2,
+                        VertexPtr i_wire1,
+                        VertexPtr i_wire2,
                         GraphPtr i_baseGraph,
                         std::string_view i_name);
 
-  /// @brief 
+  /// @brief GraphVertexSequential
   /// @param i_type type of Sequential - (a/n/an)ff(r/c)se, 
   /// @param i_clk clock for flip=flop
   /// @param i_data data value
@@ -459,7 +460,7 @@ public:
                         VertexPtr i_data,
                         VertexPtr i_rst,
                         VertexPtr i_set,
-                        VertexPtr wire3,
+                        VertexPtr i_en,
                         GraphPtr i_baseGraph,
                         std::string_view i_name);
 
