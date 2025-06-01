@@ -1,10 +1,6 @@
 #pragma once
 
-#include <algorithm>
-#include <map>
-#include <memory>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
@@ -35,7 +31,7 @@ public:
   /// @brief GraphVertexInput
   /// Initializes the GraphVertexInput object with the provided base graph
   /// pointer and type
-  /// @param i_baseGraph Pointer to the base graph. Default is nullptr.
+  /// @param i_baseGraph Pointer to the base graph.
   /// @param i_type i_type Type of the vertex. Default is VertexTypes::input.
 
   GraphVertexInput(GraphPtr i_baseGraph,
@@ -53,10 +49,6 @@ public:
   /// @brief updateValue A virtual function for updating the vertex value.
   /// The implementation is provided in derived classes
   /// @return the value of the vertex after its update
-  /// @code
-  /// TO DO:
-  /// @endcode
-  /// @throws std::invalid_argument if any input connection is invalid
 
   void setValue(const char value);
 
@@ -64,13 +56,16 @@ public:
 
   virtual void removeValue() override;
 
-  /// @brief updateLevel It is designed to update the level of the current
-  /// vertex in a directed graph based on the levels of its input connections.
-  /// When running it for a second time, set updateLevel flags to their init
-  /// state
+  /// @brief updateLevel
+  /// This method updates the level of the vertex based on the levels of its
+  /// input connections. It iterates through each input connection and sets
+  /// the vertex level to the maximum level of its input connections plus one.
+  /// If you are going to call this method for a second time, please, set
+  /// all flags, used in updateLevel to their default state.
 
   virtual void updateLevel(std::string tab = "") override;
 
+  /// @brief writes vertex to dot
   DotReturn toDOT() override;
 
   /// @brief log Used for easylogging++
@@ -92,23 +87,68 @@ private:
 
 class GraphVertexConstant : public GraphVertexInput {
 public:
+  /// @brief Initializes the GraphVertexConstant object with
+  /// the provided base graph pointer and char symbol
+  /// @param i_baseGraph Pointer to the base graph.
+  /// @param i_const char symbol for constant (1, 0, z, x)
   GraphVertexConstant(char i_const, GraphPtr i_baseGraph);
 
+  /// @brief Initializes the GraphVertexConstant object with
+  /// the provided base graph pointer and char symbol
+  /// @param i_name Name of the vertex.
+  /// @param i_baseGraph Pointer to the base graph.
+  /// @param i_const char symbol for constant (1, 0, z, x)
   GraphVertexConstant(char i_const, std::string_view i_name,
                       GraphPtr i_baseGraph);
 
-  ~GraphVertexConstant() override{};
+  ~GraphVertexConstant() override {};
 
+  /// @brief calculates hash for constant.
+  /// Calculates the hash value for the vertex based on its outgoing
+  /// connections.
+  ///  When running for a second time, set hash flags to default state
+  /// @return The hash value of the vertex based on its outgoing connections.
+  /// @code
+  /// // Creating an instance of the GraphVertexBase class
+  /// GraphVertexBase vertex(VertexTypes::output, "vertex1");
+  /// // Creating two more vertices
+  /// VertexPtr vertex2 = std::make_shared<GraphVertexBase>(VertexTypes::input,
+  /// "vertex2"); VertexPtr vertex3 =
+  /// std::make_shared<GraphVertexBase>(VertexTypes::input, "vertex3");
+  /// // Adding the second and third vertices to the output connections of the
+  /// first vertex vertex.addVertexToOutConnections(vertex2);
+  /// vertex.addVertexToOutConnections(vertex3);
+  /// // Calculating the hash for the first vertex
+  /// std::string hashValue = vertex.calculateHash();
+  /// // Output of the result
+  /// std::cout << "Hash for the first vertex: " << hashValue << std::endl;
+  /// @endcode
   size_t calculateHash() override;
 
-  /// @brief updateLevel updates the level of the current vertex in the graph
-  /// based on the levels of its incoming connections
-
+  /// @brief toVerilog
+  /// Generates Verilog code for the constant vertex
+  /// @return A string containing Verilog code for the vertex, or an empty
+  /// string if the vertex type is not "output" or if the incoming connection
+  /// is invalid
+  /// @code
+  /// // Creating an instance of the GraphVertexBase class with the type
+  /// "output" and the name "output_vertex"
+  /// GraphPtr graph = std::make_shared<OrientedGraph>();
+  /// VertexPtr outputVertex = graph->addOutput("output");
+  /// // Creating another vertex with the type "input" and the name
+  /// VertexPtr inputVertex = graph->addInput("input_vertex");
+  /// // Setting the input connection for the vertex "output_vertex"
+  /// graph->addEdge(inputVertex, outputVertex);
+  /// // Generating the Verilog code for the vertex "output_vertex"
+  /// std::string verilogCode = outputVertex->toVerilog();
+  /// // Display the generated Verilog code on the screen
+  /// std::cout << "Generated Verilog code:\n" << verilogCode << std::endl;
+  /// @endcode
   std::string toVerilog() const override;
   DotReturn toDOT() override;
 
   /// @brief getDefaultInstance
-  /// TO DO:
+  /// Creates simple verilog const instance (as a wire)
 
   std::string getVerilogInstance();
 
@@ -128,19 +168,57 @@ private:
 /// @param d_hashed Cached hash value of the vertex
 class GraphVertexSubGraph : public GraphVertexBase {
 public:
+  /// @brief Initializes the GraphVertexSubGraph object with
+  /// the provided base graph pointer and subGraph pointer
+  /// @param i_baseGraph Pointer to the base graph.
+  /// @param i_subGraph Pointer to the subGraph.
   GraphVertexSubGraph(GraphPtr i_subGraph, GraphPtr i_baseGraph);
 
   GraphVertexSubGraph(GraphPtr i_subGraph, std::string_view i_name,
                       GraphPtr i_baseGraph);
 
-  ~GraphVertexSubGraph() override{};
-
+  ~GraphVertexSubGraph() override {};
+  
+  /// @brief updateValue A virtual function for updating the vertex value.
+  /// The implementation is provided in derived classes
+  /// @return the value of the vertex after its update
   char updateValue() override;
 
   void removeValue() override;
-
+  
+  /// @brief updateLevel
+  /// This method updates the level of the vertex based on the levels of its
+  /// input connections. It iterates through each input connection and sets
+  /// the vertex level to the maximum level of its input connections plus one.
+  /// If you are going to call this method for a second time, please, set
+  /// all flags, used in updateLevel to their default state.
   void updateLevel(std::string tab = "") override;
 
+    /// @brief toVerilog
+  /// Generates Verilog code for the vertex
+  /// @return A string containing Verilog code for the vertex, or an empty
+  /// string if the vertex type is not "output" or if the incoming connection
+  /// is invalid
+  /// @code
+  /// // Creating an instance of the GraphVertexBase class with the type
+  /// "output" and the name "output_vertex"
+  /// GraphPtr graph = std::make_shared<OrientedGraph>();
+  /// GraphPtr subgraph = std::make_shared<OrientedGraph>();
+  /// subgraph->addEdge(
+  ///   subgraph->addInput("in"),
+  ///   subgraph->addOutput("out"));
+  /// VertexPtr outputVertex = graph->addOutput("output");
+  /// // Creating another vertex with the type "input" and the name
+  /// VertexPtr inputVertex = graph->addInput("input_vertex");
+  /// // Creating another vertex with the type "subGraph" and the name
+  /// VertexPtr subgraphOut = graph->addSubGraph(subgraph, inputVertex).back();
+  /// // Setting the input connection for the vertex "output_vertex"
+  /// graph->addEdge(inputVertex, subgraphOut);
+  /// graph->addEdge(subgraphOut, outputVertex);
+  /// // Generating the Verilog code for the vertex subgraph
+  /// VertexPtr subgaphItself = getVerticesByLevel(1u).back();
+  /// std::cout << subgaphItself << '\n';
+  /// @endcode
   std::string toVerilog() const override;
   DotReturn toDOT() override;
 
@@ -173,10 +251,16 @@ public:
 
   size_t calculateHash() override;
 
+  /// @brief sets new subgraph to the vertex
   void setSubGraph(GraphPtr i_subGraph);
+  /// @return pointer to subgraph, being stored in vertex
   GraphPtr getSubGraph() const;
+  /// @brief returns all vertices of outputs, which are
+  /// influenced by given input to vertex
   std::vector<VertexPtr>
   getOutputBuffersByOuterInput(VertexPtr i_outerInput) const;
+  /// @brief returns all vertices of inputs, which are
+  /// influenced by given output to vertex
   std::vector<VertexPtr>
   getOuterInputsByOutputBuffer(VertexPtr i_outputBuffer) const;
 
@@ -240,7 +324,7 @@ public:
 
   GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph);
 
-  ~GraphVertexGates() override{};
+  ~GraphVertexGates() override {};
 
   /// @brief updateValue
   /// Updates the value of the vertex
@@ -250,17 +334,13 @@ public:
   /// @endcode
   /// @throws std::invalid_argument if any of the input connections point
   /// to a nullptr
-  char updateValue() override;
+  virtual char updateValue() override;
 
   void removeValue() override;
 
   /// @brief calculateHash
   /// Calculates the hash value of the vertex. When running for a second time,
   /// set hash flags to default state
-  /// @throws None.
-  /// @code
-  /// TO DO:
-  /// @endcode
   /// @return The calculated hash value as a string
 
   size_t calculateHash() override;
@@ -281,7 +361,7 @@ public:
   /// std:: cout << "Gate type : " << gateType << std::endl;
   /// @endcode
 
-  Gates getGate() const;
+  Gates getGate() const override;
 
   /// @brief  addVertexToInConnections
   /// Buffer and Not types of gates must have only one element in
@@ -293,7 +373,7 @@ public:
   /// @throws std::overflow_error in case of connecting more than one
   /// vertex in d_inConnections
 
-  uint32_t addVertexToInConnections(VertexPtr i_vert);
+  uint32_t addVertexToInConnections(VertexPtr i_vert) override;
 
   /// @brief toVerilog
   /// generates a string in Verilog format for the current vertex,
@@ -325,12 +405,25 @@ private:
 class GraphVertexSequential : public GraphVertexBase {
 public:
   // clang-format off
+
+  /// @brief Constructor for default types
+  /// @param i_type type of sequential vertex (can be only (n)ff or latch = EN)
+  /// @param i_clk is clock signal for a ff and enable signal for a latch
+  /// @param i_data 
+  /// @param i_baseGraph 
   GraphVertexSequential(SequentialTypes i_type,
                         VertexPtr i_clk,
                         VertexPtr i_data,
                         GraphPtr i_baseGraph,
                         std::string_view i_name);
 
+  /// @brief 
+  /// @param i_type 
+  /// @param i_clk is clock signal for a ff and enable signal for a latch
+  /// @param i_data 
+  /// @param i_wire RST or CLR or SET or EN
+  /// @param i_baseGraph 
+  /// @param i_name 
   GraphVertexSequential(SequentialTypes i_type,
                         VertexPtr i_clk,
                         VertexPtr i_data,
@@ -338,6 +431,13 @@ public:
                         GraphPtr i_baseGraph,
                         std::string_view i_name);
 
+  /// @brief 
+  /// @param i_type
+  /// @param i_clk EN for latch and CLK for ff
+  /// @param i_data
+  /// @param i_wire1 RST or CLR or SET
+  /// @param i_wire2 SET or EN
+  /// @param i_baseGraph
   GraphVertexSequential(SequentialTypes i_type,
                         VertexPtr i_clk,
                         VertexPtr i_data,
@@ -346,18 +446,26 @@ public:
                         GraphPtr i_baseGraph,
                         std::string_view i_name);
 
+  /// @brief 
+  /// @param i_type type of Sequential - (a/n/an)ff(r/c)se, 
+  /// @param i_clk clock for flip=flop
+  /// @param i_data data value
+  /// @param i_rst clear (or reset signal)
+  /// @param i_set set signal
+  /// @param i_en enable
+  /// @param i_baseGraph
   GraphVertexSequential(SequentialTypes i_type,
                         VertexPtr i_clk,
                         VertexPtr i_data,
-                        VertexPtr wire1,
-                        VertexPtr wire2,
+                        VertexPtr i_rst,
+                        VertexPtr i_set,
                         VertexPtr wire3,
                         GraphPtr i_baseGraph,
                         std::string_view i_name);
 
   // clang-format on
 
-  ~GraphVertexSequential() override{};
+  ~GraphVertexSequential() override {};
 
   /// @brief calculateHash
   /// Calculates the hash value of the vertex. When running for a second time,
@@ -380,8 +488,13 @@ public:
 
   std::string toVerilog() const override;
   DotReturn toDOT() override;
-  char updateValue() override { return ValueStates::FalseValue; };
 
+  /// @brief updateValue A virtual function for updating the vertex value.
+  /// The implementation is provided in derived classes
+  /// @return the value of the vertex after its update
+  char updateValue() override { return '0'; };
+
+  /// @brief return true if sequential cell is 
   bool isFF() const;
   bool isAsync() const;
   bool isNegedge() const;

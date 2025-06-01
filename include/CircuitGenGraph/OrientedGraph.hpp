@@ -570,6 +570,8 @@ public:
   std::vector<VertexPtr>
   getVerticesByType(const VertexTypes &i_type, std::string_view i_name = "",
                     const bool &i_addSubGraphs = false) const;
+
+  /// @brief gets all vertices with requires level
   std::vector<VertexPtr> getVerticesByLevel(uint32_t i_level);
 
   /// @brief Looks for all vertices with given name in graph

@@ -2,7 +2,6 @@
 
 #include <atomic>
 #include <cstdint>
-#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -286,10 +285,6 @@ public:
   /// @brief updateValue A virtual function for updating the vertex value.
   /// The implementation is provided in derived classes
   /// @return the value of the vertex after its update
-  /// @code
-  /// TO DO:
-  /// @endcode
-  /// @throws std::invalid_argument if any input connection is invalid
 
   virtual char updateValue() = 0;
 
@@ -314,20 +309,17 @@ public:
   /// the vertex level to the maximum level of its input connections plus one.
   /// If you are going to call this method for a second time, please, set
   /// all flags, used in updateLevel to their default state.
-  /// @code
-  /// TODO:
-  /// @endcode
-  /// @throws std::invalid_argument if any of the input connections are invalid
-  /// (i.e., null pointers)
 
   virtual void updateLevel(std::string tab = "");
 
   /// @brief getVerticesByLevel Support method for
   /// OrientedGraph::getVerticesByLevel() calculating
-  /// @return
-  /// @code
-  /// TO DO:
-  /// @endcode
+  /// @param i_targetLevel level, vertices with which should be found
+  /// @param i_result reference to vector in which found values are stored
+  /// @param i_fromOut if true than begins search from outputs,
+  /// else from inputs (depends on level, if target level is closer
+  /// to outputs or inputs)
+  /// @return true if vertex has required level and false if not
   bool getVerticesByLevel(uint32_t i_targetLevel,
                           std::vector<VertexPtr> &i_result,
                           bool i_fromOut = true);
@@ -349,9 +341,6 @@ public:
 
   /// @brief getBaseGraph
   /// @return a weak pointer to the base graph associated with this vertex.
-  /// @code
-  /// TO DO:
-  /// @endcode
 
   GraphPtrWeak getBaseGraph() const;
 
@@ -406,7 +395,7 @@ public:
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// // Creating another vertex
   /// VertexPtr anotherVertex =
-  /// std::make_shared<GraphVertexBase>(VertexTypes::input, "vertex2");
+  /// std::make_shared<GraphVertexInput>(VertexTypes::input, "vertex2");
   /// // Adding a second vertex to the input connections of the first vertex
   /// and getting the number of occurrences
   /// uint32_t occurrences = vertex.addVertexToInConnections(anotherVertex);
@@ -425,7 +414,7 @@ public:
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// // Creating another vertex
   /// VertexPtr anotherVertex =
-  /// std::make_shared<GraphVertexBase>(VertexTypes::output, "vertex2");
+  /// std::make_shared<GraphVertexInput>(VertexTypes::output, "vertex2");
   /// // Adding the second vertex to the output connections of the first vertex
   /// vertex.addVertexToOutConnections(anotherVertex);
   /// // get the vector of the output connections of the first vertex
@@ -461,9 +450,9 @@ public:
   /// // Creating an instance of the GraphVertexBase class
   /// GraphVertexBase vertex(VertexTypes::output, "vertex1");
   /// // Creating two more vertices
-  /// VertexPtr vertex2 = std::make_shared<GraphVertexBase>(VertexTypes::input,
+  /// VertexPtr vertex2 = std::make_shared<GraphVertexInput>(VertexTypes::input,
   /// "vertex2"); VertexPtr vertex3 =
-  /// std::make_shared<GraphVertexBase>(VertexTypes::input, "vertex3");
+  /// std::make_shared<GraphVertexInput>(VertexTypes::input, "vertex3");
   /// // Adding the second and third vertices to the output connections of the
   /// first vertex vertex.addVertexToOutConnections(vertex2);
   /// vertex.addVertexToOutConnections(vertex3);
@@ -483,29 +472,34 @@ public:
   /// @code
   /// // Creating an instance of the GraphVertexBase class with the type
   /// "output" and the name "output_vertex"
-  /// GraphVertexBase outputVertex(VertexTypes::output, "output_vertex");
+  /// GraphPtr graph = std::make_shared<OrientedGraph>();
+  /// VertexPtr outputVertex = graph->addOutput("output");
   /// // Creating another vertex with the type "input" and the name
-  /// "input_vertex" VertexPtr inputVertex =
-  /// std::make_shared<GraphVertexBase>(VertexTypes::input, "input_vertex");
+  /// VertexPtr inputVertex = graph->addInput("input_vertex");
   /// // Setting the input connection for the vertex "output_vertex"
-  /// outputVertex.addVertexToInConnections(inputVertex);
+  /// graph->addEdge(inputVertex, outputVertex);
   /// // Generating the Verilog code for the vertex "output_vertex"
-  /// std::string verilogCode = outputVertex.toVerilog();
+  /// std::string verilogCode = outputVertex->toVerilog();
   /// // Display the generated Verilog code on the screen
   /// std::cout << "Generated Verilog code:\n" << verilogCode << std::endl;
   /// @endcode
 
   virtual std::string toVerilog() const;
 
+  /// @brief calls toVerilog and allowes to write vertex as string
+  /// to a stream
+  friend std::ostream &operator<<(std::ostream &stream,
+                                  const GraphVertexBase &matrix);
+
   /// @brief toDOT
   /// Generates DOT code for the vertex
   /// @return
 
-  friend std::ostream &operator<<(std::ostream &stream,
-                                  const GraphVertexBase &matrix);
-
   virtual DotReturn toDOT();
 
+  /// @brief Used for check if vertex is a subGraph vertex output
+  /// @return true if is vertex is subGraph vertex output
+  /// or false if not
   virtual bool isSubgraphBuffer() const { return false; }
 
   /// @brief log Used for easylogging++
@@ -524,7 +518,7 @@ protected:
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// // Creating another vertex
   /// VertexPtr anotherVertex =
-  /// std::make_shared<GraphVertexBase>(VertexTypes::output, "vertex2");
+  /// std::make_shared<GraphVertexInput>(VertexTypes::output, "vertex2");
   /// // Adding the second vertex to the output connections of the first vertex
   /// vertex.addVertexToOutConnections(anotherVertex);
   /// // Removing the second vertex from the output connections of the first
@@ -556,7 +550,7 @@ protected:
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// // Creating another vertex
   /// VertexPtr anotherVertex =
-  /// std::make_shared<GraphVertexBase>(VertexTypes::input, "vertex2");
+  /// std::make_shared<GraphVertexInput>(VertexTypes::input, "vertex2");
   /// // Adding a second vertex to the input connections of the first vertex
   /// vertex.addVertexToInConnections(anotherVertex);
   /// // Removing the second vertex from the input connections of the first
