@@ -1,10 +1,10 @@
+#include <CircuitGenGraph/GraphVertex.hpp>
+
 #include <iostream>
 #include <memory>
 #include <stack>
 #include <stdexcept>
 #include <unordered_set>
-
-#include <CircuitGenGraph/GraphVertex.hpp>
 
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
@@ -29,7 +29,7 @@ char GraphVertexSubGraph::updateValue() {
   if (d_inConnections.size() > 0) {
     std::vector<char> inputsValues, outputsValues;
     if (d_inConnections.front()->getValue() == ValueStates::UndefindedState) {
-        inputsValues.push_back(d_inConnections.front()->updateValue());
+      inputsValues.push_back(d_inConnections.front()->updateValue());
     }
     for (size_t i = 1; i < d_inConnections.size(); ++i) {
       if (d_inConnections.at(i)->getValue() == ValueStates::UndefindedState) {
@@ -38,7 +38,7 @@ char GraphVertexSubGraph::updateValue() {
     }
     outputsValues = d_subGraph->graphSimulation(inputsValues);
     for (size_t i = 1; i < d_outConnections.size(); ++i) {
-      GraphVertexGates *out_connectionVert = 
+      GraphVertexGates *out_connectionVert =
           static_cast<GraphVertexGates *>(d_outConnections.at(i));
       out_connectionVert->d_value = outputsValues.at(i);
     }
@@ -53,21 +53,20 @@ char GraphVertexSubGraph::updateValue() {
 }
 
 void GraphVertexSubGraph::removeValue() {
-  if (d_inConnections.size() > 0) { 
+  if (d_inConnections.size() > 0) {
     d_subGraph->simulationRemove();
     for (VertexPtr ptr: d_inConnections) {
       if (ptr->getValue() != ValueStates::UndefindedState) {
         ptr->removeValue();
       }
     }
-  }
-  else {
+  } else {
 #ifdef LOGFLAG
     LOG(ERROR) << "Error, SubGraph without inputs" << std::endl;
 #else
     std::cerr << "Error, SubGraph without inputs" << std::endl;
 #endif
-  } 
+  }
 }
 
 void GraphVertexSubGraph::updateLevel(std::string tab) {

@@ -294,8 +294,7 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
 
       addEdge(newGraph, newVertex);
     }
-  }
-  else {
+  } else {
 #ifdef LOGFLAG
     LOG(ERROR) << "Error, SubGraph without outputs" << std::endl;
 #else
@@ -311,7 +310,8 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
   return outputs;
 }
 
-std::vector<char> OrientedGraph::graphSimulation(std::vector<char> inputsValues) {
+std::vector<char>
+OrientedGraph::graphSimulation(std::vector<char> inputsValues) {
   std::vector<char> outputsValues;
   for (size_t i = 0; i < d_vertices[VertexTypes::input].size(); ++i) {
     GraphVertexInput *inputVert =
@@ -325,7 +325,7 @@ std::vector<char> OrientedGraph::graphSimulation(std::vector<char> inputsValues)
 }
 
 void OrientedGraph::simulationRemove() {
-  for (VertexPtr ptr: d_vertices[VertexTypes::output]){
+  for (VertexPtr ptr: d_vertices[VertexTypes::output]) {
     ptr->removeValue();
   }
 }
@@ -467,8 +467,7 @@ OrientedGraph::getBaseVertexes() const {
 
 VertexPtr OrientedGraph::getVerticeByIndex(size_t idx) const {
   if (sumFullSize() <= idx)
-    throw std::out_of_range(
-        "OrientedGraph getVerticeByIndex: invalid index");
+    throw std::out_of_range("OrientedGraph getVerticeByIndex: invalid index");
 
   static auto types = {input, constant, gate, sequential, subGraph};
   for (const auto &type: types) {
@@ -897,13 +896,14 @@ void OrientedGraph::parseVertexToGraphML(
         break;
     }
 
-    nodes += fmt::format(nodeTemplate, v->getName(i_prefix), vertexKindName, "", "");
+    nodes +=
+        fmt::format(nodeTemplate, v->getName(i_prefix), vertexKindName, "", "");
 
     for (const auto &sink: v->getOutConnections()) {
       // parsing edges not related to subGraphs
       if (sink->getType() != VertexTypes::subGraph) {
-        edges +=
-            fmt::format(edgeTemplate, v->getName(i_prefix), sink->getName(i_prefix));
+        edges += fmt::format(edgeTemplate, v->getName(i_prefix),
+                             sink->getName(i_prefix));
       }
     }
   }
@@ -916,11 +916,12 @@ std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
 
   const std::string spaces(i_indent, ' ');
 
-  const std::string graphTemplate =
-      fmt::format(rawGraphTemplate, spaces, i_indent ? "{}:" : "{}", "{}", spaces);
+  const std::string graphTemplate = fmt::format(
+      rawGraphTemplate, spaces, i_indent ? "{}:" : "{}", "{}", spaces);
   const std::string nodeTemplate =
       fmt::format(rawNodeTemplate, spaces, "{}", spaces, "{}", "{}{}", spaces);
-  const std::string edgeTemplate = fmt::format(rawEdgeTemplate, spaces, "{}", "{}");
+  const std::string edgeTemplate =
+      fmt::format(rawEdgeTemplate, spaces, "{}", "{}");
 
   std::string nodes, edges, graphs, vertexKindName;
 
@@ -940,7 +941,7 @@ std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
     // preparing template for subGraphs as vertices
     currentSubGraphTemplate =
         fmt::format(nodeTemplate, "{}", "subGraph", "\n",
-               sg->toGraphMLClassic(i_indent + 4, i_prefix + "{}::"));
+                    sg->toGraphMLClassic(i_indent + 4, i_prefix + "{}::"));
 
     /// FIXME: Why inputs and outputs of graph are connected with vertices of
     /// the same graph....
@@ -974,7 +975,8 @@ std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
     // }
   }
 
-  std::string finalGraph = fmt::format(graphTemplate, "{}", nodes + graphs + edges);
+  std::string finalGraph =
+      fmt::format(graphTemplate, "{}", nodes + graphs + edges);
   if (i_indent != 0) {
     return finalGraph;
   }
@@ -1059,8 +1061,8 @@ std::string OrientedGraph::toGraphMLPseudoABCD() {
       if (nodeNames.find(actualName) == nodeNames.end()) {
         nodeNames[actualName] = nodeCounter++;
       }
-      nodes +=
-          fmt::format(nodeTemplate, nodeNames.at(actualName), actualName, nodeType);
+      nodes += fmt::format(nodeTemplate, nodeNames.at(actualName), actualName,
+                           nodeType);
 
       for (const auto &sink: v->getOutConnections()) {
         sinkName = sink->getName();
@@ -1069,7 +1071,7 @@ std::string OrientedGraph::toGraphMLPseudoABCD() {
         }
 
         edges += fmt::format(edgeTemplate, nodeNames.at(actualName),
-                        nodeNames.at(sinkName));
+                             nodeNames.at(sinkName));
       }
     }
     ++vertexType;
@@ -1148,13 +1150,13 @@ std::string OrientedGraph::toGraphMLOpenABCD() {
               nodeNames[currentName] = nodeCounter++;
             }
             edges += fmt::format(edgeTemplate, nodeNames.at(currentName),
-                            nodeNames.at(actualName), current.second);
+                                 nodeNames.at(actualName), current.second);
             inverted += current.second;
           }
         }
       }
       nodes += fmt::format(nodeTemplate, nodeNames.at(actualName), actualName,
-                      nodeType, inverted);
+                           nodeType, inverted);
     }
     ++vertexType;
   }

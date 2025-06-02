@@ -101,7 +101,7 @@ public:
   GraphVertexConstant(char i_const, std::string_view i_name,
                       GraphPtr i_baseGraph);
 
-  ~GraphVertexConstant() override {};
+  ~GraphVertexConstant() override{};
 
   /// @brief calculates hash for constant.
   /// Calculates the hash value for the vertex based on its outgoing
@@ -177,15 +177,15 @@ public:
   GraphVertexSubGraph(GraphPtr i_subGraph, std::string_view i_name,
                       GraphPtr i_baseGraph);
 
-  ~GraphVertexSubGraph() override {};
-  
+  ~GraphVertexSubGraph() override{};
+
   /// @brief updateValue A virtual function for updating the vertex value.
   /// The implementation is provided in derived classes
   /// @return the value of the vertex after its update
   char updateValue() override;
 
   void removeValue() override;
-  
+
   /// @brief updateLevel
   /// This method updates the level of the vertex based on the levels of its
   /// input connections. It iterates through each input connection and sets
@@ -194,7 +194,7 @@ public:
   /// all flags, used in updateLevel to their default state.
   void updateLevel(std::string tab = "") override;
 
-    /// @brief toVerilog
+  /// @brief toVerilog
   /// Generates Verilog code for the vertex
   /// @return A string containing Verilog code for the vertex, or an empty
   /// string if the vertex type is not "output" or if the incoming connection
@@ -324,7 +324,7 @@ public:
 
   GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph);
 
-  ~GraphVertexGates() override {};
+  ~GraphVertexGates() override{};
 
   /// @brief updateValue
   /// Updates the value of the vertex
@@ -466,7 +466,7 @@ public:
 
   // clang-format on
 
-  ~GraphVertexSequential() override {};
+  ~GraphVertexSequential() override{};
 
   /// @brief calculateHash
   /// Calculates the hash value of the vertex. When running for a second time,
@@ -495,7 +495,7 @@ public:
   /// @return the value of the vertex after its update
   char updateValue() override { return '0'; };
 
-  /// @brief return true if sequential cell is 
+  /// @brief return true if sequential cell is
   bool isFF() const;
   bool isAsync() const;
   bool isNegedge() const;

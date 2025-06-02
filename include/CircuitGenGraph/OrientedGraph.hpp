@@ -33,8 +33,10 @@ class GraphVertexBase;
 
 /// \class OrientedGraph
 ///
-/// @param d_countNewGraphInstance Static variable to count new graph instances
-/// @param d_countGraph Current instance counter. Is used for setting a graphID
+/// @param d_countNewGraphInstance Static variable to count new graph
+/// instances
+/// @param d_countGraph Current instance counter. Is used for setting a
+/// graphID
 /// @param d_currentParentGraph Weak pointer to the current parent graph
 /// @param d_edgesCount The number of edges in the graph
 /// @param d_hashed Hashed value of the graph

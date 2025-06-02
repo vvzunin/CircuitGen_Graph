@@ -21,8 +21,8 @@ namespace CG_Graph {
 /// Enumeration of vertex types
 
 enum VertexTypes : uint8_t {
-  input = 0,  ///  input vertex
-  output = 6, ///  output vertex
+  input = 0,     ///  input vertex
+  output = 6,    ///  output vertex
   constant = 1,  /// constant vertex
   gate = 2,      /// vertex representing a logical element
   subGraph = 3,  /// subgraph that makes up the vertex
@@ -122,10 +122,10 @@ enum ValueStates : char {
   NoSignal = 'x'
 };
 
-/// @param d_logicOperations This is an associative std::map container that maps
-/// strings (keys) into pairs of strings and integers. It is used to store
-/// logical operations and their associated parameters, such as the symbolic
-/// representation of the operation and its priority
+/// \namespace GraphUtils stores all useful methods, used for some operations
+/// with graph and its vertices.
+/// @param d_logicOperations This is an associative std::map container that
+/// maps strings (keys) into pairs of strings and integers. It is used to store;
 /// @param d_hierarchySize Number of all possible operations being used.
 /// @param stringToGate A static arrays of pairs with gates and strings.
 /// key is a std::string, value - value from enum `Gates`. Use function

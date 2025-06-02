@@ -13,7 +13,8 @@ const std::map<char, std::map<char, char>> tableAnd{
     {'z', {{'0', '0'}, {'1', 'x'}, {'x', 'x'}, {'z', 'x'}}},
 };
 
-/// @brief tableNand Lookup table for NAND (not-and) operation. Used for simulation
+/// @brief tableNand Lookup table for NAND (not-and) operation. Used for
+/// simulation
 const std::map<char, std::map<char, char>> tableNand{
     {'0', {{'0', '1'}, {'1', '1'}, {'x', '1'}, {'z', '1'}}},
     {'1', {{'0', '1'}, {'1', '0'}, {'x', 'x'}, {'z', 'x'}}},
@@ -45,7 +46,8 @@ const std::map<char, std::map<char, char>> tableXor{
     {'z', {{'0', 'x'}, {'1', 'x'}, {'x', 'x'}, {'z', 'x'}}},
 };
 
-/// @brief tableXnor Lookup table for XNOR (not-xor) operation. Used for simulation
+/// @brief tableXnor Lookup table for XNOR (not-xor) operation. Used for
+/// simulation
 const std::map<char, std::map<char, char>> tableXnor{
     {'0', {{'0', '1'}, {'1', '0'}, {'x', 'x'}, {'z', 'x'}}},
     {'1', {{'0', '0'}, {'1', '1'}, {'x', 'x'}, {'z', 'x'}}},

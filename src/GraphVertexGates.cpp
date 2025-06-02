@@ -36,7 +36,7 @@ char GraphVertexGates::updateValue() {
   d_value = ValueStates::NoSignal;
   if (d_inConnections.size() > 0) {
     if (d_inConnections.front()->getValue() == ValueStates::UndefindedState) {
-        d_inConnections.front()->updateValue();
+      d_inConnections.front()->updateValue();
     }
     d_value = d_inConnections.front()->getValue();
     if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
@@ -251,8 +251,7 @@ void GraphVertexGates::log(el::base::type::ostream_t &os) const {
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
   os << "Vertex Type: " << GraphUtils::parseVertexToString(VertexTypes::gate)
-     << "(" + GraphUtils::parseGateToString(d_gate) + ")"
-     << "\n";
+     << "(" + GraphUtils::parseGateToString(d_gate) + ")" << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
   os << "Vertex Hash: " << d_hashed << "\n";

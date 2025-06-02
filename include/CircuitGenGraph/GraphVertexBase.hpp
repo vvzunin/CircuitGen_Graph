@@ -96,7 +96,8 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
 } // namespace VertexUtils
 
 /// class GraphVertexBase
-/// @param d_baseGraph A weak pointer to the base graph containing this vertex
+/// @param d_baseGraph A weak pointer to the base graph containing this
+/// vertex
 /// @param d_name The name of the vertex. It is a string containing the name
 /// of a vertex
 /// @param d_value The value of the vertex
@@ -486,7 +487,7 @@ public:
 
   virtual std::string toVerilog() const;
 
-  /// @brief calls toVerilog and allowes to write vertex as string
+  /// @brief calls toVerilog and allows to write vertex as string
   /// to a stream
   friend std::ostream &operator<<(std::ostream &stream,
                                   const GraphVertexBase &matrix);
