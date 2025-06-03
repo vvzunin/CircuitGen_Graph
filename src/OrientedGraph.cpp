@@ -379,7 +379,8 @@ void OrientedGraph::removeWasteVertices() {
 }
 
 GraphPtr OrientedGraph::createMajoritySubgraph() {
-  auto majority = std::make_shared<CG_Graph::OrientedGraph>("Majority3");
+  auto majority = std::make_shared<CG_Graph::OrientedGraph>(
+      "Majority3", 9 * sizeof(GraphVertexBase));
 
   VertexPtr in1 = majority->addInput("a");
   VertexPtr in2 = majority->addInput("b");
