@@ -39,17 +39,18 @@ char GraphVertexGates::updateValue() {
         d_inConnections.front()->updateValue();
     }
     d_value = d_inConnections.front()->getValue();
+    if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
+      if (d_gate == Gates::GateNot)
+        table = tableNot;
+      else
+        table = tableBuf;
+      d_value = table.at(d_value);
+    }
     for (size_t i = 1; i < d_inConnections.size(); i++) {
       if (d_inConnections.at(i)->getValue() == ValueStates::UndefindedState) {
         d_inConnections.at(i)->updateValue();
       }
       switch (d_gate) {
-        case (Gates::GateBuf):
-          table = tableBuf;
-          break;
-        case (Gates::GateNot):
-          table = tableNot;
-          break;
         case (Gates::GateAnd):
           table = tableAnd.at(d_value);
           break;
