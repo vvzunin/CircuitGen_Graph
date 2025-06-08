@@ -80,11 +80,8 @@ protected:
 private:
 };
 
-/// class GraphVertexConstant TO DO: Description
-///
-///
-/// </summary>
-
+/// class GraphVertexConstant
+/// A simple class, making available to use constant values in circuits
 class GraphVertexConstant : public GraphVertexInput {
 public:
   /// @brief Initializes the GraphVertexConstant object with
@@ -235,8 +232,6 @@ public:
 
   /// @brief This method is used as a substructure for
   /// OrientedGraph methods
-  /// @param i_fileStream TO DO:
-  /// @return TO DO:
   bool toGraphML(std::ofstream &i_fileStream) const;
 
   /// @brief This method is used as a substructureS for
@@ -493,7 +488,7 @@ public:
   /// @brief updateValue A virtual function for updating the vertex value.
   /// The implementation is provided in derived classes
   /// @return the value of the vertex after its update
-  char updateValue() override { return '0'; };
+  char updateValue() override { return ValueStates::FalseValue; };
 
   /// @brief return true if sequential cell is
   bool isFF() const;
