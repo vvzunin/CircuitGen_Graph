@@ -103,7 +103,7 @@ public:
    *
    * \param lhs Left-hand side of assignment
    * \param rhs Right-hand side of assignment
-   */
+   */ 
   void on_assign(const std::string &lhs,
                  const std::pair<std::string, bool> &rhs) const override;
 
