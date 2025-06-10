@@ -26,6 +26,7 @@
 #include <CircuitGenGraph/GraphMemory.hpp>
 #include <CircuitGenGraph/GraphReader.hpp>
 #include <CircuitGenGraph/GraphUtils.hpp>
+#include <CircuitGenGraph/GraphReader.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
 #ifdef LOGFLAG
