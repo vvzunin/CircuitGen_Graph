@@ -1,22 +1,20 @@
 #pragma once
 
+#include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
-
 #include <lorina/lorina.hpp>
 
 #include <map>
 
 #define GraphPtr std::shared_ptr<CG_Graph::OrientedGraph>
 #define GraphPtrWeak std::weak_ptr<CG_Graph::OrientedGraph>
-
+#define VertexPtr CG_Graph::GraphVertexBase *
 namespace CG_Graph {
 
 class OrientedGraph;
-
+class GraphVertexBase;
 class GraphReader : public lorina::verilog_reader {
 public:
-  void on_module_header(const std::string &module_name,
-                        const std::vector<std::string> &inouts);
   /*! \brief Callback method for parsed module.
    *
    * \param module_name Name of the module
@@ -41,14 +39,6 @@ public:
   void on_outputs(const std::vector<std::string> &outputs,
                   std::string const &size = "") const;
 
-  /*! \brief Callback method for parsed wires.
-   *
-   * \param wires Wire names
-   * \param size Size modifier
-   */
-  void on_wires(const std::vector<std::string> &wires,
-                std::string const &size = "") const;
-
   /*! \brief Callback method for parsed parameter definition of form ` parameter
    * M = 10;`.
    *
@@ -62,25 +52,19 @@ public:
    *
    * \param lhs Left-hand side of assignment
    * \param rhs Right-hand side of assignment
-   */
+   */ 
   void on_assign(const std::string &lhs,
                  const std::pair<std::string, bool> &rhs) const;
 
-  /*! \brief Callback method for parsed module instantiation of form `NAME
-   * #(P1,P2) NAME(.SIGNAL(SIGANL), ..., .SIGNAL(SIGNAL));`
-   *
-   * \param module_name Name of the module
-   * \param params List of parameters
-   * \param inst_name Name of the instantiation
-   * \param args List (a_1,b_1), ..., (a_n,b_n) of name pairs, where
-   *             a_i is a name of a signals in module_name and b_i is a name of
-   * a signal in inst_name.
-   */
-  void GraphReader::on_elem(const std::string &lhs, const std::pair<std::string, bool> &op1,
+  VertexPtr find_operand(const std::string& name) const;
+
+  void on_elem(const std::string &lhs, const std::pair<std::string, bool> &op1,
     const std::pair<std::string, bool> &op2, Gates gateType) const;
+
   void on_and(const std::string &lhs, const std::pair<std::string, bool> &op1,
               const std::pair<std::string, bool> &op2) const;
-void GraphReader::on_elem3(const std::string &lhs, const std::pair<std::string, bool> &op1,
+
+void on_elem3(const std::string &lhs, const std::pair<std::string, bool> &op1,
     const std::pair<std::string, bool> &op2, const std::pair<std::string, bool> &op3,
      Gates gateType) const;
   /*! \brief Callback method for parsed NAND-gate with 2 operands `LHS = ~(OP1 &
@@ -178,27 +162,7 @@ void GraphReader::on_elem3(const std::string &lhs, const std::pair<std::string, 
                const std::pair<std::string, bool> &op2,
                const std::pair<std::string, bool> &op3) const;
 
-  /*! \brief Callback method for parsed 2-to-1 multiplexer gate `LHS = OP1 ? OP2
-   * : OP3 ;`.
-   *
-   * \param lhs Left-hand side of assignment
-   * \param op1 operand1 of assignment
-   * \param op2 operand2 of assignment
-   * \param op3 operand3 of assignment
-   */
-  void on_mux21(const std::string &lhs, const std::pair<std::string, bool> &op1,
-                const std::pair<std::string, bool> &op2,
-                const std::pair<std::string, bool> &op3) const;
 
-  /*! \brief Callback method for parsed comments `// comment string`.
-   *
-   * \param comment Comment string
-   */
-  void on_comment(std::string const &comment);
-
-  /*! \brief Callback method for parsed endmodule.
-   *
-   */
   void on_endmodule() const;
   /* verilog_reader */
   GraphPtr getGraphByName(std::string_view name);
@@ -206,6 +170,7 @@ void GraphReader::on_elem3(const std::string &lhs, const std::pair<std::string, 
 private:
   mutable std::map<std::string, GraphPtr> graphs;
   mutable GraphPtr currentGraph;
+  mutable std::unordered_map<std::string, VertexPtr> currentGraphNamesList;
 };
 
 } // namespace CG_Graph

@@ -14,8 +14,8 @@
 
 #include <CircuitGenGraph/GraphMemory.hpp>
 #include <CircuitGenGraph/GraphUtils.hpp>
-#include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/GraphReader.hpp>
+#include <CircuitGenGraph/GraphVertexBase.hpp>
 
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
@@ -393,6 +393,8 @@ public:
   void simulationRemove();
 
   void removeWasteVertices();
+
+  void updateEdgesGatesCount(VertexPtr vertex, Gates type);
   /// @brief addEdge
   /// Adds an edge between two vertices in the current graph
   /// @param from A shared pointer to the vertex where the edge originates
@@ -620,9 +622,7 @@ public:
   /// where are located vertices of given type.
   /// @param i_type Type, for which place should be reserved
   /// @param i_capacity Number of vertices, which would be added later
-  void reserve(VertexTypes i_type, size_t i_capacity) {
-    d_vertices[i_type].reserve(d_vertices[i_type].size() + i_capacity);
-  }
+  void reserve(VertexTypes i_type, size_t i_capacity);
 
   /// @brief resets counter for graph IDs
   static void resetCounter() { d_countGraph = 0ul; }

@@ -333,6 +333,14 @@ void OrientedGraph::simulationRemove() {
   }
 }
 
+void OrientedGraph::updateEdgesGatesCount(VertexPtr vertex, Gates type) {
+  assert(vertex->getGate() == GateDefault);
+  for (auto *i : vertex->getInConnections())
+    if (i->getType() == gate) d_edgesGatesCount[i->getGate()][type];
+  for (auto *i : vertex->getOutConnections())
+    if (i->getType() == gate) d_edgesGatesCount[type][i->getGate()];
+}
+
 void OrientedGraph::removeWasteVertices() {
   updateLevels();
   auto removingForType = [this](VertexTypes type) {
@@ -460,9 +468,9 @@ bool OrientedGraph::removeEdge(VertexPtr from1, VertexPtr to) {
   return deleted;
 }
 GraphPtr OrientedGraph::readVerilog(std::string i_path, std::string i_topName) {
-  if (graphReader == nullptr) *graphReader = GraphReader();
-  lorina::read_verilog(i_path, *graphReader);
-  return graphReader->getGraphByName(i_topName);
+  GraphReader graphReader = GraphReader();
+  lorina::read_verilog(i_path, graphReader);
+  return graphReader.getGraphByName(i_topName);
 }
 
 std::set<GraphPtr> OrientedGraph::getSubGraphs() const {

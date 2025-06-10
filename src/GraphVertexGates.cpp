@@ -22,6 +22,11 @@ GraphVertexGates::GraphVertexGates(Gates i_gate, std::string_view i_name,
 Gates GraphVertexGates::getGate() const {
   return d_gate;
 }
+void GraphVertexGates::setGateType(Gates type) {
+  assert(d_gate == GateDefault);
+  getBaseGraph().lock()->updateEdgesGatesCount(this, type);
+  d_gate = type;
+}
 uint32_t GraphVertexGates::addVertexToInConnections(VertexPtr i_vert) {
   if ((getGate() == Gates::GateBuf || getGate() == Gates::GateNot) &&
       !d_inConnections.empty()) {
