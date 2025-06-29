@@ -1,7 +1,7 @@
-#include <CircuitGenGraph/OrientedGraph.hpp>
 #include <CircuitGenGraph/GraphReader.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
+#include <CircuitGenGraph/OrientedGraph.hpp>
 #include <lorina/lorina.hpp>
 namespace CG_Graph {
 GraphReader::GraphReader(Context &i_context) : d_context(i_context){};
