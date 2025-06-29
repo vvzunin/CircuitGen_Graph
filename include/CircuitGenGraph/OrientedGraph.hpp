@@ -44,6 +44,7 @@
 #define VertexPtr CG_Graph::GraphVertexBase *
 
 namespace CG_Graph {
+
 class GraphVertexBase;
 class GraphReader;
 class Context;
