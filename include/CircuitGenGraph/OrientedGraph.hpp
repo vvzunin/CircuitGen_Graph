@@ -15,8 +15,8 @@
 #include <CircuitGenGraph/enums.hpp>
 
 #include <CircuitGenGraph/GraphMemory.hpp>
-#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphReader.hpp>
+#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
 #ifdef LOGFLAG
@@ -34,6 +34,7 @@ namespace CG_Graph {
 
 class GraphVertexBase;
 class GraphReader;
+class Context;
 /// class OrientedGraph
 ///
 /// @param d_countNewGraphInstance Static variable to count new graph instances
@@ -444,8 +445,8 @@ public:
   getBaseVertexes() const;
   VertexPtr getVerticeByIndex(size_t idx) const;
 
-  static GraphPtr readVerilog(std::string i_path, std::string i_topName = "");
-
+  static void readVerilog(std::string i_path, Context &context);
+  static CG_Graph::Context readVerilog(std::string i_path);
   /// @brief method used for translating graph to verilog
   /// @param i_path folder, in which file should be created
   /// @param i_filename name of a file, which should be created
