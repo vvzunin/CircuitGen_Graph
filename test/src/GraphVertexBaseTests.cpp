@@ -1,7 +1,6 @@
-#include <sstream>
-
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
+
 #include <gtest/gtest.h>
 
 #ifdef LOGFLAG

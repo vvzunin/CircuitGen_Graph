@@ -94,13 +94,13 @@ TEST(TestConstructorWithIName_SubGraph, SubGraphWithDefaultInputParametrs) {
 
 // TODO: Update with easylogging
 // TEST(TestToVerilog, TestReturnPairWrongPath) {
-//   GraphPtr            graphPtr1 = std::make_shared<OrientedGraph>();
-//   GraphPtr            graphPtr2 = std::make_shared<OrientedGraph>();
+//   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
+//   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
 //   GraphVertexSubGraph subGraph1(graphPtr1, "Anything", graphPtr2);
 
-//   std::stringstream   capturedOutput;
-//   std::streambuf*     originalStderr =
-//   std::cerr.rdbuf(capturedOutput.rdbuf()); subGraph1.toVerilog("wrong_path");
+//   std::stringstream capturedOutput;
+//   std::streambuf *originalStderr = std::cerr.rdbuf(capturedOutput.rdbuf());
+//   subGraph1.toVerilog("wrong_path");
 
 //   std::cerr.rdbuf(originalStderr);
 //   std::string output = capturedOutput.str();
@@ -123,8 +123,6 @@ TEST(TestToVerilog, TestReturnPairCreateCorrectFile) {
   std::filesystem::remove(curPath + '/' + fileName);
 }
 
-TEST(Test, Test) {
-}
 TEST(TestToGraphML, Test) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("testGraph");
   graphPtr1->addConst('x', "testConst");
@@ -160,6 +158,7 @@ TEST(TestCalculateHash_SubGraph, Test) {
 
   EXPECT_EQ(subGraph1.calculateHash(), subGraph2.calculateHash());
 }
+
 TEST(TestSetSubGrahGetSubgraph, Test) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("testGraph");
   graphPtr1->addConst('x', "testConst");
@@ -170,6 +169,7 @@ TEST(TestSetSubGrahGetSubgraph, Test) {
   subGraph1.setSubGraph(graphPtr2);
   EXPECT_EQ(subGraph1.getSubGraph(), graphPtr2);
 }
+
 // -------------------------------------
 
 TEST(TestSetName_SubGraph, InputCorrectName) {

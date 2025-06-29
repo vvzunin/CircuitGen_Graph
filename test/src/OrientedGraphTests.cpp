@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <CircuitGenGraph/OrientedGraph.hpp>
+
 #include <gtest/gtest.h>
 
 #ifdef LOGFLAG
@@ -338,9 +339,9 @@ TEST(TestGetVerticeByIndex, ReturnCorrectGate) {
 TEST(TestGetVerticeByIndex, ThrowExceptionWhenWrongIndex) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
 
-  EXPECT_THROW(graphPtr->getVerticeByIndex(0), std::invalid_argument);
+  EXPECT_THROW(graphPtr->getVerticeByIndex(0), std::out_of_range);
   graphPtr->addGate(Gates::GateAnd, "Anything");
-  EXPECT_THROW(graphPtr->getVerticeByIndex(1), std::invalid_argument);
+  EXPECT_THROW(graphPtr->getVerticeByIndex(1), std::out_of_range);
 }
 // // TEST(TestGetVerticesByLevel, ReturnCorrectVertices) {
 // //   // OrientedGraph graph;
@@ -415,9 +416,9 @@ TEST(TestEdgeRemoving, ValidEdgeRemoving) {
 TEST(TestWasteVerticesRemoving, VerticesWithoutPathToOutputDestroyed) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph");
   graphPtr->updateLevels();
-  auto gate1 = graphPtr->addGate(Gates::GateAnd, "And");
-  auto alsoGate = graphPtr->addGate(Gates::GateNot, "FirstNot");
-  auto inp = graphPtr->addInput("Anything");
+  auto *gate1 = graphPtr->addGate(Gates::GateAnd, "And");
+  auto *alsoGate = graphPtr->addGate(Gates::GateNot, "FirstNot");
+  auto *inp = graphPtr->addInput("Anything");
   graphPtr->addEdge(inp, gate1);
   graphPtr->addEdge(graphPtr->addInput("AnythingElse"), gate1);
   graphPtr->addEdge(gate1, alsoGate);
@@ -443,19 +444,19 @@ TEST(TestWasteVerticesRemoving, VerticesWithoutPathToOutputDestroyed) {
   EXPECT_EQ(graphPtr->getGatesCount()[GateBuf], 0);
   EXPECT_EQ(graphPtr->getVerticesByType(gate).size(), 2);
   EXPECT_EQ(graphPtr->getVerticesByType(input).size(), 2);
-  EXPECT_EQ(graphPtr->getVerticesByType(seuqential).size(), 0);
+  EXPECT_EQ(graphPtr->getVerticesByType(sequential).size(), 0);
 }
 TEST(TestWasteVerticesRemoving, DontChangeCorrectGraph) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph");
   graphPtr->updateLevels();
   EXPECT_NO_THROW(graphPtr->removeWasteVertices());
-  auto gate = graphPtr->addGate(Gates::GateNot, "Anything");
-  auto inp = graphPtr->addInput("Anything");
+  auto *gate = graphPtr->addGate(Gates::GateNot, "Anything");
+  auto *inp = graphPtr->addInput("Anything");
   graphPtr->addEdge(inp, gate);
   graphPtr->addEdge(gate, graphPtr->addOutput());
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>("Graph");
-  auto gate2 = graphPtr2->addGate(Gates::GateNot, "Anything");
-  auto inp2 = graphPtr2->addInput("Anything");
+  auto *gate2 = graphPtr2->addGate(Gates::GateNot, "Anything");
+  auto *inp2 = graphPtr2->addInput("Anything");
   graphPtr2->addEdge(inp2, gate2);
   graphPtr2->addEdge(gate2, graphPtr2->addOutput());
   graphPtr2->updateLevels();
@@ -1201,6 +1202,67 @@ TEST(OrientedGraphTests, SimpleGetByLevel) {
   graph->updateLevels();
   auto result = graph->getVerticesByLevel(6);
   EXPECT_EQ(upperPart, result);
+}
+
+TEST(OrientedGraphTests, SimulationTest) {
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+  // level = 0
+  VertexPtr inputVertA = graph->addInput();
+  VertexPtr inputVertB = graph->addInput();
+  VertexPtr gateAndVert = graph->addGate(GateAnd);
+  VertexPtr gateNandVert = graph->addGate(GateNand);
+  VertexPtr gateOrVert = graph->addGate(GateOr);
+  VertexPtr gateNorVert = graph->addGate(GateNor);
+  VertexPtr gateXorVert = graph->addGate(GateXor);
+  VertexPtr gateXnorVert = graph->addGate(GateXnor);
+  VertexPtr gateNotVert = graph->addGate(GateNot);
+  VertexPtr gateBufVert = graph->addGate(GateBuf);
+  VertexPtr outputVertA = graph->addOutput();
+  VertexPtr outputVertB = graph->addOutput();
+  VertexPtr outputVertC = graph->addOutput();
+  VertexPtr outputVertD = graph->addOutput();
+  VertexPtr outputVertE = graph->addOutput();
+  VertexPtr outputVertF = graph->addOutput();
+  VertexPtr outputVertG = graph->addOutput();
+  VertexPtr outputVertH = graph->addOutput();
+  // Input A
+  graph->addEdge(inputVertA, gateAndVert);
+  graph->addEdge(inputVertA, gateNandVert);
+  graph->addEdge(inputVertA, gateOrVert);
+  graph->addEdge(inputVertA, gateNorVert);
+  graph->addEdge(inputVertA, gateXorVert);
+  graph->addEdge(inputVertA, gateXnorVert);
+  graph->addEdge(inputVertA, gateNotVert);
+  graph->addEdge(inputVertA, gateBufVert);
+  // Input B
+  graph->addEdge(inputVertB, gateAndVert);
+  graph->addEdge(inputVertB, gateNandVert);
+  graph->addEdge(inputVertB, gateOrVert);
+  graph->addEdge(inputVertB, gateNorVert);
+  graph->addEdge(inputVertB, gateXorVert);
+  graph->addEdge(inputVertB, gateXnorVert);
+  // Outputs
+  graph->addEdge(gateAndVert, outputVertA);
+  graph->addEdge(gateNandVert, outputVertB);
+  graph->addEdge(gateOrVert, outputVertC);
+  graph->addEdge(gateNorVert, outputVertD);
+  graph->addEdge(gateXorVert, outputVertE);
+  graph->addEdge(gateXnorVert, outputVertF);
+  graph->addEdge(gateNotVert, outputVertG);
+  graph->addEdge(gateBufVert, outputVertH);
+
+  std::vector<char> inputs = {'0', '1'};
+  std::vector<char> actualValues = {'0', '1', '1', '0', '1', '0', '1', '0'};
+
+  EXPECT_EQ(graph->graphSimulation(inputs), actualValues);
+
+  std::vector<char> actualDeletes = {'n', 'n'};
+  graph->simulationRemove();
+  std::vector<char> deletes;
+  deletes.push_back(inputVertA->getValue());
+  deletes.push_back(inputVertB->getValue());
+
+  EXPECT_EQ(deletes, actualDeletes);
 }
 
 TEST(GraphTest, MajorityLogicTestSimple) {

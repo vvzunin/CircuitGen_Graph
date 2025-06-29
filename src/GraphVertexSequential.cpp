@@ -87,30 +87,18 @@ inline void GraphVertexSequential::setSignalByType(VertexPtr i_wire,
   }                                                             \
 } while (0)
 
-/// @brief Constructor for default types
-/// @param i_type type of sequential vertex (can be only (n)ff or latch = EN)
-/// @param i_clk is clock signal for a ff and enable signal for a latch
-/// @param i_data 
-/// @param i_baseGraph 
 GraphVertexSequential::GraphVertexSequential(
     SequentialTypes i_type,
     VertexPtr i_clk,
     VertexPtr i_data,
     GraphPtr i_baseGraph,
     std::string_view i_name)
-    : GraphVertexBase(VertexTypes::seuqential, i_name, i_baseGraph)
+    : GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph)
     , d_data(i_data) {
   SET_DEFAULT;
   validateSignal(i_type, d_seqType);
 }
 
-/// @brief 
-/// @param i_type 
-/// @param i_clk is clock signal for a ff and enable signal for a latch
-/// @param i_data 
-/// @param i_wire RST or CLR or SET or EN
-/// @param i_baseGraph 
-/// @param i_name 
 GraphVertexSequential::GraphVertexSequential(
     SequentialTypes i_type,
     VertexPtr i_clk,
@@ -118,7 +106,7 @@ GraphVertexSequential::GraphVertexSequential(
     VertexPtr i_wire,
     GraphPtr i_baseGraph,
     std::string_view i_name)
-    : GraphVertexBase(VertexTypes::seuqential, i_name, i_baseGraph)
+    : GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph)
     , d_data(i_data) {
   SET_DEFAULT;
   unsigned factType = 0u;
@@ -129,13 +117,6 @@ GraphVertexSequential::GraphVertexSequential(
   validateSignal(i_type, d_seqType);
 }
 
-/// @brief 
-/// @param i_type
-/// @param i_clk EN for latch and CLK for ff
-/// @param i_data
-/// @param i_wire1 RST or CLR or SET
-/// @param i_wire2 SET or EN
-/// @param i_baseGraph
 GraphVertexSequential::GraphVertexSequential(
     SequentialTypes i_type,
     VertexPtr i_clk,
@@ -144,7 +125,7 @@ GraphVertexSequential::GraphVertexSequential(
     VertexPtr i_wire2,
     GraphPtr i_baseGraph,
     std::string_view i_name)
-    : GraphVertexBase(VertexTypes::seuqential, i_name, i_baseGraph)
+    : GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph)
     , d_data(i_data) {
   SET_DEFAULT;
   unsigned factType = 0u;
@@ -165,7 +146,7 @@ GraphVertexSequential::GraphVertexSequential(
     VertexPtr i_en,
     GraphPtr i_baseGraph,
     std::string_view i_name)
-    : GraphVertexBase(VertexTypes::seuqential, i_name, i_baseGraph)
+    : GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph)
     , d_data(i_data) {
   SET_DEFAULT;
   // cannot have 3 input wires and be a latch - latch has only 3 signals at all

@@ -134,6 +134,77 @@ chmod +x buildGraph.sh
 
 [&#8593; Contents](#content_rus)
 
+## СБорка документации
+
+Для того, чтобы собрать документацию, вам потребуеутся скачать следущий набор пакетов для ОС Fedora:
+```
+sudo dnf install \
+  doxygen \
+  texlive-scheme-medium \
+  texlive-xetex \
+  texlive-collection-latex \
+  texlive-collection-fontsrecommended \
+  texlive-collection-langcyrillic \
+  texlive-wrapfig \
+  texlive-tabu \
+  texlive-etoc \
+  texlive-needspace \
+  texlive-adjustbox \
+  texlive-capt-of \
+  texlive-zref \
+  texlive-titlesec \
+  texlive-fancyhdr \
+  texlive-pdfpages \
+  texlive-geometry \
+  texlive-underscore \
+  texlive-upquote \
+  texlive-float \
+  texlive-listings \
+  texlive-xcolor \
+  texlive-graphics \
+  texlive-enumitem \
+  texlive-amsmath \
+  texlive-amsfonts \
+  texlive-amssymb \
+  texlive-courier \
+  texlive-helvetic \
+  texlive-lm \
+  texlive-inconsolata \
+  python3 \
+  unzip \
+  curl
+```
+
+Или для Ubuntu:
+```
+sudo apt update && sudo apt install -y \
+  doxygen \
+  texlive-xetex \
+  texlive-lang-cyrillic \
+  texlive-latex-recommended \
+  texlive-latex-extra \
+  texlive-fonts-recommended \
+  texlive-fonts-extra \
+  texlive-science \
+  fonts-lmodern \
+  fonts-inconsolata \
+  curl \
+  unzip \
+  python3
+```
+
+После этого вам потребуется собрать проект с флагами для сборки документации
+```
+cmake -DBUILD_MCSS_DOCS=ON --preset=dev
+cmake --build build/ --preset=dev -j $(nproc) --target docs
+```
+
+После этого вы можете собрать файл с документацией в формате `pdf`. Скопируем файл в директорию, где находится текущая рабочая директория проекта:
+```
+./get_pdf.sh build/dev/docs/Doxygen_output/latex/
+cp ./build/dev/docs/Doxygen_output/latex/refman.pdf .
+```
+
 # Лицензия
 <a name="license"></a>
 

@@ -1,4 +1,5 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
+
 #include <gtest/gtest.h>
 
 #ifdef LOGFLAG
@@ -437,7 +438,7 @@ TEST(TestAddOutConnections, GatesAddConnections) {
   EXPECT_EQ(gate1->getOutConnections()[0], ptr1);
 
   memoryOwnerGateGr->addGate(Gates::GateAnd);
-  auto ptr2 = memoryOwnerGateGr->addGate(Gates::GateAnd);
+  auto *ptr2 = memoryOwnerGateGr->addGate(Gates::GateAnd);
   gate1->addVertexToOutConnections(ptr2);
   EXPECT_EQ(gate1->getOutConnections()[1], ptr2);
 }

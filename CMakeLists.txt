@@ -4,7 +4,7 @@ include(cmake/prelude.cmake)
 
 project(
   CircuitGenGraph
-  VERSION 1.5.0
+  VERSION 1.6.0
   DESCRIPTION "Graph for circuits dataset generation"
   HOMEPAGE_URL "https://github.com/vvzunin/CircuitGen_Graph"
   LANGUAGES CXX
@@ -15,6 +15,7 @@ include(cmake/project-is-top-level.cmake)
 include(cmake/variables.cmake)
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexBase.cpp

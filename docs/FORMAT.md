@@ -10,7 +10,7 @@
 - **CMake Language Support**  
 - **WSL** (при условии что вы работаете с помощью WSL)
 
-Даже после установки дополнений VSCode возможно не будет распознавать фрагменты синтаксиса. Для исправления этой проблемы откройте панель команд через сочетание клавиш Ctrl + Shift + P и введите:
+Даже после установки дополнений VSCode может не распознавать фрагменты синтаксиса. Для исправления этой проблемы откройте панель команд через сочетание клавиш Ctrl + Shift + P и введите:
 
 ```
 C/C++: Edit Configurations (UI)
@@ -143,7 +143,7 @@ ${workspaceFolder}/**
         "text_encoding": "cpp",
         "source_location": "cpp"
       },
-      "cmake.sourceDirectory": "/home/fuuulkrum7/1290_project/GraphOnly",
+      "cmake.sourceDirectory": "/home/user/CiruitGen/CircuitGen_Graph",
       "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, ColumnLimit: 80, BreakBeforeBraces: Attach }",
       "C_Cpp.default.compilerPath": "/usr/bin/g++"
   }
