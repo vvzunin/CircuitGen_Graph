@@ -13,15 +13,24 @@ namespace CG_Graph {
 
 class OrientedGraph;
 class GraphVertexBase;
+class Context {
+public:
+  Context() = default;
+  mutable std::string d_currentTopName;
+  mutable std::map<std::string, GraphPtr> d_graphs;
+  mutable GraphPtr d_currentGraph;
+  mutable std::unordered_map<std::string, VertexPtr> d_currentGraphNamesList;
+};
 class GraphReader : public lorina::verilog_reader {
 public:
+  GraphReader(Context &i_context);
   /*! \brief Callback method for parsed module.
    *
    * \param module_name Name of the module
    * \param inouts Container for input and output names
    */
   void on_module_header(const std::string &module_name,
-                        const std::vector<std::string> &inouts) const;
+                        const std::vector<std::string> &inouts) const override;
 
   /*! \brief Callback method for parsed inputs.
    *
@@ -29,7 +38,7 @@ public:
    * \param size Size modifier
    */
   void on_inputs(const std::vector<std::string> &inputs,
-                 std::string const &size) const;
+                 std::string const &size) const override;
 
   /*! \brief Callback method for parsed outputs.
    *
@@ -37,7 +46,7 @@ public:
    * \param size Size modifier
    */
   void on_outputs(const std::vector<std::string> &outputs,
-                  std::string const &size = "") const;
+                  std::string const &size = "") const override;
 
   /*! \brief Callback method for parsed parameter definition of form ` parameter
    * M = 10;`.
@@ -45,28 +54,29 @@ public:
    * \param name Name of the parameter
    * \param value Value of the parameter
    */
-  void on_parameter(const std::string &name, const std::string &value) const;
+  void on_parameter(const std::string &name,
+                    const std::string &value) const override;
 
   /*! \brief Callback method for parsed immediate assignment of form `LHS = RHS
    * ;`.
    *
    * \param lhs Left-hand side of assignment
    * \param rhs Right-hand side of assignment
-   */ 
+   */
   void on_assign(const std::string &lhs,
-                 const std::pair<std::string, bool> &rhs) const;
+                 const std::pair<std::string, bool> &rhs) const override;
 
-  VertexPtr find_operand(const std::string& name) const;
+  VertexPtr find_operand(const std::string &name) const;
 
   void on_elem(const std::string &lhs, const std::pair<std::string, bool> &op1,
-    const std::pair<std::string, bool> &op2, Gates gateType) const;
+               const std::pair<std::string, bool> &op2, Gates gateType) const;
 
   void on_and(const std::string &lhs, const std::pair<std::string, bool> &op1,
-              const std::pair<std::string, bool> &op2) const;
+              const std::pair<std::string, bool> &op2) const override;
 
-void on_elem3(const std::string &lhs, const std::pair<std::string, bool> &op1,
-    const std::pair<std::string, bool> &op2, const std::pair<std::string, bool> &op3,
-     Gates gateType) const;
+  void on_elem3(const std::string &lhs, const std::pair<std::string, bool> &op1,
+                const std::pair<std::string, bool> &op2,
+                const std::pair<std::string, bool> &op3, Gates gateType) const;
   /*! \brief Callback method for parsed NAND-gate with 2 operands `LHS = ~(OP1 &
    * OP2) ;`.
    *
@@ -75,7 +85,7 @@ void on_elem3(const std::string &lhs, const std::pair<std::string, bool> &op1,
    * \param op2 operand2 of assignment
    */
   void on_nand(const std::string &lhs, const std::pair<std::string, bool> &op1,
-               const std::pair<std::string, bool> &op2) const;
+               const std::pair<std::string, bool> &op2) const override;
 
   /*! \brief Callback method for parsed OR-gate with 2 operands `LHS = OP1 | OP2
    * ;`.
@@ -85,7 +95,7 @@ void on_elem3(const std::string &lhs, const std::pair<std::string, bool> &op1,
    * \param op2 operand2 of assignment
    */
   void on_or(const std::string &lhs, const std::pair<std::string, bool> &op1,
-             const std::pair<std::string, bool> &op2) const;
+             const std::pair<std::string, bool> &op2) const override;
   /*! \brief Callback method for parsed NOR-gate with 2 operands `LHS = ~(OP1 |
    * OP2) ;`.
    *
@@ -94,7 +104,7 @@ void on_elem3(const std::string &lhs, const std::pair<std::string, bool> &op1,
    * \param op2 operand2 of assignment
    */
   void on_nor(const std::string &lhs, const std::pair<std::string, bool> &op1,
-              const std::pair<std::string, bool> &op2) const;
+              const std::pair<std::string, bool> &op2) const override;
 
   /*! \brief Callback method for parsed XOR-gate with 2 operands `LHS = OP1 ^
    * OP2 ;`.
@@ -104,7 +114,7 @@ void on_elem3(const std::string &lhs, const std::pair<std::string, bool> &op1,
    * \param op2 operand2 of assignment
    */
   void on_xor(const std::string &lhs, const std::pair<std::string, bool> &op1,
-              const std::pair<std::string, bool> &op2) const;
+              const std::pair<std::string, bool> &op2) const override;
 
   /*! \brief Callback method for parsed XOR-gate with 2 operands `LHS = ~(OP1 ^
    * OP2) ;`.
@@ -114,7 +124,7 @@ void on_elem3(const std::string &lhs, const std::pair<std::string, bool> &op1,
    * \param op2 operand2 of assignment
    */
   void on_xnor(const std::string &lhs, const std::pair<std::string, bool> &op1,
-               const std::pair<std::string, bool> &op2) const;
+               const std::pair<std::string, bool> &op2) const override;
 
   /*! \brief Callback method for parsed AND-gate with 3 operands `LHS = OP1 &
    * OP2 & OP3 ;`.
@@ -126,7 +136,7 @@ void on_elem3(const std::string &lhs, const std::pair<std::string, bool> &op1,
    */
   void on_and3(const std::string &lhs, const std::pair<std::string, bool> &op1,
                const std::pair<std::string, bool> &op2,
-               const std::pair<std::string, bool> &op3) const;
+               const std::pair<std::string, bool> &op3) const override;
 
   /*! \brief Callback method for parsed OR-gate with 3 operands `LHS = OP1 | OP2
    * | OP3 ;`.
@@ -138,7 +148,7 @@ void on_elem3(const std::string &lhs, const std::pair<std::string, bool> &op1,
    */
   void on_or3(const std::string &lhs, const std::pair<std::string, bool> &op1,
               const std::pair<std::string, bool> &op2,
-              const std::pair<std::string, bool> &op3) const;
+              const std::pair<std::string, bool> &op3) const override;
   /*! \brief Callback method for parsed XOR-gate with 3 operands `LHS = OP1 ^
    * OP2 ^ OP3 ;`.
    *
@@ -149,7 +159,7 @@ void on_elem3(const std::string &lhs, const std::pair<std::string, bool> &op1,
    */
   void on_xor3(const std::string &lhs, const std::pair<std::string, bool> &op1,
                const std::pair<std::string, bool> &op2,
-               const std::pair<std::string, bool> &op3) const;
+               const std::pair<std::string, bool> &op3) const override;
   /*! \brief Callback method for parsed majority-of-3 gate `LHS = ( OP1 & OP2 )
    * | ( OP1 & OP3 ) | ( OP2 & OP3 ) ;`.
    *
@@ -160,17 +170,11 @@ void on_elem3(const std::string &lhs, const std::pair<std::string, bool> &op1,
    */
   void on_maj3(const std::string &lhs, const std::pair<std::string, bool> &op1,
                const std::pair<std::string, bool> &op2,
-               const std::pair<std::string, bool> &op3) const;
+               const std::pair<std::string, bool> &op3) const override;
 
-
-  void on_endmodule() const;
+  void on_endmodule() const override;
   /* verilog_reader */
-  GraphPtr getGraphByName(std::string_view name);
-
 private:
-  mutable std::map<std::string, GraphPtr> graphs;
-  mutable GraphPtr currentGraph;
-  mutable std::unordered_map<std::string, VertexPtr> currentGraphNamesList;
+  Context &d_context;
 };
-
 } // namespace CG_Graph

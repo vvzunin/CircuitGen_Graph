@@ -359,7 +359,7 @@ public:
   Gates getGate() const override;
 
   /// @brief setGateType
-  /// If type of current gate is gateDefault, method change it 
+  /// If type of current gate is gateDefault, method change it
   /// on provided one. In other cases nothing happens.
   /// @code
   /// GraphVertexGates vertex(Gates::GateDefault);
