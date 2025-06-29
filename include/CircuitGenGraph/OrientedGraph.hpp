@@ -618,7 +618,6 @@ public:
   /// edges between different types of gates in the graph
 
   std::map<Gates, std::map<Gates, size_t>> getEdgesGatesCount() const;
-
   /// @brief reserve additional place in vector for given number of VertexPtr,
   /// where are located vertices of given type.
   /// @param i_type Type, for which place should be reserved
