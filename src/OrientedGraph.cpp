@@ -9,8 +9,8 @@
 #include <vector>
 
 #include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
-#include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphReader.hpp>
+#include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
@@ -335,10 +335,12 @@ void OrientedGraph::simulationRemove() {
 
 void OrientedGraph::updateEdgesGatesCount(VertexPtr vertex, Gates type) {
   assert(vertex->getGate() == GateDefault);
-  for (auto *i : vertex->getInConnections())
-    if (i->getType() == gate) d_edgesGatesCount[i->getGate()][type];
-  for (auto *i : vertex->getOutConnections())
-    if (i->getType() == gate) d_edgesGatesCount[type][i->getGate()];
+  for (auto *i: vertex->getInConnections())
+    if (i->getType() == gate)
+      d_edgesGatesCount[i->getGate()][type];
+  for (auto *i: vertex->getOutConnections())
+    if (i->getType() == gate)
+      d_edgesGatesCount[type][i->getGate()];
 }
 
 void OrientedGraph::removeWasteVertices() {
@@ -467,10 +469,19 @@ bool OrientedGraph::removeEdge(VertexPtr from1, VertexPtr to) {
   }
   return deleted;
 }
-GraphPtr OrientedGraph::readVerilog(std::string i_path, std::string i_topName) {
-  GraphReader graphReader = GraphReader();
-  lorina::read_verilog(i_path, graphReader);
-  return graphReader.getGraphByName(i_topName);
+
+void OrientedGraph::readVerilog(std::string i_path, Context &context) {
+  GraphReader *reader = new GraphReader(context);
+  lorina::return_code returnCode = lorina::read_verilog(i_path, *reader);
+  if (returnCode == lorina::return_code::parse_error)
+    throw std::runtime_error("File do not exist");
+  delete reader;
+}
+
+CG_Graph::Context OrientedGraph::readVerilog(std::string i_path) {
+  Context context;
+  readVerilog(i_path, context);
+  return context;
 }
 
 std::set<GraphPtr> OrientedGraph::getSubGraphs() const {
