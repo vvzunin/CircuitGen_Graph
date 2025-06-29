@@ -1,7 +1,10 @@
-module lilModule(
-input clk,
-input [3:0] someInput,
-output reg q,
+module temp(
+clk,
+someInput,
+q
 );
-assign q = clk & someInput[0];
+input clk;
+input someInput;
+output q;
+assign q = clk & someInput;
 endmodule

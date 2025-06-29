@@ -24,8 +24,8 @@
 #include <CircuitGenGraph/enums.hpp>
 
 #include <CircuitGenGraph/GraphMemory.hpp>
-#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphReader.hpp>
+#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
 #ifdef LOGFLAG
@@ -42,13 +42,15 @@
 namespace CG_Graph {
 
 class GraphVertexBase;
+class GraphReader;
+class Context;
 
 /// \class OrientedGraph
-class GraphReader;
 /// @param d_countNewGraphInstance Static variable to count new graph
 /// instances
 /// @param d_countGraph Current instance counter. Is used for setting a
 /// graphID
+/// @param d_currentInstance Current instance count
 /// @param d_currentParentGraph Weak pointer to the current parent graph
 /// @param d_edgesCount The number of edges in the graph
 /// @param d_hashed Hashed value of the graph
@@ -79,7 +81,6 @@ class GraphReader;
 /// This map is used for quick counting of edges between different types of
 /// gates in the graph. It maps each gate type (Gates) to another map, where
 /// the inner map maps gate types to the count of edges between them.
-
 // clang-format off
 class OrientedGraph
     : public GraphMemory
@@ -563,8 +564,8 @@ public:
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr getVerticeByIndex(size_t idx) const;
 
-  static GraphPtr readVerilog(std::string i_path, std::string i_topName = "");
-
+  static void readVerilog(std::string i_path, Context &context);
+  static CG_Graph::Context readVerilog(std::string i_path);
   /// @brief method used for translating graph to verilog
   /// @param i_path folder, in which file should be created
   /// @param i_filename name of a file, which should be created
