@@ -337,10 +337,10 @@ void OrientedGraph::updateEdgesGatesCount(VertexPtr vertex, Gates type) {
   assert(vertex->getGate() == GateDefault);
   for (auto *i: vertex->getInConnections())
     if (i->getType() == gate)
-      d_edgesGatesCount[i->getGate()][type];
+      ++d_edgesGatesCount[i->getGate()][type];
   for (auto *i: vertex->getOutConnections())
     if (i->getType() == gate)
-      d_edgesGatesCount[type][i->getGate()];
+      ++d_edgesGatesCount[type][i->getGate()];
 }
 
 void OrientedGraph::removeWasteVertices() {
