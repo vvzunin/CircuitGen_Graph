@@ -54,19 +54,21 @@ public:
    * \param name Name of the parameter
    * \param value Value of the parameter
    */
+
   void on_parameter(const std::string &name,
                     const std::string &value) const override;
 
+  VertexPtr find_operand(const std::string &i_name,
+                         bool i_isInverted = false) const;
   /*! \brief Callback method for parsed immediate assignment of form `LHS = RHS
    * ;`.
    *
    * \param lhs Left-hand side of assignment
    * \param rhs Right-hand side of assignment
    */
-  void on_assign(const std::string &lhs,
-                 const std::pair<std::string, bool> &rhs) const override;
-
-  VertexPtr find_operand(const std::string &name) const;
+  virtual void
+  on_assign(const std::string &lhs,
+            const std::pair<std::string, bool> &rhs) const override;
 
   void on_elem(const std::string &lhs, const std::pair<std::string, bool> &op1,
                const std::pair<std::string, bool> &op2, Gates gateType) const;

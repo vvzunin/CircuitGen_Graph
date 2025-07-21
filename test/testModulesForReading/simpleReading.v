@@ -1,4 +1,4 @@
-module temp(
+module simpleReading(
 clk,
 someInput,
 q
