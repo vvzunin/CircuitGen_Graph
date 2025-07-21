@@ -14,6 +14,7 @@
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
+#include "CircuitGenGraph/GraphUtils.hpp"
 #include "GraphMLTemplates.hpp"
 
 #include <lorina/lorina.hpp>
@@ -335,6 +336,8 @@ void OrientedGraph::simulationRemove() {
 
 void OrientedGraph::updateEdgesGatesCount(VertexPtr vertex, Gates type) {
   assert(vertex->getGate() == GateDefault);
+  --d_gatesCount[GateDefault];
+  ++d_gatesCount[type];
   for (auto *i: vertex->getInConnections())
     if (i->getType() == gate)
       ++d_edgesGatesCount[i->getGate()][type];
@@ -472,9 +475,20 @@ bool OrientedGraph::removeEdge(VertexPtr from1, VertexPtr to) {
 
 void OrientedGraph::readVerilog(std::string i_path, Context &context) {
   GraphReader *reader = new GraphReader(context);
-  lorina::return_code returnCode = lorina::read_verilog(i_path, *reader);
+  std::ifstream in( i_path.c_str(), std::ifstream::in );
+  if(!in.is_open()) throw std::runtime_error("File do not exist\n");
+  std::string word;
+  in >> word;
+  while (word!="module"){
+    in.ignore(256,'\n');
+    in >> word;
+  }
+  int temp = in.tellg();
+  in.seekg(-6,std::ios::cur);
+  temp = in.tellg();
+  lorina::return_code returnCode = lorina::read_verilog(in, *reader);
   if (returnCode == lorina::return_code::parse_error)
-    throw std::runtime_error("File do not exist");
+    throw std::runtime_error("File is incorrect\n");
   delete reader;
 }
 
