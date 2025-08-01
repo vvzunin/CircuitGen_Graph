@@ -339,6 +339,13 @@ void OrientedGraph::simulationRemove() {
 }
 
 void OrientedGraph::updateEdgesGatesCount(VertexPtr vertex, Gates type) {
+  if (type==GateDefault){
+   for (auto *i: vertex->getOutConnections())
+    if (i->getType() == gate)
+      --d_edgesGatesCount[type][i->getGate()];
+    --d_gatesCount[GateDefault];
+  }
+  else {
   assert(vertex->getGate() == GateDefault);
   --d_gatesCount[GateDefault];
   ++d_gatesCount[type];
@@ -348,6 +355,7 @@ void OrientedGraph::updateEdgesGatesCount(VertexPtr vertex, Gates type) {
   for (auto *i: vertex->getOutConnections())
     if (i->getType() == gate)
       ++d_edgesGatesCount[type][i->getGate()];
+  }
 }
 
 void OrientedGraph::removeWasteVertices() {
@@ -487,12 +495,11 @@ void OrientedGraph::readVerilog(std::string i_path, Context &context) {
     in.ignore(256,'\n');
     in >> word;
   }
-  int temp = in.tellg();
   in.seekg(-6,std::ios::cur);
-  temp = in.tellg();
   lorina::return_code returnCode = lorina::read_verilog(in, *reader);
   if (returnCode == lorina::return_code::parse_error)
     throw std::runtime_error("File is incorrect\n");
+  in.close();
   delete reader;
 }
 
@@ -733,13 +740,14 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
   }
 
   if (d_vertices[VertexTypes::constant].size()) {
-    fileStream << "\n";
+    fileStream <<VertexUtils::vertexTypeToComment(constant)
+ <<"\n" << verilogTab << "wire ";
+      for (auto *oper: d_vertices[VertexTypes::constant]) {
+    fileStream << static_cast<GraphVertexConstant *>(oper)->getRawName()
+               << (oper != d_vertices[VertexTypes::constant].back() ? ", " : ";\n");}
   }
   // writing consts
   for (auto *oper: d_vertices[VertexTypes::constant]) {
-    fileStream << verilogTab
-               << static_cast<GraphVertexConstant *>(oper)->getVerilogInstance()
-               << "\n";
     fileStream << verilogTab << (*oper) << "\n";
   }
 

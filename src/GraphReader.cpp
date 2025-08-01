@@ -13,10 +13,16 @@ void GraphReader::on_module_header(
     const std::string &module_name,
     const std::vector<std::string> &inouts) const {
   d_context.d_currentGraph = std::make_shared<OrientedGraph>(module_name);
+  if(d_context.d_currentGraphNamesList.max_load_factor()!=1)
+  d_context.d_currentGraphNamesList.max_load_factor(1);
 }
 void GraphReader::on_inputs(const std::vector<std::string> &inputs,
                             std::string const &size) const {
   d_context.d_currentGraph->reserve(input,inputs.size());
+  if(d_context.d_numberOfVertex>7 && inputs.size()>d_context.d_numberOfVertex){
+    d_context.d_numberOfVertex+=inputs.size();
+    d_context.d_currentGraphNamesList.reserve(d_context.d_numberOfVertex);
+  }
   for (auto i: inputs)
     d_context.d_currentGraphNamesList[i] =
         d_context.d_currentGraph->addInput(i);
@@ -25,13 +31,25 @@ void GraphReader::on_outputs(const std::vector<std::string> &outputs,
                              std::string const &size) const {
   d_context.d_currentGraph->reserve(output,outputs.size());
   d_context.d_currentGraph->reserve(gate,outputs.size());
+    if(d_context.d_numberOfVertex>7 && outputs.size()*2>d_context.d_numberOfVertex){
+    d_context.d_numberOfVertex+=outputs.size()*2;
+    d_context.d_currentGraphNamesList.reserve(d_context.d_numberOfVertex);
+  }
   for (auto i: outputs) {
     VertexPtr outputVertex = d_context.d_currentGraphNamesList[i] = d_context.d_currentGraph->addOutput(i);
-    //VertexPtr outputGateVertex = d_context.d_currentGraphNamesList[i+SUFFIX_OUTPUT_GATE] = d_context.d_currentGraph->addGate(GateDefault,i+SUFFIX_OUTPUT_GATE);
-    //d_context.d_currentGraph->addEdge(outputGateVertex, outputVertex);
     }
 }
-
+void GraphReader::on_wires( const std::vector<std::string>& wires, std::string const& size)const{
+  d_context.d_currentGraph->reserve(gate,wires.size());
+  d_context.d_numberOfVertex+=wires.size();
+    if(d_context.d_numberOfVertex>7 && wires.size()>d_context.d_numberOfVertex){
+    d_context.d_numberOfVertex+=wires.size();
+    d_context.d_currentGraphNamesList.reserve(d_context.d_numberOfVertex);
+  }
+  for (auto i: wires)
+    d_context.d_currentGraphNamesList[i] =
+        d_context.d_currentGraph->addGate(GateDefault, i);
+}
 void GraphReader::on_parameter(const std::string &name,
                                const std::string &value) const {
   VertexPtr vertex;
@@ -41,43 +59,64 @@ else vertex = d_context.d_currentGraph->addConst('0',name);
 d_context.d_currentGraphNamesList[name] = vertex;
 }
 void GraphReader::on_assign( const std::string& lhs, const std::pair<std::string, bool>& rhs ) const {
-  VertexPtr leftSideVertex = find_operand(lhs);
-  if (!rhs.second) 
-    d_context.d_currentGraphNamesList[lhs] = d_context.d_currentGraphNamesList[rhs.first];
+  if(rhs.first=="1'b1"||rhs.first=="1'b0") {
+    VertexPtr vertex;
+  if (rhs.first == "1'b1" || rhs.first == "1" )
+  vertex = d_context.d_currentGraph->addConst('1',lhs);
+else vertex = d_context.d_currentGraph->addConst('0',lhs);
+d_context.d_currentGraphNamesList[lhs] = vertex;
+  } else {
+  if (d_context.d_currentGraphNamesList[lhs]->getType() != output) {
+    VertexPtr leftVertex = d_context.d_currentGraphNamesList[lhs];
+    if(!rhs.second) {
+    static_cast<GraphVertexGates*>(leftVertex)->setGateType(GateBuf);
+     d_context.d_currentGraph->addEdge(get_operand(rhs.first,rhs.second), leftVertex);
+    }
+    else {
+      static_cast<GraphVertexGates*>(leftVertex)->setGateType(GateNot);
+      d_context.d_currentGraphNamesList[rhs.first+SUFFIX_INVERSION] = leftVertex;
+      d_context.d_currentGraph->addEdge(get_operand(rhs.first), leftVertex);
+    }
+  }
   else {
-    if(d_context.d_currentGraphNamesList[lhs]->getType() == output) {
-      leftSideVertex = d_context.d_currentGraphNamesList[lhs+SUFFIX_INVERSION];
-      d_context.d_currentGraphNamesList[lhs+SUFFIX_OUTPUT_GATE] =d_context.d_currentGraphNamesList[lhs+SUFFIX_INVERSION];
-      if(leftSideVertex->getGate()==GateDefault){
-      static_cast<GraphVertexGates*>(leftSideVertex)->setGateType(GateNot);
-      d_context.d_currentGraph->addEdge(leftSideVertex, d_context.d_currentGraphNamesList[lhs]);
-      }
-      d_context.d_currentGraph->addEdge(find_operand(rhs.first), leftSideVertex);
+    VertexPtr outputGate = get_operand(rhs.first,rhs.second);
+    if(d_context.d_currentGraphNamesList.find(lhs+SUFFIX_OUTPUT_GATE)==d_context.d_currentGraphNamesList.end()) {
+        d_context.d_currentGraph->addEdge(outputGate, d_context.d_currentGraphNamesList[lhs]);
+        d_context.d_currentGraphNamesList[lhs+SUFFIX_OUTPUT_GATE] = outputGate;
       }
       else {
-
+        for (VertexPtr vertex : d_context.d_currentGraphNamesList[lhs+SUFFIX_OUTPUT_GATE]->getOutConnections()) {
+            d_context.d_currentGraph->addEdge(outputGate, vertex);
+        }
+        d_context.d_currentGraph->updateEdgesGatesCount(d_context.d_currentGraphNamesList[lhs+SUFFIX_OUTPUT_GATE],GateDefault);
+        d_context.d_currentGraphNamesList[lhs+SUFFIX_OUTPUT_GATE]->~GraphVertexBase();
+        d_context.d_currentGraphNamesList[lhs+SUFFIX_OUTPUT_GATE] = outputGate;
       }
-    }
+    } 
+  }
   };  
 
-VertexPtr GraphReader::find_operand(const std::string &i_name, bool i_isInverted) const {
+VertexPtr GraphReader::get_operand(const std::string &i_name, bool i_isInverted) const {
   auto temp = d_context.d_currentGraphNamesList.find(i_name);
   VertexPtr ans;
-  if (temp == d_context.d_currentGraphNamesList.end()) {
-    ans = d_context.d_currentGraph->addGate(GateDefault, i_name);
-    d_context.d_currentGraphNamesList[i_name] = ans;
+  if (temp->second->getType()==output && d_context.d_currentGraphNamesList.find(i_name+SUFFIX_OUTPUT_GATE)==d_context.d_currentGraphNamesList.end()) {
+      ans = d_context.d_currentGraph->addGate(GateDefault, i_name+SUFFIX_OUTPUT_GATE);
+      d_context.d_currentGraph->addEdge(ans, temp->second);
+      d_context.d_currentGraphNamesList[i_name+SUFFIX_OUTPUT_GATE] = ans;
   } else
-    if (d_context.d_currentGraphNamesList[i_name]->getType() != output) 
-    ans = d_context.d_currentGraphNamesList[i_name];
-    else 
+    if (temp->second->getType() == output) 
     ans = d_context.d_currentGraphNamesList[i_name+SUFFIX_OUTPUT_GATE];
+    else 
+    ans = d_context.d_currentGraphNamesList[i_name];
   if (i_isInverted){
-    VertexPtr storageForAnsNoInversion = find_operand(i_name+SUFFIX_INVERSION);
-    std::swap(ans, storageForAnsNoInversion);
-    if(ans->getGate()==GateDefault) {
-    static_cast<GraphVertexGates*>(ans)->setGateType(GateNot);
-    d_context.d_currentGraph->addEdge(storageForAnsNoInversion,ans);
-    }
+    auto searchForNot = d_context.d_currentGraphNamesList.find(i_name+SUFFIX_INVERSION);
+    VertexPtr notAns;
+    if(searchForNot == d_context.d_currentGraphNamesList.end()) {
+    notAns = d_context.d_currentGraph->addGate(GateNot,i_name+SUFFIX_INVERSION);
+    d_context.d_currentGraphNamesList[i_name+SUFFIX_INVERSION] = notAns;
+    d_context.d_currentGraph->addEdge(ans,notAns);
+    } else notAns = searchForNot->second;
+    return notAns;
   }
   return ans;
 }
@@ -86,11 +125,11 @@ void GraphReader::on_elem(const std::string &lhs,
                           const std::pair<std::string, bool> &op1,
                           const std::pair<std::string, bool> &op2,
                           Gates gateType) const {
-  VertexPtr vertexGate = find_operand(lhs);
+  VertexPtr vertexGate = get_operand(lhs);
   if (vertexGate->getType() == gate && vertexGate->getGate() == GateDefault)
     static_cast<GraphVertexGates *>(vertexGate)->setGateType(gateType);
-  d_context.d_currentGraph->addEdge(find_operand(op1.first,op1.second), vertexGate);
-  d_context.d_currentGraph->addEdge(find_operand(op2.first,op2.second), vertexGate);
+  d_context.d_currentGraph->addEdge(get_operand(op1.first,op1.second), vertexGate);
+  d_context.d_currentGraph->addEdge(get_operand(op2.first,op2.second), vertexGate);
 }
 
 void GraphReader::on_elem3(const std::string &lhs,
@@ -99,8 +138,8 @@ void GraphReader::on_elem3(const std::string &lhs,
                            const std::pair<std::string, bool> &op3,
                            Gates gateType) const {
   on_elem(lhs, op1, op2, gateType);
-  VertexPtr vertexGate = d_context.d_currentGraphNamesList[lhs];
-  d_context.d_currentGraph->addEdge(find_operand(op3.first,op3.second), vertexGate);
+  VertexPtr vertexGate = get_operand(lhs);
+  d_context.d_currentGraph->addEdge(get_operand(op3.first,op3.second), vertexGate);
 }
 
 void GraphReader::on_and(const std::string &lhs,
@@ -168,9 +207,9 @@ void GraphReader::on_maj3(const std::string &lhs,
     d_context.d_currentGraphNamesList[lhs]->~GraphVertexBase();
   }
   d_context.d_currentGraphNamesList[lhs] =
-      d_context.d_currentGraph->generateMajority(find_operand(op1.first, op1.second),
-                                                 find_operand(op2.first, op2.second),
-                                                 find_operand(op3.first, op3.second));
+      d_context.d_currentGraph->generateMajority(get_operand(op1.first, op1.second),
+                                                 get_operand(op2.first, op2.second),
+                                                 get_operand(op3.first, op3.second));
   d_context.d_currentGraphNamesList[lhs]->setName(lhs);
 }
 

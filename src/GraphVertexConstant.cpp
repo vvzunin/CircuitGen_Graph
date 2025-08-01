@@ -36,7 +36,7 @@ size_t GraphVertexConstant::calculateHash() {
 }
 
 std::string GraphVertexConstant::getVerilogInstance() {
-  return "wire " + getName() + ";";
+  return "wire " + getName()+ ";";
 }
 
 std::string GraphVertexConstant::toVerilog() const {
