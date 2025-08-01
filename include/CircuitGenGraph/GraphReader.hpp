@@ -2,6 +2,7 @@
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
+#include <cstddef>
 #include <lorina/lorina.hpp>
 
 #include <map>
@@ -20,6 +21,7 @@ public:
   mutable std::map<std::string, GraphPtr> d_graphs;
   mutable GraphPtr d_currentGraph;
   mutable std::unordered_map<std::string, VertexPtr> d_currentGraphNamesList;
+  mutable size_t d_numberOfVertex;
 };
 class GraphReader : public lorina::verilog_reader {
 public:
@@ -48,18 +50,25 @@ public:
   void on_outputs(const std::vector<std::string> &outputs,
                   std::string const &size = "") const override;
 
+  /*! \brief Callback method for parsed wires.
+   *
+   * \param wires Wire names
+   * \param size Size modifier
+   */
+  virtual void on_wires(const std::vector<std::string> &wires,
+                        std::string const &size = "") const override;
+
   /*! \brief Callback method for parsed parameter definition of form ` parameter
    * M = 10;`.
    *
    * \param name Name of the parameter
    * \param value Value of the parameter
    */
-
   void on_parameter(const std::string &name,
                     const std::string &value) const override;
 
-  VertexPtr find_operand(const std::string &i_name,
-                         bool i_isInverted = false) const;
+  VertexPtr get_operand(const std::string &i_name,
+                        bool i_isInverted = false) const;
   /*! \brief Callback method for parsed immediate assignment of form `LHS = RHS
    * ;`.
    *
