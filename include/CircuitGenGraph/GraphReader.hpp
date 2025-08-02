@@ -15,15 +15,31 @@ namespace CG_Graph {
 class OrientedGraph;
 class GraphVertexBase;
 class Context {
+  /// class Context contains information used for parsing each graph
+  /// and provides possibility to parse module, if it's submodules
+  /// locates in several files (not ready yet)
+  /// @param d_currentTopName name of top module in operation of
+  /// reading module with instantiation of other modules
+  /// @param d_graphs contains all already parsed modules
+  /// @param d_currentGraph storage for graph while it is creating
+  /// @param d_currentGraphNamesList using for fast search vertices by name
+  /// @param d_numberOfVertices using to reserve memory at the beginnig of
+  /// parsing
 public:
   Context() = default;
   mutable std::string d_currentTopName;
   mutable std::map<std::string, GraphPtr> d_graphs;
   mutable GraphPtr d_currentGraph;
   mutable std::unordered_map<std::string, VertexPtr> d_currentGraphNamesList;
-  mutable size_t d_numberOfVertex;
+  mutable size_t d_numberOfVertices;
 };
 class GraphReader : public lorina::verilog_reader {
+  /// @file GraphReader.hpp
+  /// class GraphReader using for parsing a object of class OrientedGraph from
+  /// verilog file by module "lorina". Library calls methods from that class,
+  /// which overrides virtual methods of verilog_reader.
+  /// @param d_context @see Context
+  /// */
 public:
   GraphReader(Context &i_context);
   /*! \brief Callback method for parsed module.
@@ -67,6 +83,13 @@ public:
   void on_parameter(const std::string &name,
                     const std::string &value) const override;
 
+  /// @brief This method is used to find or create valid vertex by
+  /// name and inversion parameter provided by lorina
+  /// @param i_name name of verilog variable
+  /// @param i_isInverted method returns (creates if it is not exist yet)
+  /// an inversion of given variable if the
+  /// parameter = true and original vertex otherwise
+  /// @return pointer for requested vertex
   VertexPtr get_operand(const std::string &i_name,
                         bool i_isInverted = false) const;
   /*! \brief Callback method for parsed immediate assignment of form `LHS = RHS
@@ -79,15 +102,33 @@ public:
   on_assign(const std::string &lhs,
             const std::pair<std::string, bool> &rhs) const override;
 
-  void on_elem(const std::string &lhs, const std::pair<std::string, bool> &op1,
-               const std::pair<std::string, bool> &op2, Gates gateType) const;
+  /// @brief This method is used to create all types of gates by provided
+  /// Gates gateType and connect it with its input signals
+  /// @param i_lhs name of gate that will be defined
+  /// @param i_op1, i_op2 input signals of the gate
+  void on_elem(const std::string &i_lhs,
+               const std::pair<std::string, bool> &i_op1,
+               const std::pair<std::string, bool> &i_op2,
+               Gates i_gateType) const;
 
+  /// @brief @see on_elem
+  /// @param i_op3 also input signals of the gate
+  void on_elem3(const std::string &i_lhs,
+                const std::pair<std::string, bool> &i_op1,
+                const std::pair<std::string, bool> &i_op2,
+                const std::pair<std::string, bool> &i_op3,
+                Gates i_gateType) const;
+
+  /*! \brief Callback method for parsed AND-gate with 2 operands `LHS = OP1 &
+   * OP2 ;`.
+   *
+   * \param lhs Left-hand side of assignment
+   * \param op1 operand1 of assignment
+   * \param op2 operand2 of assignment
+   */
   void on_and(const std::string &lhs, const std::pair<std::string, bool> &op1,
               const std::pair<std::string, bool> &op2) const override;
 
-  void on_elem3(const std::string &lhs, const std::pair<std::string, bool> &op1,
-                const std::pair<std::string, bool> &op2,
-                const std::pair<std::string, bool> &op3, Gates gateType) const;
   /*! \brief Callback method for parsed NAND-gate with 2 operands `LHS = ~(OP1 &
    * OP2) ;`.
    *

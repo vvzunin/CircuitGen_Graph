@@ -73,9 +73,7 @@ void GraphVertexOutput::log(el::base::type::ostream_t &os) const {
      << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
-  os << "Vertex Hash: "
-     << "NuN"
-     << "\n";
+  os << "Vertex Hash: " << "NuN" << "\n";
 }
 #endif
 
