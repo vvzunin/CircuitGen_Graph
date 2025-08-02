@@ -335,22 +335,21 @@ void OrientedGraph::simulationRemove() {
 }
 
 void OrientedGraph::updateEdgesGatesCount(VertexPtr vertex, Gates type) {
-  if (type==GateDefault){
-   for (auto *i: vertex->getOutConnections())
-    if (i->getType() == gate)
-      --d_edgesGatesCount[type][i->getGate()];
+  if (type == GateDefault) {
+    for (auto *i: vertex->getOutConnections())
+      if (i->getType() == gate)
+        --d_edgesGatesCount[type][i->getGate()];
     --d_gatesCount[GateDefault];
-  }
-  else {
-  assert(vertex->getGate() == GateDefault);
-  --d_gatesCount[GateDefault];
-  ++d_gatesCount[type];
-  for (auto *i: vertex->getInConnections())
-    if (i->getType() == gate)
-      ++d_edgesGatesCount[i->getGate()][type];
-  for (auto *i: vertex->getOutConnections())
-    if (i->getType() == gate)
-      ++d_edgesGatesCount[type][i->getGate()];
+  } else {
+    assert(vertex->getGate() == GateDefault);
+    --d_gatesCount[GateDefault];
+    ++d_gatesCount[type];
+    for (auto *i: vertex->getInConnections())
+      if (i->getType() == gate)
+        ++d_edgesGatesCount[i->getGate()][type];
+    for (auto *i: vertex->getOutConnections())
+      if (i->getType() == gate)
+        ++d_edgesGatesCount[type][i->getGate()];
   }
 }
 
@@ -483,15 +482,16 @@ bool OrientedGraph::removeEdge(VertexPtr from1, VertexPtr to) {
 
 void OrientedGraph::readVerilog(std::string i_path, Context &context) {
   GraphReader *reader = new GraphReader(context);
-  std::ifstream in( i_path.c_str(), std::ifstream::in );
-  if(!in.is_open()) throw std::runtime_error("File do not exist\n");
+  std::ifstream in(i_path.c_str(), std::ifstream::in);
+  if (!in.is_open())
+    throw std::runtime_error("File do not exist\n");
   std::string word;
   in >> word;
-  while (word!="module"){
-    in.ignore(256,'\n');
+  while (word != "module") {
+    in.ignore(256, '\n');
     in >> word;
   }
-  in.seekg(-6,std::ios::cur);
+  in.seekg(-6, std::ios::cur);
   lorina::return_code returnCode = lorina::read_verilog(in, *reader);
   if (returnCode == lorina::return_code::parse_error)
     throw std::runtime_error("File is incorrect\n");
@@ -736,11 +736,13 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
   }
 
   if (d_vertices[VertexTypes::constant].size()) {
-    fileStream <<VertexUtils::vertexTypeToComment(constant)
- <<"\n" << verilogTab << "wire ";
-      for (auto *oper: d_vertices[VertexTypes::constant]) {
-    fileStream << static_cast<GraphVertexConstant *>(oper)->getRawName()
-               << (oper != d_vertices[VertexTypes::constant].back() ? ", " : ";\n");}
+    fileStream << VertexUtils::vertexTypeToComment(constant) << "\n"
+               << verilogTab << "wire ";
+    for (auto *oper: d_vertices[VertexTypes::constant]) {
+      fileStream << static_cast<GraphVertexConstant *>(oper)->getRawName()
+                 << (oper != d_vertices[VertexTypes::constant].back() ? ", "
+                                                                      : ";\n");
+    }
   }
   // writing consts
   for (auto *oper: d_vertices[VertexTypes::constant]) {

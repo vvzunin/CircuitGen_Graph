@@ -82,6 +82,8 @@ TEST(VerilogReadingTest, ConstantCreating) {
                                  context));
   GraphPtr graph = context.d_graphs["constTest"];
   EXPECT_EQ(graph->calculateHash(), graphCreated->calculateHash());
+  remove("../../../test/"
+         "testModulesForReading/constTest.v");
 }
 
 TEST(VerilogReadingTest, OneContextForSeveralGraphs) {
@@ -179,4 +181,6 @@ TEST(VerilogReadingTest, AllGateTypesCreating) {
                                  context));
   GraphPtr graphCreated = context.d_graphs["allGatesTest"];
   EXPECT_EQ(graph->calculateHash(), graphCreated->calculateHash());
+  remove("../../../test/"
+         "testModulesForReading/allGatesTest.v");
 }
