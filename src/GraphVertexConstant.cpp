@@ -32,7 +32,7 @@ size_t GraphVertexConstant::calculateHash() {
 }
 
 std::string GraphVertexConstant::getVerilogInstance() {
-  return "wire " + getName()+ ";";
+  return "wire " + getName() + ";";
 }
 
 std::string GraphVertexConstant::toVerilog() const {
@@ -60,9 +60,7 @@ void GraphVertexConstant::log(el::base::type::ostream_t &os) const {
      << GraphUtils::parseVertexToString(VertexTypes::constant) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << 0 << "\n";
-  os << "Vertex Hash: "
-     << "NuN"
-     << "\n";
+  os << "Vertex Hash: " << "NuN" << "\n";
 }
 #endif
 
