@@ -23,7 +23,7 @@ class Context {
   /// @param d_graphs contains all already parsed modules
   /// @param d_currentGraph storage for graph while it is creating
   /// @param d_currentGraphNamesList using for fast search vertices by name
-  /// @param d_numberOfVertices using to reserve memory at the beginnig of
+  /// @param d_numberOfVertices using to reserve memory at the beginning of
   /// parsing
 public:
   Context() = default;
