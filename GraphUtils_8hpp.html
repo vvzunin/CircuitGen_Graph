@@ -1,0 +1,346 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>My Project: Файл GraphUtils.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+  $(document).ready(function() { init_search(); });
+/* @license-end */
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo_1.png"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">My Project
+   &#160;<span id="projectnumber">1.6.0</span>
+   </div>
+   <div id="projectbrief">Desc of Backeknd</div>
+  </td>
+   <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.svg"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Поиск" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.svg" alt=""/></a>
+          </span>
+        </div>
+</td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.1 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск','.html');
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('GraphUtils_8hpp.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#namespaces">Пространства имен</a> &#124;
+<a href="#define-members">Макросы</a> &#124;
+<a href="#enum-members">Перечисления</a> &#124;
+<a href="#func-members">Функции</a>  </div>
+  <div class="headertitle">
+<div class="title">Файл GraphUtils.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;array&gt;</code><br />
+<code>#include &lt;cstdint&gt;</code><br />
+<code>#include &lt;map&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;utility&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Граф включаемых заголовочных файлов для GraphUtils.hpp:</div>
+<div class="dyncontent">
+<div class="center"><img src="GraphUtils_8hpp__incl.png" border="0" usemap="#aGraphUtils_8hpp" alt=""/></div>
+<map name="aGraphUtils_8hpp" id="aGraphUtils_8hpp">
+<area shape="rect" title=" " alt="" coords="251,5,370,32"/>
+<area shape="rect" title=" " alt="" coords="5,80,91,107"/>
+<area shape="rect" title=" " alt="" coords="115,80,171,107"/>
+<area shape="rect" title=" " alt="" coords="195,80,261,107"/>
+<area shape="rect" title=" " alt="" coords="285,80,336,107"/>
+<area shape="rect" title=" " alt="" coords="360,80,419,107"/>
+<area shape="rect" title=" " alt="" coords="443,80,503,107"/>
+<area shape="rect" title=" " alt="" coords="527,80,590,107"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+Граф файлов, в которые включается этот файл:</div>
+<div class="dyncontent">
+<div class="center"><img src="GraphUtils_8hpp__dep__incl.png" border="0" usemap="#aGraphUtils_8hppdep" alt=""/></div>
+<map name="aGraphUtils_8hppdep" id="aGraphUtils_8hppdep">
+<area shape="rect" title=" " alt="" coords="601,5,719,32"/>
+<area shape="rect" href="DefaultAuxiliaryMethods_8hpp.html" title=" " alt="" coords="147,80,359,107"/>
+<area shape="rect" href="GraphMLTemplates_8hpp.html" title=" " alt="" coords="319,155,494,181"/>
+<area shape="rect" href="GraphVertexBase_8hpp.html" title=" " alt="" coords="639,80,801,107"/>
+<area shape="rect" href="GraphVertexSequential_8cpp.html" title=" " alt="" coords="1542,229,1741,256"/>
+<area shape="rect" href="OrientedGraph_8hpp.html" title=" " alt="" coords="531,155,677,181"/>
+<area shape="rect" href="GraphUtils_8cpp.html" title=" " alt="" coords="1018,80,1137,107"/>
+<area shape="rect" href="DefaultAuxiliaryMethods_8cpp.html" title=" " alt="" coords="5,155,216,181"/>
+<area shape="rect" href="OrientedGraph_8cpp.html" title=" " alt="" coords="179,229,323,256"/>
+<area shape="rect" href="GraphVertex_8hpp.html" title="TODO: Maybe Description some virtual methods for Graph&#39;s classes, such as GraphVertexGates." alt="" coords="761,155,892,181"/>
+<area shape="rect" href="GraphVertexBase_8cpp.html" title=" " alt="" coords="1355,229,1517,256"/>
+<area shape="rect" href="GraphVertexConstant_8cpp.html" title=" " alt="" coords="950,229,1138,256"/>
+<area shape="rect" href="GraphVertexGates_8cpp.html" title=" " alt="" coords="1163,229,1331,256"/>
+<area shape="rect" href="GraphVertexInput_8cpp.html" title=" " alt="" coords="347,229,509,256"/>
+<area shape="rect" href="GraphVertexOutput_8cpp.html" title=" " alt="" coords="534,229,709,256"/>
+<area shape="rect" href="GraphVertexSubGraph_8cpp.html" title=" " alt="" coords="733,229,926,256"/>
+</map>
+</div>
+</div>
+<p><a href="GraphUtils_8hpp_source.html">См. исходные тексты.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Пространства имен</h2></td></tr>
+<tr class="memitem:namespaceCG__Graph"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCG__Graph.html">CG_Graph</a></td></tr>
+<tr class="memdesc:namespaceCG__Graph"><td class="mdescLeft">&#160;</td><td class="mdescRight">class <a class="el" href="classCG__Graph_1_1GraphVertexInput.html">GraphVertexInput</a> Represents a vertex in a directed graph that serves as an input vertex. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceGraphUtils"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceGraphUtils.html">GraphUtils</a></td></tr>
+<tr class="memdesc:namespaceGraphUtils"><td class="mdescLeft">&#160;</td><td class="mdescRight">stores all useful methods, used for some operations with graph and its vertices. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespaceCG__Graph_1_1GraphUtils"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCG__Graph_1_1GraphUtils.html">CG_Graph::GraphUtils</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Макросы</h2></td></tr>
+<tr class="memitem:a17d4c52993a980c0401c3a60c8229e05"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="GraphUtils_8hpp.html#a17d4c52993a980c0401c3a60c8229e05">DotReturn</a>&#160;&#160;&#160;  std::vector&lt;std::pair&lt;DotTypes, std::map&lt;std::string, std::string&gt;&gt;&gt;</td></tr>
+<tr class="separator:a17d4c52993a980c0401c3a60c8229e05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d32bdde56c038a1b789e9421ae0ca7a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="GraphUtils_8hpp.html#a6d32bdde56c038a1b789e9421ae0ca7a">CGG_FF_TYPE</a>(S,  V)&#160;&#160;&#160;S = V, n##S = NEGEDGE | V</td></tr>
+<tr class="separator:a6d32bdde56c038a1b789e9421ae0ca7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Перечисления</h2></td></tr>
+<tr class="memitem:a28a42afa74ee91d31d437b68f44f9b68"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCG__Graph.html#a28a42afa74ee91d31d437b68f44f9b68">CG_Graph::VertexTypes</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#a28a42afa74ee91d31d437b68f44f9b68aed14945033076b0d3258e0164153af48">CG_Graph::input</a> = 0
+, <a class="el" href="namespaceCG__Graph.html#a28a42afa74ee91d31d437b68f44f9b68af8c5a73072a3a11284b6f9c026fb3007">CG_Graph::output</a> = 6
+, <a class="el" href="namespaceCG__Graph.html#a28a42afa74ee91d31d437b68f44f9b68aeaa7756cde7db4f269c30b494ef69c6c">CG_Graph::constant</a> = 1
+, <a class="el" href="namespaceCG__Graph.html#a28a42afa74ee91d31d437b68f44f9b68a62f916ec0a56f89bfb0e2d5422e02a3a">CG_Graph::gate</a> = 2
+, <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#a28a42afa74ee91d31d437b68f44f9b68aba4b57b0915e462916a619bc369c03c5">CG_Graph::subGraph</a> = 3
+, <a class="el" href="namespaceCG__Graph.html#a28a42afa74ee91d31d437b68f44f9b68aa955fbe209aad1b19a52bc4c3e81b3d5">CG_Graph::dataBus</a> = 4
+, <a class="el" href="namespaceCG__Graph.html#a28a42afa74ee91d31d437b68f44f9b68a4e8f99a19417f0c1ec416611401f5551">CG_Graph::sequential</a> = 5
+<br />
+ }</td></tr>
+<tr class="memdesc:a28a42afa74ee91d31d437b68f44f9b68"><td class="mdescLeft">&#160;</td><td class="mdescRight">VertexTypes Enumeration of vertex types.  <a href="namespaceCG__Graph.html#a28a42afa74ee91d31d437b68f44f9b68">Подробнее...</a><br /></td></tr>
+<tr class="separator:a28a42afa74ee91d31d437b68f44f9b68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2545f3d8eab7dee925a98f30279edc7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7">CG_Graph::SequentialTypes</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7a0c521db9844e23333d919f7920f0fc59">CG_Graph::EN</a> = 1 &lt;&lt; 0
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7a0815410c69118c2e218bda535ced3d21">CG_Graph::SET</a> = 1 &lt;&lt; 1
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7a81c29ceb9918f3515e5d7d293adf8146">CG_Graph::CLR</a> = 1 &lt;&lt; 2
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7af6d0e0da0cbac46851ca05afd0d62781">CG_Graph::RST</a> = 1 &lt;&lt; 3
+, <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7a3f01d39e94455fa32de2a53ab85b80b4">CG_Graph::ASYNC</a> = 1 &lt;&lt; 5
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7a2d50beda52a7c9006ba50e803216bd90">CG_Graph::NEGEDGE</a> = 1 &lt;&lt; 6
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7abe74ffa1bc3706e853d69d10a10e275d">CG_Graph::latch</a> = EN
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2">CG_Graph::CGG_FF_TYPE</a> =(ff, 1 &lt;&lt; 4)
+, <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2">CG_Graph::CGG_FF_TYPE</a> =(ff, 1 &lt;&lt; 4)
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2">CG_Graph::CGG_FF_TYPE</a> =(ff, 1 &lt;&lt; 4)
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2">CG_Graph::CGG_FF_TYPE</a> =(ff, 1 &lt;&lt; 4)
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2">CG_Graph::CGG_FF_TYPE</a> =(ff, 1 &lt;&lt; 4)
+, <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7a0c43195d3b93be7e5a1ce9157c7b58c1">CG_Graph::latchr</a> = latch | RST
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7abd28fa2de7a413f6570625896acb13c1">CG_Graph::latchc</a> = latch | CLR
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7aca0d527fa858e2353fd1a34818b80415">CG_Graph::latchs</a> = latch | SET
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7a7f756906229c50d44bffc889da48f8bc">CG_Graph::latchrs</a> = latch | RST | SET
+, <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7a26f9eda380b7db6f6f552f386ca11143">CG_Graph::latchcs</a> = latch | CLR | SET
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2">CG_Graph::CGG_FF_TYPE</a> =(ff, 1 &lt;&lt; 4)
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2">CG_Graph::CGG_FF_TYPE</a> =(ff, 1 &lt;&lt; 4)
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2">CG_Graph::CGG_FF_TYPE</a> =(ff, 1 &lt;&lt; 4)
+, <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2">CG_Graph::CGG_FF_TYPE</a> =(ff, 1 &lt;&lt; 4)
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2">CG_Graph::CGG_FF_TYPE</a> =(ff, 1 &lt;&lt; 4)
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2">CG_Graph::CGG_FF_TYPE</a> =(ff, 1 &lt;&lt; 4)
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2">CG_Graph::CGG_FF_TYPE</a> =(ff, 1 &lt;&lt; 4)
+, <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2">CG_Graph::CGG_FF_TYPE</a> =(ff, 1 &lt;&lt; 4)
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2">CG_Graph::CGG_FF_TYPE</a> =(ff, 1 &lt;&lt; 4)
+, <a class="el" href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2">CG_Graph::CGG_FF_TYPE</a> =(ff, 1 &lt;&lt; 4)
+<br />
+ }</td></tr>
+<tr class="memdesc:ac2545f3d8eab7dee925a98f30279edc7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Types of all sequential cells being supported.  <a href="namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7">Подробнее...</a><br /></td></tr>
+<tr class="separator:ac2545f3d8eab7dee925a98f30279edc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd16e34f3220173c8664f485f0be5637"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637">CG_Graph::Gates</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637a77823635a5f6103a224a6274ae90b482">CG_Graph::GateAnd</a>
+, <a class="el" href="namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637aaee2637a18380d1f3aae73082d6545c5">CG_Graph::GateNand</a>
+, <a class="el" href="namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637ab89a07df1e6b4bc89eff75f2fc282b79">CG_Graph::GateOr</a>
+, <a class="el" href="namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637a2e20e124fcb07550f8a9cf7493120d2e">CG_Graph::GateNor</a>
+, <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637a435eff5b9b60b085ba09412394033d23">CG_Graph::GateXor</a>
+, <a class="el" href="namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637a7f4bc8a26b1a39ceeddc97fae086da15">CG_Graph::GateXnor</a>
+, <a class="el" href="namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637a89ca63f5e15051a9df55b9ec4032ddec">CG_Graph::GateNot</a>
+, <a class="el" href="namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637a00cfb9f89587608b82a1821d5e290939">CG_Graph::GateBuf</a>
+, <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637a0f8d681754c22e8c2bdd1d65e7e31c95">CG_Graph::GateDefault</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:acd16e34f3220173c8664f485f0be5637"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gates Enumeration of types of logical elements <a class="el" href="namespaceThis.html" title="namespaece ClassicGraphML contains all templates, used for graph to classic graphML translation">This</a> enumeration defines the various types of logic elements that can be used in digital circuits.  <a href="namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637">Подробнее...</a><br /></td></tr>
+<tr class="separator:acd16e34f3220173c8664f485f0be5637"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c83e95beb2b83214d1ed39e63e3b255"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255">CG_Graph::DotTypes</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255a5f3f2535c73500fefd992778de565534">CG_Graph::DotGraph</a> = 0
+, <a class="el" href="namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255a454ac54a5910ce1062d26f16d8987288">CG_Graph::DotInput</a> = 1
+, <a class="el" href="namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255ad5f04c5d435c5e114d1eb04a901c536d">CG_Graph::DotConstant</a> = 2
+, <a class="el" href="namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255a890d72ed83e1120ff9c494a86598889c">CG_Graph::DotOutput</a> = 3
+, <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255aa5a478d3174801506d52554e157dc465">CG_Graph::DotGate</a> = 4
+, <a class="el" href="namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255acddad1f534dd10a41443b00d6fe7b2fe">CG_Graph::DotEdge</a> = 5
+, <a class="el" href="namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255a365cab8e6e876a5f83eb7383f4109782">CG_Graph::DotSubGraph</a> = 6
+, <a class="el" href="namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255a7e46f2cc0a9626313cf6251438dfd0c3">CG_Graph::DotExit</a> = 7
+<br />
+ }</td></tr>
+<tr class="memdesc:a9c83e95beb2b83214d1ed39e63e3b255"><td class="mdescLeft">&#160;</td><td class="mdescRight">DotTypes Enumeration for DOT generation.  <a href="namespaceCG__Graph.html#a9c83e95beb2b83214d1ed39e63e3b255">Подробнее...</a><br /></td></tr>
+<tr class="separator:a9c83e95beb2b83214d1ed39e63e3b255"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a911ee2f896f7a7abcbebab886965cadb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCG__Graph.html#a911ee2f896f7a7abcbebab886965cadb">CG_Graph::ValueStates</a> : char { <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#a911ee2f896f7a7abcbebab886965cadba93a455117784178d8ba90f7fb679119d">CG_Graph::UndefindedState</a> = 'n'
+, <a class="el" href="namespaceCG__Graph.html#a911ee2f896f7a7abcbebab886965cadba0b4d90fef1b3476672337c9188c6532d">CG_Graph::TrueValue</a> = '1'
+, <a class="el" href="namespaceCG__Graph.html#a911ee2f896f7a7abcbebab886965cadba183cc74474866fb91cf7217441f62272">CG_Graph::FalseValue</a> = '0'
+, <a class="el" href="namespaceCG__Graph.html#a911ee2f896f7a7abcbebab886965cadbaf0b8ffa1df4ef6efada2e62347abfe8d">CG_Graph::HighImpedance</a> = 'z'
+, <br />
+&#160;&#160;<a class="el" href="namespaceCG__Graph.html#a911ee2f896f7a7abcbebab886965cadbabe7daead51bd79ecd153232617681c57">CG_Graph::NoSignal</a> = 'x'
+<br />
+ }</td></tr>
+<tr class="separator:a911ee2f896f7a7abcbebab886965cadb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:a63f1998e5d82460eb18bd9fd10fee28d"><td class="memItemLeft" align="right" valign="top">std::pair&lt; std::string_view, int32_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCG__Graph_1_1GraphUtils.html#a63f1998e5d82460eb18bd9fd10fee28d">CG_Graph::GraphUtils::getLogicOperation</a> (const std::string &amp;i_op)</td></tr>
+<tr class="memdesc:a63f1998e5d82460eb18bd9fd10fee28d"><td class="mdescLeft">&#160;</td><td class="mdescRight">getLogicOperation Gets information about a logical operation by its name  <a href="namespaceCG__Graph_1_1GraphUtils.html#a63f1998e5d82460eb18bd9fd10fee28d">Подробнее...</a><br /></td></tr>
+<tr class="separator:a63f1998e5d82460eb18bd9fd10fee28d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af175868b714b6534c6da12fad4504f19"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Gates &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCG__Graph_1_1GraphUtils.html#af175868b714b6534c6da12fad4504f19">CG_Graph::GraphUtils::getLogicOperationsKeys</a> ()</td></tr>
+<tr class="memdesc:af175868b714b6534c6da12fad4504f19"><td class="mdescLeft">&#160;</td><td class="mdescRight">getLogicOperationsKeys Returns the keys of logical operations  <a href="namespaceCG__Graph_1_1GraphUtils.html#af175868b714b6534c6da12fad4504f19">Подробнее...</a><br /></td></tr>
+<tr class="separator:af175868b714b6534c6da12fad4504f19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2100e840adfd5ab0a7b1cdea344d441c"><td class="memItemLeft" align="right" valign="top">std::pair&lt; std::vector&lt; bool &gt;, std::vector&lt; Gates &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCG__Graph_1_1GraphUtils.html#a2100e840adfd5ab0a7b1cdea344d441c">CG_Graph::GraphUtils::getLogicOperationsWithGates</a> ()</td></tr>
+<tr class="memdesc:a2100e840adfd5ab0a7b1cdea344d441c"><td class="mdescLeft">&#160;</td><td class="mdescRight">getLogicOperationsWithGates Returns logical operations along with information about the presence of a single input The method returns a pair of vectors: the first vector contains information about whether each a logical operation has only one input(true if this is the case, false otherwise), and the second vector contains the keys(enumerated values) of all available logical operations  <a href="namespaceCG__Graph_1_1GraphUtils.html#a2100e840adfd5ab0a7b1cdea344d441c">Подробнее...</a><br /></td></tr>
+<tr class="separator:a2100e840adfd5ab0a7b1cdea344d441c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b865951b40d61c8e6fc5ba98b82aa46"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCG__Graph_1_1GraphUtils.html#a1b865951b40d61c8e6fc5ba98b82aa46">CG_Graph::GraphUtils::fromOperationsToName</a> (std::string_view i_op)</td></tr>
+<tr class="memdesc:a1b865951b40d61c8e6fc5ba98b82aa46"><td class="mdescLeft">&#160;</td><td class="mdescRight">fromOperationsToName Converts the operation to its name  <a href="namespaceCG__Graph_1_1GraphUtils.html#a1b865951b40d61c8e6fc5ba98b82aa46">Подробнее...</a><br /></td></tr>
+<tr class="separator:a1b865951b40d61c8e6fc5ba98b82aa46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a7f5b25dd2e14e85097553415236fc1"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCG__Graph_1_1GraphUtils.html#a0a7f5b25dd2e14e85097553415236fc1">CG_Graph::GraphUtils::fromHierarchyToOperation</a> (int32_t key)</td></tr>
+<tr class="memdesc:a0a7f5b25dd2e14e85097553415236fc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">fromHierarchyToOperation Converts hierarchy key to its corresponding operation value  <a href="namespaceCG__Graph_1_1GraphUtils.html#a0a7f5b25dd2e14e85097553415236fc1">Подробнее...</a><br /></td></tr>
+<tr class="separator:a0a7f5b25dd2e14e85097553415236fc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80ae38c15249e44fad97f12438b8501b"><td class="memItemLeft" align="right" valign="top">Gates&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCG__Graph_1_1GraphUtils.html#a80ae38c15249e44fad97f12438b8501b">CG_Graph::GraphUtils::parseStringToGate</a> (std::string i_gate)</td></tr>
+<tr class="memdesc:a80ae38c15249e44fad97f12438b8501b"><td class="mdescLeft">&#160;</td><td class="mdescRight">parseStringToGate Converts a string representation of a gate to its corresponding enum value  <a href="namespaceCG__Graph_1_1GraphUtils.html#a80ae38c15249e44fad97f12438b8501b">Подробнее...</a><br /></td></tr>
+<tr class="separator:a80ae38c15249e44fad97f12438b8501b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd3e3a4198309e4b11d407043490ce52"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCG__Graph_1_1GraphUtils.html#acd3e3a4198309e4b11d407043490ce52">CG_Graph::GraphUtils::parseVertexToString</a> (VertexTypes vertex)</td></tr>
+<tr class="memdesc:acd3e3a4198309e4b11d407043490ce52"><td class="mdescLeft">&#160;</td><td class="mdescRight">parseVertexToString Converts an enum value of a vertex type to its corresponding string representation  <a href="namespaceCG__Graph_1_1GraphUtils.html#acd3e3a4198309e4b11d407043490ce52">Подробнее...</a><br /></td></tr>
+<tr class="separator:acd3e3a4198309e4b11d407043490ce52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a142cea464e56296f47c23ca93d2bd7ea"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceCG__Graph_1_1GraphUtils.html#a142cea464e56296f47c23ca93d2bd7ea">CG_Graph::GraphUtils::parseGateToString</a> (Gates gate)</td></tr>
+<tr class="memdesc:a142cea464e56296f47c23ca93d2bd7ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">parseGateToString Converts an enum value of a gate to its corresponding string representation  <a href="namespaceCG__Graph_1_1GraphUtils.html#a142cea464e56296f47c23ca93d2bd7ea">Подробнее...</a><br /></td></tr>
+<tr class="separator:a142cea464e56296f47c23ca93d2bd7ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Макросы</h2>
+<a id="a6d32bdde56c038a1b789e9421ae0ca7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d32bdde56c038a1b789e9421ae0ca7a">&#9670;&nbsp;</a></span>CGG_FF_TYPE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CGG_FF_TYPE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">S, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">V&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;S = V, n##S = NEGEDGE | V</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a17d4c52993a980c0401c3a60c8229e05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17d4c52993a980c0401c3a60c8229e05">&#9670;&nbsp;</a></span>DotReturn</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DotReturn&#160;&#160;&#160;  std::vector&lt;std::pair&lt;DotTypes, std::map&lt;std::string, std::string&gt;&gt;&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_abb0c9889b4b416fb82b934e46c31059.html">CircuitGenGraph</a></li><li class="navelem"><a class="el" href="GraphUtils_8hpp.html">GraphUtils.hpp</a></li>
+    <li class="footer">Создано системой <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+  </ul>
+</div>
+</body>
+</html>

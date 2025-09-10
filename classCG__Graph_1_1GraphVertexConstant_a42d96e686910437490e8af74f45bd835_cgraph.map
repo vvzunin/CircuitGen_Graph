@@ -1,0 +1,4 @@
+<map id="CG_Graph::GraphVertexConstant::toDOT" name="CG_Graph::GraphVertexConstant::toDOT">
+<area shape="rect" id="node1" title="writes vertex to dot" alt="" coords="5,5,240,47"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1GraphVertexBase.html#a6f20afa23f62307d4409c2a28b16824d" title="getName Returns the name of the vertex" alt="" coords="288,5,496,47"/>
+</map>

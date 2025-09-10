@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['blocks_1574',['blocks',['../structMultiLinearAllocator.html#a757fce3f75a120c7cc1b5d2f4700deaf',1,'MultiLinearAllocator']]],
-  ['brief_1575',['brief',['../namespaceel_1_1base_1_1consts.html#a4f2c476d5b8958d5e3e7bb9d1935dea1',1,'el::base::consts']]],
-  ['buf_5fsize_1576',['buf_size',['../structMultiLinearAllocator.html#a724b49b432f37274bbfc8687a8f2fb3e',1,'MultiLinearAllocator']]]
+  ['blocks_497',['blocks',['../structCG__Graph_1_1MultiLinearAllocator.html#a007070270d339c31c80ac6949c69df4c',1,'CG_Graph::MultiLinearAllocator']]],
+  ['buf_5fsize_498',['buf_size',['../structCG__Graph_1_1MultiLinearAllocator.html#a1d4f4263f2b6f4e0460e98c7b79d7420',1,'CG_Graph::MultiLinearAllocator']]]
 ];

@@ -24,91 +24,90 @@
 */
 var NAVTREE =
 [
-  [ "CircuitGenGraph", "index.html", [
-    [ "Генератор комбинационных схем", "index.html", [
-      [ "Установка необходимых пакетов", "index.html#autotoc_md1", [
-        [ "Установка пакетов", "index.html#autotoc_md2", [
-          [ "С помощью apt", "index.html#autotoc_md3", null ],
-          [ "С помощью dnf (для rpm ветки)", "index.html#autotoc_md4", null ]
-        ] ],
-        [ "Установка cmake 3.28.1", "index.html#autotoc_md5", null ]
-      ] ],
-      [ "Режим разработчика", "index.html#autotoc_md6", null ],
-      [ "Сборка программы", "index.html#autotoc_md7", null ],
-      [ "Стиль кода", "index.html#autotoc_md8", null ],
-      [ "Лицензия", "index.html#autotoc_md9", null ]
-    ] ],
+  [ "My Project", "index.html", [
     [ "About", "about.html", [
       [ "Doxygen documentation", "about.html#about-doxygen", null ]
     ] ],
-    [ "Вклад", "md_CONTRIBUTING.html", [
-      [ "Нормы поведения", "md_CONTRIBUTING.html#autotoc_md11", null ],
-      [ "Начальные шаги", "md_CONTRIBUTING.html#autotoc_md12", null ]
-    ] ],
-    [ "Сборка с помощью CMake", "md_docs_BUILDING.html", [
-      [ "Сборка", "md_docs_BUILDING.html#autotoc_md14", [
-        [ "Сборка с MSVC", "md_docs_BUILDING.html#autotoc_md15", null ],
-        [ "Сборка на Apple Silicon", "md_docs_BUILDING.html#autotoc_md16", null ]
-      ] ],
-      [ "Установка", "md_docs_BUILDING.html#autotoc_md17", [
-        [ "Пакет CMake", "md_docs_BUILDING.html#autotoc_md18", null ],
-        [ "Дальнейшее использование", "md_docs_BUILDING.html#autotoc_md19", null ],
-        [ "Note to packagers", "md_docs_BUILDING.html#autotoc_md20", null ]
-      ] ]
-    ] ],
-    [ "Нормы поведения", "md_docs_CODE_OF_CONDUCT.html", null ],
-    [ "Стиль кодирования", "md_docs_CodeStyle.html", null ],
+    [ "Сборка с помощью CMake", "md_docs_BUILDING.html", null ],
+    [ "Нормы разработки в проекте", "md_docs_CODESTYLE.html", null ],
     [ "Format", "md_docs_FORMAT.html", [
-      [ "Проблемы с поддержкой синтаксиса", "md_docs_FORMAT.html#autotoc_md24", null ],
-      [ "Clang-format и settings", "md_docs_FORMAT.html#autotoc_md25", null ]
+      [ "Проблемы с поддержкой синтаксиса", "md_docs_FORMAT.html#autotoc_md13", null ],
+      [ "Clang-format и settings.json", "md_docs_FORMAT.html#autotoc_md14", null ]
     ] ],
-    [ "Hacking", "md_docs_HACKING.html", [
-      [ "Режим разработчика", "md_docs_HACKING.html#autotoc_md27", [
-        [ "Правила именования переменных", "md_docs_HACKING.html#autotoc_md28", null ],
-        [ "Пресеты", "md_docs_HACKING.html#autotoc_md29", null ],
-        [ "Настройка, сборка и тестирование", "md_docs_HACKING.html#autotoc_md30", null ],
-        [ "Цели режима разработчика", "md_docs_HACKING.html#autotoc_md31", [
-          [ "<tt>coverage</tt>", "md_docs_HACKING.html#autotoc_md32", null ],
-          [ "<tt>docs</tt>", "md_docs_HACKING.html#autotoc_md33", null ],
-          [ "<tt>format-check</tt> и <tt>format-fix</tt>", "md_docs_HACKING.html#autotoc_md34", null ],
-          [ "<tt>spell-check</tt> и <tt>spell-fix</tt>", "md_docs_HACKING.html#autotoc_md35", null ]
+    [ "Режим разработчика", "md_docs_HACKING.html", null ],
+    [ "Последовательностная логика", "md_docs_Sequential.html", null ],
+    [ "О возможностях системы менеджмента памяти", "md_docs_MEMORY_MANAGEMENT.html", null ],
+    [ "Вклад", "md_CONTRIBUTING.html", [
+      [ "Нормы поведения", "md_CONTRIBUTING.html#autotoc_md30", null ],
+      [ "Начальные шаги", "md_CONTRIBUTING.html#autotoc_md31", null ]
+    ] ],
+    [ "Генератор комбинационных схем", "md_README.html", [
+      [ "Установка необходимых пакетов", "md_README.html#autotoc_md33", [
+        [ "Сборка", "md_docs_BUILDING.html#autotoc_md1", null ],
+        [ "Сборка с MSVC", "md_docs_BUILDING.html#autotoc_md2", null ],
+        [ "Сборка на Apple Silicon", "md_docs_BUILDING.html#autotoc_md3", null ],
+        [ "Установка", "md_docs_BUILDING.html#autotoc_md4", null ],
+        [ "Пакет CMake", "md_docs_BUILDING.html#autotoc_md5", null ],
+        [ "Дальнейшее использование", "md_docs_BUILDING.html#autotoc_md6", null ],
+        [ "Особенности установки", "md_docs_BUILDING.html#autotoc_md7", null ],
+        [ "Стиль исходного кода", "md_docs_CODESTYLE.html#autotoc_md9", null ],
+        [ "Другие условия", "md_docs_CODESTYLE.html#autotoc_md10", null ],
+        [ "Правила документирования кода", "md_docs_CODESTYLE.html#autotoc_md11", null ],
+        [ "Правила при разработке", "md_docs_HACKING.html#autotoc_md16", null ],
+        [ "Пресеты", "md_docs_HACKING.html#autotoc_md17", null ],
+        [ "Настройка, сборка и тестирование", "md_docs_HACKING.html#autotoc_md18", null ],
+        [ "Цели режима разработчика", "md_docs_HACKING.html#autotoc_md19", [
+          [ "<tt>coverage</tt>", "md_docs_HACKING.html#autotoc_md20", null ],
+          [ "<tt>docs</tt>", "md_docs_HACKING.html#autotoc_md21", null ],
+          [ "<tt>format-check</tt> и <tt>format-fix</tt>", "md_docs_HACKING.html#autotoc_md22", null ],
+          [ "<tt>spell-check</tt> и <tt>spell-fix</tt>", "md_docs_HACKING.html#autotoc_md23", null ]
         ] ],
-        [ "Правила документирования кода", "md_docs_HACKING.html#autotoc_md36", null ]
+        [ "Инициализация графа", "md_docs_MEMORY_MANAGEMENT.html#autotoc_md26", null ],
+        [ "Выделение памяти под все вершины определенного типа", "md_docs_MEMORY_MANAGEMENT.html#autotoc_md27", null ],
+        [ "Выделение памяти для списков смежности в вершинах", "md_docs_MEMORY_MANAGEMENT.html#autotoc_md28", null ],
+        [ "Установка пакетов", "md_README.html#autotoc_md34", [
+          [ "С помощью apt", "md_README.html#autotoc_md35", null ],
+          [ "С помощью dnf (для rpm ветки)", "md_README.html#autotoc_md36", null ]
+        ] ],
+        [ "Установка cmake 3.28.1", "md_README.html#autotoc_md37", null ],
+        [ "Установка Doxygen 1.13.2", "md_README.html#autotoc_md38", null ]
+      ] ],
+      [ "Режим разработчика", "md_README.html#autotoc_md39", null ],
+      [ "Сборка программы", "md_README.html#autotoc_md40", null ],
+      [ "Стиль кода", "md_README.html#autotoc_md41", null ],
+      [ "СБорка документации", "md_README.html#autotoc_md42", null ],
+      [ "Лицензия", "md_README.html#autotoc_md43", null ]
+    ] ],
+    [ "Пространства имен", "namespaces.html", [
+      [ "Пространства имен", "namespaces.html", "namespaces_dup" ],
+      [ "Члены пространств имен", "namespacemembers.html", [
+        [ "Указатель", "namespacemembers.html", null ],
+        [ "Функции", "namespacemembers_func.html", null ],
+        [ "Переменные", "namespacemembers_vars.html", null ],
+        [ "Определения типов", "namespacemembers_type.html", null ],
+        [ "Перечисления", "namespacemembers_enum.html", null ],
+        [ "Элементы перечислений", "namespacemembers_eval.html", null ]
       ] ]
     ] ],
-    [ "Todo List", "todo.html", null ],
-    [ "Namespaces", "namespaces.html", [
-      [ "Namespace List", "namespaces.html", "namespaces_dup" ],
-      [ "Namespace Members", "namespacemembers.html", [
-        [ "All", "namespacemembers.html", null ],
-        [ "Functions", "namespacemembers_func.html", null ],
-        [ "Variables", "namespacemembers_vars.html", null ],
-        [ "Typedefs", "namespacemembers_type.html", null ],
-        [ "Enumerations", "namespacemembers_enum.html", null ]
+    [ "Классы", "annotated.html", [
+      [ "Классы", "annotated.html", "annotated_dup" ],
+      [ "Алфавитный указатель классов", "classes.html", null ],
+      [ "Иерархия классов", "hierarchy.html", "hierarchy" ],
+      [ "Члены классов", "functions.html", [
+        [ "Указатель", "functions.html", "functions_dup" ],
+        [ "Функции", "functions_func.html", null ],
+        [ "Переменные", "functions_vars.html", null ],
+        [ "Определения типов", "functions_type.html", null ],
+        [ "Перечисления", "functions_enum.html", null ],
+        [ "Элементы перечислений", "functions_eval.html", null ],
+        [ "Относящиеся к классу функции", "functions_rela.html", null ]
       ] ]
     ] ],
-    [ "Classes", "annotated.html", [
-      [ "Class List", "annotated.html", "annotated_dup" ],
-      [ "Class Index", "classes.html", null ],
-      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
-      [ "Class Members", "functions.html", [
-        [ "All", "functions.html", "functions_dup" ],
-        [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", null ],
-        [ "Typedefs", "functions_type.html", null ],
-        [ "Related Functions", "functions_rela.html", null ]
-      ] ]
-    ] ],
-    [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ],
-      [ "File Members", "globals.html", [
-        [ "All", "globals.html", "globals_dup" ],
-        [ "Functions", "globals_func.html", null ],
-        [ "Variables", "globals_vars.html", null ],
-        [ "Typedefs", "globals_type.html", null ],
-        [ "Enumerations", "globals_enum.html", null ],
-        [ "Enumerator", "globals_eval.html", null ],
-        [ "Macros", "globals_defs.html", "globals_defs" ]
+    [ "Файлы", "files.html", [
+      [ "Файлы", "files.html", "files_dup" ],
+      [ "Список членов всех файлов", "globals.html", [
+        [ "Указатель", "globals.html", null ],
+        [ "Макросы", "globals_defs.html", null ]
       ] ]
     ] ]
   ] ]
@@ -116,14 +115,10 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"CMakePresets_8json.html",
-"classGraphVertexBase.html#a2c41cf1fd75e3acfe7241eb29bfeded9",
-"classel_1_1LogDispatchData.html#aa7f834fbd4c8440d25ba1958ccf51ea7",
-"classel_1_1base_1_1SubsecondPrecision.html#a7b6681bcf8457b97da6d2ad5da4b45c3",
-"easylogging_09_09_8h.html#a2784aacd04cb7816ac1c0b20fcbf83cbabff7a37f020193c055a5e32b294d408f",
-"easylogging_09_09_8h.html#ad8b1f825524e153099348cf8afaf8902",
-"namespaceel_1_1base.html#a28939c5a884e67fcf12259f4b8848e00a9d8794d3178b4df3b87654adbed5c846"
+"DefaultAuxiliaryMethods_8cpp.html",
+"classCG__Graph_1_1GraphVertexSequential.html#a55ddf20748a41cc9d973a6107926baae",
+"namespaceCG__Graph.html#aafc1b943202deffccf0a142ca3ff51fc"
 ];
 
-var SYNCONMSG = 'click to disable panel synchronisation';
-var SYNCOFFMSG = 'click to enable panel synchronisation';
+var SYNCONMSG = 'нажмите на выключить для синхронизации панелей';
+var SYNCOFFMSG = 'нажмите на включить для синхронизации панелей';

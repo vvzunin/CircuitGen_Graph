@@ -1,0 +1,6 @@
+<map id="CG_Graph::OrientedGraph::parseVertexToGraphML" name="CG_Graph::OrientedGraph::parseVertexToGraphML">
+<area shape="rect" id="node1" title="TODO: add description." alt="" coords="5,71,196,112"/>
+<area shape="rect" id="node2" href="$namespaceCG__Graph_1_1AuxMethodsGraph.html#a148573721e2fb19aa7d548a16bb74b04" title="A simple function, which calls fmt." alt="" coords="244,5,459,47"/>
+<area shape="rect" id="node3" href="$namespaceCG__Graph_1_1GraphUtils.html#a142cea464e56296f47c23ca93d2bd7ea" title="parseGateToString Converts an enum value of a gate to its corresponding string representation" alt="" coords="269,71,433,112"/>
+<area shape="rect" id="node4" href="$namespaceCG__Graph_1_1GraphUtils.html#acd3e3a4198309e4b11d407043490ce52" title="parseVertexToString Converts an enum value of a vertex type to its corresponding string representatio..." alt="" coords="269,136,433,177"/>
+</map>

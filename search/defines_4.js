@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['initialize_5feasyloggingpp_2090',['INITIALIZE_EASYLOGGINGPP',['../easylogging_09_09_8h.html#a0680b16a06b8c74f1ce4165cb3c14c12',1,'easylogging++.h']]],
-  ['initialize_5fnull_5feasyloggingpp_2091',['INITIALIZE_NULL_EASYLOGGINGPP',['../easylogging_09_09_8h.html#a13d483a96a4bb714260b3cf6a9453459',1,'easylogging++.h']]]
+  ['vertexptr_620',['VertexPtr',['../GraphVertexBase_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d',1,'VertexPtr():&#160;GraphVertexBase.hpp'],['../OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d',1,'VertexPtr():&#160;OrientedGraph.hpp']]]
 ];

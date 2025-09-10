@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['unknown_1846',['Unknown',['../namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36a88183b946cc5f0e8c96b2e66e1c74a7e',1,'el::Unknown()'],['../namespaceel.html#a281f5db6d6163678bc68a8b23b59e124a88183b946cc5f0e8c96b2e66e1c74a7e',1,'el::Unknown()']]],
-  ['user_1847',['User',['../namespaceel_1_1base.html#a28939c5a884e67fcf12259f4b8848e00a8f9bfe9d1345237cb3b2b205864da075',1,'el::base']]]
+  ['vs_5fcalc_606',['VS_CALC',['../classCG__Graph_1_1GraphVertexBase.html#a342b7a827f3d32fb4fa757d12e1bb55ba1e6fc04f1564e116df14e4140919de11',1,'CG_Graph::GraphVertexBase']]],
+  ['vs_5fin_5fprogress_607',['VS_IN_PROGRESS',['../classCG__Graph_1_1GraphVertexBase.html#a342b7a827f3d32fb4fa757d12e1bb55ba4f1e23975fe8fcecb7ab4ffd757fd7af',1,'CG_Graph::GraphVertexBase']]],
+  ['vs_5fnot_5fcalc_608',['VS_NOT_CALC',['../classCG__Graph_1_1GraphVertexBase.html#a342b7a827f3d32fb4fa757d12e1bb55bac17e1d2ce9572724bffa70e2704f839e',1,'CG_Graph::GraphVertexBase']]],
+  ['vs_5fused_5fcalc_609',['VS_USED_CALC',['../classCG__Graph_1_1GraphVertexBase.html#a342b7a827f3d32fb4fa757d12e1bb55bade0dc7a00b5f0c3abadda7ac8a26a97c',1,'CG_Graph::GraphVertexBase']]],
+  ['vs_5fused_5flevel_610',['VS_USED_LEVEL',['../classCG__Graph_1_1GraphVertexBase.html#a342b7a827f3d32fb4fa757d12e1bb55ba54d9a76d8991154bab2ed25904c3bc9c',1,'CG_Graph::GraphVertexBase']]]
 ];

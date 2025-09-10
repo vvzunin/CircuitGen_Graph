@@ -1,0 +1,5 @@
+<map id="CG_Graph::OrientedGraph::isEmpty" name="CG_Graph::OrientedGraph::isEmpty">
+<area shape="rect" id="node1" title="Checks, if there are any gates in graph (including subrapgs)." alt="" coords="5,5,196,47"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1OrientedGraph.html#a80032613db5b26053cffbfb572bfafd5" title="fullSize returns the total number of vertices in the graph, including vertices from all subgraphs." alt="" coords="244,5,435,47"/>
+<area shape="rect" id="node3" href="$classCG__Graph_1_1OrientedGraph.html#a07f3c1e04280c7f10bc1611125f842d1" title="baseSize returns the number of &quot;gate&quot; type vertices in the graph" alt="" coords="483,5,673,47"/>
+</map>

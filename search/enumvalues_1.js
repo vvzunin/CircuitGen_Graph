@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['coloredterminaloutput_1773',['ColoredTerminalOutput',['../namespaceel.html#a2784aacd04cb7816ac1c0b20fcbf83cbaeececaef2fc38e4f3c91f9f6b6fb6d49',1,'el']]],
-  ['constant_1774',['constant',['../DefaultSettings_8hpp.html#a1344ac31340f5530ab7dfb0ae66cb753a995640a12d5339aabee76a933fb5f519',1,'DefaultSettings.hpp']]],
-  ['createloggerautomatically_1775',['CreateLoggerAutomatically',['../namespaceel.html#a2784aacd04cb7816ac1c0b20fcbf83cba2afa5afe77105aadedcbb90dd8547cc3',1,'el']]]
+  ['cgg_5fff_5ftype_562',['CGG_FF_TYPE',['../namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7ae11071b8cd40d0d84de18adcf291d7e2',1,'CG_Graph']]],
+  ['clr_563',['CLR',['../namespaceCG__Graph.html#ac2545f3d8eab7dee925a98f30279edc7a81c29ceb9918f3515e5d7d293adf8146',1,'CG_Graph']]],
+  ['constant_564',['constant',['../namespaceCG__Graph.html#a28a42afa74ee91d31d437b68f44f9b68aeaa7756cde7db4f269c30b494ef69c6c',1,'CG_Graph']]]
 ];

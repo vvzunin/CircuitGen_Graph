@@ -1,0 +1,7 @@
+<map id="CG_Graph::OrientedGraph::unrollGraph" name="CG_Graph::OrientedGraph::unrollGraph">
+<area shape="rect" id="node1" title="Unrolls graph. TODO: add normal description." alt="" coords="483,39,673,80"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1OrientedGraph.html#ab9f454f9efd510e3fdf69d57dc5f89ee" title="Is called by toGraphMLOpenABCD. TODO: add description." alt="" coords="244,5,435,47"/>
+<area shape="rect" id="node4" href="$classCG__Graph_1_1OrientedGraph.html#ac0605517f81ab068a869f378a49ce6ad" title="Is called by toGraphMLPseudoABCD. TODO: add description." alt="" coords="244,71,435,112"/>
+<area shape="rect" id="node3" href="$classCG__Graph_1_1OrientedGraph.html#a9b23f8ac637a24bdb4953877482702c0" title="toGraphMLOpenABCD Writes the graph structure in GraphML format to the specified output stream" alt="" coords="5,5,196,47"/>
+<area shape="rect" id="node5" href="$classCG__Graph_1_1OrientedGraph.html#ada349631bbd3902dcccdf023db02aed3" title="toGraphMLPseudoABCD Writes the graph structure in GraphML format to the specified output stream" alt="" coords="5,71,196,112"/>
+</map>

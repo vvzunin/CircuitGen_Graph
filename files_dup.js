@@ -1,11 +1,28 @@
 var files_dup =
 [
-    [ "build", "dir_4fef79e7177ba769987a8da36c892c5f.html", "dir_4fef79e7177ba769987a8da36c892c5f" ],
-    [ "CircuitGenGraph", "dir_abb0c9889b4b416fb82b934e46c31059.html", "dir_abb0c9889b4b416fb82b934e46c31059" ],
-    [ "docs", "dir_49e56c817e5e54854c35e136979f97ca.html", "dir_49e56c817e5e54854c35e136979f97ca" ],
-    [ "examples", "dir_d28a4824dc47e487b107a5db32ef43c4.html", "dir_d28a4824dc47e487b107a5db32ef43c4" ],
-    [ "lib", "dir_97aefd0d527b934f1d99a682da8fe6a9.html", "dir_97aefd0d527b934f1d99a682da8fe6a9" ],
-    [ "src", "dir_68267d1309a1af8e8297ef4c3efbcdba.html", "dir_68267d1309a1af8e8297ef4c3efbcdba" ],
-    [ "test", "dir_13e138d54eb8818da29c3992edef070a.html", "dir_13e138d54eb8818da29c3992edef070a" ],
-    [ "CMakePresets.json", "CMakePresets_8json.html", null ]
+    [ "DefaultAuxiliaryMethods.cpp", "DefaultAuxiliaryMethods_8cpp.html", "DefaultAuxiliaryMethods_8cpp" ],
+    [ "DefaultAuxiliaryMethods.hpp", "DefaultAuxiliaryMethods_8hpp.html", "DefaultAuxiliaryMethods_8hpp" ],
+    [ "enums.hpp", "enums_8hpp.html", "enums_8hpp" ],
+    [ "GraphMemory.hpp", "GraphMemory_8hpp.html", "GraphMemory_8hpp" ],
+    [ "GraphMLTemplates.hpp", "GraphMLTemplates_8hpp.html", null ],
+    [ "GraphUtils.cpp", "GraphUtils_8cpp.html", "GraphUtils_8cpp" ],
+    [ "GraphUtils.hpp", "GraphUtils_8hpp.html", "GraphUtils_8hpp" ],
+    [ "GraphVertex.hpp", "GraphVertex_8hpp.html", [
+      [ "GraphVertexInput", "classCG__Graph_1_1GraphVertexInput.html", "classCG__Graph_1_1GraphVertexInput" ],
+      [ "GraphVertexConstant", "classCG__Graph_1_1GraphVertexConstant.html", "classCG__Graph_1_1GraphVertexConstant" ],
+      [ "GraphVertexSubGraph", "classCG__Graph_1_1GraphVertexSubGraph.html", "classCG__Graph_1_1GraphVertexSubGraph" ],
+      [ "GraphVertexOutput", "classCG__Graph_1_1GraphVertexOutput.html", "classCG__Graph_1_1GraphVertexOutput" ],
+      [ "GraphVertexGates", "classCG__Graph_1_1GraphVertexGates.html", "classCG__Graph_1_1GraphVertexGates" ],
+      [ "GraphVertexSequential", "classCG__Graph_1_1GraphVertexSequential.html", "classCG__Graph_1_1GraphVertexSequential" ]
+    ] ],
+    [ "GraphVertexBase.cpp", "GraphVertexBase_8cpp.html", "GraphVertexBase_8cpp" ],
+    [ "GraphVertexBase.hpp", "GraphVertexBase_8hpp.html", "GraphVertexBase_8hpp" ],
+    [ "GraphVertexConstant.cpp", "GraphVertexConstant_8cpp.html", null ],
+    [ "GraphVertexGates.cpp", "GraphVertexGates_8cpp.html", null ],
+    [ "GraphVertexInput.cpp", "GraphVertexInput_8cpp.html", null ],
+    [ "GraphVertexOutput.cpp", "GraphVertexOutput_8cpp.html", null ],
+    [ "GraphVertexSequential.cpp", "GraphVertexSequential_8cpp.html", "GraphVertexSequential_8cpp" ],
+    [ "GraphVertexSubGraph.cpp", "GraphVertexSubGraph_8cpp.html", null ],
+    [ "OrientedGraph.cpp", "OrientedGraph_8cpp.html", "OrientedGraph_8cpp" ],
+    [ "OrientedGraph.hpp", "OrientedGraph_8hpp.html", "OrientedGraph_8hpp" ]
 ];

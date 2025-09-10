@@ -1,14 +1,13 @@
 var searchData=
 [
-  ['gate_1800',['gate',['../DefaultSettings_8hpp.html#a1344ac31340f5530ab7dfb0ae66cb753a5221c03ccb4065b74a01f3c3f1d93516',1,'DefaultSettings.hpp']]],
-  ['gateand_1801',['GateAnd',['../DefaultSettings_8hpp.html#aa99b70f21b5732e4b9810372004e6038ab9bd660ea3d58aa44fa8d9d7a1d58680',1,'DefaultSettings.hpp']]],
-  ['gatebuf_1802',['GateBuf',['../DefaultSettings_8hpp.html#aa99b70f21b5732e4b9810372004e6038af2c0e36c3abd940d27017e0d6966943e',1,'DefaultSettings.hpp']]],
-  ['gatedefault_1803',['GateDefault',['../DefaultSettings_8hpp.html#aa99b70f21b5732e4b9810372004e6038ac2976809a913c91ef0f17c57113a882a',1,'DefaultSettings.hpp']]],
-  ['gatenand_1804',['GateNand',['../DefaultSettings_8hpp.html#aa99b70f21b5732e4b9810372004e6038af21a306ee30bb9dfb9ef3b4d47f16e69',1,'DefaultSettings.hpp']]],
-  ['gatenor_1805',['GateNor',['../DefaultSettings_8hpp.html#aa99b70f21b5732e4b9810372004e6038ade214b848a51f8e2d2047b5f3ab8f7ec',1,'DefaultSettings.hpp']]],
-  ['gatenot_1806',['GateNot',['../DefaultSettings_8hpp.html#aa99b70f21b5732e4b9810372004e6038a07ac69b6fe14844c256301fcf19f4b45',1,'DefaultSettings.hpp']]],
-  ['gateor_1807',['GateOr',['../DefaultSettings_8hpp.html#aa99b70f21b5732e4b9810372004e6038ad19a5599fc0db4d0fab4305b4418c4f2',1,'DefaultSettings.hpp']]],
-  ['gatexnor_1808',['GateXnor',['../DefaultSettings_8hpp.html#aa99b70f21b5732e4b9810372004e6038a40ac05fe631678158bada6453a6185ba',1,'DefaultSettings.hpp']]],
-  ['gatexor_1809',['GateXor',['../DefaultSettings_8hpp.html#aa99b70f21b5732e4b9810372004e6038aec2070cdd992fbeca28dd9c4c416fd64',1,'DefaultSettings.hpp']]],
-  ['global_1810',['Global',['../namespaceel.html#ab0ac6091262344c52dd2d3ad099e8e36a4cc6684df7b4a92b1dec6fce3264fac8',1,'el']]]
+  ['gate_576',['gate',['../namespaceCG__Graph.html#a28a42afa74ee91d31d437b68f44f9b68a62f916ec0a56f89bfb0e2d5422e02a3a',1,'CG_Graph']]],
+  ['gateand_577',['GateAnd',['../namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637a77823635a5f6103a224a6274ae90b482',1,'CG_Graph']]],
+  ['gatebuf_578',['GateBuf',['../namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637a00cfb9f89587608b82a1821d5e290939',1,'CG_Graph']]],
+  ['gatedefault_579',['GateDefault',['../namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637a0f8d681754c22e8c2bdd1d65e7e31c95',1,'CG_Graph']]],
+  ['gatenand_580',['GateNand',['../namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637aaee2637a18380d1f3aae73082d6545c5',1,'CG_Graph']]],
+  ['gatenor_581',['GateNor',['../namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637a2e20e124fcb07550f8a9cf7493120d2e',1,'CG_Graph']]],
+  ['gatenot_582',['GateNot',['../namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637a89ca63f5e15051a9df55b9ec4032ddec',1,'CG_Graph']]],
+  ['gateor_583',['GateOr',['../namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637ab89a07df1e6b4bc89eff75f2fc282b79',1,'CG_Graph']]],
+  ['gatexnor_584',['GateXnor',['../namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637a7f4bc8a26b1a39ceeddc97fae086da15',1,'CG_Graph']]],
+  ['gatexor_585',['GateXor',['../namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637a435eff5b9b60b085ba09412394033d23',1,'CG_Graph']]]
 ];

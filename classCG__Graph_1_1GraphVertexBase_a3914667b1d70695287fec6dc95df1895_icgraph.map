@@ -1,0 +1,4 @@
+<map id="CG_Graph::GraphVertexBase::getType" name="CG_Graph::GraphVertexBase::getType">
+<area shape="rect" id="node1" title="getType This method returns the type of the vertex as a value of the VertexTypes enum" alt="" coords="299,5,507,47"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1GraphVertexSequential.html#a5c111b4b78a49b6d1b9f6cae28fa81d4" title="calculateHash Calculates the hash value of the vertex." alt="" coords="5,5,251,47"/>
+</map>

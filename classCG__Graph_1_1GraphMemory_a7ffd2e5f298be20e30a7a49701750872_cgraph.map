@@ -1,0 +1,4 @@
+<map id="CG_Graph::GraphMemory::allocate" name="CG_Graph::GraphMemory::allocate">
+<area shape="rect" id="node1" title="allocates memory for graph vertex" alt="" coords="5,5,193,47"/>
+<area shape="rect" id="node2" href="$structCG__Graph_1_1MultiLinearAllocator.html#a3b3c05ab4188909612a27266b47ac141" title="Gives out memory for given type and returns a pointer on an object of given type." alt="" coords="241,5,468,47"/>
+</map>

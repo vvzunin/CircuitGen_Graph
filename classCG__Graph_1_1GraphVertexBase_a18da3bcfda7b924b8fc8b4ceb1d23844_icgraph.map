@@ -1,0 +1,4 @@
+<map id="CG_Graph::GraphVertexBase::addVertexToInConnections" name="CG_Graph::GraphVertexBase::addVertexToInConnections">
+<area shape="rect" id="node1" title="addVertexToInConnections Adds a vertex to the input connections of this vertex and returns the count ..." alt="" coords="268,5,476,47"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1GraphVertexGates.html#aaaf6d502ed94f9ac4fda6214d4a53ab2" title="addVertexToInConnections Buffer and Not types of gates must have only one element in d_inConnections,..." alt="" coords="5,5,220,47"/>
+</map>

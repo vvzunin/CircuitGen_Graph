@@ -1,0 +1,7 @@
+<map id="CG_Graph::OrientedGraph::generateMajority" name="CG_Graph::OrientedGraph::generateMajority">
+<area shape="rect" id="node1" title="creates majority element inside current graph" alt="" coords="5,39,196,80"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1OrientedGraph.html#ab06d0e4cb83f8f16ca1519ccfd8eba47" title="addSubGraph Adds a subgraph to the current graph" alt="" coords="244,5,435,47"/>
+<area shape="rect" id="node5" href="$classCG__Graph_1_1OrientedGraph.html#a216d9c5ba0aa8d35a44636239fb0c615" title="creates a majority element, represented by a graph." alt="" coords="244,71,435,112"/>
+<area shape="rect" id="node3" href="$classCG__Graph_1_1OrientedGraph.html#a7ed08aaacef3df2a9e2fd43cf8e12e06" title="addEdge Adds an edge between two vertices in the current graph" alt="" coords="721,5,912,47"/>
+<area shape="rect" id="node4" href="$classCG__Graph_1_1OrientedGraph.html#a18bfcd87ca2875052af59ada65bfe339" title="addEdges Adds multiple edges from a vector of source vertices to a target vertex" alt="" coords="483,35,673,76"/>
+</map>

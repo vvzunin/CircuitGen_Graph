@@ -1,0 +1,875 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>My Project: Класс CG_Graph::GraphVertexSubGraph</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+  $(document).ready(function() { init_search(); });
+/* @license-end */
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo_1.png"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">My Project
+   &#160;<span id="projectnumber">1.6.0</span>
+   </div>
+   <div id="projectbrief">Desc of Backeknd</div>
+  </td>
+   <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.svg"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Поиск" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.svg" alt=""/></a>
+          </span>
+        </div>
+</td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.1 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск','.html');
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('classCG__Graph_1_1GraphVertexSubGraph.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Открытые члены</a> &#124;
+<a href="#pri-attribs">Закрытые данные</a> &#124;
+<a href="classCG__Graph_1_1GraphVertexSubGraph-members.html">Полный список членов класса</a>  </div>
+  <div class="headertitle">
+<div class="title">Класс CG_Graph::GraphVertexSubGraph</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>class <a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html" title="class GraphVertexSubGraph It is a class, having a subGruph pointer inside.">GraphVertexSubGraph</a> It is a class, having a subGruph pointer inside.  
+ <a href="classCG__Graph_1_1GraphVertexSubGraph.html#details">Подробнее...</a></p>
+
+<p><code>#include &lt;<a class="el" href="GraphVertex_8hpp_source.html">GraphVertex.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Граф наследования:CG_Graph::GraphVertexSubGraph:</div>
+<div class="dyncontent">
+<div class="center"><img src="classCG__Graph_1_1GraphVertexSubGraph__inherit__graph.png" border="0" usemap="#aCG__Graph_1_1GraphVertexSubGraph_inherit__map" alt="Inheritance graph"/></div>
+<map name="aCG__Graph_1_1GraphVertexSubGraph_inherit__map" id="aCG__Graph_1_1GraphVertexSubGraph_inherit__map">
+<area shape="rect" title="class GraphVertexSubGraph It is a class, having a subGruph pointer inside." alt="" coords="32,468,235,707"/>
+<area shape="rect" href="classCG__Graph_1_1GraphVertexBase.html" title="class GraphVertexBase" alt="" coords="5,5,261,420"/>
+</map>
+</div>
+<div class="dynheader">
+Граф связей класса CG_Graph::GraphVertexSubGraph:</div>
+<div class="dyncontent">
+<div class="center"><img src="classCG__Graph_1_1GraphVertexSubGraph__coll__graph.png" border="0" usemap="#aCG__Graph_1_1GraphVertexSubGraph_coll__map" alt="Collaboration graph"/></div>
+<map name="aCG__Graph_1_1GraphVertexSubGraph_coll__map" id="aCG__Graph_1_1GraphVertexSubGraph_coll__map">
+<area shape="rect" title="class GraphVertexSubGraph It is a class, having a subGruph pointer inside." alt="" coords="32,468,235,707"/>
+<area shape="rect" href="classCG__Graph_1_1GraphVertexBase.html" title="class GraphVertexBase" alt="" coords="5,5,261,420"/>
+</map>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Открытые члены</h2></td></tr>
+<tr class="memitem:a7c27d29a566ae9a9325a86141a25c31b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#a7c27d29a566ae9a9325a86141a25c31b">GraphVertexSubGraph</a> (<a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a> i_subGraph, <a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a> i_baseGraph)</td></tr>
+<tr class="memdesc:a7c27d29a566ae9a9325a86141a25c31b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the <a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html" title="class GraphVertexSubGraph It is a class, having a subGruph pointer inside.">GraphVertexSubGraph</a> object with the provided base graph pointer and subGraph pointer.  <a href="classCG__Graph_1_1GraphVertexSubGraph.html#a7c27d29a566ae9a9325a86141a25c31b">Подробнее...</a><br /></td></tr>
+<tr class="separator:a7c27d29a566ae9a9325a86141a25c31b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c1f9256486788a4eefbcd2ff7e450e7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#a3c1f9256486788a4eefbcd2ff7e450e7">GraphVertexSubGraph</a> (<a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a> i_subGraph, std::string_view i_name, <a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a> i_baseGraph)</td></tr>
+<tr class="separator:a3c1f9256486788a4eefbcd2ff7e450e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae8b06d8ebdd7ef22fb6835cae335e29"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#aae8b06d8ebdd7ef22fb6835cae335e29">~GraphVertexSubGraph</a> () override</td></tr>
+<tr class="separator:aae8b06d8ebdd7ef22fb6835cae335e29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1beda953dd1424bc9c962c4508b5fdb"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#ac1beda953dd1424bc9c962c4508b5fdb">updateValue</a> () override</td></tr>
+<tr class="memdesc:ac1beda953dd1424bc9c962c4508b5fdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">updateValue A virtual function for updating the vertex value.  <a href="classCG__Graph_1_1GraphVertexSubGraph.html#ac1beda953dd1424bc9c962c4508b5fdb">Подробнее...</a><br /></td></tr>
+<tr class="separator:ac1beda953dd1424bc9c962c4508b5fdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0be24a0e5efad8e499895a668c81e731"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#a0be24a0e5efad8e499895a668c81e731">removeValue</a> () override</td></tr>
+<tr class="separator:a0be24a0e5efad8e499895a668c81e731"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2d25d8260915c5cfa94312e3851179f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#ac2d25d8260915c5cfa94312e3851179f">updateLevel</a> (std::string tab=&quot;&quot;) override</td></tr>
+<tr class="memdesc:ac2d25d8260915c5cfa94312e3851179f"><td class="mdescLeft">&#160;</td><td class="mdescRight">updateLevel <a class="el" href="namespaceThis.html" title="namespaece ClassicGraphML contains all templates, used for graph to classic graphML translation">This</a> method updates the level of the vertex based on the levels of its input connections.  <a href="classCG__Graph_1_1GraphVertexSubGraph.html#ac2d25d8260915c5cfa94312e3851179f">Подробнее...</a><br /></td></tr>
+<tr class="separator:ac2d25d8260915c5cfa94312e3851179f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f6e6a34426de76e5d8cea5267424ea1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#a5f6e6a34426de76e5d8cea5267424ea1">toVerilog</a> () const override</td></tr>
+<tr class="memdesc:a5f6e6a34426de76e5d8cea5267424ea1"><td class="mdescLeft">&#160;</td><td class="mdescRight">toVerilog Generates Verilog code for the vertex  <a href="classCG__Graph_1_1GraphVertexSubGraph.html#a5f6e6a34426de76e5d8cea5267424ea1">Подробнее...</a><br /></td></tr>
+<tr class="separator:a5f6e6a34426de76e5d8cea5267424ea1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad3d45361843950239065f11bf6607e9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="GraphUtils_8hpp.html#a17d4c52993a980c0401c3a60c8229e05">DotReturn</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#aad3d45361843950239065f11bf6607e9">toDOT</a> () override</td></tr>
+<tr class="memdesc:aad3d45361843950239065f11bf6607e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">toDOT Generates DOT code for the vertex  <a href="classCG__Graph_1_1GraphVertexSubGraph.html#aad3d45361843950239065f11bf6607e9">Подробнее...</a><br /></td></tr>
+<tr class="separator:aad3d45361843950239065f11bf6607e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a944ead7ffe1e56527700e369691edee8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#a944ead7ffe1e56527700e369691edee8">toVerilog</a> (std::string i_path, std::string i_filename=&quot;&quot;)</td></tr>
+<tr class="memdesc:a944ead7ffe1e56527700e369691edee8"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceThis.html" title="namespaece ClassicGraphML contains all templates, used for graph to classic graphML translation">This</a> method is used as a substructure for <a class="el" href="classCG__Graph_1_1OrientedGraph.html">OrientedGraph</a> methods.  <a href="classCG__Graph_1_1GraphVertexSubGraph.html#a944ead7ffe1e56527700e369691edee8">Подробнее...</a><br /></td></tr>
+<tr class="separator:a944ead7ffe1e56527700e369691edee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5153065884ea45d10bc74549ed56a1da"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#a5153065884ea45d10bc74549ed56a1da">toDOT</a> (std::string i_path, std::string i_filename=&quot;&quot;)</td></tr>
+<tr class="separator:a5153065884ea45d10bc74549ed56a1da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d4a077cdf7bc5afa6fa4ab79ad918dc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#a7d4a077cdf7bc5afa6fa4ab79ad918dc">toGraphML</a> (std::ofstream &amp;i_fileStream) const</td></tr>
+<tr class="memdesc:a7d4a077cdf7bc5afa6fa4ab79ad918dc"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceThis.html" title="namespaece ClassicGraphML contains all templates, used for graph to classic graphML translation">This</a> method is used as a substructure for <a class="el" href="classCG__Graph_1_1OrientedGraph.html">OrientedGraph</a> methods.  <a href="classCG__Graph_1_1GraphVertexSubGraph.html#a7d4a077cdf7bc5afa6fa4ab79ad918dc">Подробнее...</a><br /></td></tr>
+<tr class="separator:a7d4a077cdf7bc5afa6fa4ab79ad918dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23543cafb8d79d7265be7a02d69e62d7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#a23543cafb8d79d7265be7a02d69e62d7">toGraphML</a> (uint16_t i_indent=0, std::string i_prefix=&quot;&quot;) const</td></tr>
+<tr class="memdesc:a23543cafb8d79d7265be7a02d69e62d7"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceThis.html" title="namespaece ClassicGraphML contains all templates, used for graph to classic graphML translation">This</a> method is used as a substructureS for <a class="el" href="classCG__Graph_1_1OrientedGraph.html">OrientedGraph</a> methods.  <a href="classCG__Graph_1_1GraphVertexSubGraph.html#a23543cafb8d79d7265be7a02d69e62d7">Подробнее...</a><br /></td></tr>
+<tr class="separator:a23543cafb8d79d7265be7a02d69e62d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64231954a796e404a8c7e5233b954792"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#a64231954a796e404a8c7e5233b954792">calculateHash</a> () override</td></tr>
+<tr class="memdesc:a64231954a796e404a8c7e5233b954792"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceThis.html" title="namespaece ClassicGraphML contains all templates, used for graph to classic graphML translation">This</a> method is used as a substructure for <a class="el" href="classCG__Graph_1_1OrientedGraph.html">OrientedGraph</a> methods.  <a href="classCG__Graph_1_1GraphVertexSubGraph.html#a64231954a796e404a8c7e5233b954792">Подробнее...</a><br /></td></tr>
+<tr class="separator:a64231954a796e404a8c7e5233b954792"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31dbb2c34fecb8f2a611a3faf5bc6c1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#a31dbb2c34fecb8f2a611a3faf5bc6c1f">setSubGraph</a> (<a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a> i_subGraph)</td></tr>
+<tr class="memdesc:a31dbb2c34fecb8f2a611a3faf5bc6c1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">sets new subgraph to the vertex  <a href="classCG__Graph_1_1GraphVertexSubGraph.html#a31dbb2c34fecb8f2a611a3faf5bc6c1f">Подробнее...</a><br /></td></tr>
+<tr class="separator:a31dbb2c34fecb8f2a611a3faf5bc6c1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6ef26f623310a90f738d911db55fcf7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#af6ef26f623310a90f738d911db55fcf7">getSubGraph</a> () const</td></tr>
+<tr class="separator:af6ef26f623310a90f738d911db55fcf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00e4ad6cca8758d41018744a39f2a874"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#a00e4ad6cca8758d41018744a39f2a874">getOutputBuffersByOuterInput</a> (<a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> i_outerInput) const</td></tr>
+<tr class="memdesc:a00e4ad6cca8758d41018744a39f2a874"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns all vertices of outputs, which are influenced by given input to vertex  <a href="classCG__Graph_1_1GraphVertexSubGraph.html#a00e4ad6cca8758d41018744a39f2a874">Подробнее...</a><br /></td></tr>
+<tr class="separator:a00e4ad6cca8758d41018744a39f2a874"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f9177bbecaa91f0529fede662853561"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#a9f9177bbecaa91f0529fede662853561">getOuterInputsByOutputBuffer</a> (<a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> i_outputBuffer) const</td></tr>
+<tr class="memdesc:a9f9177bbecaa91f0529fede662853561"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns all vertices of inputs, which are influenced by given output to vertex  <a href="classCG__Graph_1_1GraphVertexSubGraph.html#a9f9177bbecaa91f0529fede662853561">Подробнее...</a><br /></td></tr>
+<tr class="separator:a9f9177bbecaa91f0529fede662853561"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classCG__Graph_1_1GraphVertexBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classCG__Graph_1_1GraphVertexBase')"><img src="closed.png" alt="-"/>&#160;Открытые члены унаследованные от <a class="el" href="classCG__Graph_1_1GraphVertexBase.html">CG_Graph::GraphVertexBase</a></td></tr>
+<tr class="memitem:aac4cfca14208c203ddee9987167886b7 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#aac4cfca14208c203ddee9987167886b7">resetAllStates</a> ()</td></tr>
+<tr class="memdesc:aac4cfca14208c203ddee9987167886b7 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">used for reset for all states being used (hash, updateValue, etc)  <a href="classCG__Graph_1_1GraphVertexBase.html#aac4cfca14208c203ddee9987167886b7">Подробнее...</a><br /></td></tr>
+<tr class="separator:aac4cfca14208c203ddee9987167886b7 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b3ecd59f9a00481e54d6c8e75072338 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a9b3ecd59f9a00481e54d6c8e75072338">resetNeedUpdateState</a> ()</td></tr>
+<tr class="memdesc:a9b3ecd59f9a00481e54d6c8e75072338 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">required before recalculation of the levels of graph  <a href="classCG__Graph_1_1GraphVertexBase.html#a9b3ecd59f9a00481e54d6c8e75072338">Подробнее...</a><br /></td></tr>
+<tr class="separator:a9b3ecd59f9a00481e54d6c8e75072338 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0de7c9da307be0a0a50e193213f21ad inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#ac0de7c9da307be0a0a50e193213f21ad">resetHashState</a> ()</td></tr>
+<tr class="memdesc:ac0de7c9da307be0a0a50e193213f21ad inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">required before hash recalculation  <a href="classCG__Graph_1_1GraphVertexBase.html#ac0de7c9da307be0a0a50e193213f21ad">Подробнее...</a><br /></td></tr>
+<tr class="separator:ac0de7c9da307be0a0a50e193213f21ad inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5723d7b61b3a2d1c87023110a7bd1829 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a5723d7b61b3a2d1c87023110a7bd1829">resetUsedLevelState</a> ()</td></tr>
+<tr class="memdesc:a5723d7b61b3a2d1c87023110a7bd1829 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">required before get vertices by level  <a href="classCG__Graph_1_1GraphVertexBase.html#a5723d7b61b3a2d1c87023110a7bd1829">Подробнее...</a><br /></td></tr>
+<tr class="separator:a5723d7b61b3a2d1c87023110a7bd1829 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb11afe8c89c39852bab134de46e94e4 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#adb11afe8c89c39852bab134de46e94e4">GraphVertexBase</a> (const <a class="el" href="namespaceCG__Graph.html#a28a42afa74ee91d31d437b68f44f9b68">VertexTypes</a> i_type, <a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a> i_graph)</td></tr>
+<tr class="memdesc:adb11afe8c89c39852bab134de46e94e4 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html" title="class GraphVertexBase">GraphVertexBase</a> Constructs a <a class="el" href="classCG__Graph_1_1GraphVertexBase.html" title="class GraphVertexBase">GraphVertexBase</a> object with the specified vertex type and optional graph.  <a href="classCG__Graph_1_1GraphVertexBase.html#adb11afe8c89c39852bab134de46e94e4">Подробнее...</a><br /></td></tr>
+<tr class="separator:adb11afe8c89c39852bab134de46e94e4 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0723d29add40246bba3245aab8cafc8d inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a0723d29add40246bba3245aab8cafc8d">GraphVertexBase</a> (const <a class="el" href="namespaceCG__Graph.html#a28a42afa74ee91d31d437b68f44f9b68">VertexTypes</a> i_type, std::string_view i_name, <a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a> i_graph)</td></tr>
+<tr class="memdesc:a0723d29add40246bba3245aab8cafc8d inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html" title="class GraphVertexBase">GraphVertexBase</a> Constructs a <a class="el" href="classCG__Graph_1_1GraphVertexBase.html" title="class GraphVertexBase">GraphVertexBase</a> object with the specified vertex type, name, and optional graph.  <a href="classCG__Graph_1_1GraphVertexBase.html#a0723d29add40246bba3245aab8cafc8d">Подробнее...</a><br /></td></tr>
+<tr class="separator:a0723d29add40246bba3245aab8cafc8d inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f15ba4ee4718c9fc99e6f4b87a017bb inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html">GraphVertexBase</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a8f15ba4ee4718c9fc99e6f4b87a017bb">operator=</a> (const <a class="el" href="classCG__Graph_1_1GraphVertexBase.html">GraphVertexBase</a> &amp;other)=default</td></tr>
+<tr class="separator:a8f15ba4ee4718c9fc99e6f4b87a017bb inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a919a8bddda04e6b21ee688cf56382fc1 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html">GraphVertexBase</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a919a8bddda04e6b21ee688cf56382fc1">operator=</a> (<a class="el" href="classCG__Graph_1_1GraphVertexBase.html">GraphVertexBase</a> &amp;&amp;other)=default</td></tr>
+<tr class="separator:a919a8bddda04e6b21ee688cf56382fc1 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45b4153ca166f71b38ea4fb4bce747d0 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a45b4153ca166f71b38ea4fb4bce747d0">GraphVertexBase</a> (const <a class="el" href="classCG__Graph_1_1GraphVertexBase.html">GraphVertexBase</a> &amp;other)=default</td></tr>
+<tr class="memdesc:a45b4153ca166f71b38ea4fb4bce747d0 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html" title="class GraphVertexBase">GraphVertexBase</a> Constructs a <a class="el" href="classCG__Graph_1_1GraphVertexBase.html" title="class GraphVertexBase">GraphVertexBase</a> object with parameters similar to other <a class="el" href="classCG__Graph_1_1GraphVertexBase.html" title="class GraphVertexBase">GraphVertexBase</a> object.  <a href="classCG__Graph_1_1GraphVertexBase.html#a45b4153ca166f71b38ea4fb4bce747d0">Подробнее...</a><br /></td></tr>
+<tr class="separator:a45b4153ca166f71b38ea4fb4bce747d0 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08c3858a6ec69483d0d952e7411ee4d4 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a08c3858a6ec69483d0d952e7411ee4d4">GraphVertexBase</a> (<a class="el" href="classCG__Graph_1_1GraphVertexBase.html">GraphVertexBase</a> &amp;&amp;other)=default</td></tr>
+<tr class="memdesc:a08c3858a6ec69483d0d952e7411ee4d4 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html" title="class GraphVertexBase">GraphVertexBase</a> Move constructor for the class.  <a href="classCG__Graph_1_1GraphVertexBase.html#a08c3858a6ec69483d0d952e7411ee4d4">Подробнее...</a><br /></td></tr>
+<tr class="separator:a08c3858a6ec69483d0d952e7411ee4d4 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92deb8b1632c6c49f13a014cd50f00e0 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a92deb8b1632c6c49f13a014cd50f00e0">~GraphVertexBase</a> ()</td></tr>
+<tr class="separator:a92deb8b1632c6c49f13a014cd50f00e0 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3914667b1d70695287fec6dc95df1895 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceCG__Graph.html#a28a42afa74ee91d31d437b68f44f9b68">VertexTypes</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a3914667b1d70695287fec6dc95df1895">getType</a> () const</td></tr>
+<tr class="memdesc:a3914667b1d70695287fec6dc95df1895 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">getType <a class="el" href="namespaceThis.html" title="namespaece ClassicGraphML contains all templates, used for graph to classic graphML translation">This</a> method returns the type of the vertex as a value of the VertexTypes enum  <a href="classCG__Graph_1_1GraphVertexBase.html#a3914667b1d70695287fec6dc95df1895">Подробнее...</a><br /></td></tr>
+<tr class="separator:a3914667b1d70695287fec6dc95df1895 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5f6e855cbc0fbf3c0e519b1827f47aa inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#ab5f6e855cbc0fbf3c0e519b1827f47aa">getTypeName</a> () const</td></tr>
+<tr class="memdesc:ab5f6e855cbc0fbf3c0e519b1827f47aa inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">getTypeName <a class="el" href="namespaceThis.html" title="namespaece ClassicGraphML contains all templates, used for graph to classic graphML translation">This</a> method returns the string representation of the vertex type by parsing the vertex type enum value using the settings object associated with the vertex  <a href="classCG__Graph_1_1GraphVertexBase.html#ab5f6e855cbc0fbf3c0e519b1827f47aa">Подробнее...</a><br /></td></tr>
+<tr class="separator:ab5f6e855cbc0fbf3c0e519b1827f47aa inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd5cca5a4256aef1454d546d67110af2 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#acd5cca5a4256aef1454d546d67110af2">setName</a> (std::string_view i_name)</td></tr>
+<tr class="memdesc:acd5cca5a4256aef1454d546d67110af2 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">setName <a class="el" href="namespaceThis.html" title="namespaece ClassicGraphML contains all templates, used for graph to classic graphML translation">This</a> method sets the name of the vertex to the specified string.  <a href="classCG__Graph_1_1GraphVertexBase.html#acd5cca5a4256aef1454d546d67110af2">Подробнее...</a><br /></td></tr>
+<tr class="separator:acd5cca5a4256aef1454d546d67110af2 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f20afa23f62307d4409c2a28b16824d inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a6f20afa23f62307d4409c2a28b16824d">getName</a> () const</td></tr>
+<tr class="memdesc:a6f20afa23f62307d4409c2a28b16824d inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">getName Returns the name of the vertex  <a href="classCG__Graph_1_1GraphVertexBase.html#a6f20afa23f62307d4409c2a28b16824d">Подробнее...</a><br /></td></tr>
+<tr class="separator:a6f20afa23f62307d4409c2a28b16824d inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7537e11274cc6811a6c3b488014d3530 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a7537e11274cc6811a6c3b488014d3530">getName</a> (const std::string &amp;i_prefix) const</td></tr>
+<tr class="memdesc:a7537e11274cc6811a6c3b488014d3530 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">getName Returns concatenation of the name of the vertex and i_prefix  <a href="classCG__Graph_1_1GraphVertexBase.html#a7537e11274cc6811a6c3b488014d3530">Подробнее...</a><br /></td></tr>
+<tr class="separator:a7537e11274cc6811a6c3b488014d3530 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bfa47be96861a5bc6a89c4da844bf61 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a5bfa47be96861a5bc6a89c4da844bf61">getRawName</a> () const</td></tr>
+<tr class="memdesc:a5bfa47be96861a5bc6a89c4da844bf61 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">getRawName Returns string_view object with name of the vertex  <a href="classCG__Graph_1_1GraphVertexBase.html#a5bfa47be96861a5bc6a89c4da844bf61">Подробнее...</a><br /></td></tr>
+<tr class="separator:a5bfa47be96861a5bc6a89c4da844bf61 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab74c4a4617154de8f2af85816301cfc4 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#ab74c4a4617154de8f2af85816301cfc4">getValue</a> () const</td></tr>
+<tr class="memdesc:ab74c4a4617154de8f2af85816301cfc4 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">getValue Returns the value of the vertex.  <a href="classCG__Graph_1_1GraphVertexBase.html#ab74c4a4617154de8f2af85816301cfc4">Подробнее...</a><br /></td></tr>
+<tr class="separator:ab74c4a4617154de8f2af85816301cfc4 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf1d9d3c81863db23d135307212e1b73 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#abf1d9d3c81863db23d135307212e1b73">getLevel</a> () const</td></tr>
+<tr class="memdesc:abf1d9d3c81863db23d135307212e1b73 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">getLevel Returns the level of the vertex  <a href="classCG__Graph_1_1GraphVertexBase.html#abf1d9d3c81863db23d135307212e1b73">Подробнее...</a><br /></td></tr>
+<tr class="separator:abf1d9d3c81863db23d135307212e1b73 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2dcdaa3853718d8b1be9756db8a87b67 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a2dcdaa3853718d8b1be9756db8a87b67">getVerticesByLevel</a> (uint32_t i_targetLevel, std::vector&lt; <a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> &gt; &amp;i_result, bool i_fromOut=true)</td></tr>
+<tr class="memdesc:a2dcdaa3853718d8b1be9756db8a87b67 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">getVerticesByLevel Support method for <a class="el" href="classCG__Graph_1_1OrientedGraph.html#abb63e0564410b2383b18a9d63986be5c" title="gets all vertices with requires level">OrientedGraph::getVerticesByLevel()</a> calculating  <a href="classCG__Graph_1_1GraphVertexBase.html#a2dcdaa3853718d8b1be9756db8a87b67">Подробнее...</a><br /></td></tr>
+<tr class="separator:a2dcdaa3853718d8b1be9756db8a87b67 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54645d1d22db6563433aece1ef28cfd2 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceCG__Graph.html#acd16e34f3220173c8664f485f0be5637">Gates</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a54645d1d22db6563433aece1ef28cfd2">getGate</a> () const</td></tr>
+<tr class="memdesc:a54645d1d22db6563433aece1ef28cfd2 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">getGate Returns the type of the basic logic gate represented by this vertex.  <a href="classCG__Graph_1_1GraphVertexBase.html#a54645d1d22db6563433aece1ef28cfd2">Подробнее...</a><br /></td></tr>
+<tr class="separator:a54645d1d22db6563433aece1ef28cfd2 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ebd0edfc61877c4b6c7a28f3b60a078 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="OrientedGraph_8hpp.html#a5313b3b1d817cd6035ec0a01cb940767">GraphPtrWeak</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a4ebd0edfc61877c4b6c7a28f3b60a078">getBaseGraph</a> () const</td></tr>
+<tr class="memdesc:a4ebd0edfc61877c4b6c7a28f3b60a078 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">getBaseGraph  <a href="classCG__Graph_1_1GraphVertexBase.html#a4ebd0edfc61877c4b6c7a28f3b60a078">Подробнее...</a><br /></td></tr>
+<tr class="separator:a4ebd0edfc61877c4b6c7a28f3b60a078 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e3dbf52b271faef39aec0053bcc2eae inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a3e3dbf52b271faef39aec0053bcc2eae">reserveInConnections</a> (size_t i_size)</td></tr>
+<tr class="memdesc:a3e3dbf52b271faef39aec0053bcc2eae inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">reserveInConnections reserving memory in d_inConnections for i_size other vertices  <a href="classCG__Graph_1_1GraphVertexBase.html#a3e3dbf52b271faef39aec0053bcc2eae">Подробнее...</a><br /></td></tr>
+<tr class="separator:a3e3dbf52b271faef39aec0053bcc2eae inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12ce4a0cd66af7caa5391d514574035d inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a12ce4a0cd66af7caa5391d514574035d">reserveOutConnections</a> (size_t i_size)</td></tr>
+<tr class="memdesc:a12ce4a0cd66af7caa5391d514574035d inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">reserveInConnections reserving memory in d_outConnections for i_size other vertices  <a href="classCG__Graph_1_1GraphVertexBase.html#a12ce4a0cd66af7caa5391d514574035d">Подробнее...</a><br /></td></tr>
+<tr class="separator:a12ce4a0cd66af7caa5391d514574035d inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6676bdee7806a5a06613f63f4b5d7e0 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#ab6676bdee7806a5a06613f63f4b5d7e0">getInConnections</a> () const</td></tr>
+<tr class="memdesc:ab6676bdee7806a5a06613f63f4b5d7e0 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">getInConnections  <a href="classCG__Graph_1_1GraphVertexBase.html#ab6676bdee7806a5a06613f63f4b5d7e0">Подробнее...</a><br /></td></tr>
+<tr class="separator:ab6676bdee7806a5a06613f63f4b5d7e0 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18da3bcfda7b924b8fc8b4ceb1d23844 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">virtual uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a18da3bcfda7b924b8fc8b4ceb1d23844">addVertexToInConnections</a> (<a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> i_vert)</td></tr>
+<tr class="memdesc:a18da3bcfda7b924b8fc8b4ceb1d23844 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">addVertexToInConnections Adds a vertex to the input connections of this vertex and returns the count of occurrences of the given vertex in the input connections  <a href="classCG__Graph_1_1GraphVertexBase.html#a18da3bcfda7b924b8fc8b4ceb1d23844">Подробнее...</a><br /></td></tr>
+<tr class="separator:a18da3bcfda7b924b8fc8b4ceb1d23844 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac599c7ca7d88eee564770d21d5084cdf inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#ac599c7ca7d88eee564770d21d5084cdf">getOutConnections</a> () const</td></tr>
+<tr class="memdesc:ac599c7ca7d88eee564770d21d5084cdf inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">getOutConnections  <a href="classCG__Graph_1_1GraphVertexBase.html#ac599c7ca7d88eee564770d21d5084cdf">Подробнее...</a><br /></td></tr>
+<tr class="separator:ac599c7ca7d88eee564770d21d5084cdf inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a057ea083d619e71b222e4238edd52829 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a057ea083d619e71b222e4238edd52829">addVertexToOutConnections</a> (<a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> i_vert)</td></tr>
+<tr class="memdesc:a057ea083d619e71b222e4238edd52829 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">addVertexToOutConnections Adds a vertex to the output connections of this vertex if it is not already present  <a href="classCG__Graph_1_1GraphVertexBase.html#a057ea083d619e71b222e4238edd52829">Подробнее...</a><br /></td></tr>
+<tr class="separator:a057ea083d619e71b222e4238edd52829 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9243a2f0e5b9207be0b1bb4c125eed39 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a9243a2f0e5b9207be0b1bb4c125eed39">isSubgraphBuffer</a> () const</td></tr>
+<tr class="memdesc:a9243a2f0e5b9207be0b1bb4c125eed39 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used for check if vertex is a subGraph vertex output.  <a href="classCG__Graph_1_1GraphVertexBase.html#a9243a2f0e5b9207be0b1bb4c125eed39">Подробнее...</a><br /></td></tr>
+<tr class="separator:a9243a2f0e5b9207be0b1bb4c125eed39 inherit pub_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Закрытые данные</h2></td></tr>
+<tr class="memitem:a34057a30e81979a62eee04c04dc42bf0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html#a34057a30e81979a62eee04c04dc42bf0">d_subGraph</a></td></tr>
+<tr class="memdesc:a34057a30e81979a62eee04c04dc42bf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">log Used for easylogging++  <a href="classCG__Graph_1_1GraphVertexSubGraph.html#a34057a30e81979a62eee04c04dc42bf0">Подробнее...</a><br /></td></tr>
+<tr class="separator:a34057a30e81979a62eee04c04dc42bf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Дополнительные унаследованные члены</h2></td></tr>
+<tr class="inherit_header pub_types_classCG__Graph_1_1GraphVertexBase"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classCG__Graph_1_1GraphVertexBase')"><img src="closed.png" alt="-"/>&#160;Открытые типы унаследованные от <a class="el" href="classCG__Graph_1_1GraphVertexBase.html">CG_Graph::GraphVertexBase</a></td></tr>
+<tr class="memitem:a1d3afc47ce98b06977fa88ff4877b70d inherit pub_types_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a1d3afc47ce98b06977fa88ff4877b70d">HASH_CONDITION</a> : uint8_t { <a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a1d3afc47ce98b06977fa88ff4877b70daaab99fe590e6bfadd45b9a0c6b53e5c9">HC_NOT_CALC</a> = 0
+, <a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a1d3afc47ce98b06977fa88ff4877b70da84987c4c7cc0d5e6ee9e372c4e23178a">HC_IN_PROGRESS</a> = 1
+, <a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a1d3afc47ce98b06977fa88ff4877b70da03f0cc44976e9d0d89278642d8b58ae3">HC_CALC</a> = 2
+ }</td></tr>
+<tr class="separator:a1d3afc47ce98b06977fa88ff4877b70d inherit pub_types_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a342b7a827f3d32fb4fa757d12e1bb55b inherit pub_types_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a342b7a827f3d32fb4fa757d12e1bb55b">VERTEX_STATE</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a342b7a827f3d32fb4fa757d12e1bb55bac17e1d2ce9572724bffa70e2704f839e">VS_NOT_CALC</a> = 0u
+, <a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a342b7a827f3d32fb4fa757d12e1bb55ba4f1e23975fe8fcecb7ab4ffd757fd7af">VS_IN_PROGRESS</a> = 1u &lt;&lt; 0
+, <a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a342b7a827f3d32fb4fa757d12e1bb55ba1e6fc04f1564e116df14e4140919de11">VS_CALC</a> = 1u &lt;&lt; 1
+, <a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a342b7a827f3d32fb4fa757d12e1bb55ba54d9a76d8991154bab2ed25904c3bc9c">VS_USED_LEVEL</a> = 1u &lt;&lt; 2
+, <br />
+&#160;&#160;<a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a342b7a827f3d32fb4fa757d12e1bb55bade0dc7a00b5f0c3abadda7ac8a26a97c">VS_USED_CALC</a>
+<br />
+ }</td></tr>
+<tr class="separator:a342b7a827f3d32fb4fa757d12e1bb55b inherit pub_types_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_methods_classCG__Graph_1_1GraphVertexBase"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classCG__Graph_1_1GraphVertexBase')"><img src="closed.png" alt="-"/>&#160;Открытые статические члены унаследованные от <a class="el" href="classCG__Graph_1_1GraphVertexBase.html">CG_Graph::GraphVertexBase</a></td></tr>
+<tr class="memitem:adfcfa3efe883e01b4c82b8a9a4787ac8 inherit pub_static_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#adfcfa3efe883e01b4c82b8a9a4787ac8">resetCounter</a> ()</td></tr>
+<tr class="memdesc:adfcfa3efe883e01b4c82b8a9a4787ac8 inherit pub_static_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">resetes counter of unique id-s for vertices  <a href="classCG__Graph_1_1GraphVertexBase.html#adfcfa3efe883e01b4c82b8a9a4787ac8">Подробнее...</a><br /></td></tr>
+<tr class="separator:adfcfa3efe883e01b4c82b8a9a4787ac8 inherit pub_static_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classCG__Graph_1_1GraphVertexBase"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classCG__Graph_1_1GraphVertexBase')"><img src="closed.png" alt="-"/>&#160;Защищенные члены унаследованные от <a class="el" href="classCG__Graph_1_1GraphVertexBase.html">CG_Graph::GraphVertexBase</a></td></tr>
+<tr class="memitem:ad3bac8342403e76c24b54816692d9321 inherit pro_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#ad3bac8342403e76c24b54816692d9321">removeVertexToOutConnections</a> (<a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> i_vert)</td></tr>
+<tr class="memdesc:ad3bac8342403e76c24b54816692d9321 inherit pro_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">log Used for easylogging++  <a href="classCG__Graph_1_1GraphVertexBase.html#ad3bac8342403e76c24b54816692d9321">Подробнее...</a><br /></td></tr>
+<tr class="separator:ad3bac8342403e76c24b54816692d9321 inherit pro_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a155ece82383939d62b53af81f4c8277e inherit pro_methods_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a155ece82383939d62b53af81f4c8277e">removeVertexToInConnections</a> (<a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> i_vert)</td></tr>
+<tr class="memdesc:a155ece82383939d62b53af81f4c8277e inherit pro_methods_classCG__Graph_1_1GraphVertexBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">removeVertexToInConnections Removes a vertex from the input connections of this vertex.  <a href="classCG__Graph_1_1GraphVertexBase.html#a155ece82383939d62b53af81f4c8277e">Подробнее...</a><br /></td></tr>
+<tr class="separator:a155ece82383939d62b53af81f4c8277e inherit pro_methods_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classCG__Graph_1_1GraphVertexBase"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classCG__Graph_1_1GraphVertexBase')"><img src="closed.png" alt="-"/>&#160;Защищенные данные унаследованные от <a class="el" href="classCG__Graph_1_1GraphVertexBase.html">CG_Graph::GraphVertexBase</a></td></tr>
+<tr class="memitem:a717a06209a4888f61667b1cdc6ae1d3d inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a717a06209a4888f61667b1cdc6ae1d3d">d_inConnections</a></td></tr>
+<tr class="separator:a717a06209a4888f61667b1cdc6ae1d3d inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa90fc62f0ec96736da3285e8f4aa7571 inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#aa90fc62f0ec96736da3285e8f4aa7571">d_outConnections</a></td></tr>
+<tr class="separator:aa90fc62f0ec96736da3285e8f4aa7571 inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0165ed181ac09aa45f73cad52ad94c95 inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="OrientedGraph_8hpp.html#a5313b3b1d817cd6035ec0a01cb940767">GraphPtrWeak</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a0165ed181ac09aa45f73cad52ad94c95">d_baseGraph</a></td></tr>
+<tr class="separator:a0165ed181ac09aa45f73cad52ad94c95 inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab87d68ed1880626b47a576b94092a534 inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">std::string_view&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#ab87d68ed1880626b47a576b94092a534">d_name</a></td></tr>
+<tr class="separator:ab87d68ed1880626b47a576b94092a534 inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8642c19477c884f755060a5e8ddac5cf inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a8642c19477c884f755060a5e8ddac5cf">d_hashed</a> = 0</td></tr>
+<tr class="separator:a8642c19477c884f755060a5e8ddac5cf inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9b26c07e94a5330a9c82ac559f3a090 inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#ab9b26c07e94a5330a9c82ac559f3a090">d_level</a></td></tr>
+<tr class="separator:ab9b26c07e94a5330a9c82ac559f3a090 inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ad40de119d879b8f53458a590fa1aeb inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a6ad40de119d879b8f53458a590fa1aeb">d_value</a> = ValueStates::UndefindedState</td></tr>
+<tr class="separator:a6ad40de119d879b8f53458a590fa1aeb inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d9e6b380a3eccd7a3b9120ef886f42e inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a342b7a827f3d32fb4fa757d12e1bb55b">VERTEX_STATE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a6d9e6b380a3eccd7a3b9120ef886f42e">d_needUpdate</a> = <a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a342b7a827f3d32fb4fa757d12e1bb55bac17e1d2ce9572724bffa70e2704f839e">VS_NOT_CALC</a></td></tr>
+<tr class="separator:a6d9e6b380a3eccd7a3b9120ef886f42e inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c86aa0a55092d07633099f00359ec33 inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a1d3afc47ce98b06977fa88ff4877b70d">HASH_CONDITION</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a3c86aa0a55092d07633099f00359ec33">d_hasHash</a> = <a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a1d3afc47ce98b06977fa88ff4877b70daaab99fe590e6bfadd45b9a0c6b53e5c9">HC_NOT_CALC</a></td></tr>
+<tr class="separator:a3c86aa0a55092d07633099f00359ec33 inherit pro_attribs_classCG__Graph_1_1GraphVertexBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><p>class <a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html" title="class GraphVertexSubGraph It is a class, having a subGruph pointer inside.">GraphVertexSubGraph</a> It is a class, having a subGruph pointer inside. </p>
+<p>Is used for storing this pointer for providing graph connectivity </p><dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">d_subGraph</td><td>Pointer to the subgraph associated with this vertex </td></tr>
+    <tr><td class="paramname">d_hashed</td><td>Cached hash value of the vertex </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Конструктор(ы)</h2>
+<a id="a7c27d29a566ae9a9325a86141a25c31b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c27d29a566ae9a9325a86141a25c31b">&#9670;&nbsp;</a></span>GraphVertexSubGraph() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">CG_Graph::GraphVertexSubGraph::GraphVertexSubGraph </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a>&#160;</td>
+          <td class="paramname"><em>i_subGraph</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a>&#160;</td>
+          <td class="paramname"><em>i_baseGraph</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initializes the <a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html" title="class GraphVertexSubGraph It is a class, having a subGruph pointer inside.">GraphVertexSubGraph</a> object with the provided base graph pointer and subGraph pointer. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i_baseGraph</td><td>Pointer to the base graph. </td></tr>
+    <tr><td class="paramname">i_subGraph</td><td>Pointer to the subGraph. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3c1f9256486788a4eefbcd2ff7e450e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c1f9256486788a4eefbcd2ff7e450e7">&#9670;&nbsp;</a></span>GraphVertexSubGraph() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">CG_Graph::GraphVertexSubGraph::GraphVertexSubGraph </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a>&#160;</td>
+          <td class="paramname"><em>i_subGraph</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string_view&#160;</td>
+          <td class="paramname"><em>i_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a>&#160;</td>
+          <td class="paramname"><em>i_baseGraph</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aae8b06d8ebdd7ef22fb6835cae335e29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae8b06d8ebdd7ef22fb6835cae335e29">&#9670;&nbsp;</a></span>~GraphVertexSubGraph()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">CG_Graph::GraphVertexSubGraph::~GraphVertexSubGraph </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Методы</h2>
+<a id="a64231954a796e404a8c7e5233b954792"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64231954a796e404a8c7e5233b954792">&#9670;&nbsp;</a></span>calculateHash()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t CG_Graph::GraphVertexSubGraph::calculateHash </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="namespaceThis.html" title="namespaece ClassicGraphML contains all templates, used for graph to classic graphML translation">This</a> method is used as a substructure for <a class="el" href="classCG__Graph_1_1OrientedGraph.html">OrientedGraph</a> methods. </p>
+<p>When running it for a second time, clear hash flags </p><dl class="section return"><dt>Возвращает</dt><dd></dd></dl>
+
+<p>Переопределяет метод предка <a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a03aaf4b04708dccc6a005d08431279fc">CG_Graph::GraphVertexBase</a>.</p>
+
+</div>
+</div>
+<a id="a9f9177bbecaa91f0529fede662853561"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f9177bbecaa91f0529fede662853561">&#9670;&nbsp;</a></span>getOuterInputsByOutputBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> &gt; CG_Graph::GraphVertexSubGraph::getOuterInputsByOutputBuffer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a>&#160;</td>
+          <td class="paramname"><em>i_outputBuffer</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>returns all vertices of inputs, which are influenced by given output to vertex </p>
+
+</div>
+</div>
+<a id="a00e4ad6cca8758d41018744a39f2a874"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00e4ad6cca8758d41018744a39f2a874">&#9670;&nbsp;</a></span>getOutputBuffersByOuterInput()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> &gt; CG_Graph::GraphVertexSubGraph::getOutputBuffersByOuterInput </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="OrientedGraph_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a>&#160;</td>
+          <td class="paramname"><em>i_outerInput</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>returns all vertices of outputs, which are influenced by given input to vertex </p>
+
+</div>
+</div>
+<a id="af6ef26f623310a90f738d911db55fcf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6ef26f623310a90f738d911db55fcf7">&#9670;&nbsp;</a></span>getSubGraph()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a> CG_Graph::GraphVertexSubGraph::getSubGraph </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Возвращает</dt><dd>pointer to subgraph, being stored in vertex </dd></dl>
+
+</div>
+</div>
+<a id="a0be24a0e5efad8e499895a668c81e731"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0be24a0e5efad8e499895a668c81e731">&#9670;&nbsp;</a></span>removeValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CG_Graph::GraphVertexSubGraph::removeValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Переопределяет метод предка <a class="el" href="classCG__Graph_1_1GraphVertexBase.html#ad53a9656c0b5b761b451f2f25a55ab80">CG_Graph::GraphVertexBase</a>.</p>
+
+</div>
+</div>
+<a id="a31dbb2c34fecb8f2a611a3faf5bc6c1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31dbb2c34fecb8f2a611a3faf5bc6c1f">&#9670;&nbsp;</a></span>setSubGraph()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CG_Graph::GraphVertexSubGraph::setSubGraph </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a>&#160;</td>
+          <td class="paramname"><em>i_subGraph</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>sets new subgraph to the vertex </p>
+
+</div>
+</div>
+<a id="aad3d45361843950239065f11bf6607e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad3d45361843950239065f11bf6607e9">&#9670;&nbsp;</a></span>toDOT() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="GraphUtils_8hpp.html#a17d4c52993a980c0401c3a60c8229e05">DotReturn</a> CG_Graph::GraphVertexSubGraph::toDOT </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>toDOT Generates DOT code for the vertex </p>
+<dl class="section return"><dt>Возвращает</dt><dd></dd></dl>
+
+<p>Переопределяет метод предка <a class="el" href="classCG__Graph_1_1GraphVertexBase.html#a1b1881d8d760307dac5a41484335a769">CG_Graph::GraphVertexBase</a>.</p>
+
+</div>
+</div>
+<a id="a5153065884ea45d10bc74549ed56a1da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5153065884ea45d10bc74549ed56a1da">&#9670;&nbsp;</a></span>toDOT() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CG_Graph::GraphVertexSubGraph::toDOT </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>i_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>i_filename</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7d4a077cdf7bc5afa6fa4ab79ad918dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d4a077cdf7bc5afa6fa4ab79ad918dc">&#9670;&nbsp;</a></span>toGraphML() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CG_Graph::GraphVertexSubGraph::toGraphML </td>
+          <td>(</td>
+          <td class="paramtype">std::ofstream &amp;&#160;</td>
+          <td class="paramname"><em>i_fileStream</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="namespaceThis.html" title="namespaece ClassicGraphML contains all templates, used for graph to classic graphML translation">This</a> method is used as a substructure for <a class="el" href="classCG__Graph_1_1OrientedGraph.html">OrientedGraph</a> methods. </p>
+
+</div>
+</div>
+<a id="a23543cafb8d79d7265be7a02d69e62d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23543cafb8d79d7265be7a02d69e62d7">&#9670;&nbsp;</a></span>toGraphML() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string CG_Graph::GraphVertexSubGraph::toGraphML </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>i_indent</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>i_prefix</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="namespaceThis.html" title="namespaece ClassicGraphML contains all templates, used for graph to classic graphML translation">This</a> method is used as a substructureS for <a class="el" href="classCG__Graph_1_1OrientedGraph.html">OrientedGraph</a> methods. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i_indent</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a5f6e6a34426de76e5d8cea5267424ea1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f6e6a34426de76e5d8cea5267424ea1">&#9670;&nbsp;</a></span>toVerilog() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string CG_Graph::GraphVertexSubGraph::toVerilog </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>toVerilog Generates Verilog code for the vertex </p>
+<dl class="section return"><dt>Возвращает</dt><dd>A string containing Verilog code for the vertex, or an empty string if the vertex type is not "output" or if the incoming connection is invalid <div class="fragment"><div class="line"><span class="comment">// Creating an instance of the GraphVertexBase class with the type</span></div>
+<div class="line"><span class="stringliteral">&quot;output&quot;</span> and the name <span class="stringliteral">&quot;output_vertex&quot;</span></div>
+<div class="line"><a class="code" href="GraphVertexBase_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a> graph = std::make_shared&lt;OrientedGraph&gt;();</div>
+<div class="line"><a class="code" href="GraphVertexBase_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a> subgraph = std::make_shared&lt;OrientedGraph&gt;();</div>
+<div class="line">subgraph-&gt;addEdge(</div>
+<div class="line">  subgraph-&gt;addInput(<span class="stringliteral">&quot;in&quot;</span>),</div>
+<div class="line">  subgraph-&gt;addOutput(<span class="stringliteral">&quot;out&quot;</span>));</div>
+<div class="line"><a class="code" href="GraphVertexBase_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> outputVertex = graph-&gt;addOutput(<span class="stringliteral">&quot;output&quot;</span>);</div>
+<div class="line"><span class="comment">// Creating another vertex with the type &quot;input&quot; and the name</span></div>
+<div class="line"><a class="code" href="GraphVertexBase_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> inputVertex = graph-&gt;addInput(<span class="stringliteral">&quot;input_vertex&quot;</span>);</div>
+<div class="line"><span class="comment">// Creating another vertex with the type &quot;subGraph&quot; and the name</span></div>
+<div class="line"><a class="code" href="GraphVertexBase_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> subgraphOut = graph-&gt;addSubGraph(subgraph, inputVertex).back();</div>
+<div class="line"><span class="comment">// Setting the input connection for the vertex &quot;output_vertex&quot;</span></div>
+<div class="line">graph-&gt;addEdge(inputVertex, subgraphOut);</div>
+<div class="line">graph-&gt;addEdge(subgraphOut, outputVertex);</div>
+<div class="line"><span class="comment">// Generating the Verilog code for the vertex subgraph</span></div>
+<div class="line"><a class="code" href="GraphVertexBase_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a> subgaphItself = <a class="code" href="classCG__Graph_1_1GraphVertexBase.html#a2dcdaa3853718d8b1be9756db8a87b67">getVerticesByLevel</a>(1u).back();</div>
+<div class="line">std::cout &lt;&lt; subgaphItself &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="ttc" id="aGraphVertexBase_8hpp_html_a422e1ad1ea2471e71477f2cedbe6c23d"><div class="ttname"><a href="GraphVertexBase_8hpp.html#a422e1ad1ea2471e71477f2cedbe6c23d">VertexPtr</a></div><div class="ttdeci">#define VertexPtr</div><div class="ttdef"><b>Definition:</b> GraphVertexBase.hpp:22</div></div>
+<div class="ttc" id="aGraphVertexBase_8hpp_html_afc9ace2881a918ee869eca6ecf10dbe9"><div class="ttname"><a href="GraphVertexBase_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a></div><div class="ttdeci">#define GraphPtr</div><div class="ttdef"><b>Definition:</b> GraphVertexBase.hpp:19</div></div>
+<div class="ttc" id="aclassCG__Graph_1_1GraphVertexBase_html_a2dcdaa3853718d8b1be9756db8a87b67"><div class="ttname"><a href="classCG__Graph_1_1GraphVertexBase.html#a2dcdaa3853718d8b1be9756db8a87b67">CG_Graph::GraphVertexBase::getVerticesByLevel</a></div><div class="ttdeci">bool getVerticesByLevel(uint32_t i_targetLevel, std::vector&lt; VertexPtr &gt; &amp;i_result, bool i_fromOut=true)</div><div class="ttdoc">getVerticesByLevel Support method for OrientedGraph::getVerticesByLevel() calculating</div><div class="ttdef"><b>Definition:</b> GraphVertexBase.cpp:210</div></div>
+</div><!-- fragment --> </dd></dl>
+
+<p>Переопределяет метод предка <a class="el" href="classCG__Graph_1_1GraphVertexBase.html#ade5ea2c740ee612e3008a348de0aadca">CG_Graph::GraphVertexBase</a>.</p>
+<div class="dynheader">
+Граф вызова функции:</div>
+<div class="dyncontent">
+<div class="center"><img src="classCG__Graph_1_1GraphVertexSubGraph_a5f6e6a34426de76e5d8cea5267424ea1_icgraph.png" border="0" usemap="#aclassCG__Graph_1_1GraphVertexSubGraph_a5f6e6a34426de76e5d8cea5267424ea1_icgraph" alt=""/></div>
+<map name="aclassCG__Graph_1_1GraphVertexSubGraph_a5f6e6a34426de76e5d8cea5267424ea1_icgraph" id="aclassCG__Graph_1_1GraphVertexSubGraph_a5f6e6a34426de76e5d8cea5267424ea1_icgraph">
+<area shape="rect" title="toVerilog Generates Verilog code for the vertex" alt="" coords="244,5,444,47"/>
+<area shape="rect" href="classCG__Graph_1_1OrientedGraph.html#ad36c1d9a1a1a8b3bd2bc29f1783bc7a4" title="method used for translating graph to verilog" alt="" coords="5,5,196,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a944ead7ffe1e56527700e369691edee8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a944ead7ffe1e56527700e369691edee8">&#9670;&nbsp;</a></span>toVerilog() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CG_Graph::GraphVertexSubGraph::toVerilog </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>i_path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>i_filename</em> = <code>&quot;&quot;</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="namespaceThis.html" title="namespaece ClassicGraphML contains all templates, used for graph to classic graphML translation">This</a> method is used as a substructure for <a class="el" href="classCG__Graph_1_1OrientedGraph.html">OrientedGraph</a> methods. </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i_path</td><td>path to future file storing. Do not add submodule here, folder would be created there </td></tr>
+    <tr><td class="paramname">i_filename</td><td>name of file to be created (default is same as graph name) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>bool, meaning was file writing successful or not </dd></dl>
+
+</div>
+</div>
+<a id="ac2d25d8260915c5cfa94312e3851179f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2d25d8260915c5cfa94312e3851179f">&#9670;&nbsp;</a></span>updateLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CG_Graph::GraphVertexSubGraph::updateLevel </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>tab</em> = <code>&quot;&quot;</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>updateLevel <a class="el" href="namespaceThis.html" title="namespaece ClassicGraphML contains all templates, used for graph to classic graphML translation">This</a> method updates the level of the vertex based on the levels of its input connections. </p>
+<p>It iterates through each input connection and sets the vertex level to the maximum level of its input connections plus one. If you are going to call this method for a second time, please, set all flags, used in updateLevel to their default state. </p>
+
+<p>Переопределяет метод предка <a class="el" href="classCG__Graph_1_1GraphVertexBase.html#abee40e7a86f8698e02ad97afab8b7446">CG_Graph::GraphVertexBase</a>.</p>
+
+</div>
+</div>
+<a id="ac1beda953dd1424bc9c962c4508b5fdb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1beda953dd1424bc9c962c4508b5fdb">&#9670;&nbsp;</a></span>updateValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">char CG_Graph::GraphVertexSubGraph::updateValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>updateValue A virtual function for updating the vertex value. </p>
+<p>The implementation is provided in derived classes </p><dl class="section return"><dt>Возвращает</dt><dd>the value of the vertex after its update </dd></dl>
+
+<p>Замещает <a class="el" href="classCG__Graph_1_1GraphVertexBase.html#af934e3e6c01db698c80d6895a83e2972">CG_Graph::GraphVertexBase</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Данные класса</h2>
+<a id="a34057a30e81979a62eee04c04dc42bf0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34057a30e81979a62eee04c04dc42bf0">&#9670;&nbsp;</a></span>d_subGraph</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9">GraphPtr</a> CG_Graph::GraphVertexSubGraph::d_subGraph</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>log Used for easylogging++ </p>
+<dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">os</td><td>Stream for easylogging </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceCG__Graph.html">CG_Graph</a></li><li class="navelem"><a class="el" href="classCG__Graph_1_1GraphVertexSubGraph.html">GraphVertexSubGraph</a></li>
+    <li class="footer">Создано системой <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+  </ul>
+</div>
+</body>
+</html>

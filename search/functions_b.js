@@ -1,9 +1,18 @@
 var searchData=
 [
-  ['needtoupdatelevel_1387',['needToUpdateLevel',['../classOrientedGraph.html#a07ee04d5ab6ce7e2632df187ec586e44',1,'OrientedGraph']]],
-  ['newfilestream_1388',['newFileStream',['../classel_1_1base_1_1utils_1_1File.html#a0fabd4453ec4df237bbc9cca63bf6f13',1,'el::base::utils::File']]],
-  ['nocopy_1389',['NoCopy',['../classel_1_1base_1_1NoCopy.html#a8a0bc86c5c2b921a3c5fcf6e4d2670d3',1,'el::base::NoCopy::NoCopy(void)'],['../classel_1_1base_1_1NoCopy.html#a1a9eccab8b58f64715ce79c6179bee21',1,'el::base::NoCopy::NoCopy(const NoCopy &amp;)']]],
-  ['nomutex_1390',['NoMutex',['../classel_1_1base_1_1threading_1_1internal_1_1NoMutex.html#a23985cbf635efacb39f2a789d539bd29',1,'el::base::threading::internal::NoMutex']]],
-  ['noscopedlock_1391',['NoScopedLock',['../classel_1_1base_1_1threading_1_1internal_1_1NoScopedLock.html#a020f8cea6e83f40ea29662ef57a58235',1,'el::base::threading::internal::NoScopedLock::NoScopedLock(Mutex &amp;)'],['../classel_1_1base_1_1threading_1_1internal_1_1NoScopedLock.html#a1e8ff78d9138e899b98e58a983defca6',1,'el::base::threading::internal::NoScopedLock::NoScopedLock(void)']]],
-  ['nullwriter_1392',['NullWriter',['../classel_1_1base_1_1NullWriter.html#a936572812bfcd5a34ed928f11cac9e22',1,'el::base::NullWriter']]]
+  ['removeedge_454',['removeEdge',['../classCG__Graph_1_1OrientedGraph.html#aac7e1b0abb744f0875cdf2fdcaed3834',1,'CG_Graph::OrientedGraph']]],
+  ['removevalue_455',['removeValue',['../classCG__Graph_1_1GraphVertexInput.html#af9ce5d5d0c5cd532fd5a478bbf3028f2',1,'CG_Graph::GraphVertexInput::removeValue()'],['../classCG__Graph_1_1GraphVertexSubGraph.html#a0be24a0e5efad8e499895a668c81e731',1,'CG_Graph::GraphVertexSubGraph::removeValue()'],['../classCG__Graph_1_1GraphVertexGates.html#abf33b64469cd868bfc4262fced9cc59a',1,'CG_Graph::GraphVertexGates::removeValue()'],['../classCG__Graph_1_1GraphVertexBase.html#ad53a9656c0b5b761b451f2f25a55ab80',1,'CG_Graph::GraphVertexBase::removeValue()']]],
+  ['removevertextoinconnections_456',['removeVertexToInConnections',['../classCG__Graph_1_1GraphVertexBase.html#a155ece82383939d62b53af81f4c8277e',1,'CG_Graph::GraphVertexBase']]],
+  ['removevertextooutconnections_457',['removeVertexToOutConnections',['../classCG__Graph_1_1GraphVertexBase.html#ad3bac8342403e76c24b54816692d9321',1,'CG_Graph::GraphVertexBase']]],
+  ['removewastevertices_458',['removeWasteVertices',['../classCG__Graph_1_1OrientedGraph.html#a9bfa3564ca3f7ee2bee24cc09c0c1187',1,'CG_Graph::OrientedGraph']]],
+  ['replacer_459',['replacer',['../namespaceCG__Graph_1_1AuxMethodsGraph.html#aa8acbdce4c89ea5cfac15115ca88accd',1,'CG_Graph::AuxMethodsGraph']]],
+  ['reserve_460',['reserve',['../classCG__Graph_1_1OrientedGraph.html#a5a48fb4bbc906a11062ad9e2d8b254dc',1,'CG_Graph::OrientedGraph']]],
+  ['reserveinconnections_461',['reserveInConnections',['../classCG__Graph_1_1GraphVertexBase.html#a3e3dbf52b271faef39aec0053bcc2eae',1,'CG_Graph::GraphVertexBase']]],
+  ['reserveoutconnections_462',['reserveOutConnections',['../classCG__Graph_1_1GraphVertexBase.html#a12ce4a0cd66af7caa5391d514574035d',1,'CG_Graph::GraphVertexBase']]],
+  ['resetallstates_463',['resetAllStates',['../classCG__Graph_1_1GraphVertexBase.html#aac4cfca14208c203ddee9987167886b7',1,'CG_Graph::GraphVertexBase']]],
+  ['resetcounter_464',['resetCounter',['../classCG__Graph_1_1GraphVertexBase.html#adfcfa3efe883e01b4c82b8a9a4787ac8',1,'CG_Graph::GraphVertexBase::resetCounter()'],['../classCG__Graph_1_1OrientedGraph.html#a5f8a7a4fdc355003251cd78ec09752fb',1,'CG_Graph::OrientedGraph::resetCounter()']]],
+  ['resetcounters_465',['resetCounters',['../classCG__Graph_1_1OrientedGraph.html#a7ccebbc61a9d0b2d6a2833b5634efe42',1,'CG_Graph::OrientedGraph']]],
+  ['resethashstate_466',['resetHashState',['../classCG__Graph_1_1GraphVertexBase.html#ac0de7c9da307be0a0a50e193213f21ad',1,'CG_Graph::GraphVertexBase']]],
+  ['resetneedupdatestate_467',['resetNeedUpdateState',['../classCG__Graph_1_1GraphVertexBase.html#a9b3ecd59f9a00481e54d6c8e75072338',1,'CG_Graph::GraphVertexBase']]],
+  ['resetusedlevelstate_468',['resetUsedLevelState',['../classCG__Graph_1_1GraphVertexBase.html#a5723d7b61b3a2d1c87023110a7bd1829',1,'CG_Graph::GraphVertexBase']]]
 ];

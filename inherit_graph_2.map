@@ -1,3 +1,9 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classDefaultSettings.html" title=" " alt="" coords="5,5,128,32"/>
+<map id="Иерархия классов. Графический вид." name="Иерархия классов. Графический вид.">
+<area shape="rect" id="node1" href="$classCG__Graph_1_1GraphVertexBase.html" title="class GraphVertexBase" alt="" coords="5,107,213,133"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1GraphVertexGates.html" title="GraphVertexGates Class representing a vertex in a graph with gates." alt="" coords="277,5,491,32"/>
+<area shape="rect" id="node3" href="$classCG__Graph_1_1GraphVertexInput.html" title=" " alt="" coords="279,56,489,83"/>
+<area shape="rect" id="node5" href="$classCG__Graph_1_1GraphVertexOutput.html" title="class GraphVertexOutput It is a vertex of the graph, specially designed for data output." alt="" coords="274,107,494,133"/>
+<area shape="rect" id="node6" href="$classCG__Graph_1_1GraphVertexSequential.html" title=" " alt="" coords="261,157,507,184"/>
+<area shape="rect" id="node7" href="$classCG__Graph_1_1GraphVertexSubGraph.html" title="class GraphVertexSubGraph It is a class, having a subGruph pointer inside." alt="" coords="284,209,484,250"/>
+<area shape="rect" id="node4" href="$classCG__Graph_1_1GraphVertexConstant.html" title="class GraphVertexConstant A simple class, making available to use constant values in circuits" alt="" coords="555,56,789,83"/>
 </map>

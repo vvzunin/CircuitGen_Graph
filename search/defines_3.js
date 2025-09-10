@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['graphptr_2088',['GraphPtr',['../GraphVertexBase_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9',1,'GraphPtr():&#160;GraphVertexBase.hpp'],['../OrientedGraph_8hpp.html#afc9ace2881a918ee869eca6ecf10dbe9',1,'GraphPtr():&#160;OrientedGraph.hpp']]],
-  ['graphptrweak_2089',['GraphPtrWeak',['../GraphVertexBase_8hpp.html#a5313b3b1d817cd6035ec0a01cb940767',1,'GraphPtrWeak():&#160;GraphVertexBase.hpp'],['../OrientedGraph_8hpp.html#a5313b3b1d817cd6035ec0a01cb940767',1,'GraphPtrWeak():&#160;OrientedGraph.hpp']]]
+  ['set_5fdefault_618',['SET_DEFAULT',['../GraphVertexSequential_8cpp.html#a550bae197ecf122ec6360f436fe6b950',1,'GraphVertexSequential.cpp']]],
+  ['simple_5fvert_5fiter_619',['SIMPLE_VERT_ITER',['../OrientedGraph_8cpp.html#ae63f250c64dd16b31feac3f6323a5944',1,'OrientedGraph.cpp']]]
 ];

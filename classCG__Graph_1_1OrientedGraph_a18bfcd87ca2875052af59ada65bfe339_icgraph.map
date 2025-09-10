@@ -1,0 +1,5 @@
+<map id="CG_Graph::OrientedGraph::addEdges" name="CG_Graph::OrientedGraph::addEdges">
+<area shape="rect" id="node1" title="addEdges Adds multiple edges from a vector of source vertices to a target vertex" alt="" coords="483,5,673,47"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1OrientedGraph.html#ab06d0e4cb83f8f16ca1519ccfd8eba47" title="addSubGraph Adds a subgraph to the current graph" alt="" coords="244,5,435,47"/>
+<area shape="rect" id="node3" href="$classCG__Graph_1_1OrientedGraph.html#a3da06fbaa41520d38b242ed75f29ff64" title="creates majority element inside current graph" alt="" coords="5,5,196,47"/>
+</map>

@@ -1,44 +1,33 @@
-<map id="src/OrientedGraph.cpp" name="src/OrientedGraph.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="1235,5,1402,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="3213,408,3299,435"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,408,75,435"/>
-<area shape="rect" id="node4" title=" " alt="" coords="102,408,175,435"/>
-<area shape="rect" id="node5" title=" " alt="" coords="1035,408,1115,435"/>
-<area shape="rect" id="node6" title=" " alt="" coords="2854,80,2911,107"/>
-<area shape="rect" id="node7" title=" " alt="" coords="2935,80,3022,107"/>
-<area shape="rect" id="node8" title=" " alt="" coords="776,408,835,435"/>
-<area shape="rect" id="node9" title=" " alt="" coords="1431,408,1494,435"/>
-<area shape="rect" id="node10" href="$DefaultAuxiliaryMethods_8hpp.html" title=" " alt="" coords="286,244,525,285"/>
-<area shape="rect" id="node18" href="$GraphMLTemplates_8hpp.html" title=" " alt="" coords="1813,251,2099,278"/>
-<area shape="rect" id="node19" href="$GraphVertex_8hpp.html" title="TODO: Maybe Description some virtual methods for Graph&#39;s classes, such as GraphVertexGates." alt="" coords="2183,80,2425,107"/>
-<area shape="rect" id="node20" href="$GraphVertexBase_8hpp.html" title=" " alt="" coords="1502,155,1717,196"/>
-<area shape="rect" id="node28" href="$OrientedGraph_8hpp.html" title=" " alt="" coords="1297,244,1487,285"/>
-<area shape="rect" id="node32" href="$easylogging_09_09_8h.html" title=" " alt="" coords="2493,333,2728,360"/>
-<area shape="rect" id="node11" title=" " alt="" coords="283,408,357,435"/>
-<area shape="rect" id="node12" title=" " alt="" coords="177,333,231,360"/>
-<area shape="rect" id="node13" href="$DefaultSettings_8hpp.html" title=" " alt="" coords="1622,333,1885,360"/>
-<area shape="rect" id="node14" title=" " alt="" coords="1941,408,1992,435"/>
-<area shape="rect" id="node15" title=" " alt="" coords="2016,408,2093,435"/>
-<area shape="rect" id="node16" title=" " alt="" coords="1721,408,1785,435"/>
-<area shape="rect" id="node17" title=" " alt="" coords="2118,408,2178,435"/>
-<area shape="rect" id="node21" title=" " alt="" coords="1480,333,1547,360"/>
-<area shape="rect" id="node22" title=" " alt="" coords="1672,251,1739,278"/>
-<area shape="rect" id="node23" href="$enums_8hpp.html" title=" " alt="" coords="1909,333,2115,360"/>
-<area shape="rect" id="node24" href="$GraphMemory_8hpp.html" title=" " alt="" coords="409,333,661,360"/>
-<area shape="rect" id="node25" title=" " alt="" coords="602,408,742,435"/>
-<area shape="rect" id="node26" title=" " alt="" coords="396,408,439,435"/>
-<area shape="rect" id="node27" title=" " alt="" coords="481,408,578,435"/>
-<area shape="rect" id="node29" title=" " alt="" coords="1835,408,1893,435"/>
-<area shape="rect" id="node30" title=" " alt="" coords="1091,333,1165,360"/>
-<area shape="rect" id="node31" title=" " alt="" coords="1189,333,1304,360"/>
-<area shape="rect" id="node33" title=" " alt="" coords="2577,408,2644,435"/>
-<area shape="rect" id="node34" title=" " alt="" coords="2669,408,2734,435"/>
-<area shape="rect" id="node35" title=" " alt="" coords="2758,408,2823,435"/>
-<area shape="rect" id="node36" title=" " alt="" coords="2847,408,2915,435"/>
-<area shape="rect" id="node37" title=" " alt="" coords="2939,408,3007,435"/>
-<area shape="rect" id="node38" title=" " alt="" coords="3031,408,3094,435"/>
-<area shape="rect" id="node39" title=" " alt="" coords="3118,408,3189,435"/>
-<area shape="rect" id="node40" title=" " alt="" coords="2202,408,2326,435"/>
-<area shape="rect" id="node41" title=" " alt="" coords="2350,408,2437,435"/>
-<area shape="rect" id="node42" title=" " alt="" coords="2461,408,2553,435"/>
+<map id="OrientedGraph.cpp" name="OrientedGraph.cpp">
+<area shape="rect" id="node1" title=" " alt="" coords="1468,5,1612,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,423,91,449"/>
+<area shape="rect" id="node3" title=" " alt="" coords="1881,423,1951,449"/>
+<area shape="rect" id="node4" title=" " alt="" coords="1074,177,1147,203"/>
+<area shape="rect" id="node5" title=" " alt="" coords="1980,87,2055,114"/>
+<area shape="rect" id="node6" title=" " alt="" coords="2079,87,2159,114"/>
+<area shape="rect" id="node7" title=" " alt="" coords="2183,87,2241,114"/>
+<area shape="rect" id="node8" title=" " alt="" coords="2265,87,2351,114"/>
+<area shape="rect" id="node9" title=" " alt="" coords="1328,423,1387,449"/>
+<area shape="rect" id="node10" title=" " alt="" coords="1763,423,1826,449"/>
+<area shape="rect" id="node11" href="$DefaultAuxiliaryMethods_8hpp.html" title=" " alt="" coords="862,80,1101,121"/>
+<area shape="rect" id="node19" href="$GraphMLTemplates_8hpp.html" title=" " alt="" coords="119,266,404,293"/>
+<area shape="rect" id="node20" href="$GraphVertex_8hpp.html" title="TODO: Maybe Description some virtual methods for Graph&#39;s classes, such as GraphVertexGates." alt="" coords="1340,87,1583,114"/>
+<area shape="rect" id="node21" href="$GraphVertexBase_8hpp.html" title=" " alt="" coords="1173,169,1387,211"/>
+<area shape="rect" id="node29" href="$OrientedGraph_8hpp.html" title=" " alt="" coords="807,259,996,300"/>
+<area shape="rect" id="node12" title=" " alt="" coords="635,177,709,203"/>
+<area shape="rect" id="node13" href="$GraphUtils_8hpp.html" title=" " alt="" coords="146,348,377,375"/>
+<area shape="rect" id="node18" title=" " alt="" coords="863,177,996,203"/>
+<area shape="rect" id="node14" title=" " alt="" coords="467,423,523,449"/>
+<area shape="rect" id="node15" title=" " alt="" coords="969,423,1036,449"/>
+<area shape="rect" id="node16" title=" " alt="" coords="136,423,187,449"/>
+<area shape="rect" id="node17" title=" " alt="" coords="231,423,291,449"/>
+<area shape="rect" id="node22" title=" " alt="" coords="1207,348,1273,375"/>
+<area shape="rect" id="node23" title=" " alt="" coords="1105,348,1183,375"/>
+<area shape="rect" id="node24" href="$enums_8hpp.html" title=" " alt="" coords="401,348,607,375"/>
+<area shape="rect" id="node25" href="$GraphMemory_8hpp.html" title=" " alt="" coords="1501,348,1753,375"/>
+<area shape="rect" id="node26" title=" " alt="" coords="1599,423,1739,449"/>
+<area shape="rect" id="node27" title=" " alt="" coords="1411,423,1453,449"/>
+<area shape="rect" id="node28" title=" " alt="" coords="1478,423,1575,449"/>
+<area shape="rect" id="node30" title=" " alt="" coords="681,348,740,375"/>
+<area shape="rect" id="node31" title=" " alt="" coords="764,348,879,375"/>
 </map>

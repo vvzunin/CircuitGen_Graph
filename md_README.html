@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>My Project: Генератор комбинационных схем</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+  $(document).ready(function() { init_search(); });
+/* @license-end */
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo_1.png"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">My Project
+   &#160;<span id="projectnumber">1.6.0</span>
+   </div>
+   <div id="projectbrief">Desc of Backeknd</div>
+  </td>
+   <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.svg"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Поиск" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.svg" alt=""/></a>
+          </span>
+        </div>
+</td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.1 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск','.html');
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('md_README.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="PageDoc"><div class="header">
+  <div class="headertitle">
+<div class="title">Генератор комбинационных схем </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><p><a href="https://hub.mos.ru/circuitgen/CircuitGen_Graph/-/commits/main"><img src="https://hub.mos.ru/circuitgen/CircuitGen_Graph/badges/main/pipeline.svg" alt="pipeline status" style="pointer-events: none;" class="inline"/></a> <a href="https://hub.mos.ru/circuitgen/CircuitGen_Graph/-/commits/main"><img src="https://hub.mos.ru/circuitgen/CircuitGen_Graph/badges/main/coverage.svg" alt="coverage report" style="pointer-events: none;" class="inline"/></a> <a href="https://hub.mos.ru/circuitgen/CircuitGen_Graph/-/releases"><img src="https://hub.mos.ru/circuitgen/CircuitGen_Graph/-/badges/release.svg" alt="Latest Release" style="pointer-events: none;" class="inline"/></a></p>
+<p>&lt;font size="5"&gt;<b>Оглавление:</b>&lt;/font&gt; <a class="anchor" id="content_rus"></a></p><ul>
+<li><a href="#hacking">Правила именования переменных</a></li>
+<li><a href="#generator_build_rus">Сборка программы</a></li>
+<li><a href="#license">Лицензия</a></li>
+</ul>
+<blockquote class="doxtable">
+<p>Главный репозиторий проекта: <a href="https://hub.mos.ru/circuitgen/CircuitGen">https://hub.mos.ru/circuitgen/CircuitGen</a> </p>
+</blockquote>
+<p>Сборка и запуск производятся из операционной системы Linux.</p>
+<p>Программа запускалась на Ubuntu 22.04 с использованием WSL (Windows Subsystem for Linux).</p>
+<blockquote class="doxtable">
+<p>В проект добавлена система логирования. Для корректной работы библиотеки необходимо инициализировать библиотеку командой: #include "easyloggingpp/easylogging++.h" INITIALIZE_EASYLOGGINGPP </p>
+</blockquote>
+<h1><a class="anchor" id="autotoc_md33"></a>
+Установка необходимых пакетов</h1>
+<h2><a class="anchor" id="autotoc_md34"></a>
+Установка пакетов</h2>
+<h3><a class="anchor" id="autotoc_md35"></a>
+С помощью apt</h3>
+<div class="fragment"><div class="line">sudo apt install clang clang-tidy clang-format-15 g++ gcc make openssl cmake lcov ninja-build</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md36"></a>
+С помощью dnf (для rpm ветки)</h3>
+<div class="fragment"><div class="line">sudo dnf install clang clang-tools-extra g++ gcc make openssl cmake lcov ninja-build</div>
+</div><!-- fragment --><p> Так как в проекте используется <code>clang-format-15</code>, предлагается два возможных решения. 1) Так как критических отличий между различными версиями clang нет, допустимо просто создать link с именем <code>clang-format-15</code>: <br  />
+ </p><div class="fragment"><div class="line">sudo link /usr/bin/clang-format /usr/bin/clang-format-15</div>
+</div><!-- fragment --><p> 2) Допустимой является установка <code>clang-format-15</code> посредством <code>pip</code>. Отметим, что в данном случае создание link может быть сопряжено с некоторыми трудностями. </p><div class="fragment"><div class="line">sudo dnf install python python-pip</div>
+</div><!-- fragment --><p> Далее требуется скачать конкретную версию clang-format. </p><div class="fragment"><div class="line">pip install clang-format==15.0.7</div>
+</div><!-- fragment --><p>Для проверки корректности кода на этапе компиляции используется clang-tidy. В случае, если clang-tidy не будет найден, в терминал выведется соответствующее сообщение и компиляция прервется.</p>
+<h2><a class="anchor" id="autotoc_md37"></a>
+Установка cmake 3.28.1</h2>
+<p>В случае проблем при установке cmake, попробуйте данный способ: </p><div class="fragment"><div class="line">sudo apt install tar wget</div>
+<div class="line">cd ~/</div>
+<div class="line">wget https://cmake.org/files/v3.28/cmake-3.28.1.tar.gz</div>
+<div class="line">tar xzf cmake-3.28.1.tar.gz</div>
+<div class="line">rm -rf cmake-3.28.1.tar.gz</div>
+<div class="line">cd cmake-3.28.1</div>
+<div class="line">./bootstrap</div>
+<div class="line">make -j$(nproc)</div>
+<div class="line">sudo make install</div>
+<div class="line">cd ..</div>
+<div class="line">sudo rm -rf cmake-3.28.1</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md38"></a>
+Установка Doxygen 1.13.2</h2>
+<p>Для сборки Doxygen необходимо предварительно установить bison и flex. </p><div class="fragment"><div class="line">sudo apt-get install flex bison</div>
+</div><!-- fragment --><p> Для установки Doxygen необходимо собрать программу из исходного кода. </p><div class="fragment"><div class="line">wget https://www.doxygen.nl/files/doxygen-1.13.2.src.tar.gz </div>
+<div class="line">tar xf doxygen-1.13.2.src.tar.gz</div>
+<div class="line">cd doxygen-1.13.2</div>
+<div class="line">mkdir build</div>
+<div class="line">cd build</div>
+<div class="line">cmake -G &quot;Unix Makefiles&quot; ..</div>
+<div class="line">make -j $(nproc)</div>
+<div class="line">sudo make install</div>
+<div class="line">cd ../..</div>
+<div class="line">rm -r doxygen-1.13.2</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md39"></a>
+Режим разработчика</h1>
+<p><a class="anchor" id="hacking"></a></p>
+<p>Несколько советов, которые помогут Вам создать и протестировать этот проект в качестве разработчика и потенциального участника представлены <a class="el" href="HACKING_8md.html">здесь</a>.</p>
+<p><a href="#content_rus">&amp;#8593; Contents</a></p>
+<h1><a class="anchor" id="autotoc_md40"></a>
+Сборка программы</h1>
+<p><a class="anchor" id="generator_build_rus"></a></p>
+<p>Для сборки программы необходимо выполнить следующие команды из начальной директории: </p><div class="fragment"><div class="line">chmod +x buildGraph.sh</div>
+<div class="line">./buildGraph.sh</div>
+</div><!-- fragment --><p>Подробная схема сборка описана <a class="el" href="BUILDING_8md.html">здесь</a>.</p>
+<p><a href="#content_rus">&amp;#8593; Contents</a></p>
+<h1><a class="anchor" id="autotoc_md41"></a>
+Стиль кода</h1>
+<p><a class="anchor" id="format"></a></p>
+<p>Предварительные действия перед работой с кодом в VsCode, а также некоторую информацию касательно стиля кода и локальных файлов .json можно посмотреть <a class="el" href="FORMAT_8md.html">здесь</a>.</p>
+<p><a href="#content_rus">&amp;#8593; Contents</a></p>
+<h1><a class="anchor" id="autotoc_md42"></a>
+СБорка документации</h1>
+<p>Для того, чтобы собрать документацию, вам потребуеутся скачать следущий набор пакетов для ОС Fedora: </p><div class="fragment"><div class="line">sudo dnf install \</div>
+<div class="line">  doxygen \</div>
+<div class="line">  texlive-scheme-medium \</div>
+<div class="line">  texlive-xetex \</div>
+<div class="line">  texlive-collection-latex \</div>
+<div class="line">  texlive-collection-fontsrecommended \</div>
+<div class="line">  texlive-collection-langcyrillic \</div>
+<div class="line">  texlive-wrapfig \</div>
+<div class="line">  texlive-tabu \</div>
+<div class="line">  texlive-etoc \</div>
+<div class="line">  texlive-needspace \</div>
+<div class="line">  texlive-adjustbox \</div>
+<div class="line">  texlive-capt-of \</div>
+<div class="line">  texlive-zref \</div>
+<div class="line">  texlive-titlesec \</div>
+<div class="line">  texlive-fancyhdr \</div>
+<div class="line">  texlive-pdfpages \</div>
+<div class="line">  texlive-geometry \</div>
+<div class="line">  texlive-underscore \</div>
+<div class="line">  texlive-upquote \</div>
+<div class="line">  texlive-float \</div>
+<div class="line">  texlive-listings \</div>
+<div class="line">  texlive-xcolor \</div>
+<div class="line">  texlive-graphics \</div>
+<div class="line">  texlive-enumitem \</div>
+<div class="line">  texlive-amsmath \</div>
+<div class="line">  texlive-amsfonts \</div>
+<div class="line">  texlive-amssymb \</div>
+<div class="line">  texlive-courier \</div>
+<div class="line">  texlive-helvetic \</div>
+<div class="line">  texlive-lm \</div>
+<div class="line">  texlive-inconsolata \</div>
+<div class="line">  python3 \</div>
+<div class="line">  unzip \</div>
+<div class="line">  curl</div>
+</div><!-- fragment --><p>Или для Ubuntu: </p><div class="fragment"><div class="line">sudo apt update &amp;&amp; sudo apt install -y \</div>
+<div class="line">  doxygen \</div>
+<div class="line">  texlive-xetex \</div>
+<div class="line">  texlive-lang-cyrillic \</div>
+<div class="line">  texlive-latex-recommended \</div>
+<div class="line">  texlive-latex-extra \</div>
+<div class="line">  texlive-fonts-recommended \</div>
+<div class="line">  texlive-fonts-extra \</div>
+<div class="line">  texlive-science \</div>
+<div class="line">  fonts-lmodern \</div>
+<div class="line">  fonts-inconsolata \</div>
+<div class="line">  curl \</div>
+<div class="line">  unzip \</div>
+<div class="line">  python3</div>
+</div><!-- fragment --><p>После этого вам потребуется собрать проект с флагами для сборки документации </p><div class="fragment"><div class="line">cmake -DBUILD_MCSS_DOCS=ON --preset=dev</div>
+<div class="line">cmake --build build/ --preset=dev -j $(nproc) --target docs</div>
+</div><!-- fragment --><p>После этого вы можете собрать файл с документацией в формате <code>pdf</code>. Скопируем файл в директорию, где находится текущая рабочая директория проекта: </p><div class="fragment"><div class="line">./get_pdf.sh build/dev/docs/Doxygen_output/latex/</div>
+<div class="line">cp ./build/dev/docs/Doxygen_output/latex/refman.pdf .</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md43"></a>
+Лицензия</h1>
+<p><a class="anchor" id="license"></a></p>
+<p>Смотрите файл с [лицензией](LICENSE).</p>
+<p><a href="#content_rus">&amp;#8593; Contents</a> </p>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Создано системой <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+  </ul>
+</div>
+</body>
+</html>

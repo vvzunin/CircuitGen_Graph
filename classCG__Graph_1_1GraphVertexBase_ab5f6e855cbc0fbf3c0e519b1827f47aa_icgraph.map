@@ -1,0 +1,5 @@
+<map id="CG_Graph::GraphVertexBase::getTypeName" name="CG_Graph::GraphVertexBase::getTypeName">
+<area shape="rect" id="node1" title="getTypeName This method returns the string representation of the vertex type by parsing the vertex ty..." alt="" coords="263,39,471,80"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1GraphVertexBase.html#adb11afe8c89c39852bab134de46e94e4" title="GraphVertexBase Constructs a GraphVertexBase object with the specified vertex type and optional graph..." alt="" coords="6,5,214,47"/>
+<area shape="rect" id="node3" href="$classCG__Graph_1_1GraphVertexInput.html#a340c90f392c735ea20caebcbfb5501bc" title="updateLevel This method updates the level of the vertex based on the levels of its input connections." alt="" coords="5,71,215,112"/>
+</map>

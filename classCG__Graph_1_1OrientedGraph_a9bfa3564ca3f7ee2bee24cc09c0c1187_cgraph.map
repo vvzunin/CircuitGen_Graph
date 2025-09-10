@@ -1,0 +1,5 @@
+<map id="CG_Graph::OrientedGraph::removeWasteVertices" name="CG_Graph::OrientedGraph::removeWasteVertices">
+<area shape="rect" id="node1" title=" " alt="" coords="5,39,196,80"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1OrientedGraph.html#aac7e1b0abb744f0875cdf2fdcaed3834" title="removeEdge Remove an edge from graph if it exists." alt="" coords="244,5,435,47"/>
+<area shape="rect" id="node3" href="$classCG__Graph_1_1OrientedGraph.html#a1c7943a3650f01f3b1086f0dea03b019" title="updateLevels Calculates level for all vertices inside graph." alt="" coords="244,71,435,112"/>
+</map>

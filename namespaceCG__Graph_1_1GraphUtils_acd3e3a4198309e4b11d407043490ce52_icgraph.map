@@ -1,0 +1,8 @@
+<map id="CG_Graph::GraphUtils::parseVertexToString" name="CG_Graph::GraphUtils::parseVertexToString">
+<area shape="rect" id="node1" title="parseVertexToString Converts an enum value of a vertex type to its corresponding string representatio..." alt="" coords="519,104,683,145"/>
+<area shape="rect" id="node2" href="$classCG__Graph_1_1GraphVertexBase.html#ab5f6e855cbc0fbf3c0e519b1827f47aa" title="getTypeName This method returns the string representation of the vertex type by parsing the vertex ty..." alt="" coords="263,71,471,112"/>
+<area shape="rect" id="node5" href="$classCG__Graph_1_1OrientedGraph.html#aa02047623421693b5eb087f1416c8f10" title="TODO: add description." alt="" coords="271,136,462,177"/>
+<area shape="rect" id="node3" href="$classCG__Graph_1_1GraphVertexBase.html#adb11afe8c89c39852bab134de46e94e4" title="GraphVertexBase Constructs a GraphVertexBase object with the specified vertex type and optional graph..." alt="" coords="6,5,214,47"/>
+<area shape="rect" id="node4" href="$classCG__Graph_1_1GraphVertexInput.html#a340c90f392c735ea20caebcbfb5501bc" title="updateLevel This method updates the level of the vertex based on the levels of its input connections." alt="" coords="5,71,215,112"/>
+<area shape="rect" id="node6" href="$classCG__Graph_1_1OrientedGraph.html#a5c8ffce71c3d3f174b056e045c807437" title="Is called by toGraphMLClassic. TODO: add description." alt="" coords="15,136,205,177"/>
+</map>

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['elcrashhandler_1625',['elCrashHandler',['../namespaceel.html#ab9770514f33aef6683dbba37be2b471d',1,'el']]],
-  ['elstorage_1626',['elStorage',['../namespaceel_1_1base.html#a0ec6b7a1bd89ad58dadc10f190142018',1,'el::base']]]
+  ['offset_542',['offset',['../structCG__Graph_1_1MultiLinearAllocator.html#aa71fcd19ff354b3e85d1953f788bc790',1,'CG_Graph::MultiLinearAllocator']]]
 ];
