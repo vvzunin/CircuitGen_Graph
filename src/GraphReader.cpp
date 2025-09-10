@@ -115,18 +115,18 @@ void GraphReader::on_assign(const std::string &lhs,
 VertexPtr GraphReader::get_operand(const std::string &i_name,
                                    bool i_isInverted) const {
   auto temp = d_context.d_currentGraphNamesList.find(i_name);
-  VertexPtr ans;
+  VertexPtr res;
   if (temp->second->getType() == output) {
     if (d_context.d_currentGraphNamesList.find(i_name + SUFFIX_OUTPUT_GATE) ==
         d_context.d_currentGraphNamesList.end()) {
-      ans = d_context.d_currentGraph->addGate(GateDefault,
+      res = d_context.d_currentGraph->addGate(GateDefault,
                                               i_name + SUFFIX_OUTPUT_GATE);
-      d_context.d_currentGraph->addEdge(ans, temp->second);
-      d_context.d_currentGraphNamesList[i_name + SUFFIX_OUTPUT_GATE] = ans;
+      d_context.d_currentGraph->addEdge(res, temp->second);
+      d_context.d_currentGraphNamesList[i_name + SUFFIX_OUTPUT_GATE] = res;
     } else
-      ans = d_context.d_currentGraphNamesList[i_name + SUFFIX_OUTPUT_GATE];
+      res = d_context.d_currentGraphNamesList[i_name + SUFFIX_OUTPUT_GATE];
   } else
-    ans = d_context.d_currentGraphNamesList[i_name];
+    res = d_context.d_currentGraphNamesList[i_name];
   if (i_isInverted) {
     auto searchForNot =
         d_context.d_currentGraphNamesList.find(i_name + SUFFIX_INVERSION);
@@ -135,12 +135,12 @@ VertexPtr GraphReader::get_operand(const std::string &i_name,
       notAns =
           d_context.d_currentGraph->addGate(GateNot, i_name + SUFFIX_INVERSION);
       d_context.d_currentGraphNamesList[i_name + SUFFIX_INVERSION] = notAns;
-      d_context.d_currentGraph->addEdge(ans, notAns);
+      d_context.d_currentGraph->addEdge(res, notAns);
     } else
       notAns = searchForNot->second;
     return notAns;
   }
-  return ans;
+  return res;
 }
 
 void GraphReader::on_elem(const std::string &i_lhs,
