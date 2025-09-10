@@ -79,4 +79,4 @@ WORKDIR /circuitgen
 RUN if [ -f .gitmodules ]; then \
     git submodule sync --recursive && \
     git submodule update --init --recursive --jobs $(nproc); \
-    fi
+fi
