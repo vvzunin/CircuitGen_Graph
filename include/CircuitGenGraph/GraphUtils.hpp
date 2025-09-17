@@ -23,10 +23,11 @@ namespace CG_Graph {
   std::vector<std::pair<DotTypes, std::map<std::string, std::string>>>
 #endif
 
+static constexpr size_t d_busInType = 8;
+
 /// @brief VertexTypes
 /// Enumeration of vertex types
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */ static constexpr size_t
-    d_busInType = 8;
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 enum VertexTypes : uint8_t {
   input = 0,      ///  input vertex
   output = 5,     ///  output vertex

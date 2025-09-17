@@ -44,7 +44,6 @@
 #define VertexPtr CG_Graph::GraphVertexBase *
 
 namespace CG_Graph {
-
 class GraphVertexBase;
 class GraphReader;
 class Context;
@@ -536,6 +535,8 @@ public:
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool addEdges(std::vector<VertexPtr> from1, VertexPtr to);
 
+  bool addEdge(GraphVertexBusSlice *from, VertexPtr to);
+
   /// @brief removeEdge
   /// Remove an edge from graph if it exists.
   /// @param from1 The vertex to be deleted to the input connections of "to"
@@ -592,11 +593,11 @@ public:
   /// @return flag, if file was correctly created or not
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool toVerilog(std::string i_path, std::string i_filename = "");
-
   bool toVerilogBusEnabled(std::string i_path, std::string i_filename = "");
-
   bool toVerilogBusEnabledAsOneBit(std::string i_path,
                                    std::string i_filename = "");
+
+
 
   /// @brief
   /// @return

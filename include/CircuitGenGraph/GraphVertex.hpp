@@ -522,10 +522,14 @@ public:
   /// @param i_wire1 EN or RST or CLR
   /// @param i_wire2 RST or CLR or SET
   /// @param i_baseGraph
-  GraphVertexSequential(SequentialTypes i_type, VertexPtr i_clk,
-                           VertexPtr i_data,VertexPtr i_wire1,
-                           VertexPtr i_wire2, GraphPtr i_baseGraph,
-                           std::string_view i_name, bool i_isBus = false);
+  GraphVertexSequential(SequentialTypes i_type,
+                        VertexPtr i_clk,
+                        VertexPtr i_data,
+                        VertexPtr i_wire1,
+                        VertexPtr i_wire2,
+                        GraphPtr i_baseGraph,
+                        std::string_view i_name,
+                        bool i_isBus = false);
 
   /// @brief GraphVertexSequential
   /// @param i_type type of Sequential - (a/n/an)ff(r/c)se, 

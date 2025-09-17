@@ -202,7 +202,7 @@ public:
   /// optional graph
   /// @param i_type The type of the vertex (from the VertexTypes enum).
   /// @param i_graph Optional pointer to the graph containing the vertex
-  GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph);
+  GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph, bool i_isBus = 0);
 
   /// @brief GraphVertexBase
   /// Constructs a GraphVertexBase object with the specified vertex type, name,
@@ -211,7 +211,7 @@ public:
   /// @param i_name The name of the vertex.
   /// @param i_graph Optional pointer to the graph containing the vertex.
   GraphVertexBase(const VertexTypes i_type, std::string_view i_name,
-                  GraphPtr i_graph);
+                  GraphPtr i_graph, bool i_isBus = 0);
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphVertexBase &operator=(const GraphVertexBase &other) =
@@ -290,7 +290,7 @@ public:
   /// @endcode
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
-  std::string getName() const;
+  virtual std::string getName() const;
   /// @brief getName
   /// Returns concatenation of the name of the vertex and i_prefix
   /// @return The concatenation of name of the vertex and i_prefix

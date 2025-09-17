@@ -29,7 +29,6 @@ inline void testFile(const std::string &fileName, std::string_view text) {
   ASSERT_EQ(std::remove(fileName.c_str()), 0)
       << "Не удалось удалить файл: " << fileName;
 }
-
 TEST(BusTest, SimpleBusPrintedSeparate) {
   GraphPtr graph = std::make_shared<OrientedGraph>();
   VertexPtr inputBus = graph->addInputBus("inputBus", 5);
