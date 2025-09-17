@@ -2,7 +2,9 @@
  * @file GraphVertexBase.cpp
  * @brief Реализация базовой вершины графа и утилит VertexUtils.
  */
+#include "CircuitGenGraph/GraphUtils.hpp"
 #include <algorithm>
+#include <cstdint>
 #include <iostream>
 #include <string>
 
@@ -120,8 +122,11 @@ VertexUtils::getSequentialComment(const GraphVertexSequential *i_seq) {
   return res;
 }
 
-GraphVertexBase::GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph) {
+GraphVertexBase::GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph, bool i_isBus) {
   d_baseGraph = i_graph;
+  if(i_isBus) 
+  d_type = static_cast<VertexTypes>(static_cast<uint8_t>(i_type)|d_busInType);
+  else
   d_type = i_type;
   d_name = i_graph->internalize(this->getTypeName() + "_" +
                                 std::to_string(d_count++));
@@ -130,8 +135,11 @@ GraphVertexBase::GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph) {
 }
 
 GraphVertexBase::GraphVertexBase(const VertexTypes i_type,
-                                 std::string_view i_name, GraphPtr i_graph) {
+                                 std::string_view i_name, GraphPtr i_graph, bool i_isBus) {
   d_baseGraph = i_graph;
+  if(i_isBus) 
+  d_type = static_cast<VertexTypes>(static_cast<uint8_t>(i_type)|d_busInType);
+  else
   d_type = i_type;
   if (i_name.size()) {
     d_name = i_name;
@@ -152,16 +160,19 @@ GraphVertexBase::~GraphVertexBase() {
 }
 
 VertexTypes GraphVertexBase::getType() const {
-  return d_type;
+  return static_cast<VertexTypes>(static_cast<uint8_t>(d_type)&~d_busInType); 
 }
-
+VertexTypes GraphVertexBase::getFullType() const {
+  return d_type; 
+}
 std::string GraphVertexBase::getTypeName() const {
-  return GraphUtils::parseVertexToString(d_type);
+  return GraphUtils::parseVertexToString(getType());
 }
 
 void GraphVertexBase::setName(const std::string_view i_name) {
   d_name = i_name;
 }
+
 
 std::string GraphVertexBase::getName() const {
   return std::string(d_name);
@@ -187,6 +198,10 @@ void GraphVertexBase::removeValue() {
   for (VertexPtr ptr: d_inConnections) {
     ptr->removeValue();
   }
+}
+
+bool GraphVertexBase::isBus() const {
+  return d_type & d_busInType;
 }
 
 void GraphVertexBase::updateLevel() {
@@ -252,7 +267,7 @@ size_t GraphVertexBase::calculateHash() {
   if (d_hasHash) {
     return d_hashed;
   }
-  if (d_type == VertexTypes::input) {
+  if (getType() == VertexTypes::input) {
     d_hashed = std::hash<size_t>{}(d_outConnections.size());
     d_hasHash = HC_CALC;
     return d_hashed;
@@ -292,7 +307,7 @@ std::vector<VertexPtr> GraphVertexBase::getInConnections() const {
 
 uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
   assert(i_vert != this);
-  assert(d_type != input && d_type != constant);
+  assert(getType()!= input && getType() != constant);
   uint32_t n = 0;
   d_inConnections.push_back(i_vert);
   // @todo is rly needed?
@@ -321,7 +336,7 @@ bool GraphVertexBase::addVertexToOutConnections(VertexPtr i_vert) {
 
 // @todo what if some (more than 1) connected to output?
 std::string GraphVertexBase::toVerilog() const {
-  if (d_type == VertexTypes::output) {
+  if (getType() == VertexTypes::output) {
     if (!d_inConnections.empty()) {
       return "assign " + getName() + " = " + d_inConnections.back()->getName() +
              ";";
@@ -340,7 +355,7 @@ void GraphVertexBase::log(el::base::type::ostream_t &os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
-  os << "Vertex Type: " << GraphUtils::parseVertexToString(d_type) << "\n";
+  os << "Vertex Type: " << GraphUtils::parseVertexToString(getType()) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
   os << "Vertex Hash: " << d_hashed << "\n";

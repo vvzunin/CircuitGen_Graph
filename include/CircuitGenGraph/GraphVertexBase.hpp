@@ -33,7 +33,7 @@ namespace CG_Graph {
 
 class OrientedGraph;
 class GraphVertexSequential;
-
+class GraphVertexBus;
 /// @brief VertexUtils
 /// Namespace containing utility functions for working with vertices
 /// @author Vladimir Zunin <vzunin@hse.ru>
@@ -201,7 +201,7 @@ public:
   /// optional graph
   /// @param i_type The type of the vertex (from the VertexTypes enum).
   /// @param i_graph Optional pointer to the graph containing the vertex
-  GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph);
+  GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph, bool i_isBus = 0);
 
   /// @brief GraphVertexBase
   /// Constructs a GraphVertexBase object with the specified vertex type, name,
@@ -210,7 +210,7 @@ public:
   /// @param i_name The name of the vertex.
   /// @param i_graph Optional pointer to the graph containing the vertex.
   GraphVertexBase(const VertexTypes i_type, std::string_view i_name,
-                  GraphPtr i_graph);
+                  GraphPtr i_graph, bool i_isBus = 0);
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphVertexBase &operator=(const GraphVertexBase &other) =
@@ -243,6 +243,7 @@ public:
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexTypes getType() const;
+  VertexTypes getFullType() const;
 
   // Get для типа вершины в фомате строки
 
@@ -288,7 +289,7 @@ public:
   /// @endcode
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
-  std::string getName() const;
+  virtual std::string getName() const;
   /// @brief getName
   /// Returns concatenation of the name of the vertex and i_prefix
   /// @return The concatenation of name of the vertex and i_prefix
@@ -553,7 +554,6 @@ public:
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual std::string toVerilog() const;
-
   /// @brief calls toVerilog and allows to write vertex as string
   /// to a stream
   /// @author Fuuulkrum7 <ilka747428@gmail.com>
@@ -572,7 +572,8 @@ public:
   /// or false if not
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual bool isSubgraphBuffer() const { return false; }
-
+  virtual bool
+  isBus() const; // или можно сделать метод для получения *ширины* вершины
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
 #ifdef LOGFLAG
@@ -649,7 +650,6 @@ protected:
   std::vector<VertexPtr> d_inConnections;
   std::vector<VertexPtr> d_outConnections;
   GraphPtrWeak d_baseGraph;
-
   std::string_view d_name;
 
   size_t d_hashed = 0;

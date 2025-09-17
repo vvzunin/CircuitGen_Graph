@@ -2,6 +2,8 @@
  * @file GraphVertexInput.cpp
  * @brief Реализация вершины-входа графа.
  */
+#include "CircuitGenGraph/GraphUtils.hpp"
+#include "CircuitGenGraph/GraphVertexBus.hpp"
 #include <CircuitGenGraph/GraphVertex.hpp>
 
 #ifdef LOGFLAG
@@ -67,4 +69,7 @@ void GraphVertexInput::log(el::base::type::ostream_t &os) const {
 }
 #endif
 
+GraphVertexBusInput::GraphVertexBusInput(std::string_view i_name, GraphPtr i_baseGraph, size_t i_width) 
+: GraphVertexInput(i_name, i_baseGraph, inputBus),
+GraphVertexBus(i_width){}
 } // namespace CG_Graph

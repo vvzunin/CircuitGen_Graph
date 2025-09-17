@@ -10,6 +10,7 @@ set(SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/DefaultAuxiliaryMethods.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/GraphVertexSequential.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/GraphReader.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/GraphVertexBus.cpp
 )
 
 # set(LIBS
@@ -25,6 +26,7 @@ set(PUBLIC_HEADERS
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/DefaultAuxiliaryMethods.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphReader.hpp
+  ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertexBus.hpp
 )
 
 if(ENABLE_LOGGING)
