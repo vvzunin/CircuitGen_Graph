@@ -126,8 +126,11 @@ VertexUtils::getSequentialComment(const GraphVertexSequential *i_seq) {
   return res;
 }
 
-GraphVertexBase::GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph) {
+GraphVertexBase::GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph, bool i_isBus) {
   d_baseGraph = i_graph;
+  if(i_isBus) 
+  d_type = static_cast<VertexTypes>(static_cast<uint8_t>(i_type)|d_busInType);
+  else
   d_type = i_type;
   d_name = i_graph->internalize(this->getTypeName() + "_" +
                                 std::to_string(d_count++));
@@ -136,8 +139,11 @@ GraphVertexBase::GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph) {
 }
 
 GraphVertexBase::GraphVertexBase(const VertexTypes i_type,
-                                 std::string_view i_name, GraphPtr i_graph) {
+                                 std::string_view i_name, GraphPtr i_graph, bool i_isBus) {
   d_baseGraph = i_graph;
+  if(i_isBus) 
+  d_type = static_cast<VertexTypes>(static_cast<uint8_t>(i_type)|d_busInType);
+  else
   d_type = i_type;
   if (i_name.size()) {
     d_name = i_name;
@@ -170,6 +176,7 @@ std::string GraphVertexBase::getTypeName() const {
 void GraphVertexBase::setName(const std::string_view i_name) {
   d_name = i_name;
 }
+
 
 std::string GraphVertexBase::getName() const {
   return std::string(d_name);
