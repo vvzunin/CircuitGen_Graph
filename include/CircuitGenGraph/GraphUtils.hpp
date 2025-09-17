@@ -19,15 +19,19 @@ namespace CG_Graph {
 
 /// @brief VertexTypes
 /// Enumeration of vertex types
-
+static constexpr size_t d_busInType = 8;
 enum VertexTypes : uint8_t {
-  input = 0,     ///  input vertex
-  output = 6,    ///  output vertex
-  constant = 1,  /// constant vertex
-  gate = 2,      /// vertex representing a logical element
-  subGraph = 3,  /// subgraph that makes up the vertex
-  dataBus = 4,   /// Bus vertex type. Not supported yet
-  sequential = 5 /// sequential vertex type (d-latch or d-flip-flop)
+  input = 0,      ///  input vertex
+  output = 5,     ///  output vertex
+  constant = 1,   /// constant vertex
+  gate = 2,       /// vertex representing a logical element
+  subGraph = 3,   /// subgraph that makes up the vertex
+  sequential = 4, /// sequential vertex type (d-latch or d-flip-flop)
+  inputBus = input | d_busInType,
+  constantBus = constant | d_busInType,
+  gateBus = gate | d_busInType,
+  sequentialBus = sequential | d_busInType,
+  outputBus = output | d_busInType
 };
 
 // CGG - CiruitGenGraph
@@ -90,15 +94,18 @@ enum SequentialTypes : uint8_t {
 /// used in digital circuits.
 
 enum Gates : uint8_t {
-  GateAnd,    /// logical element - AND
-  GateNand,   /// logical element - "AND-NOT" (NAND)
-  GateOr,     /// logical element - OR
-  GateNor,    /// logical element - "OR-NOT" (NOR)
-  GateXor,    /// lofical element - XOR (Exclusive OR)
-  GateXnor,   /// logical element - XNOR
-  GateNot,    /// logical element - NOT
-  GateBuf,    /// logical element - Buffer
-  GateDefault /// default logical element
+  GateAnd,           /// logical element - AND
+  GateNand,          /// logical element - "AND-NOT" (NAND)
+  GateOr,            /// logical element - OR
+  GateNor,           /// logical element - "OR-NOT" (NOR)
+  GateXor,           /// lofical element - XOR (Exclusive OR)
+  GateXnor,          /// logical element - XNOR
+  GateNot,           /// logical element - NOT
+  GateBuf,           /// logical element - Buffer
+  GateConcatenation, /// logical element - concatenation of several vertices or
+                     /// buses
+  GateSlice,         /// logical element - slice of bus
+  GateDefault        /// default logical element
 };
 
 /// @brief DotTypes
@@ -315,9 +322,11 @@ static constexpr std::array<
                           {"xnor", {"xnor", 1}}}};
 
 static std::pair<std::string, Gates> stringToGate[] = {
-    {"and", Gates::GateAnd}, {"nand", Gates::GateNand}, {"or", Gates::GateOr},
-    {"nor", Gates::GateNor}, {"not", Gates::GateNot},   {"buf", Gates::GateBuf},
-    {"xor", Gates::GateXor}, {"xnor", Gates::GateXnor}};
+    {"and", Gates::GateAnd},       {"nand", Gates::GateNand},
+    {"or", Gates::GateOr},         {"nor", Gates::GateNor},
+    {"not", Gates::GateNot},       {"buf", Gates::GateBuf},
+    {"xor", Gates::GateXor},       {"xnor", Gates::GateXnor},
+    {"busSlice", Gates::GateSlice}};
 
 static std::pair<VertexTypes, std::string_view> vertexToString[] = {
     {VertexTypes::input, "input"},
@@ -329,11 +338,11 @@ static std::pair<VertexTypes, std::string_view> vertexToString[] = {
 
 /// TODO: we can use Gate type as an index
 static std::pair<Gates, std::string_view> gateToString[] = {
-    {Gates::GateAnd, "and"},      {Gates::GateNand, "nand"},
-    {Gates::GateOr, "or"},        {Gates::GateNor, "nor"},
-    {Gates::GateXor, "xor"},      {Gates::GateXnor, "xnor"},
-    {Gates::GateNot, "not"},      {Gates::GateBuf, "buf"},
-    {Gates::GateDefault, "ERROR"}};
+    {Gates::GateAnd, "and"},        {Gates::GateNand, "nand"},
+    {Gates::GateOr, "or"},          {Gates::GateNor, "nor"},
+    {Gates::GateXor, "xor"},        {Gates::GateXnor, "xnor"},
+    {Gates::GateNot, "not"},        {Gates::GateBuf, "buf"},
+    {Gates::GateSlice, "busSlice"}, {Gates::GateDefault, "ERROR"}};
 
 } // namespace GraphUtils
 
