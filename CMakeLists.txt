@@ -19,6 +19,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexBase.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexBus.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexConstant.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexGates.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexInput.cpp
@@ -33,12 +34,14 @@ set(SOURCES
 
 set(PUBLIC_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/enums.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphReader.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertex.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertexBase.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphReader.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertexBus.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/OrientedGraph.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphUtils.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/DefaultAuxiliaryMethods.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
 )
 
 option(ENABLE_LOGGING "Enable logging" OFF)
@@ -134,12 +137,12 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 include_directories(${CMAKE_SOURCE_DIR}/lib)
 
 set_target_properties(
-  ${PROJECT_NAME} PROPERTIES
-  VERSION ${PROJECT_VERSION}
-  SOVERSION ${PROJECT_VERSION_MAJOR}
-  EXPORT_NAME ${PROJECT_NAME}
-  OUTPUT_NAME ${PROJECT_NAME}
-  PUBLIC_HEADER ${PUBLIC_HEADERS})
+  "${PROJECT_NAME}" PROPERTIES
+  VERSION "${PROJECT_VERSION}"
+  SOVERSION "${PROJECT_VERSION_MAJOR}"
+  EXPORT_NAME "${PROJECT_NAME}"
+  OUTPUT_NAME "${PROJECT_NAME}"
+  PUBLIC_HEADER "${PUBLIC_HEADERS}")
 
 include(cmake/utils.cmake)
 

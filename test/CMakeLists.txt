@@ -47,6 +47,7 @@ add_executable(${TEST_NAME}
   src/GraphVertexGatesTests.cpp
   src/GraphVertexOutputTests.cpp
   src/GraphVertexSubGraphTests.cpp
+  src/GraphVertexBusTests.cpp
   src/GraphReaderTests.cpp
   src/GraphVertexBaseTests.cpp
   src/GraphVertexConstantTests.cpp
