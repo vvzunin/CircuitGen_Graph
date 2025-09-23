@@ -209,11 +209,9 @@ VertexPtr OrientedGraph::addConst(const char &i_value,
   return newVertex;
 }
 
-VertexPtr OrientedGraph::addConstBus(
-                                     const std::string &i_name, size_t width) {
-  VertexPtr newVertex = create<GraphVertexBusInput>(
-      i_name.empty() ? "" : internalize(i_name), shared_from_this(),
-      width);
+VertexPtr OrientedGraph::addConstBus(const std::string &i_name, size_t width) {
+  VertexPtr newVertex = create<GraphVertexBusConstant>(
+      i_name.empty() ? "" : internalize(i_name), shared_from_this(), width);
   d_vertices[VertexTypes::constant].push_back(newVertex);
 
   return newVertex;
@@ -268,8 +266,8 @@ VertexPtr OrientedGraph::addSequentialBus(const SequentialTypes &i_type,
                                           const std::string &i_name,
                                           size_t i_width) {
   auto name = i_name.empty() ? "" : internalize(i_name);
-  VertexPtr newVertex = create<GraphVertexBusSequential>(i_type, i_clk, i_data,
-                                                      shared_from_this(), name, i_width);
+  VertexPtr newVertex = create<GraphVertexBusSequential>(
+      i_type, i_clk, i_data, shared_from_this(), name, i_width);
   d_vertices[VertexTypes::sequential].push_back(newVertex);
   newVertex->reserveInConnections(2ul);
   addEdge(i_clk, newVertex);
@@ -828,8 +826,8 @@ bool OrientedGraph::verilogFileCreating(GraphPtr graph, std::string i_path,
   i_fileStream
       << "//This file was generated automatically using CircuitGen_Graph at ";
   i_fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << "." << std::endl
-             << std::endl;
-             return true;
+               << std::endl;
+  return true;
 }
 
 void OrientedGraph::verilogInoutsWriting(
@@ -920,11 +918,12 @@ bool OrientedGraph::verilogSubgraphWriting(GraphPtr graph,
   return true;
 }
 
-void OrientedGraph::verilogVerticesDefining(GraphPtr graph,
-                                            std::ofstream &i_fileStream,  std::function<void(const VertexPtr)> printDefinition) {
+void OrientedGraph::verilogVerticesDefining(
+    GraphPtr graph, std::ofstream &i_fileStream,
+    std::function<void(const VertexPtr)> printDefinition) {
   std::string verilogTab = "\t";
-  if (graph->d_vertices[VertexTypes::sequential].size()) 
-  i_fileStream << "\n";
+  if (graph->d_vertices[VertexTypes::sequential].size())
+    i_fileStream << "\n";
   for (const auto *oper: graph->d_vertices[VertexTypes::sequential]) {
     i_fileStream << VertexUtils::getSequentialComment(
         static_cast<const GraphVertexSequential *>(oper));
@@ -936,7 +935,7 @@ void OrientedGraph::verilogVerticesDefining(GraphPtr graph,
   }
   // and all operations
   for (auto *oper: graph->d_vertices[VertexTypes::gate]) {
-    printDefinition(oper); 
+    printDefinition(oper);
     i_fileStream << "\n";
   }
 
@@ -944,7 +943,7 @@ void OrientedGraph::verilogVerticesDefining(GraphPtr graph,
   // and all outputs
   for (auto *oper: graph->d_vertices[VertexTypes::output]) {
     printDefinition(oper);
-    i_fileStream <<"\n";
+    i_fileStream << "\n";
   }
 }
 
@@ -963,7 +962,7 @@ bool OrientedGraph::verilogFinalOperations(GraphPtr graph,
 }
 
 bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
-   std::string path = i_path + (d_isSubGraph ? "/submodules" : "");
+  std::string path = i_path + (d_isSubGraph ? "/submodules" : "");
   auto correctPath = path + "/" + i_filename;
   std::ofstream i_fileStream(correctPath);
   bool successFileCreating, successSubgraphWriting;
@@ -984,16 +983,19 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
     i_fileStream << vertex->getRawName();
   };
   auto lambdaDefining = [&](const VertexPtr vertex) {
-   i_fileStream << "\t" << *vertex;
+    i_fileStream << "\t" << *vertex;
   };
-  successFileCreating =  verilogFileCreating(shared_from_this(), correctPath, i_filename, i_fileStream);
+  successFileCreating = verilogFileCreating(shared_from_this(), correctPath,
+                                            i_filename, i_fileStream);
   verilogInoutsWriting(shared_from_this(), i_fileStream, lambdaInouts);
   verilogVerticesDeclaration(shared_from_this(), i_fileStream,
                              lambdaDeclaration);
   verilogConstantWriting(shared_from_this(), i_fileStream, lambdaConstant);
-  successSubgraphWriting = verilogSubgraphWriting(shared_from_this(), i_fileStream, i_path);
+  successSubgraphWriting =
+      verilogSubgraphWriting(shared_from_this(), i_fileStream, i_path);
   verilogVerticesDefining(shared_from_this(), i_fileStream, lambdaDefining);
-  return successFileCreating && successSubgraphWriting && verilogFinalOperations(shared_from_this(), i_fileStream);
+  return successFileCreating && successSubgraphWriting &&
+         verilogFinalOperations(shared_from_this(), i_fileStream);
   /* if (d_alreadyParsedVerilog && d_isSubGraph) {
      return true;
    }
@@ -1162,36 +1164,38 @@ bool OrientedGraph::toVerilogBusEnabled(std::string i_path,
     int8_t length = -1;
     std::multimap<size_t, VertexPtr> busSet;
     for (auto *value: eachVertex) {
-    if (value->isBus())
-      busSet.emplace(std::make_pair(
-    GraphVertexBus::getBusPointer(value)->getWidth(), value));
+      if (value->isBus())
+        busSet.emplace(std::make_pair(
+            GraphVertexBus::getBusPointer(value)->getWidth(), value));
     }
 
     if (busSet.size() < eachVertex.size()) {
-    i_fileStream << VertexUtils::vertexTypeToVerilog(usedType) << " ";
-    for (auto *value: eachVertex) {
+      i_fileStream << VertexUtils::vertexTypeToVerilog(usedType) << " ";
+      for (auto *value: eachVertex) {
         if (!value->isBus())
-        i_fileStream << value->getRawName()
-                     << (value != eachVertex.back() ? ", " : ";\n\t");
+          i_fileStream << value->getRawName()
+                       << (value != eachVertex.back() ? ", " : ";\n\t");
       }
     }
-    for (auto value : busSet) {
+    for (auto value: busSet) {
       if (GraphVertexBus::getBusPointer(value.second)->getWidth() == length)
         i_fileStream << value.second->getRawName()
                      << (value != *busSet.rbegin() ? ", " : ";\n");
       else
-        i_fileStream << VertexUtils::vertexTypeToVerilog(usedType) << " "
-                     << GraphVertexBus::getBusPointer(value.second)->getBusNameSuffix() << " "
-                     << value.second->getRawName()
-                     << (value != *busSet.rbegin() ? ", " : ";\n");
+        i_fileStream
+            << VertexUtils::vertexTypeToVerilog(usedType) << " "
+            << GraphVertexBus::getBusPointer(value.second)->getBusNameSuffix()
+            << " " << value.second->getRawName()
+            << (value != *busSet.rbegin() ? ", " : ";\n");
       length = value.first;
     }
+    i_fileStream << "\n";
   };
   auto lambdaInouts = [&](VertexPtr vertex) {
     i_fileStream << vertex->getRawName();
   };
-   auto lambdaDefining = [&](const VertexPtr vertex) {
-   i_fileStream << "\t" << *vertex << "\n";
+  auto lambdaDefining = [&](const VertexPtr vertex) {
+    i_fileStream << "\t" << *vertex;
   };
   verilogFileCreating(shared_from_this(), i_path, i_filename, i_fileStream);
   verilogInoutsWriting(shared_from_this(), i_fileStream, lambdaInouts);
@@ -1203,8 +1207,8 @@ bool OrientedGraph::toVerilogBusEnabled(std::string i_path,
   return verilogFinalOperations(shared_from_this(), i_fileStream);
 }
 
-bool OrientedGraph::toVerilogBusEnabledAsOneBit(
-  std::string i_path, std::string i_filename) {
+bool OrientedGraph::toVerilogBusEnabledAsOneBit(std::string i_path,
+                                                std::string i_filename) {
   std::string path = i_path + (d_isSubGraph ? "/submodules" : "");
   auto correctPath = path + "/" + i_filename;
   std::ofstream i_fileStream(correctPath);
@@ -1230,28 +1234,37 @@ bool OrientedGraph::toVerilogBusEnabledAsOneBit(
     }
     for (auto value = busSet.begin(); value != busSet.end(); ++value) {
       i_fileStream << VertexUtils::vertexTypeToVerilog(usedType) << " ";
-      for (int i = 0; i < GraphVertexBus::getBusPointer(value->second)->getWidth(); ++i)
-          i_fileStream << value->second->getRawName() << "_" << i << 
-          (i != GraphVertexBus::getBusPointer(value->second)->getWidth() - 1 ? ", ": ";\n\n\t");
+      for (int i = 0;
+           i < GraphVertexBus::getBusPointer(value->second)->getWidth(); ++i)
+        i_fileStream
+            << value->second->getRawName() << "_" << i
+            << (i != GraphVertexBus::getBusPointer(value->second)->getWidth() -
+                            1
+                    ? ", "
+                    : ";\n\t");
     }
+    i_fileStream << "\n";
   };
 
   auto lambdaInouts = [&](VertexPtr vertex) {
     if (vertex->isBus()) {
-      for (int i = 0; i < GraphVertexBus::getBusPointer(vertex)->getWidth()-1; ++i) {
-      i_fileStream << vertex->getName() << "_" << std::to_string(i)
-      <<  ", ";
+      for (int i = 0; i < GraphVertexBus::getBusPointer(vertex)->getWidth() - 1;
+           ++i) {
+        i_fileStream << vertex->getName() << "_" << std::to_string(i) << ", ";
       }
-      i_fileStream << vertex->getName() << "_" 
-      << std::to_string(GraphVertexBus::getBusPointer(vertex)->getWidth()-1); 
-    }
-    else
+      i_fileStream << vertex->getName() << "_"
+                   << std::to_string(
+                          GraphVertexBus::getBusPointer(vertex)->getWidth() -
+                          1);
+    } else
       i_fileStream << vertex->getRawName();
   };
-   auto lambdaDefining = [&](const VertexPtr vertex) {
-  if(!vertex->isBus())
-   i_fileStream <<"\t" << *vertex << "\n";
-  else i_fileStream << "\t" << GraphVertexBus::getBusPointer(vertex)->toOneBitVerilog();
+  auto lambdaDefining = [&](const VertexPtr vertex) {
+    if (!vertex->isBus())
+      i_fileStream << "\t" << *vertex << "\n";
+    else
+      i_fileStream << "\t"
+                   << GraphVertexBus::getBusPointer(vertex)->toOneBitVerilog();
   };
   verilogFileCreating(shared_from_this(), i_path, i_filename, i_fileStream);
   verilogInoutsWriting(shared_from_this(), i_fileStream, lambdaInouts);

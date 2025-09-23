@@ -3,6 +3,8 @@
  * @brief Реализация базовой вершины графа и утилит VertexUtils.
  */
 #include "CircuitGenGraph/GraphUtils.hpp"
+#include "CircuitGenGraph/GraphVertexBus.hpp"
+#include "CircuitGenGraph/OrientedGraph.hpp"
 #include <algorithm>
 #include <cstdint>
 #include <iostream>
@@ -365,6 +367,15 @@ void GraphVertexBase::log(el::base::type::ostream_t &os) const {
 std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex) {
   stream << vertex.toVerilog();
   return stream;
+}
+VertexPtr GraphVertexBase::minWidthVertex() const {
+   VertexPtr minVertex = d_inConnections.back();
+  for(auto* connection : d_inConnections) {
+    if(!connection->isBus()) return connection;
+    if(GraphVertexBus::getBusPointer(connection)->getWidth() <GraphVertexBus::getBusPointer(connection)->getWidth())
+    minVertex =  connection;  
+}
+return minVertex;
 }
 
 bool GraphVertexBase::removeVertexToInConnections(VertexPtr i_vert) {
