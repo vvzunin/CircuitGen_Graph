@@ -410,8 +410,9 @@ public:
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 protected:
-  std::string toVerilogCommon(
-      std::function<std::string(std::string &basic)> printFunction) const;
+  std::string
+  toVerilogCommon(std::function<std::string()> printBinaryOperators,
+                  std::function<std::string()> printUnaryOperators) const;
   Gates d_gate;
   // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых
   // логических операций.
@@ -548,6 +549,8 @@ class GraphVertexBusInput : public GraphVertexInput, public GraphVertexBus {
 public:
   GraphVertexBusInput(std::string_view i_name, GraphPtr i_baseGraph,
                       size_t i_width);
+  std::string toOneBitVerilog() const override final;
+
   //  size_t calculateHash() override final;
   //  std::string updateValueBus() override final;
 };
