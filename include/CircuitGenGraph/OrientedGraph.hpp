@@ -479,23 +479,6 @@ public:
   /// @endcode
 
   bool addEdges(std::vector<VertexPtr> from1, VertexPtr to);
-  // если две шины одного размера соединяют ребром,
-  // то вызывать будут addEdge(VertexPtr from, VertexPtr to)
-  // и в нем надо будет проверять некоторые свойства шин
-  // а эта перегрузка нужна, если к шины разных размеров и
-  // нужно вручную задавать какой срез вершины from будет
-  // использован в качестве аргумента (или использовать VertexPtr from,
-  // VertexPtr to) и тогда from будет подключена к to так, чтобы совпадали
-  // младшие разряды (старшие будут отброшены если она больше, и заполнены
-  // нулями, если меньше)
-  // то есть graph.addEdge(bus1.getSlice(3,5), bus2);
-  // это должно быть удобно......
-  //
-  // если нужно провести ребро от вершины к шине можно вызвать
-  // addEdge(VertexPtr from, VertexPtr to), и тогда она будет
-  // подключена к младшему разряду шины, или создавать
-  // оператор конкатенации и уже его к шине
-  bool addEdge(GraphVertexBusSlice *from, VertexPtr to);
 
   /// @brief removeEdge
   /// Remove an edge from graph if it exists.

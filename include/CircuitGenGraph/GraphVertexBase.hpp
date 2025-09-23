@@ -118,6 +118,7 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
 
 class GraphVertexBase {
   friend class OrientedGraph;
+  friend class GraphVertexBus;
 
 public:
   /// @brief resetes counter of unique id-s for vertices
@@ -572,6 +573,7 @@ protected:
   /// @endcode
 
   bool removeVertexToInConnections(VertexPtr i_vert);
+  VertexPtr minWidthVertex() const;
   std::vector<VertexPtr> d_inConnections;
   std::vector<VertexPtr> d_outConnections;
   GraphPtrWeak d_baseGraph;

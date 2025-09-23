@@ -105,9 +105,7 @@ GraphVertexBus * GraphVertexBus::getBusPointer(VertexPtr vertex) {
   /// @return A string containing Verilog code for the vertex, or an empty
   /// string if the vertex type is not "output" or if the incoming connection
   /// is invalid
-std::string GraphVertexBus::toOneBitVerilog() const {
-return ""; 
-}
+
   std::string GraphVertexBus::updateValueBus() {
 
   }
@@ -116,9 +114,4 @@ bool GraphVertexBus::compareBusWidth(const VertexPtr left, const VertexPtr right
   if (!right->isBus()) return true;
   return GraphVertexBus::getBusPointer(left)->getWidth() < GraphVertexBus::getBusPointer(right)->getWidth(); 
 }
-    /// @brief toVerilog
-  /// Generates Verilog code for the vertex
-  /// @return A string containing Verilog code for the vertex, or an empty
-  /// string if the vertex type is not "output" or if the incoming connection
-  /// is invalid
 }; // namespace CG_Graph

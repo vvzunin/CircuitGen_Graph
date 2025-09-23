@@ -68,4 +68,7 @@ void GraphVertexInput::log(el::base::type::ostream_t &os) const {
 GraphVertexBusInput::GraphVertexBusInput(std::string_view i_name, GraphPtr i_baseGraph, size_t i_width) 
 : GraphVertexInput(i_name, i_baseGraph, inputBus),
 GraphVertexBus(i_width){}
+std::string GraphVertexBusInput::toOneBitVerilog() const {
+return ""; 
+}
 } // namespace CG_Graph
