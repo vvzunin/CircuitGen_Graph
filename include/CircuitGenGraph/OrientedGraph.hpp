@@ -535,8 +535,6 @@ public:
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool addEdges(std::vector<VertexPtr> from1, VertexPtr to);
 
-  bool addEdge(GraphVertexBusSlice *from, VertexPtr to);
-
   /// @brief removeEdge
   /// Remove an edge from graph if it exists.
   /// @param from1 The vertex to be deleted to the input connections of "to"
