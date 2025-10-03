@@ -16,16 +16,6 @@ variables:
   REPO_NAME: circuitgen_graph
   DOCKER_URL: $REGISTRY_URL/$GROUP_NAME/$REPO_NAME
 
-init-submodules:
-  stage: init
-  script:
-    - git submodule sync --recursive
-    - git submodule update --init --recursive
-  tags:
-    - docker
-  rules:
-    - if: $CI_COMMIT_TAG == null
-
 lint:
   stage: check
   image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
@@ -43,7 +33,6 @@ lint:
 
 sanitize:
   stage: check
-  needs: ["init-submodules"]
   image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
   variables: 
     CXX: 'clang++-17'
@@ -64,7 +53,6 @@ sanitize:
 
 coverage:
   stage: test
-  needs: ["init-submodules"]
   image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
   needs:
     - lint
@@ -86,7 +74,6 @@ coverage:
 
 tests:
   stage: test
-  needs: ["init-submodules"]
   image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
   needs:
     - lint
@@ -114,7 +101,6 @@ tests:
 
 docs:
   stage: docs
-  needs: ["init-submodules"]
   image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
   needs:
     - coverage
