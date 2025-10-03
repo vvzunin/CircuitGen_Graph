@@ -311,7 +311,7 @@ public:
   /// If you are going to call this method for a second time, please, set
   /// all flags, used in updateLevel to their default state.
 
-  virtual void updateLevel(std::string tab = "");
+  virtual void updateLevel();
 
   /// @brief getVerticesByLevel Support method for
   /// OrientedGraph::getVerticesByLevel() calculating

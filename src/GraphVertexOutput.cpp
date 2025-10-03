@@ -1,3 +1,4 @@
+#include "CircuitGenGraph/GraphVertexBase.hpp"
 #include <CircuitGenGraph/GraphVertex.hpp>
 
 #ifdef LOGFLAG
@@ -29,17 +30,17 @@ char GraphVertexOutput::updateValue() {
   return d_value;
 }
 
-void GraphVertexOutput::updateLevel(std::string tab) {
-  int counter = 0;
-  if (d_needUpdate) {
+void GraphVertexOutput::updateLevel() {
+  if (d_needUpdate != VS_NOT_CALC) {
     return;
   }
+  int counter = 0;
   for (VertexPtr ptr: d_inConnections) {
 #ifdef LOGFLAG
-    LOG(INFO) << tab << counter++ << ". " << ptr->getName() << " ("
+    LOG(INFO) << counter++ << ". " << ptr->getName() << " ("
               << ptr->getTypeName() << ")";
 #endif
-    ptr->updateLevel(tab + "  ");
+    ptr->updateLevel();
     uint32_t lvl = ptr->getLevel() + 1;
     d_level = (lvl > d_level) ? lvl : d_level;
   }

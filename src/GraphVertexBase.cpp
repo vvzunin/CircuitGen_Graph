@@ -185,23 +185,23 @@ void GraphVertexBase::removeValue() {
   }
 }
 
-void GraphVertexBase::updateLevel(std::string tab) {
+void GraphVertexBase::updateLevel() {
   // 2 - IN PROGRESS, 1 - HC_CALC
   // 2 == 010
   // 1 == 001
   // d_needUpdate = static_cast<MY_ENUM>(HC_CALC | ADDED); // ADDED = 4 // 100
   // 101
   int counter = 0;
-  if (d_needUpdate && d_needUpdate == VS_IN_PROGRESS) {
+  if (d_needUpdate != VS_NOT_CALC) {
     return;
   }
   d_needUpdate = VS_IN_PROGRESS;
   for (VertexPtr vert: d_inConnections) {
 #ifdef LOGLFLAG
-    LOG(INFO) << tab << counter++ << ". " << vert->getName() << " ("
+    LOG(INFO) << counter++ << ". " << vert->getName() << " ("
               << vert->getTypeName() << ")";
 #endif
-    vert->updateLevel(tab + "  ");
+    vert->updateLevel();
     d_level = (vert->getLevel() >= d_level) ? vert->getLevel() + 1 : d_level;
   }
   d_needUpdate = VS_CALC;

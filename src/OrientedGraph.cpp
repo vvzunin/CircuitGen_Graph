@@ -114,7 +114,7 @@ void OrientedGraph::updateLevels() {
     LOG(INFO) << counter++ << ". " << vert->getRawName() << " ("
               << vert->getTypeName() << ")";
 #endif
-    vert->updateLevel("    ");
+    vert->updateLevel();
   }
 }
 
