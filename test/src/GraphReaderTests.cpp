@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "CircuitGenGraph/GraphUtils.hpp"
 #include <fmt/core.h>
 #include <gtest/gtest.h>
@@ -30,12 +31,97 @@ TEST(VerilogReadingTest, SimplestGraphsIsRead) {
   GraphPtr graph = context.d_graphs[simpleReadingFilename.data()];
   EXPECT_EQ(graph->getGatesCount()[GateAnd], 1);
   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
+=======
+// #include "CircuitGenGraph/GraphUtils.hpp"
+// #include <gtest/gtest.h>
+// #include <CircuitGenGraph/GraphReader.hpp>
+// #include <CircuitGenGraph/OrientedGraph.hpp>
+// #include <lorina/lorina.hpp>
+// #include <memory>
+// using namespace CG_Graph;
+// TEST(VerilogReadingTest, SimplestGraphsIsRead) {
+//   Context context = Context();
+//   EXPECT_NO_THROW(
+//       OrientedGraph::readVerilog("../../../test/"
+//                                  "testModulesForReading/simpleReading.v",
+//                                  context));
+//   GraphPtr graph = context.d_graphs["simpleReading"];
+//   EXPECT_EQ(graph->getGatesCount()[GateAnd], 1);
+//   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
+//   VertexPtr clk = graphCreated->addInput();
+//   VertexPtr someInput = graphCreated->addInput();
+//   VertexPtr gate = graphCreated->addGate(GateAnd);
+//   VertexPtr output = graphCreated->addOutput();
+//   graphCreated->addEdge(clk, gate);
+//   graphCreated->addEdge(someInput, gate);
+//   graphCreated->addEdge(gate, output);
+//   EXPECT_EQ(graph->calculateHash(), graphCreated->calculateHash());
+// }
+>>>>>>> b566073 (oneBitVerilog for gates added, sequential refactoring started)
 
-  VertexPtr clk = graphCreated->addInput();
-  VertexPtr someInput = graphCreated->addInput();
-  VertexPtr gate = graphCreated->addGate(GateAnd);
-  VertexPtr output = graphCreated->addOutput();
+// TEST(VerilogReadingTest, VerticesSequenceCreated) {
+//   Context context = Context();
+//   EXPECT_NO_THROW(
+//       OrientedGraph::readVerilog("../../../test/"
+//                                  "testModulesForReading/simpleStructure.v",
+//                                  context));
+//   GraphPtr graph = context.d_graphs["simpleStructure"];
+//   EXPECT_EQ(graph->getGatesCount()[GateNot], 1);
+//   EXPECT_EQ(graph->getGatesCount()[GateOr], 1);
+//   EXPECT_EQ(graph->getGatesCount()[GateXnor], 1);
+//   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
+//   VertexPtr inputA = graphCreated->addInput();
+//   VertexPtr inputB = graphCreated->addInput();
+//   VertexPtr inputC = graphCreated->addInput();
+//   VertexPtr gateXnor = graphCreated->addGate(GateXnor);
+//   VertexPtr gateOr = graphCreated->addGate(GateOr);
+//   VertexPtr gateAnd = graphCreated->addGate(GateAnd);
+//   VertexPtr gateNot = graphCreated->addGate(GateNot);
+//   VertexPtr outputQ = graphCreated->addOutput();
+//   VertexPtr outputQ2 = graphCreated->addOutput();
+//   graphCreated->addEdge(inputB, gateNot);
+//   graphCreated->addEdge(inputA, gateOr);
+//   graphCreated->addEdge(gateNot, gateOr);
+//   graphCreated->addEdge(inputC, gateOr);
+//   graphCreated->addEdge(gateOr, gateXnor);
+//   graphCreated->addEdge(inputA, gateXnor);
+//   graphCreated->addEdge(gateXnor, gateAnd);
+//   graphCreated->addEdge(gateOr, gateAnd);
+//   graphCreated->addEdge(gateAnd, outputQ);
+//   graphCreated->addEdge(gateNot, outputQ2);
+//   EXPECT_EQ(graph->calculateHash(), graphCreated->calculateHash());
+// }
+// TEST(VerilogReadingTest, ConstantCreating) {
+//   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
+//   VertexPtr constOne = graphCreated->addConst('1');
+//   VertexPtr constZero = graphCreated->addConst('0');
+//   VertexPtr input = graphCreated->addInput();
+//   VertexPtr nand = graphCreated->addGate(GateNand);
+//   VertexPtr output = graphCreated->addOutput();
+//   VertexPtr buf = graphCreated->addGate(GateBuf);
+//   VertexPtr xnor = graphCreated->addGate(GateXnor);
+//   graphCreated->addEdge(constOne, nand);
+//   graphCreated->addEdge(input, nand);
+//   graphCreated->addEdge(constZero, buf);
+//   graphCreated->addEdge(buf, xnor);
+//   graphCreated->addEdge(nand, xnor);
+//   graphCreated->addEdge(xnor, output);
+//   graphCreated->setName("constTest");
+//   graphCreated->toVerilog("../../../test/"
+//                           "testModulesForReading",
+//                           "constTest.v");
+//   Context context = Context();
+//   EXPECT_NO_THROW(
+//       OrientedGraph::readVerilog("../../../test/"
+//                                  "testModulesForReading/constTest.v",
+//                                  context));
+//   GraphPtr graph = context.d_graphs["constTest"];
+//   EXPECT_EQ(graph->calculateHash(), graphCreated->calculateHash());
+//   remove("../../../test/"
+//          "testModulesForReading/constTest.v");
+// }
 
+<<<<<<< HEAD
   graphCreated->addEdge(clk, gate);
   graphCreated->addEdge(someInput, gate);
   graphCreated->addEdge(gate, output);

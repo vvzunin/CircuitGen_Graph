@@ -310,8 +310,8 @@ public:
   VertexPtr addGate(const Gates &i_gate, const std::string &i_name = "");
   VertexPtr addGateBus(const Gates &i_gate, const std::string &i_name = "",
                        size_t width = 1);
-  VertexPtr addSliceBus(VertexPtr i_bus, size_t begin,
-                        const std::string &i_name, size_t i_width);
+  VertexPtr addSliceBus(VertexPtr i_bus, size_t begin, size_t i_width,
+                        const std::string &i_name = "");
   /// @brief addSequential Adds a sequential vertex to the current graph.
   /// @param i_type The type of the sequential to be added;
   /// can be flip-flop (ff) or latch only
