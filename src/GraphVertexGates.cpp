@@ -13,7 +13,7 @@
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
 #endif
-#include "../lib/fmt/core.h"
+#include "fmt/core.h"
 
 namespace CG_Graph {
 
@@ -197,8 +197,11 @@ std::string GraphVertexGates::toVerilog() const {
     if (d_gate == Gates::GateNand || d_gate == Gates::GateNor ||
         d_gate == Gates::GateXnor) {
       basic += "~ ( ";
-
       end = " )";
+    }
+    if (d_gate == Gates::GateConcatenation) {
+      basic += "{ ";
+      end = " }";
     }
     for (size_t i = 0; i < d_inConnections.size() - 1; ++i) {
       basic += d_inConnections.at(i)->getName() + " " + oper + " ";
@@ -293,7 +296,6 @@ std::string GraphVertexGates::toVerilogCommon(
 #endif
     return "";
   }
-  std::string oper = VertexUtils::gateToString(d_gate);
   VertexPtr ptr = d_inConnections.back();
   if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
     if (d_inConnections.size() > 1) {
@@ -307,8 +309,6 @@ std::string GraphVertexGates::toVerilogCommon(
     std::cerr << "Invalid: multiple-input vertex \"" << d_name
               << "\" has one input\n";
   }
-
-  std::string end = "";
   return printBinaryOperators();
 }
 
@@ -339,7 +339,7 @@ GraphVertexBusSlice::GraphVertexBusSlice(std::string_view i_name,
 
 std::string GraphVertexBusSlice::getSliceSuffix() const {
   return "[" + std::to_string(d_begin + d_width) + ":" +
-         std::to_string(d_begin) + "]";
+         std::to_string(d_begin) + "]" +";\n";
 }
 
 std::string GraphVertexBusSlice::toVerilog() const {
@@ -399,7 +399,7 @@ std::string GraphVertexBusGate::toOneBitVerilog() const {
     for (int j = 0; j < n; ++j) {
       temporaryName =
           fmt::format("{}_{}", getInConnections().back()->getName(), j);
-      stream << fmt::format("assign {}_{} = {}{}{};\n", getName(), j, oper, temporaryName,
+      stream << fmt::format("assign {}_{} = {}{}{};\n\t", getName(), j, oper, temporaryName,
                             "");
     }
     return stream.str();
@@ -412,34 +412,23 @@ std::string GraphVertexBusGate::toOneBitVerilog() const {
       begin = "~ ( ";
       end = " )";
     }
+    if (d_gate == Gates::GateConcatenation) {
+      begin = "{ ";
+      end = " }";
+    }
     names.clear();
     getNamesVectorFirst(names, d_inConnections);
-    stream << fmt::format("assign {}_0 = {}{}{};\n", getName(), begin,
+    stream << fmt::format("assign {}_0 = {}{}{};\n\t", getName(), begin,
     fmt::join(names, " " + oper + " "), end);
 
     for (int j = 1; j < getWidth(); ++j) {
       names.clear();
       getNamesVector(names,d_inConnections, j);
-      stream << fmt::format("assign {}_{} = {}{}{};\n", getName(),j, begin,
+      stream << fmt::format("assign {}_{} = {}{}{};\n\t", getName(),j, begin,
                             fmt::join(names, " " + oper + " "), end);
     }
     return stream.str();
   };
   return toVerilogCommon(printBinaryOperators, printUnaryOperators);
 }
-// std::string GraphVertexBusConcatenation::toVerilog() const {
-// if (!d_inConnections.size()) {
-//   std::cerr << "TODO: delete empty vertices: " << d_name << std::endl;
-//     return "";
-// }
-// std::stringstream ansStream;
-// ansStream << "{";
-// for (VertexPtr v : d_inConnections) ansStream << v->getName() <<", ";
-// std::string ans = ansStream.str();
-// ans.pop_back();
-// ans.pop_back();
-// ans.push_back('}');
-// return ans;
-//}
-
 } // namespace CG_Graph
