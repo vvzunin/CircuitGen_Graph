@@ -459,14 +459,10 @@ public:
   /// @param i_wire1 RST or CLR or SET
   /// @param i_wire2 SET or EN
   /// @param i_baseGraph
-  GraphVertexSequential(SequentialTypes i_type,
-                        VertexPtr i_clk,
-                        VertexPtr i_data,
-                        VertexPtr i_wire1,
-                        VertexPtr i_wire2,
-                        GraphPtr i_baseGraph,
-                        std::string_view i_name,
-                        bool i_isBus = 0);
+  GraphVertexSequential(SequentialTypes i_type, VertexPtr i_clk,
+                           VertexPtr i_data,VertexPtr i_wire1,
+                           VertexPtr i_wire2, GraphPtr i_baseGraph,
+                           std::string_view i_name, bool i_isBus = 0);
 
   /// @brief GraphVertexSequential
   /// @param i_type type of Sequential - (a/n/an)ff(r/c)se, 
@@ -538,12 +534,6 @@ protected:
 
 protected:
   SequentialTypes d_seqType;
-
-  VertexPtr d_clk = nullptr;
-  VertexPtr d_data = nullptr;
-  VertexPtr d_en = nullptr;
-  VertexPtr d_rst = nullptr;
-  VertexPtr d_set = nullptr;
 };
 class GraphVertexBusInput : public GraphVertexInput, public GraphVertexBus {
 public:
@@ -635,6 +625,7 @@ public:
   /// @param i_data
   /// @param i_wire1 RST or CLR or SET
   /// @param i_wire2 SET or EN
+  /// @param i_wire3 SET or EN
   /// @param i_baseGraph
   GraphVertexBusSequential(SequentialTypes i_type, VertexPtr i_clk,
                            VertexPtr i_data, VertexPtr i_wire1,

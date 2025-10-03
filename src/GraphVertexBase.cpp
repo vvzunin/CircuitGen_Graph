@@ -33,6 +33,8 @@ std::string VertexUtils::gateToString(Gates i_type) {
       return "^";
     case Gates::GateBuf:
       return "";
+    case Gates::GateConcatenation:
+      return ",";
       // Default
     default:
       return "Error";

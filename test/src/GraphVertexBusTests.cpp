@@ -65,8 +65,9 @@ TEST(BusTest, SimpleBusPrintedSeparate) {
       "andGate_0, andGate_1, andGate_2;\n\twire notGate_0, notGate_1, "
       "notGate_2, notGate_3, notGate_4;\n\t\n\t\n\tassign andGate_0 = "
       "anotherInputBus_0 & buf;\n\tassign andGate_1 = "
-      "anotherInputBus_1;\n\tassign andGate_2 = "
-      "anotherInputBus_2;\n\t\n\tassign notGate_0 = ~inputBus_0;\n\tassign "
+      "anotherInputBus_1 & 1'bx;\n\tassign andGate_2 = "
+      "anotherInputBus_2 & 1'bx;\n\t\n\tassign notGate_0 = "
+      "~inputBus_0;\n\tassign "
       "notGate_1 = ~inputBus_1;\n\tassign notGate_2 = ~inputBus_2;\n\tassign "
       "notGate_3 = ~inputBus_3;\n\tassign notGate_4 = "
       "~inputBus_4;\n\t\n\tassign buf = inputVertex;\n\n\n\tassign resAnd_0 = "
@@ -81,7 +82,7 @@ TEST(BusTest, oneBitVerilogForGates) {
   VertexPtr inputBus = graph->addInputBus("inputBus", 5);
   VertexPtr anotherInputBus = graph->addInputBus("anotherInputBus", 3);
   VertexPtr inputVertex = graph->addInput("inputVertex");
-  VertexPtr constBus = graph->addConstBus("", 7);
+  VertexPtr constBus = graph->addConstBus("const_0", 7);
   VertexPtr andBus = graph->addGateBus(GateAnd, "andGate", 3);
   VertexPtr notBus = graph->addGateBus(GateNot, "notGate", 5);
   VertexPtr buf = graph->addGate(GateBuf, "buf");
@@ -92,8 +93,8 @@ TEST(BusTest, oneBitVerilogForGates) {
   graph->addEdge(constBus, andBus);
   EXPECT_EQ(GraphVertexBus::getBusPointer(andBus)->toOneBitVerilog(),
             "assign andGate_0 = anotherInputBus_0 & buf & const_0_0;\n"
-            "\tassign andGate_1 = anotherInputBus_1 & const_0_1;\n"
-            "\tassign andGate_2 = anotherInputBus_2 & const_0_2;\n\t");
+            "\tassign andGate_1 = anotherInputBus_1 & 1'bx & const_0_1;\n"
+            "\tassign andGate_2 = anotherInputBus_2 & 1'bx & const_0_2;\n\t");
 }
 TEST(BusTest, severalBusModulePrintedToVerilog) {
   GraphPtr graph = std::make_shared<OrientedGraph>();
@@ -126,5 +127,44 @@ TEST(BusTest, SimpleBusAdded) {
   graph->addEdge(v, v2);
   EXPECT_NO_THROW(graph->toVerilog("./"));
 }
-TEST(BusTest, SequentialPrintTest) {
+TEST(BusTest, SliceToVerilog) {
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+  VertexPtr v = graph->addInputBus("lalala", 5);
+  VertexPtr v1 = graph->addSliceBus(v, 0, 2);
+  EXPECT_NO_THROW(graph->toVerilog("./", "micro_to_verilog_test.v"));
+  EXPECT_EQ(v1->toVerilog(), "assign gate_0 = lalala[2:0];\n");
+}
+TEST(BusTest, SliceErrorsWhenIncorrect) {
+  std::stringstream buffer;
+  // перенаправляем cerr
+  std::streambuf *old = std::cerr.rdbuf(buffer.rdbuf());
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+  VertexPtr input = graph->addInputBus("lalala", 5);
+  VertexPtr s1 = graph->addSliceBus(input, 0, 0);
+  EXPECT_EQ(GraphVertexBus::getBusPointer(s1)->getWidth(), 1);
+  VertexPtr s2 = graph->addSliceBus(input, 2, 6);
+  EXPECT_EQ(GraphVertexBus::getBusPointer(s2)->getWidth(), 3);
+  VertexPtr gate = graph->addGate(GateNor);
+  VertexPtr s3 = graph->addSliceBus(gate, 2, 6);
+  EXPECT_EQ(GraphVertexBus::getBusPointer(s3)->getWidth(), 1);
+  // возвращаем старый буфер
+  std::cerr.rdbuf(old);
+  std::string output = buffer.str();
+  EXPECT_EQ(
+      output,
+      "Width of bus must be an positive value\n"
+      "Width of slice is out of range of bus\nCreated slice with name "
+      "(name is not defined) is connected with vertex, which is not a bus\n");
+}
+TEST(BusTest, ConcatenationToVerilog) {
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+  VertexPtr v = graph->addInputBus("input_", 5);
+  VertexPtr v2 = graph->addGateBus(GateNot, "not", 5);
+  VertexPtr v3 = graph->addGateBus(GateConcatenation);
+  VertexPtr v4 = graph->addConst('1', "const_");
+  graph->addEdge(v, v3);
+  graph->addEdge(v2, v3);
+  graph->addEdge(v4, v3);
+  // EXPECT_EQ(GraphVertexBus::getBusPointer(v3)->getWidth(), 8);
+  EXPECT_EQ(v3->toVerilog(), "assign gate_0 = { input_ , not , const_ };");
 }
