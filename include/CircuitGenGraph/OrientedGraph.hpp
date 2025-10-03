@@ -44,6 +44,7 @@
 #define VertexPtr CG_Graph::GraphVertexBase *
 
 namespace CG_Graph {
+
 class GraphVertexBase;
 class GraphReader;
 class Context;
@@ -591,11 +592,11 @@ public:
   /// @return flag, if file was correctly created or not
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool toVerilog(std::string i_path, std::string i_filename = "");
+
   bool toVerilogBusEnabled(std::string i_path, std::string i_filename = "");
+
   bool toVerilogBusEnabledAsOneBit(std::string i_path,
                                    std::string i_filename = "");
-
-
 
   /// @brief
   /// @return
@@ -951,3 +952,4 @@ private:
 };
 
 } // namespace CG_Graph
+>>>>>>> b566073 (oneBitVerilog for gates added, sequential refactoring started)

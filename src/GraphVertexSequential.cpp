@@ -347,7 +347,7 @@ DotReturn GraphVertexSequential::toDOT() {
                         GraphPtr i_baseGraph,
                         std::string_view i_name,
                         size_t i_width)
-                        : GraphVertexSequential(i_type,i_clk,i_data,i_wire1, i_wire2, i_baseGraph,i_name),
+                        : GraphVertexSequential(i_type,i_clk,i_data,i_wire1, i_wire2, i_baseGraph,i_name, true),
                         GraphVertexBus(i_width) {
     if (i_clk->isBus()) 
     std::cerr << "Input 'clk' must have width = 1, but connected vertex is a bus.";
@@ -404,25 +404,25 @@ DotReturn GraphVertexSequential::toDOT() {
   std::string_view toFormat;
   std::string_view tab = "\t\t";
   bool flag = false;
-  if((d_data->isBus() && getBusPointer(d_data)->getWidth()!= getWidth()))
+  if((getData()->isBus() && getBusPointer(getData())->getWidth()!= getWidth()))
   std::cerr << "Width of DATA not match with width of current sequential vertex.\n";
   if (unsigned val = (d_seqType & RST) | (d_seqType & CLR)) {
-    if(d_rst->isBus()) {
+    if(getRst()->isBus()) {
       std::cerr << "Width of RST is more than 1. By default first bit will be used.\n";
-      simpleCheckFormatBus(verilog, std::string(d_rst->getRawName())+ "[0]", d_name,getWidth(), val, tab);  
+      simpleCheckFormatBus(verilog, std::string(getRst()->getRawName())+ "[0]", d_name,getWidth(), val, tab);  
     }
     else
-    simpleCheckFormatBus(verilog, d_rst->getRawName(), d_name, getWidth(), val, tab);
+    simpleCheckFormatBus(verilog, getRst()->getRawName(), d_name, getWidth(), val, tab);
     verilog += "\t\telse";
     flag = true;
   }
   if (d_seqType & SET) {
-     if(d_set->isBus()) {
+     if(getSet()->isBus()) {
       std::cerr << "Width of SET is more than 1. By default first bit will be used.\n";
-      simpleCheckFormatBus(verilog, std::string(d_set->getRawName())+ "[0]", d_name,getWidth(), SET, tab);  
+      simpleCheckFormatBus(verilog, std::string(getSet()->getRawName())+ "[0]", d_name,getWidth(), SET, tab);  
     }
     else
-    simpleCheckFormatBus(verilog, d_set->getRawName(), d_name, getWidth(), SET,
+    simpleCheckFormatBus(verilog, getSet()->getRawName(), d_name, getWidth(), SET,
                       flag ? " " : tab);
     verilog += "\t\telse";
     flag = true;
@@ -430,15 +430,15 @@ DotReturn GraphVertexSequential::toDOT() {
   verilog += flag ? " " : tab;
   if (d_seqType & EN) {
     toFormat = "if ({}) ";
-     if(d_en->isBus()) {
+     if(getEn()->isBus()) {
       std::cerr << "Width of EN is more than 1. By default first bit will be used.\n";
-      verilog += fmt::format(toFormat, std::string(d_en->getRawName())+ "[0]");  
+      verilog += fmt::format(toFormat, std::string(getEn()->getRawName())+ "[0]");  
     }
     else
-    verilog += fmt::format(toFormat, d_en->getRawName());
+    verilog += fmt::format(toFormat, getEn()->getRawName());
   }
   toFormat = "{} <= {};\n\tend\n";
-  verilog += fmt::format(toFormat, d_name, d_data->getRawName());
+  verilog += fmt::format(toFormat, d_name, getData()->getRawName());
 
   return verilog;
   }
