@@ -1,6 +1,5 @@
 #include "CircuitGenGraph/GraphUtils.hpp"
 #include "CircuitGenGraph/GraphVertexBus.hpp"
-#include "fmt/ranges.h"
 #include <cstddef>
 #include <functional>
 #include <iostream>
@@ -339,7 +338,7 @@ GraphVertexBusSlice::GraphVertexBusSlice(std::string_view i_name,
 
 std::string GraphVertexBusSlice::getSliceSuffix() const {
   return "[" + std::to_string(d_begin + d_width) + ":" +
-         std::to_string(d_begin) + "]" +";\n";
+         std::to_string(d_begin) + "]" + ";\n";
 }
 
 std::string GraphVertexBusSlice::toVerilog() const {
@@ -377,13 +376,14 @@ void getNamesVectorFirst(std::vector<std::string> &names,
 }
 
 void getNamesVector(std::vector<std::string> &names,
-                    const std::vector<VertexPtr> &inConnections,
-                    size_t number, std::string filler = "1'bx") {
+                    const std::vector<VertexPtr> &inConnections, size_t number,
+                    std::string filler = "1'bx") {
   for (auto *vertex: inConnections) {
-    if (vertex->isBus() && 
-    CG_Graph::GraphVertexBus::getBusPointer(vertex)->getWidth() > number)
+    if (vertex->isBus() &&
+        CG_Graph::GraphVertexBus::getBusPointer(vertex)->getWidth() > number)
       names.push_back(fmt::format("{}_{}", vertex->getName(), number));
-    else names.push_back(filler); 
+    else
+      names.push_back(filler);
   }
 }
 
@@ -395,12 +395,12 @@ std::string GraphVertexBusGate::toOneBitVerilog() const {
                            ? getBusPointer(d_inConnections.back())->getWidth()
                            : 1));
   auto printUnaryOperators = [&]() {
-     std::string temporaryName;
+    std::string temporaryName;
     for (int j = 0; j < n; ++j) {
       temporaryName =
           fmt::format("{}_{}", getInConnections().back()->getName(), j);
-      stream << fmt::format("assign {}_{} = {}{}{};\n\t", getName(), j, oper, temporaryName,
-                            "");
+      stream << fmt::format("assign {}_{} = {}{}{};\n\t", getName(), j, oper,
+                            temporaryName, "");
     }
     return stream.str();
   };
@@ -419,12 +419,12 @@ std::string GraphVertexBusGate::toOneBitVerilog() const {
     names.clear();
     getNamesVectorFirst(names, d_inConnections);
     stream << fmt::format("assign {}_0 = {}{}{};\n\t", getName(), begin,
-    fmt::join(names, " " + oper + " "), end);
+                          fmt::join(names, " " + oper + " "), end);
 
     for (int j = 1; j < getWidth(); ++j) {
       names.clear();
-      getNamesVector(names,d_inConnections, j);
-      stream << fmt::format("assign {}_{} = {}{}{};\n\t", getName(),j, begin,
+      getNamesVector(names, d_inConnections, j);
+      stream << fmt::format("assign {}_{} = {}{}{};\n\t", getName(), j, begin,
                             fmt::join(names, " " + oper + " "), end);
     }
     return stream.str();

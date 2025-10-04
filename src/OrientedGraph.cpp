@@ -232,27 +232,29 @@ VertexPtr OrientedGraph::addGateBus(const Gates &i_gate,
   return newVertex;
 }
 VertexPtr OrientedGraph::addSliceBus(VertexPtr i_bus, size_t i_begin,
-                                     size_t i_width, const std::string &i_name) {
+                                     size_t i_width,
+                                     const std::string &i_name) {
   VertexPtr newVertex;
   size_t correctWidth = i_width;
   size_t correctBegin = i_begin;
-  if(!i_bus->isBus()) {
-    std::cerr << "Created slice with name " + (i_name.empty() ? "(name is not defined)":i_name)
-    << " is connected with vertex, which is not a bus\n";
+  if (!i_bus->isBus()) {
+    std::cerr << "Created slice with name " +
+                     (i_name.empty() ? "(name is not defined)" : i_name)
+              << " is connected with vertex, which is not a bus\n";
     correctWidth = 1;
-    correctBegin = 0;  
-  } 
-  else if(i_width == 0) {
-    std::cerr << "Width of bus must be an positive value\n"; 
+    correctBegin = 0;
+  } else if (i_width == 0) {
+    std::cerr << "Width of bus must be an positive value\n";
     correctWidth = 1;
-  }
-  else if (i_bus->isBus() && i_begin + i_width > GraphVertexBus::getBusPointer(i_bus)->getWidth()) {
+  } else if (i_bus->isBus() &&
+             i_begin + i_width >
+                 GraphVertexBus::getBusPointer(i_bus)->getWidth()) {
     std::cerr << "Width of slice is out of range of bus\n";
-    correctWidth = GraphVertexBus::getBusPointer(i_bus)->getWidth() -i_begin;
+    correctWidth = GraphVertexBus::getBusPointer(i_bus)->getWidth() - i_begin;
   }
-  newVertex =
-      create<GraphVertexBusSlice>(i_name.empty() ? "" : internalize(i_name),
-                                  shared_from_this(), correctBegin, correctWidth);
+  newVertex = create<GraphVertexBusSlice>(
+      i_name.empty() ? "" : internalize(i_name), shared_from_this(),
+      correctBegin, correctWidth);
   d_vertices[gate].push_back(newVertex);
   ++d_gatesCount[GateSlice];
 
@@ -839,9 +841,9 @@ void OrientedGraph::verilogConstantWriting(
     i_fileStream << verilogTab;
     getInstance(oper);
   }
-   for (auto *oper: graph->d_vertices[VertexTypes::constant]) {
-      i_fileStream << verilogTab << (*oper) << "\n";
-   }
+  for (auto *oper: graph->d_vertices[VertexTypes::constant]) {
+    i_fileStream << verilogTab << (*oper) << "\n";
+  }
 }
 
 bool OrientedGraph::verilogSubgraphWriting(GraphPtr graph,

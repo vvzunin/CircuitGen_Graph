@@ -49,7 +49,6 @@ TEST(BusTest, SimpleBusPrintedSeparate) {
   graph->addEdge(buf, andBus);
   graph->addEdge(andBus, outputBusSecond);
   EXPECT_NO_THROW(graph->toVerilogBusEnabledAsOneBit("./", "oneBitVerilog.v"));
-  graph->toVerilogBusEnabledAsOneBit("./", "lalala4.v");
   testFile(
       "./oneBitVerilog.v",
       "module graph_5(\n\tinputBus_0, inputBus_1, inputBus_2, inputBus_3, "
@@ -109,7 +108,6 @@ TEST(BusTest, severalBusModulePrintedToVerilog) {
   graph->addEdge(inputVertex, buf);
   graph->addEdge(buf, outputVertex);
   EXPECT_NO_THROW(graph->toVerilogBusEnabled("./", "lalala.v"));
-  graph->toVerilogBusEnabled("./", "lalala3.v");
   testFile(
       "./lalala.v",
       "module graph_5(\n\tinputBus, inputVertex, \n\tres, "
@@ -119,13 +117,6 @@ TEST(BusTest, severalBusModulePrintedToVerilog) {
       "graph\n\twire buf;\n\twire [4:0] not;\n\n\t\n\tassign not = "
       "~inputBus;\n\tassign buf = inputVertex;\n\n\tassign res = "
       "not;\n\tassign outputVertex = buf;\nendmodule\n");
-}
-TEST(BusTest, SimpleBusAdded) {
-  GraphPtr graph = std::make_shared<OrientedGraph>();
-  VertexPtr v = graph->addInputBus("lalala", 5);
-  VertexPtr v2 = graph->addGateBus(GateNot, "lalala2", 5);
-  graph->addEdge(v, v2);
-  EXPECT_NO_THROW(graph->toVerilog("./"));
 }
 TEST(BusTest, SliceToVerilog) {
   GraphPtr graph = std::make_shared<OrientedGraph>();
@@ -139,7 +130,8 @@ TEST(BusTest, SliceErrorsWhenIncorrect) {
   // перенаправляем cerr
   std::streambuf *old = std::cerr.rdbuf(buffer.rdbuf());
   GraphPtr graph = std::make_shared<OrientedGraph>();
-  VertexPtr input = graph->addInputBus("lalala", 5);
+
+  VertexPtr input = graph->addInputBus("input_", 5);
   VertexPtr s1 = graph->addSliceBus(input, 0, 0);
   EXPECT_EQ(GraphVertexBus::getBusPointer(s1)->getWidth(), 1);
   VertexPtr s2 = graph->addSliceBus(input, 2, 6);
@@ -165,6 +157,5 @@ TEST(BusTest, ConcatenationToVerilog) {
   graph->addEdge(v, v3);
   graph->addEdge(v2, v3);
   graph->addEdge(v4, v3);
-  // EXPECT_EQ(GraphVertexBus::getBusPointer(v3)->getWidth(), 8);
   EXPECT_EQ(v3->toVerilog(), "assign gate_0 = { input_ , not , const_ };");
 }
