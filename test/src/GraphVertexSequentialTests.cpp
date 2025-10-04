@@ -180,7 +180,7 @@ TEST(SequentialTests, TestTriggerHashCycle) {
   auto *data = graph->addInput("data");
   auto *rst_n = graph->addInput("rst_n");
   auto *en = graph->addInput("en");
-  auto *seq = graph->addSequential(affre, clk, data, rst_n, en, "q");
+  auto *seq = graph->addSequential(affre, clk, data, en, rst_n, "q");
 
   EXPECT_EQ(seq->toVerilog(), "always @(posedge clk or negedge rst_n) begin\n"
                               "\t\tif (!rst_n) q <= 1'b0;\n"
