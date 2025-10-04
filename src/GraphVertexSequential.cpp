@@ -2,7 +2,6 @@
 #include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
 
-#include <bitset>
 #include <cassert>
 #include <iostream>
 #include <string>
@@ -54,104 +53,93 @@ inline bool validateSignal(SequentialTypes current, SequentialTypes found) {
   return false;
 }
 
-
-#define DEFAULT_CHECK_TYPE do {                                        \
-  /* NOT ALLOWED TO USE BOTH RST AND CLR */                     \
-  assert(!((i_type & RST) && (i_type & CLR)));                  \
-  if (i_type & ff) {                                            \
-    d_seqType = static_cast<SequentialTypes>(i_type & nff);     \
-  } else { /* without ff flag it is just a latch */             \
-    d_seqType = latch;                                          \
-  }                                                             \
-} while (0)
+#define DEFAULT_CHECK_TYPE \
+  do { \
+    /* NOT ALLOWED TO USE BOTH RST AND CLR */ \
+    assert(!((i_type & RST) && (i_type & CLR))); \
+    if (i_type & ff) { \
+      d_seqType = static_cast<SequentialTypes>(i_type & nff); \
+    } else { /* without ff flag it is just a latch */ \
+      d_seqType = latch; \
+    } \
+  } while (0)
 
 unsigned short countSignalsInType(SequentialTypes i_type) {
-return i_type & RST + i_type & CLR + i_type & EN + i_type & i_type & SET;
+  return bool(i_type & RST) + bool(i_type & CLR) + bool(i_type & EN) +
+         bool(i_type & SET);
 }
-//BRAND NEW SIGNALS SEQUENCE 0 -- data, 1 -- clk, 2 -- en, 3 -- RST/CLR, 4 -- SET
-GraphVertexSequential::GraphVertexSequential(
-    SequentialTypes i_type,
-    VertexPtr i_clk,
-    VertexPtr i_data,
-    GraphPtr i_baseGraph,
-    std::string_view i_name,
-    bool i_isBus)
-    : GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph)
-    { 
+// BRAND NEW SIGNALS SEQUENCE 0 -- data, 1 -- clk, 2 -- en, 3 -- RST/CLR, 4 --
+// SET
+GraphVertexSequential::GraphVertexSequential(SequentialTypes i_type,
+                                             VertexPtr i_clk, VertexPtr i_data,
+                                             GraphPtr i_baseGraph,
+                                             std::string_view i_name,
+                                             bool i_isBus) :
+    GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph) {
   reserveInConnections(2);
-  i_baseGraph->addEdge(i_data,this);
-  i_baseGraph->addEdge(i_clk, this);      
+  i_baseGraph->addEdge(i_data, this);
+  i_baseGraph->addEdge(i_clk, this);
   DEFAULT_CHECK_TYPE;
   validateSignal(i_type, d_seqType);
 }
 
 GraphVertexSequential::GraphVertexSequential(
-    SequentialTypes i_type,
-    VertexPtr i_clk,
-    VertexPtr i_data,
-    VertexPtr i_wire,
-    GraphPtr i_baseGraph,
-    std::string_view i_name,
-    bool i_isBus)
-    : GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph)
-    {
-    reserveInConnections(3);
-    i_baseGraph->addEdge(i_data,this);
-    i_baseGraph->addEdge(i_clk, this);
-    i_baseGraph->addEdge(i_wire, this);      
+    SequentialTypes i_type, VertexPtr i_clk, VertexPtr i_data, VertexPtr i_wire,
+    GraphPtr i_baseGraph, std::string_view i_name, bool i_isBus) :
+    GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph) {
+  reserveInConnections(3);
+  i_baseGraph->addEdge(i_data, this);
+  i_baseGraph->addEdge(i_clk, this);
+  i_baseGraph->addEdge(i_wire, this);
   DEFAULT_CHECK_TYPE;
   short signals = countSignalsInType(i_type);
-  if (signals < 1) d_seqType = static_cast<SequentialTypes> (i_type | EN);
-  else
-  d_seqType = i_type;
+  if (signals < 1)
+    d_seqType = static_cast<SequentialTypes>(i_type | EN);
+  else if (signals + bool(i_type & ff) > 2) {
+    if (signals + bool(i_type & ff) > 3)
+      d_seqType = static_cast<SequentialTypes>(i_type & ~SET & ~RST & ~CLR);
+    d_seqType = static_cast<SequentialTypes>(i_type & ~SET);
+  } else
+    d_seqType = i_type;
   validateSignal(i_type, d_seqType);
 }
 
 GraphVertexSequential::GraphVertexSequential(
-   SequentialTypes i_type, VertexPtr i_clk,
-                           VertexPtr i_data,
-                           VertexPtr i_wire1,
-                           VertexPtr i_wire2, GraphPtr i_baseGraph,
-                           std::string_view i_name, bool i_isBus)
-    : GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph)
-    {
+    SequentialTypes i_type, VertexPtr i_clk, VertexPtr i_data,
+    VertexPtr i_wire1, VertexPtr i_wire2, GraphPtr i_baseGraph,
+    std::string_view i_name, bool i_isBus) :
+    GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph) {
   reserveInConnections(4);
-  i_baseGraph->addEdge(i_data,this);
+  i_baseGraph->addEdge(i_data, this);
   i_baseGraph->addEdge(i_clk, this);
-  i_baseGraph->addEdge(i_wire1, this);    
-  i_baseGraph->addEdge(i_wire2, this);    
+  i_baseGraph->addEdge(i_wire1, this);
+  i_baseGraph->addEdge(i_wire2, this);
   DEFAULT_CHECK_TYPE;
   short signals = countSignalsInType(i_type);
-  if(signals == 0) {
-    d_seqType = static_cast<SequentialTypes>(i_type| EN | RST);
-  }
-  else if(signals == 1)
-  d_seqType = static_cast<SequentialTypes>(i_type | EN);
+  if (signals == 0) {
+    d_seqType = static_cast<SequentialTypes>(i_type | EN | RST);
+  } else if (signals == 1)
+    d_seqType = static_cast<SequentialTypes>(i_type | EN);
+  else if (signals + bool(i_type & ff) > 3)
+    d_seqType = static_cast<SequentialTypes>(i_type & ~SET);
   else
-  d_seqType = i_type;
+    d_seqType = i_type;
   validateSignal(i_type, d_seqType);
 }
 
 GraphVertexSequential::GraphVertexSequential(
-    SequentialTypes i_type,
-    VertexPtr i_clk,
-    VertexPtr i_data,
-    VertexPtr i_rst,
-    VertexPtr i_set,
-    VertexPtr i_en,
-    GraphPtr i_baseGraph,
-    std::string_view i_name,
-    bool i_isBus)
-    : GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph)
-  {
+    SequentialTypes i_type, VertexPtr i_clk, VertexPtr i_data, VertexPtr i_rst,
+    VertexPtr i_set, VertexPtr i_en, GraphPtr i_baseGraph,
+    std::string_view i_name, bool i_isBus) :
+    GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph) {
   reserveInConnections(5);
-  i_baseGraph->addEdge(i_data,this);
+  i_baseGraph->addEdge(i_data, this);
   i_baseGraph->addEdge(i_clk, this);
-  i_baseGraph->addEdge(i_en, this);    
-  i_baseGraph->addEdge(i_rst, this);        
-  i_baseGraph->addEdge(i_set, this);        
+  i_baseGraph->addEdge(i_en, this);
+  i_baseGraph->addEdge(i_rst, this);
+  i_baseGraph->addEdge(i_set, this);
   DEFAULT_CHECK_TYPE;
-  
+
   // cannot have 3 input wires and be a latch - latch has only 3 signals at all
   assert(isFF());
   unsigned factType = SET | EN;
@@ -171,7 +159,7 @@ SequentialTypes GraphVertexSequential::getSeqType() const {
 
 VertexPtr GraphVertexSequential::getClk() const {
   if (getSeqType() & ff)
-  return d_inConnections[1];
+    return d_inConnections[1];
   return nullptr;
 }
 
@@ -180,23 +168,25 @@ VertexPtr GraphVertexSequential::getData() const {
 }
 
 VertexPtr GraphVertexSequential::getEn() const {
-  if(getSeqType() & EN) // for flip-flops EN stored in d_inConnections[2], after clk
-                        // and for latches it is in d finConnections[1]
-  return d_inConnections[bool(getSeqType() & ff) + 1];
+  if (getSeqType() &
+      EN) // for flip-flops EN stored in d_inConnections[2], after clk
+          // and for latches it is in d finConnections[1]
+    return d_inConnections[bool(getSeqType() & ff) + 1];
   return nullptr;
 }
 
 VertexPtr GraphVertexSequential::getRst() const {
   if (getSeqType() & RST | getSeqType() & CLR)
-  return d_inConnections[bool(getSeqType() & ff) + bool(getSeqType() & EN) + 1];
-return nullptr;
+    return d_inConnections[bool(getSeqType() & ff) + bool(getSeqType() & EN) +
+                           1];
+  return nullptr;
 }
 
 VertexPtr GraphVertexSequential::getSet() const {
-   if (getSeqType() & SET)
-  return d_inConnections[bool(getSeqType() & ff) + 
-  bool(getSeqType() & EN) +bool(getSeqType() & RST | getSeqType() & CLR) + 1];
-return nullptr;
+  if (getSeqType() & SET)
+    return d_inConnections[bool(getSeqType() & ff) + bool(getSeqType() & EN) +
+                           bool(getSeqType() & RST | getSeqType() & CLR) + 1];
+  return nullptr;
 }
 
 size_t GraphVertexSequential::calculateHash() {
@@ -230,9 +220,9 @@ size_t GraphVertexSequential::calculateHash() {
 inline void
 GraphVertexSequential::formatAlwaysBegin(std::string &verilog) const {
   if (isFF() && !isAsync()) {
-    verilog =
-        fmt::format("always @({} {}) begin\n",
-                    isNegedge() ? "negedge" : "posedge", getClk()->getRawName());
+    verilog = fmt::format("always @({} {}) begin\n",
+                          isNegedge() ? "negedge" : "posedge",
+                          getClk()->getRawName());
   } else if (isFF()) {
     verilog = fmt::format("always @({} {} or negedge {}) begin\n",
                           isNegedge() ? "negedge" : "posedge",
@@ -302,162 +292,70 @@ DotReturn GraphVertexSequential::toDOT() {
   }
   return dot;
 }
- /// @brief GraphVertexSequential Constructor for default types
-  /// @param i_type type of sequential vertex (can be only (n)ff or latch = EN)
-  /// @param i_clk is clock signal for a ff and enable signal for a latch
-  /// @param i_data 
-  /// @param i_baseGraph 
-  /// @param i_name 
-  GraphVertexBusSequential::GraphVertexBusSequential(SequentialTypes i_type,
-                        VertexPtr i_clk,
-                        VertexPtr i_data,
-                        GraphPtr i_baseGraph,
-                        std::string_view i_name,
-                        size_t i_width) 
-                        : GraphVertexSequential(i_type,i_clk,i_data,i_baseGraph,i_name),
-                        GraphVertexBus(i_width) {
-    if (i_clk->isBus())
-    std::cerr << "Input 'clk' must have width = 1, but the connected vertex is a bus."; // TODO: НУЖНО УЧЕСТЬ СЛУЧАЙ КОГДА ПОДКЛЮЧАЕТСЯ НАПРИМЕР ОДНА ВЕРШИНА ИЗ ВСЕЙ ШИНЫ
-    if (i_data->isBus() && getBusPointer(i_data)->getWidth() != i_width)
-    std::cerr << "Width of 'data' input is not equal to the width of  the bus, that will be connected to it.";
-  }
+/// @brief GraphVertexSequential Constructor for default types
+/// @param i_type type of sequential vertex (can be only (n)ff or latch = EN)
+/// @param i_clk is clock signal for a ff and enable signal for a latch
+/// @param i_data
+/// @param i_baseGraph
+/// @param i_name
+GraphVertexBusSequential::GraphVertexBusSequential(
+    SequentialTypes i_type, VertexPtr i_clk, VertexPtr i_data,
+    GraphPtr i_baseGraph, std::string_view i_name, size_t i_width) :
+    GraphVertexSequential(i_type, i_clk, i_data, i_baseGraph, i_name),
+    GraphVertexBus(i_width) {
+}
 
-  /// @brief 
-  /// @param i_type 
-  /// @param i_clk is clock signal for a ff and enable signal for a latch
-  /// @param i_data 
-  /// @param i_wire RST or CLR or SET or EN
-  /// @param i_baseGraph 
-  /// @param i_name 
-  GraphVertexBusSequential::GraphVertexBusSequential(SequentialTypes i_type,
-                        VertexPtr i_clk,
-                        VertexPtr i_data,
-                        VertexPtr i_wire,
-                        GraphPtr i_baseGraph,
-                        std::string_view i_name,
-                        size_t i_width) 
-                        : GraphVertexSequential(i_type,i_clk,i_data, i_wire, i_baseGraph,i_name),
-                        GraphVertexBus(i_width) {
-  if (i_clk->isBus())
-  std::cerr << "Input 'clk' must have width = 1, but connected vertex is a bus.";
-  if (i_data->isBus() && getBusPointer(i_data)->getWidth() != i_width)
-  std::cerr << "Width of 'data' input is not equal to the width of  the bus, that will be connected to it.";
-  if (i_wire->isBus())
-  std::cerr << "Input 'wire' must have width = 1, but connected vertex is a bus.";
-                        }
+/// @brief
+/// @param i_type
+/// @param i_clk is clock signal for a ff and enable signal for a latch
+/// @param i_data
+/// @param i_wire RST or CLR or SET or EN
+/// @param i_baseGraph
+/// @param i_name
+GraphVertexBusSequential::GraphVertexBusSequential(
+    SequentialTypes i_type, VertexPtr i_clk, VertexPtr i_data, VertexPtr i_wire,
+    GraphPtr i_baseGraph, std::string_view i_name, size_t i_width) :
+    GraphVertexSequential(i_type, i_clk, i_data, i_wire, i_baseGraph, i_name),
+    GraphVertexBus(i_width) {
+}
 
-  /// @brief GraphVertexSequential
-  /// @param i_type
-  /// @param i_clk EN for latch and CLK for ff
-  /// @param i_data
-  /// @param i_wire1 RST or CLR or SET
-  /// @param i_wire2 SET or EN
-  /// @param i_baseGraph
-  GraphVertexBusSequential::GraphVertexBusSequential(SequentialTypes i_type,
-                        VertexPtr i_clk,
-                        VertexPtr i_data,
-                        VertexPtr i_wire1,
-                        VertexPtr i_wire2,
-                        GraphPtr i_baseGraph,
-                        std::string_view i_name,
-                        size_t i_width)
-                        : GraphVertexSequential(i_type,i_clk,i_data,i_wire1, i_wire2, i_baseGraph,i_name, true),
-                        GraphVertexBus(i_width) {
-    if (i_clk->isBus()) 
-    std::cerr << "Input 'clk' must have width = 1, but connected vertex is a bus.";
-    if (i_data->isBus() && getBusPointer(i_data)->getWidth() != i_width)
-    std::cerr << "Width of 'data' input is not equal to the width of  the bus, that will be connected to it.";
-    if (i_wire1->isBus())
-    std::cerr << "Input 'wire1' must have width = 1, but connected vertex is a bus.";
-    if (i_wire2->isBus())
-    std::cerr << "Input 'wire2' must have width = 1, but connected vertex is a bus.";
-  }
+/// @brief GraphVertexSequential
+/// @param i_type
+/// @param i_clk EN for latch and CLK for ff
+/// @param i_data
+/// @param i_wire1 RST or CLR or SET
+/// @param i_wire2 SET or EN
+/// @param i_baseGraph
+GraphVertexBusSequential::GraphVertexBusSequential(
+    SequentialTypes i_type, VertexPtr i_clk, VertexPtr i_data,
+    VertexPtr i_wire1, VertexPtr i_wire2, GraphPtr i_baseGraph,
+    std::string_view i_name, size_t i_width) :
+    GraphVertexSequential(i_type, i_clk, i_data, i_wire1, i_wire2, i_baseGraph,
+                          i_name, true),
+    GraphVertexBus(i_width) {
+}
 
-  /// @brief GraphVertexSequential
-  /// @param i_type type of Sequential - (a/n/an)ff(r/c)se, 
-  /// @param i_clk clock for flip=flop
-  /// @param i_data data value
-  /// @param i_rst clear (or reset signal)
-  /// @param i_set set signal
-  /// @param i_en enable
-  /// @param i_baseGraph
-  GraphVertexBusSequential::GraphVertexBusSequential(SequentialTypes i_type,
-                        VertexPtr i_clk,
-                        VertexPtr i_data,
-                        VertexPtr i_rst,
-                        VertexPtr i_set,
-                        VertexPtr i_en,
-                        GraphPtr i_baseGraph,
-                        std::string_view i_name,
-                        size_t i_width) 
-                        : GraphVertexSequential(i_type, i_clk, i_data, i_rst, i_set, i_en, i_baseGraph, i_name),
-                        GraphVertexBus(i_width) {
-    if (i_clk->isBus())
-    std::cerr << "Input 'clk' must have width = 1, but connected vertex is a bus.";
-    if (i_data->isBus() && getBusPointer(i_data)->getWidth() != i_width)
-    std::cerr << "Width of 'data' input is not equal to the width of  the bus, that will be connected to it.";
-    if (i_rst->isBus())
-    std::cerr << "Input 'rst' must have width = 1, but connected vertex is a bus.";
-    if (i_set->isBus())
-    std::cerr << "Input 'set' must have width = 1, but connected vertex is a bus.";
-      if (i_en->isBus())
-    std::cerr << "Input 'en' must have width = 1, but connected vertex is a bus.";
-  }
-  inline void simpleCheckFormatBus(std::string &verilog,
-                              std::string_view nameToCheck,
-                              std::string_view data, short unsigned width, unsigned type,
-                              std::string_view tab, short valueForSet = 255) {
-  std::string_view toFormat = "{}if ({}{}) {} <= {}'b{};\n";
-  verilog += fmt::format(toFormat, tab, type & RST ? "!" : "", nameToCheck, 
-                         data, width, type & SET ? std::bitset<256>(valueForSet).to_string().substr(255-width,255) : std::string(width, '0'));
-}//ИСПРАВИТЬ ЭТОТ КОШМАР ТАК НЕЛЬЗЯ
+/// @brief GraphVertexSequential
+/// @param i_type type of Sequential - (a/n/an)ff(r/c)se,
+/// @param i_clk clock for flip=flop
+/// @param i_data data value
+/// @param i_rst clear (or reset signal)
+/// @param i_set set signal
+/// @param i_en enable
+/// @param i_baseGraph
+GraphVertexBusSequential::GraphVertexBusSequential(
+    SequentialTypes i_type, VertexPtr i_clk, VertexPtr i_data, VertexPtr i_rst,
+    VertexPtr i_set, VertexPtr i_en, GraphPtr i_baseGraph,
+    std::string_view i_name, size_t i_width) :
+    GraphVertexSequential(i_type, i_clk, i_data, i_rst, i_set, i_en,
+                          i_baseGraph, i_name),
+    GraphVertexBus(i_width) {
+}
 
-  std::string GraphVertexBusSequential::toVerilog() const {
-    std::string verilog;
-  GraphVertexSequential::formatAlwaysBegin(verilog);
-  std::string_view toFormat;
-  std::string_view tab = "\t\t";
-  bool flag = false;
-  if((getData()->isBus() && getBusPointer(getData())->getWidth()!= getWidth()))
-  std::cerr << "Width of DATA not match with width of current sequential vertex.\n";
-  if (unsigned val = (d_seqType & RST) | (d_seqType & CLR)) {
-    if(getRst()->isBus()) {
-      std::cerr << "Width of RST is more than 1. By default first bit will be used.\n";
-      simpleCheckFormatBus(verilog, std::string(getRst()->getRawName())+ "[0]", d_name,getWidth(), val, tab);  
-    }
-    else
-    simpleCheckFormatBus(verilog, getRst()->getRawName(), d_name, getWidth(), val, tab);
-    verilog += "\t\telse";
-    flag = true;
-  }
-  if (d_seqType & SET) {
-     if(getSet()->isBus()) {
-      std::cerr << "Width of SET is more than 1. By default first bit will be used.\n";
-      simpleCheckFormatBus(verilog, std::string(getSet()->getRawName())+ "[0]", d_name,getWidth(), SET, tab);  
-    }
-    else
-    simpleCheckFormatBus(verilog, getSet()->getRawName(), d_name, getWidth(), SET,
-                      flag ? " " : tab);
-    verilog += "\t\telse";
-    flag = true;
-  }
-  verilog += flag ? " " : tab;
-  if (d_seqType & EN) {
-    toFormat = "if ({}) ";
-     if(getEn()->isBus()) {
-      std::cerr << "Width of EN is more than 1. By default first bit will be used.\n";
-      verilog += fmt::format(toFormat, std::string(getEn()->getRawName())+ "[0]");  
-    }
-    else
-    verilog += fmt::format(toFormat, getEn()->getRawName());
-  }
-  toFormat = "{} <= {};\n\tend\n";
-  verilog += fmt::format(toFormat, d_name, getData()->getRawName());
-
-  return verilog;
-  }
-  std::string GraphVertexBusSequential::toOneBitVerilog() const {
-  size_t minWidth = getBusPointer( (*std::min_element(d_inConnections.begin(),d_inConnections.end(), compareBusWidth)))->getWidth();
-
-  }
+std::string GraphVertexBusSequential::toVerilog() const {
+  return "";
+}
+std::string GraphVertexBusSequential::toOneBitVerilog() const {
+  return "";
+}
 } // namespace CG_Graph

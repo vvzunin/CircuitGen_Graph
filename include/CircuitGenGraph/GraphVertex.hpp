@@ -456,8 +456,8 @@ public:
   /// @param i_type
   /// @param i_clk EN for latch and CLK for ff
   /// @param i_data
-  /// @param i_wire1 RST or CLR or SET
-  /// @param i_wire2 SET or EN
+  /// @param i_wire1 EN or RST or CLR
+  /// @param i_wire2 RST or CLR or SET
   /// @param i_baseGraph
   GraphVertexSequential(SequentialTypes i_type, VertexPtr i_clk,
                            VertexPtr i_data,VertexPtr i_wire1,
