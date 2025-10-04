@@ -7,7 +7,6 @@
 #include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
 
-#include <bitset>
 #include <cassert>
 #include <iostream>
 #include <string>
