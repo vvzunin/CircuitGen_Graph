@@ -51,7 +51,7 @@ sudo apt install clang clang-tidy clang-format-15 g++ gcc make openssl cmake lco
 
 #### С помощью dnf (для rpm ветки)
 ```
-sudo dnf install clang clang-tools-extra g++ gcc make openssl cmake lcov ninja-build
+sudo dnf install clang clang-tools-extra g++ gcc make openssl cmake lcov ninja-build libasan
 ```
 Так как в проекте используется `clang-format-15`, предлагается два возможных решения. 
 1) Так как критических отличий между различными версиями clang нет, 

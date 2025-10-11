@@ -269,7 +269,7 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
 
   if (i_inputs.size() != iGraph.size()) {
     throw std::invalid_argument(
-        "Number of inputs should be same, as subgraph inputs number");
+        "Number of inputs should be the same as subgraph inputs number");
   }
 
   std::vector<VertexPtr> outputs;
@@ -924,64 +924,50 @@ std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
   const std::string edgeTemplate =
       fmt::format(rawEdgeTemplate, spaces, "{}", "{}");
 
-  std::string nodes, edges, graphs, vertexKindName;
-
+  std::string nodes, edges, graphs, vertexKindName, actI_prefix;
+  
+  actI_prefix = i_indent ? i_prefix + "::" : i_prefix;
   uint8_t counter = 0;
   for (const auto &vertexVector: d_vertices) {
     parseVertexToGraphML((VertexTypes)counter++, vertexVector, nodeTemplate,
-                         edgeTemplate, i_prefix, nodes, edges);
+                         edgeTemplate, actI_prefix, nodes, edges);
   }
   if (d_allSubGraphsOutputs.size()) {
     parseVertexToGraphML(VertexTypes::gate, d_allSubGraphsOutputs, nodeTemplate,
-                         edgeTemplate, i_prefix, nodes, edges);
+                         edgeTemplate, actI_prefix, nodes, edges);
   }
 
-  std::string currentSubGraphTemplate, sgName;
+  for (const auto &sgvBase: d_vertices.at(VertexTypes::subGraph)) {
 
-  for (const auto &sg: d_subGraphs) {
-    // preparing template for subGraphs as vertices
-    currentSubGraphTemplate =
-        fmt::format(nodeTemplate, "{}", "subGraph", "\n",
-                    sg->toGraphMLClassic(i_indent + 4, i_prefix + "{}::"));
+    const GraphVertexSubGraph *sgv = static_cast<GraphVertexSubGraph *>(sgvBase);
+    const std::string &sgI_prefix = sgvBase->getName(actI_prefix);
+    const GraphPtr &sg = sgv->getSubGraph();
 
-    /// FIXME: Why inputs and outputs of graph are connected with vertices of
-    /// the same graph....
-    // graphInputs, graphOutputs, verticesInputs, verticesOutputs
-    // const auto &gInputs = sg->d_vertices.at(VertexTypes::input);
-    // const auto &gOutputs = sg->d_vertices.at(VertexTypes::output);
-    // const auto &vInputs = sg->d_subGraphsInputsPtr.at(d_graphID);
-    // const auto &vOutputs = sg->d_subGraphsOutputsPtr.at(d_graphID);
+    nodes += fmt::format(nodeTemplate, sgI_prefix, "subGraph", "\n",
+                    sgv->toGraphML(i_indent + 6, sgI_prefix));
+                    
+    const auto &gInputs = sg->d_vertices.at(VertexTypes::input);
+    const auto &gOutputs = sg->d_vertices.at(VertexTypes::output);
+    const auto &vInputs = sgv->d_inConnections;
+    const auto &vOutputs = sgv->d_outConnections;
 
-    // for (size_t i = 0; i < vOutputs.size(); ++i) {
-    //   // getting name of current subGraph vertex
-    //   sgName = vOutputs[i][0]->getInConnections()[0]->getName(i_prefix);
+    for (size_t i = 0; i < gInputs.size(); ++i) {
+      edges += fmt::format(edgeTemplate, vInputs[i]->getName(actI_prefix),
+                    gInputs[i]->getName(sgI_prefix + "::"));
+    }
 
-    //   // element->subGraph edges
-    //   for (size_t j = 0; j < gInputs.size(); ++j) {
-    //     edges += format(edgeTemplate, vInputs[i][j]->getName(i_prefix),
-    //                     gInputs[j]->getName(sgName + "::"));
-    //   }
-    //   // subGraph->element edges (skipping buffer)
-    //   for (size_t j = 0; j < gOutputs.size(); ++j) {
-    //     if (vOutputs[i][j]->getOutConnections().empty()) {
-    //       continue;
-    //     }
-    //     edges +=
-    //         format(edgeTemplate, gOutputs[j]->getName(sgName + "::"),
-    //                vOutputs[i][j]->getOutConnections()[0]->getName(i_prefix));
-    //   }
-
-    //   // parsing subGraphs as vertices
-    //   graphs += replacer(currentSubGraphTemplate, sgName);
-    // }
+    for (size_t i = 0; i < gOutputs.size(); ++i) {
+      edges += fmt::format(edgeTemplate, gOutputs[i]->getName(actI_prefix),
+                    vOutputs[i]->getName(sgI_prefix + "::"));
+    }
   }
-
-  std::string finalGraph =
-      fmt::format(graphTemplate, "{}", nodes + graphs + edges);
+    
   if (i_indent != 0) {
-    return finalGraph;
+    return fmt::format(graphTemplate, i_prefix, nodes + edges);
   }
-  return fmt::format(mainTemplate, fmt::format(finalGraph, d_name));
+  else {
+    return fmt::format(mainTemplate, fmt::format(graphTemplate, d_name, nodes + edges));
+  }
 }
 
 bool OrientedGraph::toGraphMLClassic(std::ofstream &fileStream) {
