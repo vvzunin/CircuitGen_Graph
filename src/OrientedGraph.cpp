@@ -965,9 +965,7 @@ std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
   if (i_indent != 0) {
     return fmt::format(graphTemplate, i_prefix, nodes + edges);
   }
-  else {
-    return fmt::format(mainTemplate, fmt::format(graphTemplate, d_name, nodes + edges));
-  }
+  return fmt::format(mainTemplate, fmt::format(graphTemplate, d_name, nodes + edges));
 }
 
 bool OrientedGraph::toGraphMLClassic(std::ofstream &fileStream) {

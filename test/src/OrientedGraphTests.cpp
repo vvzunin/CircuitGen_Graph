@@ -496,7 +496,7 @@ TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreNodes) {
 
   graphPtr1->addGate(Gates::GateNot, "gate2");
   EXPECT_EQ(
-      graphPtr1->toGraphMLClassic(0),
+      graphPtr1->toGraphMLClassic(),
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<graphml "
       "xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
       "xmlns:xsi=\"http://www.w3.org/2001/"
@@ -509,18 +509,49 @@ TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreNodes) {
       "id=\"gate2\">\n      <data key=\"t\">not</data>\n    </node>\n  "
       "</graph>\n</graphml>\n");
 }
-// Unknown error
-// TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreSubGraphs) {
-//   GraphPtr graphPtr1    = std::make_shared<OrientedGraph>("Graph1");
-//   GraphPtr subGraphPtr1 = std::make_shared<OrientedGraph>("SubGraph1");
-//   graphPtr1->addSubGraph(
-//       subGraphPtr1, graphPtr1->getVerticesByType(VertexTypes::input)
-//   );
-//   EXPECT_EQ(graphPtr1->toGraphMLClassic(0), "");
+TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreSubGraphs) {
+  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("Graph1");
+  GraphPtr subGraphPtr1 = std::make_shared<OrientedGraph>("SubGraph1");
+  graphPtr1->addSubGraph(subGraphPtr1,
+                         graphPtr1->getVerticesByType(VertexTypes::input));
+  EXPECT_EQ(
+      graphPtr1->toGraphMLClassic(),
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+      "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
+      "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
+      "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
+      "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">\n"
+      "  <key id=\"t\" for=\"node\" attr.name=\"type\" attr.type=\"string\"/>\n"
+      "  <graph id=\"Graph1\" edgedefault=\"directed\">\n"
+      "    <node id=\"subGraph_0\">\n"
+      "      <data key=\"t\">subGraph</data>\n"
+      "        <graph id=\"subGraph_0:\" edgedefault=\"directed\">\n"
+      "        </graph>\n"
+      "    </node>\n"
+      "  </graph>\n"
+      "</graphml>\n");
 
-//   subGraphPtr1->addGate(Gates::GateAnd, "gate1");
-//   EXPECT_EQ(graphPtr1->toGraphMLClassic(0), "");
-// }
+  subGraphPtr1->addGate(Gates::GateAnd, "gate1");
+  EXPECT_EQ(
+      graphPtr1->toGraphMLClassic(),
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+      "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
+      "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
+      "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
+      "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">\n"
+      "  <key id=\"t\" for=\"node\" attr.name=\"type\" attr.type=\"string\"/>\n"
+      "  <graph id=\"Graph1\" edgedefault=\"directed\">\n"
+      "    <node id=\"subGraph_0\">\n"
+      "      <data key=\"t\">subGraph</data>\n"
+      "        <graph id=\"subGraph_0:\" edgedefault=\"directed\">\n"
+      "          <node id=\"subGraph_0::gate1\">\n"
+      "            <data key=\"t\">and</data>\n"
+      "          </node>\n"
+      "        </graph>\n"
+      "    </node>\n"
+      "  </graph>\n"
+      "</graphml>\n");
+}
 
 TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreSubEdges) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("Graph1");
@@ -530,7 +561,7 @@ TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreSubEdges) {
 
   graphPtr1->addEdges({input1, input2}, gate1);
   EXPECT_EQ(
-      graphPtr1->toGraphMLClassic(0),
+      graphPtr1->toGraphMLClassic(),
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<graphml "
       "xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
       "xmlns:xsi=\"http://www.w3.org/2001/"
@@ -545,31 +576,37 @@ TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreSubEdges) {
       "   <edge source=\"input1\" target=\"gate1\"/>\n    <edge "
       "source=\"input2\" target=\"gate1\"/>\n  </graph>\n</graphml>\n");
 }
+TEST(TestToGraphMLBoolReturn, CorrectWriteToFile) {
+  std::string filename = "ToGraphMLTest.txt";
+  std::string stringEQ = "";
+  std::ofstream outF(filename);
+  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("Graph1");
+  VertexPtr gate1 = graphPtr1->addGate(Gates::GateAnd, "gate1");
+  VertexPtr input1 = graphPtr1->addInput("input1");
+  VertexPtr input2 = graphPtr1->addInput("input2");
+  GraphPtr subGraphPtr1 = std::make_shared<OrientedGraph>("SubGraph1");
+  graphPtr1->addSubGraph(subGraphPtr1,
+                         subGraphPtr1->getVerticesByType(VertexTypes::input));
+  graphPtr1->addEdges({input1, input2}, gate1);
+  subGraphPtr1->addGate(Gates::GateAnd, "gate1");
+  EXPECT_EQ(graphPtr1->toGraphMLClassic(outF), true);
 
-// Unknown error
-// TEST(TestToGraphMLBoolReturn, CorrectWriteToFile) {
-//   std::string   filename = "ToGraphMLTest.txt";
-//   std::ofstream outF(filename);
-//   GraphPtr      graphPtr1    = std::make_shared<OrientedGraph>("Graph1");
-//   VertexPtr          gate1        = graphPtr1->addGate(Gates::GateAnd,
-//   "gate1"); VertexPtr          input1       = graphPtr1->addInput("input1");
-//   VertexPtr          input2       = graphPtr1->addInput("input2");
-//   GraphPtr      subGraphPtr1 = std::make_shared<OrientedGraph>("SubGraph1");
-//   graphPtr1->addSubGraph(
-//       subGraphPtr1, subGraphPtr1->getVerticesByType(VertexTypes::input)
-//   );
-//   graphPtr1->addEdges({input1, input2}, gate1);
-//   subGraphPtr1->addGate(Gates::GateAnd, "gate1");
-//   EXPECT_EQ(graphPtr1->toGraphMLClassic(outF), true);
-
-//   std::ifstream inF(filename);
-//   outF.close();
-//   std::ostringstream contentStream;
-//   contentStream << inF.rdbuf();
-//   std::string stringF = contentStream.str();
-//   inF.close();
-//   EXPECT_EQ(stringF, graphPtr1->toGraphMLClassic(0));
-// }
+  std::ifstream inF(filename);
+  outF.close();
+  std::ostringstream contentStream;
+  contentStream << inF.rdbuf();
+  std::string stringF = contentStream.str();
+  inF.close();
+  auto t = std::time(nullptr);
+  auto tm = *std::localtime(&t);
+  std::ostringstream timeStream;
+  timeStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S");
+  std::string timeStr = timeStream.str();
+  EXPECT_EQ(
+      stringF,
+      "<!-- This file was generated automatically using CircuitGen_Graph at " +
+          timeStr + ". -->\n\n" + graphPtr1->toGraphMLClassic());
+}
 
 #define RESET_HASH() \
   graphPtr1->clearHashStates(); \
