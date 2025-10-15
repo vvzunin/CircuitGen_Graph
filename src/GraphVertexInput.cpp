@@ -29,12 +29,12 @@ void GraphVertexInput::removeValue() {
   d_value = ValueStates::UndefindedState;
 }
 
-void GraphVertexInput::updateLevel(std::string tab) {
-  if (d_needUpdate) {
+void GraphVertexInput::updateLevel() {
+  if (d_needUpdate != VS_NOT_CALC) {
     return;
   }
 #ifdef LOGFLAG
-  LOG(INFO) << tab << "0. " << d_name << " (" << getTypeName() << ")";
+  LOG(INFO) << "0. " << d_name << " (" << getTypeName() << ")";
 #endif
   d_level = 0;
   d_needUpdate = VS_CALC;

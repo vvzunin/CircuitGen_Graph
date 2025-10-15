@@ -63,7 +63,7 @@ public:
   /// If you are going to call this method for a second time, please, set
   /// all flags, used in updateLevel to their default state.
 
-  virtual void updateLevel(std::string tab = "") override;
+  virtual void updateLevel() override;
 
   /// @brief writes vertex to dot
   DotReturn toDOT() override;
@@ -189,7 +189,7 @@ public:
   /// the vertex level to the maximum level of its input connections plus one.
   /// If you are going to call this method for a second time, please, set
   /// all flags, used in updateLevel to their default state.
-  void updateLevel(std::string tab = "") override;
+  void updateLevel() override;
 
   /// @brief toVerilog
   /// Generates Verilog code for the vertex
@@ -297,7 +297,7 @@ public:
   /// vertices to which it is connected, and sets the level of the current
   /// vertex to one higher than the highest level
 
-  void updateLevel(std::string tab = "") override;
+  void updateLevel() override;
 
   DotReturn toDOT() override;
 

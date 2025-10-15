@@ -1,3 +1,4 @@
+#include "CircuitGenGraph/GraphVertexBase.hpp"
 #include <CircuitGenGraph/GraphVertex.hpp>
 
 #include <iostream>
@@ -69,9 +70,9 @@ void GraphVertexSubGraph::removeValue() {
   }
 }
 
-void GraphVertexSubGraph::updateLevel(std::string tab) {
+void GraphVertexSubGraph::updateLevel() {
   int counter = 0, max_inLevel = 0;
-  if (d_needUpdate) {
+  if (d_needUpdate != VS_NOT_CALC) {
     return;
   }
   d_needUpdate = VS_IN_PROGRESS;
