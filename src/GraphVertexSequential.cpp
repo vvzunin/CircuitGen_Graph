@@ -242,31 +242,81 @@ inline void simpleCheckFormat(std::string &verilog,
 }
 
 std::string GraphVertexSequential::toVerilog() const {
-  std::string verilog;
-  formatAlwaysBegin(verilog);
-  std::string_view toFormat;
-  std::string_view tab = "\t\t";
-  bool flag = false;
-  if (unsigned val = (d_seqType & RST) | (d_seqType & CLR)) {
-    simpleCheckFormat(verilog, getRst()->getRawName(), d_name, val, tab);
-    verilog += "\t\telse";
-    flag = true;
-  }
-  if (d_seqType & SET) {
-    simpleCheckFormat(verilog, getSet()->getRawName(), d_name, SET,
-                      flag ? " " : tab);
-    verilog += "\t\telse";
-    flag = true;
-  }
-  verilog += flag ? " " : tab;
-  if (d_seqType & EN) {
-    toFormat = "if ({}) ";
-    verilog += fmt::format(toFormat, getEn()->getRawName());
-  }
-  toFormat = "{} <= {};\n\tend\n";
-  verilog += fmt::format(toFormat, d_name, getData()->getRawName());
+  // switch (countSignalsInType(d_seqType) + isFF()) {
+  //   case 1:
 
-  return verilog;
+  //   break;
+  //   case 2:
+  //   break;
+  //   case 3:
+  //   break;
+  //   case 4:
+  switch(d_seqType)
+  case affr: 
+  return fmt::format(const S &format_str, Args &&args...)
+  break;
+
+  // case affre: ;
+  // case affrs: ;
+  // case affrse: ;
+  // case latchr: ;
+  // case latchc: ;
+  // case latchs: ;
+  // case latchrs: ;
+  // case latchcs: ;
+  // case ffe: ;
+  // case ffr: ;
+  // case ffc: ;
+  // case SequentialTypes::ffs: ;
+  // case ffre: ;
+  // case ffce: ;
+  // case ffse: ;
+  // case ffrs: ;
+  // case ffcs: ;
+  // case ffrse: ;
+  // case ffcse: ;
+  // case nff: ;
+  // case nffe: ;
+  // case nffr: ;
+  // case nffc: ;
+  // case SequentialTypes::nffs: ; 
+  // case nffre: ;
+  // case nffce: ;
+  // case nffse: ;
+  // case nffrs: ;
+  // case nffcs: ;
+  // case nffrse: ;
+  // case nffcse: ;
+  // case naffrs: ;
+  // case naffrse: ;
+  // case naffr: ;
+  // case naffre: ;
+  }
+  // std::string verilog;
+  // formatAlwaysBegin(verilog);
+  // std::string_view toFormat;
+  // std::string_view tab = "\t\t";
+  // bool flag = false;
+  // if (unsigned val = (d_seqType & RST) | (d_seqType & CLR)) {
+  //   simpleCheckFormat(verilog, getRst()->getRawName(), d_name, val, tab);
+  //   verilog += "\t\telse";
+  //   flag = true;
+  // }
+  // if (d_seqType & SET) {
+  //   simpleCheckFormat(verilog, getSet()->getRawName(), d_name, SET,
+  //                     flag ? " " : tab);
+  //   verilog += "\t\telse";
+  //   flag = true;
+  // }
+  // verilog += flag ? " " : tab;
+  // if (d_seqType & EN) {
+  //   toFormat = "if ({}) ";
+  //   verilog += fmt::format(toFormat, getEn()->getRawName());
+  // }
+  // toFormat = "{} <= {};\n\tend\n";
+  // verilog += fmt::format(toFormat, d_name, getData()->getRawName());
+
+  // return verilog;
 }
 
 DotReturn GraphVertexSequential::toDOT() {
