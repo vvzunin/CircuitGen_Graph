@@ -1,6 +1,10 @@
+#include "CircuitGenGraph/GraphUtils.hpp"
+#include "CircuitGenGraph/OrientedGraph.hpp"
 #include <CircuitGenGraph/GraphVertex.hpp>
 
 #include <gtest/gtest.h>
+#include <memory>
+#include <string>
 #ifdef LOGFLAG
 #include "easylogging++Init.hpp"
 #endif
@@ -265,4 +269,45 @@ TEST(ErrorOutputTest, CapturesCerr) {
 
   std::string output = buffer.str();
   EXPECT_EQ(output, "Invalid flag found in used type: SET\n");
+}
+unsigned short countSignalsInType(SequentialTypes i_type) {
+  return bool(i_type & RST) + bool(i_type & CLR) + bool(i_type & EN) +
+         bool(i_type & SET) + bool(i_type & ff);
+}
+TEST(GetAllStringsTest, Test) {
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+  VertexPtr first = graph->addInput("first");
+  VertexPtr second = graph->addInput("second");
+  VertexPtr third = graph->addInput("third");
+  VertexPtr clk = graph->addInput("clk");
+  VertexPtr data = graph->addInput("data");
+  SequentialTypes types[] = {
+      affr, affre, affrs, affrse, latch,
+      latchr, latchc, latchs,
+      latchrs, latchcs, ff, ffe, ffr, ffc, SequentialTypes::ffs, ffre, ffce, ffse,
+      ffrs, ffcs, ffrse, ffcse, nff, nffe, nffr, nffc, SequentialTypes::nffs,
+      nffre, nffce, nffse, nffrs, nffcs, nffrse, nffcse, naffrs, naffrse, naffr,
+      naffre};
+  for (int i = 0; i < 35; ++i) {
+    switch (countSignalsInType(types[i])) {
+      case 1:
+        graph->addSequential(types[i], clk, data, "_" + std::to_string(i));
+        break;
+      case 2:
+        graph->addSequential(types[i], clk, data, first,
+                             "_" + std::to_string(i));
+        break;
+      case 3:
+        graph->addSequential(types[i], clk, data, first, second,
+                             "_" + std::to_string(i));
+        break;
+      case 4:
+        if (types[i] & ff) {
+          graph->addSequential(types[i], clk, data, first, second, third,
+                               "_" + std::to_string(i));
+        }
+        break;
+    }
+  }
+  graph->toVerilog("./", "allSequential.v");
 }
