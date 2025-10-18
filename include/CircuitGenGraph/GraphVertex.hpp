@@ -358,17 +358,17 @@ public:
 
   Gates getGate() const override;
 
-  /// @brief setGateType
+  /// @brief setGateIfDefault
   /// If type of current gate is gateDefault, method change it
   /// on provided one. In other cases nothing happens.
   /// @code
   /// GraphVertexGates vertex(Gates::GateDefault);
-  /// vertex.setGateType(GateAnd);
+  /// vertex.setGateIfDefault(GateAnd);
   /// Gates gateType = vertex.getGate();
   /// std:: cout << "Gate type : " << gateType << std::endl;
   /// @endcode
 
-  void setGateType(Gates type);
+  void setGateIfDefault(Gates type);
 
   /// @brief  addVertexToInConnections
   /// Buffer and Not types of gates must have only one element in

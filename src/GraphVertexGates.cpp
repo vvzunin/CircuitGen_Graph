@@ -22,7 +22,7 @@ GraphVertexGates::GraphVertexGates(Gates i_gate, std::string_view i_name,
 Gates GraphVertexGates::getGate() const {
   return d_gate;
 }
-void GraphVertexGates::setGateType(Gates type) {
+void GraphVertexGates::setGateIfDefault(Gates type) {
   assert(d_gate == GateDefault);
   getBaseGraph().lock()->updateEdgesGatesCount(this, type);
   d_gate = type;

@@ -14,13 +14,16 @@ TEST(VerilogReadingTest, SimplestGraphsIsRead) {
   GraphPtr graph = context.d_graphs["simpleReading"];
   EXPECT_EQ(graph->getGatesCount()[GateAnd], 1);
   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
+
   VertexPtr clk = graphCreated->addInput();
   VertexPtr someInput = graphCreated->addInput();
   VertexPtr gate = graphCreated->addGate(GateAnd);
   VertexPtr output = graphCreated->addOutput();
+
   graphCreated->addEdge(clk, gate);
   graphCreated->addEdge(someInput, gate);
   graphCreated->addEdge(gate, output);
+
   EXPECT_EQ(graph->calculateHash(), graphCreated->calculateHash());
 }
 
@@ -31,10 +34,13 @@ TEST(VerilogReadingTest, VerticesSequenceCreated) {
                                  "testModulesForReading/simpleStructure.v",
                                  context));
   GraphPtr graph = context.d_graphs["simpleStructure"];
+
   EXPECT_EQ(graph->getGatesCount()[GateNot], 1);
   EXPECT_EQ(graph->getGatesCount()[GateOr], 1);
   EXPECT_EQ(graph->getGatesCount()[GateXnor], 1);
+
   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
+
   VertexPtr inputA = graphCreated->addInput();
   VertexPtr inputB = graphCreated->addInput();
   VertexPtr inputC = graphCreated->addInput();
@@ -44,6 +50,7 @@ TEST(VerilogReadingTest, VerticesSequenceCreated) {
   VertexPtr gateNot = graphCreated->addGate(GateNot);
   VertexPtr outputQ = graphCreated->addOutput();
   VertexPtr outputQ2 = graphCreated->addOutput();
+
   graphCreated->addEdge(inputB, gateNot);
   graphCreated->addEdge(inputA, gateOr);
   graphCreated->addEdge(gateNot, gateOr);
@@ -54,10 +61,12 @@ TEST(VerilogReadingTest, VerticesSequenceCreated) {
   graphCreated->addEdge(gateOr, gateAnd);
   graphCreated->addEdge(gateAnd, outputQ);
   graphCreated->addEdge(gateNot, outputQ2);
+
   EXPECT_EQ(graph->calculateHash(), graphCreated->calculateHash());
 }
 TEST(VerilogReadingTest, ConstantCreating) {
   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
+
   VertexPtr constOne = graphCreated->addConst('1');
   VertexPtr constZero = graphCreated->addConst('0');
   VertexPtr input = graphCreated->addInput();
@@ -65,6 +74,7 @@ TEST(VerilogReadingTest, ConstantCreating) {
   VertexPtr output = graphCreated->addOutput();
   VertexPtr buf = graphCreated->addGate(GateBuf);
   VertexPtr xnor = graphCreated->addGate(GateXnor);
+
   graphCreated->addEdge(constOne, nand);
   graphCreated->addEdge(input, nand);
   graphCreated->addEdge(constZero, buf);
@@ -72,6 +82,7 @@ TEST(VerilogReadingTest, ConstantCreating) {
   graphCreated->addEdge(nand, xnor);
   graphCreated->addEdge(xnor, output);
   graphCreated->setName("constTest");
+
   graphCreated->toVerilog("../../../test/"
                           "testModulesForReading",
                           "constTest.v");
@@ -108,6 +119,7 @@ TEST(VerilogReadingTest, UseOutputAsGate) {
   GraphPtr graph = context.d_graphs["outputAsGate"];
   EXPECT_EQ(graph->getGatesCount()[GateAnd], 1);
   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
+
   VertexPtr clk = graphCreated->addInput("clk");
   VertexPtr someInput = graphCreated->addInput("someInput");
   VertexPtr gateQ1 = graphCreated->addGate(GateAnd, "Q1and");
@@ -119,6 +131,7 @@ TEST(VerilogReadingTest, UseOutputAsGate) {
   VertexPtr nand = graphCreated->addGate(GateNand, "nand");
   VertexPtr gateQ4 = graphCreated->addGate(GateBuf, "Q4buf");
   VertexPtr outputQ4 = graphCreated->addOutput("q4");
+
   graphCreated->addEdge(clk, gateQ1);
   graphCreated->addEdge(someInput, gateQ1);
   graphCreated->addEdge(gateQ1, outputQ1);
@@ -132,11 +145,13 @@ TEST(VerilogReadingTest, UseOutputAsGate) {
   graphCreated->addEdge(clk, nand);
   graphCreated->addEdge(nand, gateQ4);
   graphCreated->addEdge(gateQ4, outputQ4);
+
   EXPECT_EQ(graph->calculateHash(), graphCreated->calculateHash());
 }
 TEST(VerilogReadingTest, AllGateTypesCreating) {
   Context context = Context();
   GraphPtr graph = std::make_shared<OrientedGraph>();
+
   VertexPtr inputA = graph->addInput();
   VertexPtr inputB = graph->addInput();
   VertexPtr inputC = graph->addInput();
@@ -152,6 +167,7 @@ TEST(VerilogReadingTest, AllGateTypesCreating) {
   VertexPtr vNotB = graph->addGate(GateNot);
   VertexPtr vBufQ1 = graph->addGate(GateBuf);
   VertexPtr vBufQ2 = graph->addGate(GateBuf);
+
   graph->addEdge(inputA, vXor);
   graph->addEdge(inputC, vXor);
   graph->addEdge(inputA, vNotA);
@@ -171,6 +187,7 @@ TEST(VerilogReadingTest, AllGateTypesCreating) {
   graph->addEdge(vXor, vBufQ2);
   graph->addEdge(vBufQ1, outputQ1);
   graph->addEdge(vBufQ2, outputQ2);
+
   graph->setName("allGatesTest");
   graph->toVerilog("../../../test/"
                    "testModulesForReading",

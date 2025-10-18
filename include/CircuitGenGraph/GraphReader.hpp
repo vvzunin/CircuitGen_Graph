@@ -14,6 +14,7 @@ namespace CG_Graph {
 
 class OrientedGraph;
 class GraphVertexBase;
+
 class Context {
   /// class Context contains information used for parsing each graph
   /// and provides possibility to parse module, if it's submodules
@@ -24,15 +25,15 @@ class Context {
   /// @param d_currentGraph storage for graph while it is creating
   /// @param d_currentGraphNamesList using for fast search vertices by name
   /// @param d_numberOfVertices using to reserve memory at the beginning of
-  /// parsing
 public:
   Context() = default;
-  mutable std::string d_currentTopName;
-  mutable std::map<std::string, GraphPtr> d_graphs;
-  mutable GraphPtr d_currentGraph;
-  mutable std::unordered_map<std::string, VertexPtr> d_currentGraphNamesList;
-  mutable size_t d_numberOfVertices;
+  std::string d_currentTopName;
+  std::map<std::string, GraphPtr> d_graphs;
+  GraphPtr d_currentGraph;
+  std::unordered_map<std::string, VertexPtr> d_currentGraphNamesList;
+  size_t d_numberOfVertices;
 };
+
 class GraphReader : public lorina::verilog_reader {
   /// @file GraphReader.hpp
   /// class GraphReader using for parsing a object of class OrientedGraph from
@@ -92,6 +93,8 @@ public:
   /// @return pointer for requested vertex
   VertexPtr get_operand(const std::string &i_name,
                         bool i_isInverted = false) const;
+  VertexPtr get_or_create_inversion(const std::string &i_name,
+                                    VertexPtr i_vertex) const;
   /*! \brief Callback method for parsed immediate assignment of form `LHS = RHS
    * ;`.
    *
