@@ -33,6 +33,7 @@ TEST(VerilogReadingTest, SimplestGraphsIsRead) {
   GraphPtr graph = context.d_graphs[simpleReadingFilename.data()];
   EXPECT_EQ(graph->getGatesCount()[GateAnd], 1);
   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
+
   VertexPtr clk = graphCreated->addInput();
   VertexPtr someInput = graphCreated->addInput();
   VertexPtr gate = graphCreated->addGate(GateAnd);
