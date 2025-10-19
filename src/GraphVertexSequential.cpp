@@ -248,8 +248,7 @@ std::string GraphVertexSequential::toVerilog() const {
   //   case 4:
   switch(d_seqType)
   case affr: 
-  return fmt::format(const S &format_str, Args &&args...)
-  break;
+  return ""; // fmt::format(const S &format_str, Args &&args...)
 
   // case affre: ;
   // case affrs: ;
@@ -286,6 +285,7 @@ std::string GraphVertexSequential::toVerilog() const {
   // case naffrse: ;
   // case naffr: ;
   // case naffre: ;
+  return "ERROR";
   }
   // std::string verilog;
   // formatAlwaysBegin(verilog);
@@ -312,7 +312,6 @@ std::string GraphVertexSequential::toVerilog() const {
   // verilog += fmt::format(toFormat, d_name, getData()->getRawName());
 
   // return verilog;
-}
 
 DotReturn GraphVertexSequential::toDOT() {
   if (!d_inConnections.size()) {
