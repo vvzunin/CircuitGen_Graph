@@ -141,6 +141,14 @@ public:
     return *d_strings.emplace(s).first;
   }
 
+  /// @brief puts string_view to strings set and returns a string_view on the
+  /// added string
+  /// @param s string to be stored
+  /// @return string_view from string in the set
+  std::string_view internalize(std::string &&s) {
+    return *d_strings.emplace(s).first;
+  }
+
   /// @brief allocates memory for graph vertex
   /// @tparam T type of graph vertex
   /// @return pointer to the required vertex type
