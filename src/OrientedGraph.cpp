@@ -181,6 +181,33 @@ VertexPtr OrientedGraph::addInput(const std::string &i_name) {
 
   return newVertex;
 }
+
+std::vector<VertexPtr> OrientedGraph::addInputs(size_t i_num) {
+  std::vector<VertexPtr> inputs;
+  inputs.reserve(i_num);
+  reserve(VertexTypes::input, i_num);
+  for (size_t i = 0; i < i_num; ++i) {
+    VertexPtr ptr = create<GraphVertexInput>(shared_from_this());
+    inputs.push_back(ptr);
+    d_vertices[VertexTypes::input].push_back(ptr);
+  }
+  return inputs;
+}
+
+std::vector<VertexPtr>
+OrientedGraph::addInputs(size_t i_num, NameGenerator generator) {
+  std::vector<VertexPtr> inputs;
+  inputs.reserve(i_num);
+  reserve(VertexTypes::input, i_num);
+  for (size_t i = 0; i < i_num; ++i) {
+    VertexPtr ptr = create<GraphVertexInput>(
+        internalize(generator(i)), shared_from_this());
+    inputs.push_back(ptr);
+    d_vertices[VertexTypes::input].push_back(ptr);
+  }
+  return inputs;
+}
+
 VertexPtr OrientedGraph::addInputBus(const std::string &i_name, size_t width) {
   VertexPtr newVertex = create<GraphVertexBusInput>(
       i_name.empty() ? "" : internalize(i_name), shared_from_this(), width);

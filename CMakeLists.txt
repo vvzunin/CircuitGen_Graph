@@ -53,12 +53,7 @@ if(ENABLE_LOGGING)
   )
 endif()
 
-include_directories(lib)
-link_directories(lib)
-
 add_subdirectory(lib)
-target_link_libraries(${PROJECT_NAME} PRIVATE Lorina)
-target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 
 find_program(CLANG_TIDY NAMES clang-tidy)
 
@@ -79,6 +74,11 @@ elseif(CLANG_TIDY)
 else()
   message(STATUS "clang-tidy not found")
 endif()
+
+
+target_link_libraries(${PROJECT_NAME} PUBLIC
+  Lorina
+  fmt)
 
 if(ENABLE_LOGGING)
   message(STATUS "Logs enabled")

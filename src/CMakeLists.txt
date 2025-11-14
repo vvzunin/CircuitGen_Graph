@@ -39,6 +39,7 @@ endif()
 
 add_library(CircuitGenGraph::CircuitGenGraph ALIAS ${PROJECT_NAME})
 
+include_directories(${CMAKE_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/lib)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 

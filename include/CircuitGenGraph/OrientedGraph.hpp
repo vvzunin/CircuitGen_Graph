@@ -52,6 +52,8 @@ class GraphReader;
 class Context;
 class GraphVertexBus;
 
+using NameGenerator = std::function<std::string(size_t)>;
+
 /// class OrientedGraph
 ///
 /// @param d_countNewGraphInstance Static variable to count new graph
@@ -258,6 +260,10 @@ public:
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr addInput(const std::string &i_name = "");
+
+  std::vector<VertexPtr> addInputs(size_t i_num);
+  std::vector<VertexPtr> addInputs(size_t i_num, NameGenerator generator);
+
   VertexPtr addInputBus(const std::string &i_name = "", size_t width = 1);
   /// @brief addOutput
   /// Adds an output vertex to the current graph
