@@ -5,6 +5,8 @@
 #include <cassert>
 
 #include <CircuitGenGraph/GraphUtils.hpp>
+#include <string_view>
+#include <vector>
 
 /* start of static variable values declaration */
 
@@ -85,7 +87,12 @@ Gates parseStringToGate(std::string i_gate) {
 std::string parseGateToString(Gates gate) {
   return std::string(findPairByKey(gateToString, gate)->second);
 }
-
+std::string parseSequentialToString(SequentialTypes type) {
+  return std::string(findPairByKey(sequentialToString, type)->second);
+}
+std::vector<std::string_view>parseSequentialToInputs(SequentialTypes type) {
+return std::vector<std::string_view>(findPairByKey(sequentialToInputList, type)->second);
+}
 std::string parseVertexToString(VertexTypes vertex) {
   return std::string(findPairByKey(vertexToString, vertex)->second);
 };

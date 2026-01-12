@@ -4,10 +4,11 @@
  */
 #include "CircuitGenGraph/GraphUtils.hpp"
 #include <cassert>
+#include <fmt/core.h>
+#include <fmt/format.h>
 #include <memory>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
-#include <sstream>
 #include <string>
 #include <string_view>
 
@@ -89,22 +90,20 @@ std::string GraphVertexBusConstant::toVerilog() const {
          d_valueBus + ";";
 }
 std::string GraphVertexBusConstant::getVerilogInstance() {
-  return "wire " + getName() + getBusNameSuffix() + ";";
+  return fmt::format("wire {}{};",getName(), getBusNameSuffix());
 }
 std::string GraphVertexBusConstant::getVerilogInstanceSeparate() {
-  std::stringstream res;
-  res << "wire ";
-  for (size_t i = 0; i < getWidth(); ++i) {
-    res << getName() << "_" << i << (i != getWidth() - 1 ? ", " : ";\n");
+  std::vector<std::string> ans;
+  for (int i = 0; i < getWidth(); ++i) {
+    ans.push_back(fmt::format("{}_{}", getName(), i));
   }
-  return res.str();
+  return fmt::format("wire {};\n", fmt::join(ans, ", "));
 }
 std::string GraphVertexBusConstant::toOneBitVerilog() const {
-  std::stringstream res;
-  for (size_t i = 0; i < getWidth(); ++i) {
-    res << "assign " << getName() << "_" << i << " = " << d_valueBus[i]
-        << ";\n";
+  std::vector<std::string> ans;
+  for (int i = 0; i < getWidth(); ++i) {
+    ans.push_back(fmt::format("assign {}_{} = {};\n\t", getName(), i, d_valueBus[i]));
   }
-  return res.str();
+  return fmt::format("{}\n", fmt::join(ans, ""));
 }
 } // namespace CG_Graph

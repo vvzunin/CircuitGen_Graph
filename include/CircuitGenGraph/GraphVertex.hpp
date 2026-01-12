@@ -11,6 +11,7 @@
  */
 #pragma once
 
+#include "CircuitGenGraph/GraphUtils.hpp"
 #include "CircuitGenGraph/GraphVertexBus.hpp"
 #include <cstddef>
 #include <string>
@@ -572,6 +573,18 @@ public:
   virtual std::string
   toVerilog() const override; // помечен виртуальным потому что у этого класса
                               // есть потомок-шина со своим методом
+
+  virtual std::string getVerilogInstance();
+  static std::string
+  getSequentialString(SequentialTypes i_type, std::string_view i_name,
+                      std::vector<std::string_view> i_inputs);
+
+  static std::string getVerilogInstance(const VertexPtr vertex,
+                                        std::string_view i_inputDataName,
+                                        std::string_view i_qOutputName,
+                                        std::string_view i_dataName = "data",
+                                        std::string_view i_qName = "q",
+                                        std::string_view i_instanceName = "");
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   DotReturn toDOT() override;
 
@@ -606,8 +619,6 @@ protected:
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void setSignalByType(VertexPtr i_wire, SequentialTypes i_type,
                        unsigned &factType);
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
-  void formatAlwaysBegin(std::string &verilog) const;
 
 protected:
   SequentialTypes d_seqType;
