@@ -488,7 +488,7 @@ void OrientedGraph::readVerilog(std::string i_path, Context &context) {
   GraphReader *reader = new GraphReader(context);
   std::ifstream in(i_path.c_str(), std::ifstream::in);
   if (!in.is_open())
-    throw std::runtime_error("File do not exist\n");
+    throw std::runtime_error("File do not exist. Current path:"+i_path+"\n");
   std::string word;
   in >> word;
   while (word != "module") {

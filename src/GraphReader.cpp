@@ -3,7 +3,10 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
+#include <cstddef>
 #include <lorina/lorina.hpp>
+#include <regex>
+#include <string>
 #include <utility>
 
 #define SUFFIX_INVERSION "_not"
@@ -13,6 +16,7 @@ namespace CG_Graph {
 
 GraphReader::GraphReader(Context &i_context) : d_context(i_context) {
 };
+
 void GraphReader::on_module_header(
     const std::string &module_name,
     const std::vector<std::string> &inouts) const {
@@ -26,6 +30,7 @@ void GraphReader::on_inputs(const std::vector<std::string> &inputs,
   d_context.d_currentGraph->reserve(input, inputs.size());
     d_context.d_numberOfVertices += inputs.size();
     d_context.d_currentGraphNamesList.reserve(d_context.d_numberOfVertices);
+    
   for (auto i: inputs)
     d_context.d_currentGraphNamesList[i] =
         d_context.d_currentGraph->addInput(i);
@@ -35,8 +40,9 @@ void GraphReader::on_outputs(const std::vector<std::string> &outputs,
                              std::string const &size) const {
   d_context.d_currentGraph->reserve(output, outputs.size());
   d_context.d_currentGraph->reserve(gate, outputs.size());
-    d_context.d_numberOfVertices += outputs.size() * 2;
-    d_context.d_currentGraphNamesList.reserve(d_context.d_numberOfVertices);
+  d_context.d_numberOfVertices += outputs.size() * 2;
+  d_context.d_currentGraphNamesList.reserve(d_context.d_numberOfVertices);
+  
   for (auto i: outputs) {
     VertexPtr outputVertex = d_context.d_currentGraphNamesList[i] =
         d_context.d_currentGraph->addOutput(i);
@@ -52,26 +58,38 @@ void GraphReader::on_wires(const std::vector<std::string> &wires,
     d_context.d_currentGraphNamesList[i] =
         d_context.d_currentGraph->addGate(GateDefault, i);
 }
+std::pair<size_t, std::string> parseConstValue(const std::string &input) {
+  //It is a mock, will be reworked
+
+  size_t length;
+  std::string value;
+
+  if(input.find("\'") < input.length()) {
+    length = std::stoi(input.substr(0, input.find("\'")));
+    value = input.substr(input.find("\'")+2,input.length()-input.find("\'")-2);
+  }
+
+  else {
+  length = input.length();
+  value = input;
+  }
+
+  return std::make_pair(length, value);
+}
 
 void GraphReader::on_parameter(const std::string &name,
                                const std::string &value) const {
   VertexPtr vertex;
-  if (value == "1'b1" || value == "1")
-    vertex = d_context.d_currentGraph->addConst('1', name);
-  else
-    vertex = d_context.d_currentGraph->addConst('0', name);
+  std::pair<size_t, std::string> data = parseConstValue(value);
+    vertex = d_context.d_currentGraph->addConst(data.second[0], name);
   d_context.d_currentGraphNamesList[name] = vertex;
 }
 
 void GraphReader::on_assign(const std::string &lhs,
                             const std::pair<std::string, bool> &rhs) const {
-  if (rhs.first == "1'b1" || rhs.first == "1'b0") {
-    VertexPtr vertex;
-    if (rhs.first == "1'b1" || rhs.first == "1")
-      vertex = d_context.d_currentGraph->addConst('1', lhs);
-    else
-      vertex = d_context.d_currentGraph->addConst('0', lhs);
-    d_context.d_currentGraphNamesList[lhs] = vertex;
+  std::regex isConstant("^([0-9]+)'[bhdo]([0-9A-Fa-f]+)$"), isSimpleConstant("^[0-9]+$");
+  if (std::regex_match(rhs.first, isConstant)||std::regex_match(rhs.first, isSimpleConstant)) {
+    on_parameter(lhs, rhs.first);
   } else {
     if (d_context.d_currentGraphNamesList[lhs]->getType() != output) {
       VertexPtr leftVertex = d_context.d_currentGraphNamesList[lhs];
@@ -131,6 +149,7 @@ VertexPtr GraphReader::get_operand(const std::string &i_name,
   }
   return res;
 }
+
 VertexPtr GraphReader::get_or_create_inversion(const std::string &i_name, VertexPtr i_vertex) const {
   auto searchForNot =
         d_context.d_currentGraphNamesList.find(i_name + SUFFIX_INVERSION);
@@ -174,6 +193,7 @@ void GraphReader::on_and(const std::string &lhs,
                          const std::pair<std::string, bool> &op2) const {
   on_elem(lhs, op1, op2, GateAnd);
 }
+
 void GraphReader::on_nand(const std::string &lhs,
                           const std::pair<std::string, bool> &op1,
                           const std::pair<std::string, bool> &op2) const {

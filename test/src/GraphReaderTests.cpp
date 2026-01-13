@@ -1,17 +1,32 @@
 #include "CircuitGenGraph/GraphUtils.hpp"
+#include <fmt/core.h>
 #include <gtest/gtest.h>
 #include <CircuitGenGraph/GraphReader.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 #include <lorina/lorina.hpp>
 #include <memory>
+#include <string>
+#include <string_view>
 using namespace CG_Graph;
+
+constexpr std::string_view simpleReadingFilename = "simpleReading";
+constexpr std::string_view simpleStructureFilename = "simpleStructure";
+constexpr std::string_view constTestFilename = "constTest";
+constexpr std::string_view outputAsGateFilename = "outputAsGate";
+constexpr std::string_view allGatesFilename = "allGatesTest";
+constexpr std::string_view concatenationPattern = "{}/{}.v";
+
+std::string testsFolderPath = fmt::format(
+    "{}testModulesForReading",
+    std::string(__FILE__).substr(0, std::string(__FILE__).find("test/") + 5));
+
 TEST(VerilogReadingTest, SimplestGraphsIsRead) {
   Context context = Context();
-  EXPECT_NO_THROW(
-      OrientedGraph::readVerilog("../../../test/"
-                                 "testModulesForReading/simpleReading.v",
-                                 context));
-  GraphPtr graph = context.d_graphs["simpleReading"];
+  std::string path =
+      fmt::format(concatenationPattern, testsFolderPath, simpleReadingFilename);
+  EXPECT_NO_THROW(OrientedGraph::readVerilog(path, context));
+
+  GraphPtr graph = context.d_graphs[simpleReadingFilename.data()];
   EXPECT_EQ(graph->getGatesCount()[GateAnd], 1);
   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
 
@@ -29,11 +44,10 @@ TEST(VerilogReadingTest, SimplestGraphsIsRead) {
 
 TEST(VerilogReadingTest, VerticesSequenceCreated) {
   Context context = Context();
-  EXPECT_NO_THROW(
-      OrientedGraph::readVerilog("../../../test/"
-                                 "testModulesForReading/simpleStructure.v",
-                                 context));
-  GraphPtr graph = context.d_graphs["simpleStructure"];
+  std::string path = fmt::format(concatenationPattern, testsFolderPath,
+                                 simpleStructureFilename);
+  EXPECT_NO_THROW(OrientedGraph::readVerilog(path, context));
+  GraphPtr graph = context.d_graphs[simpleStructureFilename.data()];
 
   EXPECT_EQ(graph->getGatesCount()[GateNot], 1);
   EXPECT_EQ(graph->getGatesCount()[GateOr], 1);
@@ -65,6 +79,9 @@ TEST(VerilogReadingTest, VerticesSequenceCreated) {
   EXPECT_EQ(graph->calculateHash(), graphCreated->calculateHash());
 }
 TEST(VerilogReadingTest, ConstantCreating) {
+  std::string path =
+      fmt::format(concatenationPattern, testsFolderPath, constTestFilename);
+
   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
 
   VertexPtr constOne = graphCreated->addConst('1');
@@ -81,42 +98,34 @@ TEST(VerilogReadingTest, ConstantCreating) {
   graphCreated->addEdge(buf, xnor);
   graphCreated->addEdge(nand, xnor);
   graphCreated->addEdge(xnor, output);
-  graphCreated->setName("constTest");
+  graphCreated->setName(constTestFilename.data());
 
-  graphCreated->toVerilog("../../../test/"
-                          "testModulesForReading",
-                          "constTest.v");
+  std::string filename = fmt::format("{}.v", constTestFilename);
+  graphCreated->toVerilog(testsFolderPath, filename);
   Context context = Context();
-  EXPECT_NO_THROW(
-      OrientedGraph::readVerilog("../../../test/"
-                                 "testModulesForReading/constTest.v",
-                                 context));
-  GraphPtr graph = context.d_graphs["constTest"];
+  EXPECT_NO_THROW(OrientedGraph::readVerilog(path, context));
+  GraphPtr graph = context.d_graphs[constTestFilename.data()];
   EXPECT_EQ(graph->calculateHash(), graphCreated->calculateHash());
-  remove("../../../test/"
-         "testModulesForReading/constTest.v");
+  remove(path.data());
 }
 
 TEST(VerilogReadingTest, OneContextForSeveralGraphs) {
   Context context = Context();
-  EXPECT_NO_THROW(
-      OrientedGraph::readVerilog("../../../test/"
-                                 "testModulesForReading/simpleStructure.v",
-                                 context));
-  EXPECT_NO_THROW(
-      OrientedGraph::readVerilog("../../../test/"
-                                 "testModulesForReading/simpleReading.v",
-                                 context));
-  EXPECT_NO_THROW(context.d_graphs["simpleStructure"]);
-  EXPECT_NO_THROW(context.d_graphs["simpleReading"]);
+  std::string pathReading =
+      fmt::format(concatenationPattern, testsFolderPath, simpleReadingFilename);
+  std::string pathStructure = fmt::format(concatenationPattern, testsFolderPath,
+                                          simpleStructureFilename);
+  EXPECT_NO_THROW(OrientedGraph::readVerilog(pathStructure, context));
+  EXPECT_NO_THROW(OrientedGraph::readVerilog(pathStructure, context));
+  EXPECT_NO_THROW(context.d_graphs[simpleStructureFilename.data()]);
+  EXPECT_NO_THROW(context.d_graphs[simpleReadingFilename.data()]);
 }
 TEST(VerilogReadingTest, UseOutputAsGate) {
   Context context = Context();
-  EXPECT_NO_THROW(
-      OrientedGraph::readVerilog("../../../test/"
-                                 "testModulesForReading/outputAsGate.v",
-                                 context));
-  GraphPtr graph = context.d_graphs["outputAsGate"];
+  std::string path =
+      fmt::format(concatenationPattern, testsFolderPath, outputAsGateFilename);
+  EXPECT_NO_THROW(OrientedGraph::readVerilog(path, context));
+  GraphPtr graph = context.d_graphs[outputAsGateFilename.data()];
   EXPECT_EQ(graph->getGatesCount()[GateAnd], 1);
   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
 
@@ -188,16 +197,14 @@ TEST(VerilogReadingTest, AllGateTypesCreating) {
   graph->addEdge(vBufQ1, outputQ1);
   graph->addEdge(vBufQ2, outputQ2);
 
-  graph->setName("allGatesTest");
-  graph->toVerilog("../../../test/"
-                   "testModulesForReading",
-                   "allGatesTest.v");
-  EXPECT_NO_THROW(
-      OrientedGraph::readVerilog("../../../test/"
-                                 "testModulesForReading/allGatesTest.v",
-                                 context));
-  GraphPtr graphCreated = context.d_graphs["allGatesTest"];
+  graph->setName(allGatesFilename.data());
+  std::string filename = fmt::format("{}.v", allGatesFilename);
+
+  graph->toVerilog(testsFolderPath, filename);
+  std::string path =
+      fmt::format(concatenationPattern, testsFolderPath, allGatesFilename);
+  EXPECT_NO_THROW(OrientedGraph::readVerilog(path, context));
+  GraphPtr graphCreated = context.d_graphs[allGatesFilename.data()];
   EXPECT_EQ(graph->calculateHash(), graphCreated->calculateHash());
-  remove("../../../test/"
-         "testModulesForReading/allGatesTest.v");
+  remove(path.data());
 }
