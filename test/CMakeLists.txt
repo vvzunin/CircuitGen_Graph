@@ -56,6 +56,7 @@ add_executable(${TEST_NAME}
   src/DefaultAuxiliaryMethodsTests.cpp
   src/GraphVertexSequentialTests.cpp
   src/GraphUtilsTests.cpp
+  src/TestbenchGeneratorTests.cpp
 )
 
 # Include directories

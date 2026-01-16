@@ -28,6 +28,7 @@
 <a name="content_rus"></a> 
 - [Правила именования переменных](#hacking)
 - [Сборка программы](#generator_build_rus)
+- [Генерация тестбенчей](#testbench)
 - [Лицензия](#license)
 
 > Главный репозиторий проекта: https://hub.mos.ru/circuitgen/CircuitGen
@@ -131,6 +132,38 @@ chmod +x buildGraph.sh
 <a name="format"></a>
 
 Предварительные действия перед работой с кодом в VsCode, а также некоторую информацию касательно стиля кода и локальных файлов .json можно посмотреть [здесь](/docs/FORMAT.md).
+
+[&#8593; Contents](#content_rus)
+
+## Генерация тестбенчей
+<a name="testbench"></a>
+
+Библиотека поддерживает автоматическую генерацию Verilog тестбенчей для верификации сгенерированных схем.
+
+### Установка Icarus Verilog (опционально)
+
+Для полной верификации рекомендуется установить Icarus Verilog:
+
+```bash
+# Ubuntu/Debian
+sudo apt install iverilog
+
+# Fedora
+sudo dnf install iverilog
+```
+
+Полный пример использования см. в файле [example_testbench.cpp](/example_testbench.cpp).
+
+### Запуск тестов с Icarus Verilog
+
+Некоторые тесты требуют установленного Icarus Verilog и отключены по умолчанию. Для их запуска:
+
+```bash
+# Запуск тестов с Icarus Verilog
+./build/test/CircuitGenGraph_tests --gtest_filter=*DISABLED_* --gtest_also_run_disabled_tests
+```
+
+Подробнее о запуске тестов см. в [docs/BUILDING.md](/docs/BUILDING.md).
 
 [&#8593; Contents](#content_rus)
 

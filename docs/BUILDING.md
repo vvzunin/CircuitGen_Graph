@@ -100,7 +100,58 @@ target_link_libraries(
 ```
 #include <CircuitGenGraph/GraphUtils.hpp>
 ```
+
+Для работы с генерацией тестбенчей используется:
+
+```
+#include <CircuitGenGraph/TestbenchGenerator.hpp>
+```
+
 Подробное описание функций находится в автоматически сгенерированной [документации][4].
+
+### Сборка и запуск примера тестбенча
+
+После сборки библиотеки можно скомпилировать и запустить пример генерации тестбенчей:
+
+```sh
+g++ -std=c++17 -I./include -L./build example_testbench.cpp \
+    -o example_testbench -lCircuitGenGraph
+
+LD_LIBRARY_PATH=./build:$LD_LIBRARY_PATH ./example_testbench
+```
+
+Для полной верификации с помощью Icarus Verilog требуется его установка:
+
+```sh
+# Ubuntu/Debian
+sudo apt install iverilog
+
+# Fedora
+sudo dnf install iverilog
+```
+
+### Запуск тестов
+
+Для запуска всех тестов (включая unit-тесты библиотеки):
+
+```sh
+ctest --test-dir build --output-on-failure
+```
+
+Некоторые тесты, требующие установленного Icarus Verilog, отключены по умолчанию (префикс `DISABLED_`). Чтобы запустить их:
+
+```sh
+# Запуск ТОЛЬКО отключенных тестов
+./build/test/CircuitGenGraph_tests --gtest_filter=*DISABLED_* --gtest_also_run_disabled_tests
+
+# Или запуск конкретного теста
+./build/test/CircuitGenGraph_tests --gtest_filter=TestbenchGeneratorTests.DISABLED_IcarusVerificationAndGate --gtest_also_run_disabled_tests
+
+# Запуск ВСЕХ тестов (обычных + отключенных)
+./build/test/CircuitGenGraph_tests --gtest_also_run_disabled_tests
+```
+
+**Примечание**: Тесты с Icarus Verilog отключены по умолчанию, потому что требуют установленного симулятора. Если `iverilog` не найден, тесты будут пропущены (`GTEST_SKIP`).
 
 ### Особенности установки
 

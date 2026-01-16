@@ -28,6 +28,7 @@ set(SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphUtils.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultAuxiliaryMethods.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexSequential.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/TestbenchGenerator.cpp
 )
 
 set(LIBS 
@@ -42,6 +43,7 @@ set(PUBLIC_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphUtils.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/DefaultAuxiliaryMethods.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/TestbenchGenerator.hpp
 )
 
 option(ENABLE_LOGGING "Enable logging" OFF)
@@ -155,7 +157,7 @@ set_target_properties(
   SOVERSION ${PROJECT_VERSION_MAJOR}
   EXPORT_NAME ${PROJECT_NAME}
   OUTPUT_NAME ${PROJECT_NAME}
-  PUBLIC_HEADER ${PUBLIC_HEADERS})
+  PUBLIC_HEADER "${PUBLIC_HEADERS}")
 
 include(cmake/utils.cmake)
 

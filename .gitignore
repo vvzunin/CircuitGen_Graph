@@ -19,3 +19,46 @@ coverage.info
 coverage_report/
 
 .cache/
+
+# Build artifacts
+*.o
+*.a
+*.exe
+example_usage
+example_half_adder
+example_dff
+example_testbench
+
+# Generated simulation files
+*.vcd
+*_sim
+
+# User-generated test files and circuits (not in repo)
+example_usage.cpp
+example_half_adder.cpp
+example_dff.cpp
+USAGE_GUIDE.md
+my_circuit
+half_adder
+dff_with_reset
+testSimple.dot
+testSimple.v
+testSubGraph.dot
+testSubGraph.v
+testSubGraph3.dot
+testSubGraphUnroll.dot
+testSubGraphUnroll2.dot
+testSubGraphUnroll3.dot
+
+# Output directory for generated files
+output/
+
+# Documentation artifacts (generated)
+refman.pdf
+
+# Downloaded sources
+doxygen-*.tar.gz
+
+# User test data
+submodules/
+submodulesDOT/
