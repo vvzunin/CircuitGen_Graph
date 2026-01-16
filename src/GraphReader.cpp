@@ -8,14 +8,13 @@
 #include <regex>
 #include <string>
 #include <utility>
-
+#include <cassert>
 #define SUFFIX_INVERSION "_not"
 #define SUFFIX_OUTPUT_GATE "_gate"
 
 namespace CG_Graph {
 
-GraphReader::GraphReader(Context &i_context) : d_context(i_context) {
-};
+GraphReader::GraphReader(Context &i_context) : d_context(i_context) {};
 
 void GraphReader::on_module_header(
     const std::string &module_name,
@@ -28,9 +27,9 @@ void GraphReader::on_module_header(
 void GraphReader::on_inputs(const std::vector<std::string> &inputs,
                             std::string const &size) const {
   d_context.d_currentGraph->reserve(input, inputs.size());
-    d_context.d_numberOfVertices += inputs.size();
-    d_context.d_currentGraphNamesList.reserve(d_context.d_numberOfVertices);
-    
+  d_context.d_numberOfVertices += inputs.size();
+  d_context.d_currentGraphNamesList.reserve(d_context.d_numberOfVertices);
+
   for (auto i: inputs)
     d_context.d_currentGraphNamesList[i] =
         d_context.d_currentGraph->addInput(i);
@@ -42,7 +41,7 @@ void GraphReader::on_outputs(const std::vector<std::string> &outputs,
   d_context.d_currentGraph->reserve(gate, outputs.size());
   d_context.d_numberOfVertices += outputs.size() * 2;
   d_context.d_currentGraphNamesList.reserve(d_context.d_numberOfVertices);
-  
+
   for (auto i: outputs) {
     VertexPtr outputVertex = d_context.d_currentGraphNamesList[i] =
         d_context.d_currentGraph->addOutput(i);
@@ -59,19 +58,20 @@ void GraphReader::on_wires(const std::vector<std::string> &wires,
         d_context.d_currentGraph->addGate(GateDefault, i);
 }
 std::pair<size_t, std::string> parseConstValue(const std::string &input) {
-  //It is a mock, will be reworked
+  // It is a mock, will be reworked
 
   size_t length;
   std::string value;
 
-  if(input.find("\'") < input.length()) {
+  if (input.find("\'") < input.length()) {
     length = std::stoi(input.substr(0, input.find("\'")));
-    value = input.substr(input.find("\'")+2,input.length()-input.find("\'")-2);
+    value = input.substr(input.find("\'") + 2,
+                         input.length() - input.find("\'") - 2);
   }
 
   else {
-  length = input.length();
-  value = input;
+    length = input.length();
+    value = input;
   }
 
   return std::make_pair(length, value);
@@ -81,14 +81,37 @@ void GraphReader::on_parameter(const std::string &name,
                                const std::string &value) const {
   VertexPtr vertex;
   std::pair<size_t, std::string> data = parseConstValue(value);
-    vertex = d_context.d_currentGraph->addConst(data.second[0], name);
+  vertex = d_context.d_currentGraph->addConst(data.second[0], name);
   d_context.d_currentGraphNamesList[name] = vertex;
+}
+
+void assignOutputs(const std::string &lhs, VertexPtr outputGate,
+                   Context &d_context) {
+  std::string outputAsGateName = lhs + SUFFIX_OUTPUT_GATE;
+  if (d_context.d_currentGraphNamesList.find(outputAsGateName) ==
+      d_context.d_currentGraphNamesList.end()) {
+
+    d_context.d_currentGraph->addEdge(outputGate,
+                                      d_context.d_currentGraphNamesList[lhs]);
+  } else {
+    VertexPtr incorrectOutputGate =
+        d_context.d_currentGraphNamesList[outputAsGateName];
+    for (VertexPtr vertex: incorrectOutputGate->getOutConnections()) {
+      d_context.d_currentGraph->addEdge(outputGate, vertex);
+    }
+    d_context.d_currentGraph->updateEdgesGatesCount(
+        d_context.d_currentGraphNamesList[outputAsGateName], GateDefault);
+    incorrectOutputGate->~GraphVertexBase();
+  }
+  d_context.d_currentGraphNamesList[outputAsGateName] = outputGate;
 }
 
 void GraphReader::on_assign(const std::string &lhs,
                             const std::pair<std::string, bool> &rhs) const {
-  std::regex isConstant("^([0-9]+)'[bhdo]([0-9A-Fa-f]+)$"), isSimpleConstant("^[0-9]+$");
-  if (std::regex_match(rhs.first, isConstant)||std::regex_match(rhs.first, isSimpleConstant)) {
+  std::regex isConstant("^([0-9]+)'[bhdo]([0-9A-Fa-f]+)$"),
+      isSimpleConstant("^[0-9]+$");
+  if (std::regex_match(rhs.first, isConstant) ||
+      std::regex_match(rhs.first, isSimpleConstant)) {
     on_parameter(lhs, rhs.first);
   } else {
     if (d_context.d_currentGraphNamesList[lhs]->getType() != output) {
@@ -103,28 +126,11 @@ void GraphReader::on_assign(const std::string &lhs,
             leftVertex;
         d_context.d_currentGraph->addEdge(get_operand(rhs.first), leftVertex);
       }
-    } else {
+    }
+
+    else {
       VertexPtr outputGate = get_operand(rhs.first, rhs.second);
-      if (d_context.d_currentGraphNamesList.find(lhs + SUFFIX_OUTPUT_GATE) ==
-          d_context.d_currentGraphNamesList.end()) {
-        d_context.d_currentGraph->addEdge(
-            outputGate, d_context.d_currentGraphNamesList[lhs]);
-        d_context.d_currentGraphNamesList[lhs + SUFFIX_OUTPUT_GATE] =
-            outputGate;
-      } else {
-        for (VertexPtr vertex:
-             d_context.d_currentGraphNamesList[lhs + SUFFIX_OUTPUT_GATE]
-                 ->getOutConnections()) {
-          d_context.d_currentGraph->addEdge(outputGate, vertex);
-        }
-        d_context.d_currentGraph->updateEdgesGatesCount(
-            d_context.d_currentGraphNamesList[lhs + SUFFIX_OUTPUT_GATE],
-            GateDefault);
-        d_context.d_currentGraphNamesList[lhs + SUFFIX_OUTPUT_GATE]
-            ->~GraphVertexBase();
-        d_context.d_currentGraphNamesList[lhs + SUFFIX_OUTPUT_GATE] =
-            outputGate;
-      }
+      assignOutputs(lhs, outputGate, d_context);
     }
   }
 };
@@ -136,6 +142,7 @@ VertexPtr GraphReader::get_operand(const std::string &i_name,
   if (temp->second->getType() == output) {
     if (d_context.d_currentGraphNamesList.find(i_name + SUFFIX_OUTPUT_GATE) ==
         d_context.d_currentGraphNamesList.end()) {
+
       res = d_context.d_currentGraph->addGate(GateDefault,
                                               i_name + SUFFIX_OUTPUT_GATE);
       d_context.d_currentGraph->addEdge(res, temp->second);
@@ -150,19 +157,20 @@ VertexPtr GraphReader::get_operand(const std::string &i_name,
   return res;
 }
 
-VertexPtr GraphReader::get_or_create_inversion(const std::string &i_name, VertexPtr i_vertex) const {
+VertexPtr GraphReader::get_or_create_inversion(const std::string &i_name,
+                                               VertexPtr i_vertex) const {
   auto searchForNot =
-        d_context.d_currentGraphNamesList.find(i_name + SUFFIX_INVERSION);
-    VertexPtr notAns;
-    if (searchForNot == d_context.d_currentGraphNamesList.end()) {
-      notAns =
-          d_context.d_currentGraph->addGate(GateNot, i_name + SUFFIX_INVERSION);
-      d_context.d_currentGraphNamesList[i_name + SUFFIX_INVERSION] = notAns;
-      d_context.d_currentGraph->addEdge(i_vertex, notAns);
-      return notAns;
-    }
-    return searchForNot->second;
-} 
+      d_context.d_currentGraphNamesList.find(i_name + SUFFIX_INVERSION);
+  VertexPtr notAns;
+  if (searchForNot == d_context.d_currentGraphNamesList.end()) {
+    notAns =
+        d_context.d_currentGraph->addGate(GateNot, i_name + SUFFIX_INVERSION);
+    d_context.d_currentGraphNamesList[i_name + SUFFIX_INVERSION] = notAns;
+    d_context.d_currentGraph->addEdge(i_vertex, notAns);
+    return notAns;
+  }
+  return searchForNot->second;
+}
 
 void GraphReader::on_elem(const std::string &i_lhs,
                           const std::pair<std::string, bool> &i_op1,
@@ -251,14 +259,18 @@ void GraphReader::on_maj3(const std::string &lhs,
                           const std::pair<std::string, bool> &op3) const {
   auto temp = d_context.d_currentGraphNamesList.find(lhs);
   if (temp != d_context.d_currentGraphNamesList.end()) {
-    d_context.d_currentGraphNamesList[lhs]->~GraphVertexBase();
+    d_context.d_currentGraph->majorityAsLogic(
+        get_operand(op1.first, op1.second), get_operand(op2.first, op2.second),
+        get_operand(op3.first, op3.second), temp->second);
   }
+  else {
   d_context.d_currentGraphNamesList[lhs] =
       d_context.d_currentGraph->generateMajority(
           get_operand(op1.first, op1.second),
           get_operand(op2.first, op2.second),
           get_operand(op3.first, op3.second));
   d_context.d_currentGraphNamesList[lhs]->setName(lhs);
+}
 }
 
 void GraphReader::on_endmodule() const {

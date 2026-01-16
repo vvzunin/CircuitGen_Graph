@@ -743,6 +743,8 @@ public:
   /// @return GraphPtr to created graph
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   static GraphPtr createMajoritySubgraph();
+  VertexPtr majorityAsLogic(VertexPtr a, VertexPtr b, VertexPtr c,
+                            VertexPtr output);
   /// @brief creates majority element inside current graph
   /** @author Andrey <shapkin.andrey123@gmail.com> */
   VertexPtr generateMajority(VertexPtr a, VertexPtr b, VertexPtr c);

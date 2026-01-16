@@ -4,6 +4,8 @@
  */
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
+#include <fmt/format.h>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -443,7 +445,30 @@ VertexPtr OrientedGraph::generateMajority(VertexPtr a, VertexPtr b,
       this->addSubGraph(majoritySubgraph, {a, b, c});
   return outputs.back();
 }
+VertexPtr OrientedGraph::majorityAsLogic(VertexPtr a, VertexPtr b,
+                                          VertexPtr c, VertexPtr output = nullptr) {
+  VertexPtr res = output == nullptr ? this->addGate(GateBuf) : output;
+  VertexPtr and_ab = addGate(Gates::GateAnd);
+  addEdges({a, b}, and_ab);
 
+  VertexPtr and_ac = addGate(Gates::GateAnd);
+  addEdges({a, c}, and_ac);
+
+  VertexPtr and_bc = addGate(Gates::GateAnd);
+  addEdges({b, c}, and_bc);
+
+  VertexPtr or1 = addGate(Gates::GateOr);
+  addEdges({and_ab, and_ac}, or1);
+  
+  VertexPtr or2;
+  if(output != nullptr && output->getGate() == GateDefault) {
+    static_cast<GraphVertexGates*>(output)->setGateIfDefault(GateOr);
+    or2 = output;
+  }
+  else or2 = addGate(Gates::GateOr);
+  addEdges({or1, and_bc}, or2);
+  return or2;
+}
 bool OrientedGraph::addEdge(VertexPtr from, VertexPtr to) {
   bool f;
   uint32_t n;
