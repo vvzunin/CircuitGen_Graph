@@ -92,19 +92,19 @@ std::string GraphVertexBusConstant::getVerilogInstance() {
   return "wire " + getName() + getBusNameSuffix() + ";";
 }
 std::string GraphVertexBusConstant::getVerilogInstanceSeparate() {
-  std::stringstream ans;
-  ans << "wire ";
+  std::stringstream res;
+  res << "wire ";
   for (int i = 0; i < getWidth(); ++i) {
-    ans << getName() << "_" << i << (i != getWidth() - 1 ? ", " : ";\n");
+    res << getName() << "_" << i << (i != getWidth() - 1 ? ", " : ";\n");
   }
-  return ans.str();
+  return res.str();
 }
 std::string GraphVertexBusConstant::toOneBitVerilog() const {
-  std::stringstream ans;
+  std::stringstream res;
   for (int i = 0; i < getWidth(); ++i) {
-    ans << "assign " << getName() << "_" << i << " = " << d_valueBus[i]
+    res << "assign " << getName() << "_" << i << " = " << d_valueBus[i]
         << ";\n";
   }
-  return ans.str();
+  return res.str();
 }
 } // namespace CG_Graph

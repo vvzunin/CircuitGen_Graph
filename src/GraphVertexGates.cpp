@@ -22,12 +22,12 @@ namespace CG_Graph {
 
 GraphVertexGates::GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph,
                                    bool i_isBus) :
-    GraphVertexBase(VertexTypes::gate, i_baseGraph, i_isBus) {
+    GraphVertexBase(i_isBus ? VertexTypes::gateBus : gate, i_baseGraph) {
   d_gate = i_gate;
 }
 GraphVertexGates::GraphVertexGates(Gates i_gate, std::string_view i_name,
                                    GraphPtr i_baseGraph, bool i_isBus) :
-    GraphVertexBase(VertexTypes::gate, i_name, i_baseGraph, i_isBus) {
+    GraphVertexBase(i_isBus ? VertexTypes::gateBus : gate, i_name, i_baseGraph) {
   d_gate = i_gate;
 }
 
@@ -202,7 +202,7 @@ std::string GraphVertexGates::toVerilog() const {
       basic += "~ ( ";
       end = " )";
     }
-    if (d_gate == Gates::GateConcatenation) {
+    else if (d_gate == Gates::GateConcatenation) {
       basic += "{ ";
       end = " }";
     }
@@ -215,48 +215,6 @@ std::string GraphVertexGates::toVerilog() const {
   };
   return toVerilogCommon(printBinaryOperators, printUnaryOperators);
 }
-/*if (!(d_inConnections.size())) {
-#ifdef LOGFLAG
-    LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
-#else
-    std::cerr << "TODO: delete empty vertices: " << d_name << std::endl;
-#endif
-    return "";
-  }
-  std::string basic = "assign " + getName() + " = ";
-
-  std::string oper = VertexUtils::gateToString(d_gate);
-  VertexPtr ptr = d_inConnections.back();
-  if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
-    if (d_inConnections.size() > 1) {
-      std::cerr << "Invalid: one-input vertex \"" << d_name
-                << "\" has inputs: " << d_inConnections.size() << '\n';
-    }
-    basic += oper + ptr->getName() + ";";
-
-    return basic;
-  }
-  if (d_inConnections.size() == 1) {
-
-    std::cerr << "Invalid: multiple-input vertex \"" << d_name
-              << "\" has one input\n";
-  }
-
-  std::string end = "";
-
-  if (d_gate == Gates::GateNand || d_gate == Gates::GateNor ||
-      d_gate == Gates::GateXnor) {
-    basic += "~ ( ";
-
-    end = " )";
-  }
-  for (size_t i = 0; i < d_inConnections.size() - 1; ++i) {
-    basic += d_inConnections.at(i)->getName() + " " + oper + " ";
-  }
-  basic += d_inConnections.back()->getName() + end + ";";
-
-  return basic;
-}*/
 
 DotReturn GraphVertexGates::toDOT() {
   if (!d_inConnections.size()) {

@@ -81,8 +81,7 @@ GraphVertexSequential::GraphVertexSequential(SequentialTypes i_type,
                                              bool i_isBus) :
     GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph) {
   reserveInConnections(2);
-  i_baseGraph->addEdge(i_data, this);
-  i_baseGraph->addEdge(i_clk, this);
+  i_baseGraph->addEdges({i_data, i_clk}, this);
   DEFAULT_CHECK_TYPE;
   validateSignal(i_type, d_seqType);
 }
@@ -92,9 +91,7 @@ GraphVertexSequential::GraphVertexSequential(
     GraphPtr i_baseGraph, std::string_view i_name, bool i_isBus) :
     GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph) {
   reserveInConnections(3);
-  i_baseGraph->addEdge(i_data, this);
-  i_baseGraph->addEdge(i_clk, this);
-  i_baseGraph->addEdge(i_wire, this);
+    i_baseGraph->addEdges({i_data, i_clk, i_wire}, this);
   DEFAULT_CHECK_TYPE;
   short signals = countSignalsInType(i_type);
   if (signals < 1)
@@ -114,10 +111,7 @@ GraphVertexSequential::GraphVertexSequential(
     std::string_view i_name, bool i_isBus) :
     GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph) {
   reserveInConnections(4);
-  i_baseGraph->addEdge(i_data, this);
-  i_baseGraph->addEdge(i_clk, this);
-  i_baseGraph->addEdge(i_wire1, this);
-  i_baseGraph->addEdge(i_wire2, this);
+    i_baseGraph->addEdges({i_data, i_clk, i_wire1, i_wire2}, this);
   DEFAULT_CHECK_TYPE;
   short signals = countSignalsInType(i_type);
   if (signals == 0) {
@@ -137,11 +131,7 @@ GraphVertexSequential::GraphVertexSequential(
     std::string_view i_name, bool i_isBus) :
     GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph) {
   reserveInConnections(5);
-  i_baseGraph->addEdge(i_data, this);
-  i_baseGraph->addEdge(i_clk, this);
-  i_baseGraph->addEdge(i_en, this);
-  i_baseGraph->addEdge(i_rst, this);
-  i_baseGraph->addEdge(i_set, this);
+    i_baseGraph->addEdges({i_data, i_clk, i_en, i_rst, i_set}, this);
   DEFAULT_CHECK_TYPE;
 
   // cannot have 3 input wires and be a latch - latch has only 3 signals at all

@@ -126,14 +126,9 @@ VertexUtils::getSequentialComment(const GraphVertexSequential *i_seq) {
   return res;
 }
 
-GraphVertexBase::GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph,
-                                 bool i_isBus) {
+GraphVertexBase::GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph) {
   d_baseGraph = i_graph;
-  if (i_isBus)
-    d_type =
-        static_cast<VertexTypes>(static_cast<uint8_t>(i_type) | d_busInType);
-  else
-    d_type = i_type;
+  d_type = i_type;
   d_name = i_graph->internalize(this->getTypeName() + "_" +
                                 std::to_string(d_count++));
   d_value = 'x';
@@ -141,14 +136,9 @@ GraphVertexBase::GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph,
 }
 
 GraphVertexBase::GraphVertexBase(const VertexTypes i_type,
-                                 std::string_view i_name, GraphPtr i_graph,
-                                 bool i_isBus) {
+                                 std::string_view i_name, GraphPtr i_graph) {
   d_baseGraph = i_graph;
-  if (i_isBus)
-    d_type =
-        static_cast<VertexTypes>(static_cast<uint8_t>(i_type) | d_busInType);
-  else
-    d_type = i_type;
+  d_type = i_type;
   if (i_name.size()) {
     d_name = i_name;
   } else {
@@ -372,17 +362,6 @@ void GraphVertexBase::log(el::base::type::ostream_t &os) const {
 std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex) {
   stream << vertex.toVerilog();
   return stream;
-}
-VertexPtr GraphVertexBase::minWidthVertex() const {
-  VertexPtr minVertex = d_inConnections.back();
-  for (auto *connection: d_inConnections) {
-    if (!connection->isBus())
-      return connection;
-    if (GraphVertexBus::getBusPointer(connection)->getWidth() <
-        GraphVertexBus::getBusPointer(connection)->getWidth())
-      minVertex = connection;
-  }
-  return minVertex;
 }
 
 bool GraphVertexBase::removeVertexToInConnections(VertexPtr i_vert) {

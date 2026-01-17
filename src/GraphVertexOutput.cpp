@@ -2,6 +2,7 @@
  * @file GraphVertexOutput.cpp
  * @brief Реализация вершины-выхода графа.
  */
+#include "CircuitGenGraph/GraphUtils.hpp"
 #include "CircuitGenGraph/GraphVertexBase.hpp"
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <algorithm>
@@ -16,12 +17,12 @@
 namespace CG_Graph {
 
 GraphVertexOutput::GraphVertexOutput(GraphPtr i_baseGraph, bool i_isBus) :
-    GraphVertexBase(VertexTypes::output, i_baseGraph, i_isBus) {
+    GraphVertexBase(i_isBus ? VertexTypes::outputBus : output, i_baseGraph) {
 }
 
 GraphVertexOutput::GraphVertexOutput(std::string_view i_name,
                                      GraphPtr i_baseGraph, bool i_isBus) :
-    GraphVertexBase(VertexTypes::output, i_name, i_baseGraph, i_isBus) {
+    GraphVertexBase(i_isBus ? VertexTypes::outputBus : output, i_name, i_baseGraph) {
 }
 
 char GraphVertexOutput::updateValue() {

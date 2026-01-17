@@ -107,7 +107,7 @@ public:
   /// the provided base graph pointer and char symbol
   /// @param i_baseGraph Pointer to the base graph.
   /// @param i_const char symbol for constant (1, 0, z, x)
-  GraphVertexConstant(char i_const, GraphPtr i_baseGraph, bool i_isBus = 0);
+  GraphVertexConstant(char i_const, GraphPtr i_baseGraph, bool i_isBus = false);
 
   /// @brief Initializes the GraphVertexConstant object with
   /// the provided base graph pointer and char symbol
@@ -115,7 +115,7 @@ public:
   /// @param i_baseGraph Pointer to the base graph.
   /// @param i_const char symbol for constant (1, 0, z, x)
   GraphVertexConstant(char i_const, std::string_view i_name,
-                      GraphPtr i_baseGraph, bool i_isBus = 0);
+                      GraphPtr i_baseGraph, bool i_isBus = false);
 
   ~GraphVertexConstant() override {};
 
@@ -315,11 +315,11 @@ private:
 
 class GraphVertexOutput : public GraphVertexBase {
 public:
-  GraphVertexOutput(GraphPtr i_baseGraph, bool i_isBus = 0);
+  GraphVertexOutput(GraphPtr i_baseGraph, bool i_isBus = false);
 
  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphVertexOutput(std::string_view i_name, GraphPtr i_baseGraph,
-                    bool i_isBus = 0);
+                    bool i_isBus = false);
 
   /// @brief updateValue updates the value of the current vertex of the graph
   /// based on the values of its incoming connections and the type of logical
@@ -361,11 +361,11 @@ private:
 
 class GraphVertexGates : public GraphVertexBase {
 public:
-  GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph, bool i_isBus = 0);
+  GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph, bool i_isBus = false);
 
     /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph,
-                   bool i_isBus = 0);
+                   bool i_isBus = false);
 
   ~GraphVertexGates() override {};
 
@@ -488,7 +488,7 @@ public:
                         VertexPtr i_data,
                         GraphPtr i_baseGraph,
                         std::string_view i_name,
-                        bool i_isBus = 0);
+                        bool i_isBus = false);
 
   /// @brief 
   /// @param i_type 
@@ -503,7 +503,7 @@ public:
                         VertexPtr i_wire,
                         GraphPtr i_baseGraph,
                         std::string_view i_name,
-                        bool i_isBus = 0);
+                        bool i_isBus = false);
 
   /// @brief GraphVertexSequential
   /// @param i_type
@@ -515,7 +515,7 @@ public:
   GraphVertexSequential(SequentialTypes i_type, VertexPtr i_clk,
                            VertexPtr i_data,VertexPtr i_wire1,
                            VertexPtr i_wire2, GraphPtr i_baseGraph,
-                           std::string_view i_name, bool i_isBus = 0);
+                           std::string_view i_name, bool i_isBus = false);
 
   /// @brief GraphVertexSequential
   /// @param i_type type of Sequential - (a/n/an)ff(r/c)se, 
@@ -533,7 +533,7 @@ public:
                         VertexPtr i_en,
                         GraphPtr i_baseGraph,
                         std::string_view i_name,
-                        bool i_isBus = 0);
+                        bool i_isBus = false);
 
   // clang-format on
 
