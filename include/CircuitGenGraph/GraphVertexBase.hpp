@@ -20,6 +20,16 @@
 #define GraphPtrWeak std::weak_ptr<CG_Graph::OrientedGraph>
 
 #define VertexPtr CG_Graph::GraphVertexBase *
+/// @file GraphVertexBase.hpp
+/// @brief Base class for all graph vertices with common functionality
+/// @ingroup GraphCore
+/// 
+/// Defines the abstract base class GraphVertexBase which provides:
+/// - Connection management (input/output edges)
+/// - Level calculation for topological ordering
+/// - Hash computation for graph comparison
+/// - Verilog/DOT/GraphML export capabilities
+/// - Memory management integration
 
 namespace CG_Graph {
 
@@ -580,7 +590,7 @@ protected:
   size_t d_hashed = 0;
   uint32_t d_level;
 
-  char d_value = ValueStates::UndefindedState;
+  char d_value = ValueStates::UndefinedState;
   VERTEX_STATE d_needUpdate = VS_NOT_CALC;
   HASH_CONDITION d_hasHash = HC_NOT_CALC;
 
@@ -595,3 +605,4 @@ static_assert(sizeof(GraphVertexBase) <= 104u);
 std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex);
 
 } // namespace CG_Graph
+
