@@ -1,5 +1,16 @@
 #pragma once
 
+/// @file GraphVertexBase.hpp
+/// @brief Base class for all graph vertices with common functionality
+/// @ingroup GraphCore
+/// 
+/// Defines the abstract base class GraphVertexBase which provides:
+/// - Connection management (input/output edges)
+/// - Level calculation for topological ordering
+/// - Hash computation for graph comparison
+/// - Verilog/DOT/GraphML export capabilities
+/// - Memory management integration
+
 #include <atomic>
 #include <cstdint>
 #include <memory>
@@ -20,16 +31,6 @@
 #define GraphPtrWeak std::weak_ptr<CG_Graph::OrientedGraph>
 
 #define VertexPtr CG_Graph::GraphVertexBase *
-/// @file GraphVertexBase.hpp
-/// @brief Base class for all graph vertices with common functionality
-/// @ingroup GraphCore
-/// 
-/// Defines the abstract base class GraphVertexBase which provides:
-/// - Connection management (input/output edges)
-/// - Level calculation for topological ordering
-/// - Hash computation for graph comparison
-/// - Verilog/DOT/GraphML export capabilities
-/// - Memory management integration
 
 namespace CG_Graph {
 

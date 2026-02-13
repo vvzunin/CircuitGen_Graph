@@ -191,28 +191,53 @@ std::pair<std::vector<bool>, std::vector<Gates>> getLogicOperationsWithGates();
 /// @brief Converts operation string to its formal name
 /// @param i_op a string representing the operation
 /// @return std::string Operation name
-/// @throw std::runtime_error if the passed operation does not exist
+/// @code
+///   // Convert the operation to its name
+///   std::string operationName = GraphUtils::fromOperationsToName("and");
+///   std::cout << "Operation name: " << operationName << std::endl;
+/// @endcode
 std::string fromOperationsToName(std::string_view i_op);
 
 /// @brief Converts hierarchy key to its corresponding operation value
 /// @param key Required hierarchy key
 /// @return std::string_view The value representing the operation
 /// @throws std::out_of_range if the provided key does not exist
+/// @code
+///   // Get the hierarchy associated with the operation key 5
+///   std::string_view element = GraphUtils::fromHierarchyToOperation(5);
+///   // Output the element
+///   std::cout << element << " ";
+/// @endcode
 std::string_view fromHierarchyToOperation(int32_t key);
 
 /// @brief Converts a string representation of a gate to its corresponding enum value
 /// @param i_gate The string representation of the gate
 /// @return Gates The enum value corresponding to the provided string representation
+/// @code
+///   // Convert the string representation "and" to its corresponding enum value
+///   Gates gate = GraphUtils::parseStringToGate("and");
+///   std::cout << "Enum value of 'and': " << gate << std::endl;
+/// @endcode
 Gates parseStringToGate(std::string i_gate);
 
 /// @brief Converts an enum value of a vertex type to its string representation
 /// @param vertex The enum value representing the vertex type
 /// @return std::string The string representation of the vertex type
+/// @code
+///   // Convert the enum value VertexTypes::input to its corresponding string representation
+///   std::string vertexString = GraphUtils::parseVertexToString(VertexTypes::input);
+///   std::cout << "String representation of VertexTypes::input: " << vertexString << std::endl;
+/// @endcode
 std::string parseVertexToString(VertexTypes vertex);
 
 /// @brief Converts an enum value of a gate to its string representation
 /// @param gate The enum value representing the gate
 /// @return std::string The string representation of the gate
+/// @code
+///   // Convert the enum value Gates::GateAnd to its corresponding string representation
+///   std::string gateString = GraphUtils::parseGateToString(Gates::GateAnd);
+///   std::cout << "String representation of Gates::GateAnd: " << gateString << std::endl;
+/// @endcode
 std::string parseGateToString(Gates gate);
 
 /// @brief Looks for a std::pair with a given key in an array of pairs
