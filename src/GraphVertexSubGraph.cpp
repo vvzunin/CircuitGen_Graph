@@ -29,11 +29,11 @@ GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
 char GraphVertexSubGraph::updateValue() {
   if (d_inConnections.size() > 0) {
     std::vector<char> inputsValues, outputsValues;
-    if (d_inConnections.front()->getValue() == ValueStates::UndefindedState) {
+    if (d_inConnections.front()->getValue() == ValueStates::UndefinedState) {
       inputsValues.push_back(d_inConnections.front()->updateValue());
     }
     for (size_t i = 1; i < d_inConnections.size(); ++i) {
-      if (d_inConnections.at(i)->getValue() == ValueStates::UndefindedState) {
+      if (d_inConnections.at(i)->getValue() == ValueStates::UndefinedState) {
         inputsValues.push_back(d_inConnections.at(i)->updateValue());
       }
     }
@@ -57,7 +57,7 @@ void GraphVertexSubGraph::removeValue() {
   if (d_inConnections.size() > 0) {
     d_subGraph->simulationRemove();
     for (VertexPtr ptr: d_inConnections) {
-      if (ptr->getValue() != ValueStates::UndefindedState) {
+      if (ptr->getValue() != ValueStates::UndefinedState) {
         ptr->removeValue();
       }
     }

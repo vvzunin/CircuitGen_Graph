@@ -35,7 +35,7 @@ char GraphVertexGates::updateValue() {
   std::map<char, char> table;
   d_value = ValueStates::NoSignal;
   if (d_inConnections.size() > 0) {
-    if (d_inConnections.front()->getValue() == ValueStates::UndefindedState) {
+    if (d_inConnections.front()->getValue() == ValueStates::UndefinedState) {
       d_inConnections.front()->updateValue();
     }
     d_value = d_inConnections.front()->getValue();
@@ -47,7 +47,7 @@ char GraphVertexGates::updateValue() {
       d_value = table.at(d_value);
     }
     for (size_t i = 1; i < d_inConnections.size(); i++) {
-      if (d_inConnections.at(i)->getValue() == ValueStates::UndefindedState) {
+      if (d_inConnections.at(i)->getValue() == ValueStates::UndefinedState) {
         d_inConnections.at(i)->updateValue();
       }
       switch (d_gate) {
@@ -83,10 +83,10 @@ char GraphVertexGates::updateValue() {
 }
 
 void GraphVertexGates::removeValue() {
-  d_value = ValueStates::UndefindedState;
+  d_value = ValueStates::UndefinedState;
   if (d_inConnections.size() > 0) {
     for (VertexPtr ptr: d_inConnections) {
-      if (ptr->getValue() != ValueStates::UndefindedState) {
+      if (ptr->getValue() != ValueStates::UndefinedState) {
         ptr->removeValue();
       }
     }

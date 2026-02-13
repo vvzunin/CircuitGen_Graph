@@ -26,7 +26,7 @@ char GraphVertexInput::updateValue() {
 }
 
 void GraphVertexInput::removeValue() {
-  d_value = ValueStates::UndefindedState;
+  d_value = ValueStates::UndefinedState;
 }
 
 void GraphVertexInput::updateLevel() {
