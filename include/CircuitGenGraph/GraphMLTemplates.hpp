@@ -7,11 +7,10 @@
 /// @file GraphMLTemplates.hpp
 /// @brief GraphML template definitions for different output formats
 /// @ingroup GraphExport
-/// 
+///
 /// This header contains string templates for exporting graphs in three
 /// GraphML formats: Classic, OpenABCD, and PseudoABCD.
-/// 
-
+///
 
 /// \namespace ClassicGraphML
 /// \brief Contains all templates for classic GraphML translation
@@ -56,7 +55,8 @@ namespace CG_Graph::OpenABCD {
 
 /// \var mainTemplate
 /// \brief Main template for OpenABCD GraphML format
-/// \details Includes specific keys for node_id, node_type, num_inverted_predecessors, and edge_type
+/// \details Includes specific keys for node_id, node_type,
+/// num_inverted_predecessors, and edge_type
 const char *mainTemplate = R"(<?xml version='1.0' encoding='utf-8'?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
   <key id="d3" for="edge" attr.name="edge_type" attr.type="long" />
@@ -70,7 +70,8 @@ const char *mainTemplate = R"(<?xml version='1.0' encoding='utf-8'?>
 
 /// \var nodeTemplate
 /// \brief Template for node with ABCD-specific attributes
-/// \details Includes node_id (d0), node_type (d1), and num_inverted_predecessors (d2)
+/// \details Includes node_id (d0), node_type (d1), and
+/// num_inverted_predecessors (d2)
 const char *nodeTemplate = R"(    <node id="{}">
       <data key="d0">{}</data>
       <data key="d1">{}</data>

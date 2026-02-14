@@ -11,7 +11,7 @@
 /// @file GraphUtils.hpp
 /// @brief Utility functions, enumerations and templates for graph operations
 /// @ingroup GraphCore
-/// 
+///
 /// This header contains:
 /// - Graph-related enumerations (VertexTypes, Gates, SequentialTypes, etc.)
 /// - String conversion utilities
@@ -23,7 +23,8 @@ namespace CG_Graph {
 #ifndef DotReturn
 /// @def DotReturn
 /// @brief Type alias for DOT format return structure
-/// @details Vector of pairs where each pair contains a DotType and associated properties
+/// @details Vector of pairs where each pair contains a DotType and associated
+/// properties
 #define DotReturn \
   std::vector<std::pair<DotTypes, std::map<std::string, std::string>>>
 #endif
@@ -44,7 +45,8 @@ enum VertexTypes : uint8_t {
 /// @brief Macro for defining flip-flop type pairs (normal and negedge versions)
 /// @param S Suffix for the flip-flop type name
 /// @param V Base value combining control signals
-/// @details Generates both standard and negedge-clocked versions of a flip-flop type
+/// @details Generates both standard and negedge-clocked versions of a flip-flop
+/// type
 /// @note CGG stands for CircuitGenGraph
 #define CGG_FF_TYPE(S, V) S = V, n##S = NEGEDGE | V
 
@@ -101,7 +103,8 @@ enum SequentialTypes : uint8_t {
 
 /// @brief Enumeration of logic gate types
 /// @enum Gates
-/// @details Defines the various types of logic elements that can be used in digital circuits.
+/// @details Defines the various types of logic elements that can be used in
+/// digital circuits.
 enum Gates : uint8_t {
   GateAnd,    ///< Logical element - AND
   GateNand,   ///< Logical element - "AND-NOT" (NAND)
@@ -130,16 +133,16 @@ enum DotTypes : uint8_t {
 /// @brief Enumeration of possible signal values in circuit simulation
 /// @enum ValueStates
 enum ValueStates : char {
-  UndefinedState = 'n',  ///< Undefined/unknown state
-  TrueValue = '1',       ///< Logical true (high)
-  FalseValue = '0',      ///< Logical false (low)
-  HighImpedance = 'z',   ///< High impedance (tri-state)
-  NoSignal = 'x'         ///< No signal/invalid
+  UndefinedState = 'n', ///< Undefined/unknown state
+  TrueValue = '1',      ///< Logical true (high)
+  FalseValue = '0',     ///< Logical false (low)
+  HighImpedance = 'z',  ///< High impedance (tri-state)
+  NoSignal = 'x'        ///< No signal/invalid
 };
 
 /// \namespace GraphUtils
 /// \brief Utility functions and data for graph operations
-/// 
+///
 /// Contains static data and helper functions for:
 /// - Converting between string and enum representations
 /// - Logic operation mappings
@@ -161,12 +164,15 @@ namespace GraphUtils {
 std::pair<std::string_view, int32_t> getLogicOperation(const std::string &i_op);
 
 /// @brief Returns the keys of logical operations
-/// @return std::vector<Gates> A vector containing the keys of logical operations
+/// @return std::vector<Gates> A vector containing the keys of logical
+/// operations
 std::vector<Gates> getLogicOperationsKeys();
 
-/// @brief Returns logical operations along with information about single input gates
+/// @brief Returns logical operations along with information about single input
+/// gates
 /// @return std::pair<std::vector<bool>, std::vector<Gates>> A pair of
-/// vectors: information about single-input gates and the keys of logical operations
+/// vectors: information about single-input gates and the keys of logical
+/// operations
 /// @code
 /// auto logicOperationsInfo = GraphUtils::getLogicOperationsWithGates();
 /// for (size_t i = 0; i < logicOperationsInfo.second.size(); ++i)
@@ -210,9 +216,11 @@ std::string fromOperationsToName(std::string_view i_op);
 /// @endcode
 std::string_view fromHierarchyToOperation(int32_t key);
 
-/// @brief Converts a string representation of a gate to its corresponding enum value
+/// @brief Converts a string representation of a gate to its corresponding enum
+/// value
 /// @param i_gate The string representation of the gate
-/// @return Gates The enum value corresponding to the provided string representation
+/// @return Gates The enum value corresponding to the provided string
+/// representation
 /// @code
 ///   // Convert the string representation "and" to its corresponding enum value
 ///   Gates gate = GraphUtils::parseStringToGate("and");
@@ -224,9 +232,10 @@ Gates parseStringToGate(std::string i_gate);
 /// @param vertex The enum value representing the vertex type
 /// @return std::string The string representation of the vertex type
 /// @code
-///   // Convert the enum value VertexTypes::input to its corresponding string representation
-///   std::string vertexString = GraphUtils::parseVertexToString(VertexTypes::input);
-///   std::cout << "String representation of VertexTypes::input: " << vertexString << std::endl;
+///   // Convert the enum value VertexTypes::input to its corresponding string
+///   representation std::string vertexString =
+///   GraphUtils::parseVertexToString(VertexTypes::input); std::cout << "String
+///   representation of VertexTypes::input: " << vertexString << std::endl;
 /// @endcode
 std::string parseVertexToString(VertexTypes vertex);
 
@@ -234,9 +243,10 @@ std::string parseVertexToString(VertexTypes vertex);
 /// @param gate The enum value representing the gate
 /// @return std::string The string representation of the gate
 /// @code
-///   // Convert the enum value Gates::GateAnd to its corresponding string representation
-///   std::string gateString = GraphUtils::parseGateToString(Gates::GateAnd);
-///   std::cout << "String representation of Gates::GateAnd: " << gateString << std::endl;
+///   // Convert the enum value Gates::GateAnd to its corresponding string
+///   representation std::string gateString =
+///   GraphUtils::parseGateToString(Gates::GateAnd); std::cout << "String
+///   representation of Gates::GateAnd: " << gateString << std::endl;
 /// @endcode
 std::string parseGateToString(Gates gate);
 
@@ -256,7 +266,8 @@ static std::pair<T, M> *findPairByKey(std::pair<T, M> (&iterable)[N],
 }
 
 /// @var d_hierarchySize
-/// @brief Size of the logic operations hierarchy (max value + 1 from d_logicOperations)
+/// @brief Size of the logic operations hierarchy (max value + 1 from
+/// d_logicOperations)
 static constexpr size_t d_hierarchySize = 11;
 
 /// @var d_logicOperations
@@ -284,7 +295,8 @@ static std::pair<std::string, Gates> stringToGate[] = {
     {"xor", Gates::GateXor}, {"xnor", Gates::GateXnor}};
 
 /// @var vertexToString
-/// @brief Static array for converting VertexTypes enum to string representations
+/// @brief Static array for converting VertexTypes enum to string
+/// representations
 static std::pair<VertexTypes, std::string_view> vertexToString[] = {
     {VertexTypes::input, "input"},
     {VertexTypes::output, "output"},

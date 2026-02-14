@@ -3,7 +3,7 @@
 /// @file GraphVertexBase.hpp
 /// @brief Base class for all graph vertices with common functionality
 /// @ingroup GraphCore
-/// 
+///
 /// Defines the abstract base class GraphVertexBase which provides:
 /// - Connection management (input/output edges)
 /// - Level calculation for topological ordering
@@ -606,4 +606,3 @@ static_assert(sizeof(GraphVertexBase) <= 104u);
 std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex);
 
 } // namespace CG_Graph
-
