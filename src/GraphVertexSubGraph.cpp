@@ -343,13 +343,6 @@ void GraphVertexSubGraph::log(el::base::type::ostream_t &os) const {
 }
 #endif
 
-
-
-struct VerilogPorts {
-    std::vector<std::string> inputs;
-    std::vector<std::string> outputs;
-};
-
 namespace {
 void collectPortsFromLine(const std::string &line,
                           const std::regex &port_regex,
@@ -370,13 +363,32 @@ void collectPortsFromLine(const std::string &line,
     }
   }
 }
+
+void collectPortsFromDot(const DotReturn &dot,
+                         std::set<std::string> &inputs,
+                         std::set<std::string> &outputs) {
+  for (const auto &[dotType, attrs]: dot) {
+    if (dotType != DotTypes::DotInput && dotType != DotTypes::DotOutput) {
+      continue;
+    }
+    auto nameIt = attrs.find("name");
+    if (nameIt == attrs.end()) {
+      continue;
+    }
+    if (dotType == DotTypes::DotInput) {
+      inputs.insert(nameIt->second);
+    } else {
+      outputs.insert(nameIt->second);
+    }
+  }
+}
 } // namespace
 
-VerilogPorts parseVerilogPorts(const std::string& filepath) {
+VerilogPorts parseVerilogPorts(const std::string &filepath) {
   VerilogPorts ports;
   std::ifstream file(filepath);
   if (!file.is_open()) {
-      throw std::runtime_error("Cannot open Verilog file: " + filepath);
+    throw std::runtime_error("Cannot open Verilog file: " + filepath);
   }
 
   std::string line;
@@ -395,18 +407,37 @@ VerilogPorts parseVerilogPorts(const std::string& filepath) {
   return ports;
 }
 
-bool checkPortsMatch(const std::vector<std::string>& graphInputs,
-                     const std::vector<std::string>& graphOutputs,
-                     const VerilogPorts& verilogPorts,
-                     std::string& errorMsg) {
-  std::set<std::string> gIn(graphInputs.begin(), graphInputs.end());
-  std::set<std::string> gOut(graphOutputs.begin(), graphOutputs.end());
+bool checkPortsMatch(const DotReturn &graphDot,
+                     const VerilogPorts &verilogPorts,
+                     std::string &errorMsg) {
+  std::set<std::string> gIn;
+  std::set<std::string> gOut;
+  collectPortsFromDot(graphDot, gIn, gOut);
+
   std::set<std::string> vIn(verilogPorts.inputs.begin(), verilogPorts.inputs.end());
   std::set<std::string> vOut(verilogPorts.outputs.begin(), verilogPorts.outputs.end());
+
   if (gIn != vIn || gOut != vOut) {
+    errorMsg = "Graph ports from DotReturn do not match Verilog ports.";
     return false;
   }
+  errorMsg.clear();
   return true;
+}
+
+bool checkPortsMatch(const std::vector<std::string> &graphInputs,
+                     const std::vector<std::string> &graphOutputs,
+                     const VerilogPorts &verilogPorts,
+                     std::string &errorMsg) {
+  DotReturn graphDot;
+  graphDot.reserve(graphInputs.size() + graphOutputs.size());
+  for (const auto &name: graphInputs) {
+    graphDot.push_back({DotTypes::DotInput, {{"name", name}}});
+  }
+  for (const auto &name: graphOutputs) {
+    graphDot.push_back({DotTypes::DotOutput, {{"name", name}}});
+  }
+  return checkPortsMatch(graphDot, verilogPorts, errorMsg);
 }
 
 } // namespace CG_Graph

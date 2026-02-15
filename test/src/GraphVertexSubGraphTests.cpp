@@ -1,5 +1,6 @@
 #include <filesystem>
 #include <fstream>
+#include <set>
 #include <string>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
@@ -23,6 +24,13 @@ std::string loadStringFileSubGraph(const std::filesystem::path &p) {
   file.read(&str[0], sz);
   return str;
 }
+
+namespace CG_Graph {
+// This overload is implemented in GraphVertexSubGraph.cpp and used internally
+// for port matching via DotReturn.
+bool checkPortsMatch(const DotReturn &graphDot, const VerilogPorts &verilogPorts,
+                     std::string &errorMsg);
+} // namespace CG_Graph
 
 TEST(TestConstructorWithoutIName, WithoutDefaulParametrs) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
@@ -177,6 +185,66 @@ TEST(TestSetName_SubGraph, InputCorrectName) {
   GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSubGr);
   subGraph1.setName("Anything");
   EXPECT_EQ(subGraph1.getRawName(), "Anything");
+}
+
+TEST(PortsParsing_SubGraph, ParseVerilogPortsSimple) {
+  const std::filesystem::path tmpPath =
+      std::filesystem::current_path() / "tmp_ports_subgraph_test.v";
+  {
+    std::ofstream file(tmpPath);
+    file << "module m(\n";
+    file << "  input wire a, b,\n";
+    file << "  output reg y,\n";
+    file << ");\n";
+    file << "input wire a, b, c; // comment\n";
+    file << "output reg y, z;\n";
+    file << "endmodule\n";
+  }
+
+  const VerilogPorts ports = parseVerilogPorts(tmpPath.string());
+  std::filesystem::remove(tmpPath);
+
+  const std::set<std::string> inputs(ports.inputs.begin(), ports.inputs.end());
+  const std::set<std::string> outputs(ports.outputs.begin(), ports.outputs.end());
+
+  EXPECT_EQ(inputs, (std::set<std::string>{"a", "b", "c"}));
+  EXPECT_EQ(outputs, (std::set<std::string>{"y", "z"}));
+}
+
+TEST(PortsMatching_SubGraph, CheckPortsMatchDotReturnSuccess) {
+  DotReturn graphDot = {
+      {DotTypes::DotInput, {{"name", "a"}}},
+      {DotTypes::DotInput, {{"name", "b"}}},
+      {DotTypes::DotOutput, {{"name", "y"}}},
+  };
+  VerilogPorts verilogPorts = {{"a", "b"}, {"y"}};
+  std::string errorMsg;
+
+  EXPECT_TRUE(checkPortsMatch(graphDot, verilogPorts, errorMsg));
+  EXPECT_TRUE(errorMsg.empty());
+}
+
+TEST(PortsMatching_SubGraph, CheckPortsMatchDotReturnFail) {
+  DotReturn graphDot = {
+      {DotTypes::DotInput, {{"name", "a"}}},
+      {DotTypes::DotOutput, {{"name", "y"}}},
+  };
+  VerilogPorts verilogPorts = {{"a", "b"}, {"y"}};
+  std::string errorMsg;
+
+  EXPECT_FALSE(checkPortsMatch(graphDot, verilogPorts, errorMsg));
+  EXPECT_FALSE(errorMsg.empty());
+}
+
+TEST(PortsMatching_SubGraph, CheckPortsMatchLegacyWrapperStillWorks) {
+  const std::vector<std::string> graphInputs = {"a", "b"};
+  const std::vector<std::string> graphOutputs = {"y"};
+  VerilogPorts verilogPorts = {{"b", "a"}, {"y"}};
+  std::string errorMsg;
+
+  EXPECT_TRUE(
+      checkPortsMatch(graphInputs, graphOutputs, verilogPorts, errorMsg));
+  EXPECT_TRUE(errorMsg.empty());
 }
 
 // Do not know what to do with it
