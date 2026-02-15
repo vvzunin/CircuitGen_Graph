@@ -25,13 +25,6 @@ std::string loadStringFileSubGraph(const std::filesystem::path &p) {
   return str;
 }
 
-namespace CG_Graph {
-// This overload is implemented in GraphVertexSubGraph.cpp and used internally
-// for port matching via DotReturn.
-bool checkPortsMatch(const DotReturn &graphDot, const VerilogPorts &verilogPorts,
-                     std::string &errorMsg);
-} // namespace CG_Graph
-
 TEST(TestConstructorWithoutIName, WithoutDefaulParametrs) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSubGr);
@@ -205,7 +198,8 @@ TEST(PortsParsing_SubGraph, ParseVerilogPortsSimple) {
   std::filesystem::remove(tmpPath);
 
   const std::set<std::string> inputs(ports.inputs.begin(), ports.inputs.end());
-  const std::set<std::string> outputs(ports.outputs.begin(), ports.outputs.end());
+  const std::set<std::string> outputs(ports.outputs.begin(),
+                                      ports.outputs.end());
 
   EXPECT_EQ(inputs, (std::set<std::string>{"a", "b", "c"}));
   EXPECT_EQ(outputs, (std::set<std::string>{"y", "z"}));

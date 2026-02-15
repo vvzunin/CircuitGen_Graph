@@ -167,11 +167,13 @@ class GraphVertexSubGraph : public GraphVertexBase {
 public:
   /// @brief Устанавливает путь к внешнему Verilog файлу для подграфа
   /// @param verilogPath Путь к Verilog файлу
-  void setVerilogPath(const std::string& verilogPath) { d_verilogPath = verilogPath; }
+  void setVerilogPath(const std::string &verilogPath) {
+    d_verilogPath = verilogPath;
+  }
 
   /// @brief Получить путь к Verilog файлу
   /// @return строка с путем или пустая строка, если не задан
-  const std::string& getVerilogPath() const { return d_verilogPath; }
+  const std::string &getVerilogPath() const { return d_verilogPath; }
 
   /// @brief Initializes the GraphVertexSubGraph object with
   /// the provided base graph pointer and subGraph pointer
@@ -538,6 +540,14 @@ struct VerilogPorts {
 VerilogPorts parseVerilogPorts(const std::string &filepath);
 
 /// @brief Check that graph ports match Verilog ports.
+/// @param graphDot Graph ports in DotReturn format.
+/// @param verilogPorts Parsed Verilog ports.
+/// @param errorMsg Error message (optional, may be filled by implementation).
+/// @return True if ports match, otherwise false.
+bool checkPortsMatch(const DotReturn &graphDot,
+                     const VerilogPorts &verilogPorts, std::string &errorMsg);
+
+/// @brief Check that graph ports match Verilog ports.
 /// @param graphInputs Graph input names.
 /// @param graphOutputs Graph output names.
 /// @param verilogPorts Parsed Verilog ports.
@@ -545,7 +555,6 @@ VerilogPorts parseVerilogPorts(const std::string &filepath);
 /// @return True if ports match, otherwise false.
 bool checkPortsMatch(const std::vector<std::string> &graphInputs,
                      const std::vector<std::string> &graphOutputs,
-                     const VerilogPorts &verilogPorts,
-                     std::string &errorMsg);
+                     const VerilogPorts &verilogPorts, std::string &errorMsg);
 
 } // namespace CG_Graph
