@@ -508,8 +508,7 @@ public:
 
   /// @brief
   /// @return
-  DotReturn toDOT(); // не потерять, https://hub.mos.ru/circuitgen/CircuitGen_Generator/-/tree/main/src
-  //https://hub.mos.ru/circuitgen/CircuitGen_Generator/-/blob/main/examples/json/sampleGenetic.json
+  DotReturn toDOT();
 
   /// @brief
   /// @param i_path
