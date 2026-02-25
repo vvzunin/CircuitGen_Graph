@@ -2,10 +2,10 @@
 
 #include <map>
 
-/// \namespace Contains all classes and functions, used for this graph
+/// \namespace \~english Contains all classes and functions, used for this graph \~russian Содержит все классы и функции, используемые для этого графа
 namespace CG_Graph {
 
-/// @brief tableAnd Lookup table for AND operation. Used for simulation
+/// @brief \~english tableAnd Lookup table for AND operation. Used for simulation \~russian Таблица поиска для операции И (AND). Используется для симуляции
 const std::map<char, std::map<char, char>> tableAnd{
     {'0', {{'0', '0'}, {'1', '0'}, {'x', '0'}, {'z', '0'}}},
     {'1', {{'0', '0'}, {'1', '1'}, {'x', 'x'}, {'z', 'x'}}},
@@ -13,8 +13,9 @@ const std::map<char, std::map<char, char>> tableAnd{
     {'z', {{'0', '0'}, {'1', 'x'}, {'x', 'x'}, {'z', 'x'}}},
 };
 
-/// @brief tableNand Lookup table for NAND (not-and) operation. Used for
-/// simulation
+/// @brief \~english tableNand Lookup table for NAND (not-and) operation. Used for
+/// simulation \~russian Таблица поиска для операции И-НЕ (NAND). Используется для
+/// симуляции
 const std::map<char, std::map<char, char>> tableNand{
     {'0', {{'0', '1'}, {'1', '1'}, {'x', '1'}, {'z', '1'}}},
     {'1', {{'0', '1'}, {'1', '0'}, {'x', 'x'}, {'z', 'x'}}},
@@ -22,7 +23,7 @@ const std::map<char, std::map<char, char>> tableNand{
     {'z', {{'0', '1'}, {'1', 'x'}, {'x', 'x'}, {'z', 'x'}}},
 };
 
-/// @brief tableOr Lookup table for OR operation. Used for simulation
+/// @brief \~english tableOr Lookup table for OR operation. Used for simulation \~russian Таблица поиска для операции ИЛИ (OR). Используется для симуляции
 const std::map<char, std::map<char, char>> tableOr{
     {'0', {{'0', '0'}, {'1', '1'}, {'x', 'x'}, {'z', 'x'}}},
     {'1', {{'0', '1'}, {'1', '1'}, {'x', '1'}, {'z', '1'}}},
@@ -30,7 +31,7 @@ const std::map<char, std::map<char, char>> tableOr{
     {'z', {{'0', 'x'}, {'1', '1'}, {'x', 'x'}, {'z', 'x'}}},
 };
 
-/// @brief tableNor Lookup table for NOR (not-or) operation. Used for simulation
+/// @brief \~english tableNor Lookup table for NOR (not-or) operation. Used for simulation \~russian Таблица поиска для операции ИЛИ-НЕ (NOR). Используется для симуляции
 const std::map<char, std::map<char, char>> tableNor{
     {'0', {{'0', '1'}, {'1', '0'}, {'x', 'x'}, {'z', 'x'}}},
     {'1', {{'0', '0'}, {'1', '0'}, {'x', '0'}, {'z', '0'}}},
@@ -38,7 +39,7 @@ const std::map<char, std::map<char, char>> tableNor{
     {'z', {{'0', 'x'}, {'1', '0'}, {'x', 'x'}, {'z', 'x'}}},
 };
 
-/// @brief tableXor Lookup table for XOR operation. Used for simulation
+/// @brief \~english tableXor Lookup table for XOR operation. Used for simulation \~russian Таблица поиска для операции ИСКЛЮЧАЮЩЕЕ ИЛИ (XOR). Используется для симуляции
 const std::map<char, std::map<char, char>> tableXor{
     {'0', {{'0', '0'}, {'1', '1'}, {'x', 'x'}, {'z', 'x'}}},
     {'1', {{'0', '1'}, {'1', '0'}, {'x', 'x'}, {'z', 'x'}}},
@@ -46,8 +47,9 @@ const std::map<char, std::map<char, char>> tableXor{
     {'z', {{'0', 'x'}, {'1', 'x'}, {'x', 'x'}, {'z', 'x'}}},
 };
 
-/// @brief tableXnor Lookup table for XNOR (not-xor) operation. Used for
-/// simulation
+/// @brief \~english tableXnor Lookup table for XNOR (not-xor) operation. Used for
+/// simulation \~russian Таблица поиска для операции ИСКЛЮЧАЮЩЕЕ ИЛИ-НЕ (XNOR). Используется для
+/// симуляции
 const std::map<char, std::map<char, char>> tableXnor{
     {'0', {{'0', '1'}, {'1', '0'}, {'x', 'x'}, {'z', 'x'}}},
     {'1', {{'0', '0'}, {'1', '1'}, {'x', 'x'}, {'z', 'x'}}},
@@ -55,10 +57,10 @@ const std::map<char, std::map<char, char>> tableXnor{
     {'z', {{'0', 'x'}, {'1', 'x'}, {'x', 'x'}, {'z', 'x'}}},
 };
 
-/// @brief tableBuf Lookup table for BUF operation. Used for simulation
+/// @brief \~english tableBuf Lookup table for BUF operation. Used for simulation \~russian Таблица поиска для операции БУФЕР (BUF). Используется для симуляции
 const std::map<char, char> tableBuf{
     {'0', '0'}, {'1', '1'}, {'x', 'x'}, {'z', 'x'}};
-/// @brief tableNot Lookup table for NOT operation. Used for simulation
+/// @brief \~english tableNot Lookup table for NOT operation. Used for simulation \~russian Таблица поиска для операции НЕ (NOT). Используется для симуляции
 const std::map<char, char> tableNot{
     {'0', '1'}, {'1', '0'}, {'x', 'x'}, {'z', 'x'}};
 

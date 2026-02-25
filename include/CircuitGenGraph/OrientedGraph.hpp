@@ -20,7 +20,11 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
-/// TODO: Добавить проверку на имена файлов при доблении новых вершин
+/// \~english
+/// TODO: Add checking for file names when adding new vertices
+/// \~russian
+/// TODO: Добавить проверку на имена файлов при добавлении новых вершин
+/// \~
 
 #define GraphPtr std::shared_ptr<CG_Graph::OrientedGraph>
 #define GraphPtrWeak std::weak_ptr<CG_Graph::OrientedGraph>
@@ -31,42 +35,71 @@ namespace CG_Graph {
 
 class GraphVertexBase;
 
-/// \class OrientedGraph
+/// \class CG_Graph::OrientedGraph
 ///
-/// @param d_countNewGraphInstance Static variable to count new graph
-/// instances
-/// @param d_countGraph Current instance counter. Is used for setting a
-/// graphID
+/// \~english
+/// @param d_countNewGraphInstance Static variable to count new graph instances
+/// @param d_countGraph Current instance counter. Is used for setting a graphID
 /// @param d_currentParentGraph Weak pointer to the current parent graph
 /// @param d_edgesCount The number of edges in the graph
 /// @param d_hashed Hashed value of the graph
 /// @param d_parentGraphs Vector of weak pointers to parent graphs
 /// @param d_name The name of the graph
-/// @param d_needLevelUpdate A flag indicating whether the vertex levels in
-/// the graph need to be updated
-/// @param d_graphInstanceToVerilogCount Map to count instances to Verilog
+/// @param d_needLevelUpdate A flag indicating whether the vertex levels in the graph need to be updated
+/// @param d_graphInstanceToVerilogCount Map to count instances to Verilog.
 /// This map is used to count how many times each subgraph instance has been
 /// converted to Verilog. The key represents the instance number of the
 /// subgraph, and the value represents the count of how many times it has been
 /// converted to Verilog
-/// @param d_graphInstanceToDotCount Map to count instances to DOT
+/// @param d_graphInstanceToDotCount Map to count instances to DOT.
 /// This map is used to count how many times each subgraph instance has been
 /// converted to DOT. The key represents the instance number of the
 /// subgraph, and the value represents the count of how many times it has been
 /// converted to DOT
 /// @param d_allSubGraphsOutputs Vector storing all outputs of subgraphs
-/// @param d_subGraphs Set of subgraphs
+/// @param d_subGraphs Set of subgraphs.
 /// This set stores the subgraphs present in the graph. It is used to keep
 /// track of all the subgraphs associated with the current graph instance
 /// @param d_vertices Map of vertex types to vectors of vertex pointers
 /// @param d_countGraph Static counter for the total number of graphs
-/// @param d_gatesCount Map for quick gates count
+/// @param d_gatesCount Map for quick gates count.
 /// This map is used for quick counting of gates in the graph. It maps each
 /// gate type (Gates) to the count of gates of that type present in the graph.
-/// @param d_edgesGatesCount Map for quick count of edges of gate type
+/// @param d_edgesGatesCount Map for quick count of edges of gate type.
 /// This map is used for quick counting of edges between different types of
 /// gates in the graph. It maps each gate type (Gates) to another map, where
 /// the inner map maps gate types to the count of edges between them.
+/// \~russian
+/// @param d_countNewGraphInstance Статическая переменная для подсчета новых экземпляров графа
+/// @param d_countGraph Текущий счетчик экземпляров. Используется для установки graphID
+/// @param d_currentParentGraph Слабый указатель (weak pointer) на текущий родительский граф
+/// @param d_edgesCount Количество ребер в графе
+/// @param d_hashed Хэшированное значение графа
+/// @param d_parentGraphs Вектор слабых указателей на родительские графы
+/// @param d_name Имя графа
+/// @param d_needLevelUpdate Флаг, указывающий, нужно ли обновлять уровни вершин в графе
+/// @param d_graphInstanceToVerilogCount Словарь для подсчета экземпляров, преобразованных в Verilog.
+/// Этот словарь используется для подсчета того, сколько раз каждый экземпляр подграфа
+/// был преобразован в Verilog. Ключ представляет номер экземпляра
+/// подграфа, а значение - количество раз, которое он был преобразован в Verilog
+/// @param d_graphInstanceToDotCount Словарь для подсчета экземпляров, преобразованных в DOT.
+/// Этот словарь используется для подсчета того, сколько раз каждый экземпляр подграфа
+/// был преобразован в DOT. Ключ представляет номер экземпляра
+/// подграфа, а значение - количество раз, которое он был преобразован в DOT
+/// @param d_allSubGraphsOutputs Вектор, хранящий все выходы подграфов
+/// @param d_subGraphs Множество подграфов.
+/// Это множество хранит подграфы, присутствующие в графе. Используется для отслеживания
+/// всех подграфов, связанных с текущим экземпляром графа
+/// @param d_vertices Словарь, сопоставляющий типы вершин с векторами указателей на вершины
+/// @param d_countGraph Статический счетчик общего количества графов
+/// @param d_gatesCount Словарь для быстрого подсчета вентилей.
+/// Этот словарь используется для быстрого подсчета вентилей в графе. Он сопоставляет каждый
+/// тип вентиля (Gates) с количеством вентилей этого типа, присутствующих в графе.
+/// @param d_edgesGatesCount Словарь для быстрого подсчета ребер между типами вентилей.
+/// Этот словарь используется для быстрого подсчета ребер между различными типами
+/// вентилей в графе. Он сопоставляет каждый тип вентиля (Gates) с другим словарем,
+/// где внутренний словарь сопоставляет типы вентилей с количеством ребер между ними.
+/// \~
 
 // clang-format off
 class OrientedGraph
@@ -84,7 +117,7 @@ public:
 
   using GraphID = std::size_t;
 
-  // TODO: Добавить использование gates_inputs_info.
+  // \~english TODO: Add the use of gates_inputs_info. \~russian TODO: Добавить использование gates_inputs_info.
 
   ~OrientedGraph();
 
@@ -93,83 +126,111 @@ public:
   OrientedGraph(const OrientedGraph &other) = delete;
   OrientedGraph(OrientedGraph &&other) = delete;
 
-  // Количество gate в графе, за исключением подграфов
-  /// @brief baseSize returns the number of "gate" type vertices in the graph
-  /// @return An integer value representing the number of "gate" type vertices
-  /// in the graph
+  // \~english Number of gates in the graph, excluding subgraphs \~russian Количество gate в графе, за исключением подграфов
+  /// @brief \~english baseSize returns the number of "gate" type vertices in the graph \~russian baseSize возвращает количество вершин типа "gate" в графе
+  /// @return \~english An integer value representing the number of "gate" type vertices in the graph \~russian Целочисленное значение, представляющее количество вершин типа "gate" в графе
 
   size_t baseSize() const;
-  // Количество gate в графе, включая подграфы
-  /// @brief fullSize returns the total number of vertices in the graph,
+  // \~english Number of gates in the graph, including subgraphs \~russian Количество gate в графе, включая подграфы
+  /// @brief
+  /// \~english
+  /// fullSize returns the total number of vertices in the graph,
   /// including vertices from all subgraphs. It recursively traverses all
   /// the subgraphs and sums up the number of vertices in each of them
-  /// @return An integer value representing the total number of vertices
-  /// in the graph, including vertices from all subgraphs
+  /// \~russian
+  /// fullSize возвращает общее количество вершин в графе,
+  /// включая вершины из всех подграфов. Он рекурсивно обходит все
+  /// подграфы и суммирует количество вершин в каждом из них
+  /// \~
+  /// @return \~english An integer value representing the total number of vertices in the graph, including vertices from all subgraphs \~russian Целочисленное значение, представляющее общее количество вершин в графе, включая вершины из всех подграфов
 
   size_t fullSize() const;
-  // sum of gates, inputs, outputs and consts sizes
-  /// @brief sumFullSize returns the total number of vertices of all types
-  /// in the graph, including input vertices, constants, gates, and output
-  /// vertices
-  /// @return the size of all vertices in the graph, summing the number of
-  /// vertices of each type
+  // \~english sum of gates, inputs, outputs and consts sizes \~russian сумма размеров вентилей, входов, выходов и констант
+  /// @brief
+  /// \~english
+  /// sumFullSize returns the total number of vertices of all types
+  /// in the graph, including input vertices, constants, gates, and output vertices
+  /// \~russian
+  /// sumFullSize возвращает общее количество вершин всех типов
+  /// в графе, включая входные вершины, константы, вентили и выходные вершины
+  /// \~
+  /// @return \~english the size of all vertices in the graph, summing the number of vertices of each type \~russian размер всех вершин в графе, путем суммирования количества вершин каждого типа
   size_t sumFullSize() const;
 
-  // Имеются ли gate в схеме, включая подграфы
-  /// @brief Checks, if there are any gates in graph (including subrapgs).
-  /// In fact checks, if fullSize is equal to zero
+  // \~english Are there any gates in the circuit, including subgraphs \~russian Имеются ли gate в схеме, включая подграфы
+  /// @brief \~english Checks, if there are any gates in graph (including subrapgs). In fact checks, if fullSize is equal to zero \~russian Проверяет, есть ли какие-либо вентили в графе (включая подграфы). Фактически проверяет, равен ли fullSize нулю
   bool isEmpty() const;
 
-  /// @brief Resets all internal states for all types of vertices
+  /// @brief \~english Resets all internal states for all types of vertices \~russian Сбрасывает все внутренние состояния для всех типов вершин
   void clearAllStates();
-  /// @brief Resets hash states for all vertices of current graph
-  /// (including subgraphs). Should be called before each hash recalculation
+  /// @brief \~english Resets hash states for all vertices of current graph (including subgraphs). Should be called before each hash recalculation \~russian Сбрасывает состояния хэша для всех вершин текущего графа (включая подграфы). Должен вызываться перед каждым пересчетом хэша
   void clearHashStates();
-  /// @brief Resets update for all vertices of current graph
-  /// (including subgraphs). Should be called before each level recalculation
+  /// @brief \~english Resets update for all vertices of current graph (including subgraphs). Should be called before each level recalculation \~russian Сбрасывает состояние обновления для всех вершин текущего графа (включая подграфы). Должен вызываться перед каждым пересчетом уровня
   void clearNeedUpdateStates();
-  /// @brief Sets for all vertices state, that shows, that all vertices
-  /// were not used for for `getVerticesByLevel`. Is called by
-  /// `getVerticesByLevel`.
+  /// @brief
+  /// \~english
+  /// Sets for all vertices state, that shows, that all vertices
+  /// were not used for for `getVerticesByLevel`. Is called by `getVerticesByLevel`.
+  /// \~russian
+  /// Устанавливает для всех вершин состояние, показывающее, что все вершины
+  /// не использовались для `getVerticesByLevel`. Вызывается методом `getVerticesByLevel`.
+  /// \~
   void clearUsedLevelStates();
 
-  /// @brief isEmptyFull It is used to check the emptiness of a graph,
+  /// @brief
+  /// \~english
+  /// isEmptyFull It is used to check the emptiness of a graph,
   /// including all its subgraphs. It recursively traverses all the subgraphs
   /// and checks if they are empty
-  /// @return bool - true if the graph and all its subgraphs are empty, and
-  /// false if at least one of them contains vertice
+  /// \~russian
+  /// isEmptyFull Используется для проверки пустоты графа,
+  /// включая все его подграфы. Рекурсивно обходит все подграфы
+  /// и проверяет, пусты ли они
+  /// \~
+  /// @return \~english bool - true if the graph and all its subgraphs are empty, and false if at least one of them contains vertice \~russian bool - true, если граф и все его подграфы пусты, и false, если хотя бы один из них содержит вершины
   bool isEmptyFull() const;
 
-  /// @brief setName Used to set the name of the graph. It takes a string as
-  /// an argument and sets the d_name field to this string
-  /// @param i_name the new name of the graph
+  /// @brief \~english setName Used to set the name of the graph. It takes a string as an argument and sets the d_name field to this string \~russian setName Используется для установки имени графа. Принимает строку в качестве аргумента и устанавливает поле d_name в эту строку
+  /// @param i_name \~english the new name of the graph \~russian новое имя графа
 
   void setName(const std::string &i_name);
 
-  /// @brief getName Used to get the name of the graph
-  /// @return the name of the graph
+  /// @brief \~english getName Used to get the name of the graph \~russian getName Используется для получения имени графа
+  /// @return \~english the name of the graph \~russian имя графа
 
   std::string getName() const;
 
-  /// @brief needToUpdateLevel it is used to check whether the vertex levels
-  /// in the graph need to be updated
-  /// @return bool - true if updating the vertex levels in the graph is
-  /// required, and false if not required
+  /// @brief \~english needToUpdateLevel it is used to check whether the vertex levels in the graph need to be updated \~russian needToUpdateLevel используется для проверки того, нужно ли обновлять уровни вершин в графе
+  /// @return \~english bool - true if updating the vertex levels in the graph is required, and false if not required \~russian bool - true, если требуется обновление уровней вершин в графе, и false, если не требуется
 
   bool needToUpdateLevel() const;
 
-  /// @brief updateLevels Calculates level for all vertices inside graph.
+  /// @brief
+  /// \~english
+  /// updateLevels Calculates level for all vertices inside graph.
   /// Level show, how far is vertex from an input, Inputs has level 0,
   /// vertices, which inConnections contains inputs only - 1 level, etc.
   /// Outputs (1 or more) always has max possible level, but
   /// not **all** outputs have max possible level.
+  /// \~russian
+  /// updateLevels Вычисляет уровень для всех вершин внутри графа.
+  /// Уровень показывает, насколько далеко вершина находится от входа. Входы имеют уровень 0,
+  /// вершины, чьи inConnections (входящие соединения) содержат только входы - уровень 1 и т.д.
+  /// Выходы (1 или более) всегда имеют максимально возможный уровень, но
+  /// не **все** выходы имеют максимально возможный уровень.
+  /// \~
 
   void updateLevels();
 
-  /// @brief getMaxLevel
-  /// Calculates and returns the maximum level of the output vertices in the
-  /// graph
-  /// @return maximum level of the output vertices
+  /// @brief
+  /// \~english
+  /// getMaxLevel
+  /// Calculates and returns the maximum level of the output vertices in the graph
+  /// \~russian
+  /// getMaxLevel
+  /// Вычисляет и возвращает максимальный уровень выходных вершин в графе
+  /// \~
+  /// @return \~english maximum level of the output vertices \~russian максимальный уровень выходных вершин
   /// @code
   ///  OrientedGraph graph("ExampleGraph");
   /// // Add vertices and edges to the graph (omitted for brevity)
@@ -181,10 +242,15 @@ public:
 
   uint32_t getMaxLevel();
 
-  /// @brief setCurrentParent
+  /// @brief
+  /// \~english
+  /// setCurrentParent
   /// Sets the current parent graph of the current graph
-  /// @param parent A shared pointer to the parent graph to be set as the
-  /// current parent
+  /// \~russian
+  /// setCurrentParent
+  /// Устанавливает текущий родительский граф для текущего графа
+  /// \~
+  /// @param parent \~english A shared pointer to the parent graph to be set as the current parent \~russian Shared-указатель на родительский граф, который будет установлен в качестве текущего родителя
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -196,16 +262,27 @@ public:
   /// @endcode
   void setCurrentParent(GraphPtr parent);
 
-  /// @brief resetCounters
+  /// @brief
+  /// \~english
+  /// resetCounters
   /// Resets counters associated with a specific graph instance
-  /// @param where A shared pointer to the subgraph whose counters need to be
-  /// reset
+  /// \~russian
+  /// resetCounters
+  /// Сбрасывает счетчики, связанные с конкретным экземпляром графа
+  /// \~
+  /// @param where \~english A shared pointer to the subgraph whose counters need to be reset \~russian Shared-указатель на подграф, счетчики которого необходимо сбросить
   void resetCounters(GraphPtr where);
 
-  /// @brief addInput
+  /// @brief
+  /// \~english
+  /// addInput
   /// Adds an input vertex to the current graph
-  /// @param i_name The name of the input vertex to be added
-  /// @return A shared pointer to the newly created input vertex
+  /// \~russian
+  /// addInput
+  /// Добавляет входную вершину в текущий граф
+  /// \~
+  /// @param i_name \~english The name of the input vertex to be added \~russian Имя добавляемой входной вершины
+  /// @return \~english A shared pointer to the newly created input vertex \~russian Указатель (поинтер) на вновь созданную входную вершину
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -216,10 +293,16 @@ public:
 
   VertexPtr addInput(const std::string &i_name = "");
 
-  /// @brief addOutput
+  /// @brief
+  /// \~english
+  /// addOutput
   /// Adds an output vertex to the current graph
-  /// @param i_name The name of the output vertex to be added
-  /// @return A shared pointer to the newly created output vertex
+  /// \~russian
+  /// addOutput
+  /// Добавляет выходную вершину в текущий граф
+  /// \~
+  /// @param i_name \~english The name of the output vertex to be added \~russian Имя добавляемой выходной вершины
+  /// @return \~english A shared pointer to the newly created output vertex \~russian Указатель на вновь созданную выходную вершину
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -230,11 +313,17 @@ public:
 
   VertexPtr addOutput(const std::string &i_name = "");
 
-  /// @brief addConst
+  /// @brief
+  /// \~english
+  /// addConst
   /// Adds a constant vertex to the current graph
-  /// @param i_value The value of the constant vertex to be added
-  /// @param i_name The name of the constant vertex to be added
-  /// @return A shared pointer to the newly created constant vertex
+  /// \~russian
+  /// addConst
+  /// Добавляет константную вершину в текущий граф
+  /// \~
+  /// @param i_value \~english The value of the constant vertex to be added \~russian Значение добавляемой константной вершины
+  /// @param i_name \~english The name of the constant vertex to be added \~russian Имя добавляемой константной вершины
+  /// @return \~english A shared pointer to the newly created constant vertex \~russian Указатель на вновь созданную константную вершину
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -246,11 +335,17 @@ public:
 
   VertexPtr addConst(const char &i_value, const std::string &i_name = "");
 
-  /// @brief addGate
+  /// @brief
+  /// \~english
+  /// addGate
   /// Adds a gate vertex to the current graph
-  /// @param i_gate The type of the gate vertex to be added
-  /// @param i_name The name of the gate vertex to be added
-  /// @return A shared pointer to the newly created gate vertex
+  /// \~russian
+  /// addGate
+  /// Добавляет вершину-вентиль (gate) в текущий граф
+  /// \~
+  /// @param i_gate \~english The type of the gate vertex to be added \~russian Тип добавляемой вершины-вентиля
+  /// @param i_name \~english The name of the gate vertex to be added \~russian Имя добавляемой вершины-вентиля
+  /// @return \~english A shared pointer to the newly created gate vertex \~russian Указатель на вновь созданную вершину-вентиль
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -261,13 +356,12 @@ public:
 
   VertexPtr addGate(const Gates &i_gate, const std::string &i_name = "");
 
-  /// @brief addSequential Adds a sequential vertex to the current graph.
-  /// @param i_type The type of the gsequential to be added;
-  /// can be flip-flop (ff) or latch only
-  /// @param i_clk Vertex, that is used as clock (or enable for latch)
-  /// @param i_data Data vertex, should be written to a reg
-  /// @param i_name The name of the gate vertex to be added
-  /// @return A shared pointer to the newly created gate vertex
+  /// @brief \~english addSequential Adds a sequential vertex to the current graph. \~russian addSequential Добавляет последовательностную вершину в текущий граф.
+  /// @param i_type \~english The type of the gsequential to be added; can be flip-flop (ff) or latch only \~russian Тип добавляемого последовательностного элемента; может быть только триггером (ff) или защелкой (latch)
+  /// @param i_clk \~english Vertex, that is used as clock (or enable for latch) \~russian Вершина, которая используется как синхросигнал (или enable для защелки)
+  /// @param i_data \~english Data vertex, should be written to a reg \~russian Вершина данных, должна быть записана в регистр
+  /// @param i_name \~english The name of the gate vertex to be added \~russian Имя добавляемой вершины
+  /// @return \~english A shared pointer to the newly created gate vertex \~russian Указатель на вновь созданную вершину
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -279,15 +373,13 @@ public:
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, const std::string &i_name = "");
 
-  /// @brief addSequential Adds a sequential vertex to the current graph.
-  /// @param i_type The type of the gsequential to be added;
-  /// can be any type, that need one additional signal.
-  /// @param i_clk Vertex, that is used as clock (or enable for latch)
-  /// EN for latch and CLK for FF
-  /// @param i_data Data vertex, should be written to a reg
-  /// @param i_wire RST or CLR or SET or EN (enable only if flip-flop)
-  /// @param i_name The name of the gate vertex to be added
-  /// @return A shared pointer to the newly created gate vertex
+  /// @brief \~english addSequential Adds a sequential vertex to the current graph. \~russian addSequential Добавляет последовательностную вершину в текущий граф.
+  /// @param i_type \~english The type of the gsequential to be added; can be any type, that need one additional signal. \~russian Тип добавляемого последовательностного элемента; может быть любым типом, требующим один дополнительный сигнал.
+  /// @param i_clk \~english Vertex, that is used as clock (or enable for latch) EN for latch and CLK for FF \~russian Вершина, которая используется как синхросигнал (или enable для защелки). EN для защелки и CLK для триггера
+  /// @param i_data \~english Data vertex, should be written to a reg \~russian Вершина данных, должна быть записана в регистр
+  /// @param i_wire \~english RST or CLR or SET or EN (enable only if flip-flop) \~russian RST или CLR или SET или EN (enable только если это триггер)
+  /// @param i_name \~english The name of the gate vertex to be added \~russian Имя добавляемой вершины
+  /// @return \~english A shared pointer to the newly created gate vertex \~russian Указатель на вновь созданную вершину
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -301,16 +393,14 @@ public:
                           VertexPtr i_data, VertexPtr i_wire,
                           const std::string &i_name = "");
 
-  /// @brief addSequential Adds a sequential vertex to the current graph.
-  /// @param i_type The type of the gsequential to be added;
-  /// can be flip-flop (ff) or latch only
-  /// @param i_clk Vertex, that is used as clock (or enable for latch)
-  /// @param i_data Data vertex, should be written to a reg
-  /// @param i_wire1 RST or CLR or SET
-  /// @param i_wire2 SET (double set is not allowed, for sure)
-  /// or EN (en for flip-flop only)
-  /// @param i_name The name of the gate vertex to be added
-  /// @return A shared pointer to the newly created gate vertex
+  /// @brief \~english addSequential Adds a sequential vertex to the current graph. \~russian addSequential Добавляет последовательностную вершину в текущий граф.
+  /// @param i_type \~english The type of the gsequential to be added; can be flip-flop (ff) or latch only \~russian Тип добавляемого последовательностного элемента; может быть только триггером (ff) или защелкой
+  /// @param i_clk \~english Vertex, that is used as clock (or enable for latch) \~russian Вершина, которая используется как синхросигнал (или enable для защелки)
+  /// @param i_data \~english Data vertex, should be written to a reg \~russian Вершина данных, должна быть записана в регистр
+  /// @param i_wire1 \~english RST or CLR or SET \~russian RST или CLR или SET
+  /// @param i_wire2 \~english SET (double set is not allowed, for sure) or EN (en for flip-flop only) \~russian SET (двойной set не допускается) или EN (en только для триггера)
+  /// @param i_name \~english The name of the gate vertex to be added \~russian Имя добавляемой вершины
+  /// @return \~english A shared pointer to the newly created gate vertex \~russian Указатель на вновь созданную вершину
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -325,15 +415,14 @@ public:
                           VertexPtr i_data, VertexPtr i_wire1,
                           VertexPtr i_wire2, const std::string &i_name = "");
 
-  /// @brief addSequential Adds a sequential vertex to the current graph.
-  /// Use with FF only!
-  /// @param i_clk CLK signal
-  /// @param i_data what to write, D
-  /// @param i_rst RST (or CLR) signal
-  /// @param i_set SET signal
-  /// @param i_en EN signal
-  /// @param i_name The name of the gate vertex to be added
-  /// @return A shared pointer to the newly created gate vertex
+  /// @brief \~english addSequential Adds a sequential vertex to the current graph. Use with FF only! \~russian addSequential Добавляет последовательностную вершину в текущий граф. Использовать ТОЛЬКО с триггерами (FF)!
+  /// @param i_clk \~english CLK signal \~russian Сигнал CLK (синхронизация)
+  /// @param i_data \~english what to write, D \~russian что записать, данные D
+  /// @param i_rst \~english RST (or CLR) signal \~russian Сигнал сброса RST (или CLR)
+  /// @param i_set \~english SET signal \~russian Сигнал установки SET
+  /// @param i_en \~english EN signal \~russian Сигнал разрешения EN
+  /// @param i_name \~english The name of the gate vertex to be added \~russian Имя добавляемой вершины
+  /// @return \~english A shared pointer to the newly created gate vertex \~russian Указатель на вновь созданную вершину
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -349,12 +438,17 @@ public:
                           VertexPtr i_data, VertexPtr i_rst, VertexPtr i_set,
                           VertexPtr i_en, const std::string &i_name = "");
 
-  /// @brief addSubGraph
+  /// @brief
+  /// \~english
+  /// addSubGraph
   /// Adds a subgraph to the current graph
-  /// @param i_subGraph A shared pointer to the subgraph to be added
-  /// @param i_inputs A vector containing the input vertices to be connected
-  /// to the subgraph
-  /// @return A vector containing the output vertices of the subgraph
+  /// \~russian
+  /// addSubGraph
+  /// Добавляет подграф в текущий граф
+  /// \~
+  /// @param i_subGraph \~english A shared pointer to the subgraph to be added \~russian Shared-указатель на добавляемый подграф
+  /// @param i_inputs \~english A vector containing the input vertices to be connected to the subgraph \~russian Вектор, содержащий входные вершины для подключения к подграфу
+  /// @return \~english A vector containing the output vertices of the subgraph \~russian Вектор, содержащий выходные вершины подграфа
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -371,13 +465,14 @@ public:
   /// auto subGraphOutputs = graph->addSubGraph(subGraph, subGraphInputs);
   /// // Now subGraphOutputs contains the output vertices of the subgraph
   /// @endcode
-  /// @throws std::invalid_argument if the number of inputs does not match
-  /// the number of input vertices in the subgraph
+  /// @throws \~english std::invalid_argument if the number of inputs does not match the number of input vertices in the subgraph \~russian std::invalid_argument, если количество входов не совпадает с количеством входных вершин в подграфе
 
   std::vector<VertexPtr> addSubGraph(GraphPtr i_subGraph,
                                      std::vector<VertexPtr> i_inputs);
 
-  /// @brief removeWasteVertices()
+  /// @brief
+  /// \~english
+  /// removeWasteVertices()
   /// Some generated graphs have vertices which have not any path
   /// to outputs of scheme. The method deletes these ones.
   /// Firstly, it is removing all inner (gates, sequental, subgraph)
@@ -387,16 +482,33 @@ public:
   /// After removing of inner ones, some inputs or constants
   /// can have not any element in d_outConnections(), these
   /// also will be removed.
+  /// \~russian
+  /// removeWasteVertices()
+  /// В некоторых сгенерированных графах есть вершины, не имеющие пути
+  /// к выходам схемы. Метод удаляет их.
+  /// Сначала он удаляет все внутренние (вентили, последовательностные элементы, подграфы)
+  /// вершины, у которых d_level == 0 (хороший критерий из-за специфики
+  /// алгоритма OrientedGraph::updateLevel()), а также все ребра от нормальных вершин к этим ошибочным.
+  /// После удаления внутренних вершин некоторые входы или константы
+  /// могут остаться без элементов в d_outConnections(), такие вершины
+  /// также будут удалены.
+  /// \~
   std::vector<char> graphSimulation(std::vector<char> values);
 
   void simulationRemove();
 
   void removeWasteVertices();
-  /// @brief addEdge
+  /// @brief
+  /// \~english
+  /// addEdge
   /// Adds an edge between two vertices in the current graph
-  /// @param from A shared pointer to the vertex where the edge originates
-  /// @param to A shared pointer to the vertex where the edge terminates
-  /// @return true if the edge was successfully added, false otherwise
+  /// \~russian
+  /// addEdge
+  /// Добавляет ребро между двумя вершинами в текущем графе
+  /// \~
+  /// @param from \~english A shared pointer to the vertex where the edge originates \~russian Указатель на вершину, из которой исходит ребро
+  /// @param to \~english A shared pointer to the vertex where the edge terminates \~russian Указатель на вершину, в которой ребро заканчивается
+  /// @return \~english true if the edge was successfully added, false otherwise \~russian true, если ребро было успешно добавлено, false в противном случае
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -414,21 +526,21 @@ public:
   ///   LOG(ERROR) << "Failed to add edge between Vertex1 and Vertex2\n";
   /// }
   /// @endcode
-  /// @throws std::invalid_argument if attempting to add an edge from one
-  /// subgraph to another when the 'from' vertex is not an output, or when
-  /// attempting to add an edge to another subgraph when the 'to' vertex is
-  /// not an input
+  /// @throws \~english std::invalid_argument if attempting to add an edge from one subgraph to another when the 'from' vertex is not an output, or when attempting to add an edge to another subgraph when the 'to' vertex is not an input \~russian std::invalid_argument при попытке добавить ребро из одного подграфа в другой, когда вершина 'from' не является выходом, или при попытке добавить ребро в другой подграф, когда вершина 'to' не является входом
 
   bool addEdge(VertexPtr from, VertexPtr to);
 
-  /// @brief addEdges
+  /// @brief
+  /// \~english
+  /// addEdges
   /// Adds multiple edges from a vector of source vertices to a target vertex
-  /// @param from1 A vector containing the source vertices from which edges
-  /// will originate
-  /// @param to A shared pointer to the target vertex where the edges will
-  /// terminate
-  /// @return true if all edges were successfully added, false if at least one
-  /// edge failed to be added
+  /// \~russian
+  /// addEdges
+  /// Добавляет несколько ребер от вектора исходных вершин к целевой вершине
+  /// \~
+  /// @param from1 \~english A vector containing the source vertices from which edges will originate \~russian Вектор, содержащий исходные вершины, от которых будут исходить ребра
+  /// @param to \~english A shared pointer to the target vertex where the edges will terminate \~russian Указатель на целевую вершину, в которой ребра будут заканчиваться
+  /// @return \~english true if all edges were successfully added, false if at least one edge failed to be added \~russian true, если все ребра были успешно добавлены, false, если хотя бы одно ребро не удалось добавить
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -457,11 +569,17 @@ public:
 
   bool addEdges(std::vector<VertexPtr> from1, VertexPtr to);
 
-  /// @brief removeEdge
+  /// @brief
+  /// \~english
+  /// removeEdge
   /// Remove an edge from graph if it exists.
-  /// @param from1 The vertex to be deleted to the input connections of "to"
-  /// @param to The vertex to be deleted to the output connections of "from"
-  /// @return True if edge was found and deleted, false otherwise
+  /// \~russian
+  /// removeEdge
+  /// Удаляет ребро из графа, если оно существует.
+  /// \~
+  /// @param from1 \~english The vertex to be deleted to the input connections of "to" \~russian Вершина, которую нужно удалить из входных соединений "to"
+  /// @param to \~english The vertex to be deleted to the output connections of "from" \~russian Вершина, которую нужно удалить из выходных соединений "from"
+  /// @return \~english True if edge was found and deleted, false otherwise \~russian True, если ребро было найдено и удалено, false в противном случае
   /// @code
   /// // Creating an instance of the OrientedGraph and two vertices
   /// GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph");
@@ -477,33 +595,38 @@ public:
 
   bool removeEdge(VertexPtr from1, VertexPtr to);
 
-  /// @brief getEdgesCount
-  /// Retrieves the total number of edges in the graph
-  /// @return The total number of edges in the graph
+  /// @brief \~english getEdgesCount Retrieves the total number of edges in the graph \~russian getEdgesCount Возвращает общее количество ребер в графе
+  /// @return \~english The total number of edges in the graph \~russian Общее количество ребер в графе
   size_t getEdgesCount() { return d_edgesCount; }
 
-  /// @brief Returns set af all subGraphs (graphs, which instances has current
-  /// graph)
-  /// @return set of subGrpahs
+  /// @brief \~english Returns set af all subGraphs (graphs, which instances has current graph) \~russian Возвращает множество всех подграфов (графов, экземпляры которых содержит текущий граф)
+  /// @return \~english set of subGrpahs \~russian множество подграфов
   std::set<GraphPtr> getSubGraphs() const;
 
-  /// @brief returns all vertices (as an array of vectors of pointers to the
-  /// base class)
-  /// @return d_vertices field
+  /// @brief \~english returns all vertices (as an array of vectors of pointers to the base class) \~russian возвращает все вершины (в виде массива векторов указателей на базовый класс)
+  /// @return \~english d_vertices field \~russian поле d_vertices
   std::array<std::vector<VertexPtr>, VertexTypes::output + 1>
   getBaseVertexes() const;
 
-  /// @brief getVerticeByIndex returns a vertex from graph. Index should be
+  /// @brief
+  /// \~english
+  /// getVerticeByIndex returns a vertex from graph. Index should be
   /// smaller, that number of all vertices inside current graph. Index firstly
   /// is used for inputs, than - constants, than - gates, sequential, subGraphs
   /// and than - outputs.
-  /// @throw out_of_range if idx is bigger than number of all vertices in graph
+  /// \~russian
+  /// getVerticeByIndex возвращает вершину из графа. Индекс должен быть
+  /// меньше, чем количество всех вершин внутри текущего графа. Индекс сначала
+  /// используется для входов, затем - констант, затем - вентилей, последовательностных элементов, подграфов
+  /// и затем - выходов.
+  /// \~
+  /// @throw \~english out_of_range if idx is bigger than number of all vertices in graph \~russian out_of_range, если idx больше количества всех вершин в графе
   VertexPtr getVerticeByIndex(size_t idx) const;
 
-  /// @brief method used for translating graph to verilog
-  /// @param i_path folder, in which file should be created
-  /// @param i_filename name of a file, which should be created
-  /// @return flag, if file was correctly vreated or not
+  /// @brief \~english method used for translating graph to verilog \~russian метод, используемый для трансляции графа в формат Verilog
+  /// @param i_path \~english folder, in which file should be created \~russian папка, в которой должен быть создан файл
+  /// @param i_filename \~english name of a file, which should be created \~russian имя файла, который должен быть создан
+  /// @return \~english flag, if file was correctly vreated or not \~russian флаг, указывающий, был ли файл корректно создан или нет
   bool toVerilog(std::string i_path, std::string i_filename = "");
 
   /// @brief
@@ -516,37 +639,37 @@ public:
   /// @return
   bool toDOT(std::string i_path, std::string i_filename = "");
 
-  /// @brief toGraphML Writes the graph structure in GraphML format to the
-  /// specified output stream
-  /// @param i_fileStream A reference to the std::ofstream object, which
-  /// represents the file in which the graph structure will be written in
-  /// GraphML format
-  /// @return bool: Returns true if the graph structure has been successfully
-  /// written in GraphML format, and false otherwise. In this case, it always
-  /// returns true.
+  /// @brief
+  /// \~english
+  /// toGraphML Writes the graph structure in GraphML format to the specified output stream
+  /// \~russian
+  /// toGraphML Записывает структуру графа в формате GraphML в указанный выходной поток
+  /// \~
+  /// @param i_fileStream \~english A reference to the std::ofstream object, which represents the file in which the graph structure will be written in GraphML format \~russian Ссылка на объект std::ofstream, который представляет файл, в который будет записана структура графа в формате GraphML
+  /// @return \~english bool: Returns true if the graph structure has been successfully written in GraphML format, and false otherwise. In this case, it always returns true. \~russian bool: Возвращает true, если структура графа была успешно записана в формате GraphML, и false в противном случае. В данном случае всегда возвращает true.
   bool toGraphMLClassic(std::ofstream &i_fileStream);
 
-  /// @brief toGraphMLPseudoABCD Writes the graph structure in GraphML format to
-  /// the specified output stream
-  /// @param i_fileStream A reference to the std::ofstream object, which
-  /// represents the file in which the graph structure will be written in
-  /// GraphML format
-  /// @return bool: Returns true if the graph structure has been successfully
-  /// written in GraphML format, and false otherwise. In this case, it always
-  /// returns true.
+  /// @brief
+  /// \~english
+  /// toGraphMLPseudoABCD Writes the graph structure in GraphML format to the specified output stream
+  /// \~russian
+  /// toGraphMLPseudoABCD Записывает структуру графа в формате GraphML в указанный выходной поток
+  /// \~
+  /// @param i_fileStream \~english A reference to the std::ofstream object, which represents the file in which the graph structure will be written in GraphML format \~russian Ссылка на объект std::ofstream, который представляет файл, в который будет записана структура графа в формате GraphML
+  /// @return \~english bool: Returns true if the graph structure has been successfully written in GraphML format, and false otherwise. In this case, it always returns true. \~russian bool: Возвращает true, если структура графа была успешно записана в формате GraphML, и false в противном случае. В данном случае всегда возвращает true.
   bool toGraphMLPseudoABCD(std::ofstream &i_fileStream);
 
-  /// @brief toGraphMLOpenABCD Writes the graph structure in GraphML format to
-  /// the specified output stream
-  /// @param i_fileStream A reference to the std::ofstream object, which
-  /// represents the file in which the graph structure will be written in
-  /// GraphML format
-  /// @return bool: Returns true if the graph structure has been successfully
-  /// written in GraphML format, and false otherwise. In this case, it always
-  /// returns true.
+  /// @brief
+  /// \~english
+  /// toGraphMLOpenABCD Writes the graph structure in GraphML format to the specified output stream
+  /// \~russian
+  /// toGraphMLOpenABCD Записывает структуру графа в формате GraphML в указанный выходной поток
+  /// \~
+  /// @param i_fileStream \~english A reference to the std::ofstream object, which represents the file in which the graph structure will be written in GraphML format \~russian Ссылка на объект std::ofstream, который представляет файл, в который будет записана структура графа в формате GraphML
+  /// @return \~english bool: Returns true if the graph structure has been successfully written in GraphML format, and false otherwise. In this case, it always returns true. \~russian bool: Возвращает true, если структура графа была успешно записана в формате GraphML, и false в противном случае. В данном случае всегда возвращает true.
   bool toGraphMLOpenABCD(std::ofstream &i_fileStream);
 
-  /// TODO: add description
+  /// \~english TODO: add description \~russian TODO: добавить описание
   void parseVertexToGraphML(const VertexTypes &vertexType,
                             const std::vector<VertexPtr> &vertexVector,
                             const std::string &nodeTemplate,
@@ -554,17 +677,17 @@ public:
                             const std::string &i_prefix, std::string &nodes,
                             std::string &edges);
 
-  /// @brief Is called by toGraphMLClassic. TODO: add description
+  /// @brief \~english Is called by toGraphMLClassic. TODO: add description \~russian Вызывается методом toGraphMLClassic. TODO: добавить описание
   std::string toGraphMLClassic(uint16_t i_indent = 0,
                                const std::string &i_prefix = "");
 
-  /// @brief Is called by toGraphMLPseudoABCD. TODO: add description
+  /// @brief \~english Is called by toGraphMLPseudoABCD. TODO: add description \~russian Вызывается методом toGraphMLPseudoABCD. TODO: добавить описание
   std::string toGraphMLPseudoABCD();
 
-  /// @brief Is called by toGraphMLOpenABCD. TODO: add description
+  /// @brief \~english Is called by toGraphMLOpenABCD. TODO: add description \~russian Вызывается методом toGraphMLOpenABCD. TODO: добавить описание
   std::string toGraphMLOpenABCD();
 
-  /// @brief used for looking for a vector of all vertices with required type
+  /// @brief \~english used for looking for a vector of all vertices with required type \~russian используется для поиска вектора всех вершин требуемого типа
   /// @param i_type
   /// @param i_name
   /// @param i_addSubGraphs
@@ -573,92 +696,117 @@ public:
   getVerticesByType(const VertexTypes &i_type, std::string_view i_name = "",
                     const bool &i_addSubGraphs = false) const;
 
-  /// @brief gets all vertices with requires level
+  /// @brief \~english gets all vertices with requires level \~russian получает все вершины с требуемым уровнем
   std::vector<VertexPtr> getVerticesByLevel(uint32_t i_level);
 
-  /// @brief Looks for all vertices with given name in graph
-  /// and subGrpahs (if required)
-  /// @param i_name name, which should have vertices
-  /// @param i_addSubGraphs if true, looks inside subGraphs for vertices.
-  /// Is false by default.
-  /// @return vector with all found vertices.
+  /// @brief \~english Looks for all vertices with given name in graph and subGrpahs (if required) \~russian Ищет все вершины с заданным именем в графе и подграфах (если требуется)
+  /// @param i_name \~english name, which should have vertices \~russian имя, которое должны иметь вершины
+  /// @param i_addSubGraphs \~english if true, looks inside subGraphs for vertices. Is false by default. \~russian если true, ищет вершины внутри подграфов. По умолчанию false.
+  /// @return \~english vector with all found vertices. \~russian вектор со всеми найденными вершинами.
   std::vector<VertexPtr>
   getVerticesByName(std::string_view i_name,
                     const bool i_addSubGraphs = false) const;
 
-  /// @brief Call calculateHash before this check!!!!
-  /// @param rhs another value to be compared
-  /// @return returns true, if hashes are equal
+  /// @brief \~english Call calculateHash before this check!!!! \~russian Вызовите calculateHash перед этой проверкой!!!!
+  /// @param rhs \~english another value to be compared \~russian другое значение для сравнения
+  /// @return \~english returns true, if hashes are equal \~russian возвращает true, если хэши равны
   bool operator==(const OrientedGraph &rhs);
 
-  /// @brief calculateHash calculates hash values for a graph based on the hash
+  /// @brief
+  /// \~english
+  /// calculateHash calculates hash values for a graph based on the hash
   /// values of its vertices
   /// When running for a second time, set hash flags to default state
-  /// @return A string representing the hash value of the graph
+  /// \~russian
+  /// calculateHash вычисляет значения хэша для графа на основе значений хэша
+  /// его вершин
+  /// При повторном запуске установите флаги хэша в состояние по умолчанию
+  /// \~
+  /// @return \~english A string representing the hash value of the graph \~russian Строка, представляющая значение хэша графа
 
   std::string calculateHash();
 
-  // @brief getGatesCount Returns a display containing the number of each gate
+  // @brief
+  /// \~english
+  /// getGatesCount Returns a display containing the number of each gate
   /// type in the graph
-  /// @return A display where each key is a type of gate (Gates), and the
-  /// corresponding value is the number of gates of this type in the graph
+  /// \~russian
+  /// getGatesCount Возвращает словарь, содержащий количество вентилей каждого
+  /// типа в графе
+  /// \~
+  /// @return \~english A display where each key is a type of gate (Gates), and the corresponding value is the number of gates of this type in the graph \~russian Словарь, где каждый ключ - это тип вентиля (Gates), а соответствующее значение - количество вентилей этого типа в графе
 
   std::map<Gates, size_t> getGatesCount() const;
 
-  /// @brief getEdgesGatesCount Returns a mapping containing the number of
+  /// @brief
+  /// \~english
+  /// getEdgesGatesCount Returns a mapping containing the number of
   /// edges between different types of gates in the graph
-  /// @return A mapping where each external key is a gate type, and the
-  /// corresponding value is an internal mapping containing the number of
-  /// edges between different types of gates in the graph
+  /// \~russian
+  /// getEdgesGatesCount Возвращает словарь, содержащий количество
+  /// ребер между различными типами вентилей в графе
+  /// \~
+  /// @return \~english A mapping where each external key is a gate type, and the corresponding value is an internal mapping containing the number of edges between different types of gates in the graph \~russian Словарь, где каждый внешний ключ - это тип вентиля, а соответствующее значение - это внутренний словарь, содержащий количество ребер между различными типами вентилей в графе
 
   std::map<Gates, std::map<Gates, size_t>> getEdgesGatesCount() const;
 
-  /// @brief reserve additional place in vector for given number of VertexPtr,
-  /// where are located vertices of given type.
-  /// @param i_type Type, for which place should be reserved
-  /// @param i_capacity Number of vertices, which would be added later
+  /// @brief \~english reserve additional place in vector for given number of VertexPtr, where are located vertices of given type. \~russian резервирует дополнительное место в векторе для заданного количества VertexPtr, где расположены вершины заданного типа.
+  /// @param i_type \~english Type, for which place should be reserved \~russian Тип, для которого должно быть зарезервировано место
+  /// @param i_capacity \~english Number of vertices, which would be added later \~russian Количество вершин, которые будут добавлены позже
   void reserve(VertexTypes i_type, size_t i_capacity) {
     d_vertices[i_type].reserve(d_vertices[i_type].size() + i_capacity);
   }
 
-  /// @brief resets counter for graph IDs
+  /// @brief \~english resets counter for graph IDs \~russian сбрасывает счетчик для идентификаторов графов
   static void resetCounter() { d_countGraph = 0ul; }
 
-  /// @brief Checks graph connectivity
-  /// @return bool, true if the graph is connected, and false if not.
+  /// @brief \~english Checks graph connectivity \~russian Проверяет связность графа
+  /// @return \~english bool, true if the graph is connected, and false if not. \~russian bool, true, если граф связен, и false, если нет.
   bool isConnected(bool i_recalculate = false);
 
-  /// @brief A simple counter for subGrpah instances to give
+  /// @brief
+  /// \~english
+  /// A simple counter for subGrpah instances to give
   /// them unique names in Verilog
-  /// @param i_id GraphID of subGraph, instance of which is being created.
-  /// @return new index for new unique name.
+  /// \~russian
+  /// Простой счетчик для экземпляров подграфов, чтобы дать
+  /// им уникальные имена в Verilog
+  /// \~
+  /// @param i_id \~english GraphID of subGraph, instance of which is being created. \~russian GraphID подграфа, экземпляр которого создается.
+  /// @return \~english new index for new unique name. \~russian новый индекс для нового уникального имени.
   std::uint64_t getGraphInstVerilog(GraphID i_id) {
     return d_graphInstanceToVerilogCount[i_id]++;
   }
 
-  /// @brief A simple counter for subGrpah instances to give
+  /// @brief
+  /// \~english
+  /// A simple counter for subGrpah instances to give
   /// them unique names in DOT format
-  /// @param i_id GraphID of subGraph, instance of which is being created.
-  /// @return new index for new unique name.
+  /// \~russian
+  /// Простой счетчик для экземпляров подграфов, чтобы дать
+  /// им уникальные имена в формате DOT
+  /// \~
+  /// @param i_id \~english GraphID of subGraph, instance of which is being created. \~russian GraphID подграфа, экземпляр которого создается.
+  /// @return \~english new index for new unique name. \~russian новый индекс для нового уникального имени.
   std::uint64_t getGraphInstDOT(GraphID i_id) {
     return d_graphInstanceToDotCount[i_id]++;
   }
 
-  /// @brief getter for unique graph ID
-  /// @return id of graph (size_t)
+  /// @brief \~english getter for unique graph ID \~russian геттер для уникального ID графа
+  /// @return \~english id of graph (size_t) \~russian id графа (size_t)
   GraphID getID() { return d_graphID; }
 
-  /// @brief Unrolls graph. TODO: add normal description
+  /// @brief \~english Unrolls graph. TODO: add normal description \~russian Разворачивает граф. TODO: добавить нормальное описание
   GraphPtr unrollGraph();
 
-  /// @brief creates a majority element, represented by a graph.
-  /// @return GraphPtr to created graph
+  /// @brief \~english creates a majority element, represented by a graph. \~russian создает мажоритарный элемент, представленный графом.
+  /// @return \~english GraphPtr to created graph \~russian GraphPtr на созданный граф
   static GraphPtr createMajoritySubgraph();
-  /// @brief creates majority element inside current graph
+  /// @brief \~english creates majority element inside current graph \~russian создает мажоритарный элемент внутри текущего графа
   VertexPtr generateMajority(VertexPtr a, VertexPtr b, VertexPtr c);
 
-  /// @brief log Used for easylogging++
-  /// @param os Stream for easylogging
+  /// @brief \~english log Used for easylogging++ \~russian log Используется для easylogging++
+  /// @param os \~english Stream for easylogging \~russian Поток для easylogging
 #ifdef LOGFLAG
   virtual void log(el::base::type::ostream_t &os) const;
 #endif
@@ -667,8 +815,7 @@ protected:
   /* memory management block */
 
   /// @author Fuuulkrum7
-  /// @brief Allocates memory and creates an instance of required type. Is used
-  /// for creating ALL vertices of any type.
+  /// @brief \~english Allocates memory and creates an instance of required type. Is used for creating ALL vertices of any type. \~russian Выделяет память и создает экземпляр требуемого типа. Используется для создания ВСЕХ вершин любого типа.
   /// @tparam T
   /// @tparam ...Args
   /// @param ...args

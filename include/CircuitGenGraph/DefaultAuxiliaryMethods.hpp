@@ -9,16 +9,31 @@
 #include "../../lib/fmt/core.h"
 
 /// @file AuxiliaryMethods.hpp
+/// \~english
 /// TODO: ToEnum
 /// TODO: if need LineReader
 /// TODO: if need CopyDirectory
+/// \~russian
+/// TODO: ToEnum
+/// TODO: если нужен LineReader (построчное чтение)
+/// TODO: если нужен CopyDirectory (копирование директорий)
+/// \~
 
+/// \~english
 /// namespace CG_Graph::AuxMethodsGraph was created to organize a set
 /// of auxiliary functions and methods that can be used
 /// in various parts of a software project.
 /// Functions: print to an string stream, used to replace % to str,
 /// format, needed for for backward compatibility (now fmt is used)
 /// </summary>
+/// \~russian
+/// Пространство имен CG_Graph::AuxMethodsGraph создано для организации набора
+/// вспомогательных функций и методов, которые могут применяться
+/// в различных частях программного проекта.
+/// Функции: вывод в строковый поток; замена % на строку;
+/// format — оставлен для обратной совместимости (сейчас используется библиотека fmt).
+/// </summary>
+/// \~
 
 namespace CG_Graph::AuxMethodsGraph {
 
@@ -44,8 +59,8 @@ struct TuplePrinter<Tuple, 1> {
   }
 };
 
-/// @brief A simple function, which calls fmt
-/// @return formatted string
+/// @brief \~english A simple function, which calls fmt \~russian Простая функция, вызывающая fmt
+/// @return \~english formatted string \~russian отформатированная строка
 template<typename... Args>
 auto format(Args &&...args)
     -> decltype(fmt::format(std::forward<Args>(args)...)) {
