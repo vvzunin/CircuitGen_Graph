@@ -363,28 +363,6 @@ void collectPortsFromLine(const std::string &line, const std::regex &port_regex,
   }
 }
 
-GraphPtr createGraphFromDotPorts(const DotReturn &dot) {
-  GraphPtr graph = std::make_shared<OrientedGraph>();
-
-  for (const auto &[dotType, attrs]: dot) {
-    if (dotType != DotTypes::DotInput && dotType != DotTypes::DotOutput) {
-      continue;
-    }
-    auto nameIt = attrs.find("name");
-    if (nameIt == attrs.end()) {
-      continue;
-    }
-
-    if (dotType == DotTypes::DotInput) {
-      graph->addInput(nameIt->second);
-    } else {
-      graph->addOutput(nameIt->second);
-    }
-  }
-
-  return graph;
-}
-
 void collectPortNamesByType(const GraphPtr &graph, const VertexTypes i_type,
                             std::set<std::string> &ports) {
   const auto vertices = graph->getVerticesByType(i_type);
@@ -417,10 +395,8 @@ VerilogPorts parseVerilogPorts(const std::string &filepath) {
   return ports;
 }
 
-bool checkPortsMatch(const DotReturn &graphDot,
-                     const VerilogPorts &verilogPorts, std::string &errorMsg) {
-  GraphPtr graph = createGraphFromDotPorts(graphDot);
-
+bool checkPortsMatch(const GraphPtr &graph, const VerilogPorts &verilogPorts,
+                     std::string &errorMsg) {
   std::set<std::string> gIn;
   std::set<std::string> gOut;
   collectPortNamesByType(graph, VertexTypes::input, gIn);
@@ -432,25 +408,11 @@ bool checkPortsMatch(const DotReturn &graphDot,
                              verilogPorts.outputs.end());
 
   if (gIn != vIn || gOut != vOut) {
-    errorMsg = "Graph ports from DotReturn do not match Verilog ports.";
+    errorMsg = "Graph ports do not match Verilog ports.";
     return false;
   }
   errorMsg.clear();
   return true;
-}
-
-bool checkPortsMatch(const std::vector<std::string> &graphInputs,
-                     const std::vector<std::string> &graphOutputs,
-                     const VerilogPorts &verilogPorts, std::string &errorMsg) {
-  DotReturn graphDot;
-  graphDot.reserve(graphInputs.size() + graphOutputs.size());
-  for (const auto &name: graphInputs) {
-    graphDot.push_back({DotTypes::DotInput, {{"name", name}}});
-  }
-  for (const auto &name: graphOutputs) {
-    graphDot.push_back({DotTypes::DotOutput, {{"name", name}}});
-  }
-  return checkPortsMatch(graphDot, verilogPorts, errorMsg);
 }
 
 } // namespace CG_Graph

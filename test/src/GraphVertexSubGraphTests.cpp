@@ -210,80 +210,28 @@ TEST(PortsParsing_SubGraph, ParseVerilogPortsThrowsWhenFileMissing) {
                std::runtime_error);
 }
 
-TEST(PortsMatching_SubGraph, CheckPortsMatchDotReturnSuccess) {
+TEST(PortsMatching_SubGraph, CheckPortsMatchGraphPtrSuccess) {
   GraphPtr graph = std::make_shared<OrientedGraph>("PortsGraph");
   graph->addInput("a");
   graph->addInput("b");
   graph->addOutput("y");
-
-  DotReturn graphDot = graph->toDOT();
-  VerilogPorts verilogPorts = {{"a", "b"}, {"y"}};
-  std::string errorMsg;
-
-  EXPECT_TRUE(checkPortsMatch(graphDot, verilogPorts, errorMsg));
-  EXPECT_TRUE(errorMsg.empty());
-}
-
-TEST(PortsMatching_SubGraph, CheckPortsMatchDotReturnFail) {
-  GraphPtr graph = std::make_shared<OrientedGraph>("PortsGraph");
-  graph->addInput("a");
-  graph->addOutput("y");
-
-  DotReturn graphDot = graph->toDOT();
-  VerilogPorts verilogPorts = {{"a", "b"}, {"y"}};
-  std::string errorMsg;
-
-  EXPECT_FALSE(checkPortsMatch(graphDot, verilogPorts, errorMsg));
-  EXPECT_FALSE(errorMsg.empty());
-}
-
-TEST(PortsMatching_SubGraph,
-     CheckPortsMatchDotReturnIgnoresNonPortsAndMissingNames) {
-  DotReturn graphDot = {
-      {DotTypes::DotGraph, {{"name", "PortsGraph"}}},
-      {DotTypes::DotInput, {{"name", "a"}}},
-      {DotTypes::DotOutput, {{"name", "y"}}},
-      {DotTypes::DotInput, {{"label", "no_name_should_be_ignored"}}},
-  };
-
-  VerilogPorts verilogPorts = {{"a"}, {"y"}};
-  std::string errorMsg;
-
-  EXPECT_TRUE(checkPortsMatch(graphDot, verilogPorts, errorMsg));
-  EXPECT_TRUE(errorMsg.empty());
-}
-
-TEST(PortsMatching_SubGraph, CheckPortsMatchLegacyWrapperStillWorks) {
-  GraphPtr graph = std::make_shared<OrientedGraph>("PortsGraph");
-  graph->addInput("a");
-  graph->addInput("b");
-  graph->addOutput("y");
-
-  std::vector<std::string> graphInputs;
-  std::vector<std::string> graphOutputs;
-  for (const auto *vertex: graph->getVerticesByType(VertexTypes::input)) {
-    graphInputs.push_back(std::string(vertex->getRawName()));
-  }
-  for (const auto *vertex: graph->getVerticesByType(VertexTypes::output)) {
-    graphOutputs.push_back(std::string(vertex->getRawName()));
-  }
 
   VerilogPorts verilogPorts = {{"b", "a"}, {"y"}};
   std::string errorMsg;
 
-  EXPECT_TRUE(
-      checkPortsMatch(graphInputs, graphOutputs, verilogPorts, errorMsg));
+  EXPECT_TRUE(checkPortsMatch(graph, verilogPorts, errorMsg));
   EXPECT_TRUE(errorMsg.empty());
 }
 
-TEST(PortsMatching_SubGraph, CheckPortsMatchLegacyWrapperFail) {
-  const std::vector<std::string> graphInputs = {"a"};
-  const std::vector<std::string> graphOutputs = {"y"};
+TEST(PortsMatching_SubGraph, CheckPortsMatchGraphPtrFail) {
+  GraphPtr graph = std::make_shared<OrientedGraph>("PortsGraph");
+  graph->addInput("a");
+  graph->addOutput("y");
+
   VerilogPorts verilogPorts = {{"a", "b"}, {"y"}};
   std::string errorMsg;
 
-  EXPECT_FALSE(
-      checkPortsMatch(graphInputs, graphOutputs, verilogPorts, errorMsg));
+  EXPECT_FALSE(checkPortsMatch(graph, verilogPorts, errorMsg));
   EXPECT_FALSE(errorMsg.empty());
 }
 

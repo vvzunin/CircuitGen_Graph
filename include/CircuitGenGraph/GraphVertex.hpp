@@ -540,21 +540,11 @@ struct VerilogPorts {
 VerilogPorts parseVerilogPorts(const std::string &filepath);
 
 /// @brief Check that graph ports match Verilog ports.
-/// @param graphDot Graph ports in DotReturn format.
+/// @param graph Graph containing inputs/outputs to be compared.
 /// @param verilogPorts Parsed Verilog ports.
 /// @param errorMsg Error message (optional, may be filled by implementation).
 /// @return True if ports match, otherwise false.
-bool checkPortsMatch(const DotReturn &graphDot,
-                     const VerilogPorts &verilogPorts, std::string &errorMsg);
-
-/// @brief Check that graph ports match Verilog ports.
-/// @param graphInputs Graph input names.
-/// @param graphOutputs Graph output names.
-/// @param verilogPorts Parsed Verilog ports.
-/// @param errorMsg Error message (optional, may be filled by implementation).
-/// @return True if ports match, otherwise false.
-bool checkPortsMatch(const std::vector<std::string> &graphInputs,
-                     const std::vector<std::string> &graphOutputs,
-                     const VerilogPorts &verilogPorts, std::string &errorMsg);
+bool checkPortsMatch(const GraphPtr &graph, const VerilogPorts &verilogPorts,
+                     std::string &errorMsg);
 
 } // namespace CG_Graph
