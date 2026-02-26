@@ -344,8 +344,7 @@ void GraphVertexSubGraph::log(el::base::type::ostream_t &os) const {
 #endif
 
 namespace {
-void collectPortsFromLine(const std::string &line,
-                          const std::regex &port_regex,
+void collectPortsFromLine(const std::string &line, const std::regex &port_regex,
                           const std::regex &name_regex,
                           std::vector<std::string> &out_ports) {
   std::smatch match;
@@ -364,9 +363,9 @@ void collectPortsFromLine(const std::string &line,
   }
 }
 
-void collectPortsFromDot(const DotReturn &dot,
-                         std::set<std::string> &inputs,
-                         std::set<std::string> &outputs) {
+GraphPtr createGraphFromDotPorts(const DotReturn &dot) {
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+
   for (const auto &[dotType, attrs]: dot) {
     if (dotType != DotTypes::DotInput && dotType != DotTypes::DotOutput) {
       continue;
@@ -375,11 +374,22 @@ void collectPortsFromDot(const DotReturn &dot,
     if (nameIt == attrs.end()) {
       continue;
     }
+
     if (dotType == DotTypes::DotInput) {
-      inputs.insert(nameIt->second);
+      graph->addInput(nameIt->second);
     } else {
-      outputs.insert(nameIt->second);
+      graph->addOutput(nameIt->second);
     }
+  }
+
+  return graph;
+}
+
+void collectPortNamesByType(const GraphPtr &graph, const VertexTypes i_type,
+                            std::set<std::string> &ports) {
+  const auto vertices = graph->getVerticesByType(i_type);
+  for (const auto *vertex: vertices) {
+    ports.insert(std::string(vertex->getRawName()));
   }
 }
 } // namespace
@@ -408,14 +418,18 @@ VerilogPorts parseVerilogPorts(const std::string &filepath) {
 }
 
 bool checkPortsMatch(const DotReturn &graphDot,
-                     const VerilogPorts &verilogPorts,
-                     std::string &errorMsg) {
+                     const VerilogPorts &verilogPorts, std::string &errorMsg) {
+  GraphPtr graph = createGraphFromDotPorts(graphDot);
+
   std::set<std::string> gIn;
   std::set<std::string> gOut;
-  collectPortsFromDot(graphDot, gIn, gOut);
+  collectPortNamesByType(graph, VertexTypes::input, gIn);
+  collectPortNamesByType(graph, VertexTypes::output, gOut);
 
-  std::set<std::string> vIn(verilogPorts.inputs.begin(), verilogPorts.inputs.end());
-  std::set<std::string> vOut(verilogPorts.outputs.begin(), verilogPorts.outputs.end());
+  std::set<std::string> vIn(verilogPorts.inputs.begin(),
+                            verilogPorts.inputs.end());
+  std::set<std::string> vOut(verilogPorts.outputs.begin(),
+                             verilogPorts.outputs.end());
 
   if (gIn != vIn || gOut != vOut) {
     errorMsg = "Graph ports from DotReturn do not match Verilog ports.";
@@ -427,8 +441,7 @@ bool checkPortsMatch(const DotReturn &graphDot,
 
 bool checkPortsMatch(const std::vector<std::string> &graphInputs,
                      const std::vector<std::string> &graphOutputs,
-                     const VerilogPorts &verilogPorts,
-                     std::string &errorMsg) {
+                     const VerilogPorts &verilogPorts, std::string &errorMsg) {
   DotReturn graphDot;
   graphDot.reserve(graphInputs.size() + graphOutputs.size());
   for (const auto &name: graphInputs) {
