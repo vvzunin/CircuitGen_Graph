@@ -1,3 +1,12 @@
+/**
+ * @file GraphVertexBase.cpp
+ * @brief Реализация базовой вершины графа и утилит VertexUtils.
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Theossr <feolab05@gmail.com>
+ * @author rainbowkittensss <viktorrrrry20@gmail.com>
+ * @author NonDif <shapkin.andrey123@gmail.com>
+ */
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -14,6 +23,7 @@ namespace CG_Graph {
 
 std::atomic_uint64_t GraphVertexBase::d_count = 0ul;
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string VertexUtils::gateToString(Gates i_type) {
   switch (i_type) {
     case Gates::GateNot:
@@ -35,6 +45,7 @@ std::string VertexUtils::gateToString(Gates i_type) {
   }
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string VertexUtils::vertexTypeToVerilog(VertexTypes i_type) {
   switch (i_type) {
     case VertexTypes::input:
@@ -53,6 +64,7 @@ std::string VertexUtils::vertexTypeToVerilog(VertexTypes i_type) {
   return "";
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string VertexUtils::vertexTypeToComment(VertexTypes i_type) {
   switch (i_type) {
     case VertexTypes::input:
@@ -71,14 +83,17 @@ std::string VertexUtils::vertexTypeToComment(VertexTypes i_type) {
   return "// Unknown vertex";
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 inline void format_comment(std::string &res, std::string_view to_format,
                            std::string_view name) {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string copied = fmt::format(to_format, name);
   res.reserve(copied.size() + res.size());
   res += copied;
 }
 
 std::string
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 VertexUtils::getSequentialComment(const GraphVertexSequential *i_seq) {
   constexpr std::string_view en_comment =
       "\t// EN signal \"{}\" - when it is in a logical one "
@@ -116,10 +131,12 @@ VertexUtils::getSequentialComment(const GraphVertexSequential *i_seq) {
   return res;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 GraphVertexBase::GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph) {
   d_baseGraph = i_graph;
   d_type = i_type;
   d_name = i_graph->internalize(this->getTypeName() + "_" +
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
                                 std::to_string(d_count++));
   d_value = 'x';
   d_level = 0;
@@ -138,43 +155,56 @@ GraphVertexBase::GraphVertexBase(const VertexTypes i_type,
           "name cannot be created");
     }
     d_name = i_graph->internalize(this->getTypeName() + "_" +
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
                                   std::to_string(d_count++));
   }
   d_value = 'x';
   d_level = 0;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 GraphVertexBase::~GraphVertexBase() {
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 VertexTypes GraphVertexBase::getType() const {
   return d_type;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string GraphVertexBase::getTypeName() const {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return GraphUtils::parseVertexToString(d_type);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 void GraphVertexBase::setName(const std::string_view i_name) {
   d_name = i_name;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string GraphVertexBase::getName() const {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return std::string(d_name);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string_view GraphVertexBase::getRawName() const {
   return d_name;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string GraphVertexBase::getName(const std::string &i_prefix) const {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return i_prefix + std::string(d_name);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 uint32_t GraphVertexBase::getLevel() const {
   return d_level;
 }
 
+/** @author Theossr <feolab05@gmail.com> */
 void GraphVertexBase::removeValue() {
   d_value = ValueStates::UndefindedState;
   if (d_inConnections.empty()) {
@@ -185,6 +215,7 @@ void GraphVertexBase::removeValue() {
   }
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 void GraphVertexBase::updateLevel() {
   // 2 - IN PROGRESS, 1 - HC_CALC
   // 2 == 010
@@ -234,19 +265,24 @@ bool GraphVertexBase::getVerticesByLevel(uint32_t i_level,
   return flag;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 char GraphVertexBase::getValue() const {
   return d_value;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 GraphPtrWeak GraphVertexBase::getBaseGraph() const {
   return d_baseGraph;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 size_t GraphVertexBase::calculateHash() {
   if (d_hasHash) {
     return d_hashed;
   }
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   if (d_type == VertexTypes::input) {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
     d_hashed = std::hash<size_t>{}(d_outConnections.size());
     d_hasHash = HC_CALC;
     return d_hashed;
@@ -259,31 +295,38 @@ size_t GraphVertexBase::calculateHash() {
   for (auto *child: d_inConnections) {
     hashed_data.push_back(child->calculateHash());
   }
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::sort(hashed_data.begin(), hashed_data.end());
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   hashedStr.reserve(sizeof(decltype(hashed_data)::value_type) *
                     hashed_data.size());
   for (const auto &sub: hashed_data) {
     hashedStr += sub;
   }
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   d_hashed = std::hash<std::string>{}(hashedStr);
   d_hasHash = HC_CALC;
 
   return d_hashed;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 void GraphVertexBase::reserveInConnections(size_t i_size) {
   d_inConnections.reserve(d_inConnections.size() + i_size);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 void GraphVertexBase::reserveOutConnections(size_t i_size) {
   d_outConnections.reserve(d_outConnections.size() + i_size);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::vector<VertexPtr> GraphVertexBase::getInConnections() const {
   return d_inConnections;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
   assert(i_vert != this);
   assert(d_type != input && d_type != constant);
@@ -295,10 +338,12 @@ uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
   return n;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::vector<VertexPtr> GraphVertexBase::getOutConnections() const {
   return d_outConnections;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 bool GraphVertexBase::addVertexToOutConnections(VertexPtr i_vert) {
   assert(i_vert != this);
   assert(d_type != output);
@@ -314,7 +359,9 @@ bool GraphVertexBase::addVertexToOutConnections(VertexPtr i_vert) {
 }
 
 // TODO: what if some (more than 1) connected to output?
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string GraphVertexBase::toVerilog() const {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   if (d_type == VertexTypes::output) {
     if (!d_inConnections.empty()) {
       return "assign " + getName() + " = " + d_inConnections.back()->getName() +
@@ -325,15 +372,18 @@ std::string GraphVertexBase::toVerilog() const {
 }
 
 std::vector<std::pair<DotTypes, std::map<std::string, std::string>>>
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 GraphVertexBase::toDOT() {
   return {};
 }
 
 #ifdef LOGFLAG
+/** @author Vladimir Zunin <vzunin@hse.ru> */
 void GraphVertexBase::log(el::base::type::ostream_t &os) const {
   GraphPtr gr = d_baseGraph.lock();
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   os << "Vertex Type: " << GraphUtils::parseVertexToString(d_type) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
@@ -341,26 +391,33 @@ void GraphVertexBase::log(el::base::type::ostream_t &os) const {
 }
 #endif
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex) {
   stream << vertex.toVerilog();
   return stream;
 }
 
+/** @author rainbowkittensss <viktorrrrry20@gmail.com> */
 bool GraphVertexBase::removeVertexToInConnections(VertexPtr i_vert) {
   auto vertToRemove =
+/** @author rainbowkittensss <viktorrrrry20@gmail.com> */
       std::find(d_inConnections.begin(), d_inConnections.end(), i_vert);
   if (vertToRemove == d_inConnections.end())
     return false;
+/** @author rainbowkittensss <viktorrrrry20@gmail.com> */
   std::swap(*vertToRemove, *d_inConnections.rbegin());
   d_inConnections.resize(d_inConnections.size() - 1);
   return true;
 }
 
+/** @author rainbowkittensss <viktorrrrry20@gmail.com> */
 bool GraphVertexBase::removeVertexToOutConnections(VertexPtr i_vert) {
   auto vertToRemove =
+/** @author rainbowkittensss <viktorrrrry20@gmail.com> */
       std::find(d_outConnections.begin(), d_outConnections.end(), i_vert);
   if (vertToRemove == d_outConnections.end())
     return false;
+/** @author rainbowkittensss <viktorrrrry20@gmail.com> */
   std::swap(*vertToRemove, *d_outConnections.rbegin());
   d_outConnections.resize(d_outConnections.size() - 1);
   return true;

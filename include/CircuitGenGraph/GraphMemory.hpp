@@ -1,5 +1,11 @@
 #pragma once
 
+/**
+ * @file GraphMemory.hpp
+ * @brief Аллокатор MultiLinearAllocator и утилиты управления памятью графа.
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Theossr <feolab05@gmail.com>
+ */
 #include <cassert>
 #include <memory_resource>
 #include <set>
@@ -27,6 +33,7 @@ struct MultiLinearAllocator {
   /// @param chunk_size size for further allocations (usually is less
   /// than `buf_size` value)
   MultiLinearAllocator(size_t buf_size, size_t chunk_size)
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       : buf_size(buf_size)
       , chunk_size(chunk_size) {
     assert(buf_size >= 154);
@@ -37,8 +44,10 @@ struct MultiLinearAllocator {
 
   // clang-format on
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   MultiLinearAllocator &operator=(MultiLinearAllocator &&other) = delete;
   MultiLinearAllocator(MultiLinearAllocator &&other) = delete;
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   MultiLinearAllocator &operator=(const MultiLinearAllocator &other) = delete;
   MultiLinearAllocator(const MultiLinearAllocator &other) = delete;
 
@@ -71,12 +80,14 @@ struct MultiLinearAllocator {
     return reinterpret_cast<T *>(current);
   }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void deallocate() {}
 
 private:
   /// @brief simple aligner for memory address
   /// @tparam T type, align of which we should get
   template<typename T>
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void align() {
     size_t suboffset = (uintptr_t)offset & (alignof(T) - 1);
     if (suboffset) {
@@ -114,14 +125,17 @@ public:
   GraphMemory(
         size_t buf_size = DEFAULT_BUF,
         size_t chunk_size = CHUNK_SIZE)
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       : d_vertexMemory(buf_size, chunk_size)
       , d_strings {&d_stringMemory}
   {}
 
   // clang-format on
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphMemory &operator=(GraphMemory &&other) = delete;
   GraphMemory(GraphMemory &&other) = delete;
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphMemory &operator=(const GraphMemory &other) = delete;
   GraphMemory(const GraphMemory &other) = delete;
 
@@ -129,6 +143,7 @@ public:
   /// added string
   /// @param s string to be stored
   /// @return string_view from string in the set
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view internalize(std::string_view s) {
     return *d_strings.emplace(s).first;
   }
@@ -137,6 +152,7 @@ public:
   /// added string
   /// @param s string to be stored
   /// @return string_view from string in the set
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view internalize(const std::string &s) {
     return *d_strings.emplace(s).first;
   }

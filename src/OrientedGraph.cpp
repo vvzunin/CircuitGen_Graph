@@ -1,4 +1,13 @@
-﻿#include <algorithm>
+/**
+ * @file OrientedGraph.cpp
+ * @brief Реализация ориентированного графа схемы.
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Theossr <feolab05@gmail.com>
+ * @author rainbowkittensss <viktorrrrry20@gmail.com>
+ * @author NonDif <shapkin.andrey123@gmail.com>
+ */
+#include <algorithm>
 #include <cassert>
 #include <fstream>
 #include <iomanip>
@@ -23,6 +32,7 @@ namespace CG_Graph {
 std::atomic_size_t OrientedGraph::d_countGraph = 0;
 std::atomic_size_t OrientedGraph::d_countNewGraphInstance = 0;
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 bool CompareLevels(const VertexPtr left, const VertexPtr right) {
   return left->getLevel() < right->getLevel();
 }
@@ -33,20 +43,26 @@ OrientedGraph::OrientedGraph(const std::string &i_name, size_t buffer_size,
   d_graphID = d_countNewGraphInstance++;
 
   if (i_name == "")
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
     d_name = "graph_" + std::to_string(d_countGraph++);
   else
     d_name = i_name;
 
   // filling edges
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   for (auto cur_gate: GraphUtils::getLogicOperationsKeys()) {
     d_edgesGatesCount[cur_gate] = d_gatesCount;
   }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   d_vertices = {std::vector<VertexPtr>(), std::vector<VertexPtr>(),
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
                 std::vector<VertexPtr>(), std::vector<VertexPtr>(),
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
                 std::vector<VertexPtr>()};
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 OrientedGraph::~OrientedGraph() {
   for (auto sub: d_subGraphs) {
     sub->d_currentParentGraph.lock() = nullptr;
@@ -63,10 +79,13 @@ OrientedGraph::~OrientedGraph() {
   }
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 size_t OrientedGraph::baseSize() const {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return d_vertices.at(VertexTypes::gate).size();
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 size_t OrientedGraph::fullSize() const {
   size_t size = this->baseSize();
   for (GraphPtr vert: d_subGraphs)
@@ -74,10 +93,12 @@ size_t OrientedGraph::fullSize() const {
   return size;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 bool OrientedGraph::isEmpty() const {
   return this->fullSize() == 0;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 bool OrientedGraph::isEmptyFull() const {
   bool f = true;
   for (const auto &value: d_vertices)
@@ -90,25 +111,31 @@ bool OrientedGraph::isEmptyFull() const {
   return f;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 void OrientedGraph::setName(const std::string &i_name) {
   d_name = i_name;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string OrientedGraph::getName() const {
   return d_name;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 bool OrientedGraph::needToUpdateLevel() const {
   return d_needLevelUpdate;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 void OrientedGraph::updateLevels() {
 #ifdef LOGFLAG
   LOG(INFO) << "Starting level update. Wait.";
   LOG(INFO) << "Outputs for update: "
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
             << d_vertices.at(VertexTypes::output).size();
 #endif
   int counter = 0;
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   for (VertexPtr vert: d_vertices.at(VertexTypes::output)) {
 #ifdef LOGFLAG
     LOG(INFO) << counter++ << ". " << vert->getRawName() << " ("
@@ -118,9 +145,11 @@ void OrientedGraph::updateLevels() {
   }
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 uint32_t OrientedGraph::getMaxLevel() {
   this->updateLevels();
   uint32_t mx = 0;
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   for (VertexPtr vert: d_vertices.at(VertexTypes::output)) {
     mx = mx > vert->getLevel() ? mx : vert->getLevel();
   }
@@ -132,19 +161,23 @@ uint32_t OrientedGraph::getMaxLevel() {
     for (auto *vertex: vec) \
   vertex->methodName()
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 void OrientedGraph::clearHashStates() {
   SIMPLE_VERT_ITER(d_vertices, resetHashState);
   d_hashState = HC_NOT_CALC;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 void OrientedGraph::clearNeedUpdateStates() {
   SIMPLE_VERT_ITER(d_vertices, resetNeedUpdateState);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 void OrientedGraph::clearUsedLevelStates() {
   SIMPLE_VERT_ITER(d_vertices, resetUsedLevelState);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 void OrientedGraph::clearAllStates() {
   SIMPLE_VERT_ITER(d_vertices, resetAllStates);
   d_hashState = HC_NOT_CALC;
@@ -152,17 +185,21 @@ void OrientedGraph::clearAllStates() {
 
 #undef SIMPLE_VERT_ITER
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 VertexPtr OrientedGraph::addInput(const std::string &i_name) {
   VertexPtr newVertex = create<GraphVertexInput>(
       i_name.empty() ? "" : internalize(i_name), shared_from_this());
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   d_vertices[VertexTypes::input].push_back(newVertex);
 
   return newVertex;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 VertexPtr OrientedGraph::addOutput(const std::string &i_name) {
   VertexPtr newVertex = create<GraphVertexOutput>(
       i_name.empty() ? "" : internalize(i_name), shared_from_this());
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   d_vertices[VertexTypes::output].push_back(newVertex);
 
   return newVertex;
@@ -173,6 +210,7 @@ VertexPtr OrientedGraph::addConst(const char &i_value,
   auto name = i_name.empty() ? "" : internalize(i_name);
   VertexPtr newVertex =
       create<GraphVertexConstant>(i_value, name, shared_from_this());
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   d_vertices[VertexTypes::constant].push_back(newVertex);
 
   return newVertex;
@@ -182,6 +220,7 @@ VertexPtr OrientedGraph::addGate(const Gates &i_gate,
                                  const std::string &i_name) {
   VertexPtr newVertex = create<GraphVertexGates>(
       i_gate, i_name.empty() ? "" : internalize(i_name), shared_from_this());
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   d_vertices[VertexTypes::gate].push_back(newVertex);
 
   ++d_gatesCount[i_gate];
@@ -195,6 +234,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
   auto name = i_name.empty() ? "" : internalize(i_name);
   VertexPtr newVertex = create<GraphVertexSequential>(i_type, i_clk, i_data,
                                                       shared_from_this(), name);
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   d_vertices[VertexTypes::sequential].push_back(newVertex);
   newVertex->reserveInConnections(2ul);
   addEdge(i_clk, newVertex);
@@ -210,6 +250,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
   auto name = i_name.empty() ? "" : internalize(i_name);
   VertexPtr newVertex = create<GraphVertexSequential>(
       i_type, i_clk, i_data, i_wire, shared_from_this(), name);
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   d_vertices[VertexTypes::sequential].push_back(newVertex);
 
   newVertex->reserveInConnections(3ul);
@@ -227,6 +268,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
   auto name = i_name.empty() ? "" : internalize(i_name);
   VertexPtr newVertex = create<GraphVertexSequential>(
       i_type, i_clk, i_data, i_wire1, i_wire2, shared_from_this(), name);
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   d_vertices[VertexTypes::sequential].push_back(newVertex);
 
   newVertex->reserveInConnections(4ul);
@@ -246,6 +288,7 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
   auto name = i_name.empty() ? "" : internalize(i_name);
   VertexPtr newVertex = create<GraphVertexSequential>(
       i_type, i_clk, i_data, i_rst, i_set, i_en, shared_from_this(), name);
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   d_vertices[VertexTypes::sequential].push_back(newVertex);
 
   newVertex->reserveInConnections(5ul);
@@ -262,6 +305,7 @@ std::vector<VertexPtr>
 OrientedGraph::addSubGraph(GraphPtr i_subGraph,
                            std::vector<VertexPtr> i_inputs) {
   std::vector<VertexPtr> iGraph =
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       i_subGraph->getVerticesByType(VertexTypes::input);
 
   i_subGraph->setCurrentParent(shared_from_this());
@@ -276,17 +320,20 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
 
   VertexPtr newGraph =
       create<GraphVertexSubGraph>(i_subGraph, shared_from_this());
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   d_vertices[VertexTypes::subGraph].push_back(newGraph);
 
   // adding edges for subGraphs
   addEdges(i_inputs, newGraph);
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   size_t outSize = i_subGraph->getVerticesByType(VertexTypes::output).size();
 
   if (outSize > 0) {
     newGraph->reserveOutConnections(outSize);
     for (int i = 0; i < outSize; ++i) {
       VertexPtr newVertex =
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
           create<GraphVertexGates>(Gates::GateBuf, shared_from_this());
 
       outputs.push_back(newVertex);
@@ -296,6 +343,7 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
     }
   } else {
 #ifdef LOGFLAG
+/** @author Theossr <feolab05@gmail.com> */
     LOG(ERROR) << "Error, SubGraph without outputs" << std::endl;
 #else
     std::cerr << "Error, SubGraph without outputs" << std::endl;
@@ -311,25 +359,32 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
 }
 
 std::vector<char>
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 OrientedGraph::graphSimulation(std::vector<char> inputsValues) {
   std::vector<char> outputsValues;
+/** @author Theossr <feolab05@gmail.com> */
   for (size_t i = 0; i < d_vertices[VertexTypes::input].size(); ++i) {
     GraphVertexInput *inputVert =
+/** @author Theossr <feolab05@gmail.com> */
         static_cast<GraphVertexInput *>(d_vertices[VertexTypes::input].at(i));
     inputVert->setValue(inputsValues.at(i));
   }
+/** @author Theossr <feolab05@gmail.com> */
   for (VertexPtr outputVert: d_vertices[VertexTypes::output]) {
     outputsValues.push_back(outputVert->updateValue());
   }
   return outputsValues;
 }
 
+/** @author Theossr <feolab05@gmail.com> */
 void OrientedGraph::simulationRemove() {
+/** @author Theossr <feolab05@gmail.com> */
   for (VertexPtr ptr: d_vertices[VertexTypes::output]) {
     ptr->removeValue();
   }
 }
 
+/** @author rainbowkittensss <viktorrrrry20@gmail.com> */
 void OrientedGraph::removeWasteVertices() {
   updateLevels();
   auto removingForType = [this](VertexTypes type) {
@@ -358,6 +413,7 @@ void OrientedGraph::removeWasteVertices() {
             this->d_gatesCount[vert->getGate()] -= 1;
           }
           // IMPORTANT. do not use rbegin
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
           std::swap(*iter, *(d_vertices[type].end() - 1 - counterForResize));
           vert->~GraphVertexBase();
           ++counterForResize;
@@ -368,6 +424,7 @@ void OrientedGraph::removeWasteVertices() {
     }
     if (counterForResize == d_vertices[type].size())
       d_vertices[type].clear();
+/** @author rainbowkittensss <viktorrrrry20@gmail.com> */
     else if (counterForResize)
       d_vertices[type].resize(d_vertices[type].size() - counterForResize);
   };
@@ -378,6 +435,7 @@ void OrientedGraph::removeWasteVertices() {
   removingForType(constant);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 GraphPtr OrientedGraph::createMajoritySubgraph() {
   auto majority = std::make_shared<CG_Graph::OrientedGraph>(
       "Majority3", 9 * sizeof(GraphVertexBase));
@@ -386,18 +444,23 @@ GraphPtr OrientedGraph::createMajoritySubgraph() {
   VertexPtr in2 = majority->addInput("b");
   VertexPtr in3 = majority->addInput("c");
 
+/** @author Andrey <shapkin.andrey123@gmail.com> */
   VertexPtr and_ab = majority->addGate(Gates::GateAnd, "and_ab");
   majority->addEdges({in1, in2}, and_ab);
 
+/** @author Andrey <shapkin.andrey123@gmail.com> */
   VertexPtr and_ac = majority->addGate(Gates::GateAnd, "and_ac");
   majority->addEdges({in1, in3}, and_ac);
 
+/** @author Andrey <shapkin.andrey123@gmail.com> */
   VertexPtr and_bc = majority->addGate(Gates::GateAnd, "and_bc");
   majority->addEdges({in2, in3}, and_bc);
 
+/** @author Andrey <shapkin.andrey123@gmail.com> */
   VertexPtr or1 = majority->addGate(Gates::GateOr, "or1");
   majority->addEdges({and_ab, and_ac}, or1);
 
+/** @author Andrey <shapkin.andrey123@gmail.com> */
   VertexPtr or2 = majority->addGate(Gates::GateOr, "or2");
   majority->addEdges({or1, and_bc}, or2);
 
@@ -417,6 +480,7 @@ VertexPtr OrientedGraph::generateMajority(VertexPtr a, VertexPtr b,
   return outputs.back();
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 bool OrientedGraph::addEdge(VertexPtr from, VertexPtr to) {
   bool f;
   uint32_t n;
@@ -429,13 +493,16 @@ bool OrientedGraph::addEdge(VertexPtr from, VertexPtr to) {
   }
   d_edgesCount += f && (n > 0);
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   if (from->getType() == VertexTypes::gate &&
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       to->getType() == VertexTypes::gate)
     ++d_edgesGatesCount[from->getGate()][to->getGate()];
 
   return f && (n > 0);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 bool OrientedGraph::addEdges(std::vector<VertexPtr> from1, VertexPtr to) {
   bool f = true;
   to->reserveInConnections(from1.size());
@@ -444,6 +511,7 @@ bool OrientedGraph::addEdges(std::vector<VertexPtr> from1, VertexPtr to) {
   return f;
 }
 
+/** @author rainbowkittensss <viktorrrrry20@gmail.com> */
 bool OrientedGraph::removeEdge(VertexPtr from1, VertexPtr to) {
   bool deleted = false;
   deleted = from1->removeVertexToOutConnections(to);
@@ -457,17 +525,21 @@ bool OrientedGraph::removeEdge(VertexPtr from1, VertexPtr to) {
   return deleted;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::set<GraphPtr> OrientedGraph::getSubGraphs() const {
   return d_subGraphs;
 }
 
 std::array<std::vector<VertexPtr>, VertexTypes::output + 1>
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 OrientedGraph::getBaseVertexes() const {
   return d_vertices;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 VertexPtr OrientedGraph::getVerticeByIndex(size_t idx) const {
   if (sumFullSize() <= idx)
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
     throw std::out_of_range("OrientedGraph getVerticeByIndex: invalid index");
 
   static auto types = {input, constant, gate, sequential, subGraph};
@@ -477,9 +549,11 @@ VertexPtr OrientedGraph::getVerticeByIndex(size_t idx) const {
     idx -= d_vertices.at(type).size();
   }
   // here output
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return d_vertices.at(VertexTypes::output).at(idx);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::vector<VertexPtr> OrientedGraph::getVerticesByLevel(uint32_t i_level) {
   updateLevels();
   std::vector<VertexPtr> a;
@@ -547,61 +621,81 @@ OrientedGraph::getVerticesByName(std::string_view i_name,
   return resVert;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 size_t OrientedGraph::sumFullSize() const {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return d_vertices.at(VertexTypes::input).size() +
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
          d_vertices.at(VertexTypes::constant).size() +
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
          d_vertices.at(VertexTypes::gate).size() +
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
          d_vertices.at(VertexTypes::output).size() +
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
          d_vertices.at(VertexTypes::sequential).size() +
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
          d_vertices.at(VertexTypes::subGraph).size();
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::map<Gates, size_t> OrientedGraph::getGatesCount() const {
   return d_gatesCount;
 }
 
 std::map<Gates, std::map<Gates, size_t>>
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 OrientedGraph::getEdgesGatesCount() const {
   return d_edgesGatesCount;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string OrientedGraph::calculateHash() {
   if (d_hashState)
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
     return std::to_string(d_hashed);
 
   d_hashState = HC_IN_PROGRESS;
   std::vector<size_t> hashed_data;
   std::string hashedStr = "";
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   for (auto *vertex: d_vertices[VertexTypes::output]) {
     hashed_data.push_back(vertex->calculateHash());
   }
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::sort(hashed_data.begin(), hashed_data.end());
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   hashedStr.reserve(sizeof(decltype(hashed_data)::value_type) *
                     hashed_data.size());
   for (const auto &sub: hashed_data) {
     hashedStr += sub;
   }
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   d_hashed = std::hash<std::string>{}(hashedStr);
   d_hashState = HC_CALC;
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return std::to_string(d_hashed);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 bool OrientedGraph::operator==(const OrientedGraph &rhs) {
   return d_hashed == rhs.d_hashed && d_hashed;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 void OrientedGraph::setCurrentParent(GraphPtr i_parent) {
   d_currentParentGraph = i_parent;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 void OrientedGraph::resetCounters(GraphPtr i_where) {
   d_graphInstanceToVerilogCount[i_where->d_graphID] = 0;
   d_graphInstanceToDotCount[i_where->d_graphID] = 0;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
   if (d_alreadyParsedVerilog && d_isSubGraph) {
     return true;
@@ -612,9 +706,11 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
   if (!i_filename.size()) {
     i_filename = d_name + ".v";
   }
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string path = i_path + (d_isSubGraph ? "/submodules" : "");
 
   auto correctPath = path + "/" + i_filename;
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::ofstream fileStream(correctPath);
 
   if (!fileStream) {
@@ -626,23 +722,29 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
     return false;
   }
 
+/** @author Vladimir Zunin <vzunin@hse.ru> */
   auto t = std::time(nullptr);
+/** @author Vladimir Zunin <vzunin@hse.ru> */
   auto tm = *std::localtime(&t);
   fileStream
       << "//This file was generated automatically using CircuitGen_Graph at ";
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << "." << std::endl
              << std::endl;
   fileStream << "module " << d_name << "(\n" << verilogTab;
 
   // here we are parsing inputs by their wire size
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   for (auto *inp: d_vertices[VertexTypes::input]) {
     fileStream << inp->getRawName() << ", ";
   }
   fileStream << '\n' << verilogTab;
 
   // and outputs
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   for (auto *outVert: d_vertices[VertexTypes::output]) {
     fileStream << outVert->getRawName()
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
                << ((outVert == d_vertices[VertexTypes::output].back()) ? "\n"
                                                                        : ", ");
   }
@@ -658,6 +760,7 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
     if (eachVertex.size()) {
       auto usedType = eachVertex.back()->getType();
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       fileStream << VertexUtils::vertexTypeToComment(usedType);
 
       switch (count) {
@@ -670,6 +773,7 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
       }
       fileStream << std::endl << verilogTab;
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       fileStream << VertexUtils::vertexTypeToVerilog(usedType) << " ";
     }
 
@@ -683,10 +787,12 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
     ++count;
   }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   if (d_vertices[VertexTypes::constant].size()) {
     fileStream << "\n";
   }
   // writing consts
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   for (auto *oper: d_vertices[VertexTypes::constant]) {
     fileStream << verilogTab
                << static_cast<GraphVertexConstant *>(oper)->getVerilogInstance()
@@ -698,6 +804,7 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
     fileStream << "\n";
   }
   // and all modules
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   for (auto *subPtr: d_vertices[VertexTypes::subGraph]) {
     auto *sub = static_cast<GraphVertexSubGraph *>(subPtr);
 
@@ -707,26 +814,31 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
     fileStream << sub->toVerilog();
   }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   if (d_vertices[VertexTypes::sequential].size()) {
     fileStream << "\n";
   }
   // and all operations
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   for (const auto *oper: d_vertices[VertexTypes::sequential]) {
     fileStream << VertexUtils::getSequentialComment(
         static_cast<const GraphVertexSequential *>(oper));
     fileStream << verilogTab << (*oper);
   }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   if (d_vertices[VertexTypes::gate].size()) {
     fileStream << "\n";
   }
   // and all operations
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   for (auto *oper: d_vertices[VertexTypes::gate]) {
     fileStream << verilogTab << (*oper) << "\n";
   }
 
   fileStream << "\n";
   // and all outputs
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   for (auto *oper: d_vertices[VertexTypes::output]) {
     fileStream << verilogTab << (*oper) << "\n";
   }
@@ -743,19 +855,24 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
   return true;
 }
 
+/** @author Vladimir Zunin <vzunin@hse.ru> */
 DotReturn OrientedGraph::toDOT() {
   DotReturn dot = {{DotTypes::DotGraph, {{"name", d_name}}}};
 #ifdef LOGFLAG
   LOG(INFO) << "      DotGraph(" << d_name << ") added to DOT";
   LOG(INFO) << "      Start adding vertices to DOT";
   LOG(INFO) << "      inputs          : "
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
             << d_vertices[VertexTypes::input].size();
   LOG(INFO) << "      outputs         : "
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
             << d_vertices[VertexTypes::output].size();
   LOG(INFO) << "      subGraphOutputs : " << d_allSubGraphsOutputs.size();
   LOG(INFO) << "      gates           : "
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
             << d_vertices[VertexTypes::gate].size();
   LOG(INFO) << "      constants       : "
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
             << d_vertices[VertexTypes::constant].size();
 #endif
   size_t sizeAll = d_allSubGraphsOutputs.size();
@@ -769,6 +886,7 @@ DotReturn OrientedGraph::toDOT() {
     int counter = 0;
     for (auto *value: eachVertex) {
       DotReturn dotVertex = value->toDOT();
+/** @author Vladimir Zunin <vzunin@hse.ru> */
       dot.insert(std::end(dot), std::begin(dotVertex), std::end(dotVertex));
     }
   }
@@ -777,6 +895,7 @@ DotReturn OrientedGraph::toDOT() {
     dot.push_back(value->toDOT()[0]);
   }
   std::vector<std::pair<GraphVertexSubGraph *, DotReturn>> subDotResults;
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   for (auto *subPtr: d_vertices[VertexTypes::subGraph]) {
     auto *sub = static_cast<GraphVertexSubGraph *>(subPtr);
 
@@ -785,9 +904,11 @@ DotReturn OrientedGraph::toDOT() {
 
     auto subGraph = sub->getSubGraph();
     for (size_t i = 0;
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
          i < subGraph->getBaseVertexes()[VertexTypes::input].size(); ++i) {
       auto *inp = subPtr->getInConnections()[i];
       std::string inp_name =
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
           subGraph->getBaseVertexes()[VertexTypes::input][i]->getName();
 
       dot.push_back({DotTypes::DotEdge,
@@ -808,15 +929,18 @@ DotReturn OrientedGraph::toDOT() {
     }
   }
   for (auto &i: subDotResults) {
+/** @author Vladimir Zunin <vzunin@hse.ru> */
     dot.insert(std::end(dot), std::begin(i.second), std::end(i.second));
   }
 
+/** @author Vladimir Zunin <vzunin@hse.ru> */
   dot.push_back({DotTypes::DotExit, {{"name", d_name}}});
 
   d_alreadyParsedDot = true;
   return dot;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 bool OrientedGraph::toDOT(std::string i_path, std::string i_filename) {
   using namespace AuxMethodsGraph;
   if (d_alreadyParsedDot && d_isSubGraph) {
@@ -833,9 +957,11 @@ bool OrientedGraph::toDOT(std::string i_path, std::string i_filename) {
   if (!i_filename.size()) {
     i_filename = d_name + ".dot";
   }
+/** @author Vladimir Zunin <vzunin@hse.ru> */
   std::string path = i_path + (d_isSubGraph ? "/submodulesDOT" : "");
 
   auto correctPath = path + "/" + i_filename;
+/** @author Vladimir Zunin <vzunin@hse.ru> */
   std::ofstream fileStream(correctPath);
 
   if (!fileStream) {
@@ -847,10 +973,13 @@ bool OrientedGraph::toDOT(std::string i_path, std::string i_filename) {
     return false;
   }
 
+/** @author Vladimir Zunin <vzunin@hse.ru> */
   auto t = std::time(nullptr);
+/** @author Vladimir Zunin <vzunin@hse.ru> */
   auto tm = *std::localtime(&t);
   fileStream
       << "// This file was generated automatically using CircuitGen_Graph at ";
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << ".\n\n";
 
   fileStream << dotReturnToString(dot);
@@ -878,6 +1007,7 @@ void OrientedGraph::parseVertexToGraphML(
       return;
     case VertexTypes::input:
     case VertexTypes::output:
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       vertexKindName = GraphUtils::parseVertexToString(vertexType);
       break;
     default:
@@ -888,9 +1018,11 @@ void OrientedGraph::parseVertexToGraphML(
     // every "gate" and "const" vertex has subtypes
     switch (vertexType) {
       case VertexTypes::constant:
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
         vertexKindName = std::string(1, v->getValue());
         break;
       case VertexTypes::gate:
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
         vertexKindName = GraphUtils::parseGateToString(v->getGate());
         break;
       default:
@@ -898,11 +1030,14 @@ void OrientedGraph::parseVertexToGraphML(
     }
 
     nodes +=
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
         fmt::format(nodeTemplate, v->getName(i_prefix), vertexKindName, "", "");
 
     for (const auto &sink: v->getOutConnections()) {
       // parsing edges not related to subGraphs
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       if (sink->getType() != VertexTypes::subGraph) {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
         edges += fmt::format(edgeTemplate, v->getName(i_prefix),
                              sink->getName(i_prefix));
       }
@@ -915,13 +1050,16 @@ std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
   using namespace AuxMethodsGraph; // format() and replacer()
   using namespace ClassicGraphML;  // templates
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   const std::string spaces(i_indent, ' ');
 
   const std::string graphTemplate = fmt::format(
       rawGraphTemplate, spaces, i_indent ? "{}:" : "{}", "{}", spaces);
   const std::string nodeTemplate =
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       fmt::format(rawNodeTemplate, spaces, "{}", spaces, "{}", "{}{}", spaces);
   const std::string edgeTemplate =
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       fmt::format(rawEdgeTemplate, spaces, "{}", "{}");
 
   std::string nodes, edges, graphs, vertexKindName;
@@ -942,6 +1080,7 @@ std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
     // preparing template for subGraphs as vertices
     currentSubGraphTemplate =
         fmt::format(nodeTemplate, "{}", "subGraph", "\n",
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
                     sg->toGraphMLClassic(i_indent + 4, i_prefix + "{}::"));
 
     /// FIXME: Why inputs and outputs of graph are connected with vertices of
@@ -977,18 +1116,24 @@ std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
   }
 
   std::string finalGraph =
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       fmt::format(graphTemplate, "{}", nodes + graphs + edges);
   if (i_indent != 0) {
     return finalGraph;
   }
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return fmt::format(mainTemplate, fmt::format(finalGraph, d_name));
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 bool OrientedGraph::toGraphMLClassic(std::ofstream &fileStream) {
+/** @author Vladimir Zunin <vzunin@hse.ru> */
   auto t = std::time(nullptr);
+/** @author Vladimir Zunin <vzunin@hse.ru> */
   auto tm = *std::localtime(&t);
   fileStream << "<!-- This file was generated automatically using "
                 "CircuitGen_Graph at ";
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << ". -->" << std::endl
              << std::endl;
 
@@ -996,11 +1141,15 @@ bool OrientedGraph::toGraphMLClassic(std::ofstream &fileStream) {
   return true;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 bool OrientedGraph::toGraphMLPseudoABCD(std::ofstream &fileStream) {
+/** @author Vladimir Zunin <vzunin@hse.ru> */
   auto t = std::time(nullptr);
+/** @author Vladimir Zunin <vzunin@hse.ru> */
   auto tm = *std::localtime(&t);
   fileStream << "<!-- This file was generated automatically using "
                 "CircuitGen_Graph at ";
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << ". -->" << std::endl
              << std::endl;
 
@@ -1008,11 +1157,15 @@ bool OrientedGraph::toGraphMLPseudoABCD(std::ofstream &fileStream) {
   return true;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 bool OrientedGraph::toGraphMLOpenABCD(std::ofstream &fileStream) {
+/** @author Vladimir Zunin <vzunin@hse.ru> */
   auto t = std::time(nullptr);
+/** @author Vladimir Zunin <vzunin@hse.ru> */
   auto tm = *std::localtime(&t);
   fileStream << "<!-- This file was generated automatically using "
                 "CircuitGen_Graph at ";
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << ". -->" << std::endl
              << std::endl;
 
@@ -1020,17 +1173,21 @@ bool OrientedGraph::toGraphMLOpenABCD(std::ofstream &fileStream) {
   return true;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string OrientedGraph::toGraphMLPseudoABCD() {
   using namespace AuxMethodsGraph; // format()
   using namespace PseudoABCD;      // templates
 
   GraphPtr graphPtr = shared_from_this();
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   if (!d_vertices.at(VertexTypes::subGraph).empty()) {
     graphPtr = this->unrollGraph();
   }
 
   graphPtr->updateLevels();
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::sort(graphPtr->d_vertices.at(VertexTypes::gate).begin(),
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
             graphPtr->d_vertices.at(VertexTypes::gate).end(), CompareLevels);
 
   std::string nodes, edges, nodeType, actualName, sinkName;
@@ -1052,6 +1209,7 @@ std::string OrientedGraph::toGraphMLPseudoABCD() {
       // every "gate" and "const" vertex has subtypes
       switch (vertexType) {
         case VertexTypes::constant:
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
           nodeType = "100" + std::string(1, v->getValue());
           break;
         case VertexTypes::gate:
@@ -1062,6 +1220,7 @@ std::string OrientedGraph::toGraphMLPseudoABCD() {
       if (nodeNames.find(actualName) == nodeNames.end()) {
         nodeNames[actualName] = nodeCounter++;
       }
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       nodes += fmt::format(nodeTemplate, nodeNames.at(actualName), actualName,
                            nodeType);
 
@@ -1071,6 +1230,7 @@ std::string OrientedGraph::toGraphMLPseudoABCD() {
           nodeNames[sinkName] = nodeCounter++;
         }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
         edges += fmt::format(edgeTemplate, nodeNames.at(actualName),
                              nodeNames.at(sinkName));
       }
@@ -1078,20 +1238,25 @@ std::string OrientedGraph::toGraphMLPseudoABCD() {
     ++vertexType;
   }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return fmt::format(mainTemplate, nodes + edges);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string OrientedGraph::toGraphMLOpenABCD() {
   using namespace AuxMethodsGraph; // format()
   using namespace OpenABCD;        // templates
 
   GraphPtr graphPtr = shared_from_this();
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   if (!d_vertices.at(VertexTypes::subGraph).empty()) {
     graphPtr = this->unrollGraph();
   }
 
   graphPtr->updateLevels();
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::sort(graphPtr->d_vertices.at(VertexTypes::gate).begin(),
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
             graphPtr->d_vertices.at(VertexTypes::gate).end(), CompareLevels);
 
   std::string nodes, edges, nodeType, actualName, currentName;
@@ -1114,10 +1279,12 @@ std::string OrientedGraph::toGraphMLOpenABCD() {
       // every "gate" and "const" vertex has subtypes
       switch (vertexType) {
         case VertexTypes::constant:
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
           nodeType = "100" + std::string(1, v->getValue());
           break;
         case VertexTypes::gate:
           vGate = v->getGate();
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
           if (vGate == Gates::GateBuf || vGate == Gates::GateNot) {
             continue;
           }
@@ -1133,16 +1300,19 @@ std::string OrientedGraph::toGraphMLOpenABCD() {
       inverted = 0;
       for (const auto &sink: v->getOutConnections()) {
         std::stack<std::pair<VertexPtr, bool>> stck;
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
         stck.push({sink, sink->getGate() == Gates::GateNot ? 1 : 0});
 
         while (!stck.empty()) {
           auto current = stck.top();
           stck.pop();
           currentGate = current.first->getGate();
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
           if (currentGate == Gates::GateBuf || currentGate == Gates::GateNot) {
             for (const auto &s: current.first->getOutConnections()) {
               sGate = s->getGate();
               bool state = current.second;
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
               stck.push({s, sGate == Gates::GateNot ? !state : state});
             }
           } else {
@@ -1150,27 +1320,34 @@ std::string OrientedGraph::toGraphMLOpenABCD() {
             if (nodeNames.find(currentName) == nodeNames.end()) {
               nodeNames[currentName] = nodeCounter++;
             }
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
             edges += fmt::format(edgeTemplate, nodeNames.at(currentName),
                                  nodeNames.at(actualName), current.second);
             inverted += current.second;
           }
         }
       }
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       nodes += fmt::format(nodeTemplate, nodeNames.at(actualName), actualName,
                            nodeType, inverted);
     }
     ++vertexType;
   }
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return fmt::format(mainTemplate, nodes + edges);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 GraphPtr OrientedGraph::unrollGraph() {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphPtr newGraph = std::make_shared<OrientedGraph>(d_name + "_unrolled");
   std::map<VertexPtr, VertexPtr> vPairs;
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   for (const auto &v: d_vertices.at(VertexTypes::input)) {
     vPairs.insert({v, newGraph->addInput(v->getName())});
   }
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   for (const auto &v: d_vertices.at(VertexTypes::output)) {
     vPairs.insert({v, newGraph->addOutput(v->getName())});
   }
@@ -1195,7 +1372,9 @@ GraphPtr OrientedGraph::unrollGraph() {
           case VertexTypes::subGraph: {
             const auto *sgv = static_cast<GraphVertexSubGraph *>(v);
             const GraphPtr sg = sgv->getSubGraph();
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
             const auto &gInputs = sg->d_vertices.at(VertexTypes::input);
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
             const auto &gOutputs = sg->d_vertices.at(VertexTypes::output);
             const auto &vInputs = v->getInConnections();
             const auto &vOutputs = v->getOutConnections();
@@ -1239,7 +1418,9 @@ GraphPtr OrientedGraph::unrollGraph() {
     pair.second->reserveOutConnections(size);
     for (const auto &v: pair.first->getOutConnections()) {
       // if v is not subGraph and if v is not output from subGraph
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       if (v->getType() != VertexTypes::subGraph &&
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
           (v->getType() != VertexTypes::output ||
            v->getBaseGraph().lock().get() == this)) {
         newGraph->addEdge(pair.second, vPairs.at(v));
@@ -1249,6 +1430,7 @@ GraphPtr OrientedGraph::unrollGraph() {
   return newGraph;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 bool OrientedGraph::isConnected(bool i_recalculate) {
   if (d_connected && !i_recalculate) {
     return d_connected + 1;
@@ -1261,6 +1443,7 @@ bool OrientedGraph::isConnected(bool i_recalculate) {
 
   size_t subGraphsBuffersCount = 0;
   std::unordered_set<VertexPtr> disconnectedSubGraphs;
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   for (auto *subGraph: d_vertices[VertexTypes::subGraph]) {
     subGraphsBuffersCount += subGraph->getOutConnections().size();
     auto *subGraphPtr = static_cast<GraphVertexSubGraph *>(subGraph);
@@ -1274,6 +1457,7 @@ bool OrientedGraph::isConnected(bool i_recalculate) {
 
   char type = 0;
   for (auto &vertices: d_vertices) {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
     if (type == VertexTypes::subGraph) {
       continue;
     }
@@ -1328,6 +1512,7 @@ void OrientedGraph::dfs(VertexPtr i_startVertex,
       i_visited.insert(current);
 
       for (auto *vert: current->getOutConnections()) {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
         if (vert->getType() != VertexTypes::subGraph ||
             i_dsg.find(vert) == i_dsg.end()) {
           stck.push(vert);
@@ -1339,6 +1524,7 @@ void OrientedGraph::dfs(VertexPtr i_startVertex,
         }
       }
       for (auto *ptr: current->getInConnections()) {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
         if (ptr->getType() != VertexTypes::subGraph ||
             i_dsg.find(ptr) == i_dsg.end()) {
           stck.push(ptr);
@@ -1355,6 +1541,7 @@ void OrientedGraph::dfs(VertexPtr i_startVertex,
 }
 
 #ifdef LOGFLAG
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 void OrientedGraph::log(el::base::type::ostream_t &osStream) const {
   //   osStream << "\n";
   //   osStream << "Graph Name: " << d_name << "\n";

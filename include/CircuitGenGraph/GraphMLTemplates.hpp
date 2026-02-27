@@ -1,5 +1,10 @@
 #pragma once
 
+/**
+ * @file GraphMLTemplates.hpp
+ * @brief Шаблоны строк для экспорта графа в формат GraphML (ClassicGraphML).
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ */
 #include <map>
 
 #include <CircuitGenGraph/GraphUtils.hpp>

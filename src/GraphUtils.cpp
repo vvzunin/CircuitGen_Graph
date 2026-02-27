@@ -1,3 +1,10 @@
+/**
+ * @file GraphUtils.cpp
+ * @brief Реализация утилит графа (логические операции, парсинг, константы).
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Theossr <feolab05@gmail.com>
+ */
 #include <cassert>
 
 #include <CircuitGenGraph/GraphUtils.hpp>
@@ -9,8 +16,10 @@ namespace CG_Graph::GraphUtils {
 /* end of static variable values declaration */
 
 std::pair<std::string_view, int32_t>
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 getLogicOperation(const std::string &i_op) {
   const auto *iter =
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       std::find_if(d_logicOperations.begin(), d_logicOperations.end(),
                    [&](const auto &x) { return x.first == i_op; });
   assert(iter != d_logicOperations.end() &&
@@ -18,6 +27,7 @@ getLogicOperation(const std::string &i_op) {
   return iter->second;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::vector<Gates> getLogicOperationsKeys() {
   static std::vector<Gates> logicElements = {
       Gates::GateAnd, Gates::GateNand, Gates::GateOr,  Gates::GateNor,
@@ -25,17 +35,21 @@ std::vector<Gates> getLogicOperationsKeys() {
   return logicElements;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::pair<std::vector<bool>, std::vector<Gates>> getLogicOperationsWithGates() {
   std::vector<bool> oneGate;
 
   auto &&res = getLogicOperationsKeys();
   for (const auto &key: res) {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
     oneGate.push_back(key == Gates::GateBuf || key == Gates::GateNot);
   }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return std::make_pair(oneGate, res);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string_view fromHierarchyToOperation(int32_t i_key) {
   /// \var d_operationsToHierarchy This is an associative std::map container
   /// that maps integers to string vectors. It is used to store a hierarchy of
@@ -53,6 +67,7 @@ std::string_view fromHierarchyToOperation(int32_t i_key) {
   return operationByHierarchy[i_key];
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string fromOperationsToName(std::string_view i_op) {
   /// \var d_operationsToName It is used to match symbolic representations of
   /// logical operations and their names.
@@ -67,22 +82,31 @@ std::string fromOperationsToName(std::string_view i_op) {
     filled = true;
   }
   auto *iter =
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       std::find_if(std::begin(operationsToName), std::end(operationsToName),
                    [&](const auto &x) { return x.first == i_op; });
+/** @author Theossr <feolab05@gmail.com> */
   assert(iter != std::end(operationsToName) &&
          "name not found in operations' container");
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return std::string(iter->second);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 Gates parseStringToGate(std::string i_gate) {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return findPairByKey(stringToGate, i_gate)->second;
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string parseGateToString(Gates gate) {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return std::string(findPairByKey(gateToString, gate)->second);
 }
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string parseVertexToString(VertexTypes vertex) {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return std::string(findPairByKey(vertexToString, vertex)->second);
 };
 

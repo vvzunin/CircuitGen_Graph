@@ -1,5 +1,10 @@
 #pragma once
 
+/**
+ * @file enums.hpp
+ * @brief Перечисления и таблицы истинности для симуляции графа (Gates, VertexTypes и др.).
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ */
 #include <map>
 
 /// \namespace Contains all classes and functions, used for this graph

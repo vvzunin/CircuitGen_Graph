@@ -1,5 +1,12 @@
 #pragma once
 
+/**
+ * @file GraphUtils.hpp
+ * @brief Утилиты графа: VertexTypes, DotTypes, логические операции, парсинг имён.
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Theossr <feolab05@gmail.com>
+ */
 #include <algorithm>
 #include <array>
 #include <cstdint>
@@ -7,8 +14,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-
-/// @file GraphUtils.hpp
 
 namespace CG_Graph {
 
@@ -155,12 +160,14 @@ namespace GraphUtils {
 /// @throws makes an assert, if values is out of range
 /// (it is a non-excepted behavior)
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::pair<std::string_view, int32_t> getLogicOperation(const std::string &i_op);
 
 /// @brief getLogicOperationsKeys Returns the keys of logical operations
 /// @return std::vector<Gates> A vector containing the keys of logical
 /// operations
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::vector<Gates> getLogicOperationsKeys();
 
 /// @brief getLogicOperationsWithGates Returns logical operations along with
@@ -197,6 +204,7 @@ std::vector<Gates> getLogicOperationsKeys();
 /// }
 /// @endcode
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::pair<std::vector<bool>, std::vector<Gates>> getLogicOperationsWithGates();
 
 /// @brief fromOperationsToName Converts the operation to its name
@@ -211,6 +219,7 @@ std::pair<std::vector<bool>, std::vector<Gates>> getLogicOperationsWithGates();
 /// @throw has an assert if the passed operation does not exist in the
 /// list of operations
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string fromOperationsToName(std::string_view i_op);
 
 /// @brief fromHierarchyToOperation Converts hierarchy key to its
@@ -229,6 +238,7 @@ std::string fromOperationsToName(std::string_view i_op);
 /// @throws assert if the provided key does not exist in the
 /// internal array of operation keys to hierarchies
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string_view fromHierarchyToOperation(int32_t key);
 
 /// @brief parseStringToGate Converts a string representation of a gate to
@@ -242,6 +252,7 @@ std::string_view fromHierarchyToOperation(int32_t key);
 /// std::cout << "Enum value of 'and': " << gate << std::endl;
 /// @endcode
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 Gates parseStringToGate(std::string i_gate);
 
 /// @brief parseVertexToString Converts an enum value of a vertex type to its
@@ -258,6 +269,7 @@ Gates parseStringToGate(std::string i_gate);
 /// std::endl;
 /// @endcode
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string parseVertexToString(VertexTypes vertex);
 
 /// @brief parseGateToString Converts an enum value of a gate to its
@@ -277,6 +289,7 @@ std::string parseVertexToString(VertexTypes vertex);
 /// representation of Gates::GateAnd: " << gateString << std::endl;
 /// @endcode
 
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string parseGateToString(Gates gate);
 
 /// @brief Looks for a std::pair with a given key (pair - <key, value>).
@@ -289,8 +302,10 @@ std::string parseGateToString(Gates gate);
 /// @param key the key that must contain the required pair (pair.first)
 /// @return found pair or std::end(iterable)
 template<typename T, typename M, size_t N>
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 static std::pair<T, M> *findPairByKey(std::pair<T, M> (&iterable)[N],
                                       const T &key) {
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   auto *iter = std::find_if(std::begin(iterable), std::end(iterable),
                             [key](const auto &x) { return x.first == key; });
   return iter;
