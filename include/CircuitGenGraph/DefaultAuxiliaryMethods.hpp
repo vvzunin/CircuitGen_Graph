@@ -2,7 +2,8 @@
 
 /**
  * @file DefaultAuxiliaryMethods.hpp
- * @brief Вспомогательные методы: AuxMethodsGraph (replacer, dotReturnToString, TuplePrinter).
+ * @brief Вспомогательные методы: AuxMethodsGraph (replacer, dotReturnToString,
+ * TuplePrinter).
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
  */
@@ -35,24 +36,25 @@ std::string dotReturnToString(DotReturn dot);
 // code from here https://gist.github.com/en4bz/f07ef13706c3ae3a4fb2
 template<class Tuple, std::size_t N>
 struct TuplePrinter {
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   static void print(const std::string &fmt, std::ostream &os, const Tuple &t) {
     const size_t idx = fmt.find_last_of('%');
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+    /** @author Fuuulkrum7 <ilka747428@gmail.com> */
     TuplePrinter<Tuple, N - 1>::print(std::string(fmt, 0, idx), os, t);
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+    /** @author Fuuulkrum7 <ilka747428@gmail.com> */
     os << std::get<N - 1>(t) << std::string(fmt, idx + 1);
   }
 };
 
 template<class Tuple>
 struct TuplePrinter<Tuple, 1> {
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   static void print(const std::string &fmt, std::ostream &os, const Tuple &t) {
     const size_t idx = fmt.find_first_of('%');
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
-    os << std::string(fmt, 0, idx) << std::get<0>(t)
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+    /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+    os << std::string(fmt, 0, idx)
+       << std::get<0>(t)
+       /** @author Fuuulkrum7 <ilka747428@gmail.com> */
        << std::string(fmt, idx + 1);
   }
 };
@@ -62,9 +64,9 @@ struct TuplePrinter<Tuple, 1> {
 template<typename... Args>
 /** @author Fuuulkrum7 <ilka747428@gmail.com> */
 auto format(Args &&...args)
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+    /** @author Fuuulkrum7 <ilka747428@gmail.com> */
     -> decltype(fmt::format(std::forward<Args>(args)...)) {
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   return fmt::format(std::forward<Args>(args)...);
 }
 

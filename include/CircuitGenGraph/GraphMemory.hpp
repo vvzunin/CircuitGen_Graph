@@ -44,10 +44,10 @@ struct MultiLinearAllocator {
 
   // clang-format on
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   MultiLinearAllocator &operator=(MultiLinearAllocator &&other) = delete;
   MultiLinearAllocator(MultiLinearAllocator &&other) = delete;
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   MultiLinearAllocator &operator=(const MultiLinearAllocator &other) = delete;
   MultiLinearAllocator(const MultiLinearAllocator &other) = delete;
 
@@ -80,14 +80,14 @@ struct MultiLinearAllocator {
     return reinterpret_cast<T *>(current);
   }
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void deallocate() {}
 
 private:
   /// @brief simple aligner for memory address
   /// @tparam T type, align of which we should get
   template<typename T>
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void align() {
     size_t suboffset = (uintptr_t)offset & (alignof(T) - 1);
     if (suboffset) {
@@ -132,10 +132,10 @@ public:
 
   // clang-format on
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphMemory &operator=(GraphMemory &&other) = delete;
   GraphMemory(GraphMemory &&other) = delete;
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphMemory &operator=(const GraphMemory &other) = delete;
   GraphMemory(const GraphMemory &other) = delete;
 
@@ -143,7 +143,7 @@ public:
   /// added string
   /// @param s string to be stored
   /// @return string_view from string in the set
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view internalize(std::string_view s) {
     return *d_strings.emplace(s).first;
   }
@@ -152,7 +152,7 @@ public:
   /// added string
   /// @param s string to be stored
   /// @return string_view from string in the set
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view internalize(const std::string &s) {
     return *d_strings.emplace(s).first;
   }

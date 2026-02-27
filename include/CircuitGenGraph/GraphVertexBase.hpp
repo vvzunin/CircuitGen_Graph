@@ -143,7 +143,7 @@ class GraphVertexBase {
 
 public:
   /// @brief resetes counter of unique id-s for vertices
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   static void resetCounter() { d_count = 0ul; }
 
 private:
@@ -172,22 +172,22 @@ public:
   };
 
   /// @brief used for reset for all states being used (hash, updateValue, etc)
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void resetAllStates() {
     d_needUpdate = VS_NOT_CALC;
     d_hasHash = HC_NOT_CALC;
   }
 
   /// @brief required before recalculation of the levels of graph
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void resetNeedUpdateState() { d_needUpdate = VS_NOT_CALC; }
 
   /// @brief required before hash recalculation
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void resetHashState() { d_hasHash = HC_NOT_CALC; }
 
   /// @brief required before get vertices by level
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void resetUsedLevelState() {
     // remove flag using bitwise operations
     d_needUpdate = static_cast<VERTEX_STATE>(d_needUpdate & ~VS_USED_LEVEL);
@@ -209,10 +209,10 @@ public:
   GraphVertexBase(const VertexTypes i_type, std::string_view i_name,
                   GraphPtr i_graph);
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphVertexBase &operator=(const GraphVertexBase &other) =
       default; // оператор копирующего присваивания
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+               /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphVertexBase &operator=(GraphVertexBase &&other) =
       default; // оператор перемещающего присваивания
   /// @brief GraphVertexBase
@@ -237,7 +237,7 @@ public:
   /// std::cout << "Type of the vertex: " << type << std::endl;
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexTypes getType() const;
 
   // Get для типа вершины в фомате строки
@@ -253,7 +253,7 @@ public:
   /// std::cout << "String representation of the vertex type: " << typeName;
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string getTypeName() const;
 
   // Get-Set для имен входов
@@ -268,7 +268,7 @@ public:
   /// std::endl;
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void setName(std::string_view i_name);
 
   /// @brief getName
@@ -280,7 +280,7 @@ public:
   /// std::cout << "Name of the vertex: " << name << std::endl;
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string getName() const;
   /// @brief getName
   /// Returns concatenation of the name of the vertex and i_prefix
@@ -291,7 +291,7 @@ public:
   /// std::cout << "Name of the vertex: " << s << std::endl;
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string getName(const std::string &i_prefix) const;
 
   /// @brief getRawName
@@ -303,7 +303,7 @@ public:
   /// std::cout << "Name of the vertex: " << std::string(s) << std::endl;
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view getRawName() const;
 
   // Get для значения вершины
@@ -316,17 +316,17 @@ public:
   /// std::cout << "Value of the vertex: " << value << std::endl;
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   char getValue() const;
 
   /// @brief updateValue A virtual function for updating the vertex value.
   /// The implementation is provided in derived classes
   /// @return the value of the vertex after its update
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual char updateValue() = 0;
 
-/** @author Theossr <feolab05@gmail.com> */
+  /** @author Theossr <feolab05@gmail.com> */
   virtual void removeValue();
 
   // Get-Set для уровня
@@ -340,7 +340,7 @@ public:
   /// std::cout << "Level of the vertex: " << level << std::endl;
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   uint32_t getLevel() const;
 
   /// @brief updateLevel
@@ -350,7 +350,7 @@ public:
   /// If you are going to call this method for a second time, please, set
   /// all flags, used in updateLevel to their default state.
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual void updateLevel();
 
   /// @brief getVerticesByLevel Support method for
@@ -361,7 +361,7 @@ public:
   /// else from inputs (depends on level, if target level is closer
   /// to outputs or inputs)
   /// @return true if vertex has required level and false if not
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool getVerticesByLevel(uint32_t i_targetLevel,
                           std::vector<VertexPtr> &i_result,
                           bool i_fromOut = true);
@@ -376,7 +376,7 @@ public:
   /// Gates gateType = vertex.getGate();
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual Gates getGate() const { return Gates::GateDefault; }
 
   // Get-Set для базового графа
@@ -385,7 +385,7 @@ public:
   /// @brief getBaseGraph
   /// @return a weak pointer to the base graph associated with this vertex.
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphPtrWeak getBaseGraph() const;
 
   /// @brief reserveInConnections
@@ -394,7 +394,7 @@ public:
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// vertex.reserveInConnections(5);
   /// @endcode
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void reserveInConnections(size_t i_size);
   /// @brief reserveInConnections
   /// reserving memory in d_outConnections for i_size other vertices
@@ -402,7 +402,7 @@ public:
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// vertex.reserveOutConnections(5);
   /// @endcode
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void reserveOutConnections(size_t i_size);
 
   /// @brief getInConnections
@@ -428,7 +428,7 @@ public:
   /// }
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::vector<VertexPtr> getInConnections() const;
 
   /// @brief addVertexToInConnections
@@ -451,7 +451,7 @@ public:
   /// connections of the first vertex: " << occurrences << std::endl;
   /// @endcode
 
-/** @author rainbowkittensss <viktorrrrry20@gmail.com> */
+  /** @author rainbowkittensss <viktorrrrry20@gmail.com> */
   virtual uint32_t addVertexToInConnections(VertexPtr i_vert);
 
   /// @brief getOutConnections
@@ -475,7 +475,7 @@ public:
   /// }
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::vector<VertexPtr> getOutConnections() const;
 
   /// @brief addVertexToOutConnections
@@ -488,7 +488,7 @@ public:
   /// TO DO:
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool addVertexToOutConnections(VertexPtr i_vert);
 
   /// @brief calculateHash
@@ -512,7 +512,7 @@ public:
   /// std::cout << "Hash for the first vertex: " << hashValue << std::endl;
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual size_t calculateHash();
 
   /// @brief toVerilog
@@ -535,12 +535,12 @@ public:
   /// std::cout << "Generated Verilog code:\n" << verilogCode << std::endl;
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual std::string toVerilog() const;
 
   /// @brief calls toVerilog and allows to write vertex as string
   /// to a stream
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   friend std::ostream &operator<<(std::ostream &stream,
                                   const GraphVertexBase &matrix);
 
@@ -548,19 +548,19 @@ public:
   /// Generates DOT code for the vertex
   /// @return
 
-/** @author Vladimir Zunin <vzunin@hse.ru> */
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual DotReturn toDOT();
 
   /// @brief Used for check if vertex is a subGraph vertex output
   /// @return true if is vertex is subGraph vertex output
   /// or false if not
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual bool isSubgraphBuffer() const { return false; }
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
 #ifdef LOGFLAG
-/** @author Vladimir Zunin <vzunin@hse.ru> */
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const;
 #endif
 
@@ -592,7 +592,7 @@ protected:
   /// }
   /// @endcode
 
-/** @author rainbowkittensss <viktorrrrry20@gmail.com> */
+  /** @author rainbowkittensss <viktorrrrry20@gmail.com> */
   bool removeVertexToOutConnections(VertexPtr i_vert);
   /// @brief removeVertexToInConnections
   /// Removes a vertex from the input connections of this vertex.
@@ -626,7 +626,7 @@ protected:
   /// }
   /// @endcode
 
-/** @author rainbowkittensss <viktorrrrry20@gmail.com> */
+  /** @author rainbowkittensss <viktorrrrry20@gmail.com> */
   bool removeVertexToInConnections(VertexPtr i_vert);
   std::vector<VertexPtr> d_inConnections;
   std::vector<VertexPtr> d_outConnections;

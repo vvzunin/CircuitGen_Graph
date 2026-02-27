@@ -2,7 +2,8 @@
 
 /**
  * @file GraphUtils.hpp
- * @brief Утилиты графа: VertexTypes, DotTypes, логические операции, парсинг имён.
+ * @brief Утилиты графа: VertexTypes, DotTypes, логические операции, парсинг
+ * имён.
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
  * @author Theossr <feolab05@gmail.com>
@@ -305,7 +306,7 @@ template<typename T, typename M, size_t N>
 /** @author Fuuulkrum7 <ilka747428@gmail.com> */
 static std::pair<T, M> *findPairByKey(std::pair<T, M> (&iterable)[N],
                                       const T &key) {
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   auto *iter = std::find_if(std::begin(iterable), std::end(iterable),
                             [key](const auto &x) { return x.first == key; });
   return iter;

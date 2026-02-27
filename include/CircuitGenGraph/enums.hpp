@@ -2,7 +2,8 @@
 
 /**
  * @file enums.hpp
- * @brief Перечисления и таблицы истинности для симуляции графа (Gates, VertexTypes и др.).
+ * @brief Перечисления и таблицы истинности для симуляции графа (Gates,
+ * VertexTypes и др.).
  * @author Fuuulkrum7 <ilka747428@gmail.com>
  */
 #include <map>
