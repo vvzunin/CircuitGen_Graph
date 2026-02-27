@@ -1,14 +1,13 @@
-#pragma once
-
 /**
  * @file GraphVertexBase.hpp
  * @brief Базовый класс вершины графа (GraphVertexBase) и namespace VertexUtils.
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
- * @author Theossr <feolab05@gmail.com>
  * @author rainbowkittensss <viktorrrrry20@gmail.com>
+ * @author Theossr <feolab05@gmail.com>
  * @author NonDif <shapkin.andrey123@gmail.com>
  */
+#pragma once
 #include <atomic>
 #include <cstdint>
 #include <memory>
@@ -253,7 +252,7 @@ public:
   /// std::cout << "String representation of the vertex type: " << typeName;
   /// @endcode
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string getTypeName() const;
 
   // Get-Set для имен входов
@@ -280,7 +279,7 @@ public:
   /// std::cout << "Name of the vertex: " << name << std::endl;
   /// @endcode
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string getName() const;
   /// @brief getName
   /// Returns concatenation of the name of the vertex and i_prefix
@@ -291,7 +290,7 @@ public:
   /// std::cout << "Name of the vertex: " << s << std::endl;
   /// @endcode
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string getName(const std::string &i_prefix) const;
 
   /// @brief getRawName
@@ -303,7 +302,7 @@ public:
   /// std::cout << "Name of the vertex: " << std::string(s) << std::endl;
   /// @endcode
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view getRawName() const;
 
   // Get для значения вершины
@@ -357,11 +356,11 @@ public:
   /// OrientedGraph::getVerticesByLevel() calculating
   /// @param i_targetLevel level, vertices with which should be found
   /// @param i_result reference to vector in which found values are stored
-  /// @param i_fromOut if true than begins search from outputs,
+  /// @param i_fromOut if true, then begins search from outputs,
   /// else from inputs (depends on level, if target level is closer
   /// to outputs or inputs)
   /// @return true if vertex has required level and false if not
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool getVerticesByLevel(uint32_t i_targetLevel,
                           std::vector<VertexPtr> &i_result,
                           bool i_fromOut = true);
@@ -428,7 +427,7 @@ public:
   /// }
   /// @endcode
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::vector<VertexPtr> getInConnections() const;
 
   /// @brief addVertexToInConnections
@@ -475,7 +474,7 @@ public:
   /// }
   /// @endcode
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::vector<VertexPtr> getOutConnections() const;
 
   /// @brief addVertexToOutConnections
@@ -485,10 +484,8 @@ public:
   /// @return true if the vertex was successfully added, false if it was
   /// already present in the output connections.
   /// @code
-  /// TO DO:
   /// @endcode
-
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /// @author Fuuulkrum7 <ilka747428@gmail.com>
   bool addVertexToOutConnections(VertexPtr i_vert);
 
   /// @brief calculateHash
@@ -540,7 +537,7 @@ public:
 
   /// @brief calls toVerilog and allows to write vertex as string
   /// to a stream
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /// @author Fuuulkrum7 <ilka747428@gmail.com>
   friend std::ostream &operator<<(std::ostream &stream,
                                   const GraphVertexBase &matrix);
 

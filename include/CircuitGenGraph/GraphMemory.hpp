@@ -1,11 +1,11 @@
-#pragma once
-
 /**
  * @file GraphMemory.hpp
  * @brief Аллокатор MultiLinearAllocator и утилиты управления памятью графа.
+ * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
  * @author Theossr <feolab05@gmail.com>
  */
+#pragma once
 #include <cassert>
 #include <memory_resource>
 #include <set>
@@ -21,9 +21,10 @@ typedef unsigned char bytea;
 
 /// @author Fuuulkrum7
 /// @brief This is a custom allocator, which allocates firstly `buf_size`
-/// bytes, and than, if requires, allocates additionally `chunk_size` bytes.
+/// bytes, and then, if required, allocates additionally `chunk_size` bytes.
 /// Pointers on all allocated blocks are stored in a vector, so, if it is
 /// possible, calculate buf_size correctly to reduce time for deallocation
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 struct MultiLinearAllocator {
   // clang-format off
 
@@ -96,7 +97,7 @@ private:
   }
 
 private:
-  /// @brief all pinters on memory blocks, which have been allocated
+  /// @brief all pointers on memory blocks, which have been allocated
   std::vector<bytea *> blocks;
   /// @brief pointer on position, from which allocation should be started (from
   /// `offset` to `offset + sizeof(T)`)
@@ -112,6 +113,7 @@ private:
 /// `MultiLinearAllocator` for allocating memory for graph vertices and
 /// monotonic_buffer_resource, which is used for memory allocation for set of
 /// strings, where all vertices names are stored.
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 class GraphMemory {
 public:
   // clang-format off
@@ -119,7 +121,7 @@ public:
   /// @param buf_size size, which would be used for memory buffer reserve.
   /// By default we allocate memory for 1024 base vertices. Size of one vertex
   /// is supposed to be 112 bytes by default.
-  /// @param chunk_size additional size, which would allocated, if buffer ends.
+  /// @param chunk_size additional size, which would be allocated, if buffer ends.
   /// By default we allocate memory for 128 base vertices. Size of one vertex
   /// is supposed to be 112 bytes by default.
   GraphMemory(
@@ -143,7 +145,7 @@ public:
   /// added string
   /// @param s string to be stored
   /// @return string_view from string in the set
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view internalize(std::string_view s) {
     return *d_strings.emplace(s).first;
   }
@@ -152,7 +154,7 @@ public:
   /// added string
   /// @param s string to be stored
   /// @return string_view from string in the set
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view internalize(const std::string &s) {
     return *d_strings.emplace(s).first;
   }
