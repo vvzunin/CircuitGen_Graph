@@ -1,9 +1,6 @@
 /**
  * @file DefaultAuxiliaryMethods.cpp
  * @brief Вспомогательные методы для работы с графами (AuxMethodsGraph, operator*).
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
- * @author Theossr <feolab05@gmail.com>
  */
 #include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
 
@@ -13,7 +10,6 @@
 
 namespace CG_Graph {
 
-/** @author Vladimir Zunin <vzunin@hse.ru> */
 std::string operator*(std::string a, unsigned int b) {
   std::string output = "";
   while (b--) {
@@ -27,11 +23,9 @@ std::string AuxMethodsGraph::replacer(const std::string &i_fmt,
   std::string res;
   std::string::size_type pos = 0, prev_pos = 0;
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   size_t count = std::count(i_fmt.begin(), i_fmt.end(), '%');
   res.reserve(i_fmt.length() + (i_val.length() - 1) * count);
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   while ((pos = i_fmt.find('%', pos)) != std::string::npos) {
     res.append(i_fmt, prev_pos, pos - prev_pos);
     res.append(i_val);
@@ -42,7 +36,6 @@ std::string AuxMethodsGraph::replacer(const std::string &i_fmt,
   return res;
 }
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 std::string AuxMethodsGraph::dotReturnToString(DotReturn dot) {
   unsigned int tab = 0;
   std::string dotTab = "  ";
