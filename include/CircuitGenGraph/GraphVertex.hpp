@@ -157,7 +157,7 @@ public:
   /// // Display the generated Verilog code on the screen
   /// std::cout << "Generated Verilog code:\n" << verilogCode << std::endl;
   /// @endcode
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string toVerilog() const override;
   /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
@@ -165,7 +165,7 @@ public:
   /// @brief getDefaultInstance
   /// Creates simple verilog const instance (as a wire)
 
-/** @author Vladimir Zunin <vzunin@hse.ru> */
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   std::string getVerilogInstance();
 
   /// @brief log Used for easylogging++
@@ -239,7 +239,7 @@ public:
   /// VertexPtr subgaphItself = getVerticesByLevel(1u).back();
   /// std::cout << subgaphItself << '\n';
   /// @endcode
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string toVerilog() const override;
   /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
@@ -266,7 +266,7 @@ public:
   /// OrientedGraph methods
   /// @param i_indent
   /// @return
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string toGraphML(uint16_t i_indent = 0, std::string i_prefix = "") const;
 
   /// @brief This method is used as a substructure for
@@ -387,7 +387,7 @@ public:
   /// @return A string in Verilog format representing the current vertex
   /// @throws std::invalid_argument if any input connection is invalid
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string getVerilogString() const;
 
   /// @brief getGate
@@ -423,7 +423,7 @@ public:
   /// @return A Verilog format string for the current vertex
   /// @throws std::invalid_argument if any input connection is invalid
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string toVerilog() const override;
   /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
@@ -532,7 +532,7 @@ public:
   /// @return A Verilog format string for the current vertex
   /// @throws std::invalid_argument if any input connection is invalid
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string toVerilog() const override;
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   DotReturn toDOT() override;
@@ -565,7 +565,7 @@ public:
   VertexPtr getSet() const;
 
 private:
-  /// @author Fuuulkrum7 <ilka747428@gmail.com> 
+  /// @author Fuuulkrum7 <ilka747428@gmail.com>
   void setSignalByType(VertexPtr i_wire, SequentialTypes i_type,
                        unsigned &factType);
   /// @author Fuuulkrum7 <ilka747428@gmail.com>

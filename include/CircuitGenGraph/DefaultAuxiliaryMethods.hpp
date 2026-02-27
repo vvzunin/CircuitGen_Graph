@@ -45,21 +45,21 @@ template<class Tuple, std::size_t N>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
  */
 struct TuplePrinter {
-/**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
- */
+  /**
+   * @author Vladimir Zunin <vzunin@hse.ru>
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   */
   static void print(const std::string &fmt, std::ostream &os, const Tuple &t) {
     const size_t idx = fmt.find_last_of('%');
-/**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
- */
+    /**
+     * @author Vladimir Zunin <vzunin@hse.ru>
+     * @author Fuuulkrum7 <ilka747428@gmail.com>
+     */
     TuplePrinter<Tuple, N - 1>::print(std::string(fmt, 0, idx), os, t);
-/**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
- */
+    /**
+     * @author Vladimir Zunin <vzunin@hse.ru>
+     * @author Fuuulkrum7 <ilka747428@gmail.com>
+     */
     os << std::get<N - 1>(t) << std::string(fmt, idx + 1);
   }
 };
@@ -70,18 +70,18 @@ template<class Tuple>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
  */
 struct TuplePrinter<Tuple, 1> {
-/**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
- */
+  /**
+   * @author Vladimir Zunin <vzunin@hse.ru>
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   */
   static void print(const std::string &fmt, std::ostream &os, const Tuple &t) {
     const size_t idx = fmt.find_first_of('%');
     os << std::string(fmt, 0, idx)
        << std::get<0>(t)
-/**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
- */
+       /**
+        * @author Vladimir Zunin <vzunin@hse.ru>
+        * @author Fuuulkrum7 <ilka747428@gmail.com>
+        */
        << std::string(fmt, idx + 1);
   }
 };

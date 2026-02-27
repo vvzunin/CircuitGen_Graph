@@ -145,7 +145,7 @@ public:
   /// added string
   /// @param s string to be stored
   /// @return string_view from string in the set
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view internalize(std::string_view s) {
     return *d_strings.emplace(s).first;
   }
@@ -154,7 +154,7 @@ public:
   /// added string
   /// @param s string to be stored
   /// @return string_view from string in the set
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view internalize(const std::string &s) {
     return *d_strings.emplace(s).first;
   }

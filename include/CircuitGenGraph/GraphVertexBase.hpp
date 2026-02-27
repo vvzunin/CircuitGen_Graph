@@ -252,7 +252,7 @@ public:
   /// std::cout << "String representation of the vertex type: " << typeName;
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string getTypeName() const;
 
   // Get-Set для имен входов
@@ -279,7 +279,7 @@ public:
   /// std::cout << "Name of the vertex: " << name << std::endl;
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string getName() const;
   /// @brief getName
   /// Returns concatenation of the name of the vertex and i_prefix
@@ -290,7 +290,7 @@ public:
   /// std::cout << "Name of the vertex: " << s << std::endl;
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string getName(const std::string &i_prefix) const;
 
   /// @brief getRawName
@@ -302,7 +302,7 @@ public:
   /// std::cout << "Name of the vertex: " << std::string(s) << std::endl;
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view getRawName() const;
 
   // Get для значения вершины
@@ -360,7 +360,7 @@ public:
   /// else from inputs (depends on level, if target level is closer
   /// to outputs or inputs)
   /// @return true if vertex has required level and false if not
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool getVerticesByLevel(uint32_t i_targetLevel,
                           std::vector<VertexPtr> &i_result,
                           bool i_fromOut = true);
@@ -427,7 +427,7 @@ public:
   /// }
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::vector<VertexPtr> getInConnections() const;
 
   /// @brief addVertexToInConnections
@@ -474,7 +474,7 @@ public:
   /// }
   /// @endcode
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::vector<VertexPtr> getOutConnections() const;
 
   /// @brief addVertexToOutConnections
