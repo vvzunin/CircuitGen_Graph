@@ -31,7 +31,7 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
-/// TODO: Добавить проверку на имена файлов при добавлении новых вершин
+/// @todo Добавить проверку на имена файлов при добавлении новых вершин
 
 #define GraphPtr std::shared_ptr<CG_Graph::OrientedGraph>
 #define GraphPtrWeak std::weak_ptr<CG_Graph::OrientedGraph>
@@ -95,7 +95,7 @@ public:
 
   using GraphID = std::size_t;
 
-  // TODO: Добавить использование gates_inputs_info.
+  // @todo Добавить использование gates_inputs_info.
 
   ~OrientedGraph();
 
@@ -172,7 +172,7 @@ public:
   /// @brief getName Used to get the name of the graph
   /// @return the name of the graph
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string getName() const;
 
   /// @brief needToUpdateLevel it is used to check whether the vertex levels
@@ -309,7 +309,7 @@ public:
   /// // Creates a simple d flip-flop
   /// auto *seq = graph->addSequential(ff, clk, data, "q");
   /// @endcode
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, const std::string &i_name = "");
 
@@ -331,7 +331,7 @@ public:
   /// // Creates a simple d flip-flop with async reset
   /// auto *seq = graph->addSequential(affr, clk, data, rst_n, "q");
   /// @endcode
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_wire,
                           const std::string &i_name = "");
@@ -356,7 +356,7 @@ public:
   /// // Creates a latch with clr and set signals
   /// auto *seq = graph->addSequential(latchcs, clk, data, clr, set, "q");
   /// @endcode
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_wire1,
                           VertexPtr i_wire2, const std::string &i_name = "");
@@ -381,7 +381,7 @@ public:
   /// // Flip-flop with negedge clk, sync reset signal, set and enable signals
   /// auto *seq = graph->addSequential(nffrse, clk, data, rst, set, en, "q");
   /// @endcode
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_rst, VertexPtr i_set,
                           VertexPtr i_en, const std::string &i_name = "");
@@ -424,7 +424,7 @@ public:
   /// After removing of inner ones, some inputs or constants
   /// can have not any element in d_outConnections(), these
   /// also will be removed.
-  /** @author Theossr <feolab05@gmail.com> */
+/** @author Theossr <feolab05@gmail.com> */
   std::vector<char> graphSimulation(std::vector<char> values);
 
   /** @author Theossr <feolab05@gmail.com> */
@@ -529,7 +529,7 @@ public:
   /// @brief Returns set af all subGraphs (graphs, which instances has current
   /// graph)
   /// @return set of subgraphs
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::set<GraphPtr> getSubGraphs() const;
 
   /// @brief returns all vertices (as an array of vectors of pointers to the
@@ -539,8 +539,8 @@ public:
   getBaseVertexes() const;
 
   /// @brief getVerticeByIndex returns a vertex from graph. Index should be
-  /// smaller than the number of all vertices inside current graph. Index is
-  /// used first for inputs, then constants, then gates, sequential, subGraphs,
+  /// smaller than the number of all vertices inside current graph. Index is used
+  /// first for inputs, then constants, then gates, sequential, subGraphs,
   /// and then outputs.
   /// @throw out_of_range if idx is bigger than number of all vertices in graph
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
@@ -598,8 +598,7 @@ public:
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool toGraphMLOpenABCD(std::ofstream &i_fileStream);
 
-  /// TODO: add description
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /// @todo add description
   void parseVertexToGraphML(const VertexTypes &vertexType,
                             const std::vector<VertexPtr> &vertexVector,
                             const std::string &nodeTemplate,
@@ -607,17 +606,20 @@ public:
                             const std::string &i_prefix, std::string &nodes,
                             std::string &edges);
 
-  /// @brief Is called by toGraphMLClassic. TODO: add description
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /// @brief Is called by toGraphMLClassic.
+  /// @todo add description
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string toGraphMLClassic(uint16_t i_indent = 0,
                                const std::string &i_prefix = "");
 
-  /// @brief Is called by toGraphMLPseudoABCD. TODO: add description
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /// @brief Is called by toGraphMLPseudoABCD.
+  /// @todo add description
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string toGraphMLPseudoABCD();
 
-  /// @brief Is called by toGraphMLOpenABCD. TODO: add description
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /// @brief Is called by toGraphMLOpenABCD.
+  /// @todo add description
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string toGraphMLOpenABCD();
 
   /// @brief used for looking for a vector of all vertices with required type
@@ -630,7 +632,7 @@ public:
                     const bool &i_addSubGraphs = false) const;
 
   /// @brief gets all vertices with requires level
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::vector<VertexPtr> getVerticesByLevel(uint32_t i_level);
 
   /// @brief Looks for all vertices with given name in graph
@@ -654,7 +656,7 @@ public:
   /// When running for a second time, set hash flags to default state
   /// @return A string representing the hash value of the graph
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string calculateHash();
 
   // @brief getGatesCount Returns a display containing the number of each gate
@@ -662,7 +664,7 @@ public:
   /// @return A display where each key is a type of gate (Gates), and the
   /// corresponding value is the number of gates of this type in the graph
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::map<Gates, size_t> getGatesCount() const;
 
   /// @brief getEdgesGatesCount Returns a mapping containing the number of
@@ -671,7 +673,7 @@ public:
   /// corresponding value is an internal mapping containing the number of
   /// edges between different types of gates in the graph
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::map<Gates, std::map<Gates, size_t>> getEdgesGatesCount() const;
 
   /// @brief reserve additional place in vector for given number of VertexPtr,
@@ -696,7 +698,7 @@ public:
   /// them unique names in Verilog
   /// @param i_id GraphID of subGraph, instance of which is being created.
   /// @return new index for new unique name.
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::uint64_t getGraphInstVerilog(GraphID i_id) {
     return d_graphInstanceToVerilogCount[i_id]++;
   }
@@ -705,7 +707,7 @@ public:
   /// them unique names in DOT format
   /// @param i_id GraphID of subGraph, instance of which is being created.
   /// @return new index for new unique name.
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::uint64_t getGraphInstDOT(GraphID i_id) {
     return d_graphInstanceToDotCount[i_id]++;
   }
@@ -715,7 +717,8 @@ public:
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphID getID() { return d_graphID; }
 
-  /// @brief Unrolls graph. TODO: add normal description
+  /// @brief Unrolls graph.
+  /// @todo add normal description
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphPtr unrollGraph();
 
@@ -746,11 +749,11 @@ protected:
   /// @return
   template<typename T, typename... Args>
   T *create(Args &&...args) {
-    /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
     return new (allocate<T>()) T(std::forward<Args>(args)...);
   }
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void dfs(VertexPtr i_startVertex, std::unordered_set<VertexPtr> &i_visited,
            std::unordered_set<VertexPtr> &i_dsg);
 

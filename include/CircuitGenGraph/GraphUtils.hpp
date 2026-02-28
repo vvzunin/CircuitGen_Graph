@@ -5,6 +5,7 @@
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
  * @author Theossr <feolab05@gmail.com>
+ * @author Чернявских Илья Игоревич <fuuulkrum7@gmail.com>
  */
 #pragma once
 #include <algorithm>
@@ -24,7 +25,7 @@ namespace CG_Graph {
 
 /// @brief VertexTypes
 /// Enumeration of vertex types
-/// @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 enum VertexTypes : uint8_t {
   input = 0,     ///  input vertex
   output = 6,    ///  output vertex
@@ -39,10 +40,9 @@ enum VertexTypes : uint8_t {
 #define CGG_FF_TYPE(S, V) S = V, n##S = NEGEDGE | V
 
 /// @brief Types of all sequential cells being supported
-/**
- * @author Fuuulkrum7 <ilka747428@gmail.com>
- * @author Theossr <feolab05@gmail.com>
- */
+/** @author Fuuulkrum7 <ilka747428@gmail.com>
+ *  @author Theossr <feolab05@gmail.com>
+*/
 enum SequentialTypes : uint8_t {
   /// enable signal, writes data to output if is equal to 1'b1
   EN = 1 << 0,
@@ -124,10 +124,10 @@ enum DotTypes : uint8_t {
   DotExit = 7      /// DOT type, representing end of graph
 };
 
-/**
- * @author Theossr <feolab05@gmail.com>
+/** 
  * @author Fuuulkrum7 <ilka747428@gmail.com>
- */
+ * @author Theossr <feolab05@gmail.com>
+*/
 enum ValueStates : char {
   UndefindedState = 'n',
   TrueValue = '1',
@@ -169,7 +169,7 @@ namespace GraphUtils {
 /// @throws makes an assert, if values is out of range
 /// (it is a non-excepted behavior)
 
-/**
+/** 
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
  */
@@ -179,7 +179,7 @@ std::pair<std::string_view, int32_t> getLogicOperation(const std::string &i_op);
 /// @return std::vector<Gates> A vector containing the keys of logical
 /// operations
 
-/**
+/** 
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
  */
@@ -325,16 +325,19 @@ std::string parseVertexToString(VertexTypes vertex);
  */
 std::string parseGateToString(Gates gate);
 
-/// @brief Looks for a std::pair with a given key (pair - <key, value>).
-/// Most of all functions in GraphUtils use arrays of pairs, and looking
-/// for a value with key is one of the most frequently used operations.
-/// @tparam T key type in pairs array
-/// @tparam M value type in pairs array
-/// @tparam N number elements in an array
-/// @param iterable array of pairs, in which value should be found
-/// @param key the key that must contain the required pair (pair.first)
-/// @return found pair or std::end(iterable)
-/// @author Fuuulkrum7 <ilka747428@gmail.com>
+/**
+ * @brief Looks for a std::pair with a given key (pair - <key, value>).
+ * Most of all functions in GraphUtils use arrays of pairs, and looking
+ * for a value with key is one of the most frequently used operations.
+ * @tparam T key type in pairs array
+ * @tparam M value type in pairs array
+ * @tparam N number elements in an array
+ * @param iterable array of pairs, in which value should be found
+ * @param key the key that must contain the required pair (pair.first)
+ * @return found pair or std::end(iterable)
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ */
 template<typename T, typename M, size_t N>
 static std::pair<T, M> *findPairByKey(std::pair<T, M> (&iterable)[N],
                                       const T &key) {
@@ -374,7 +377,7 @@ static std::pair<VertexTypes, std::string_view> vertexToString[] = {
     {VertexTypes::sequential, "sequential"},
     {VertexTypes::gate, "gate"}};
 
-/// TODO: we can use Gate type as an index
+/// @todo we can use Gate type as an index
 static std::pair<Gates, std::string_view> gateToString[] = {
     {Gates::GateAnd, "and"},      {Gates::GateNand, "nand"},
     {Gates::GateOr, "or"},        {Gates::GateNor, "nor"},

@@ -151,7 +151,7 @@ TEST(TestGetVerilogString, ReturnStringWithAndExpressionWhenUseGateAnd) {
   EXPECT_EQ(gate1.getVerilogString(), "Var1 & Var2 & Var3");
 }
 
-// TODO: Update with easylogging
+// @todo Update with easylogging
 // TEST(TestGetVerilogString, CerrErrorStringWhenUseGateDefault) {
 //   GraphVertexGates gate1(Gates::GateDefault);
 //   VertexPtr        gatePtr1 =
@@ -265,7 +265,7 @@ TEST(TestGetGate, ReturnCorrectGate) {
   EXPECT_EQ(gate9.getGate(), Gates::GateXor);
 }
 
-// TODO: Update with easylogging
+// @todo Update with easylogging
 // TEST(TestToVerilog, CerrErrorStringIfDInConnectionsSizeIzZero) {
 //   GraphVertexGates  gate1(Gates::GateAnd);
 //   std::stringstream capturedOutput;
