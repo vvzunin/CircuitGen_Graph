@@ -27,29 +27,29 @@
 
 namespace CG_Graph::AuxMethodsGraph {
 
-/** 
+/**
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
-*/
+ */
 std::string replacer(const std::string &i_s, const std::string &i_r);
 
-/** 
+/**
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
-*/
+ */
 std::string dotReturnToString(DotReturn dot);
 
-/** 
+/**
  * @details code from here https://gist.github.com/en4bz/f07ef13706c3ae3a4fb2
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
-*/
+ */
 template<class Tuple, std::size_t N>
 struct TuplePrinter {
-  /** 
+  /**
    * @author Vladimir Zunin <vzunin@hse.ru>
    * @author Fuuulkrum7 <ilka747428@gmail.com>
-  */
+   */
   static void print(const std::string &fmt, std::ostream &os, const Tuple &t) {
     const size_t idx = fmt.find_last_of('%');
     TuplePrinter<Tuple, N - 1>::print(std::string(fmt, 0, idx), os, t);
@@ -57,26 +57,25 @@ struct TuplePrinter {
   }
 };
 
-/** 
+/**
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
-*/
+ */
 template<class Tuple>
 /** @author Fuuulkrum7 <ilka747428@gmail.com> */
 struct TuplePrinter<Tuple, 1> {
-  /** 
+  /**
    * @author Vladimir Zunin <vzunin@hse.ru>
    * @author Fuuulkrum7 <ilka747428@gmail.com>
-  */
+   */
   static void print(const std::string &fmt, std::ostream &os, const Tuple &t) {
     const size_t idx = fmt.find_first_of('%');
-    os << std::string(fmt, 0, idx)
-       << std::get<0>(t)
+    os << std::string(fmt, 0, idx) << std::get<0>(t)
        << std::string(fmt, idx + 1);
   }
 };
 
-/** 
+/**
  * @brief A simple function, which calls fmt
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>

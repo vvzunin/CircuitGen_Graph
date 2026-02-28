@@ -42,7 +42,7 @@ enum VertexTypes : uint8_t {
 /// @brief Types of all sequential cells being supported
 /** @author Fuuulkrum7 <ilka747428@gmail.com>
  *  @author Theossr <feolab05@gmail.com>
-*/
+ */
 enum SequentialTypes : uint8_t {
   /// enable signal, writes data to output if is equal to 1'b1
   EN = 1 << 0,
@@ -124,10 +124,10 @@ enum DotTypes : uint8_t {
   DotExit = 7      /// DOT type, representing end of graph
 };
 
-/** 
+/**
  * @author Fuuulkrum7 <ilka747428@gmail.com>
  * @author Theossr <feolab05@gmail.com>
-*/
+ */
 enum ValueStates : char {
   UndefindedState = 'n',
   TrueValue = '1',
@@ -169,7 +169,7 @@ namespace GraphUtils {
 /// @throws makes an assert, if values is out of range
 /// (it is a non-excepted behavior)
 
-/** 
+/**
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
  */
@@ -179,7 +179,7 @@ std::pair<std::string_view, int32_t> getLogicOperation(const std::string &i_op);
 /// @return std::vector<Gates> A vector containing the keys of logical
 /// operations
 
-/** 
+/**
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
  */
