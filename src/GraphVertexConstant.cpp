@@ -71,7 +71,9 @@ void GraphVertexConstant::log(el::base::type::ostream_t &os) const {
      << GraphUtils::parseVertexToString(VertexTypes::constant) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << 0 << "\n";
-  os << "Vertex Hash: " << "NuN" << "\n";
+  os << "Vertex Hash: "
+     << "NuN"
+     << "\n";
 }
 #endif
 GraphVertexBusConstant::GraphVertexBusConstant(std::string_view i_name,
