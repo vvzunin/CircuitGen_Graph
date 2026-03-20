@@ -78,8 +78,10 @@ else()
 endif()
 
 
+target_link_libraries(${PROJECT_NAME} PRIVATE
+  Lorina)
+
 target_link_libraries(${PROJECT_NAME} PUBLIC
-  Lorina
   fmt::fmt)
 
 if(ENABLE_LOGGING)

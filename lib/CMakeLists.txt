@@ -11,11 +11,11 @@ set(LORINA_EXAMPLES OFF CACHE BOOL "Disable examples build")
 
 add_subdirectory(lorina)
 
-install(
-  TARGETS Lorina
-  EXPORT CircuitGenGraphTargets
-  INCLUDES DESTINATION "${CircuitGenGraph_INSTALL_CMAKEDIR}"
-)
+# install(
+#   TARGETS Lorina
+#   EXPORT CircuitGenGraphTargets
+#   INCLUDES DESTINATION "${CircuitGenGraph_INSTALL_CMAKEDIR}"
+# )
 
 if(ENABLE_LOGGING)
   add_library(
