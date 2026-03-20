@@ -263,6 +263,9 @@ public:
 
   std::vector<VertexPtr> addInputs(size_t i_num);
   std::vector<VertexPtr> addInputs(size_t i_num, NameGenerator generator);
+  
+  std::vector<VertexPtr> addOutputs(size_t i_num);
+  std::vector<VertexPtr> addOutputs(const std::vector<VertexPtr> &gates);
 
   VertexPtr addInputBus(const std::string &i_name = "", size_t width = 1);
   /// @brief addOutput

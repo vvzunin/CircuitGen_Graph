@@ -208,6 +208,32 @@ OrientedGraph::addInputs(size_t i_num, NameGenerator generator) {
   return inputs;
 }
 
+std::vector<VertexPtr> OrientedGraph::addOutputs(size_t i_num) {
+  std::vector<VertexPtr> outputs;
+  outputs.reserve(i_num);
+  reserve(VertexTypes::output, i_num);
+  for (size_t i = 0; i < i_num; ++i) {
+    VertexPtr ptr = create<GraphVertexOutput>(shared_from_this());
+    outputs.push_back(ptr);
+    d_vertices[VertexTypes::output].push_back(ptr);
+  }
+  return outputs;
+}
+
+std::vector<VertexPtr>
+OrientedGraph::addOutputs(const std::vector<VertexPtr> &gates) {
+  std::vector<VertexPtr> outputs;
+  outputs.reserve(gates.size());
+  reserve(VertexTypes::output, gates.size());
+  for (size_t i = 0; i < gates.size(); ++i) {
+    VertexPtr ptr = create<GraphVertexOutput>(shared_from_this());
+    outputs.push_back(ptr);
+    d_vertices[VertexTypes::output].push_back(ptr);
+    addEdge(gates[i], ptr);
+  }
+  return outputs;
+}
+
 VertexPtr OrientedGraph::addInputBus(const std::string &i_name, size_t width) {
   VertexPtr newVertex = create<GraphVertexBusInput>(
       i_name.empty() ? "" : internalize(i_name), shared_from_this(), width);

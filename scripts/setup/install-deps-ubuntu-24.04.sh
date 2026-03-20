@@ -52,6 +52,7 @@ PACKAGES=(
   lcov
   libclang-dev
   llvm-dev
+  libfmt-dev
   make
   ninja-build
   openssl

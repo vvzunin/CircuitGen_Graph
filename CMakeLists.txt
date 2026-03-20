@@ -32,6 +32,8 @@ option(ENABLE_LOGGING "Enable logging" OFF)
 
 option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
 
+find_package(fmt REQUIRED)
+
 # Подключаем папку с исходниками (новый формат)
 add_subdirectory(src)
 
@@ -78,7 +80,7 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
   Lorina
-  fmt)
+  fmt::fmt)
 
 if(ENABLE_LOGGING)
   message(STATUS "Logs enabled")
