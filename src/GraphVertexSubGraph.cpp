@@ -1,3 +1,7 @@
+/**
+ * @file GraphVertexSubGraph.cpp
+ * @brief Реализация вершины-подграфа.
+ */
 #include "CircuitGenGraph/GraphVertexBase.hpp"
 #include <CircuitGenGraph/GraphVertex.hpp>
 

@@ -1,5 +1,11 @@
+/**
+ * @file GraphMemory.hpp
+ * @brief Аллокатор MultiLinearAllocator и утилиты управления памятью графа.
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Theossr <feolab05@gmail.com>
+ */
 #pragma once
-
 #include <cassert>
 #include <memory_resource>
 #include <set>
@@ -15,9 +21,10 @@ typedef unsigned char bytea;
 
 /// @author Fuuulkrum7
 /// @brief This is a custom allocator, which allocates firstly `buf_size`
-/// bytes, and than, if requires, allocates additionally `chunk_size` bytes.
+/// bytes, and then, if required, allocates additionally `chunk_size` bytes.
 /// Pointers on all allocated blocks are stored in a vector, so, if it is
 /// possible, calculate buf_size correctly to reduce time for deallocation
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 struct MultiLinearAllocator {
   // clang-format off
 
@@ -27,6 +34,7 @@ struct MultiLinearAllocator {
   /// @param chunk_size size for further allocations (usually is less
   /// than `buf_size` value)
   MultiLinearAllocator(size_t buf_size, size_t chunk_size)
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       : buf_size(buf_size)
       , chunk_size(chunk_size) {
     assert(buf_size >= 154);
@@ -37,8 +45,10 @@ struct MultiLinearAllocator {
 
   // clang-format on
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   MultiLinearAllocator &operator=(MultiLinearAllocator &&other) = delete;
   MultiLinearAllocator(MultiLinearAllocator &&other) = delete;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   MultiLinearAllocator &operator=(const MultiLinearAllocator &other) = delete;
   MultiLinearAllocator(const MultiLinearAllocator &other) = delete;
 
@@ -71,12 +81,14 @@ struct MultiLinearAllocator {
     return reinterpret_cast<T *>(current);
   }
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void deallocate() {}
 
 private:
   /// @brief simple aligner for memory address
   /// @tparam T type, align of which we should get
   template<typename T>
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void align() {
     size_t suboffset = (uintptr_t)offset & (alignof(T) - 1);
     if (suboffset) {
@@ -85,7 +97,7 @@ private:
   }
 
 private:
-  /// @brief all pinters on memory blocks, which have been allocated
+  /// @brief all pointers on memory blocks, which have been allocated
   std::vector<bytea *> blocks;
   /// @brief pointer on position, from which allocation should be started (from
   /// `offset` to `offset + sizeof(T)`)
@@ -101,6 +113,7 @@ private:
 /// `MultiLinearAllocator` for allocating memory for graph vertices and
 /// monotonic_buffer_resource, which is used for memory allocation for set of
 /// strings, where all vertices names are stored.
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 class GraphMemory {
 public:
   // clang-format off
@@ -108,20 +121,23 @@ public:
   /// @param buf_size size, which would be used for memory buffer reserve.
   /// By default we allocate memory for 1024 base vertices. Size of one vertex
   /// is supposed to be 112 bytes by default.
-  /// @param chunk_size additional size, which would allocated, if buffer ends.
+  /// @param chunk_size additional size, which would be allocated, if buffer ends.
   /// By default we allocate memory for 128 base vertices. Size of one vertex
   /// is supposed to be 112 bytes by default.
   GraphMemory(
         size_t buf_size = DEFAULT_BUF,
         size_t chunk_size = CHUNK_SIZE)
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       : d_vertexMemory(buf_size, chunk_size)
       , d_strings {&d_stringMemory}
   {}
 
   // clang-format on
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphMemory &operator=(GraphMemory &&other) = delete;
   GraphMemory(GraphMemory &&other) = delete;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphMemory &operator=(const GraphMemory &other) = delete;
   GraphMemory(const GraphMemory &other) = delete;
 
@@ -129,6 +145,7 @@ public:
   /// added string
   /// @param s string to be stored
   /// @return string_view from string in the set
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view internalize(std::string_view s) {
     return *d_strings.emplace(s).first;
   }
@@ -137,6 +154,7 @@ public:
   /// added string
   /// @param s string to be stored
   /// @return string_view from string in the set
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view internalize(const std::string &s) {
     return *d_strings.emplace(s).first;
   }

@@ -1,3 +1,7 @@
+/**
+ * @file GraphVertexOutput.cpp
+ * @brief Реализация вершины-выхода графа.
+ */
 #include "CircuitGenGraph/GraphVertexBase.hpp"
 #include <CircuitGenGraph/GraphVertex.hpp>
 
