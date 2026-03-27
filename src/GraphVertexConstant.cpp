@@ -1,3 +1,7 @@
+/**
+ * @file GraphVertexConstant.cpp
+ * @brief Реализация вершины-константы графа.
+ */
 #include <cassert>
 #include <memory>
 
