@@ -33,24 +33,7 @@ example_testbench
 *.vcd
 *_sim
 
-# User-generated test files and circuits (not in repo)
-example_usage.cpp
-example_half_adder.cpp
-example_dff.cpp
-USAGE_GUIDE.md
-my_circuit
-half_adder
-dff_with_reset
-testSimple.dot
-testSimple.v
-testSubGraph.dot
-testSubGraph.v
-testSubGraph3.dot
-testSubGraphUnroll.dot
-testSubGraphUnroll2.dot
-testSubGraphUnroll3.dot
-
-# Output directory for generated files
+# Output directory for generated files (testbenches, graphs, etc.)
 output/
 
 # Documentation artifacts (generated)
@@ -58,7 +41,3 @@ refman.pdf
 
 # Downloaded sources
 doxygen-*.tar.gz
-
-# User test data
-submodules/
-submodulesDOT/
