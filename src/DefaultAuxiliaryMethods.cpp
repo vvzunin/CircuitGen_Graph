@@ -1,3 +1,7 @@
+/**
+ * @file DefaultAuxiliaryMethods.cpp
+ * @brief Вспомогательные методы для работы с графами (AuxMethodsGraph, operator*).
+ */
 #include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
 
 #ifdef LOGFLAG

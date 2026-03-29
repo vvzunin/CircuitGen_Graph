@@ -1,5 +1,15 @@
+/**
+ * @file GraphVertex.hpp
+ * @brief Объявления вершин графа: GraphVertexInput, GraphVertexOutput,
+ * GraphVertexGates, GraphVertexConstant, GraphVertexSubGraph,
+ * GraphVertexSequential.
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Theossr <feolab05@gmail.com>
+ * @author rainbowkittensss <viktorrrrry20@gmail.com>
+ * @author Чернявских Илья Игоревич <fuuulkrum7@gmail.com>
+ */
 #pragma once
-
 #include <string>
 #include <vector>
 
@@ -9,8 +19,7 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
-/// @file GraphVertex.hpp
-/// TODO: Maybe Description some virtual methods for Graph's classes,
+/// @todo Maybe Description some virtual methods for Graph's classes,
 /// such as GraphVertexGates
 
 /// class GraphVertexInput Represents a vertex in a directed graph that
@@ -50,10 +59,13 @@ public:
   /// The implementation is provided in derived classes
   /// @return the value of the vertex after its update
 
+  /** @author Theossr <feolab05@gmail.com> */
   void setValue(const char value);
 
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual char updateValue() override;
 
+  /** @author Theossr <feolab05@gmail.com> */
   virtual void removeValue() override;
 
   /// @brief updateLevel
@@ -63,14 +75,17 @@ public:
   /// If you are going to call this method for a second time, please, set
   /// all flags, used in updateLevel to their default state.
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual void updateLevel() override;
 
   /// @brief writes vertex to dot
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
 #ifdef LOGFLAG
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 
@@ -120,6 +135,7 @@ public:
   /// // Output of the result
   /// std::cout << "Hash for the first vertex: " << hashValue << std::endl;
   /// @endcode
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   size_t calculateHash() override;
 
   /// @brief toVerilog
@@ -141,17 +157,21 @@ public:
   /// // Display the generated Verilog code on the screen
   /// std::cout << "Generated Verilog code:\n" << verilogCode << std::endl;
   /// @endcode
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string toVerilog() const override;
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
 
   /// @brief getDefaultInstance
   /// Creates simple verilog const instance (as a wire)
 
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   std::string getVerilogInstance();
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
 #ifdef LOGFLAG
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 
@@ -179,8 +199,10 @@ public:
   /// @brief updateValue A virtual function for updating the vertex value.
   /// The implementation is provided in derived classes
   /// @return the value of the vertex after its update
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   char updateValue() override;
 
+  /** @author Theossr <feolab05@gmail.com> */
   void removeValue() override;
 
   /// @brief updateLevel
@@ -189,6 +211,7 @@ public:
   /// the vertex level to the maximum level of its input connections plus one.
   /// If you are going to call this method for a second time, please, set
   /// all flags, used in updateLevel to their default state.
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void updateLevel() override;
 
   /// @brief toVerilog
@@ -216,7 +239,9 @@ public:
   /// VertexPtr subgaphItself = getVerticesByLevel(1u).back();
   /// std::cout << subgaphItself << '\n';
   /// @endcode
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string toVerilog() const override;
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
 
   /// @brief This method is used as a substructure for
@@ -226,29 +251,36 @@ public:
   /// @param i_filename name of file to be created (default is same as graph
   /// name)
   /// @return bool, meaning was file writing successful or not
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool toVerilog(std::string i_path, std::string i_filename = "");
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool toDOT(std::string i_path, std::string i_filename = "");
 
   /// @brief This method is used as a substructure for
   /// OrientedGraph methods
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool toGraphML(std::ofstream &i_fileStream) const;
 
   /// @brief This method is used as a substructureS for
   /// OrientedGraph methods
   /// @param i_indent
   /// @return
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string toGraphML(uint16_t i_indent = 0, std::string i_prefix = "") const;
 
   /// @brief This method is used as a substructure for
   /// OrientedGraph methods. When running it for a second time, clear hash flags
   /// @return
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   size_t calculateHash() override;
 
   /// @brief sets new subgraph to the vertex
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void setSubGraph(GraphPtr i_subGraph);
   /// @return pointer to subgraph, being stored in vertex
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphPtr getSubGraph() const;
   /// @brief returns all vertices of outputs, which are
   /// influenced by given input to vertex
@@ -262,6 +294,7 @@ public:
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
 #ifdef LOGFLAG
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 
@@ -277,6 +310,7 @@ class GraphVertexOutput : public GraphVertexBase {
 public:
   GraphVertexOutput(GraphPtr i_baseGraph);
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphVertexOutput(std::string_view i_name, GraphPtr i_baseGraph);
 
   /// @brief updateValue updates the value of the current vertex of the graph
@@ -289,6 +323,7 @@ public:
   /// updating based on the values of its incoming connections and the type of
   /// logical element (or "gate").
 
+  /** @author Theossr <feolab05@gmail.com> */
   char updateValue() override;
 
   /// @brief updateLevel updates the level of the current vertex in the graph
@@ -297,13 +332,16 @@ public:
   /// vertices to which it is connected, and sets the level of the current
   /// vertex to one higher than the highest level
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void updateLevel() override;
 
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
 #ifdef LOGFLAG
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 
@@ -317,6 +355,7 @@ class GraphVertexGates : public GraphVertexBase {
 public:
   GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph);
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph);
 
   ~GraphVertexGates() override{};
@@ -325,12 +364,14 @@ public:
   /// Updates the value of the vertex
   /// @return The updated value of the vertex
   /// @code
-  /// TO DO:
+  /// @todo add example
   /// @endcode
   /// @throws std::invalid_argument if any of the input connections point
   /// to a nullptr
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual char updateValue() override;
 
+  /** @author Theossr <feolab05@gmail.com> */
   void removeValue() override;
 
   /// @brief calculateHash
@@ -338,6 +379,7 @@ public:
   /// set hash flags to default state
   /// @return The calculated hash value as a string
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   size_t calculateHash() override;
 
   /// @brief getVerilogString
@@ -345,6 +387,7 @@ public:
   /// @return A string in Verilog format representing the current vertex
   /// @throws std::invalid_argument if any input connection is invalid
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string getVerilogString() const;
 
   /// @brief getGate
@@ -356,6 +399,7 @@ public:
   /// std:: cout << "Gate type : " << gateType << std::endl;
   /// @endcode
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   Gates getGate() const override;
 
   /// @brief  addVertexToInConnections
@@ -368,6 +412,7 @@ public:
   /// @throws std::overflow_error in case of connecting more than one
   /// vertex in d_inConnections
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   uint32_t addVertexToInConnections(VertexPtr i_vert) override;
 
   /// @brief toVerilog
@@ -378,14 +423,18 @@ public:
   /// @return A Verilog format string for the current vertex
   /// @throws std::invalid_argument if any input connection is invalid
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string toVerilog() const override;
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool isSubgraphBuffer() const override;
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
 #ifdef LOGFLAG
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 
@@ -468,10 +517,11 @@ public:
   /// set hash flags to default state
   /// @throws None.
   /// @code
-  /// TO DO:
+  /// @todo add example
   /// @endcode
   /// @return The calculated hash value as a string
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   size_t calculateHash() override;
 
   /// @brief toVerilog
@@ -482,29 +532,43 @@ public:
   /// @return A Verilog format string for the current vertex
   /// @throws std::invalid_argument if any input connection is invalid
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string toVerilog() const override;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   DotReturn toDOT() override;
 
   /// @brief updateValue A virtual function for updating the vertex value.
   /// The implementation is provided in derived classes
   /// @return the value of the vertex after its update
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   char updateValue() override { return ValueStates::FalseValue; };
 
   /// @brief return true if sequential cell is
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool isFF() const;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool isAsync() const;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool isNegedge() const;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   SequentialTypes getSeqType() const;
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr getClk() const;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr getData() const;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr getEn() const;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr getRst() const;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr getSet() const;
 
 private:
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void setSignalByType(VertexPtr i_wire, SequentialTypes i_type,
                        unsigned &factType);
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void formatAlwaysBegin(std::string &verilog) const;
 
 private:

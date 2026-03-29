@@ -1,3 +1,7 @@
+/**
+ * @file GraphVertexInput.cpp
+ * @brief Реализация вершины-входа графа.
+ */
 #include <CircuitGenGraph/GraphVertex.hpp>
 
 #ifdef LOGFLAG

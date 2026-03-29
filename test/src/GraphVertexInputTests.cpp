@@ -89,7 +89,7 @@ TEST(TestUpdateValue, InputReturnDValueIfDInConnectionsSizeZero) {
   EXPECT_EQ(input.updateValue(), c);
 }
 
-// TODO: Update with easylogging
+// @todo Update with easylogging
 // TEST(TestUpdateValue, CerrErrorIfThereIsBaseGraph) {
 //   GraphPtr         graphPtr1 = std::make_shared<OrientedGraph>();
 //   GraphVertexInput input1(graphPtr1);

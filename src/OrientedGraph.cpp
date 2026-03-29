@@ -1,4 +1,8 @@
-﻿#include <algorithm>
+/**
+ * @file OrientedGraph.cpp
+ * @brief Реализация ориентированного графа схемы.
+ */
+#include <algorithm>
 #include <cassert>
 #include <fstream>
 #include <iomanip>

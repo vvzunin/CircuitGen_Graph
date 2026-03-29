@@ -11,14 +11,14 @@ variables:
   DOCKERFILE_DEV_NAME: Dockerfile.dev
   DOCKER_CI_SYSTEM: ubuntu:22.04
   DOCKER_CI_TAG: latest
-  REGISTRY_URL: registry-hub.mos.ru
+  REGISTRY_URL: vvzunin.me:5201
   GROUP_NAME: circuitgen
-  REPO_NAME: circuitgen_graph
+  REPO_NAME: graph
   DOCKER_URL: $REGISTRY_URL/$GROUP_NAME/$REPO_NAME
 
 lint:
   stage: check
-  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
+  image: vvzunin.me:5201/circuitgen/graph/ci:$DOCKER_CI_TAG
   before_script:
     - python3 --version
     - git submodule sync --recursive
@@ -33,7 +33,7 @@ lint:
 
 sanitize:
   stage: check
-  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
+  image: vvzunin.me:5201/circuitgen/graph/ci:$DOCKER_CI_TAG
   variables: 
     CXX: 'clang++-17'
     ASAN_OPTIONS: 'strict_string_checks=1:detect_stack_use_after_return=1:check_initialization_order=1:strict_init_order=1:detect_leaks=1:detect_odr_violation=1'
@@ -53,7 +53,7 @@ sanitize:
 
 coverage:
   stage: test
-  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
+  image: vvzunin.me:5201/circuitgen/graph/ci:$DOCKER_CI_TAG
   needs:
     - lint
     - sanitize
@@ -74,7 +74,7 @@ coverage:
 
 tests:
   stage: test
-  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
+  image: vvzunin.me:5201/circuitgen/graph/ci:$DOCKER_CI_TAG
   needs:
     - lint
     - sanitize
@@ -101,7 +101,7 @@ tests:
 
 docs:
   stage: docs
-  image: registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
+  image: vvzunin.me:5201/circuitgen/graph/ci:$DOCKER_CI_TAG
   needs:
     - coverage
     - tests
@@ -141,11 +141,11 @@ release-from-tag:
 docker-ci:
   stage: docker
   before_script:
-    - docker login "$REGISTRY_URL" -u vvzunin -p "$moshub_token_docker_ci"
+    - docker login "$REGISTRY_URL" -u "$NAS_Harbor_USER" -p "$NAS_Harbor_PASS"
   script:
-    - echo "Creating docker image with tag ci_$DOCKER_CI_TAG" && echo "Image will push to $DOCKER_URL"
-    - docker buildx build --pull --rm --provenance=false --no-cache --build-arg system=$DOCKER_CI_SYSTEM -f $DOCKERFILE_CI_NAME -t registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG .
-    - docker image push registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG
+    - echo "Creating docker image with tag $DOCKER_CI_TAG" && echo "Image will push to $DOCKER_URL"
+    - docker buildx build --pull --rm --provenance=false --no-cache --build-arg system=$DOCKER_CI_SYSTEM -f $DOCKERFILE_CI_NAME -t vvzunin.me:5201/circuitgen/graph/ci:$DOCKER_CI_TAG .
+    - docker image push vvzunin.me:5201/circuitgen/graph/ci:$DOCKER_CI_TAG
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
@@ -160,15 +160,18 @@ docker-ci:
 
 docker-dev:
   stage: docker
+  needs:
+    - docker-ci
   before_script:
-    - docker login "$REGISTRY_URL" -u vvzunin -p "$moshub_token_docker_ci"
+    - docker login "$REGISTRY_URL" -u "$NAS_Harbor_USER" -p "$NAS_Harbor_PASS"
   script:
-    - echo "Creating docker image with tag dev_$DOCKER_CI_TAG" && echo "Image will push to $DOCKER_URL"
-    - docker buildx build --pull --rm --provenance=false --no-cache --build-arg system=registry-hub.mos.ru/circuitgen/circuitgen_graph:ci_$DOCKER_CI_TAG -f $DOCKERFILE_DEV_NAME -t registry-hub.mos.ru/circuitgen/circuitgen_graph:dev_$DOCKER_CI_TAG .
-    - docker image push registry-hub.mos.ru/circuitgen/circuitgen_graph:dev_$DOCKER_CI_TAG
+    - echo "Creating docker image with tag $DOCKER_CI_TAG" && echo "Image will push to $DOCKER_URL"
+    - docker buildx build --pull --rm --provenance=false --no-cache --build-arg system=vvzunin.me:5201/circuitgen/graph/ci:$DOCKER_CI_TAG -f $DOCKERFILE_DEV_NAME -t vvzunin.me:5201/circuitgen/graph/dev:$DOCKER_CI_TAG .
+    - docker image push vvzunin.me:5201/circuitgen/graph/dev:$DOCKER_CI_TAG
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
+        - $DOCKERFILE_CI_NAME
         - $DOCKERFILE_DEV_NAME
         - .gitlab-ci.yml
         - .gitmodules
