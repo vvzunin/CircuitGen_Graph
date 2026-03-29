@@ -216,7 +216,8 @@ private:
   /// @brief Выполняет команду безопасно через fork+execvp (без shell)
   /// @param i_argv Массив аргументов команды (первый - имя программы)
   /// @return Пара (код возврата, вывод команды)
-  std::pair<int, std::string> executeCommandSafe(const std::vector<std::string> &i_argv);
+  std::pair<int, std::string>
+  executeCommandSafe(const std::vector<std::string> &i_argv);
 
   GraphPtr d_graph;         ///< Указатель на граф схемы
   TestbenchConfig d_config; ///< Конфигурация генератора
