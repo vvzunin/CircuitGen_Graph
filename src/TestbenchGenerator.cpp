@@ -12,6 +12,12 @@
 #include <regex>
 #include <sstream>
 
+#ifndef _WIN32
+#include <fcntl.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#endif
+
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
 #endif
@@ -468,6 +474,87 @@ VerificationResult TestbenchGenerator::runInternalSimulation() {
 }
 
 std::pair<int, std::string>
+TestbenchGenerator::executeCommandSafe(const std::vector<std::string> &i_argv) {
+  if (i_argv.empty()) {
+    return {-1, "Empty command"};
+  }
+
+#ifdef _WIN32
+  // На Windows используем старый метод через popen для совместимости
+  std::string command = i_argv[0];
+  for (size_t i = 1; i < i_argv.size(); ++i) {
+    command += " " + i_argv[i];
+  }
+  return executeCommand(command);
+#else
+  // Unix: используем fork + execvp для безопасного выполнения
+  int pipefd[2];
+  if (pipe(pipefd) == -1) {
+    return {-1, "Failed to create pipe"};
+  }
+
+  pid_t pid = fork();
+  if (pid == -1) {
+    close(pipefd[0]);
+    close(pipefd[1]);
+    return {-1, "Failed to fork process"};
+  }
+
+  if (pid == 0) {
+    // Дочерний процесс
+    close(pipefd[0]); // Закрываем читающий конец
+
+    // Перенаправляем stdout и stderr в pipe
+    dup2(pipefd[1], STDOUT_FILENO);
+    dup2(pipefd[1], STDERR_FILENO);
+    close(pipefd[1]);
+
+    // Подготавливаем argv для execvp
+    std::vector<char*> argv_c;
+    argv_c.reserve(i_argv.size() + 1);
+    for (const auto &arg : i_argv) {
+      argv_c.push_back(const_cast<char*>(arg.c_str()));
+    }
+    argv_c.push_back(nullptr);
+
+    // Выполняем команду
+    execvp(argv_c[0], argv_c.data());
+    
+    // Если execvp вернулся, произошла ошибка
+    std::cerr << "Failed to execute: " << i_argv[0] << std::endl;
+    _exit(127);
+  }
+
+  // Родительский процесс
+  close(pipefd[1]); // Закрываем пишущий конец
+
+  // Читаем вывод
+  std::string output;
+  std::array<char, 4096> buffer;
+  ssize_t bytesRead;
+  while ((bytesRead = read(pipefd[0], buffer.data(), buffer.size())) > 0) {
+    output.append(buffer.data(), bytesRead);
+  }
+  close(pipefd[0]);
+
+  // Ждём завершения дочернего процесса
+  int status;
+  waitpid(pid, &status, 0);
+
+  int exitCode = 0;
+  if (WIFEXITED(status)) {
+    exitCode = WEXITSTATUS(status);
+  } else if (WIFSIGNALED(status)) {
+    exitCode = 128 + WTERMSIG(status);
+  } else {
+    exitCode = -1;
+  }
+
+  return {exitCode, output};
+#endif
+}
+
+std::pair<int, std::string>
 TestbenchGenerator::executeCommand(const std::string &i_command) {
   std::array<char, 4096> buffer;
   std::string output;
@@ -560,26 +647,32 @@ TestbenchGenerator::runIcarusVerification(const std::string &i_workDir,
   std::string outPath = i_workDir + "/" + d_graph->getName() + "_sim";
   std::string submodulesPath = i_workDir + "/submodules";
 
-  // Собираем список всех подмодулей
-  std::string submoduleFiles;
+  // Собираем список всех подмодулей в вектор
+  std::vector<std::string> compileArgs;
+  compileArgs.push_back(i_icarusPath);
+  compileArgs.push_back("-o");
+  compileArgs.push_back(outPath);
+  compileArgs.push_back(modulePath);
+  compileArgs.push_back(tbPath);
+  
   if (std::filesystem::exists(submodulesPath)) {
     for (const auto &entry :
          std::filesystem::directory_iterator(submodulesPath)) {
       if (entry.path().extension() == ".v") {
-        submoduleFiles += " " + entry.path().string();
+        compileArgs.push_back(entry.path().string());
       }
     }
   }
 
-  // Компилируем с Icarus Verilog (подавляем информационный вывод)
-  std::string compileCmd = i_icarusPath + " -o " + outPath + " " + modulePath +
-                           " " + tbPath + submoduleFiles + " 2>&1";
-
 #ifdef LOGFLAG
-  LOG(INFO) << "TestbenchGenerator: compiling with command: " << compileCmd;
+  std::ostringstream cmdLog;
+  for (const auto &arg : compileArgs) {
+    cmdLog << arg << " ";
+  }
+  LOG(INFO) << "TestbenchGenerator: compiling with command: " << cmdLog.str();
 #endif
 
-  auto [compileExitCode, compileOutput] = executeCommand(compileCmd);
+  auto [compileExitCode, compileOutput] = executeCommandSafe(compileArgs);
 
   // Фильтруем вывод - убираем copyright/version информацию
   std::string filteredOutput;
@@ -624,13 +717,13 @@ TestbenchGenerator::runIcarusVerification(const std::string &i_workDir,
   }
 
   // Запускаем симуляцию
-  std::string simCmd = i_vvpPath + " " + outPath;
+  std::vector<std::string> simArgs = {i_vvpPath, outPath};
 
 #ifdef LOGFLAG
-  LOG(INFO) << "TestbenchGenerator: running simulation: " << simCmd;
+  LOG(INFO) << "TestbenchGenerator: running simulation: " << i_vvpPath << " " << outPath;
 #endif
 
-  auto [simExitCode, simOutput] = executeCommand(simCmd);
+  auto [simExitCode, simOutput] = executeCommandSafe(simArgs);
 
   result.simulatorExitCode = simExitCode;
   result.simulatorOutput = simOutput;
@@ -658,10 +751,10 @@ TestbenchGenerator::runIcarusVerification(const std::string &i_workDir,
   }
 
   if (std::regex_search(simOutput, match, statusRegex)) {
-    result.success = (match[1].str() == "ALL TESTS PASSED");
+    result.success = (match[1].str() == "ALL TESTS PASSED") && (simExitCode == 0);
   } else {
-    // Если статус не найден, определяем по количеству ошибок
-    result.success = (result.failedTests == 0);
+    // Если статус не найден, определяем по количеству ошибок и коду возврата
+    result.success = (result.failedTests == 0) && (simExitCode == 0);
   }
 
 #ifdef LOGFLAG
@@ -691,13 +784,43 @@ TestbenchGenerator::compareSimulations(const std::string &i_workDir) {
   result.passedTests = 0;
   result.failedTests = 0;
 
-  if (internalResult.passedTests == icarusResult.passedTests) {
+  bool matchSuccess = (internalResult.success == icarusResult.success);
+  bool matchPassedTests = (internalResult.passedTests == icarusResult.passedTests);
+  bool matchFailedTests = (internalResult.failedTests == icarusResult.failedTests);
+  bool matchTotalTests = (internalResult.totalTests == icarusResult.totalTests);
+
+  // Сравниваем векторы результатов поэлементно
+  bool matchVectors = true;
+  if (internalResult.vectors.size() == icarusResult.vectors.size()) {
+    for (size_t i = 0; i < internalResult.vectors.size(); ++i) {
+      const auto &internalVec = internalResult.vectors[i];
+      const auto &icarusVec = icarusResult.vectors[i];
+      if (internalVec.passed != icarusVec.passed ||
+          internalVec.inputs != icarusVec.inputs ||
+          internalVec.expected != icarusVec.expected ||
+          internalVec.actual != icarusVec.actual) {
+        matchVectors = false;
+        break;
+      }
+    }
+  } else {
+    matchVectors = false;
+  }
+
+  if (matchSuccess && matchPassedTests && matchFailedTests && matchTotalTests && matchVectors) {
     result.success = true;
     result.passedTests = internalResult.passedTests;
     result.failedTests = internalResult.failedTests;
   } else {
     result.success = false;
-    result.errorMessage = "Internal and Icarus simulation results differ";
+    std::ostringstream errMsg;
+    errMsg << "Internal and Icarus simulation results differ:";
+    if (!matchSuccess) errMsg << " success(" << internalResult.success << " vs " << icarusResult.success << ")";
+    if (!matchPassedTests) errMsg << " passedTests(" << internalResult.passedTests << " vs " << icarusResult.passedTests << ")";
+    if (!matchFailedTests) errMsg << " failedTests(" << internalResult.failedTests << " vs " << icarusResult.failedTests << ")";
+    if (!matchTotalTests) errMsg << " totalTests(" << internalResult.totalTests << " vs " << icarusResult.totalTests << ")";
+    if (!matchVectors) errMsg << " vectors differ";
+    result.errorMessage = errMsg.str();
   }
 
   result.simulatorOutput = icarusResult.simulatorOutput;

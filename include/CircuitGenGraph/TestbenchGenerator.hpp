@@ -213,6 +213,11 @@ private:
   /// @brief Выполняет команду и возвращает результат
   std::pair<int, std::string> executeCommand(const std::string &i_command);
 
+  /// @brief Выполняет команду безопасно через fork+execvp (без shell)
+  /// @param i_argv Массив аргументов команды (первый - имя программы)
+  /// @return Пара (код возврата, вывод команды)
+  std::pair<int, std::string> executeCommandSafe(const std::vector<std::string> &i_argv);
+
   GraphPtr d_graph;         ///< Указатель на граф схемы
   TestbenchConfig d_config; ///< Конфигурация генератора
   std::vector<TestVector> d_testVectors;  ///< Тестовые векторы

@@ -111,13 +111,15 @@ target_link_libraries(
 
 ### Сборка и запуск примера тестбенча
 
-После сборки библиотеки можно скомпилировать и запустить пример генерации тестбенчей:
+После сборки библиотеки можно скомпилировать и запустить пример генерации тестбенчей с помощью CMake:
 
 ```sh
-g++ -std=c++17 -I./include -L./build example_testbench.cpp \
-    -o example_testbench -lCircuitGenGraph
+# Включить опцию сборки примеров
+cmake -S . -B build -DBUILD_EXAMPLES=ON
+cmake --build build
 
-LD_LIBRARY_PATH=./build:$LD_LIBRARY_PATH ./example_testbench
+# Запустить пример
+./build/examples/example_testbench
 ```
 
 Для полной верификации с помощью Icarus Verilog требуется его установка:
@@ -138,7 +140,14 @@ sudo dnf install iverilog
 ctest --test-dir build --output-on-failure
 ```
 
-Некоторые тесты, требующие установленного Icarus Verilog, отключены по умолчанию (префикс `DISABLED_`). Чтобы запустить их:
+Некоторые тесты, требующие установленного Icarus Verilog, отключены по умолчанию (префикс `DISABLED_`). Для включения и запуска этих тестов используйте существующий скрипт:
+
+```sh
+# Запустить скрипт, который включает и выполняет все тесты (включая Icarus)
+./TEST_BEFORE_PUSH.sh
+```
+
+Также можно запустить отключенные тесты вручную:
 
 ```sh
 # Запуск ТОЛЬКО отключенных тестов
