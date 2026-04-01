@@ -1,5 +1,11 @@
+/**
+ * @file GraphMemory.hpp
+ * @brief Аллокатор MultiLinearAllocator и утилиты управления памятью графа.
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Theossr <feolab05@gmail.com>
+ */
 #pragma once
-
 #include <cassert>
 #include <memory_resource>
 #include <set>
@@ -13,42 +19,42 @@ constexpr int CHUNK_SIZE = 13312;
 
 typedef unsigned char bytea;
 
-/*!
- * \author Fuuulkrum7
- * \brief
+/**
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
  *
  * \~english
- * This is a custom allocator, which allocates firstly `buf_size`
- * bytes, and than, if requires, allocates additionally `chunk_size` bytes.
+ * @brief This is a custom allocator, which allocates firstly `buf_size`
+ * bytes, and then, if required, allocates additionally `chunk_size` bytes.
  * Pointers on all allocated blocks are stored in a vector, so, if it is
- * possible, calculate buf_size correctly to reduce time for deallocation
+ * possible, calculate buf_size correctly to reduce time for deallocation.
  *
  * \~russian
- * Это пользовательский аллокатор, который сначала выделяет `buf_size`
- * байт, а затем, при необходимости, дополнительно выделяет `chunk_size`
- * байт. Указатели на все выделенные блоки хранятся в векторе, поэтому,
- * по возможности, правильно рассчитывайте buf_size, чтобы сократить время
- * на освобождение памяти
+ * @brief Это пользовательский аллокатор, который сначала выделяет
+ * `buf_size` байт, а затем, при необходимости, дополнительно выделяет
+ * `chunk_size` байт. Указатели на все выделенные блоки хранятся в
+ * векторе, поэтому, по возможности, правильно рассчитывайте buf_size,
+ * чтобы сократить время на освобождение памяти.
  */
 struct MultiLinearAllocator {
   // clang-format off
 
   /*!
    * \~english
-   * \brief buf_size should be more than 154 bytes, as the biggest vertex
+   * @brief buf_size should be more than 154 bytes, as the biggest vertex
    * has such size
-   * \param buf_size size for the first allocation
-   * \param chunk_size size for further allocations (usually is less than
+   * @param buf_size size for the first allocation
+   * @param chunk_size size for further allocations (usually is less than
    * `buf_size` value)
    *
    * \~russian
-   * \brief buf_size должен быть больше 154 байт, так как самая большая
+   * @brief buf_size должен быть больше 154 байт, так как самая большая
    * вершина имеет такой размер
-   * \param buf_size размер для первого выделения памяти
-   * \param chunk_size размер для последующих выделений памяти (обычно
+   * @param buf_size размер для первого выделения памяти
+   * @param chunk_size размер для последующих выделений памяти (обычно
    * меньше значения `buf_size`)
    */
   MultiLinearAllocator(size_t buf_size, size_t chunk_size)
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       : buf_size(buf_size)
       , chunk_size(chunk_size) {
     assert(buf_size >= 154);
@@ -59,8 +65,10 @@ struct MultiLinearAllocator {
 
   // clang-format on
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   MultiLinearAllocator &operator=(MultiLinearAllocator &&other) = delete;
   MultiLinearAllocator(MultiLinearAllocator &&other) = delete;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   MultiLinearAllocator &operator=(const MultiLinearAllocator &other) = delete;
   MultiLinearAllocator(const MultiLinearAllocator &other) = delete;
 
@@ -106,6 +114,7 @@ struct MultiLinearAllocator {
     return reinterpret_cast<T *>(current);
   }
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void deallocate() {}
 
 private:
@@ -119,6 +128,7 @@ private:
    * \tparam T тип, выравнивание которого мы должны получить
    */
   template<typename T>
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void align() {
     size_t suboffset = (uintptr_t)offset & (alignof(T) - 1);
     if (suboffset) {
@@ -127,12 +137,12 @@ private:
   }
 
 private:
-  /*!
+  /**
    * \~english
-   * \brief all pinters on memory blocks, which have been allocated
+   * @brief all pointers on memory blocks, which have been allocated
    *
    * \~russian
-   * \brief все указатели на блоки памяти, которые были выделены
+   * @brief все указатели на блоки памяти, которые были выделены
    */
   std::vector<bytea *> blocks;
 
@@ -166,21 +176,20 @@ private:
   size_t chunk_size;
 };
 
-/*!
- * \author Fuuulkrum7
- * \brief
+/**
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
  *
  * \~english
- * This class is used for memory management. It has a
+ * @brief This class is used for memory management. It has a
  * `MultiLinearAllocator` for allocating memory for graph vertices and
  * monotonic_buffer_resource, which is used for memory allocation for set
  * of strings, where all vertices names are stored.
  *
  * \~russian
- * Этот класс используется для управления памятью. Он содержит
+ * @brief Этот класс используется для управления памятью. Он содержит
  * `MultiLinearAllocator` для выделения памяти под вершины графа и
- * monotonic_buffer_resource, который используется для выделения памяти под
- * множество строк, где хранятся все имена вершин.
+ * monotonic_buffer_resource, который используется для выделения памяти
+ * под множество строк, где хранятся все имена вершин.
  */
 class GraphMemory {
 public:
@@ -188,19 +197,19 @@ public:
 
   /*!
    * \~english
-   * \param buf_size size, which would be used for memory buffer reserve.
+   * @param buf_size size, which would be used for memory buffer reserve.
    * By default we allocate memory for 1024 base vertices. Size of one
    * vertex is supposed to be 112 bytes by default.
-   * \param chunk_size additional size, which would allocated, if buffer
+   * @param chunk_size additional size, which would be allocated, if buffer
    * ends. By default we allocate memory for 128 base vertices. Size of one
    * vertex is supposed to be 112 bytes by default.
    *
    * \~russian
-   * \param buf_size размер, который будет использоваться для резерва
+   * @param buf_size размер, который будет использоваться для резерва
    * буфера памяти. По умолчанию выделяется память для 1024 базовых вершин.
    * Предполагается, что размер одной вершины по умолчанию составляет
    * 112 байт.
-   * \param chunk_size дополнительный размер, который будет выделен, если
+   * @param chunk_size дополнительный размер, который будет выделен, если
    * буфер закончится. По умолчанию выделяется память для 128 базовых
    * вершин. Предполагается, что размер одной вершины по умолчанию
    * составляет 112 байт.
@@ -208,47 +217,52 @@ public:
   GraphMemory(
         size_t buf_size = DEFAULT_BUF,
         size_t chunk_size = CHUNK_SIZE)
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
       : d_vertexMemory(buf_size, chunk_size)
       , d_strings {&d_stringMemory}
   {}
 
   // clang-format on
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphMemory &operator=(GraphMemory &&other) = delete;
   GraphMemory(GraphMemory &&other) = delete;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphMemory &operator=(const GraphMemory &other) = delete;
   GraphMemory(const GraphMemory &other) = delete;
 
-  /*!
+  /**
    * \~english
-   * \brief puts string_view to strings set and returns a string_view on
+   * @brief puts string_view to strings set and returns a string_view on
    * the added string
-   * \param s string to be stored
-   * \return string_view from string in the set
+   * @param s string to be stored
+   * @return string_view from string in the set
    *
    * \~russian
-   * \brief помещает string_view в множество строк и возвращает
+   * @brief помещает string_view в множество строк и возвращает
    * string_view на добавленную строку
-   * \param s сохраняемая строка
-   * \return string_view из строки в множестве
+   * @param s сохраняемая строка
+   * @return string_view из строки в множестве
    */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view internalize(std::string_view s) {
     return *d_strings.emplace(s).first;
   }
 
-  /*!
+  /**
    * \~english
-   * \brief puts string_view to strings set and returns a string_view on
+   * @brief puts string_view to strings set and returns a string_view on
    * the added string
-   * \param s string to be stored
-   * \return string_view from string in the set
+   * @param s string to be stored
+   * @return string_view from string in the set
    *
    * \~russian
-   * \brief помещает string_view в множество строк и возвращает
+   * @brief помещает string_view в множество строк и возвращает
    * string_view на добавленную строку
-   * \param s сохраняемая строка
-   * \return string_view из строки в множестве
+   * @param s сохраняемая строка
+   * @return string_view из строки в множестве
    */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view internalize(const std::string &s) {
     return *d_strings.emplace(s).first;
   }

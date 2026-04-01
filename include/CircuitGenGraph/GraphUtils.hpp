@@ -1,5 +1,13 @@
+/**
+ * @file GraphUtils.hpp
+ * @brief Утилиты графа: VertexTypes, DotTypes, логические операции, парсинг
+ * имён.
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Theossr <feolab05@gmail.com>
+ * @author Чернявских Илья Игоревич <fuuulkrum7@gmail.com>
+ */
 #pragma once
-
 #include <algorithm>
 #include <array>
 #include <cstdint>
@@ -8,11 +16,11 @@
 #include <utility>
 #include <vector>
 
-/*!
- * \file GraphUtils.hpp
+/**
+ * @file GraphUtils.hpp
  *
  * \~english
- * \brief Utility functions, enumerations and templates for graph operations
+ * @brief Utility functions, enumerations and templates for graph operations
  * \ingroup GraphCore
  *
  * This header contains:
@@ -22,7 +30,7 @@
  * - Logic operation mappings
  *
  * \~russian
- * \brief Вспомогательные функции, перечисления и шаблоны для операций
+ * @brief Вспомогательные функции, перечисления и шаблоны для операций
  * с графами
  * \ingroup GraphCore
  *
@@ -33,7 +41,6 @@
  * - Шаблонные функции для поиска пар
  * - Сопоставления логических операций
  */
-
 namespace CG_Graph {
 
 #ifndef DotReturn
@@ -41,27 +48,29 @@ namespace CG_Graph {
  * \def DotReturn
  *
  * \~english
- * \brief Type alias for DOT format return structure
- * \details Vector of pairs where each pair contains a DotType and
+ * @brief Type alias for DOT format return structure
+ * @details Vector of pairs where each pair contains a DotType and
  * associated properties
  *
  * \~russian
- * \brief Псевдоним типа для структуры возврата формата DOT
- * \details Вектор пар, где каждая пара содержит DotType и связанные с ним
+ * @brief Псевдоним типа для структуры возврата формата DOT
+ * @details Вектор пар, где каждая пара содержит DotType и связанные с ним
  * свойства
  */
 #define DotReturn \
   std::vector<std::pair<DotTypes, std::map<std::string, std::string>>>
 #endif
 
-/*!
+/**
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ *
  * \~english
- * \brief Enumeration of all possible vertex types in a graph
- * \enum VertexTypes
+ * @brief Enumeration of all possible vertex types in a graph
+ * @enum VertexTypes
  *
  * \~russian
- * \brief Перечисление всех возможных типов вершин в графе
- * \enum VertexTypes
+ * @brief Перечисление всех возможных типов вершин в графе
+ * @enum VertexTypes
  */
 enum VertexTypes : uint8_t {
   /*!
@@ -111,33 +120,36 @@ enum VertexTypes : uint8_t {
  * \def CGG_FF_TYPE
  *
  * \~english
- * \brief Macro for defining flip-flop type pairs (normal and negedge
+ * @brief Macro for defining flip-flop type pairs (normal and negedge
  * versions)
- * \param S Suffix for the flip-flop type name
- * \param V Base value combining control signals
- * \details Generates both standard and negedge-clocked versions of a
+ * @param S Suffix for the flip-flop type name
+ * @param V Base value combining control signals
+ * @details Generates both standard and negedge-clocked versions of a
  * flip-flop type
- * \note CGG stands for CircuitGenGraph
+ * @note CGG stands for CircuitGenGraph
  *
  * \~russian
- * \brief Макрос для определения пар типов триггеров (обычная версия и
+ * @brief Макрос для определения пар типов триггеров (обычная версия и
  * версия по спаду)
- * \param S Суффикс для имени типа триггера
- * \param V Базовое значение, объединяющее управляющие сигналы
- * \details Генерирует как стандартную версию типа триггера, так и версию
+ * @param S Суффикс для имени типа триггера
+ * @param V Базовое значение, объединяющее управляющие сигналы
+ * @details Генерирует как стандартную версию типа триггера, так и версию
  * с синхронизацией по спаду (negedge)
- * \note CGG означает CircuitGenGraph
+ * @note CGG означает CircuitGenGraph
  */
 #define CGG_FF_TYPE(S, V) S = V, n##S = NEGEDGE | V
 
-/*!
+/**
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Theossr <feolab05@gmail.com>
+ *
  * \~english
- * \brief Types of all sequential cells being supported
- * \enum SequentialTypes
+ * @brief Types of all sequential cells being supported
+ * @enum SequentialTypes
  *
  * \~russian
- * \brief Типы всех поддерживаемых последовательностных ячеек
- * \enum SequentialTypes
+ * @brief Типы всех поддерживаемых последовательностных ячеек
+ * @enum SequentialTypes
  */
 enum SequentialTypes : uint8_t {
   /*!
@@ -238,16 +250,18 @@ enum SequentialTypes : uint8_t {
   CGG_FF_TYPE(ffcse, ff | EN | CLR | SET)
 };
 
-/*!
+/**
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ *
  * \~english
- * \brief Enumeration of logic gate types
- * \enum Gates
- * \details Defines the various types of logic elements that can be used in
+ * @brief Enumeration of logic gate types
+ * @enum Gates
+ * @details Defines the various types of logic elements that can be used in
  * digital circuits.
  *
  * \~russian
- * \brief Перечисление типов логических вентилей
- * \details Определяет различные типы логических элементов, которые могут
+ * @brief Перечисление типов логических вентилей
+ * @details Определяет различные типы логических элементов, которые могут
  * использоваться в цифровых схемах.
  */
 enum Gates : uint8_t {
@@ -306,13 +320,15 @@ enum Gates : uint8_t {
   GateDefault
 };
 
-/*!
+/**
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ *
  * \~english
- * \brief Enumeration for DOT graph generation components
- * \enum DotTypes
+ * @brief Enumeration for DOT graph generation components
+ * @enum DotTypes
  *
  * \~russian
- * \brief Перечисление компонентов для генерации графа в формате DOT
+ * @brief Перечисление компонентов для генерации графа в формате DOT
  */
 enum DotTypes : uint8_t {
   /*!
@@ -364,13 +380,16 @@ enum DotTypes : uint8_t {
   DotExit = 7
 };
 
-/*!
+/**
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Theossr <feolab05@gmail.com>
+ *
  * \~english
- * \brief Enumeration of possible signal values in circuit simulation
- * \enum ValueStates
+ * @brief Enumeration of possible signal values in circuit simulation
+ * @enum ValueStates
  *
  * \~russian
- * \brief Перечисление возможных значений сигнала при симуляции схемы
+ * @brief Перечисление возможных значений сигнала при симуляции схемы
  */
 enum ValueStates : char {
   /*!
@@ -407,7 +426,7 @@ enum ValueStates : char {
 /*!
  * \namespace GraphUtils
  * \~english
- * \brief Utility functions and data for graph operations
+ * @brief Utility functions and data for graph operations
  *
  * Contains static data and helper functions for:
  * - Converting between string and enum representations
@@ -415,7 +434,7 @@ enum ValueStates : char {
  * - Graph hierarchy utilities
  *
  * \~russian
- * \brief Вспомогательные функции и данные для операций с графами
+ * @brief Вспомогательные функции и данные для операций с графами
  *
  * Содержит статические данные и вспомогательные функции для:
  * - Преобразования между строковым и перечислимым представлениями
@@ -424,50 +443,59 @@ enum ValueStates : char {
  */
 namespace GraphUtils {
 
-/*!
+/**
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ *
  * \~english
- * \brief Gets information about a logical operation by its name
- * \param i_op A string containing the name of the logical operation
- * \return std::pair<std::string_view, int32_t> A pair containing the name
+ * @brief Gets information about a logical operation by its name
+ * @param i_op A string containing the name of the logical operation
+ * @return std::pair<std::string_view, int32_t> A pair containing the name
  * and ID of the logical operation
- * \code
+ * @code
  * std::pair<std::string_view, int32_t> operationInfo =
  * GraphUtils::getLogicOperation("and");
  * // Output information about the logical operation
  * std::cout << "Operation name: " << operationInfo.first << std::endl;
  * std::cout << "Operation ID: " << operationInfo.second << std::endl;
- * \endcode
- * \throws std::runtime_error if operation name is not found
+ * @endcode
+ * @throws std::runtime_error if operation name is not found
  *
  * \~russian
- * \brief Получает информацию о логической операции по ее имени
- * \param i_op Строка, содержащая имя логической операции
- * \return std::pair<std::string_view, int32_t> Пара, содержащая имя и ID
+ * @brief Получает информацию о логической операции по ее имени
+ * @param i_op Строка, содержащая имя логической операции
+ * @return std::pair<std::string_view, int32_t> Пара, содержащая имя и ID
  * логической операции
- * \throws std::runtime_error, если имя операции не найдено
+ * @throws std::runtime_error, если имя операции не найдено
  */
 std::pair<std::string_view, int32_t> getLogicOperation(const std::string &i_op);
 
-/*!
+/**
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ *
  * \~english
- * \brief Returns the keys of logical operations
- * \return std::vector<Gates> A vector containing the keys of logical
+ * @brief Returns the keys of logical operations
+ * @return std::vector<Gates> A vector containing the keys of logical
  * operations
  *
  * \~russian
- * \brief Возвращает ключи логических операций
- * \return std::vector<Gates> Вектор, содержащий ключи логических операций
+ * @brief Возвращает ключи логических операций
+ * @return std::vector<Gates> Вектор, содержащий ключи логических операций
  */
 std::vector<Gates> getLogicOperationsKeys();
 
-/*!
+/**
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ *
  * \~english
- * \brief Returns logical operations along with information about single
+ * @brief Returns logical operations along with information about single
  * input gates
- * \return std::pair<std::vector<bool>, std::vector<Gates>> A pair of
+ * @return std::pair<std::vector<bool>, std::vector<Gates>> A pair of
  * vectors: information about single-input gates and the keys of logical
  * operations
- * \code
+ * @code
  * auto logicOperationsInfo = GraphUtils::getLogicOperationsWithGates();
  * for (size_t i = 0; i < logicOperationsInfo.second.size(); ++i) {
  * std::string operationName =
@@ -481,138 +509,156 @@ std::vector<Gates> getLogicOperationsKeys();
  * }
  * std::cout << std::endl;
  * }
- * \endcode
+ * @endcode
  *
  * \~russian
- * \brief Возвращает логические операции вместе с информацией о вентилях с
+ * @brief Возвращает логические операции вместе с информацией о вентилях с
  * одним входом
- * \return std::pair<std::vector<bool>, std::vector<Gates>> Пара векторов:
+ * @return std::pair<std::vector<bool>, std::vector<Gates>> Пара векторов:
  * информация о вентилях с одним входом и ключи логических операций
  */
 std::pair<std::vector<bool>, std::vector<Gates>> getLogicOperationsWithGates();
 
-/*!
+/**
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ *
  * \~english
- * \brief Converts operation string to its formal name
- * \param i_op a string representing the operation
- * \return std::string Operation name
- * \code
+ * @brief Converts operation string to its formal name
+ * @param i_op a string representing the operation
+ * @return std::string Operation name
+ * @code
  * // Convert the operation to its name
  * std::string operationName = GraphUtils::fromOperationsToName("and");
  * std::cout << "Operation name: " << operationName << std::endl;
- * \endcode
+ * @endcode
  *
  * \~russian
- * \brief Преобразует строку операции в ее формальное имя
- * \param i_op строка, представляющая операцию
- * \return std::string Имя операции
+ * @brief Преобразует строку операции в ее формальное имя
+ * @param i_op строка, представляющая операцию
+ * @return std::string Имя операции
  */
 std::string fromOperationsToName(std::string_view i_op);
 
-/*!
+/**
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ *
  * \~english
- * \brief Converts hierarchy key to its corresponding operation value
- * \param key Required hierarchy key
- * \return std::string_view The value representing the operation
- * \throws std::out_of_range if the provided key does not exist
- * \code
+ * @brief Converts hierarchy key to its corresponding operation value
+ * @param key Required hierarchy key
+ * @return std::string_view The value representing the operation
+ * @throws std::out_of_range if the provided key does not exist
+ * @code
  * // Get the hierarchy associated with the operation key 5
  * std::string_view element = GraphUtils::fromHierarchyToOperation(5);
  * // Output the element
  * std::cout << element << " ";
- * \endcode
+ * @endcode
  *
  * \~russian
- * \brief Преобразует ключ иерархии в соответствующее значение операции
- * \param key Требуемый ключ иерархии
- * \return std::string_view Значение, представляющее операцию
- * \throws std::out_of_range, если предоставленный ключ не существует
+ * @brief Преобразует ключ иерархии в соответствующее значение операции
+ * @param key Требуемый ключ иерархии
+ * @return std::string_view Значение, представляющее операцию
+ * @throws std::out_of_range, если предоставленный ключ не существует
  */
 std::string_view fromHierarchyToOperation(int32_t key);
 
-/*!
+/**
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ *
  * \~english
- * \brief Converts a string representation of a gate to its corresponding
+ * @brief Converts a string representation of a gate to its corresponding
  * enum value
- * \param i_gate The string representation of the gate
- * \return Gates The enum value corresponding to the provided string
+ * @param i_gate The string representation of the gate
+ * @return Gates The enum value corresponding to the provided string
  * representation
- * \code
+ * @code
  * // Convert the string representation "and" to its corresponding enum
  * Gates gate = GraphUtils::parseStringToGate("and");
  * std::cout << "Enum value of 'and': " << gate << std::endl;
- * \endcode
+ * @endcode
  *
  * \~russian
- * \brief Преобразует строковое представление вентиля в соответствующее
+ * @brief Преобразует строковое представление вентиля в соответствующее
  * значение перечисления
- * \param i_gate Строковое представление вентиля
- * \return Gates Значение перечисления, соответствующее предоставленному
+ * @param i_gate Строковое представление вентиля
+ * @return Gates Значение перечисления, соответствующее предоставленному
  * строковому представлению
  */
 Gates parseStringToGate(std::string i_gate);
 
-/*!
+/**
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ *
  * \~english
- * \brief Converts an enum value of a vertex type to its string
+ * @brief Converts an enum value of a vertex type to its string
  * representation
- * \param vertex The enum value representing the vertex type
- * \return std::string The string representation of the vertex type
- * \code
+ * @param vertex The enum value representing the vertex type
+ * @return std::string The string representation of the vertex type
+ * @code
  * // Convert the enum value VertexTypes::input to its string
  * std::string vertexString =
  * GraphUtils::parseVertexToString(VertexTypes::input);
  * std::cout << "String representation of VertexTypes::input: "
  * << vertexString << std::endl;
- * \endcode
+ * @endcode
  *
  * \~russian
- * \brief Преобразует значение перечисления типа вершины в его строковое
+ * @brief Преобразует значение перечисления типа вершины в его строковое
  * представление
- * \param vertex Значение перечисления, представляющее тип вершины
- * \return std::string Строковое представление типа вершины
+ * @param vertex Значение перечисления, представляющее тип вершины
+ * @return std::string Строковое представление типа вершины
  */
 std::string parseVertexToString(VertexTypes vertex);
 
-/*!
+/**
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ *
  * \~english
- * \brief Converts an enum value of a gate to its string representation
- * \param gate The enum value representing the gate
- * \return std::string The string representation of the gate
- * \code
+ * @brief Converts an enum value of a gate to its string representation
+ * @param gate The enum value representing the gate
+ * @return std::string The string representation of the gate
+ * @code
  * // Convert the enum value Gates::GateAnd to its string
  * std::string gateString =
  * GraphUtils::parseGateToString(Gates::GateAnd);
  * std::cout << "String representation of Gates::GateAnd: "
  * << gateString << std::endl;
- * \endcode
+ * @endcode
  *
  * \~russian
- * \brief Преобразует значение перечисления вентиля в его строковое
+ * @brief Преобразует значение перечисления вентиля в его строковое
  * представление
- * \param gate Значение перечисления, представляющее вентиль
- * \return std::string Строковое представление вентиля
+ * @param gate Значение перечисления, представляющее вентиль
+ * @return std::string Строковое представление вентиля
  */
 std::string parseGateToString(Gates gate);
 
-/*!
+/**
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ *
  * \~english
- * \brief Looks for a std::pair with a given key in an array of pairs
- * \tparam T Key type in pairs array
- * \tparam M Value type in pairs array
- * \tparam N Number of elements in the array
- * \param iterable Array of pairs to search in
- * \param key The key to search for (pair.first)
- * \return Pointer to found pair or nullptr if not found
+ * @brief Looks for a std::pair with a given key in an array of pairs
+ * @tparam T Key type in pairs array
+ * @tparam M Value type in pairs array
+ * @tparam N Number of elements in the array
+ * @param iterable Array of pairs to search in
+ * @param key The key to search for (pair.first)
+ * @return Pointer to found pair or nullptr if not found
  *
  * \~russian
- * \brief Ищет std::pair с заданным ключом в массиве пар
- * \tparam T Тип ключа в массиве пар
- * \tparam M Тип значения в массиве пар
- * \tparam N Количество элементов в массиве
- * \param iterable Массив пар для поиска
- * \param key Ключ для поиска (pair.first)
- * \return Указатель на найденную пару или nullptr, если не найдено
+ * @brief Ищет std::pair с заданным ключом в массиве пар
+ * @tparam T Тип ключа в массиве пар
+ * @tparam M Тип значения в массиве пар
+ * @tparam N Количество элементов в массиве
+ * @param iterable Массив пар для поиска
+ * @param key Ключ для поиска (pair.first)
+ * @return Указатель на найденную пару или nullptr, если не найдено
  */
 template<typename T, typename M, size_t N>
 static std::pair<T, M> *findPairByKey(std::pair<T, M> (&iterable)[N],
@@ -623,24 +669,24 @@ static std::pair<T, M> *findPairByKey(std::pair<T, M> (&iterable)[N],
 }
 
 /*!
- * \var d_hierarchySize
+ * @var d_hierarchySize
  * \~english
- * \brief Size of the logic operations hierarchy (max value + 1 from
+ * @brief Size of the logic operations hierarchy (max value + 1 from
  * d_logicOperations)
  *
  * \~russian
- * \brief Размер иерархии логических операций (максимальное значение + 1
+ * @brief Размер иерархии логических операций (максимальное значение + 1
  * из d_logicOperations)
  */
 static constexpr size_t d_hierarchySize = 11;
 
 /*!
- * \var d_logicOperations
+ * @var d_logicOperations
  * \~english
- * \brief Static array mapping operation names to their string views and IDs
+ * @brief Static array mapping operation names to their string views and IDs
  *
  * \~russian
- * \brief Статический массив, сопоставляющий имена операций с их строковыми
+ * @brief Статический массив, сопоставляющий имена операций с их строковыми
  * представлениями и ID
  */
 static constexpr std::array<
@@ -659,12 +705,12 @@ static constexpr std::array<
                           {"xnor", {"xnor", 1}}}};
 
 /*!
- * \var stringToGate
+ * @var stringToGate
  * \~english
- * \brief Static array for converting strings to Gates enum values
+ * @brief Static array for converting strings to Gates enum values
  *
  * \~russian
- * \brief Статический массив для преобразования строк в значения
+ * @brief Статический массив для преобразования строк в значения
  * перечисления Gates
  */
 static std::pair<std::string, Gates> stringToGate[] = {
@@ -673,13 +719,13 @@ static std::pair<std::string, Gates> stringToGate[] = {
     {"xor", Gates::GateXor}, {"xnor", Gates::GateXnor}};
 
 /*!
- * \var vertexToString
+ * @var vertexToString
  * \~english
- * \brief Static array for converting VertexTypes enum to string
+ * @brief Static array for converting VertexTypes enum to string
  * representations
  *
  * \~russian
- * \brief Статический массив для преобразования перечисления VertexTypes в
+ * @brief Статический массив для преобразования перечисления VertexTypes в
  * строковые представления
  */
 static std::pair<VertexTypes, std::string_view> vertexToString[] = {
@@ -691,19 +737,19 @@ static std::pair<VertexTypes, std::string_view> vertexToString[] = {
     {VertexTypes::gate, "gate"}};
 
 /*!
- * \var gateToString
+ * @var gateToString
  * \~english
- * \brief Static array for converting Gates enum to string representations
- * \todo Optimize gateToString lookup by using Gates enum as direct array
+ * @brief Static array for converting Gates enum to string representations
+ * @todo Optimize gateToString lookup by using Gates enum as direct array
  * index
- * \note Current implementation requires linear search via findPairByKey
+ * @note Current implementation requires linear search via findPairByKey
  *
  * \~russian
- * \brief Статический массив для преобразования перечисления Gates в
+ * @brief Статический массив для преобразования перечисления Gates в
  * строковые представления
- * \todo Оптимизировать поиск gateToString, используя перечисление Gates в
+ * @todo Оптимизировать поиск gateToString, используя перечисление Gates в
  * качестве прямого индекса массива
- * \note Текущая реализация требует линейного поиска через findPairByKey
+ * @note Текущая реализация требует линейного поиска через findPairByKey
  */
 static std::pair<Gates, std::string_view> gateToString[] = {
     {Gates::GateAnd, "and"},      {Gates::GateNand, "nand"},

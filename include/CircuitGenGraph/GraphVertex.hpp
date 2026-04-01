@@ -1,5 +1,15 @@
+/**
+ * @file GraphVertex.hpp
+ * @brief Объявления вершин графа: GraphVertexInput, GraphVertexOutput,
+ * GraphVertexGates, GraphVertexConstant, GraphVertexSubGraph,
+ * GraphVertexSequential.
+ * @author Vladimir Zunin <vzunin@hse.ru>
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Theossr <feolab05@gmail.com>
+ * @author rainbowkittensss <viktorrrrry20@gmail.com>
+ * @author Чернявских Илья Игоревич <fuuulkrum7@gmail.com>
+ */
 #pragma once
-
 #include <string>
 #include <vector>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
@@ -8,100 +18,101 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
-/*!
- * \file GraphVertex.hpp
- *
+/**
  * \~english
- * \brief TODO: Maybe Description some virtual methods for Graph's classes,
+ * @todo Maybe Description some virtual methods for Graph's classes,
  * such as GraphVertexGates
  *
+ * @class GraphVertexInput
+ * @brief Represents a vertex in a directed graph that serves as an input
+ * vertex. It inherits from the GraphVertexBase class and extends its
+ * functionality to work with input vertices
+ * @param i_baseGraph A pointer to the oriented graph to which this vertex
+ * belongs. It can be null ptr, which indicates the absence of a base graph
+ * @param i_type Vertex type (VertexTypes enumeration). By default, it is
+ * set to VertexTypes::input, indicating that this is the input vertex
+ * @param i_name The name of the vertex provided during creation. This is
+ * a string of type std::string that identifies a vertex
+ *
  * \~russian
- * \brief TODO: Возможно, стоит добавить описание некоторых виртуальных
+ * @todo Возможно, стоит добавить описание некоторых виртуальных
  * методов для классов графа, таких как GraphVertexGates
+ *
+ * @class GraphVertexInput
+ * @brief Представляет вершину в ориентированном графе, которая служит
+ * входной вершиной. Наследуется от класса GraphVertexBase и расширяет его
+ * функциональность для работы с входными вершинами
+ * @param i_baseGraph Указатель на ориентированный граф, которому
+ * принадлежит эта вершина. Может быть null ptr, что указывает на
+ * отсутствие базового графа
+ * @param i_type Тип вершины (перечисление VertexTypes). По умолчанию
+ * установлено VertexTypes::input, что указывает на то, что это входная
+ * вершина
+ * @param i_name Имя вершины, заданное при создании. Это строка типа
+ * std::string, которая идентифицирует вершину
  */
 
 namespace CG_Graph {
 
-/*!
- * \class GraphVertexInput
- * \~english
- * \brief Represents a vertex in a directed graph that serves as an input
- * vertex. It inherits from the GraphVertexBase class and extends its
- * functionality to work with input vertices
- * \param i_baseGraph A pointer to the oriented graph to which this vertex
- * belongs. It can be null ptr, which indicates the absence of a base graph
- * \param i_type Vertex type (VertexTypes enumeration). By default, it is
- * set to VertexTypes::input, indicating that this is the input vertex
- * \param i_name The name of the vertex provided during creation. This is a
- * string of type std::string that identifies a vertex
- *
- * \~russian
- * \brief Представляет вершину в ориентированном графе, которая служит
- * входной вершиной. Наследуется от класса GraphVertexBase и расширяет его
- * функциональность для работы с входными вершинами
- * \param i_baseGraph Указатель на ориентированный граф, которому
- * принадлежит эта вершина. Может быть null ptr, что указывает на
- * отсутствие базового графа
- * \param i_type Тип вершины (перечисление VertexTypes). По умолчанию
- * установлено VertexTypes::input, что указывает на то, что это входная
- * вершина
- * \param i_name Имя вершины, заданное при создании. Это строка типа
- * std::string, которая идентифицирует вершину
- */
 class GraphVertexInput : public GraphVertexBase {
 public:
-  /*!
+  /**
    * \~english
-   * \brief GraphVertexInput Initializes the GraphVertexInput object with
+   * @brief GraphVertexInput Initializes the GraphVertexInput object with
    * the provided base graph pointer and type
-   * \param i_baseGraph Pointer to the base graph.
-   * \param i_type i_type Type of the vertex. Default is VertexTypes::input.
+   * @param i_baseGraph Pointer to the base graph.
+   * @param i_type i_type Type of the vertex. Default is VertexTypes::input.
    *
    * \~russian
-   * \brief GraphVertexInput Инициализирует объект GraphVertexInput с
+   * @brief GraphVertexInput Инициализирует объект GraphVertexInput с
    * предоставленным указателем на базовый граф и типом
-   * \param i_baseGraph Указатель на базовый граф.
-   * \param i_type Тип вершины. По умолчанию VertexTypes::input.
+   * @param i_baseGraph Указатель на базовый граф.
+   * @param i_type Тип вершины. По умолчанию VertexTypes::input.
    */
   GraphVertexInput(GraphPtr i_baseGraph,
                    const VertexTypes i_type = VertexTypes::input);
 
-  /*!
+  /**
    * \~english
-   * \brief GraphVertexInput Initializes the GraphVertexInput object with
+   * @brief GraphVertexInput Initializes the GraphVertexInput object with
    * the provided name, base graph pointer, and type
-   * \param i_name Name of the vertex.
-   * \param i_baseGraph Pointer to the base graph.
-   * \param i_type Type of the vertex.
+   * @param i_name Name of the vertex.
+   * @param i_baseGraph Pointer to the base graph.
+   * @param i_type Type of the vertex.
    *
    * \~russian
-   * \brief GraphVertexInput Инициализирует объект GraphVertexInput с
+   * @brief GraphVertexInput Инициализирует объект GraphVertexInput с
    * предоставленным именем, указателем на базовый граф и типом
-   * \param i_name Имя вершины.
-   * \param i_baseGraph Указатель на базовый граф.
-   * \param i_type Тип вершины.
+   * @param i_name Имя вершины.
+   * @param i_baseGraph Указатель на базовый граф.
+   * @param i_type Тип вершины.
    */
   GraphVertexInput(std::string_view i_name, GraphPtr i_baseGraph,
                    const VertexTypes i_type = VertexTypes::input);
 
-  /*!
+  /**
    * \~english
-   * \brief updateValue A virtual function for updating the vertex value.
+   * @brief updateValue A virtual function for updating the vertex value.
    * The implementation is provided in derived classes
-   * \return the value of the vertex after its update
+   * @return the value of the vertex after its update
    *
    * \~russian
-   * \brief updateValue Виртуальная функция для обновления значения
+   * @brief updateValue Виртуальная функция для обновления значения
    * вершины. Реализация предоставляется в производных классах
-   * \return значение вершины после ее обновления
+   * @return значение вершины после ее обновления
    */
+  /** @author Theossr <feolab05@gmail.com> */
   void setValue(const char value);
+
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual char updateValue() override;
+
+  /** @author Theossr <feolab05@gmail.com> */
   virtual void removeValue() override;
 
-  /*!
+  /**
    * \~english
-   * \brief updateLevel This method updates the level of the vertex based
+   * @brief updateLevel This method updates the level of the vertex based
    * on the levels of its input connections. It iterates through each input
    * connection and sets the vertex level to the maximum level of its input
    * connections plus one.
@@ -109,7 +120,7 @@ public:
    * all flags, used in updateLevel to their default state.
    *
    * \~russian
-   * \brief updateLevel Этот метод обновляет уровень вершины на основе
+   * @brief updateLevel Этот метод обновляет уровень вершины на основе
    * уровней ее входных соединений. Он итерируется по каждому входному
    * соединению и устанавливает уровень вершины равным максимальному
    * уровню ее входных соединений плюс один.
@@ -117,27 +128,30 @@ public:
    * установите все флаги, используемые в updateLevel, в их состояние по
    * умолчанию.
    */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual void updateLevel() override;
 
-  /*!
+  /**
    * \~english
-   * \brief writes vertex to dot
+   * @brief writes vertex to dot
    *
    * \~russian
-   * \brief записывает вершину в формат dot
+   * @brief записывает вершину в формат dot
    */
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
 
-  /*!
+  /**
    * \~english
-   * \brief log Used for easylogging++
-   * \param os Stream for easylogging
+   * @brief log Used for easylogging++
+   * @param os Stream for easylogging
    *
    * \~russian
-   * \brief log Используется для easylogging++
-   * \param os Поток для easylogging
+   * @brief log Используется для easylogging++
+   * @param os Поток для easylogging
    */
 #ifdef LOGFLAG
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 
@@ -147,59 +161,61 @@ protected:
 private:
 };
 
-/*!
- * \class GraphVertexConstant
+/**
+ * @class GraphVertexConstant
  * \~english
- * \brief A simple class, making available to use constant values in circuits
+ * @brief A simple class, making available to use constant values in circuits
  *
  * \~russian
- * \brief Простой класс, позволяющий использовать константные значения в
+ * @brief Простой класс, позволяющий использовать константные значения в
  * схемах
  */
 class GraphVertexConstant : public GraphVertexInput {
 public:
-  /*!
+  /**
    * \~english
-   * \brief Initializes the GraphVertexConstant object with the provided
+   * @brief Initializes the GraphVertexConstant object with the provided
    * base graph pointer and char symbol
-   * \param i_baseGraph Pointer to the base graph.
-   * \param i_const char symbol for constant (1, 0, z, x)
+   * @param i_baseGraph Pointer to the base graph.
+   * @param i_const char symbol for constant (1, 0, z, x)
    *
    * \~russian
-   * \brief Инициализирует объект GraphVertexConstant с предоставленным
+   * @brief Инициализирует объект GraphVertexConstant с предоставленным
    * указателем на базовый граф и символом char
-   * \param i_baseGraph Указатель на базовый граф.
-   * \param i_const символ char для константы (1, 0, z, x)
+   * @param i_baseGraph Указатель на базовый граф.
+   * @param i_const символ char для константы (1, 0, z, x)
    */
   GraphVertexConstant(char i_const, GraphPtr i_baseGraph);
 
-  /*!
+  /**
    * \~english
-   * \brief Initializes the GraphVertexConstant object with the provided
+   * @brief Initializes the GraphVertexConstant object with the provided
    * base graph pointer and char symbol
-   * \param i_name Name of the vertex.
-   * \param i_baseGraph Pointer to the base graph.
-   * \param i_const char symbol for constant (1, 0, z, x)
+   * @param i_name Name of the vertex.
+   * @param i_baseGraph Pointer to the base graph.
+   * @param i_const char symbol for constant (1, 0, z, x)
    *
    * \~russian
-   * \brief Инициализирует объект GraphVertexConstant с предоставленным
+   * @brief Инициализирует объект GraphVertexConstant с предоставленным
    * указателем на базовый граф и символом char
-   * \param i_name Имя вершины.
-   * \param i_baseGraph Указатель на базовый граф.
-   * \param i_const символ char для константы (1, 0, z, x)
+   * @param i_name Имя вершины.
+   * @param i_baseGraph Указатель на базовый граф.
+   * @param i_const символ char для константы (1, 0, z, x)
    */
   GraphVertexConstant(char i_const, std::string_view i_name,
                       GraphPtr i_baseGraph);
   ~GraphVertexConstant() override{};
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief calculates hash for constant.
+   * @brief calculates hash for constant.
    * Calculates the hash value for the vertex based on its outgoing
    * connections.
    * When running for a second time, set hash flags to default state
-   * \return The hash value of the vertex based on its outgoing connections.
-   * \code
+   * @return The hash value of the vertex based on its outgoing connections.
+   * @code
    * // Creating an instance of the GraphVertexBase class
    * GraphVertexBase vertex(VertexTypes::output, "vertex1");
    * // Creating two more vertices
@@ -215,23 +231,25 @@ public:
    * std::string hashValue = vertex.calculateHash();
    * // Output of the result
    * std::cout << "Hash for the first vertex: " << hashValue << std::endl;
-   * \endcode
+   * @endcode
    *
    * \~russian
-   * \brief вычисляет хэш для константы.
+   * @brief вычисляет хэш для константы.
    * Вычисляет значение хэша для вершины на основе ее исходящих соединений.
    * При повторном запуске установите флаги хэша в состояние по умолчанию
-   * \return Значение хэша вершины на основе ее исходящих соединений.
+   * @return Значение хэша вершины на основе ее исходящих соединений.
    */
   size_t calculateHash() override;
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief toVerilog Generates Verilog code for the constant vertex
-   * \return A string containing Verilog code for the vertex, or an empty
+   * @brief toVerilog Generates Verilog code for the constant vertex
+   * @return A string containing Verilog code for the vertex, or an empty
    * string if the vertex type is not "output" or if the incoming
    * connection is invalid
-   * \code
+   * @code
    * // Creating an instance of the GraphVertexBase class with the type
    * // "output" and the name "output_vertex"
    * GraphPtr graph = std::make_shared<OrientedGraph>();
@@ -244,97 +262,107 @@ public:
    * std::string verilogCode = outputVertex->toVerilog();
    * // Display the generated Verilog code on the screen
    * std::cout << "Generated Verilog code:\n" << verilogCode << std::endl;
-   * \endcode
+   * @endcode
    *
    * \~russian
-   * \brief toVerilog Генерирует код Verilog для константной вершины
-   * \return Строка, содержащая код Verilog для вершины, или пустая строка,
+   * @brief toVerilog Генерирует код Verilog для константной вершины
+   * @return Строка, содержащая код Verilog для вершины, или пустая строка,
    * если тип вершины не "output" или если входящее соединение
    * недействительно
    */
   std::string toVerilog() const override;
 
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
 
-  /*!
+  /**
+   * @author Vladimir Zunin <vzunin@hse.ru>
+   *
    * \~english
-   * \brief getDefaultInstance Creates simple verilog const instance
+   * @brief getDefaultInstance Creates simple verilog const instance
    * (as a wire)
    *
    * \~russian
-   * \brief getDefaultInstance Создает простой экземпляр константы
+   * @brief getDefaultInstance Создает простой экземпляр константы
    * verilog (как wire)
    */
   std::string getVerilogInstance();
 
-  /*!
+  /**
    * \~english
-   * \brief log Used for easylogging++
-   * \param os Stream for easylogging
+   * @brief log Used for easylogging++
+   * @param os Stream for easylogging
    *
    * \~russian
-   * \brief log Используется для easylogging++
-   * \param os Поток для easylogging
+   * @brief log Используется для easylogging++
+   * @param os Поток для easylogging
    */
 #ifdef LOGFLAG
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 
 private:
 };
 
-/*!
- * \class GraphVertexSubGraph
+/**
+ * @class GraphVertexSubGraph
  * \~english
- * \brief It is a class, having a subGruph pointer inside. Is used for
+ * @brief It is a class, having a subGruph pointer inside. Is used for
  * storing this pointer for providing graph connectivity
- * \param d_subGraph Pointer to the subgraph associated with this vertex
- * \param d_hashed Cached hash value of the vertex
+ * @param d_subGraph Pointer to the subgraph associated with this vertex
+ * @param d_hashed Cached hash value of the vertex
  *
  * \~russian
- * \brief Это класс, содержащий внутри указатель на подграф (subGraph).
+ * @brief Это класс, содержащий внутри указатель на подграф (subGraph).
  * Используется для хранения этого указателя с целью обеспечения связности
  * графа
- * \param d_subGraph Указатель на подграф, связанный с этой вершиной
- * \param d_hashed Кэшированное значение хэша вершины
+ * @param d_subGraph Указатель на подграф, связанный с этой вершиной
+ * @param d_hashed Кэшированное значение хэша вершины
  */
 class GraphVertexSubGraph : public GraphVertexBase {
 public:
-  /*!
+  /**
    * \~english
-   * \brief Initializes the GraphVertexSubGraph object with the provided
+   * @brief Initializes the GraphVertexSubGraph object with the provided
    * base graph pointer and subGraph pointer
-   * \param i_baseGraph Pointer to the base graph.
-   * \param i_subGraph Pointer to the subGraph.
+   * @param i_baseGraph Pointer to the base graph.
+   * @param i_subGraph Pointer to the subGraph.
    *
    * \~russian
-   * \brief Инициализирует объект GraphVertexSubGraph с предоставленным
+   * @brief Инициализирует объект GraphVertexSubGraph с предоставленным
    * указателем на базовый граф и указателем на подграф
-   * \param i_baseGraph Указатель на базовый граф.
-   * \param i_subGraph Указатель на подграф.
+   * @param i_baseGraph Указатель на базовый граф.
+   * @param i_subGraph Указатель на подграф.
    */
   GraphVertexSubGraph(GraphPtr i_subGraph, GraphPtr i_baseGraph);
   GraphVertexSubGraph(GraphPtr i_subGraph, std::string_view i_name,
                       GraphPtr i_baseGraph);
   ~GraphVertexSubGraph() override{};
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief updateValue A virtual function for updating the vertex value.
+   * @brief updateValue A virtual function for updating the vertex value.
    * The implementation is provided in derived classes
-   * \return the value of the vertex after its update
+   * @return the value of the vertex after its update
    *
    * \~russian
-   * \brief updateValue Виртуальная функция для обновления значения
+   * @brief updateValue Виртуальная функция для обновления значения
    * вершины. Реализация предоставляется в производных классах
-   * \return значение вершины после ее обновления
+   * @return значение вершины после ее обновления
    */
   char updateValue() override;
+
+  /** @author Theossr <feolab05@gmail.com> */
   void removeValue() override;
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief updateLevel
+   * @brief updateLevel
    * This method updates the level of the vertex based on the levels of its
    * input connections. It iterates through each input connection and sets
    * the vertex level to the maximum level of its input connections plus
@@ -342,7 +370,7 @@ public:
    * set all flags, used in updateLevel to their default state.
    *
    * \~russian
-   * \brief updateLevel
+   * @brief updateLevel
    * Этот метод обновляет уровень вершины на основе уровней ее входных
    * соединений. Он итерируется по каждому входному соединению и
    * устанавливает уровень вершины равным максимальному уровню ее входных
@@ -352,13 +380,15 @@ public:
    */
   void updateLevel() override;
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief toVerilog Generates Verilog code for the vertex
-   * \return A string containing Verilog code for the vertex, or an empty
+   * @brief toVerilog Generates Verilog code for the vertex
+   * @return A string containing Verilog code for the vertex, or an empty
    * string if the vertex type is not "output" or if the incoming
    * connection is invalid
-   * \code
+   * @code
    * // Creating an instance of the GraphVertexBase class with the type
    * // "output" and the name "output_vertex"
    * GraphPtr graph = std::make_shared<OrientedGraph>();
@@ -377,129 +407,145 @@ public:
    * // Generating the Verilog code for the vertex subgraph
    * VertexPtr subgaphItself = getVerticesByLevel(1u).back();
    * std::cout << subgaphItself << '\n';
-   * \endcode
+   * @endcode
    *
    * \~russian
-   * \brief toVerilog Генерирует код Verilog для вершины
-   * \return Строка, содержащая код Verilog для вершины, или пустая строка,
+   * @brief toVerilog Генерирует код Verilog для вершины
+   * @return Строка, содержащая код Verilog для вершины, или пустая строка,
    * если тип вершины не "output" или если входящее соединение
    * недействительно
    */
   std::string toVerilog() const override;
 
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief This method is used as a substructure for OrientedGraph methods
-   * \param i_path path to future file storing. Do not add submodule here,
+   * @brief This method is used as a substructure for OrientedGraph methods
+   * @param i_path path to future file storing. Do not add submodule here,
    * folder would be created there
-   * \param i_filename name of file to be created (default is same as
+   * @param i_filename name of file to be created (default is same as
    * graph name)
-   * \return bool, meaning was file writing successful or not
+   * @return bool, meaning was file writing successful or not
    *
    * \~russian
-   * \brief Этот метод используется как подструктура для методов
+   * @brief Этот метод используется как подструктура для методов
    * OrientedGraph
-   * \param i_path путь для будущего сохранения файла. Не добавляйте сюда
+   * @param i_path путь для будущего сохранения файла. Не добавляйте сюда
    * подмодуль, папка будет создана там
-   * \param i_filename имя создаваемого файла (по умолчанию совпадает с
+   * @param i_filename имя создаваемого файла (по умолчанию совпадает с
    * именем графа)
-   * \return bool, означающий, была ли запись файла успешной или нет
+   * @return bool, означающий, была ли запись файла успешной или нет
    */
   bool toVerilog(std::string i_path, std::string i_filename = "");
+
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool toDOT(std::string i_path, std::string i_filename = "");
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief This method is used as a substructure for OrientedGraph methods
+   * @brief This method is used as a substructure for OrientedGraph methods
    *
    * \~russian
-   * \brief Этот метод используется как подструктура для методов
+   * @brief Этот метод используется как подструктура для методов
    * OrientedGraph
    */
   bool toGraphML(std::ofstream &i_fileStream) const;
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief This method is used as a substructureS for OrientedGraph
+   * @brief This method is used as a substructureS for OrientedGraph
    * methods
-   * \param i_indent
-   * \return
+   * @param i_indent
+   * @return
    *
    * \~russian
-   * \brief Этот метод используется как подструктура для методов
+   * @brief Этот метод используется как подструктура для методов
    * OrientedGraph
-   * \param i_indent
-   * \return
+   * @param i_indent
+   * @return
    */
   std::string toGraphML(uint16_t i_indent = 0, std::string i_prefix = "") const;
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief This method is used as a substructure for OrientedGraph
+   * @brief This method is used as a substructure for OrientedGraph
    * methods. When running it for a second time, clear hash flags
-   * \return
+   * @return
    *
    * \~russian
-   * \brief Этот метод используется как подструктура для методов
+   * @brief Этот метод используется как подструктура для методов
    * OrientedGraph. При повторном запуске очистите флаги хэша
-   * \return
+   * @return
    */
   size_t calculateHash() override;
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief sets new subgraph to the vertex
+   * @brief sets new subgraph to the vertex
    *
    * \~russian
-   * \brief устанавливает новый подграф для вершины
+   * @brief устанавливает новый подграф для вершины
    */
   void setSubGraph(GraphPtr i_subGraph);
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \return pointer to subgraph, being stored in vertex
+   * @return pointer to subgraph, being stored in vertex
    *
    * \~russian
-   * \return указатель на подграф, хранящийся в вершине
+   * @return указатель на подграф, хранящийся в вершине
    */
   GraphPtr getSubGraph() const;
 
-  /*!
+  /**
    * \~english
-   * \brief returns all vertices of outputs, which are influenced by given
+   * @brief returns all vertices of outputs, which are influenced by given
    * input to vertex
    *
    * \~russian
-   * \brief возвращает все вершины выходов, на которые влияет заданный вход
+   * @brief возвращает все вершины выходов, на которые влияет заданный вход
    * в вершину
    */
   std::vector<VertexPtr>
   getOutputBuffersByOuterInput(VertexPtr i_outerInput) const;
 
-  /*!
+  /**
    * \~english
-   * \brief returns all vertices of inputs, which are influenced by given
+   * @brief returns all vertices of inputs, which are influenced by given
    * output to vertex
    *
    * \~russian
-   * \brief возвращает все вершины входов, на которые влияет заданный выход
+   * @brief возвращает все вершины входов, на которые влияет заданный выход
    * в вершину
    */
   std::vector<VertexPtr>
   getOuterInputsByOutputBuffer(VertexPtr i_outputBuffer) const;
 
-  /*!
+  /**
    * \~english
-   * \brief log Used for easylogging++
-   * \param os Stream for easylogging
+   * @brief log Used for easylogging++
+   * @param os Stream for easylogging
    *
    * \~russian
-   * \brief log Используется для easylogging++
-   * \param os Поток для easylogging
+   * @brief log Используется для easylogging++
+   * @param os Поток для easylogging
    */
 #ifdef LOGFLAG
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 
@@ -507,57 +553,63 @@ private:
   GraphPtr d_subGraph;
 };
 
-/*!
- * \class GraphVertexOutput
+/**
+ * @class GraphVertexOutput
  * \~english
- * \brief It is a vertex of the graph, specially designed for data output.
+ * @brief It is a vertex of the graph, specially designed for data output.
  * It inherits from the GraphVertexBase class and adds additional
  * functionality related to data output
  *
  * \~russian
- * \brief Это вершина графа, специально предназначенная для вывода данных.
+ * @brief Это вершина графа, специально предназначенная для вывода данных.
  * Наследуется от класса GraphVertexBase и добавляет дополнительную
  * функциональность, связанную с выводом данных
  */
 class GraphVertexOutput : public GraphVertexBase {
 public:
   GraphVertexOutput(GraphPtr i_baseGraph);
+
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphVertexOutput(std::string_view i_name, GraphPtr i_baseGraph);
 
-  /*!
+  /**
+   * @author Theossr <feolab05@gmail.com>
+   *
    * \~english
-   * \brief updateValue updates the value of the current vertex of the
+   * @brief updateValue updates the value of the current vertex of the
    * graph based on the values of its incoming connections and the type of
    * logical element (or "gate"). Depending on the type of gate and the
    * values of the incoming links, the method uses the truth tables to
    * perform the corresponding logical operation and sets a new value for
    * the current vertex
-   * \return A char that represents the new value of the current vertex
+   * @return A char that represents the new value of the current vertex
    * after updating based on the values of its incoming connections and
    * the type of logical element (or "gate").
    *
    * \~russian
-   * \brief updateValue обновляет значение текущей вершины графа на основе
+   * @brief updateValue обновляет значение текущей вершины графа на основе
    * значений ее входящих соединений и типа логического элемента (или
    * "вентиля"). В зависимости от типа вентиля и значений входящих связей,
    * метод использует таблицы истинности для выполнения соответствующей
    * логической операции и устанавливает новое значение для текущей вершины
-   * \return Символ char, представляющий новое значение текущей вершины
+   * @return Символ char, представляющий новое значение текущей вершины
    * после обновления на основе значений ее входящих соединений и типа
    * логического элемента (или "вентиля").
    */
   char updateValue() override;
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief updateLevel updates the level of the current vertex in the
+   * @brief updateLevel updates the level of the current vertex in the
    * graph based on the levels of its incoming connections. If a vertex has
    * incoming connections, the method determines the highest level among
    * all the vertices to which it is connected, and sets the level of the
    * current vertex to one higher than the highest level
    *
    * \~russian
-   * \brief updateLevel обновляет уровень текущей вершины в графе на основе
+   * @brief updateLevel обновляет уровень текущей вершины в графе на основе
    * уровней ее входящих соединений. Если вершина имеет входящие
    * соединения, метод определяет самый высокий уровень среди всех вершин,
    * к которым она подключена, и устанавливает уровень текущей вершины на
@@ -565,167 +617,189 @@ public:
    */
   void updateLevel() override;
 
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
 
-  /*!
+  /**
    * \~english
-   * \brief log Used for easylogging++
-   * \param os Stream for easylogging
+   * @brief log Used for easylogging++
+   * @param os Stream for easylogging
    *
    * \~russian
-   * \brief log Используется для easylogging++
-   * \param os Поток для easylogging
+   * @brief log Используется для easylogging++
+   * @param os Поток для easylogging
    */
 #ifdef LOGFLAG
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 
 private:
 };
 
-/*!
- * \class GraphVertexGates
+/**
+ * @class GraphVertexGates
  * \~english
- * \brief Class representing a vertex in a graph with gates
+ * @brief Class representing a vertex in a graph with gates
  *
  * \~russian
- * \brief Класс, представляющий вершину в графе с логическими вентилями
+ * @brief Класс, представляющий вершину в графе с логическими вентилями
  */
 class GraphVertexGates : public GraphVertexBase {
 public:
   GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph);
+
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph);
   ~GraphVertexGates() override{};
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief updateValue Updates the value of the vertex
-   * \return The updated value of the vertex
-   * \code
+   * @brief updateValue Updates the value of the vertex
+   * @return The updated value of the vertex
+   * @code
    * TO DO:
-   * \endcode
-   * \throws std::invalid_argument if any of the input connections point
+   * @endcode
+   * @throws std::invalid_argument if any of the input connections point
    * to a nullptr
    *
    * \~russian
-   * \brief updateValue Обновляет значение вершины
-   * \return Обновленное значение вершины
-   * \code
+   * @brief updateValue Обновляет значение вершины
+   * @return Обновленное значение вершины
+   * @code
    * TO DO:
-   * \endcode
-   * \throws std::invalid_argument, если любое из входных соединений
+   * @endcode
+   * @throws std::invalid_argument, если любое из входных соединений
    * указывает на nullptr
    */
   virtual char updateValue() override;
+
+  /** @author Theossr <feolab05@gmail.com> */
   void removeValue() override;
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief calculateHash Calculates the hash value of the vertex. When
+   * @brief calculateHash Calculates the hash value of the vertex. When
    * running for a second time, set hash flags to default state
-   * \return The calculated hash value as a string
+   * @return The calculated hash value as a string
    *
    * \~russian
-   * \brief calculateHash Вычисляет значение хэша вершины. При повторном
+   * @brief calculateHash Вычисляет значение хэша вершины. При повторном
    * запуске установите флаги хэша в состояние по умолчанию
-   * \return Вычисленное значение хэша в виде строки
+   * @return Вычисленное значение хэша в виде строки
    */
   size_t calculateHash() override;
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief getVerilogString Gets a string in Verilog format representing
+   * @brief getVerilogString Gets a string in Verilog format representing
    * the current vertex
-   * \return A string in Verilog format representing the current vertex
-   * \throws std::invalid_argument if any input connection is invalid
+   * @return A string in Verilog format representing the current vertex
+   * @throws std::invalid_argument if any input connection is invalid
    *
    * \~russian
-   * \brief getVerilogString Получает строку в формате Verilog,
+   * @brief getVerilogString Получает строку в формате Verilog,
    * представляющую текущую вершину
-   * \return Строка в формате Verilog, представляющая текущую вершину
-   * \throws std::invalid_argument, если какое-либо входное соединение
+   * @return Строка в формате Verilog, представляющая текущую вершину
+   * @throws std::invalid_argument, если какое-либо входное соединение
    * недействительно
    */
   std::string getVerilogString() const;
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief getGate Returns the type of valve associated with the current
+   * @brief getGate Returns the type of valve associated with the current
    * vertex
-   * \return The type of valve associated with the current vertex
-   * \code
+   * @return The type of valve associated with the current vertex
+   * @code
    * GraphVertexGates vertex(Gates::GateAnd);
    * Gates gateType = vertex.getGate();
    * std:: cout << "Gate type : " << gateType << std::endl;
-   * \endcode
+   * @endcode
    *
    * \~russian
-   * \brief getGate Возвращает тип вентиля, связанный с текущей вершиной
-   * \return Тип вентиля, связанный с текущей вершиной
+   * @brief getGate Возвращает тип вентиля, связанный с текущей вершиной
+   * @return Тип вентиля, связанный с текущей вершиной
    */
   Gates getGate() const override;
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief addVertexToInConnections
+   * @brief addVertexToInConnections
    * Buffer and Not types of gates must have only one element in
    * d_inConnections, so realization for GraphVertexGates has a check
    * before adding
-   * \param i_vert Vertex that will be added to d_inConnections of this
-   * \return The count of occurrences of the given vertex in the input
+   * @param i_vert Vertex that will be added to d_inConnections of this
+   * @return The count of occurrences of the given vertex in the input
    * connections after adding it
-   * \throws std::overflow_error in case of connecting more than one
+   * @throws std::overflow_error in case of connecting more than one
    * vertex in d_inConnections
    *
    * \~russian
-   * \brief addVertexToInConnections
+   * @brief addVertexToInConnections
    * Типы вентилей Буфер (Buffer) и НЕ (Not) должны иметь только один
    * элемент в d_inConnections, поэтому реализация для GraphVertexGates
    * содержит проверку перед добавлением
-   * \param i_vert Вершина, которая будет добавлена в d_inConnections
+   * @param i_vert Вершина, которая будет добавлена в d_inConnections
    * этой вершины
-   * \return Количество вхождений данной вершины во входные соединения
+   * @return Количество вхождений данной вершины во входные соединения
    * после ее добавления
-   * \throws std::overflow_error в случае подключения более одной
+   * @throws std::overflow_error в случае подключения более одной
    * вершины в d_inConnections
    */
   uint32_t addVertexToInConnections(VertexPtr i_vert) override;
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief toVerilog generates a string in Verilog format for the current
+   * @brief toVerilog generates a string in Verilog format for the current
    * vertex, representing the valve according to its type and input
    * connections. If a vertex has no input connections, an empty string
    * is returned. If any input connection is invalid, an exception is
    * thrown.
-   * \return A Verilog format string for the current vertex
-   * \throws std::invalid_argument if any input connection is invalid
+   * @return A Verilog format string for the current vertex
+   * @throws std::invalid_argument if any input connection is invalid
    *
    * \~russian
-   * \brief toVerilog генерирует строку в формате Verilog для текущей
+   * @brief toVerilog генерирует строку в формате Verilog для текущей
    * вершины, представляющую вентиль в соответствии с его типом и входными
    * соединениями. Если у вершины нет входных соединений, возвращается
    * пустая строка. Если какое-либо входное соединение недействительно,
    * выбрасывается исключение.
-   * \return Строка в формате Verilog для текущей вершины
-   * \throws std::invalid_argument, если какое-либо входное соединение
+   * @return Строка в формате Verilog для текущей вершины
+   * @throws std::invalid_argument, если какое-либо входное соединение
    * недействительно
    */
   std::string toVerilog() const override;
 
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
+
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool isSubgraphBuffer() const override;
 
-  /*!
+  /**
    * \~english
-   * \brief log Used for easylogging++
-   * \param os Stream for easylogging
+   * @brief log Used for easylogging++
+   * @param os Stream for easylogging
    *
    * \~russian
-   * \brief log Используется для easylogging++
-   * \param os Поток для easylogging
+   * @brief log Используется для easylogging++
+   * @param os Поток для easylogging
    */
 #ifdef LOGFLAG
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 
@@ -740,25 +814,25 @@ class GraphVertexSequential : public GraphVertexBase {
 public:
   // clang-format off
 
-  /*!
+  /**
    * \~english
-   * \brief GraphVertexSequential Constructor for default types
-   * \param i_type type of sequential vertex (can be only (n)ff or
+   * @brief GraphVertexSequential Constructor for default types
+   * @param i_type type of sequential vertex (can be only (n)ff or
    * latch = EN)
-   * \param i_clk is clock signal for a ff and enable signal for a latch
-   * \param i_data
-   * \param i_baseGraph
-   * \param i_name
+   * @param i_clk is clock signal for a ff and enable signal for a latch
+   * @param i_data
+   * @param i_baseGraph
+   * @param i_name
    *
    * \~russian
-   * \brief GraphVertexSequential Конструктор для типов по умолчанию
-   * \param i_type тип последовательностной вершины (может быть только
+   * @brief GraphVertexSequential Конструктор для типов по умолчанию
+   * @param i_type тип последовательностной вершины (может быть только
    * (n)ff или защелка = EN)
-   * \param i_clk сигнал синхронизации (clock) для триггера и сигнал
+   * @param i_clk сигнал синхронизации (clock) для триггера и сигнал
    * разрешения (enable) для защелки
-   * \param i_data
-   * \param i_baseGraph
-   * \param i_name
+   * @param i_data
+   * @param i_baseGraph
+   * @param i_name
    */
   GraphVertexSequential(SequentialTypes i_type,
                         VertexPtr i_clk,
@@ -766,17 +840,17 @@ public:
                         GraphPtr i_baseGraph,
                         std::string_view i_name);
 
-  /*!
-   * \brief
-   * \param i_type
-   * \param i_clk \~english is clock signal for a ff and enable signal
+  /**
+   * @brief
+   * @param i_type
+   * @param i_clk \~english is clock signal for a ff and enable signal
    * for a latch \~russian сигнал синхронизации (clock) для триггера и
    * сигнал разрешения (enable) для защелки
-   * \param i_data
-   * \param i_wire \~english RST or CLR or SET or EN \~russian RST или
+   * @param i_data
+   * @param i_wire \~english RST or CLR or SET or EN \~russian RST или
    * CLR или SET или EN
-   * \param i_baseGraph
-   * \param i_name
+   * @param i_baseGraph
+   * @param i_name
    */
   GraphVertexSequential(SequentialTypes i_type,
                         VertexPtr i_clk,
@@ -785,16 +859,16 @@ public:
                         GraphPtr i_baseGraph,
                         std::string_view i_name);
 
-  /*!
-   * \brief GraphVertexSequential
-   * \param i_type
-   * \param i_clk \~english EN for latch and CLK for ff \~russian EN
+  /**
+   * @brief GraphVertexSequential
+   * @param i_type
+   * @param i_clk \~english EN for latch and CLK for ff \~russian EN
    * для защелки и CLK для триггера
-   * \param i_data
-   * \param i_wire1 \~english RST or CLR or SET \~russian RST или CLR
+   * @param i_data
+   * @param i_wire1 \~english RST or CLR or SET \~russian RST или CLR
    * или SET
-   * \param i_wire2 \~english SET or EN \~russian SET или EN
-   * \param i_baseGraph
+   * @param i_wire2 \~english SET or EN \~russian SET или EN
+   * @param i_baseGraph
    */
   GraphVertexSequential(SequentialTypes i_type,
                         VertexPtr i_clk,
@@ -804,18 +878,18 @@ public:
                         GraphPtr i_baseGraph,
                         std::string_view i_name);
 
-  /*!
-   * \brief GraphVertexSequential
-   * \param i_type \~english type of Sequential - (a/n/an)ff(r/c)se,
+  /**
+   * @brief GraphVertexSequential
+   * @param i_type \~english type of Sequential - (a/n/an)ff(r/c)se,
    * \~russian тип Sequential - (a/n/an)ff(r/c)se,
-   * \param i_clk \~english clock for flip=flop \~russian синхронизация
+   * @param i_clk \~english clock for flip=flop \~russian синхронизация
    * для триггера
-   * \param i_data \~english data value \~russian значение данных
-   * \param i_rst \~english clear (or reset signal) \~russian очистка
+   * @param i_data \~english data value \~russian значение данных
+   * @param i_rst \~english clear (or reset signal) \~russian очистка
    * (или сигнал сброса)
-   * \param i_set \~english set signal \~russian сигнал установки
-   * \param i_en \~english enable \~russian разрешение (enable)
-   * \param i_baseGraph
+   * @param i_set \~english set signal \~russian сигнал установки
+   * @param i_en \~english enable \~russian разрешение (enable)
+   * @param i_baseGraph
    */
   GraphVertexSequential(SequentialTypes i_type,
                         VertexPtr i_clk,
@@ -830,85 +904,103 @@ public:
 
   ~GraphVertexSequential() override{};
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief calculateHash Calculates the hash value of the vertex.
+   * @brief calculateHash Calculates the hash value of the vertex.
    * When running for a second time, set hash flags to default state
-   * \return The calculated hash value as a string
-   * \throws None.
-   * \code
+   * @return The calculated hash value as a string
+   * @throws None.
+   * @code
    * TO DO:
-   * \endcode
+   * @endcode
    *
    * \~russian
-   * \brief calculateHash Вычисляет значение хэша вершины. При повторном
+   * @brief calculateHash Вычисляет значение хэша вершины. При повторном
    * запуске установите флаги хэша в состояние по умолчанию
-   * \return Вычисленное значение хэша в виде строки
-   * \throws Нет.
-   * \code
+   * @return Вычисленное значение хэша в виде строки
+   * @throws Нет.
+   * @code
    * TO DO:
-   * \endcode
+   * @endcode
    */
   size_t calculateHash() override;
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief toVerilog generates a string in Verilog format for the
+   * @brief toVerilog generates a string in Verilog format for the
    * current vertex, representing the valve according to its type and
    * input connections. If a vertex has no input connections, an empty
    * string is returned. If any input connection is invalid, an
    * exception is thrown.
-   * \return A Verilog format string for the current vertex
-   * \throws std::invalid_argument if any input connection is invalid
+   * @return A Verilog format string for the current vertex
+   * @throws std::invalid_argument if any input connection is invalid
    *
    * \~russian
-   * \brief toVerilog генерирует строку в формате Verilog для текущей
+   * @brief toVerilog генерирует строку в формате Verilog для текущей
    * вершины, представляющую вентиль в соответствии с его типом и
    * входными соединениями. Если у вершины нет входных соединений,
    * возвращается пустая строка. Если какое-либо входное соединение
    * недействительно, выбрасывается исключение.
-   * \return Строка в формате Verilog для текущей вершины
-   * \throws std::invalid_argument, если какое-либо входное соединение
+   * @return Строка в формате Verilog для текущей вершины
+   * @throws std::invalid_argument, если какое-либо входное соединение
    * недействительно
    */
   std::string toVerilog() const override;
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   DotReturn toDOT() override;
 
-  /*!
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
-   * \brief updateValue A virtual function for updating the vertex value.
+   * @brief updateValue A virtual function for updating the vertex value.
    * The implementation is provided in derived classes
-   * \return the value of the vertex after its update
+   * @return the value of the vertex after its update
    *
    * \~russian
-   * \brief updateValue Виртуальная функция для обновления значения
+   * @brief updateValue Виртуальная функция для обновления значения
    * вершины. Реализация предоставляется в производных классах
-   * \return значение вершины после ее обновления
+   * @return значение вершины после ее обновления
    */
   char updateValue() override { return ValueStates::FalseValue; };
 
-  /*!
+  /**
    * \~english
-   * \brief return true if sequential cell is
+   * @brief return true if sequential cell is
    *
    * \~russian
-   * \brief возвращает true, если последовательностная ячейка
+   * @brief возвращает true, если последовательностная ячейка
    */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool isFF() const;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool isAsync() const;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool isNegedge() const;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   SequentialTypes getSeqType() const;
 
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr getClk() const;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr getData() const;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr getEn() const;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr getRst() const;
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr getSet() const;
 
 private:
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void setSignalByType(VertexPtr i_wire, SequentialTypes i_type,
                        unsigned &factType);
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void formatAlwaysBegin(std::string &verilog) const;
 
 private:

@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
   gcc \
   git \
   lcov \
+  libfmt-dev \
   make \
   ninja-build \
   openssl \

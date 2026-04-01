@@ -1,3 +1,7 @@
+/**
+ * @file GraphVertexGates.cpp
+ * @brief Реализация вершины-логического элемента (гейт) графа.
+ */
 #include <iostream>
 
 #include <CircuitGenGraph/GraphVertex.hpp>

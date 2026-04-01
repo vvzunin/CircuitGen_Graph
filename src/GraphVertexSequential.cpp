@@ -1,3 +1,7 @@
+/**
+ * @file GraphVertexSequential.cpp
+ * @brief Реализация последовательностной вершины графа (триггеры, регистры).
+ */
 #include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
 

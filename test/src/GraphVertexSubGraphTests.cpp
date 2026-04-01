@@ -92,7 +92,7 @@ TEST(TestConstructorWithIName_SubGraph, SubGraphWithDefaultInputParametrs) {
 //   EXPECT_THROW(subGraph1.toVerilog("path"), std::invalid_argument);
 // }
 
-// TODO: Update with easylogging
+// @todo Update with easylogging
 // TEST(TestToVerilog, TestReturnPairWrongPath) {
 //   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
 //   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
@@ -239,7 +239,7 @@ TEST(TestSetName_SubGraph, InputCorrectName) {
 //   EXPECT_EQ(subGraphPtr1->getInConnections().size(), 1);
 // }
 
-// TODO: Need to fix
+// @todo Need to fix
 // TEST(TestUpdateLevel, UpdateLevelCorrect) {
 //   GraphPtr            graphPtr1 = std::make_shared<OrientedGraph>();
 //   GraphVertexSubGraph subGraph1(graphPtr1);
