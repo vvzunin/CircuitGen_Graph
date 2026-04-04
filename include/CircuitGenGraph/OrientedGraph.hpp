@@ -196,6 +196,7 @@ public:
   /// Calculates and returns the maximum level of the output vertices in the
   /// graph
   /// @return maximum level of the output vertices
+  /// @par Example
   /// @code
   ///  OrientedGraph graph("ExampleGraph");
   /// // Add vertices and edges to the graph (omitted for brevity)
@@ -212,6 +213,7 @@ public:
   /// Sets the current parent graph of the current graph
   /// @param parent A shared pointer to the parent graph to be set as the
   /// current parent
+  /// @par Example
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -235,6 +237,7 @@ public:
   /// Adds an input vertex to the current graph
   /// @param i_name The name of the input vertex to be added
   /// @return A shared pointer to the newly created input vertex
+  /// @par Example
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -250,6 +253,7 @@ public:
   /// Adds an output vertex to the current graph
   /// @param i_name The name of the output vertex to be added
   /// @return A shared pointer to the newly created output vertex
+  /// @par Example
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -266,6 +270,7 @@ public:
   /// @param i_value The value of the constant vertex to be added
   /// @param i_name The name of the constant vertex to be added
   /// @return A shared pointer to the newly created constant vertex
+  /// @par Example
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -283,6 +288,7 @@ public:
   /// @param i_gate The type of the gate vertex to be added
   /// @param i_name The name of the gate vertex to be added
   /// @return A shared pointer to the newly created gate vertex
+  /// @par Example
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -301,6 +307,7 @@ public:
   /// @param i_data Data vertex, should be written to a reg
   /// @param i_name The name of the gate vertex to be added
   /// @return A shared pointer to the newly created gate vertex
+  /// @par Example
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -322,6 +329,7 @@ public:
   /// @param i_wire RST or CLR or SET or EN (enable only if flip-flop)
   /// @param i_name The name of the gate vertex to be added
   /// @return A shared pointer to the newly created gate vertex
+  /// @par Example
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -346,6 +354,7 @@ public:
   /// or EN (en for flip-flop only)
   /// @param i_name The name of the gate vertex to be added
   /// @return A shared pointer to the newly created gate vertex
+  /// @par Example
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -370,6 +379,7 @@ public:
   /// @param i_en EN signal
   /// @param i_name The name of the gate vertex to be added
   /// @return A shared pointer to the newly created gate vertex
+  /// @par Example
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -392,6 +402,7 @@ public:
   /// @param i_inputs A vector containing the input vertices to be connected
   /// to the subgraph
   /// @return A vector containing the output vertices of the subgraph
+  /// @par Example
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -437,6 +448,7 @@ public:
   /// @param from A shared pointer to the vertex where the edge originates
   /// @param to A shared pointer to the vertex where the edge terminates
   /// @return true if the edge was successfully added, false otherwise
+  /// @par Example
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -470,6 +482,7 @@ public:
   /// terminate
   /// @return true if all edges were successfully added, false if at least one
   /// edge failed to be added
+  /// @par Example
   /// @code
   /// // Create an instance of OrientedGraph
   /// auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
@@ -504,6 +517,7 @@ public:
   /// @param from1 The vertex to be deleted to the input connections of "to"
   /// @param to The vertex to be deleted to the output connections of "from"
   /// @return True if edge was found and deleted, false otherwise
+  /// @par Example
   /// @code
   /// // Creating an instance of the OrientedGraph and two vertices
   /// GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph");

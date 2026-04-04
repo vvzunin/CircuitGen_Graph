@@ -113,13 +113,14 @@ public:
   GraphVertexConstant(char i_const, std::string_view i_name,
                       GraphPtr i_baseGraph);
 
-  ~GraphVertexConstant() override{};
+  ~GraphVertexConstant() override {};
 
   /// @brief calculates hash for constant.
   /// Calculates the hash value for the vertex based on its outgoing
   /// connections.
   ///  When running for a second time, set hash flags to default state
   /// @return The hash value of the vertex based on its outgoing connections.
+  /// @par Example
   /// @code
   /// // Creating an instance of the GraphVertexBase class
   /// GraphVertexBase vertex(VertexTypes::output, "vertex1");
@@ -143,6 +144,7 @@ public:
   /// @return A string containing Verilog code for the vertex, or an empty
   /// string if the vertex type is not "output" or if the incoming connection
   /// is invalid
+  /// @par Example
   /// @code
   /// // Creating an instance of the GraphVertexBase class with the type
   /// "output" and the name "output_vertex"
@@ -194,7 +196,7 @@ public:
   GraphVertexSubGraph(GraphPtr i_subGraph, std::string_view i_name,
                       GraphPtr i_baseGraph);
 
-  ~GraphVertexSubGraph() override{};
+  ~GraphVertexSubGraph() override {};
 
   /// @brief updateValue A virtual function for updating the vertex value.
   /// The implementation is provided in derived classes
@@ -219,6 +221,7 @@ public:
   /// @return A string containing Verilog code for the vertex, or an empty
   /// string if the vertex type is not "output" or if the incoming connection
   /// is invalid
+  /// @par Example
   /// @code
   /// // Creating an instance of the GraphVertexBase class with the type
   /// "output" and the name "output_vertex"
@@ -358,11 +361,12 @@ public:
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph);
 
-  ~GraphVertexGates() override{};
+  ~GraphVertexGates() override {};
 
   /// @brief updateValue
   /// Updates the value of the vertex
   /// @return The updated value of the vertex
+  /// @par Example
   /// @code
   /// @todo add example
   /// @endcode
@@ -393,6 +397,7 @@ public:
   /// @brief getGate
   /// Returns the type of valve associated with the current vertex
   /// @return The type of valve associated with the current vertex
+  /// @par Example
   /// @code
   /// GraphVertexGates vertex(Gates::GateAnd);
   /// Gates gateType = vertex.getGate();
@@ -510,15 +515,11 @@ public:
 
   // clang-format on
 
-  ~GraphVertexSequential() override{};
+  ~GraphVertexSequential() override {};
 
   /// @brief calculateHash
   /// Calculates the hash value of the vertex. When running for a second time,
   /// set hash flags to default state
-  /// @throws None.
-  /// @code
-  /// @todo add example
-  /// @endcode
   /// @return The calculated hash value as a string
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
