@@ -34,7 +34,6 @@
 <a name="content_rus"></a>
 - [Правила именования переменных](#hacking)
 - [Сборка программы](#generator_build_rus)
-- [Авторы проекта](docs/AUTHORS.md)
 - [Лицензия](#license)
 
 > Главный репозиторий проекта: https://hub.mos.ru/circuitgen/CircuitGen
@@ -76,14 +75,6 @@ bash scripts/dev/build-debug.sh
 ```
 
 Подробная схема сборки описана [здесь](docs/ru/BUILDING.md).
-
-[&#8593; Contents](#content_rus)
-
-## Авторы проекта
-
-Список авторов с контактами и вкладом в код (на основе авторства классов, методов и файлов) приведен в отдельном документе:
-
-**[Авторы проекта (docs/AUTHORS.md)](docs/AUTHORS.md)**
 
 [&#8593; Contents](#content_rus)
 
