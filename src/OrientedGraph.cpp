@@ -414,7 +414,7 @@ GraphPtr OrientedGraph::createMajoritySubgraph() {
 VertexPtr OrientedGraph::generateMajority(VertexPtr a, VertexPtr b,
                                           VertexPtr c) {
   static GraphPtr majoritySubgraph =
-      createMajoritySubgraph(); // создаётся один раз
+      createMajoritySubgraph(); // создается один раз
 
   std::vector<VertexPtr> outputs =
       this->addSubGraph(majoritySubgraph, {a, b, c});
