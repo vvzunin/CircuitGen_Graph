@@ -94,14 +94,18 @@ GraphVertexSequential::GraphVertexSequential(
     i_baseGraph->addEdges({i_data, i_clk, i_wire}, this);
   DEFAULT_CHECK_TYPE;
   short signals = countSignalsInType(i_type);
-  if (signals < 1)
+  if (signals < 1) {
     d_seqType = static_cast<SequentialTypes>(i_type | EN);
+  }
   else if (signals + bool(i_type & ff) > 2) {
-    if (signals + bool(i_type & ff) > 3)
+    if (signals + bool(i_type & ff) > 3) {
       d_seqType = static_cast<SequentialTypes>(i_type & ~SET & ~RST & ~CLR);
+    }
     d_seqType = static_cast<SequentialTypes>(i_type & ~SET);
-  } else
+  } 
+  else {
     d_seqType = i_type;
+  }
   validateSignal(i_type, d_seqType);
 }
 

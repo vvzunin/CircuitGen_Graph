@@ -467,8 +467,6 @@ protected:
   toVerilogCommon(std::function<std::string()> printBinaryOperators,
                   std::function<std::string()> printUnaryOperators) const;
   Gates d_gate;
-  // Определяем тип вершины: подграф, вход, выход, константа или одна из базовых
-  // логических операций.
 
   friend class GraphVertexSubGraph;
 };
@@ -598,6 +596,7 @@ protected:
 protected:
   SequentialTypes d_seqType;
 };
+
 class GraphVertexBusInput : public GraphVertexInput, public GraphVertexBus {
 public:
   GraphVertexBusInput(std::string_view i_name, GraphPtr i_baseGraph,
@@ -616,6 +615,7 @@ public:
   std::string toOneBitVerilog() const override final;
   //
 };
+
 class GraphVertexBusConstant :
     public GraphVertexConstant,
     public GraphVertexBus {
@@ -633,6 +633,7 @@ public:
 private:
   std::string d_valueBus;
 };
+
 class GraphVertexBusGate : public GraphVertexGates, public GraphVertexBus {
 public:
   GraphVertexBusGate(Gates i_gate, std::string_view i_name,
@@ -656,6 +657,7 @@ public:
 private:
   size_t d_begin;
 };
+
 class GraphVertexBusSequential :
     public GraphVertexSequential,
     public GraphVertexBus {

@@ -50,8 +50,8 @@ const GraphVertexBus *GraphVertexBus::getBusPointer(const VertexPtr i_vertex) {
     }
   }
 }
-
-GraphVertexBus *GraphVertexBus::getBusPointer(VertexPtr i_vertex) {
+#define getBusPointerMacros(is_const) 
+GraphVertexBus *GraphVertexBus::getBusPointer(VertexPtr i_vertex) { 
   switch (i_vertex->getFullType()) {
     case inputBus:
       return static_cast<GraphVertexBusInput *>(i_vertex);
@@ -84,12 +84,12 @@ void GraphVertexBus::updateValueBus(std::string i_value) {
     d_value = i_value;
 }
 
-bool GraphVertexBus::compareBusWidth(const VertexPtr i_left,
+bool GraphVertexBus::hasSmallerWidth(const VertexPtr i_left,
                                      const VertexPtr i_right) {
   if (!i_left->isBus())
-    return false;
-  if (!i_right->isBus())
     return true;
+  if (!i_right->isBus())
+    return false;
   return GraphVertexBus::getBusPointer(i_left)->getWidth() <
          GraphVertexBus::getBusPointer(i_right)->getWidth();
 }

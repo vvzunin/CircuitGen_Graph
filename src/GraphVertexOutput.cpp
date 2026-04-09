@@ -99,7 +99,7 @@ std::string GraphVertexBusOutput::toOneBitVerilog() const {
   if (!d_inConnections.empty())
     minWidth = getBusPointer(
                    (*std::min_element(d_inConnections.begin(),
-                                      d_inConnections.end(), compareBusWidth)))
+                                      d_inConnections.end(), hasSmallerWidth)))
                    ->getWidth();
   for (int i = 0; i < std::min(minWidth, getWidth()); ++i)
     ans << "assign " << getName() << "_" << std::to_string(i) << " = "

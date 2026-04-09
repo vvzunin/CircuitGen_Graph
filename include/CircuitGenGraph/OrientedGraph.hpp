@@ -593,7 +593,9 @@ public:
   /// @return flag, if file was correctly created or not
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool toVerilog(std::string i_path, std::string i_filename = "");
+
   bool toVerilogBusEnabled(std::string i_path, std::string i_filename = "");
+
   bool toVerilogBusEnabledAsOneBit(std::string i_path,
                                    std::string i_filename = "");
 
@@ -801,25 +803,97 @@ protected:
            std::unordered_set<VertexPtr> &i_dsg);
 
 private:
-  static bool verilogFileCreating(GraphPtr graph, std::string i_path,
+  /**
+   * @brief This method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_path path for output verilog file
+   * @param i_filename file name
+   *@return true if file created correctly, false otherwise
+   */
+  static bool verilogFileCreating(GraphPtr i_graph, std::string i_path,
                                   std::string i_filename,
                                   std::ofstream &i_fileStream);
-  static void verilogInoutsWriting(GraphPtr graph, std::ofstream &i_fileStream,
-                                   std::function<void(VertexPtr)> printPin);
-  static void verilogVerticesDeclaration(
-      GraphPtr graph, std::ofstream &i_fileStream,
-      std::function<void(std::vector<GraphVertexBase *>, VertexTypes usedType)>
-          printFunction);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_printPin function, defined in toVerilog..(), print correct
+   * name of vertex to i_fileStream
+   *
+   */
+  static void verilogInoutsWriting(GraphPtr i_graph,
+                                   std::ofstream &i_fileStream,
+                                   std::function<void(VertexPtr)> i_printPin);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_printFunction function, defined in toVerilog..(), print all
+   * vertices of type (i_usedType from VertexTypes) to i_fileStream
+   */
   static void
-  verilogConstantWriting(GraphPtr graph, std::ofstream &i_fileStream,
-                         std::function<void(VertexPtr)> getInstance);
-  static bool verilogSubgraphWriting(GraphPtr graph,
+  verilogVerticesDeclaration(GraphPtr i_graph, std::ofstream &i_fileStream,
+                             std::function<void(std::vector<GraphVertexBase *>,
+                                                VertexTypes i_usedType)>
+                                 i_printFunction);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_getInstance function, defined in toVerilog..(),
+   * print correct constant instance to i_fileStream
+   */
+  static void
+  verilogConstantWriting(GraphPtr i_graph, std::ofstream &i_fileStream,
+                         std::function<void(VertexPtr)> i_getInstance);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_path path to create verilog files for subgraphs
+   * @return true if all files created correctly, false otherwise
+   */
+  static bool verilogSubgraphWriting(GraphPtr i_graph,
                                      std::ofstream &i_fileStream,
                                      std::string i_path);
-  static void
-  verilogVerticesDefining(GraphPtr graph, std::ofstream &i_fileStream,
-                          std::function<void(const VertexPtr)> printDefinition);
-  static bool verilogFinalOperations(GraphPtr graph,
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_printDefinition function, defined in toVerilog..(),
+   * print correct definitions to i_fileStream
+   */
+  static void verilogVerticesDefining(
+      GraphPtr i_graph, std::ofstream &i_fileStream,
+      std::function<void(const VertexPtr)> i_printDefinition);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @return true if file saved correctly, false otherwise
+   */
+  static bool verilogFinalOperations(GraphPtr i_graph,
                                      std::ofstream &i_fileStream);
 
 private:

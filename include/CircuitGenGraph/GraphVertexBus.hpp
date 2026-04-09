@@ -7,6 +7,7 @@
 namespace CG_Graph {
 class GraphVertexBase;
 class GraphVertexBusSlice;
+
 /// \class GraphVertexBus
 /// @brief The class provides methods, specific for bus as type
 /// of vertex
@@ -17,6 +18,7 @@ class GraphVertexBus {
 
 public:
   GraphVertexBus(size_t i_width);
+
   /**
    * @brief Create or obtain a slice of the bus.
    *
@@ -31,7 +33,6 @@ public:
    */
   GraphVertexBusSlice getSlice(size_t i_start, size_t i_end);
 
-  size_t getWidth() const;
   /**
    * @brief Obtain a pointer to the GraphVertexBus interface from a base vertex.
    *
@@ -45,6 +46,16 @@ public:
    */
   static GraphVertexBus *getBusPointer(VertexPtr i_vertex);
   static const GraphVertexBus *getBusPointer(const VertexPtr i_vertex);
+
+  /**
+   * @brief Get width of the bus.
+   *
+   * :)
+   * @return Width as integer value.
+   */
+
+  size_t getWidth() const;
+
   /**
    * @brief Get suffix for the bus name.
    *
@@ -53,18 +64,9 @@ public:
    *
    * @return Bus name suffix as a string.
    */
+
   std::string getBusNameSuffix();
-  /**
-   * @brief Compare two vertices by their bus width.
-   *
-   * This method is intended to be used as a comparator,
-   * for example in sorting routines.
-   *
-   * @param left Pointer to the first vertex.
-   * @param right Pointer to the second vertex.
-   * @return True if the left bus width is smaller than the right one.
-   */
-  static bool compareBusWidth(const VertexPtr i_left, const VertexPtr i_right);
+
   /**
    * @brief Convert the bus to a one-bit Verilog representation.
    *
@@ -73,6 +75,19 @@ public:
    * @return Verilog code representing a single bit of the bus.
    */
   virtual std::string toOneBitVerilog() const = 0;
+
+  /**
+   * @brief Compare two vertices by their bus width.
+   *
+   * This method is intended to be used as a comparator,
+   * for example in sorting routines. Equal to i_left <= i_right
+   *
+   * @param i_left Pointer to the first vertex.
+   * @param i_right Pointer to the second vertex.
+   * @return True if the left bus width is smaller than the right one.
+   */
+  static bool hasSmallerWidth(const VertexPtr i_left, const VertexPtr i_right);
+
   /**
    * @brief Update the bus value during simulation.
    *
@@ -84,8 +99,8 @@ public:
 
 private:
   void setWidth(size_t i_width);
-  size_t d_width;
   std::string d_value;
+  size_t d_width;
 };
 
 } // namespace CG_Graph
