@@ -18,6 +18,8 @@
 #include "easyloggingpp/easylogging++.h"
 #endif
 
+namespace CG_Graph {
+
 /**
  * \~english
  * @todo Maybe Description some virtual methods for Graph's classes,
@@ -37,9 +39,6 @@
  * входной вершиной. Наследуется от класса GraphVertexBase и расширяет его
  * функциональность для работы с входными вершинами.
  */
-
-namespace CG_Graph {
-
 class GraphVertexInput : public GraphVertexBase {
 public:
   /**
@@ -77,6 +76,19 @@ public:
                    const VertexTypes i_type = VertexTypes::input);
 
   /**
+   * @author Theossr <feolab05@gmail.com>
+   * \~english
+   * @brief Sets a new value for the vertex.
+   * @param value The value to set.
+   *
+   * \~russian
+   * @brief Устанавливает новое значение для вершины.
+   * @param value Устанавливаемое значение.
+   */
+  void setValue(const char value);
+
+  /**
+   * @author Vladimir Zunin <vzunin@hse.ru>
    * \~english
    * @brief updateValue A virtual function for updating the vertex value.
    * The implementation is provided in derived classes
@@ -87,16 +99,13 @@ public:
    * вершины. Реализация предоставляется в производных классах
    * @return значение вершины после ее обновления
    */
-  /** @author Theossr <feolab05@gmail.com> */
-  void setValue(const char value);
-
-  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual char updateValue() override;
 
   /** @author Theossr <feolab05@gmail.com> */
   virtual void removeValue() override;
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
    * \~english
    * @brief updateLevel This method updates the level of the vertex based
    * on the levels of its input connections. It iterates through each input
@@ -114,20 +123,21 @@ public:
    * установите все флаги, используемые в updateLevel, в их состояние по
    * умолчанию.
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual void updateLevel() override;
 
   /**
+   * @author Vladimir Zunin <vzunin@hse.ru>
    * \~english
    * @brief writes vertex to dot
    *
    * \~russian
    * @brief записывает вершину в формат dot
    */
-  /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
 
+#ifdef LOGFLAG
   /**
+   * @author Vladimir Zunin <vzunin@hse.ru>
    * \~english
    * @brief log Used for easylogging++
    * @param os Stream for easylogging
@@ -136,8 +146,6 @@ public:
    * @brief log Используется для easylogging++
    * @param os Поток для easylogging
    */
-#ifdef LOGFLAG
-  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 
@@ -162,14 +170,14 @@ public:
    * \~english
    * @brief Initializes the GraphVertexConstant object with the provided
    * base graph pointer and char symbol
-   * @param i_baseGraph Pointer to the base graph.
    * @param i_const char symbol for constant (1, 0, z, x)
+   * @param i_baseGraph Pointer to the base graph.
    *
    * \~russian
    * @brief Инициализирует объект GraphVertexConstant с предоставленным
    * указателем на базовый граф и символом char
-   * @param i_baseGraph Указатель на базовый граф.
    * @param i_const символ char для константы (1, 0, z, x)
+   * @param i_baseGraph Указатель на базовый граф.
    */
   GraphVertexConstant(char i_const, GraphPtr i_baseGraph);
 
@@ -177,16 +185,16 @@ public:
    * \~english
    * @brief Initializes the GraphVertexConstant object with the provided
    * base graph pointer and char symbol
+   * @param i_const char symbol for constant (1, 0, z, x)
    * @param i_name Name of the vertex.
    * @param i_baseGraph Pointer to the base graph.
-   * @param i_const char symbol for constant (1, 0, z, x)
    *
    * \~russian
    * @brief Инициализирует объект GraphVertexConstant с предоставленным
    * указателем на базовый граф и символом char
+   * @param i_const символ char для константы (1, 0, z, x)
    * @param i_name Имя вершины.
    * @param i_baseGraph Указатель на базовый граф.
-   * @param i_const символ char для константы (1, 0, z, x)
    */
   GraphVertexConstant(char i_const, std::string_view i_name,
                       GraphPtr i_baseGraph);
@@ -277,7 +285,9 @@ public:
    */
   std::string getVerilogInstance();
 
+#ifdef LOGFLAG
   /**
+   * @author Vladimir Zunin <vzunin@hse.ru>
    * \~english
    * @brief log Used for easylogging++
    * @param os Stream for easylogging
@@ -286,8 +296,6 @@ public:
    * @brief log Используется для easylogging++
    * @param os Поток для easylogging
    */
-#ifdef LOGFLAG
-  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 
@@ -311,14 +319,14 @@ public:
    * \~english
    * @brief Initializes the GraphVertexSubGraph object with the provided
    * base graph pointer and subGraph pointer
-   * @param i_baseGraph Pointer to the base graph.
    * @param i_subGraph Pointer to the subGraph.
+   * @param i_baseGraph Pointer to the base graph.
    *
    * \~russian
    * @brief Инициализирует объект GraphVertexSubGraph с предоставленным
    * указателем на базовый граф и указателем на подграф
-   * @param i_baseGraph Указатель на базовый граф.
    * @param i_subGraph Указатель на подграф.
+   * @param i_baseGraph Указатель на базовый граф.
    */
   GraphVertexSubGraph(GraphPtr i_subGraph, GraphPtr i_baseGraph);
   GraphVertexSubGraph(GraphPtr i_subGraph, std::string_view i_name,
@@ -448,16 +456,18 @@ public:
    * @author Fuuulkrum7 <ilka747428@gmail.com>
    *
    * \~english
-   * @brief This method is used as a substructureS for OrientedGraph
+   * @brief This method is used as a substructure for OrientedGraph
    * methods
-   * @param i_indent
-   * @return
+   * @param i_indent Indentation level
+   * @param i_prefix Prefix string
+   * @return Formatted GraphML string
    *
    * \~russian
    * @brief Этот метод используется как подструктура для методов
    * OrientedGraph
-   * @param i_indent
-   * @return
+   * @param i_indent Уровень отступа
+   * @param i_prefix Строка префикса
+   * @return Отформатированная строка GraphML
    */
   std::string toGraphML(uint16_t i_indent = 0, std::string i_prefix = "") const;
 
@@ -467,12 +477,12 @@ public:
    * \~english
    * @brief This method is used as a substructure for OrientedGraph
    * methods. When running it for a second time, clear hash flags
-   * @return
+   * @return Hash value
    *
    * \~russian
    * @brief Этот метод используется как подструктура для методов
    * OrientedGraph. При повторном запуске очистите флаги хэша
-   * @return
+   * @return Значение хэша
    */
   size_t calculateHash() override;
 
@@ -502,10 +512,14 @@ public:
    * \~english
    * @brief returns all vertices of outputs, which are influenced by given
    * input to vertex
+   * @param i_outerInput Input vertex
+   * @return Vector of output vertices
    *
    * \~russian
    * @brief возвращает все вершины выходов, на которые влияет заданный вход
    * в вершину
+   * @param i_outerInput Входная вершина
+   * @return Вектор выходных вершин
    */
   std::vector<VertexPtr>
   getOutputBuffersByOuterInput(VertexPtr i_outerInput) const;
@@ -514,15 +528,21 @@ public:
    * \~english
    * @brief returns all vertices of inputs, which are influenced by given
    * output to vertex
+   * @param i_outputBuffer Output buffer vertex
+   * @return Vector of input vertices
    *
    * \~russian
    * @brief возвращает все вершины входов, на которые влияет заданный выход
    * в вершину
+   * @param i_outputBuffer Вершина выходного буфера
+   * @return Вектор входных вершин
    */
   std::vector<VertexPtr>
   getOuterInputsByOutputBuffer(VertexPtr i_outputBuffer) const;
 
+#ifdef LOGFLAG
   /**
+   * @author Vladimir Zunin <vzunin@hse.ru>
    * \~english
    * @brief log Used for easylogging++
    * @param os Stream for easylogging
@@ -531,8 +551,6 @@ public:
    * @brief log Используется для easylogging++
    * @param os Поток для easylogging
    */
-#ifdef LOGFLAG
-  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 
@@ -607,7 +625,9 @@ public:
   /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
 
+#ifdef LOGFLAG
   /**
+   * @author Vladimir Zunin <vzunin@hse.ru>
    * \~english
    * @brief log Used for easylogging++
    * @param os Stream for easylogging
@@ -616,8 +636,6 @@ public:
    * @brief log Используется для easylogging++
    * @param os Поток для easylogging
    */
-#ifdef LOGFLAG
-  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 
@@ -774,7 +792,9 @@ public:
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool isSubgraphBuffer() const override;
 
+#ifdef LOGFLAG
   /**
+   * @author Vladimir Zunin <vzunin@hse.ru>
    * \~english
    * @brief log Used for easylogging++
    * @param os Stream for easylogging
@@ -783,15 +803,11 @@ public:
    * @brief log Используется для easylogging++
    * @param os Поток для easylogging
    */
-#ifdef LOGFLAG
-  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
 
 private:
   Gates d_gate;
-  // Определяем тип вершины: подграф, вход, выход, константа или одна из
-  // базовых логических операций.
   friend class GraphVertexSubGraph;
 };
 

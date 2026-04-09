@@ -203,60 +203,46 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
  * @author NonDif <shapkin.andrey123@gmail.com>
  *
  * \~english
- * @param d_baseGraph A weak pointer to the base graph containing this
- * vertex
- * @param d_name The name of the vertex. It is a string containing the name
- * of a vertex
- * @param d_value The value of the vertex
- * @param d_level The vertex level is represented by the uint32_t type
- * @param d_inConnections vector of weak pointers to input connections with
- * other vertices
- * @param d_outConnections vector of strong pointers to output connections
- * with other vertices
- * @param d_type Vertex Type - Defined by the VertexTypes enumeration
- * @param d_count Vertex counter for naming and other purposes. Represented
- * by the uint_fast64_t type
- * @param d_hashed A string containing the calculated hash value for the
- * vertex
- * @param d_hasHash A HASH_CONDITION value containing hashing status
- * @see HASH_CONDITION
- * @param d_needUpdate A VERTEX_STATE value containing status in the
- * context of level calculating
- * @see VERTEX_STATE
+ * @brief Base class for graph vertices
+ * - d_baseGraph: A weak pointer to the base graph containing this vertex
+ * - d_name: The name of the vertex. It is a string containing the name of a vertex
+ * - d_value: The value of the vertex
+ * - d_level: The vertex level is represented by the uint32_t type
+ * - d_inConnections: vector of weak pointers to input connections with other vertices
+ * - d_outConnections: vector of strong pointers to output connections with other vertices
+ * - d_type: Vertex Type - Defined by the VertexTypes enumeration
+ * - d_count: Vertex counter for naming and other purposes. Represented by the uint_fast64_t type
+ * - d_hashed: A string containing the calculated hash value for the vertex
+ * - d_hasHash: A HASH_CONDITION value containing hashing status
+ * - d_needUpdate: A VERTEX_STATE value containing status in the context of level calculating
  *
  * \~russian
- * @param d_baseGraph Слабый указатель (weak pointer) на базовый граф,
- * содержащий эту вершину
- * @param d_name Имя вершины. Это строка, содержащая имя вершины
- * @param d_value Значение вершины
- * @param d_level Уровень вершины, представленный типом uint32_t
- * @param d_inConnections вектор слабых указателей на входные соединения
- * с другими вершинами
- * @param d_outConnections вектор сильных указателей на выходные
- * соединения с другими вершинами
- * @param d_type Тип вершины - определяется перечислением VertexTypes
- * @param d_count Счетчик вершин для именования и других целей.
- * Представлен типом uint_fast64_t
- * @param d_hashed Строка, содержащая вычисленное значение хэша для
- * вершины
- * @param d_hasHash Значение HASH_CONDITION, содержащее статус хэширования
- * @see HASH_CONDITION
- * @param d_needUpdate Значение VERTEX_STATE, содержащее статус в
- * контексте вычисления уровня
- * @see VERTEX_STATE
+ * @brief Базовый класс для вершин графа
+ * - d_baseGraph: Слабый указатель (weak pointer) на базовый граф, содержащий эту вершину
+ * - d_name: Имя вершины. Это строка, содержащая имя вершины
+ * - d_value: Значение вершины
+ * - d_level: Уровень вершины, представленный типом uint32_t
+ * - d_inConnections: вектор слабых указателей на входные соединения с другими вершинами
+ * - d_outConnections: вектор сильных указателей на выходные соединения с другими вершинами
+ * - d_type: Тип вершины - определяется перечислением VertexTypes
+ * - d_count: Счетчик вершин для именования и других целей. Представлен типом uint_fast64_t
+ * - d_hashed: Строка, содержащая вычисленное значение хэша для вершины
+ * - d_hasHash: Значение HASH_CONDITION, содержащее статус хэширования
+ * - d_needUpdate: Значение VERTEX_STATE, содержащее статус в контексте вычисления уровня
  */
 class GraphVertexBase {
   friend class OrientedGraph;
 
 public:
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief resetes counter of unique id-s for vertices
    *
    * \~russian
    * @brief сбрасывает счетчик уникальных идентификаторов для вершин
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   static void resetCounter() { d_count = 0ul; }
 
 private:
@@ -285,6 +271,8 @@ public:
   };
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief used for reset for all states being used (hash, updateValue,
    * etc)
@@ -293,40 +281,42 @@ public:
    * @brief используется для сброса всех используемых состояний (hash,
    * updateValue и т.д.)
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void resetAllStates() {
     d_needUpdate = VS_NOT_CALC;
     d_hasHash = HC_NOT_CALC;
   }
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief required before recalculation of the levels of graph
    *
    * \~russian
    * @brief требуется перед пересчетом уровней графа
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void resetNeedUpdateState() { d_needUpdate = VS_NOT_CALC; }
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief required before hash recalculation
    *
    * \~russian
    * @brief требуется перед пересчетом хэша
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void resetHashState() { d_hasHash = HC_NOT_CALC; }
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief required before get vertices by level
    *
    * \~russian
    * @brief требуется перед получением вершин по уровню
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void resetUsedLevelState() {
     // remove flag using bitwise operations
     d_needUpdate = static_cast<VERTEX_STATE>(d_needUpdate & ~VS_USED_LEVEL);
@@ -365,13 +355,23 @@ public:
   GraphVertexBase(const VertexTypes i_type, std::string_view i_name,
                   GraphPtr i_graph);
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
-  GraphVertexBase &operator=(const GraphVertexBase &other) =
-      default; // оператор копирующего присваивания
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * \~english
+   * @brief Copy assignment operator
+   * \~russian
+   * @brief Оператор копирующего присваивания
+   */
+  GraphVertexBase &operator=(const GraphVertexBase &other) = default; 
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
-  GraphVertexBase &operator=(GraphVertexBase &&other) =
-      default; // оператор перемещающего присваивания
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * \~english
+   * @brief Move assignment operator
+   * \~russian
+   * @brief Оператор перемещающего присваивания
+   */
+  GraphVertexBase &operator=(GraphVertexBase &&other) = default; 
 
   /**
    * \~english
@@ -400,6 +400,8 @@ public:
   virtual ~GraphVertexBase();
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief getType
    * This method returns the type of the vertex as a value of the
@@ -417,12 +419,11 @@ public:
    * Этот метод возвращает тип вершины как значение перечисления VertexTypes
    * @return Тип вершины (из перечисления VertexTypes).
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexTypes getType() const;
 
-  // Get для типа вершины в фомате строки
-
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief getTypeName
    * This method returns the string representation of the vertex type by
@@ -443,12 +444,11 @@ public:
    * настроек, связанного с вершиной
    * @return Строковое представление типа вершины.
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string getTypeName() const;
 
-  // Get-Set для имен входов
-
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief setName This method sets the name of the vertex to the
    * specified string.
@@ -465,10 +465,11 @@ public:
    * @brief setName Этот метод устанавливает имя вершины в указанную строку.
    * @param i_name Новое имя для вершины.
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void setName(std::string_view i_name);
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief getName Returns the name of the vertex
    * @return The name of the vertex.
@@ -483,13 +484,15 @@ public:
    * @brief getName Возвращает имя вершины
    * @return Имя вершины.
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string getName() const;
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief getName Returns concatenation of the name of the vertex and
    * i_prefix
+   * @param i_prefix String prefix to append
    * @return The concatenation of name of the vertex and i_prefix
    * @par Example
    * @code
@@ -500,12 +503,14 @@ public:
    *
    * \~russian
    * @brief getName Возвращает конкатенацию имени вершины и i_prefix
+   * @param i_prefix Строка-префикс для добавления
    * @return Конкатенация имени вершины и i_prefix
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string getName(const std::string &i_prefix) const;
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief getRawName Returns string_view object with name of the vertex
    * @return The string_view object with name of the vertex
@@ -520,12 +525,11 @@ public:
    * @brief getRawName Возвращает объект string_view с именем вершины
    * @return Объект string_view с именем вершины
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view getRawName() const;
 
-  // Get для значения вершины
-
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief getValue Returns the value of the vertex.
    * @return The value of the vertex.
@@ -540,10 +544,11 @@ public:
    * @brief getValue Возвращает значение вершины.
    * @return Значение вершины.
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   char getValue() const;
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief updateValue A virtual function for updating the vertex value.
    * The implementation is provided in derived classes
@@ -554,15 +559,20 @@ public:
    * Реализация предоставляется в производных классах
    * @return значение вершины после ее обновления
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual char updateValue() = 0;
 
-  /** @author Theossr <feolab05@gmail.com> */
+  /**
+   * @author Theossr <feolab05@gmail.com>
+   * \~english
+   * @brief Removes value of the vertex
+   * \~russian
+   * @brief Удаляет значение вершины
+   */
   virtual void removeValue();
 
-  // Get-Set для уровня
-
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief getLevel Returns the level of the vertex
    * @return The level of the vertex
@@ -577,10 +587,11 @@ public:
    * @brief getLevel Возвращает уровень вершины
    * @return Уровень вершины
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   uint32_t getLevel() const;
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief updateLevel
    * This method updates the level of the vertex based on the levels of its
@@ -598,10 +609,11 @@ public:
    * раз, пожалуйста, установите все флаги, используемые в updateLevel,
    * в их состояние по умолчанию.
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual void updateLevel();
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief getVerticesByLevel Support method for
    * OrientedGraph::getVerticesByLevel() calculating
@@ -623,12 +635,13 @@ public:
    * входам)
    * @return true, если вершина имеет требуемый уровень, и false, если нет
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool getVerticesByLevel(uint32_t i_targetLevel,
                           std::vector<VertexPtr> &i_result,
                           bool i_fromOut = true);
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief getGate
    * Returns the type of the basic logic gate represented by this vertex. If
@@ -648,13 +661,11 @@ public:
    * логическому вентилю, возвращает Gate Default (по умолчанию)
    * @return Тип базового логического вентиля, представленного этой вершиной
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual Gates getGate() const { return Gates::GateDefault; }
 
-  // Get-Set для базового графа
-  // void setBaseGraph(std::shared_ptr<OrientedGraph> const i_baseGraph);
-
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief getBaseGraph
    * @return a weak pointer to the base graph associated with this vertex.
@@ -664,13 +675,15 @@ public:
    * @return слабый указатель (weak pointer) на базовый граф, связанный с
    * этой вершиной.
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphPtrWeak getBaseGraph() const;
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief reserveInConnections reserving memory in d_inConnections for
    * i_size other vertices
+   * @param i_size Size to reserve
    * @code
    * GraphVertexBase vertex(VertexTypes::input, "vertex1");
    * vertex.reserveInConnections(5);
@@ -679,14 +692,17 @@ public:
    * \~russian
    * @brief reserveInConnections резервирует память в d_inConnections для
    * i_size других вершин
+   * @param i_size Размер резервируемой памяти
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void reserveInConnections(size_t i_size);
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief reserveOutConnections reserving memory in d_outConnections for
    * i_size other vertices
+   * @param i_size Size to reserve
    * @code
    * GraphVertexBase vertex(VertexTypes::input, "vertex1");
    * vertex.reserveOutConnections(5);
@@ -695,11 +711,13 @@ public:
    * \~russian
    * @brief reserveOutConnections резервирует память в d_outConnections для
    * i_size других вершин
+   * @param i_size Размер резервируемой памяти
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void reserveOutConnections(size_t i_size);
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief getInConnections
    * @return A vector of weak pointers to the input connections of this
@@ -730,10 +748,11 @@ public:
    * @brief getInConnections
    * @return Вектор слабых указателей на входные соединения этой вершины
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::vector<VertexPtr> getInConnections() const;
 
   /**
+   * @author rainbowkittensss <viktorrrrry20@gmail.com>
+   *
    * \~english
    * @brief addVertexToInConnections
    * Adds a vertex to the input connections of this vertex and returns the
@@ -764,10 +783,11 @@ public:
    * @return Количество вхождений данной вершины во входных соединениях
    * после ее добавления
    */
-  /** @author rainbowkittensss <viktorrrrry20@gmail.com> */
   virtual uint32_t addVertexToInConnections(VertexPtr i_vert);
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief getOutConnections
    * @return A vector of shared pointers to the output connections of this
@@ -795,10 +815,11 @@ public:
    * @brief getOutConnections
    * @return Вектор сильных указателей на выходные соединения этой вершины
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::vector<VertexPtr> getOutConnections() const;
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief addVertexToOutConnections
    * Adds a vertex to the output connections of this vertex if it is not
@@ -819,10 +840,11 @@ public:
    * @return true, если вершина была успешно добавлена, false, если она уже
    * присутствовала в выходных соединениях.
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool addVertexToOutConnections(VertexPtr i_vert);
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief calculateHash
    * Calculates the hash value for the vertex based on its outgoing
@@ -854,10 +876,11 @@ public:
    * При повторном запуске установите флаги хэша в состояние по умолчанию
    * @return Значение хэша вершины на основе ее исходящих соединений.
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual size_t calculateHash();
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief toVerilog Generates Verilog code for the vertex
    * @return A string containing Verilog code for the vertex, or an empty
@@ -884,35 +907,42 @@ public:
    * если тип вершины не "output" или если входящее соединение
    * недействительно
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual std::string toVerilog() const;
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief calls toVerilog and allows to write vertex as string to a
    * stream
+   * @param stream Stream to write to
+   * @param matrix Vertex to write
    *
    * \~russian
    * @brief вызывает toVerilog и позволяет записать вершину в виде строки
    * в поток
+   * @param stream Поток для записи
+   * @param matrix Вершина для записи
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   friend std::ostream &operator<<(std::ostream &stream,
                                   const GraphVertexBase &matrix);
 
   /**
+   * @author Vladimir Zunin <vzunin@hse.ru>
+   *
    * \~english
    * @brief toDOT Generates DOT code for the vertex
-   * @return
+   * @return DOT representation
    *
    * \~russian
    * @brief toDOT Генерирует код DOT для вершины
-   * @return
+   * @return DOT представление
    */
-  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual DotReturn toDOT();
 
   /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   *
    * \~english
    * @brief Used for check if vertex is a subGraph vertex output
    * @return true if is vertex is subGraph vertex output or false if not
@@ -923,10 +953,12 @@ public:
    * @return true, если вершина является выходом вершины подграфа, или
    * false, если нет
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual bool isSubgraphBuffer() const { return false; }
 
+#ifdef LOGFLAG
   /**
+   * @author Vladimir Zunin <vzunin@hse.ru>
+   *
    * \~english
    * @brief log Used for easylogging++
    * @param os Stream for easylogging
@@ -935,13 +967,13 @@ public:
    * @brief log Используется для easylogging++
    * @param os Поток для easylogging
    */
-#ifdef LOGFLAG
-  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const;
 #endif
 
 protected:
   /**
+   * @author rainbowkittensss <viktorrrrry20@gmail.com>
+   *
    * \~english
    * @brief removeVertexToOutConnections
    * Removes a vertex from the output connections of this vertex.
@@ -976,18 +1008,15 @@ protected:
    * @return true, если вершина была успешно удалена, false в противном
    * случае.
    */
-  /** @author rainbowkittensss <viktorrrrry20@gmail.com> */
   bool removeVertexToOutConnections(VertexPtr i_vert);
 
   /**
+   * @author rainbowkittensss <viktorrrrry20@gmail.com>
+   *
    * \~english
    * @brief removeVertexToInConnections
    * Removes a vertex from the input connections of this vertex.
    * @param i_vert The vertex to be removed from the input connections.
-   * @param i_full flag indicating whether to remove all occurrences of the
-   * vertex from the input connections. (Not available in current version)
-   * If true, all occurrences will be removed. If false, only the first
-   * occurrence will be removed. Default - false
    * @return true if the vertex was successfully removed, false otherwise.
    * @par Example
    * @code
@@ -999,8 +1028,7 @@ protected:
    * // Adding a second vertex to the input connections
    * vertex.addVertexToInConnections(anotherVertex);
    * // Removing the second vertex from the input connections
-   * bool removed = vertex.removeVertexToInConnections(anotherVertex,
-   * false);
+   * bool removed = vertex.removeVertexToInConnections(anotherVertex);
    * // Output of the result
    * if (removed)
    * {
@@ -1016,12 +1044,9 @@ protected:
    * @brief removeVertexToInConnections
    * Удаляет вершину из входных соединений этой вершины.
    * @param i_vert Вершина, которую нужно удалить из входных соединений.
-   * @param i_full флаг, указывающий, нужно ли удалять все вхождения
-   * вершины из входных соединений. (Недоступно в текущей версии).
    * @return true, если вершина была успешно удалена, false в противном
    * случае.
    */
-  /** @author rainbowkittensss <viktorrrrry20@gmail.com> */
   bool removeVertexToInConnections(VertexPtr i_vert);
 
   std::vector<VertexPtr> d_inConnections;
@@ -1045,7 +1070,10 @@ private:
 
 static_assert(sizeof(GraphVertexBase) <= 104u);
 
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/**
+ * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @brief Operator overloader for string conversion
+ */
 std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex);
 
 } // namespace CG_Graph

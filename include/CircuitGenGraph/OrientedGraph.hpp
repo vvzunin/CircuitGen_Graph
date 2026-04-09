@@ -51,81 +51,42 @@ class GraphVertexBase;
  * @class CG_Graph::OrientedGraph
  *
  * \~english
- * @param d_countNewGraphInstance Static variable to count new graph
- * instances
- * @param d_countGraph Current instance counter. Is used for setting a
- * graphID
- * @param d_currentParentGraph Weak pointer to the current parent graph
- * @param d_edgesCount The number of edges in the graph
- * @param d_hashed Hashed value of the graph
- * @param d_parentGraphs Vector of weak pointers to parent graphs
- * @param d_name The name of the graph
- * @param d_needLevelUpdate A flag indicating whether the vertex levels in
- * the graph need to be updated
- * @param d_graphInstanceToVerilogCount Map to count instances to Verilog.
- * This map is used to count how many times each subgraph instance has been
- * converted to Verilog. The key represents the instance number of the
- * subgraph, and the value represents the count of how many times it has
- * been converted to Verilog
- * @param d_graphInstanceToDotCount Map to count instances to DOT.
- * This map is used to count how many times each subgraph instance has been
- * converted to DOT. The key represents the instance number of the
- * subgraph, and the value represents the count of how many times it has
- * been converted to DOT
- * @param d_allSubGraphsOutputs Vector storing all outputs of subgraphs
- * @param d_subGraphs Set of subgraphs.
- * This set stores the subgraphs present in the graph. It is used to keep
- * track of all the subgraphs associated with the current graph instance
- * @param d_vertices Map of vertex types to vectors of vertex pointers
- * @param d_countGraph Static counter for the total number of graphs
- * @param d_gatesCount Map for quick gates count.
- * This map is used for quick counting of gates in the graph. It maps each
- * gate type (Gates) to the count of gates of that type present in the
- * graph.
- * @param d_edgesGatesCount Map for quick count of edges of gate type.
- * This map is used for quick counting of edges between different types of
- * gates in the graph. It maps each gate type (Gates) to another map, where
- * the inner map maps gate types to the count of edges between them.
+ * @brief Main class representing a directed graph
+ * - d_countNewGraphInstance Static variable to count new graph instances
+ * - d_countGraph Current instance counter. Is used for setting a graphID
+ * - d_currentParentGraph Weak pointer to the current parent graph
+ * - d_edgesCount The number of edges in the graph
+ * - d_hashed Hashed value of the graph
+ * - d_parentGraphs Vector of weak pointers to parent graphs
+ * - d_name The name of the graph
+ * - d_needLevelUpdate A flag indicating whether the vertex levels in the graph need to be updated
+ * - d_graphInstanceToVerilogCount Map to count instances to Verilog.
+ * - d_graphInstanceToDotCount Map to count instances to DOT.
+ * - d_allSubGraphsOutputs Vector storing all outputs of subgraphs
+ * - d_subGraphs Set of subgraphs.
+ * - d_vertices Map of vertex types to vectors of vertex pointers
+ * - d_countGraph Static counter for the total number of graphs
+ * - d_gatesCount Map for quick gates count.
+ * - d_edgesGatesCount Map for quick count of edges of gate type.
  *
  * \~russian
- * @param d_countNewGraphInstance Статическая переменная для подсчета новых
- * экземпляров графа
- * @param d_countGraph Текущий счетчик экземпляров. Используется для
- * установки graphID
- * @param d_currentParentGraph Слабый указатель (weak pointer) на текущий
- * родительский граф
- * @param d_edgesCount Количество ребер в графе
- * @param d_hashed Хэшированное значение графа
- * @param d_parentGraphs Вектор слабых указателей на родительские графы
- * @param d_name Имя графа
- * @param d_needLevelUpdate Флаг, указывающий, нужно ли обновлять уровни
- * вершин в графе
- * @param d_graphInstanceToVerilogCount Словарь для подсчета экземпляров,
- * преобразованных в Verilog. Этот словарь используется для подсчета того,
- * сколько раз каждый экземпляр подграфа был преобразован в Verilog. Ключ
- * представляет номер экземпляра подграфа, а значение - количество раз,
- * которое он был преобразован в Verilog
- * @param d_graphInstanceToDotCount Словарь для подсчета экземпляров,
- * преобразованных в DOT. Этот словарь используется для подсчета того,
- * сколько раз каждый экземпляр подграфа был преобразован в DOT. Ключ
- * представляет номер экземпляра подграфа, а значение - количество раз,
- * которое он был преобразован в DOT
- * @param d_allSubGraphsOutputs Вектор, хранящий все выходы подграфов
- * @param d_subGraphs Множество подграфов. Это множество хранит подграфы,
- * присутствующие в графе. Используется для отслеживания всех подграфов,
- * связанных с текущим экземпляром графа
- * @param d_vertices Словарь, сопоставляющий типы вершин с векторами
- * указателей на вершины
- * @param d_countGraph Статический счетчик общего количества графов
- * @param d_gatesCount Словарь для быстрого подсчета вентилей. Этот словарь
- * используется для быстрого подсчета вентилей в графе. Он сопоставляет
- * каждый тип вентиля (Gates) с количеством вентилей этого типа,
- * присутствующих в графе.
- * @param d_edgesGatesCount Словарь для быстрого подсчета ребер между
- * типами вентилей. Этот словарь используется для быстрого подсчета ребер
- * между различными типами вентилей в графе. Он сопоставляет каждый тип
- * вентиля (Gates) с другим словарем, где внутренний словарь сопоставляет
- * типы вентилей с количеством ребер между ними.
+ * @brief Главный класс, представляющий ориентированный граф
+ * - d_countNewGraphInstance Статическая переменная для подсчета новых экземпляров графа
+ * - d_countGraph Текущий счетчик экземпляров. Используется для установки graphID
+ * - d_currentParentGraph Слабый указатель (weak pointer) на текущий родительский граф
+ * - d_edgesCount Количество ребер в графе
+ * - d_hashed Хэшированное значение графа
+ * - d_parentGraphs Вектор слабых указателей на родительские графы
+ * - d_name Имя графа
+ * - d_needLevelUpdate Флаг, указывающий, нужно ли обновлять уровни вершин в графе
+ * - d_graphInstanceToVerilogCount Словарь для подсчета экземпляров, преобразованных в Verilog.
+ * - d_graphInstanceToDotCount Словарь для подсчета экземпляров, преобразованных в DOT.
+ * - d_allSubGraphsOutputs Вектор, хранящий все выходы подграфов
+ * - d_subGraphs Множество подграфов.
+ * - d_vertices Словарь, сопоставляющий типы вершин с векторами указателей на вершины
+ * - d_countGraph Статический счетчик общего количества графов
+ * - d_gatesCount Словарь для быстрого подсчета вентилей.
+ * - d_edgesGatesCount Словарь для быстрого подсчета ребер между типами вентилей.
  */
 
 // clang-format off
@@ -228,11 +189,13 @@ public:
    * @brief Checks, if there are any gates in graph (including subrapgs).
    * In fact checks, if fullSize is equal to zero
    * @note Are there any gates in the circuit, including subgraphs
+   * @return true if empty, false otherwise
    *
    * \~russian
    * @brief Проверяет, есть ли какие-либо вентили в графе (включая
    * подграфы). Фактически проверяет, равен ли fullSize нулю
    * @note Имеются ли gate в схеме, включая подграфы
+   * @return true если пуст, false в противном случае
    */
   bool isEmpty() const;
 
@@ -745,11 +708,21 @@ public:
                                      std::vector<VertexPtr> i_inputs);
 
   /** * @author Theossr <feolab05@gmail.com> 
+   * \~english
+   * @brief Starts graph simulation
+   * @param values Vector of input values
+   * @return Vector of output simulation results
+   * * \~russian
    * @brief Запускает симуляцию графа 
+   * @param values Вектор входных значений
+   * @return Вектор выходных результатов симуляции
    */
   std::vector<char> graphSimulation(std::vector<char> values);
 
   /** * @author Theossr <feolab05@gmail.com> 
+   * \~english
+   * @brief Resets values after simulation
+   * * \~russian
    * @brief Сбрасывает значения после симуляции
    */
   void simulationRemove();
@@ -769,7 +742,7 @@ public:
    * can have not any element in d_outConnections(), these
    * also will be removed.
    *
-* \~russian
+   * \~russian
    * @brief removeWasteVertices()
    * В некоторых сгенерированных графах есть вершины, не имеющие пути
    * к выходам схемы. Метод удаляет их.
@@ -956,6 +929,8 @@ public:
    * smaller, that number of all vertices inside current graph. Index
    * firstly is used for inputs, than - constants, than - gates,
    * sequential, subGraphs and than - outputs.
+   * @param idx Index of the vertex to retrieve
+   * @return Pointer to the requested vertex
    * @throw out_of_range if idx is bigger than number of all vertices in
    * graph
    *
@@ -964,6 +939,8 @@ public:
    * быть меньше, чем количество всех вершин внутри текущего графа. Индекс
    * сначала используется для входов, затем - констант, затем - вентилей,
    * последовательностных элементов, подграфов и затем - выходов.
+   * @param idx Индекс вершины для получения
+   * @return Указатель на запрошенную вершину
    * @throw out_of_range, если idx больше количества всех вершин в графе
    */
   VertexPtr getVerticeByIndex(size_t idx) const;
@@ -1088,9 +1065,25 @@ public:
 
   /**
    * \~english
+   * @brief Parses vertex information to GraphML format components
+   * @param vertexType The type of the vertex being parsed
+   * @param vertexVector Vector containing pointers to the vertices
+   * @param nodeTemplate String template for formatting nodes
+   * @param edgeTemplate String template for formatting edges
+   * @param i_prefix Prefix string for ID generation
+   * @param nodes Reference to string where parsed nodes will be appended
+   * @param edges Reference to string where parsed edges will be appended
    * @todo add description
    *
    * \~russian
+   * @brief Парсит информацию о вершине в компоненты формата GraphML
+   * @param vertexType Тип парсируемой вершины
+   * @param vertexVector Вектор, содержащий указатели на вершины
+   * @param nodeTemplate Строковый шаблон для форматирования узлов
+   * @param edgeTemplate Строковый шаблон для форматирования ребер
+   * @param i_prefix Строка-префикс для генерации ID
+   * @param nodes Ссылка на строку, куда будут добавлены распарсенные узлы
+   * @param edges Ссылка на строку, куда будут добавлены распарсенные ребра
    * @todo добавить описание
    */
   void parseVertexToGraphML(const VertexTypes &vertexType,
@@ -1104,11 +1097,17 @@ public:
    * @author Fuuulkrum7 <ilka747428@gmail.com>
    *
    * \~english
-   * @brief Is called by toGraphMLClassic.
+   * @brief Is called by toGraphMLClassic. Generates classical GraphML format.
+   * @param i_indent Indentation level for formatting
+   * @param i_prefix Prefix for graph components
+   * @return Formatted GraphML string
    * @todo add description
    *
    * \~russian
-   * @brief Вызывается методом toGraphMLClassic.
+   * @brief Вызывается методом toGraphMLClassic. Генерирует классический формат GraphML.
+   * @param i_indent Уровень отступа для форматирования
+   * @param i_prefix Префикс для компонентов графа
+   * @return Отформатированная строка GraphML
    * @todo добавить описание
    */
   std::string toGraphMLClassic(uint16_t i_indent = 0,
@@ -1119,10 +1118,12 @@ public:
    *
    * \~english
    * @brief Is called by toGraphMLPseudoABCD.
+   * @return Formatted pseudo-ABCD GraphML string
    * @todo add description
    *
    * \~russian
    * @brief Вызывается методом toGraphMLPseudoABCD.
+   * @return Отформатированная строка псевдо-ABCD GraphML
    * @todo добавить описание
    */
   std::string toGraphMLPseudoABCD();
@@ -1132,10 +1133,12 @@ public:
    *
    * \~english
    * @brief Is called by toGraphMLOpenABCD.
+   * @return Formatted open-ABCD GraphML string
    * @todo add description
    *
    * \~russian
    * @brief Вызывается методом toGraphMLOpenABCD.
+   * @return Отформатированная строка open-ABCD GraphML
    * @todo добавить описание
    */
   std::string toGraphMLOpenABCD();
@@ -1143,17 +1146,17 @@ public:
   /**
    * \~english
    * @brief used for looking for a vector of all vertices with required type
-   * @param i_type
-   * @param i_name
-   * @param i_addSubGraphs
-   * @return
+   * @param i_type The required vertex type
+   * @param i_name Optional name to filter by
+   * @param i_addSubGraphs Whether to search inside subgraphs
+   * @return Vector of vertices matching the criteria
    *
    * \~russian
    * @brief используется для поиска вектора всех вершин требуемого типа
-   * @param i_type
-   * @param i_name
-   * @param i_addSubGraphs
-   * @return
+   * @param i_type Требуемый тип вершины
+   * @param i_name Опциональное имя для фильтрации
+   * @param i_addSubGraphs Выполнять ли поиск внутри подграфов
+   * @return Вектор вершин, соответствующих критериям
    */
   std::vector<VertexPtr>
   getVerticesByType(const VertexTypes &i_type, std::string_view i_name = "",
@@ -1164,9 +1167,13 @@ public:
    *
    * \~english
    * @brief gets all vertices with requires level
+   * @param i_level The target level to retrieve
+   * @return Vector of vertices at the specified level
    *
    * \~russian
    * @brief получает все вершины с требуемым уровнем
+   * @param i_level Целевой уровень для поиска
+   * @return Вектор вершин на указанном уровне
    */
   std::vector<VertexPtr> getVerticesByLevel(uint32_t i_level);
 
@@ -1294,10 +1301,12 @@ public:
    *
    * \~english
    * @brief Checks graph connectivity
+   * @param i_recalculate Flag to force recalculation of connectivity
    * @return bool, true if the graph is connected, and false if not.
    *
    * \~russian
    * @brief Проверяет связность графа
+   * @param i_recalculate Флаг для принудительного пересчета связности
    * @return bool, true, если граф связен, и false, если нет.
    */
   bool isConnected(bool i_recalculate = false);
@@ -1358,10 +1367,12 @@ public:
    *
    * \~english
    * @brief Unrolls graph.
+   * @return Pointer to unrolled graph
    * @todo add normal description
    *
    * \~russian
    * @brief Разворачивает граф.
+   * @return Указатель на развернутый граф
    * @todo добавить нормальное описание
    */
   GraphPtr unrollGraph();
@@ -1384,13 +1395,23 @@ public:
    *
    * \~english
    * @brief creates majority element inside current graph
+   * @param a First input vertex
+   * @param b Second input vertex
+   * @param c Third input vertex
+   * @return Vertex pointer to the generated majority output
    *
    * \~russian
    * @brief создает мажоритарный элемент внутри текущего графа
+   * @param a Первая входная вершина
+   * @param b Вторая входная вершина
+   * @param c Третья входная вершина
+   * @return Указатель на вершину сгенерированного мажоритарного выхода
    */
   VertexPtr generateMajority(VertexPtr a, VertexPtr b, VertexPtr c);
 
+#ifdef LOGFLAG
   /**
+   * @author Vladimir Zunin <vzunin@hse.ru>
    * \~english
    * @brief log Used for easylogging++
    * @param os Stream for easylogging
@@ -1399,8 +1420,6 @@ public:
    * @brief log Используется для easylogging++
    * @param os Поток для easylogging
    */
-#ifdef LOGFLAG
-  /** @author Vladimir Zunin <vzunin@hse.ru> */
   virtual void log(el::base::type::ostream_t &os) const;
 #endif
 
@@ -1413,26 +1432,37 @@ protected:
    * \~english
    * @brief Allocates memory and creates an instance of required type. Is
    * used for creating ALL vertices of any type.
-   * @tparam T
-   * @tparam ...Args
-   * @param ...args
-   * @return
+   * @tparam T Type of vertex to create
+   * @tparam Args Template argument pack for constructor
+   * @param args Arguments forwarded to constructor
+   * @return Pointer to newly created instance
    *
    * \~russian
    * @brief Выделяет память и создает экземпляр требуемого типа.
    * Используется для создания ВСЕХ вершин любого типа.
-   * @tparam T
-   * @tparam ...Args
-   * @param ...args
-   * @return
+   * @tparam T Тип создаваемой вершины
+   * @tparam Args Пакет шаблонных аргументов для конструктора
+   * @param args Аргументы, передаваемые в конструктор
+   * @return Указатель на созданный экземпляр
    */
   template<typename T, typename... Args>
   T *create(Args &&...args) {
-    /** @author Fuuulkrum7 <ilka747428@gmail.com> */
     return new (allocate<T>()) T(std::forward<Args>(args)...);
   }
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /**
+   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * \~english
+   * @brief Depth-first search traversal
+   * @param i_startVertex Starting vertex for traversal
+   * @param i_visited Set tracking visited vertices
+   * @param i_dsg Set tracking subgraphs
+   * * \~russian
+   * @brief Обход в глубину (DFS)
+   * @param i_startVertex Стартовая вершина для обхода
+   * @param i_visited Множество отслеживаемых посещенных вершин
+   * @param i_dsg Множество отслеживаемых подграфов
+   */
   void dfs(VertexPtr i_startVertex, std::unordered_set<VertexPtr> &i_visited,
            std::unordered_set<VertexPtr> &i_dsg);
 
