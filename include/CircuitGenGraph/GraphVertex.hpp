@@ -26,13 +26,7 @@
  * @class GraphVertexInput
  * @brief Represents a vertex in a directed graph that serves as an input
  * vertex. It inherits from the GraphVertexBase class and extends its
- * functionality to work with input vertices
- * @param i_baseGraph A pointer to the oriented graph to which this vertex
- * belongs. It can be null ptr, which indicates the absence of a base graph
- * @param i_type Vertex type (VertexTypes enumeration). By default, it is
- * set to VertexTypes::input, indicating that this is the input vertex
- * @param i_name The name of the vertex provided during creation. This is
- * a string of type std::string that identifies a vertex
+ * functionality to work with input vertices.
  *
  * \~russian
  * @todo Возможно, стоит добавить описание некоторых виртуальных
@@ -41,15 +35,7 @@
  * @class GraphVertexInput
  * @brief Представляет вершину в ориентированном графе, которая служит
  * входной вершиной. Наследуется от класса GraphVertexBase и расширяет его
- * функциональность для работы с входными вершинами
- * @param i_baseGraph Указатель на ориентированный граф, которому
- * принадлежит эта вершина. Может быть null ptr, что указывает на
- * отсутствие базового графа
- * @param i_type Тип вершины (перечисление VertexTypes). По умолчанию
- * установлено VertexTypes::input, что указывает на то, что это входная
- * вершина
- * @param i_name Имя вершины, заданное при создании. Это строка типа
- * std::string, которая идентифицирует вершину
+ * функциональность для работы с входными вершинами.
  */
 
 namespace CG_Graph {
@@ -204,7 +190,8 @@ public:
    */
   GraphVertexConstant(char i_const, std::string_view i_name,
                       GraphPtr i_baseGraph);
-  ~GraphVertexConstant() override{};
+
+  ~GraphVertexConstant() override {};
 
   /**
    * @author Fuuulkrum7 <ilka747428@gmail.com>
@@ -215,6 +202,7 @@ public:
    * connections.
    * When running for a second time, set hash flags to default state
    * @return The hash value of the vertex based on its outgoing connections.
+   * @par Example
    * @code
    * // Creating an instance of the GraphVertexBase class
    * GraphVertexBase vertex(VertexTypes::output, "vertex1");
@@ -249,6 +237,7 @@ public:
    * @return A string containing Verilog code for the vertex, or an empty
    * string if the vertex type is not "output" or if the incoming
    * connection is invalid
+   * @par Example
    * @code
    * // Creating an instance of the GraphVertexBase class with the type
    * // "output" and the name "output_vertex"
@@ -309,16 +298,12 @@ private:
  * @class GraphVertexSubGraph
  * \~english
  * @brief It is a class, having a subGruph pointer inside. Is used for
- * storing this pointer for providing graph connectivity
- * @param d_subGraph Pointer to the subgraph associated with this vertex
- * @param d_hashed Cached hash value of the vertex
+ * storing this pointer for providing graph connectivity.
  *
  * \~russian
  * @brief Это класс, содержащий внутри указатель на подграф (subGraph).
  * Используется для хранения этого указателя с целью обеспечения связности
- * графа
- * @param d_subGraph Указатель на подграф, связанный с этой вершиной
- * @param d_hashed Кэшированное значение хэша вершины
+ * графа.
  */
 class GraphVertexSubGraph : public GraphVertexBase {
 public:
@@ -338,7 +323,8 @@ public:
   GraphVertexSubGraph(GraphPtr i_subGraph, GraphPtr i_baseGraph);
   GraphVertexSubGraph(GraphPtr i_subGraph, std::string_view i_name,
                       GraphPtr i_baseGraph);
-  ~GraphVertexSubGraph() override{};
+
+  ~GraphVertexSubGraph() override {};
 
   /**
    * @author Fuuulkrum7 <ilka747428@gmail.com>
@@ -388,6 +374,7 @@ public:
    * @return A string containing Verilog code for the vertex, or an empty
    * string if the vertex type is not "output" or if the incoming
    * connection is invalid
+   * @par Example
    * @code
    * // Creating an instance of the GraphVertexBase class with the type
    * // "output" and the name "output_vertex"
@@ -651,7 +638,8 @@ public:
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph);
-  ~GraphVertexGates() override{};
+
+  ~GraphVertexGates() override {};
 
   /**
    * @author Fuuulkrum7 <ilka747428@gmail.com>
@@ -659,18 +647,14 @@ public:
    * \~english
    * @brief updateValue Updates the value of the vertex
    * @return The updated value of the vertex
-   * @code
-   * TO DO:
-   * @endcode
+   * @todo Add example of usage
    * @throws std::invalid_argument if any of the input connections point
    * to a nullptr
    *
    * \~russian
    * @brief updateValue Обновляет значение вершины
    * @return Обновленное значение вершины
-   * @code
-   * TO DO:
-   * @endcode
+   * @todo Добавить пример использования
    * @throws std::invalid_argument, если любое из входных соединений
    * указывает на nullptr
    */
@@ -685,12 +669,12 @@ public:
    * \~english
    * @brief calculateHash Calculates the hash value of the vertex. When
    * running for a second time, set hash flags to default state
-   * @return The calculated hash value as a string
+   * @return The calculated hash value as a number
    *
    * \~russian
    * @brief calculateHash Вычисляет значение хэша вершины. При повторном
    * запуске установите флаги хэша в состояние по умолчанию
-   * @return Вычисленное значение хэша в виде строки
+   * @return Вычисленное значение хэша в виде числа
    */
   size_t calculateHash() override;
 
@@ -719,6 +703,7 @@ public:
    * @brief getGate Returns the type of valve associated with the current
    * vertex
    * @return The type of valve associated with the current vertex
+   * @par Example
    * @code
    * GraphVertexGates vertex(Gates::GateAnd);
    * Gates gateType = vertex.getGate();
@@ -810,29 +795,37 @@ private:
   friend class GraphVertexSubGraph;
 };
 
+/**
+ * @class GraphVertexSequential
+ * \~english
+ * @brief Class representing a sequential logic vertex in the graph
+ * (e.g., flip-flops, latches)
+ *
+ * \~russian
+ * @brief Класс, представляющий последовательностную логическую вершину
+ * в графе (например, триггеры, защелки)
+ */
 class GraphVertexSequential : public GraphVertexBase {
 public:
   // clang-format off
 
   /**
    * \~english
-   * @brief GraphVertexSequential Constructor for default types
-   * @param i_type type of sequential vertex (can be only (n)ff or
-   * latch = EN)
-   * @param i_clk is clock signal for a ff and enable signal for a latch
-   * @param i_data
-   * @param i_baseGraph
-   * @param i_name
+   * @brief Constructor for sequential vertex
+   * @param i_type type of sequential vertex
+   * @param i_clk clock signal for a ff and enable signal for a latch
+   * @param i_data data value
+   * @param i_baseGraph pointer to the base graph
+   * @param i_name name of the vertex
    *
    * \~russian
-   * @brief GraphVertexSequential Конструктор для типов по умолчанию
-   * @param i_type тип последовательностной вершины (может быть только
-   * (n)ff или защелка = EN)
+   * @brief Конструктор для последовательностной вершины
+   * @param i_type тип последовательностной вершины
    * @param i_clk сигнал синхронизации (clock) для триггера и сигнал
    * разрешения (enable) для защелки
-   * @param i_data
-   * @param i_baseGraph
-   * @param i_name
+   * @param i_data значение данных
+   * @param i_baseGraph указатель на базовый граф
+   * @param i_name имя вершины
    */
   GraphVertexSequential(SequentialTypes i_type,
                         VertexPtr i_clk,
@@ -841,16 +834,24 @@ public:
                         std::string_view i_name);
 
   /**
-   * @brief
-   * @param i_type
-   * @param i_clk \~english is clock signal for a ff and enable signal
-   * for a latch \~russian сигнал синхронизации (clock) для триггера и
-   * сигнал разрешения (enable) для защелки
-   * @param i_data
-   * @param i_wire \~english RST or CLR or SET or EN \~russian RST или
-   * CLR или SET или EN
-   * @param i_baseGraph
-   * @param i_name
+   * \~english
+   * @brief Constructor for sequential vertex
+   * @param i_type type of sequential vertex
+   * @param i_clk clock signal for a ff and enable signal for a latch
+   * @param i_data data value
+   * @param i_wire RST or CLR or SET or EN
+   * @param i_baseGraph pointer to the base graph
+   * @param i_name name of the vertex
+   *
+   * \~russian
+   * @brief Конструктор для последовательностной вершины
+   * @param i_type тип последовательностной вершины
+   * @param i_clk сигнал синхронизации (clock) для триггера и сигнал
+   * разрешения (enable) для защелки
+   * @param i_data значение данных
+   * @param i_wire RST или CLR или SET или EN
+   * @param i_baseGraph указатель на базовый граф
+   * @param i_name имя вершины
    */
   GraphVertexSequential(SequentialTypes i_type,
                         VertexPtr i_clk,
@@ -860,15 +861,25 @@ public:
                         std::string_view i_name);
 
   /**
-   * @brief GraphVertexSequential
-   * @param i_type
-   * @param i_clk \~english EN for latch and CLK for ff \~russian EN
-   * для защелки и CLK для триггера
-   * @param i_data
-   * @param i_wire1 \~english RST or CLR or SET \~russian RST или CLR
-   * или SET
-   * @param i_wire2 \~english SET or EN \~russian SET или EN
-   * @param i_baseGraph
+   * \~english
+   * @brief Constructor for sequential vertex
+   * @param i_type type of sequential vertex
+   * @param i_clk EN for latch and CLK for ff
+   * @param i_data data value
+   * @param i_wire1 RST or CLR or SET
+   * @param i_wire2 SET or EN
+   * @param i_baseGraph pointer to the base graph
+   * @param i_name name of the vertex
+   *
+   * \~russian
+   * @brief Конструктор для последовательностной вершины
+   * @param i_type тип последовательностной вершины
+   * @param i_clk EN для защелки и CLK для триггера
+   * @param i_data значение данных
+   * @param i_wire1 RST или CLR или SET
+   * @param i_wire2 SET или EN
+   * @param i_baseGraph указатель на базовый граф
+   * @param i_name имя вершины
    */
   GraphVertexSequential(SequentialTypes i_type,
                         VertexPtr i_clk,
@@ -879,17 +890,27 @@ public:
                         std::string_view i_name);
 
   /**
-   * @brief GraphVertexSequential
-   * @param i_type \~english type of Sequential - (a/n/an)ff(r/c)se,
-   * \~russian тип Sequential - (a/n/an)ff(r/c)se,
-   * @param i_clk \~english clock for flip=flop \~russian синхронизация
-   * для триггера
-   * @param i_data \~english data value \~russian значение данных
-   * @param i_rst \~english clear (or reset signal) \~russian очистка
-   * (или сигнал сброса)
-   * @param i_set \~english set signal \~russian сигнал установки
-   * @param i_en \~english enable \~russian разрешение (enable)
-   * @param i_baseGraph
+   * \~english
+   * @brief Constructor for sequential vertex
+   * @param i_type type of Sequential - (a/n/an)ff(r/c)se
+   * @param i_clk clock for flip-flop
+   * @param i_data data value
+   * @param i_rst clear (or reset signal)
+   * @param i_set set signal
+   * @param i_en enable
+   * @param i_baseGraph pointer to the base graph
+   * @param i_name name of the vertex
+   *
+   * \~russian
+   * @brief Конструктор для последовательностной вершины
+   * @param i_type тип Sequential - (a/n/an)ff(r/c)se
+   * @param i_clk синхронизация для триггера
+   * @param i_data значение данных
+   * @param i_rst очистка (или сигнал сброса)
+   * @param i_set сигнал установки
+   * @param i_en разрешение (enable)
+   * @param i_baseGraph указатель на базовый граф
+   * @param i_name имя вершины
    */
   GraphVertexSequential(SequentialTypes i_type,
                         VertexPtr i_clk,
@@ -902,7 +923,7 @@ public:
 
   // clang-format on
 
-  ~GraphVertexSequential() override{};
+  ~GraphVertexSequential() override {};
 
   /**
    * @author Fuuulkrum7 <ilka747428@gmail.com>
@@ -910,20 +931,16 @@ public:
    * \~english
    * @brief calculateHash Calculates the hash value of the vertex.
    * When running for a second time, set hash flags to default state
-   * @return The calculated hash value as a string
+   * @return The calculated hash value as a number
    * @throws None.
-   * @code
-   * TO DO:
-   * @endcode
+   * @todo Add example of usage
    *
    * \~russian
    * @brief calculateHash Вычисляет значение хэша вершины. При повторном
    * запуске установите флаги хэша в состояние по умолчанию
-   * @return Вычисленное значение хэша в виде строки
+   * @return Вычисленное значение хэша в виде числа
    * @throws Нет.
-   * @code
-   * TO DO:
-   * @endcode
+   * @todo Добавить пример использования
    */
   size_t calculateHash() override;
 

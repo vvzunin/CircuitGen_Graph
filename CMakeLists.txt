@@ -1,6 +1,5 @@
-cmake_minimum_required(VERSION 3.21)
-
-include(cmake/prelude.cmake)
+# Минимальная версия CMake для сборки
+cmake_minimum_required(VERSION 3.26)
 
 project(
   CircuitGenGraph
@@ -10,10 +9,21 @@ project(
   LANGUAGES CXX
 )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_INIT} -std=c++17 -fPIC")
-include(cmake/project-is-top-level.cmake)
-include(cmake/variables.cmake)
+list(APPEND PROJECT_SUPPORTED_SYSTEMS "Linux")
 
+include(cmake/project-is-top-level.cmake)
+include(cmake/utils.cmake)
+include(cmake/checks.cmake)
+include(cmake/folders.cmake)
+include(cmake/variables.cmake)
+include(cmake/lint-targets.cmake)
+include(cmake/spell-targets.cmake)
+include(cmake/CMakeGraphVizOptions.cmake)
+
+include(CheckIPOSupported)
+check_ipo_supported(RESULT ipo_supported)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_INIT} -std=c++17 -fPIC")
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -30,7 +40,7 @@ set(SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexSequential.cpp
 )
 
-set(LIBS 
+set(LIBS
   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.cc
 )
 
@@ -45,7 +55,7 @@ set(PUBLIC_HEADERS
 )
 
 option(ENABLE_LOGGING "Enable logging" OFF)
-if (ENABLE_LOGGING)
+if(ENABLE_LOGGING)
   add_compile_definitions(LOGFLAG)
 endif()
 
@@ -69,15 +79,6 @@ if(ENABLE_LOGGING)
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.h
   )
 endif()
-
-# DOES NOT WORK IN FetchContent
-# add_library(
-#   fmt STATIC
-#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/core.h
-#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format-inl.h
-#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.h
-#   ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.cc
-# )
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 add_compile_options(-fno-rtti)
@@ -107,8 +108,10 @@ if(ENABLE_LOGGING)
 endif()
 
 find_program(CLANG_TIDY NAMES clang-tidy)
-
-if (CLANG_TIDY)
+if(PROJECT_IS_TOP_LEVEL)
+  option(CircuitGenGraph_ENABLE_CLANG_TIDY "Run clang-tidy during build" OFF)
+endif()
+if(CLANG_TIDY AND CircuitGenGraph_ENABLE_CLANG_TIDY)
   set(GRAPH_CLANG_TIDY
     ${CLANG_TIDY};
     -line-filter=[{"name":".hpp"},{"name":".cpp"}]
@@ -116,8 +119,10 @@ if (CLANG_TIDY)
   set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_CLANG_TIDY "${GRAPH_CLANG_TIDY}"
   )
+elseif(CLANG_TIDY)
+  message(STATUS "clang-tidy found but disabled (set CircuitGenGraph_ENABLE_CLANG_TIDY=ON to enable)")
 else()
-  message(FATAL_ERROR "clang-tidy not found, aborting")
+  message(STATUS "clang-tidy not found")
 endif()
 
 target_include_directories(
@@ -157,39 +162,32 @@ set_target_properties(
   OUTPUT_NAME ${PROJECT_NAME}
   PUBLIC_HEADER ${PUBLIC_HEADERS})
 
-include(cmake/utils.cmake)
-
 if(ENABLE_LOGGING)
   message(STATUS "Logs enabled")
   install(TARGETS ${PROJECT_NAME} easylogging++
     EXPORT "${PROJECT_NAME}Targets"
 
-    # these get default values from GNUInstallDirs, no need to set them
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} # bin
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} # lib
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} # lib
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 
-    # except for public headers, as we want them to be inside a library folder
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} # include/SomeLibrary
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} # include
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   )
 else()
   message(STATUS "Logs disabled")
   install(TARGETS ${PROJECT_NAME}
     EXPORT "${PROJECT_NAME}Targets"
 
-    # these get default values from GNUInstallDirs, no need to set them
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} # bin
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} # lib
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} # lib
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 
-    # except for public headers, as we want them to be inside a library folder
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} # include/SomeLibrary
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} # include
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   )
 endif()
 
-# generate and install export file
 install(EXPORT "${PROJECT_NAME}Targets"
   FILE "${PROJECT_NAME}Targets.cmake"
   DESTINATION cmake
@@ -198,32 +196,60 @@ install(EXPORT "${PROJECT_NAME}Targets"
 
 include(CMakePackageConfigHelpers)
 
-# generate the version file for the config file
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
   VERSION ${PROJECT_VERSION}
   COMPATIBILITY AnyNewerVersion
 )
 
-# create config file
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake.in
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
   INSTALL_DESTINATION cmake
 )
 
-# install config files
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
   DESTINATION cmake
 )
 
-if(PROJECT_IS_TOP_LEVEL)
-  option(BUILD_EXAMPLES "Build examples tree." "${CircuitGenGraph_DEVELOPER_MODE}")
+include(CTest)
+if(BUILD_TESTING)
+  add_subdirectory(test)
+endif()
 
-  if(BUILD_EXAMPLES)
+if(PROJECT_IS_TOP_LEVEL)
+  option(CircuitGenGraph_BUILD_EXAMPLES "Build examples tree." "${CircuitGenGraph_DEVELOPER_MODE}")
+
+  if(CircuitGenGraph_BUILD_EXAMPLES)
     add_subdirectory(examples)
   endif()
+endif()
+
+if(PROJECT_IS_TOP_LEVEL)
+  option(BUILD_MCSS_DOCS "Build documentation using Doxygen and m.css" OFF)
+  if(BUILD_MCSS_DOCS)
+    include(cmake/docs.cmake)
+  endif()
+  if(ENABLE_COVERAGE)
+    include(cmake/coverage.cmake)
+  endif()
+endif()
+
+print_cmake_info(Green)
+print_build_info(Green)
+print_system_info(Green)
+
+if(PROJECT_IS_TOP_LEVEL)
+  print_project_info(Green)
+endif()
+
+if(ENABLE_LOGGING)
+  configure_file(
+    easylogging++.conf
+    "${PROJECT_BINARY_DIR}/easylogging++.conf"
+    COPYONLY
+  )
 endif()
 
 # ---- Developer mode ----
@@ -236,4 +262,7 @@ elseif(NOT PROJECT_IS_TOP_LEVEL)
   )
 endif()
 
-include(cmake/dev-mode.cmake)
+target_compile_options(${PROJECT_NAME} PUBLIC -Wpedantic)
+target_compile_options(${PROJECT_NAME} PUBLIC -Wall)
+
+add_folders(Project)

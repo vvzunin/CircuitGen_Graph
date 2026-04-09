@@ -1,11 +1,17 @@
-# Генератор комбинационных схем
+# Библиотека графа (CircuitGen Graph)
+
+**Язык:** Русский | [English](README.en.md)
+**Документация:** [Русский](docs/ru/README.md) | [English](docs/en/README.md)
+**Версионирование (SemVer):** [русский](docs/ru/Versioning.md) | [English](docs/en/Versioning.md)
+**Вклад:** [русский](docs/ru/CONTRIBUTING.md) | [English](docs/en/CONTRIBUTING.md)
+**Запросы на слияние (MR):** [русский](docs/ru/MergeRequests.md) | [English](docs/en/MergeRequests.md)
+
 <!--
 ![License: MIT](https://img.shields.io/github/license/vvzunin/CircuitGen_Graph)
 ![GitHub forks](https://img.shields.io/github/forks/vvzunin/CircuitGen_Graph)
 ![GitHub Repo stars](https://img.shields.io/github/stars/vvzunin/CircuitGen_Graph)
 ![GitHub watchers](https://img.shields.io/github/watchers/vvzunin/CircuitGen_Graph)
 
-![GitHub CI](https://github.com/vvzunin/CircuitGen_Graph/actions/workflows/ci.yml/badge.svg)
 [![codecov](https://codecov.io/gh/vvzunin/CircuitGen_Graph/graph/badge.svg?token=U88U82QFX8)](https://codecov.io/gh/vvzunin/CircuitGen_Graph)
 ![GitHub Release](https://img.shields.io/github/v/release/vvzunin/CircuitGen_Graph)
 ![GitHub Release Date](https://img.shields.io/github/release-date/vvzunin/CircuitGen_Graph)
@@ -25,10 +31,9 @@
 [![Latest Release](https://hub.mos.ru/circuitgen/CircuitGen_Graph/-/badges/release.svg)](https://hub.mos.ru/circuitgen/CircuitGen_Graph/-/releases)
 
 <font size="5">**Оглавление:**</font>
-<a name="content_rus"></a> 
+<a name="content_rus"></a>
 - [Правила именования переменных](#hacking)
 - [Сборка программы](#generator_build_rus)
-- [Авторы проекта](docs/AUTHORS.md)
 - [Лицензия](#license)
 
 > Главный репозиторий проекта: https://hub.mos.ru/circuitgen/CircuitGen
@@ -41,178 +46,58 @@
 > #include "easyloggingpp/easylogging++.h"
 > INITIALIZE_EASYLOGGINGPP
 
-## Установка необходимых пакетов
+## Установка зависимостей
 
-### Установка пакетов
+Актуальные списки пакетов и доп. шаги (CMake с Kitware, **clang-format** с PyPI, **lcov** 2+ на Ubuntu 22.04, Doxygen и т.д.) собраны в скриптах каталога **[`scripts/setup/`](scripts/setup/)** — по одному файлу на ОС из CI-матрицы, например:
 
-#### С помощью apt
-```
-sudo apt install clang clang-tidy clang-format-15 g++ gcc make openssl cmake lcov ninja-build
-```
+- [`install-deps-ubuntu-22.04.sh`](scripts/setup/install-deps-ubuntu-22.04.sh)
+- [`install-deps-ubuntu-24.04.sh`](scripts/setup/install-deps-ubuntu-24.04.sh)
+- [`install-deps-debian-13.sh`](scripts/setup/install-deps-debian-13.sh)
+- [`install-deps-fedora-42.sh`](scripts/setup/install-deps-fedora-42.sh) / [`install-deps-fedora-43.sh`](scripts/setup/install-deps-fedora-43.sh)
 
-#### С помощью dnf (для rpm ветки)
-```
-sudo dnf install clang clang-tools-extra g++ gcc make openssl cmake lcov ninja-build
-```
-Так как в проекте используется `clang-format-15`, предлагается два возможных решения. 
-1) Так как критических отличий между различными версиями clang нет, 
-допустимо просто создать link с именем `clang-format-15`:  
-```
-sudo link /usr/bin/clang-format /usr/bin/clang-format-15
-```
-2) Допустимой является установка `clang-format-15` посредством `pip`. 
-Отметим, что в данном случае создание link может быть сопряжено с некоторыми трудностями.
-```
-sudo dnf install python python-pip
-```
-Далее требуется скачать конкретную версию clang-format.
-```
-pip install clang-format==15.0.7
-```
+Запуск от root: `sudo bash scripts/setup/install-deps-ubuntu-24.04.sh`.
 
-Для проверки корректности кода на этапе компиляции используется clang-tidy. В случае, если clang-tidy 
-не будет найден, в терминал выведется соответствующее сообщение и компиляция прервется. 
-
-### Установка cmake 3.28.1
-В случае проблем при установке cmake, попробуйте данный способ:
-```
-sudo apt install tar wget
-cd ~/
-wget https://cmake.org/files/v3.28/cmake-3.28.1.tar.gz
-tar xzf cmake-3.28.1.tar.gz
-rm -rf cmake-3.28.1.tar.gz
-cd cmake-3.28.1
-./bootstrap
-make -j$(nproc)
-sudo make install
-cd ..
-sudo rm -rf cmake-3.28.1
-```
-
-### Установка Doxygen 1.13.2
-Для сборки Doxygen необходимо предварительно установить bison и flex.
-```
-sudo apt-get install flex bison
-```
-Для установки Doxygen необходимо собрать программу из исходного кода.
-```
-wget https://www.doxygen.nl/files/doxygen-1.13.2.src.tar.gz 
-tar xf doxygen-1.13.2.src.tar.gz
-cd doxygen-1.13.2
-mkdir build
-cd build
-cmake -G "Unix Makefiles" ..
-make -j $(nproc)
-sudo make install
-cd ../..
-rm -r doxygen-1.13.2
-```
+Детали сборки и скриптов: [BUILDING.md](docs/ru/BUILDING.md), [SCRIPTS.md](docs/ru/SCRIPTS.md).
 
 ## Режим разработчика
-<a name="hacking"></a> 
+<a name="hacking"></a>
 
-Несколько советов, которые помогут Вам создать и протестировать этот проект в качестве разработчика и потенциального участника представлены [здесь](/docs/HACKING.md).
+Несколько советов, которые помогут Вам создать и протестировать этот проект в качестве разработчика и потенциального участника представлены [здесь](docs/ru/HACKING.md).
 
 [&#8593; Contents](#content_rus)
 
 ## Сборка программы
-<a name="generator_build_rus"></a> 
+<a name="generator_build_rus"></a>
 
-Для сборки программы необходимо выполнить следующие команды из начальной директории:
+Для сборки программы из корня репозитория (после `cp CMakeUserPresets.json.example CMakeUserPresets.json`):
 ```
-chmod +x buildGraph.sh
-./buildGraph.sh
+bash scripts/dev/build-debug.sh
 ```
 
-Подробная схема сборка описана [здесь](/docs/BUILDING.md).
-
-[&#8593; Contents](#content_rus)
-
-## Авторы проекта
-
-Список авторов с контактами и вкладом в код (на основе авторства классов, методов и файлов) приведён в отдельном документе:
-
-**[Авторы проекта (docs/AUTHORS.md)](docs/AUTHORS.md)**
+Подробная схема сборки описана [здесь](docs/ru/BUILDING.md).
 
 [&#8593; Contents](#content_rus)
 
 ## Стиль кода
 <a name="format"></a>
 
-Предварительные действия перед работой с кодом в VsCode, а также некоторую информацию касательно стиля кода и локальных файлов .json можно посмотреть [здесь](/docs/FORMAT.md).
+Предварительные действия перед работой с кодом в VS Code, а также информацию о стиле кода и локальных `.json` можно посмотреть [здесь](docs/ru/Format.md).
 
 [&#8593; Contents](#content_rus)
 
-## СБорка документации
+## Сборка документации
 
-Для того, чтобы собрать документацию, вам потребуеутся скачать следущий набор пакетов для ОС Fedora:
-```
-sudo dnf install \
-  doxygen \
-  texlive-scheme-medium \
-  texlive-xetex \
-  texlive-collection-latex \
-  texlive-collection-fontsrecommended \
-  texlive-collection-langcyrillic \
-  texlive-wrapfig \
-  texlive-tabu \
-  texlive-etoc \
-  texlive-needspace \
-  texlive-adjustbox \
-  texlive-capt-of \
-  texlive-zref \
-  texlive-titlesec \
-  texlive-fancyhdr \
-  texlive-pdfpages \
-  texlive-geometry \
-  texlive-underscore \
-  texlive-upquote \
-  texlive-float \
-  texlive-listings \
-  texlive-xcolor \
-  texlive-graphics \
-  texlive-enumitem \
-  texlive-amsmath \
-  texlive-amsfonts \
-  texlive-amssymb \
-  texlive-courier \
-  texlive-helvetic \
-  texlive-lm \
-  texlive-inconsolata \
-  python3 \
-  unzip \
-  curl
-```
+Зависимости для Doxygen, LaTeX/PDF и вспомогательных инструментов входят в соответствующий [`scripts/setup/install-deps-*.sh`](scripts/setup/) для вашей ОС.
 
-Или для Ubuntu:
-```
-sudo apt update && sudo apt install -y \
-  doxygen \
-  texlive-xetex \
-  texlive-lang-cyrillic \
-  texlive-latex-recommended \
-  texlive-latex-extra \
-  texlive-fonts-recommended \
-  texlive-fonts-extra \
-  texlive-science \
-  fonts-lmodern \
-  fonts-inconsolata \
-  curl \
-  unzip \
-  python3
-```
-
-После этого вам потребуется собрать проект с флагами для сборки документации
+Сборка (HTML, LaTeX и PDF через `make` в каталоге LaTeX — см. `cmake/docs.cmake`):
 ```
 cmake -DBUILD_MCSS_DOCS=ON --preset=dev
-cmake --build build/ --preset=dev -j $(nproc) --target docs
+cmake --build build/dev --preset=dev -j $(nproc) --target docs
 ```
 
-После этого вы можете собрать файл с документацией в формате `pdf`. Скопируем файл в директорию, где находится текущая рабочая директория проекта:
-```
-./get_pdf.sh build/dev/docs/Doxygen_output/latex/
-cp ./build/dev/docs/Doxygen_output/latex/refman.pdf .
-```
+Готовый PDF: **`build/dev/docs/pdf/CircuitGenGraph.pdf`** (копируется из `build/dev/docs/latex/refman.pdf` целью `docs`).
+
+Полный конвейер как в CI (в т.ч. PDF): **`bash scripts/ci/docs.sh`** — артефакты в **`build/docs/pdf/<язык>/`** (см. `docs/ru/SCRIPTS.md`).
 
 # Лицензия
 <a name="license"></a>

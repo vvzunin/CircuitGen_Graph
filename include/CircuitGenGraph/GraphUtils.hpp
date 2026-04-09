@@ -1,7 +1,7 @@
 /**
  * @file GraphUtils.hpp
  * @brief Утилиты графа: VertexTypes, DotTypes, логические операции, парсинг
- * имён.
+ * имен.
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
  * @author Theossr <feolab05@gmail.com>
@@ -443,6 +443,22 @@ enum ValueStates : char {
  */
 namespace GraphUtils {
 
+/// @brief getLogicOperation Gets information about a logical operation by
+/// its name
+/// @param i_op A string containing the name of the logical operation
+/// @return std::pair<std::string_view, int32_t> A pair containing the name and
+/// ID of the logical operation
+/// @par Example
+/// @code
+/// std::pair<std::string_view, int32_t> operationInfo =
+/// GraphUtils::getLogicOperation("and");
+/// // Output information about the logical operation
+/// std::cout << "Operation name: " << operationInfo.first << std::endl;
+/// std::cout << "Operation ID: " << operationInfo.second << std::endl;
+/// @endcode
+/// @throws makes an assert, if values is out of range
+/// (it is a non-excepted behavior)
+
 /**
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
@@ -485,6 +501,41 @@ std::pair<std::string_view, int32_t> getLogicOperation(const std::string &i_op);
  */
 std::vector<Gates> getLogicOperationsKeys();
 
+/// @brief getLogicOperationsWithGates Returns logical operations along with
+/// information about the presence of a single input
+/// The method returns a pair of vectors: the first vector contains
+/// information about whether each a logical operation has only one
+/// input(true if this is the case, false otherwise),
+/// and the second vector contains the keys(enumerated values) of all
+/// available logical operations
+/// @return std::pair<std::vector<bool>, std::vector<Gates>> A pair of
+/// vectors: information about the presence of a single input and the keys
+/// of logical operations
+/// @par Example
+/// @code
+/// // Get logical operations together with information about the presence
+/// // of a single input
+/// std::pair<std::vector<bool>, std::vector<Gates>> logicOperationsInfo =
+/// GraphUtils::getLogicOperationsWithGates();
+/// // Output information about each logical operation
+/// for (size_t i = 0; i < logicOperationsInfo.second.size(); ++i)
+/// {
+/// std::string operationName =
+/// GraphUtils::parseGateToString(logicOperationsInfo.second[i]);
+/// bool hasOneInput = logicOperationsInfo.first[i];
+/// std::cout << "Operation: " << operationName;
+/// if (hasOneInput)
+/// {
+///   std::cout << " (Has one input)";
+/// }
+/// else
+/// {
+///   std::cout << " (Does not have one input)";
+/// }
+/// std::cout << std::endl;
+/// }
+/// @endcode
+
 /**
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
@@ -519,6 +570,19 @@ std::vector<Gates> getLogicOperationsKeys();
  */
 std::pair<std::vector<bool>, std::vector<Gates>> getLogicOperationsWithGates();
 
+/// @brief fromOperationsToName Converts the operation to its name
+/// @param i_op a string representing the operation
+/// @return std::string Operation name
+/// @par Example
+/// @code
+/// // Convert the operation to its name
+/// std::string operationName;
+/// operationName = GraphUtils::fromOperationsToName("and");
+/// std::cout << "Operation name: " << operationName << std::endl;
+/// @endcode
+/// @throw has an assert if the passed operation does not exist in the
+/// list of operations
+
 /**
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
@@ -539,6 +603,23 @@ std::pair<std::vector<bool>, std::vector<Gates>> getLogicOperationsWithGates();
  * @return std::string Имя операции
  */
 std::string fromOperationsToName(std::string_view i_op);
+
+/// @brief fromHierarchyToOperation Converts hierarchy key to its
+/// corresponding operation value
+/// @param key Required hierarchy key
+/// @return std::string_view The value representing the operation. As
+/// string_view refers to hardcoded strings, you do not need to care about
+/// lifetime
+/// @par Example
+/// @code
+/// // Get the hierarchy associated with the operation key 5
+/// std::string_view element =
+/// GraphUtils::fromHierarchyToOperation(5);
+/// // Output the element
+/// std::cout << element << " ";
+/// @endcode
+/// @throws assert if the provided key does not exist in the
+/// internal array of operation keys to hierarchies
 
 /**
  * @author Vladimir Zunin <vzunin@hse.ru>
@@ -563,6 +644,18 @@ std::string fromOperationsToName(std::string_view i_op);
  * @throws std::out_of_range, если предоставленный ключ не существует
  */
 std::string_view fromHierarchyToOperation(int32_t key);
+
+/// @brief parseStringToGate Converts a string representation of a gate to
+/// its corresponding enum value
+/// @param i_gate The string representation of the gate
+/// @return Gates The enum value corresponding to the provided string
+/// representation of the gate
+/// @par Example
+/// @code
+/// // Convert the string representation "and" to its corresponding enum value
+/// Gates gate = GraphUtils::parseStringToGate("and");
+/// std::cout << "Enum value of 'and': " << gate << std::endl;
+/// @endcode
 
 /**
  * @author Vladimir Zunin <vzunin@hse.ru>
@@ -589,6 +682,21 @@ std::string_view fromHierarchyToOperation(int32_t key);
  */
 Gates parseStringToGate(std::string i_gate);
 
+/// @brief parseVertexToString Converts an enum value of a vertex type to its
+/// corresponding string representation
+/// @param vertex The enum value representing the vertex type
+/// @return std::string The string representation of the provided vertex type
+/// enum value
+/// @par Example
+/// @code
+/// // Creating an instance of the GraphUtils class or getting it from an
+/// // Convert the enum value VertexTypes::input to its corresponding string
+/// representation std::string vertexString =
+/// GraphUtils::parseVertexToString(VertexTypes::input); std::cout <<
+/// "String representation of VertexTypes::input: " << vertexString <<
+/// std::endl;
+/// @endcode
+
 /**
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
@@ -613,6 +721,24 @@ Gates parseStringToGate(std::string i_gate);
  * @return std::string Строковое представление типа вершины
  */
 std::string parseVertexToString(VertexTypes vertex);
+
+/// @brief parseGateToString Converts an enum value of a gate to its
+/// corresponding string representation
+/// @param gate The enum value representing the gate
+/// @return std::string The string representation of the provided gate enum
+/// value This method converts an enum value representing a gate to its
+/// corresponding string representation.
+/// It retrieves the string representation from the internal map date
+/// ToString, which maps enum values of gates to their string
+/// representations.
+/// @par Example
+/// @code
+/// // Creating an instance of the GraphUtils class or getting it from an
+/// // Convert the enum value Gates::GateAnd to its corresponding string
+/// representation std::string gateString =
+/// GraphUtils::parseGateToString(Gates::GateAnd); std::cout << "String
+/// representation of Gates::GateAnd: " << gateString << std::endl;
+/// @endcode
 
 /**
  * @author Vladimir Zunin <vzunin@hse.ru>
