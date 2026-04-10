@@ -19,50 +19,19 @@ include(cmake/variables.cmake)
 include(cmake/lint-targets.cmake)
 include(cmake/spell-targets.cmake)
 include(cmake/CMakeGraphVizOptions.cmake)
-
 include(GNUInstallDirs)
 include(CheckIPOSupported)
+
 check_ipo_supported(RESULT ipo_supported)
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ${ipo_supported})
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_INIT} -std=c++17 -fPIC")
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-<<<<<<< CMakeLists.txt
-set(SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexBase.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexConstant.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexGates.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexInput.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexOutput.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexSubGraph.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/OrientedGraph.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphUtils.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/DefaultAuxiliaryMethods.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexSequential.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/TestbenchGenerator.cpp
-)
-
-set(LIBS
-  ${CMAKE_CURRENT_SOURCE_DIR}/lib/fmt/format.cc
-)
-
-set(PUBLIC_HEADERS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/enums.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertex.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertexBase.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/OrientedGraph.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphUtils.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/DefaultAuxiliaryMethods.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/TestbenchGenerator.hpp 
-)
-
-=======
->>>>>>> CMakeLists.txt
 option(ENABLE_LOGGING "Enable logging" OFF)
 option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
+
+# Подключаем папку с исходниками (новый формат)
 add_subdirectory(src)
 
 if(ENABLE_COVERAGE)
@@ -86,6 +55,7 @@ find_program(CLANG_TIDY NAMES clang-tidy)
 if(PROJECT_IS_TOP_LEVEL)
   option(CircuitGenGraph_ENABLE_CLANG_TIDY "Run clang-tidy during build" OFF)
 endif()
+
 if(CLANG_TIDY AND CircuitGenGraph_ENABLE_CLANG_TIDY)
   set(GRAPH_CLANG_TIDY
     ${CLANG_TIDY};
@@ -100,54 +70,12 @@ else()
   message(STATUS "clang-tidy not found")
 endif()
 
-<<<<<<< CMakeLists.txt
-target_include_directories(
-  ${PROJECT_NAME} ${warning_guard}
-  PUBLIC
-  "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
-)
-
-target_include_directories(
-  ${PROJECT_NAME} SYSTEM
-  PUBLIC
-  "\$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
-)
-
-target_include_directories(${PROJECT_NAME}
-  PRIVATE
-
-  # where the library itself will look for its internal headers
-  ${CMAKE_CURRENT_SOURCE_DIR}/src
-  PUBLIC
-
-  # where top-level project will look for the library's public headers
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-
-  # where external projects will look for the library's public headers
-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-)
-
-include_directories(${CMAKE_SOURCE_DIR}/include)
-include_directories(${CMAKE_SOURCE_DIR}/lib)
-
-set_target_properties(
-  ${PROJECT_NAME} PROPERTIES
-  VERSION ${PROJECT_VERSION}
-  SOVERSION ${PROJECT_VERSION_MAJOR}
-  EXPORT_NAME ${PROJECT_NAME}
-  OUTPUT_NAME ${PROJECT_NAME}
-  PUBLIC_HEADER "${PUBLIC_HEADERS}"
-)
-
-=======
->>>>>>> CMakeLists.txt
 if(ENABLE_LOGGING)
   message(STATUS "Logs enabled")
   install(TARGETS ${PROJECT_NAME} easylogging++
     EXPORT "${PROJECT_NAME}Targets"
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   )
@@ -157,7 +85,6 @@ else()
     EXPORT "${PROJECT_NAME}Targets"
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   )
@@ -195,7 +122,6 @@ endif()
 
 if(PROJECT_IS_TOP_LEVEL)
   option(CircuitGenGraph_BUILD_EXAMPLES "Build examples tree." "${CircuitGenGraph_DEVELOPER_MODE}")
-
   if(CircuitGenGraph_BUILD_EXAMPLES)
     add_subdirectory(examples)
   endif()
@@ -239,5 +165,4 @@ endif()
 
 target_compile_options(${PROJECT_NAME} PUBLIC -Wpedantic)
 target_compile_options(${PROJECT_NAME} PUBLIC -Wall)
-
 add_folders(Project)
