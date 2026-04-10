@@ -130,7 +130,7 @@ if(DEFINED CircuitGenGraph_SOURCE_DIR AND DEFINED CircuitGenGraph_BINARY_DIR)
     " -isystem \"${CircuitGenGraph_BINARY_DIR}/include\""
   )
 endif()
-if(CMAKE_PROJECT_NAME STREQUAL "CircuitGenGenerator")
+if(CMAKE_PROJECT_NAME STREQUAL "CircuitGenGraph")
   string(APPEND DOXYGEN_CLANG_OPTIONS_CONFIGURED
     " -I\"${CMAKE_SOURCE_DIR}/include\""
     " -I\"${CMAKE_SOURCE_DIR}/lib\""
