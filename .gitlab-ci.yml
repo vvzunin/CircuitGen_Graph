@@ -387,6 +387,7 @@ coverage:
     paths:
       - build/coverage/coverage.info
       - build/coverage/coverage_summary.txt
+      - build/coverage/html
 
 tests:
   stage: test
@@ -653,6 +654,7 @@ coverage-os-ubuntu-22.04:
     paths:
       - build/coverage/coverage.info
       - build/coverage/coverage_summary.txt
+      - build/coverage/html
 
 tests-os-ubuntu-22.04:
   stage: test-os
@@ -730,6 +732,7 @@ coverage-os-debian-13:
     paths:
       - build/coverage/coverage.info
       - build/coverage/coverage_summary.txt
+      - build/coverage/html
 
 tests-os-debian-13:
   stage: test-os
@@ -807,6 +810,7 @@ coverage-os-fedora-42:
     paths:
       - build/coverage/coverage.info
       - build/coverage/coverage_summary.txt
+      - build/coverage/html
 
 tests-os-fedora-42:
   stage: test-os
@@ -884,6 +888,7 @@ coverage-os-fedora-43:
     paths:
       - build/coverage/coverage.info
       - build/coverage/coverage_summary.txt
+      - build/coverage/html
 
 tests-os-fedora-43:
   stage: test-os
