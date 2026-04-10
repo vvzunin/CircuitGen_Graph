@@ -5,7 +5,7 @@ project(
   CircuitGenGraph
   VERSION 1.6.0
   DESCRIPTION "Graph for circuits dataset generation"
-  HOMEPAGE_URL "https://github.com/vvzunin/CircuitGen_Graph"
+  HOMEPAGE_URL "https://hub.mos.ru/circuitgen/CircuitGen_Graph"
   LANGUAGES CXX
 )
 
@@ -20,13 +20,16 @@ include(cmake/lint-targets.cmake)
 include(cmake/spell-targets.cmake)
 include(cmake/CMakeGraphVizOptions.cmake)
 
+include(GNUInstallDirs)
 include(CheckIPOSupported)
 check_ipo_supported(RESULT ipo_supported)
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ${ipo_supported})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_INIT} -std=c++17 -fPIC")
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+<<<<<<< CMakeLists.txt
 set(SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexBase.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/GraphVertexConstant.cpp
@@ -56,39 +59,11 @@ set(PUBLIC_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/include/CircuitGenGraph/TestbenchGenerator.hpp 
 )
 
+=======
+>>>>>>> CMakeLists.txt
 option(ENABLE_LOGGING "Enable logging" OFF)
-if(ENABLE_LOGGING)
-  add_compile_definitions(LOGFLAG)
-endif()
-
-if(BUILD_SHARED_LIBS)
-  add_library(${PROJECT_NAME} SHARED ${SOURCES} ${LIBS})
-else()
-  add_library(${PROJECT_NAME} STATIC ${SOURCES} ${LIBS})
-endif()
-
-add_library(
-  CircuitGenGraph::CircuitGenGraph ALIAS
-  ${PROJECT_NAME})
-
-include_directories(lib)
-link_directories(lib)
-
-if(ENABLE_LOGGING)
-  add_library(
-    easylogging++ STATIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.h
-  )
-endif()
-
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
-add_compile_options(-fno-rtti)
-add_compile_options(-g3 -Wall -Wignored-qualifiers -DYYERROR_VERBOSE)
-
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
-
 option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
+add_subdirectory(src)
 
 if(ENABLE_COVERAGE)
   message(STATUS "Code coverage enabled")
@@ -99,8 +74,6 @@ if(ENABLE_COVERAGE)
     message(WARNING "Code coverage is only supported with GCC or Clang")
   endif()
 endif()
-
-include(GNUInstallDirs)
 
 if(ENABLE_LOGGING)
   target_link_libraries(
@@ -127,6 +100,7 @@ else()
   message(STATUS "clang-tidy not found")
 endif()
 
+<<<<<<< CMakeLists.txt
 target_include_directories(
   ${PROJECT_NAME} ${warning_guard}
   PUBLIC
@@ -165,12 +139,12 @@ set_target_properties(
   PUBLIC_HEADER "${PUBLIC_HEADERS}"
 )
 
+=======
+>>>>>>> CMakeLists.txt
 if(ENABLE_LOGGING)
   message(STATUS "Logs enabled")
   install(TARGETS ${PROJECT_NAME} easylogging++
     EXPORT "${PROJECT_NAME}Targets"
-
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 
@@ -181,8 +155,6 @@ else()
   message(STATUS "Logs disabled")
   install(TARGETS ${PROJECT_NAME}
     EXPORT "${PROJECT_NAME}Targets"
-
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 
