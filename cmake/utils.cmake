@@ -122,7 +122,7 @@ function(print_cmake_info color)
   print_as_title("" ${default_output_max_len} "-" "c" OFF ${color})
 
   print_message_two_parts("- CMake version"                       ": ${CMAKE_VERSION}"                  ${first_part_len} ${color})
-  print_message_two_parts("- CMake generator"                     ": ${CMAKE_GENERATOR}"              ${first_part_len} ${color})
+  print_message_two_parts("- CMake graph"                     ": ${CMAKE_GENERATOR}"              ${first_part_len} ${color})
   print_message_two_parts("- Target CMake system name"            ": ${CMAKE_SYSTEM_NAME}"            ${first_part_len} ${color})
   print_message_two_parts("- Target CMake system processor"       ": ${CMAKE_SYSTEM_PROCESSOR}"       ${first_part_len} ${color})
   print_message_two_parts("- Target CMake system version"         ": ${CMAKE_SYSTEM_VERSION}"         ${first_part_len} ${color})
@@ -245,14 +245,18 @@ function(print_project_info color)
   print_message_two_parts("- Project url"                           ": ${PROJECT_HOMEPAGE_URL}" ${first_part_len} ${color})
   print_message_two_parts("- Project description"                   ": ${PROJECT_DESCRIPTION}"  ${first_part_len} ${color})
   print_message_two_parts("- Project source dir"                    ": ${PROJECT_SOURCE_DIR}"   ${first_part_len} ${color})
-  print_message_two_parts("- CircuitGenGraph_DEVELOPER_MODE"          ": ${CircuitGenGraph_DEVELOPER_MODE}"   ${first_part_len} ${color})
-  print_message_two_parts("- CircuitGenGraph_BUILD_EXAMPLES"          ": ${CircuitGenGraph_BUILD_EXAMPLES}"   ${first_part_len} ${color})
-  print_message_two_parts("- BUILD_SHARED_LIBS"                     ": ${BUILD_SHARED_LIBS}"   ${first_part_len} ${color})
-  print_message_two_parts("- ENABLE_LOGGING"                        ": ${ENABLE_LOGGING}"   ${first_part_len} ${color})
+  print_message_two_parts("- CircuitGenGraph_DEVELOPER_MODE"    ": ${CircuitGenGraph_DEVELOPER_MODE}"   ${first_part_len} ${color})
+  print_message_two_parts("- CircuitGenGraph_BUILD_EXAMPLES"    ": ${CircuitGenGraph_BUILD_EXAMPLES}"   ${first_part_len} ${color})
+  print_message_two_parts("- CircuitGenGraph_INSTALL_CMAKEDIR"  ": ${CircuitGenGraph_INSTALL_CMAKEDIR}"   ${first_part_len} ${color})
   print_message_two_parts("- BUILD_MCSS_DOCS"                       ": ${BUILD_MCSS_DOCS}"   ${first_part_len} ${color})
   print_message_two_parts("- ENABLE_COVERAGE"                       ": ${ENABLE_COVERAGE}"   ${first_part_len} ${color})
   print_message_two_parts("- CMAKE_CXX_FLAGS_INIT"                  ": ${CMAKE_CXX_FLAGS_INIT}"   ${first_part_len} ${color})
   print_message_two_parts("- CMAKE_EXPORT_COMPILE_COMMANDS"         ": ${CMAKE_EXPORT_COMPILE_COMMANDS}"   ${first_part_len} ${color})
+  print_message_two_parts("- CMAKE_CXX_VISIBILITY_PRESET"           ": ${CMAKE_CXX_VISIBILITY_PRESET}"   ${first_part_len} ${color})
+  print_message_two_parts("- CMAKE_VISIBILITY_INLINES_HIDDEN"       ": ${CMAKE_VISIBILITY_INLINES_HIDDEN}"   ${first_part_len} ${color})
+  print_message_two_parts("- THREADS_PREFER_PTHREAD_FLAG"           ": ${THREADS_PREFER_PTHREAD_FLAG}"   ${first_part_len} ${color})
+  list(JOIN external_targets ", " external_targets_string)
+  print_message_two_parts("- Project external targets"              ": ${external_targets_string}"   ${first_part_len} ${color})
   print_as_title("" ${default_output_max_len} "-" "c" OFF ${color})
 endfunction()
 
@@ -269,7 +273,7 @@ endmacro()
 #
 # Creates custom command to copy runtime dependencies to target's directory after building the target.
 # Function does nothing if platform is not Windows and ignores all dependencies except shared libraries.
-# On CMake 3.21 or newer, function uses TARGET_RUNTIME_DLLS generator expression to obtain list of runtime
+# On CMake 3.21 or newer, function uses TARGET_RUNTIME_DLLS graph expression to obtain list of runtime
 # dependencies. Specified dependencies (if any) are still used to find and copy PDB files for debug builds.
 function(win_copy_deps_to_target_dir target)
     if(NOT WIN32)
