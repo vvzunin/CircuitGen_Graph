@@ -59,7 +59,8 @@ class GraphVertexBase;
  * - d_hashed Hashed value of the graph
  * - d_parentGraphs Vector of weak pointers to parent graphs
  * - d_name The name of the graph
- * - d_needLevelUpdate A flag indicating whether the vertex levels in the graph need to be updated
+ * - d_needLevelUpdate A flag indicating whether the vertex levels in the graph
+ * need to be updated
  * - d_graphInstanceToVerilogCount Map to count instances to Verilog.
  * - d_graphInstanceToDotCount Map to count instances to DOT.
  * - d_allSubGraphsOutputs Vector storing all outputs of subgraphs
@@ -71,22 +72,30 @@ class GraphVertexBase;
  *
  * \~russian
  * @brief Главный класс, представляющий ориентированный граф
- * - d_countNewGraphInstance Статическая переменная для подсчета новых экземпляров графа
- * - d_countGraph Текущий счетчик экземпляров. Используется для установки graphID
- * - d_currentParentGraph Слабый указатель (weak pointer) на текущий родительский граф
+ * - d_countNewGraphInstance Статическая переменная для подсчета новых
+ * экземпляров графа
+ * - d_countGraph Текущий счетчик экземпляров. Используется для установки
+ * graphID
+ * - d_currentParentGraph Слабый указатель (weak pointer) на текущий
+ * родительский граф
  * - d_edgesCount Количество ребер в графе
  * - d_hashed Хэшированное значение графа
  * - d_parentGraphs Вектор слабых указателей на родительские графы
  * - d_name Имя графа
- * - d_needLevelUpdate Флаг, указывающий, нужно ли обновлять уровни вершин в графе
- * - d_graphInstanceToVerilogCount Словарь для подсчета экземпляров, преобразованных в Verilog.
- * - d_graphInstanceToDotCount Словарь для подсчета экземпляров, преобразованных в DOT.
+ * - d_needLevelUpdate Флаг, указывающий, нужно ли обновлять уровни вершин в
+ * графе
+ * - d_graphInstanceToVerilogCount Словарь для подсчета экземпляров,
+ * преобразованных в Verilog.
+ * - d_graphInstanceToDotCount Словарь для подсчета экземпляров, преобразованных
+ * в DOT.
  * - d_allSubGraphsOutputs Вектор, хранящий все выходы подграфов
  * - d_subGraphs Множество подграфов.
- * - d_vertices Словарь, сопоставляющий типы вершин с векторами указателей на вершины
+ * - d_vertices Словарь, сопоставляющий типы вершин с векторами указателей на
+ * вершины
  * - d_countGraph Статический счетчик общего количества графов
  * - d_gatesCount Словарь для быстрого подсчета вентилей.
- * - d_edgesGatesCount Словарь для быстрого подсчета ребер между типами вентилей.
+ * - d_edgesGatesCount Словарь для быстрого подсчета ребер между типами
+ * вентилей.
  */
 
 // clang-format off
@@ -707,19 +716,19 @@ public:
   std::vector<VertexPtr> addSubGraph(GraphPtr i_subGraph,
                                      std::vector<VertexPtr> i_inputs);
 
-  /** * @author Theossr <feolab05@gmail.com> 
+  /** * @author Theossr <feolab05@gmail.com>
    * \~english
    * @brief Starts graph simulation
    * @param values Vector of input values
    * @return Vector of output simulation results
    * * \~russian
-   * @brief Запускает симуляцию графа 
+   * @brief Запускает симуляцию графа
    * @param values Вектор входных значений
    * @return Вектор выходных результатов симуляции
    */
   std::vector<char> graphSimulation(std::vector<char> values);
 
-  /** * @author Theossr <feolab05@gmail.com> 
+  /** * @author Theossr <feolab05@gmail.com>
    * \~english
    * @brief Resets values after simulation
    * * \~russian
@@ -1104,7 +1113,8 @@ public:
    * @todo add description
    *
    * \~russian
-   * @brief Вызывается методом toGraphMLClassic. Генерирует классический формат GraphML.
+   * @brief Вызывается методом toGraphMLClassic. Генерирует классический формат
+   * GraphML.
    * @param i_indent Уровень отступа для форматирования
    * @param i_prefix Префикс для компонентов графа
    * @return Отформатированная строка GraphML

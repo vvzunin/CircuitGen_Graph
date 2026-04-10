@@ -205,30 +205,40 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
  * \~english
  * @brief Base class for graph vertices
  * - d_baseGraph: A weak pointer to the base graph containing this vertex
- * - d_name: The name of the vertex. It is a string containing the name of a vertex
+ * - d_name: The name of the vertex. It is a string containing the name of a
+ * vertex
  * - d_value: The value of the vertex
  * - d_level: The vertex level is represented by the uint32_t type
- * - d_inConnections: vector of weak pointers to input connections with other vertices
- * - d_outConnections: vector of strong pointers to output connections with other vertices
+ * - d_inConnections: vector of weak pointers to input connections with other
+ * vertices
+ * - d_outConnections: vector of strong pointers to output connections with
+ * other vertices
  * - d_type: Vertex Type - Defined by the VertexTypes enumeration
- * - d_count: Vertex counter for naming and other purposes. Represented by the uint_fast64_t type
+ * - d_count: Vertex counter for naming and other purposes. Represented by the
+ * uint_fast64_t type
  * - d_hashed: A string containing the calculated hash value for the vertex
  * - d_hasHash: A HASH_CONDITION value containing hashing status
- * - d_needUpdate: A VERTEX_STATE value containing status in the context of level calculating
+ * - d_needUpdate: A VERTEX_STATE value containing status in the context of
+ * level calculating
  *
  * \~russian
  * @brief Базовый класс для вершин графа
- * - d_baseGraph: Слабый указатель (weak pointer) на базовый граф, содержащий эту вершину
+ * - d_baseGraph: Слабый указатель (weak pointer) на базовый граф, содержащий
+ * эту вершину
  * - d_name: Имя вершины. Это строка, содержащая имя вершины
  * - d_value: Значение вершины
  * - d_level: Уровень вершины, представленный типом uint32_t
- * - d_inConnections: вектор слабых указателей на входные соединения с другими вершинами
- * - d_outConnections: вектор сильных указателей на выходные соединения с другими вершинами
+ * - d_inConnections: вектор слабых указателей на входные соединения с другими
+ * вершинами
+ * - d_outConnections: вектор сильных указателей на выходные соединения с
+ * другими вершинами
  * - d_type: Тип вершины - определяется перечислением VertexTypes
- * - d_count: Счетчик вершин для именования и других целей. Представлен типом uint_fast64_t
+ * - d_count: Счетчик вершин для именования и других целей. Представлен типом
+ * uint_fast64_t
  * - d_hashed: Строка, содержащая вычисленное значение хэша для вершины
  * - d_hasHash: Значение HASH_CONDITION, содержащее статус хэширования
- * - d_needUpdate: Значение VERTEX_STATE, содержащее статус в контексте вычисления уровня
+ * - d_needUpdate: Значение VERTEX_STATE, содержащее статус в контексте
+ * вычисления уровня
  */
 class GraphVertexBase {
   friend class OrientedGraph;
@@ -362,7 +372,7 @@ public:
    * \~russian
    * @brief Оператор копирующего присваивания
    */
-  GraphVertexBase &operator=(const GraphVertexBase &other) = default; 
+  GraphVertexBase &operator=(const GraphVertexBase &other) = default;
 
   /**
    * @author Fuuulkrum7 <ilka747428@gmail.com>
@@ -371,7 +381,7 @@ public:
    * \~russian
    * @brief Оператор перемещающего присваивания
    */
-  GraphVertexBase &operator=(GraphVertexBase &&other) = default; 
+  GraphVertexBase &operator=(GraphVertexBase &&other) = default;
 
   /**
    * \~english

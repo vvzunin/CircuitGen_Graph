@@ -688,7 +688,7 @@ static std::pair<std::string, Gates> stringToGate[] = {
  * @brief Array for converting VertexTypes enum to string representations
  *
  * \~russian
- * @brief Массив для преобразования перечисления VertexTypes в строковые 
+ * @brief Массив для преобразования перечисления VertexTypes в строковые
  * представления
  */
 static std::pair<VertexTypes, std::string_view> vertexToString[] = {
@@ -708,7 +708,7 @@ static std::pair<VertexTypes, std::string_view> vertexToString[] = {
  *
  * \~russian
  * @brief Массив для преобразования перечисления Gates в строковые представления
- * @todo Оптимизировать поиск gateToString, используя перечисление Gates в 
+ * @todo Оптимизировать поиск gateToString, используя перечисление Gates в
  * качестве прямого индекса массива
  * @note Текущая реализация требует линейного поиска через findPairByKey
  */
