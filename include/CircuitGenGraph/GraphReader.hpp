@@ -60,6 +60,9 @@ public:
                  std::string const &size) const override;
 
   /*! \brief Callback method for parsed outputs.
+   * An output vertex can be used as a signal source for gates.
+   * Each output is connected to exactly one logic gate,
+   * which acts as its signal source.
    *
    * \param outputs Output names
    * \param size Size modifier
@@ -91,8 +94,8 @@ public:
   /// an inversion of given variable if the
   /// parameter = true and original vertex otherwise
   /// @return pointer for requested vertex
-  VertexPtr get_operand(const std::string &i_name,
-                        bool i_isInverted = false) const;
+  VertexPtr get_vertex_by_name(const std::string &i_name,
+                               bool i_isInverted = false) const;
   VertexPtr get_or_create_inversion(const std::string &i_name,
                                     VertexPtr i_vertex) const;
   /*! \brief Callback method for parsed immediate assignment of form `LHS = RHS
@@ -228,6 +231,12 @@ public:
                const std::pair<std::string, bool> &op3) const override;
 
   void on_endmodule() const override;
+
+  VertexPtr getRightHS(const std::string &i_name,
+                       bool i_isInverted = false) const;
+
+  VertexPtr getLeftHS(const std::string &i_name,
+                      bool i_isInverted = false) const;
   /* verilog_reader */
 private:
   Context &d_context;

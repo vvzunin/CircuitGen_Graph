@@ -24,6 +24,7 @@ TEST(VerilogReadingTest, SimplestGraphsIsRead) {
   Context context = Context();
   std::string path =
       fmt::format(concatenationPattern, testsFolderPath, simpleReadingFilename);
+
   EXPECT_NO_THROW(OrientedGraph::readVerilog(path, context));
 
   GraphPtr graph = context.d_graphs[simpleReadingFilename.data()];
@@ -46,6 +47,7 @@ TEST(VerilogReadingTest, VerticesSequenceCreated) {
   Context context = Context();
   std::string path = fmt::format(concatenationPattern, testsFolderPath,
                                  simpleStructureFilename);
+
   EXPECT_NO_THROW(OrientedGraph::readVerilog(path, context));
   GraphPtr graph = context.d_graphs[simpleStructureFilename.data()];
 
@@ -103,6 +105,7 @@ TEST(VerilogReadingTest, ConstantCreating) {
   std::string filename = fmt::format("{}.v", constTestFilename);
   graphCreated->toVerilog(testsFolderPath, filename);
   Context context = Context();
+
   EXPECT_NO_THROW(OrientedGraph::readVerilog(path, context));
   GraphPtr graph = context.d_graphs[constTestFilename.data()];
   EXPECT_EQ(graph->calculateHash(), graphCreated->calculateHash());
@@ -115,7 +118,8 @@ TEST(VerilogReadingTest, OneContextForSeveralGraphs) {
       fmt::format(concatenationPattern, testsFolderPath, simpleReadingFilename);
   std::string pathStructure = fmt::format(concatenationPattern, testsFolderPath,
                                           simpleStructureFilename);
-  EXPECT_NO_THROW(OrientedGraph::readVerilog(pathStructure, context));
+
+  EXPECT_NO_THROW(OrientedGraph::readVerilog(pathReading, context));
   EXPECT_NO_THROW(OrientedGraph::readVerilog(pathStructure, context));
   EXPECT_NO_THROW(context.d_graphs[simpleStructureFilename.data()]);
   EXPECT_NO_THROW(context.d_graphs[simpleReadingFilename.data()]);
@@ -124,9 +128,17 @@ TEST(VerilogReadingTest, UseOutputAsGate) {
   Context context = Context();
   std::string path =
       fmt::format(concatenationPattern, testsFolderPath, outputAsGateFilename);
+  std::string pathToSecondTest =
+      fmt::format(concatenationPattern, testsFolderPath, "testest");
+
   EXPECT_NO_THROW(OrientedGraph::readVerilog(path, context));
   GraphPtr graph = context.d_graphs[outputAsGateFilename.data()];
+  graph->setName("testest");
+  graph->toVerilog(testsFolderPath, "testest.v");
+  EXPECT_NO_THROW(OrientedGraph::readVerilog(pathToSecondTest, context));
+  GraphPtr graphSecond = context.d_graphs["testest"];
   EXPECT_EQ(graph->getGatesCount()[GateAnd], 1);
+  EXPECT_EQ(graph->calculateHash(), graphSecond->calculateHash());
   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
 
   VertexPtr clk = graphCreated->addInput("clk");
@@ -144,13 +156,13 @@ TEST(VerilogReadingTest, UseOutputAsGate) {
   graphCreated->addEdge(clk, gateQ1);
   graphCreated->addEdge(someInput, gateQ1);
   graphCreated->addEdge(gateQ1, outputQ1);
-  graphCreated->addEdge(gateQ1, gateQ2);
+  graphCreated->addEdge(outputQ1, gateQ2);
   graphCreated->addEdge(gateQ2, outputQ2);
-  graphCreated->addEdge(gateQ1, gateQ3);
-  graphCreated->addEdge(gateQ2, gateQ3);
+  graphCreated->addEdge(outputQ1, gateQ3);
+  graphCreated->addEdge(outputQ2, gateQ3);
   graphCreated->addEdge(someInput, gateQ3);
   graphCreated->addEdge(gateQ3, outputQ3);
-  graphCreated->addEdge(gateQ3, nand);
+  graphCreated->addEdge(outputQ3, nand);
   graphCreated->addEdge(clk, nand);
   graphCreated->addEdge(nand, gateQ4);
   graphCreated->addEdge(gateQ4, outputQ4);
@@ -164,18 +176,20 @@ TEST(VerilogReadingTest, AllGateTypesCreating) {
   VertexPtr inputA = graph->addInput();
   VertexPtr inputB = graph->addInput();
   VertexPtr inputC = graph->addInput();
+
   VertexPtr outputQ1 = graph->addOutput();
   VertexPtr outputQ2 = graph->addOutput();
-  VertexPtr vAnd = graph->addGate(GateAnd);
-  VertexPtr vNand = graph->addGate(GateNand);
-  VertexPtr vOr = graph->addGate(GateOr);
-  VertexPtr vNor = graph->addGate(GateNor);
-  VertexPtr vXor = graph->addGate(GateXor);
-  VertexPtr vXnor = graph->addGate(GateXnor);
-  VertexPtr vNotA = graph->addGate(GateNot);
-  VertexPtr vNotB = graph->addGate(GateNot);
-  VertexPtr vBufQ1 = graph->addGate(GateBuf);
-  VertexPtr vBufQ2 = graph->addGate(GateBuf);
+
+  VertexPtr vAnd = graph->addGate(GateAnd, "and");
+  VertexPtr vNand = graph->addGate(GateNand, "nand");
+  VertexPtr vOr = graph->addGate(GateOr, "or");
+  VertexPtr vNor = graph->addGate(GateNor, "nor");
+  VertexPtr vXor = graph->addGate(GateXor, "xor");
+  VertexPtr vXnor = graph->addGate(GateXnor, "xnor");
+  VertexPtr vNotA = graph->addGate(GateNot, "notA");
+  VertexPtr vNotB = graph->addGate(GateNot, "notB");
+  VertexPtr vBufQ1 = graph->addGate(GateBuf, "bufQ1");
+  VertexPtr vBufQ2 = graph->addGate(GateBuf, "bufQ2");
 
   graph->addEdge(inputA, vXor);
   graph->addEdge(inputC, vXor);
@@ -203,6 +217,7 @@ TEST(VerilogReadingTest, AllGateTypesCreating) {
   graph->toVerilog(testsFolderPath, filename);
   std::string path =
       fmt::format(concatenationPattern, testsFolderPath, allGatesFilename);
+
   EXPECT_NO_THROW(OrientedGraph::readVerilog(path, context));
   GraphPtr graphCreated = context.d_graphs[allGatesFilename.data()];
   EXPECT_EQ(graph->calculateHash(), graphCreated->calculateHash());
