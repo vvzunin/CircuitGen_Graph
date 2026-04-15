@@ -267,7 +267,7 @@ std::string fromOperationsToName(std::string_view i_op);
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
  */
-std::string_view fromHierarchyToOperation(int32_t key);
+std::string_view fromHierarchyToOperation(uint32_t key);
 
 /// @brief parseStringToGate Converts a string representation of a gate to
 /// its corresponding enum value
@@ -357,7 +357,7 @@ static std::pair<T, M> *findPairByKey(std::pair<T, M> (&iterable)[N],
 static constexpr size_t d_hierarchySize = 11;
 
 static constexpr std::array<
-    std::pair<std::string_view, std::pair<std::string_view, int32_t>>,
+    std::pair<std::string_view, std::pair<std::string_view, uint32_t>>,
     d_hierarchySize>
     d_logicOperations = {{{"input", {"", 10}},
                           {"output", {"=", 0}},

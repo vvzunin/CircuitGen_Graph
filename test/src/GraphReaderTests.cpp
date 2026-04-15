@@ -182,7 +182,7 @@ TEST(VerilogReadingTest, AllGateTypesCreating) {
 
   VertexPtr vAnd = graph->addGate(GateAnd, "and");
   VertexPtr vNand = graph->addGate(GateNand, "nand");
-  VertexPtr vOr = graph->addGate(GateOr, "or");
+  VertexPtr vertexOr = graph->addGate(GateOr, "or");
   VertexPtr vNor = graph->addGate(GateNor, "nor");
   VertexPtr vXor = graph->addGate(GateXor, "xor");
   VertexPtr vXnor = graph->addGate(GateXnor, "xnor");
@@ -196,9 +196,9 @@ TEST(VerilogReadingTest, AllGateTypesCreating) {
   graph->addEdge(inputA, vNotA);
   graph->addEdge(vNotA, vNand);
   graph->addEdge(inputB, vNand);
-  graph->addEdge(vNand, vOr);
-  graph->addEdge(vXor, vOr);
-  graph->addEdge(vOr, vXnor);
+  graph->addEdge(vNand, vertexOr);
+  graph->addEdge(vXor, vertexOr);
+  graph->addEdge(vertexOr, vXnor);
   graph->addEdge(vNotA, vXnor);
   graph->addEdge(vXnor, vNor);
   graph->addEdge(inputB, vNor);

@@ -190,12 +190,14 @@ void GraphVertexBase::removeValue() {
 }
 
 void GraphVertexBase::updateLevel() {
-  // 2 - IN PROGRESS, 1 - HC_CALC
-  // 2 == 010
-  // 1 == 001
-  // d_needUpdate = static_cast<MY_ENUM>(HC_CALC | ADDED); // ADDED = 4 // 100
-  // 101
+// 2 - IN PROGRESS, 1 - HC_CALC
+// 2 == 010
+// 1 == 001
+// d_needUpdate = static_cast<MY_ENUM>(HC_CALC | ADDED); // ADDED = 4 // 100
+// 101
+#ifdef LOGLFLAG
   int counter = 0;
+#endif
   if (d_needUpdate != VS_NOT_CALC) {
     return;
   }
@@ -305,7 +307,7 @@ std::vector<VertexPtr> GraphVertexBase::getOutConnections() const {
 
 bool GraphVertexBase::addVertexToOutConnections(VertexPtr i_vert) {
   assert(i_vert != this);
-  //assert(d_type != output);
+  // assert(d_type != output);
 
   size_t n = 0;
   for (VertexPtr vert: d_outConnections)

@@ -40,7 +40,7 @@ std::pair<std::vector<bool>, std::vector<Gates>> getLogicOperationsWithGates() {
   return std::make_pair(oneGate, res);
 }
 
-std::string_view fromHierarchyToOperation(int32_t i_key) {
+std::string_view fromHierarchyToOperation(uint32_t i_key) {
   /// \var d_operationsToHierarchy This is an associative std::map container
   /// that maps integers to string vectors. It is used to store a hierarchy of
   /// logical operations

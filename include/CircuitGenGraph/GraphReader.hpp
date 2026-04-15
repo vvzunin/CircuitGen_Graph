@@ -34,7 +34,7 @@ public:
   size_t d_numberOfVertices;
 };
 
-class GraphReader : public lorina::verilog_reader {
+class GraphReader final : public lorina::verilog_reader {
   /// @file GraphReader.hpp
   /// class GraphReader using for parsing a object of class OrientedGraph from
   /// verilog file by module "lorina". Library calls methods from that class,
@@ -75,8 +75,8 @@ public:
    * \param wires Wire names
    * \param size Size modifier
    */
-  virtual void on_wires(const std::vector<std::string> &wires,
-                        std::string const &size = "") const override;
+  void on_wires(const std::vector<std::string> &wires,
+                std::string const &size = "") const override;
 
   /*! \brief Callback method for parsed parameter definition of form ` parameter
    * M = 10;`.
@@ -104,9 +104,8 @@ public:
    * \param lhs Left-hand side of assignment
    * \param rhs Right-hand side of assignment
    */
-  virtual void
-  on_assign(const std::string &lhs,
-            const std::pair<std::string, bool> &rhs) const override;
+  void on_assign(const std::string &lhs,
+                 const std::pair<std::string, bool> &rhs) const override;
 
   /// @brief This method is used to create all types of gates by provided
   /// Gates gateType and connect it with its input signals

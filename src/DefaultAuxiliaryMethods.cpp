@@ -44,7 +44,7 @@ std::string AuxMethodsGraph::dotReturnToString(DotReturn dot) {
 
   bool printingSubGraph = false;
 
-  for (int i = 0; i < dot.size(); i++) {
+  for (size_t i = 0; i < dot.size(); i++) {
     switch (dot[i].first) {
       case DotTypes::DotGraph:
         s += dotTab * tab++ + "digraph " + dot[i].second["name"] + " {\n";

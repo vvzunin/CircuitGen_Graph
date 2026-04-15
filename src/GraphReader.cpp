@@ -15,7 +15,7 @@
 
 namespace CG_Graph {
 
-GraphReader::GraphReader(Context &i_context) : d_context(i_context) {};
+GraphReader::GraphReader(Context &i_context) : d_context(i_context){};
 
 void GraphReader::on_module_header(
     const std::string &module_name,
@@ -44,7 +44,7 @@ void GraphReader::on_outputs(const std::vector<std::string> &outputs,
   d_context.d_currentGraphNamesList.reserve(d_context.d_numberOfVertices);
 
   for (auto i: outputs) {
-    VertexPtr outputVertex = d_context.d_currentGraphNamesList[i] =
+    d_context.d_currentGraphNamesList[i] =
         d_context.d_currentGraph->addOutput(i);
   }
 }
@@ -87,7 +87,6 @@ void GraphReader::on_parameter(const std::string &name,
   d_context.d_currentGraphNamesList[name] = vertex;
 }
 
-
 void GraphReader::on_assign(const std::string &lhs,
                             const std::pair<std::string, bool> &rhs) const {
   std::regex isConstant("^([0-9]+)'[bhdo]([0-9A-Fa-f]+)$"),
@@ -95,46 +94,46 @@ void GraphReader::on_assign(const std::string &lhs,
   if (std::regex_match(rhs.first, isConstant) ||
       std::regex_match(rhs.first, isSimpleConstant)) {
     on_parameter(lhs, rhs.first);
-  } 
-  else {
-    VertexPtr rightVertex;
+  } else {
     if (d_context.d_currentGraphNamesList[lhs]->getType() != output) {
       VertexPtr leftVertex = d_context.d_currentGraphNamesList[lhs];
       if (!rhs.second) {
         static_cast<GraphVertexGates *>(leftVertex)->setGateIfDefault(GateBuf);
-        d_context.d_currentGraph->addEdge(getRightHS(rhs.first),
-                                          leftVertex);
-      } 
-      else {
+        d_context.d_currentGraph->addEdge(getRightHS(rhs.first), leftVertex);
+      } else {
         static_cast<GraphVertexGates *>(leftVertex)->setGateIfDefault(GateNot);
-        if(d_context.d_currentGraphNamesList.find(rhs.first + SUFFIX_INVERSION) ==d_context.d_currentGraphNamesList.end())
-        d_context.d_currentGraphNamesList[rhs.first + SUFFIX_INVERSION] =
-            leftVertex;
-            d_context.d_currentGraphNamesList[lhs] =
-            leftVertex;
+        if (d_context.d_currentGraphNamesList.find(rhs.first +
+                                                   SUFFIX_INVERSION) ==
+            d_context.d_currentGraphNamesList.end())
+          d_context.d_currentGraphNamesList[rhs.first + SUFFIX_INVERSION] =
+              leftVertex;
+        d_context.d_currentGraphNamesList[lhs] = leftVertex;
         d_context.d_currentGraph->addEdge(getRightHS(rhs.first), leftVertex);
       }
-    }
-    else {
-        d_context.d_currentGraph->addEdge(getRightHS(rhs.first,rhs.second), get_vertex_by_name(lhs));      
+    } else {
+      d_context.d_currentGraph->addEdge(getRightHS(rhs.first, rhs.second),
+                                        get_vertex_by_name(lhs));
     }
   }
 };
 
 VertexPtr GraphReader::getRightHS(const std::string &i_name,
-                                   bool i_isInverted) const {
+                                  bool i_isInverted) const {
   return get_vertex_by_name(i_name, i_isInverted);
 }
 
 VertexPtr GraphReader::getLeftHS(const std::string &i_name,
-                                   bool i_isInverted) const {
+                                 bool i_isInverted) const {
   auto temp = d_context.d_currentGraphNamesList.find(i_name);
   // create assert for calling for each vertex ONCE incorrect verilog otherwise
   if (temp->second->getType() == output) {
-    if (d_context.d_currentGraphNamesList.find(i_name + SUFFIX_OUTPUT_GATE) == d_context.d_currentGraphNamesList.end()) {
-      VertexPtr outputGate = d_context.d_currentGraph->addGate(GateDefault, i_name + SUFFIX_OUTPUT_GATE);
+    if (d_context.d_currentGraphNamesList.find(i_name + SUFFIX_OUTPUT_GATE) ==
+        d_context.d_currentGraphNamesList.end()) {
+      VertexPtr outputGate = d_context.d_currentGraph->addGate(
+          GateDefault, i_name + SUFFIX_OUTPUT_GATE);
       d_context.d_currentGraph->addEdge(outputGate, temp->second);
-      d_context.d_currentGraphNamesList[i_name + SUFFIX_OUTPUT_GATE] = outputGate;
+      d_context.d_currentGraphNamesList[i_name + SUFFIX_OUTPUT_GATE] =
+          outputGate;
     }
     return get_vertex_by_name(i_name + SUFFIX_OUTPUT_GATE, i_isInverted);
   }
@@ -142,8 +141,7 @@ VertexPtr GraphReader::getLeftHS(const std::string &i_name,
 }
 
 VertexPtr GraphReader::get_vertex_by_name(const std::string &i_name,
-                                   bool i_isInverted) const {
-  auto temp = d_context.d_currentGraphNamesList.find(i_name);
+                                          bool i_isInverted) const {
   VertexPtr res = d_context.d_currentGraphNamesList[i_name];
   if (i_isInverted) {
     return get_or_create_inversion(i_name, res);
@@ -257,15 +255,14 @@ void GraphReader::on_maj3(const std::string &lhs,
     d_context.d_currentGraph->majorityAsLogic(
         getRightHS(op1.first, op1.second), getRightHS(op2.first, op2.second),
         getRightHS(op3.first, op3.second), temp->second);
+  } else {
+    d_context.d_currentGraphNamesList[lhs] =
+        d_context.d_currentGraph->generateMajority(
+            getRightHS(op1.first, op1.second),
+            getRightHS(op2.first, op2.second),
+            getRightHS(op3.first, op3.second));
+    d_context.d_currentGraphNamesList[lhs]->setName(lhs);
   }
-  else {
-  d_context.d_currentGraphNamesList[lhs] =
-      d_context.d_currentGraph->generateMajority(
-          getRightHS(op1.first, op1.second),
-          getRightHS(op2.first, op2.second),
-          getRightHS(op3.first, op3.second));
-  d_context.d_currentGraphNamesList[lhs]->setName(lhs);
-}
 }
 
 void GraphReader::on_endmodule() const {

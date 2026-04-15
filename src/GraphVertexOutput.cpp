@@ -38,7 +38,9 @@ void GraphVertexOutput::updateLevel() {
   if (d_needUpdate != VS_NOT_CALC) {
     return;
   }
+#ifdef LOGFLAG
   int counter = 0;
+#endif
   for (VertexPtr ptr: d_inConnections) {
 #ifdef LOGFLAG
     LOG(INFO) << counter++ << ". " << ptr->getName() << " ("

@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <cstdint>
 #include <fmt/format.h>
 #include <fstream>
 #include <iomanip>
@@ -117,8 +118,8 @@ void OrientedGraph::updateLevels() {
   LOG(INFO) << "Starting level update. Wait.";
   LOG(INFO) << "Outputs for update: "
             << d_vertices.at(VertexTypes::output).size();
-#endif
   int counter = 0;
+#endif
   for (VertexPtr vert: d_vertices.at(VertexTypes::output)) {
 #ifdef LOGFLAG
     LOG(INFO) << counter++ << ". " << vert->getRawName() << " ("
@@ -295,7 +296,7 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
 
   if (outSize > 0) {
     newGraph->reserveOutConnections(outSize);
-    for (int i = 0; i < outSize; ++i) {
+    for (size_t i = 0; i < outSize; ++i) {
       VertexPtr newVertex =
           create<GraphVertexGates>(Gates::GateBuf, shared_from_this());
 
@@ -445,9 +446,8 @@ VertexPtr OrientedGraph::generateMajority(VertexPtr a, VertexPtr b,
       this->addSubGraph(majoritySubgraph, {a, b, c});
   return outputs.back();
 }
-VertexPtr OrientedGraph::majorityAsLogic(VertexPtr a, VertexPtr b,
-                                          VertexPtr c, VertexPtr output = nullptr) {
-  VertexPtr res = output == nullptr ? this->addGate(GateBuf) : output;
+VertexPtr OrientedGraph::majorityAsLogic(VertexPtr a, VertexPtr b, VertexPtr c,
+                                         VertexPtr output = nullptr) {
   VertexPtr and_ab = addGate(Gates::GateAnd);
   addEdges({a, b}, and_ab);
 
@@ -459,13 +459,13 @@ VertexPtr OrientedGraph::majorityAsLogic(VertexPtr a, VertexPtr b,
 
   VertexPtr or1 = addGate(Gates::GateOr);
   addEdges({and_ab, and_ac}, or1);
-  
+
   VertexPtr or2;
-  if(output != nullptr && output->getGate() == GateDefault) {
-    static_cast<GraphVertexGates*>(output)->setGateIfDefault(GateOr);
+  if (output != nullptr && output->getGate() == GateDefault) {
+    static_cast<GraphVertexGates *>(output)->setGateIfDefault(GateOr);
     or2 = output;
-  }
-  else or2 = addGate(Gates::GateOr);
+  } else
+    or2 = addGate(Gates::GateOr);
   addEdges({or1, and_bc}, or2);
   return or2;
 }
@@ -513,7 +513,8 @@ void OrientedGraph::readVerilog(std::string i_path, Context &context) {
   GraphReader *reader = new GraphReader(context);
   std::ifstream in(i_path.c_str(), std::ifstream::in);
   if (!in.is_open())
-    throw std::runtime_error("File do not exist. Current path:"+i_path+"\n");
+    throw std::runtime_error("File do not exist. Current path:" + i_path +
+                             "\n");
   std::string word;
   in >> word;
   while (word != "module") {
@@ -850,13 +851,11 @@ DotReturn OrientedGraph::toDOT() {
        {d_vertices[VertexTypes::input], d_vertices[VertexTypes::output],
         d_vertices[VertexTypes::gate], d_vertices[VertexTypes::sequential],
         d_vertices[VertexTypes::constant]}) {
-    int counter = 0;
     for (auto *value: eachVertex) {
       DotReturn dotVertex = value->toDOT();
       dot.insert(std::end(dot), std::begin(dotVertex), std::end(dotVertex));
     }
   }
-  int counter = 0;
   for (auto *value: d_allSubGraphsOutputs) {
     dot.push_back(value->toDOT()[0]);
   }
@@ -884,7 +883,7 @@ DotReturn OrientedGraph::toDOT() {
     auto buffers = subGraphPair.first->getOutConnections();
     auto outs = subGraphPair.first->getSubGraph()->getVerticesByType(
         VertexTypes::output);
-    for (auto i = 0; i < outs.size(); i++) {
+    for (uint32_t i = 0; i < outs.size(); i++) {
       dot.push_back({DotTypes::DotEdge,
                      {{"from", subGraphPair.second[0].second.at("instName") +
                                    "_" + outs[i]->getName()},

@@ -701,7 +701,7 @@ public:
   /// @param i_capacity Number of vertices, which would be added later
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void reserve(VertexTypes i_type, size_t i_capacity);
-  
+
   /// @brief resets counter for graph IDs
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   static void resetCounter() { d_countGraph = 0ul; }
