@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "${ROOT_DIR}"
-
+git submodule update --init
 JOBS="${JOBS:-$(nproc)}"
 INSTALL_PREFIX="${INSTALL_PREFIX:-prefix/release}"
 
