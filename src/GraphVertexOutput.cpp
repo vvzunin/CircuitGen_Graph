@@ -22,7 +22,8 @@ GraphVertexOutput::GraphVertexOutput(GraphPtr i_baseGraph, bool i_isBus) :
 
 GraphVertexOutput::GraphVertexOutput(std::string_view i_name,
                                      GraphPtr i_baseGraph, bool i_isBus) :
-    GraphVertexBase(i_isBus ? VertexTypes::outputBus : output, i_name, i_baseGraph) {
+    GraphVertexBase(i_isBus ? VertexTypes::outputBus : output, i_name,
+                    i_baseGraph) {
 }
 
 char GraphVertexOutput::updateValue() {
@@ -94,18 +95,18 @@ GraphVertexBusOutput::GraphVertexBusOutput(std::string_view i_name,
 }
 
 std::string GraphVertexBusOutput::toOneBitVerilog() const {
-  std::stringstream ans;
+  std::stringstream res;
   size_t minWidth;
   if (!d_inConnections.empty())
     minWidth = getBusPointer(
                    (*std::min_element(d_inConnections.begin(),
                                       d_inConnections.end(), hasSmallerWidth)))
                    ->getWidth();
-  for (int i = 0; i < std::min(minWidth, getWidth()); ++i)
-    ans << "assign " << getName() << "_" << std::to_string(i) << " = "
+  for (size_t i = 0; i < std::min(minWidth, getWidth()); ++i)
+    res << "assign " << getName() << "_" << std::to_string(i) << " = "
         << d_inConnections.back()->getName() << "_" << std::to_string(i)
         << ";\n\t";
-  return ans.str();
+  return res.str();
 }
 
 } // namespace CG_Graph

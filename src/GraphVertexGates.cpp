@@ -27,7 +27,8 @@ GraphVertexGates::GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph,
 }
 GraphVertexGates::GraphVertexGates(Gates i_gate, std::string_view i_name,
                                    GraphPtr i_baseGraph, bool i_isBus) :
-    GraphVertexBase(i_isBus ? VertexTypes::gateBus : gate, i_name, i_baseGraph) {
+    GraphVertexBase(i_isBus ? VertexTypes::gateBus : gate, i_name,
+                    i_baseGraph) {
   d_gate = i_gate;
 }
 
@@ -201,8 +202,7 @@ std::string GraphVertexGates::toVerilog() const {
         d_gate == Gates::GateXnor) {
       basic += "~ ( ";
       end = " )";
-    }
-    else if (d_gate == Gates::GateConcatenation) {
+    } else if (d_gate == Gates::GateConcatenation) {
       basic += "{ ";
       end = " }";
     }
@@ -257,7 +257,6 @@ std::string GraphVertexGates::toVerilogCommon(
 #endif
     return "";
   }
-  VertexPtr ptr = d_inConnections.back();
   if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
     if (d_inConnections.size() > 1) {
       std::cerr << "Invalid: one-input vertex \"" << d_name
@@ -321,7 +320,7 @@ std::string GraphVertexBusSlice::toOneBitVerilog() const {
     return "";
   }
   std::stringstream stream;
-  for (int i = d_begin; i < d_begin + d_width; ++i)
+  for (size_t i = d_begin; i < d_begin + d_width; ++i)
     stream << "assign " << getName() << "_" << std::to_string(i) << " = "
            << getInConnections()[0]->getName() << "_" << std::to_string(i);
 
@@ -358,7 +357,7 @@ std::string GraphVertexBusGate::toOneBitVerilog() const {
                            : 1));
   auto printUnaryOperators = [&]() {
     std::string temporaryName;
-    for (int j = 0; j < n; ++j) {
+    for (size_t j = 0; j < n; ++j) {
       temporaryName =
           fmt::format("{}_{}", getInConnections().back()->getName(), j);
       stream << fmt::format("assign {}_{} = {}{}{};\n\t", getName(), j, oper,
@@ -383,7 +382,7 @@ std::string GraphVertexBusGate::toOneBitVerilog() const {
     stream << fmt::format("assign {}_0 = {}{}{};\n\t", getName(), begin,
                           fmt::join(names, " " + oper + " "), end);
 
-    for (int j = 1; j < getWidth(); ++j) {
+    for (size_t j = 1; j < getWidth(); ++j) {
       names.clear();
       getNamesVector(names, d_inConnections, j);
       stream << fmt::format("assign {}_{} = {}{}{};\n\t", getName(), j, begin,

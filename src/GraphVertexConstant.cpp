@@ -94,14 +94,14 @@ std::string GraphVertexBusConstant::getVerilogInstance() {
 std::string GraphVertexBusConstant::getVerilogInstanceSeparate() {
   std::stringstream res;
   res << "wire ";
-  for (int i = 0; i < getWidth(); ++i) {
+  for (size_t i = 0; i < getWidth(); ++i) {
     res << getName() << "_" << i << (i != getWidth() - 1 ? ", " : ";\n");
   }
   return res.str();
 }
 std::string GraphVertexBusConstant::toOneBitVerilog() const {
   std::stringstream res;
-  for (int i = 0; i < getWidth(); ++i) {
+  for (size_t i = 0; i < getWidth(); ++i) {
     res << "assign " << getName() << "_" << i << " = " << d_valueBus[i]
         << ";\n";
   }

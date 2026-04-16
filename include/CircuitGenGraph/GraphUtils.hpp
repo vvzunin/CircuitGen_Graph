@@ -25,7 +25,8 @@ namespace CG_Graph {
 
 /// @brief VertexTypes
 /// Enumeration of vertex types
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */static constexpr size_t d_busInType = 8;
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */ static constexpr size_t
+    d_busInType = 8;
 enum VertexTypes : uint8_t {
   input = 0,      ///  input vertex
   output = 5,     ///  output vertex

@@ -817,7 +817,8 @@ void OrientedGraph::verilogInoutsWriting(
   // and outputs
   for (auto *outVert: i_graph->d_vertices[VertexTypes::output]) {
     i_printPin(outVert);
-    i_fileStream << ((outVert == i_graph->d_vertices[VertexTypes::output].back())
+    i_fileStream << ((outVert ==
+                      i_graph->d_vertices[VertexTypes::output].back())
                          ? "\n"
                          : ", ");
   }
@@ -832,8 +833,8 @@ void OrientedGraph::verilogVerticesDeclaration(
   uint8_t count = 0;
   for (auto eachVertex:
        {i_graph->d_vertices[VertexTypes::input],
-        i_graph->d_vertices[VertexTypes::output], i_graph->d_allSubGraphsOutputs,
-        i_graph->d_vertices[VertexTypes::gate],
+        i_graph->d_vertices[VertexTypes::output],
+        i_graph->d_allSubGraphsOutputs, i_graph->d_vertices[VertexTypes::gate],
         i_graph->d_vertices[VertexTypes::sequential]}) {
     if (eachVertex.size()) {
       auto i_usedType = eachVertex.back()->getType();
@@ -970,7 +971,6 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
   verilogVerticesDefining(shared_from_this(), i_fileStream, lambdaDefining);
   return successFileCreating && successSubgraphWriting &&
          verilogFinalOperations(shared_from_this(), i_fileStream);
-
 }
 
 bool OrientedGraph::toVerilogBusEnabled(std::string i_path,
@@ -988,7 +988,7 @@ bool OrientedGraph::toVerilogBusEnabled(std::string i_path,
   };
   auto lambdaDeclaration = [&](std::vector<GraphVertexBase *> eachVertex,
                                VertexTypes usedType) {
-    int8_t length = -1;
+    size_t length = -1;
     std::multimap<size_t, VertexPtr> busSet;
     for (auto *value: eachVertex) {
       if (value->isBus())
@@ -1061,7 +1061,7 @@ bool OrientedGraph::toVerilogBusEnabledAsOneBit(std::string i_path,
     }
     for (auto value = busSet.begin(); value != busSet.end(); ++value) {
       i_fileStream << VertexUtils::vertexTypeToVerilog(usedType) << " ";
-      for (int i = 0;
+      for (size_t i = 0;
            i < GraphVertexBus::getBusPointer(value->second)->getWidth(); ++i)
         i_fileStream
             << value->second->getRawName() << "_" << i
@@ -1075,8 +1075,8 @@ bool OrientedGraph::toVerilogBusEnabledAsOneBit(std::string i_path,
 
   auto lambdaInouts = [&](VertexPtr vertex) {
     if (vertex->isBus()) {
-      for (int i = 0; i < GraphVertexBus::getBusPointer(vertex)->getWidth() - 1;
-           ++i) {
+      for (size_t i = 0;
+           i < GraphVertexBus::getBusPointer(vertex)->getWidth() - 1; ++i) {
         i_fileStream << vertex->getName() << "_" << std::to_string(i) << ", ";
       }
       i_fileStream << vertex->getName() << "_"

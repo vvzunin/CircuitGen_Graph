@@ -91,19 +91,17 @@ GraphVertexSequential::GraphVertexSequential(
     GraphPtr i_baseGraph, std::string_view i_name, bool i_isBus) :
     GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph) {
   reserveInConnections(3);
-    i_baseGraph->addEdges({i_data, i_clk, i_wire}, this);
+  i_baseGraph->addEdges({i_data, i_clk, i_wire}, this);
   DEFAULT_CHECK_TYPE;
   short signals = countSignalsInType(i_type);
   if (signals < 1) {
     d_seqType = static_cast<SequentialTypes>(i_type | EN);
-  }
-  else if (signals + bool(i_type & ff) > 2) {
+  } else if (signals + bool(i_type & ff) > 2) {
     if (signals + bool(i_type & ff) > 3) {
       d_seqType = static_cast<SequentialTypes>(i_type & ~SET & ~RST & ~CLR);
     }
     d_seqType = static_cast<SequentialTypes>(i_type & ~SET);
-  } 
-  else {
+  } else {
     d_seqType = i_type;
   }
   validateSignal(i_type, d_seqType);
@@ -115,7 +113,7 @@ GraphVertexSequential::GraphVertexSequential(
     std::string_view i_name, bool i_isBus) :
     GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph) {
   reserveInConnections(4);
-    i_baseGraph->addEdges({i_data, i_clk, i_wire1, i_wire2}, this);
+  i_baseGraph->addEdges({i_data, i_clk, i_wire1, i_wire2}, this);
   DEFAULT_CHECK_TYPE;
   short signals = countSignalsInType(i_type);
   if (signals == 0) {
@@ -135,7 +133,7 @@ GraphVertexSequential::GraphVertexSequential(
     std::string_view i_name, bool i_isBus) :
     GraphVertexBase(VertexTypes::sequential, i_name, i_baseGraph) {
   reserveInConnections(5);
-    i_baseGraph->addEdges({i_data, i_clk, i_en, i_rst, i_set}, this);
+  i_baseGraph->addEdges({i_data, i_clk, i_en, i_rst, i_set}, this);
   DEFAULT_CHECK_TYPE;
 
   // cannot have 3 input wires and be a latch - latch has only 3 signals at all
@@ -174,7 +172,7 @@ VertexPtr GraphVertexSequential::getEn() const {
 }
 
 VertexPtr GraphVertexSequential::getRst() const {
-  if (getSeqType() & RST | getSeqType() & CLR)
+  if (((getSeqType()) & RST) | ((getSeqType()) & CLR))
     return d_inConnections[bool(getSeqType() & ff) + bool(getSeqType() & EN) +
                            1];
   return nullptr;

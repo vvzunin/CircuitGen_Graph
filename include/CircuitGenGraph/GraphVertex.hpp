@@ -172,7 +172,7 @@ public:
   /// Creates simple verilog const instance (as a wire)
 
   /** @author Vladimir Zunin <vzunin@hse.ru> */
-  std::string getVerilogInstance();
+  virtual std::string getVerilogInstance();
 
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
@@ -317,7 +317,7 @@ class GraphVertexOutput : public GraphVertexBase {
 public:
   GraphVertexOutput(GraphPtr i_baseGraph, bool i_isBus = false);
 
- /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphVertexOutput(std::string_view i_name, GraphPtr i_baseGraph,
                     bool i_isBus = false);
 
@@ -363,7 +363,7 @@ class GraphVertexGates : public GraphVertexBase {
 public:
   GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph, bool i_isBus = false);
 
-    /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph,
                    bool i_isBus = false);
 
@@ -446,11 +446,11 @@ public:
   /// @return A Verilog format string for the current vertex
   /// @throws std::invalid_argument if any input connection is invalid
 
-    /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual std::string
   toVerilog() const override; // помечен виртуальным потому что у этого класса
                               // есть потомок-шина со своим методом
-/** @author Vladimir Zunin <vzunin@hse.ru> */
+  /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */

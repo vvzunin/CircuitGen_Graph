@@ -26,7 +26,6 @@ size_t GraphVertexBus::getWidth() const {
   return d_width;
 }
 
-
 const GraphVertexBus *GraphVertexBus::getBusPointer(const VertexPtr i_vertex) {
   switch (i_vertex->getFullType()) {
     case inputBus:
@@ -50,8 +49,8 @@ const GraphVertexBus *GraphVertexBus::getBusPointer(const VertexPtr i_vertex) {
     }
   }
 }
-#define getBusPointerMacros(is_const) 
-GraphVertexBus *GraphVertexBus::getBusPointer(VertexPtr i_vertex) { 
+#define getBusPointerMacros(is_const)
+GraphVertexBus *GraphVertexBus::getBusPointer(VertexPtr i_vertex) {
   switch (i_vertex->getFullType()) {
     case inputBus:
       return static_cast<GraphVertexBusInput *>(i_vertex);
