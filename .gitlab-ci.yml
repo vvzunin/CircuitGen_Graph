@@ -656,7 +656,19 @@ docs:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       changes:
+        # Documentation sources and Doxygen configuration.
         - docs/**/*
+        - scripts/docs/**/*
+        # Doxygen inputs include the public API headers and (some) sources.
+        - include/**/*
+        - src/**/*
+        # CMake presets / config affect compile_commands.json generation for clang-assisted parsing.
+        - CMakePresets.json
+        - CMakeLists.txt
+        - src/CMakeLists.txt
+        - examples/CMakeLists.txt
+        - test/CMakeLists.txt
+        # CI/docs tooling and dependency installers can change the doc build environment.
         - cmake/**/*
         - scripts/ci/docs.sh
         - cmake/docs-ci.cmake
