@@ -1,21 +1,24 @@
-#include "CircuitGenGraph/GraphUtils.hpp"
 #include <CircuitGenGraph/GraphReader.hpp>
+
+#include "CircuitGenGraph/GraphUtils.hpp"
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
+
 #include <cstddef>
-#include <lorina/lorina.hpp>
 #include <regex>
 #include <string>
 #include <utility>
 #include <cassert>
+
+#include <lorina/lorina.hpp>
 
 #define SUFFIX_INVERSION "_not"
 #define SUFFIX_OUTPUT_GATE "_gate"
 
 namespace CG_Graph {
 
-GraphReader::GraphReader(Context &i_context) : d_context(i_context){};
+GraphReader::GraphReader(Context &i_context) : d_context(i_context) {};
 
 void GraphReader::on_module_header(
     const std::string &module_name,
@@ -94,13 +97,15 @@ void GraphReader::on_assign(const std::string &lhs,
   if (std::regex_match(rhs.first, isConstant) ||
       std::regex_match(rhs.first, isSimpleConstant)) {
     on_parameter(lhs, rhs.first);
-  } else {
+  } 
+  else {
     if (d_context.d_currentGraphNamesList[lhs]->getType() != output) {
       VertexPtr leftVertex = d_context.d_currentGraphNamesList[lhs];
       if (!rhs.second) {
         static_cast<GraphVertexGates *>(leftVertex)->setGateIfDefault(GateBuf);
         d_context.d_currentGraph->addEdge(getRightHS(rhs.first), leftVertex);
-      } else {
+      } 
+      else {
         static_cast<GraphVertexGates *>(leftVertex)->setGateIfDefault(GateNot);
         if (d_context.d_currentGraphNamesList.find(rhs.first +
                                                    SUFFIX_INVERSION) ==
@@ -110,7 +115,8 @@ void GraphReader::on_assign(const std::string &lhs,
         d_context.d_currentGraphNamesList[lhs] = leftVertex;
         d_context.d_currentGraph->addEdge(getRightHS(rhs.first), leftVertex);
       }
-    } else {
+    } 
+    else {
       d_context.d_currentGraph->addEdge(getRightHS(rhs.first, rhs.second),
                                         get_vertex_by_name(lhs));
     }
@@ -255,7 +261,8 @@ void GraphReader::on_maj3(const std::string &lhs,
     d_context.d_currentGraph->majorityAsLogic(
         getRightHS(op1.first, op1.second), getRightHS(op2.first, op2.second),
         getRightHS(op3.first, op3.second), temp->second);
-  } else {
+  } 
+  else {
     d_context.d_currentGraphNamesList[lhs] =
         d_context.d_currentGraph->generateMajority(
             getRightHS(op1.first, op1.second),
