@@ -30,6 +30,11 @@ SETUP_SCRIPT="scripts/setup/install-deps-${TARGET_OS}.sh"
 
 OS_IMAGE_TAG="${DOCKER_URL}/os-${TARGET_OS}:${DOCKER_CI_TAG}"
 
+REGISTRY_URL="${REGISTRY_URL:-vvzunin.me:5201}"
+# Prefer Harbor proxy cache for Docker Hub base images in CI.
+BASE_IMAGE="$(REGISTRY_URL="${REGISTRY_URL}" DOCKER_HUB_PROXY_PROJECT="${DOCKER_HUB_PROXY_PROJECT:-}" \
+  bash "${ROOT_DIR}/scripts/ci/docker-hub-proxy-image.sh" "${BASE_IMAGE}")"
+
 echo "Building OS image: ${OS_IMAGE_TAG}"
 docker buildx build --pull --rm --provenance=false --no-cache \
   --build-arg "BASE_IMAGE=${BASE_IMAGE}" \

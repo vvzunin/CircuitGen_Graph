@@ -49,6 +49,7 @@ variables:
   DOCKER_CI_SYSTEM: ubuntu:22.04
   DOCKER_CI_TAG: $CI_COMMIT_REF_SLUG
   REGISTRY_URL: vvzunin.me:5201
+  DOCKER_HUB_PROXY_PROJECT: proxy_cache_docker_hub
   # Optional CI/CD variable: HARBOR_WEB_UI_URL — HTTPS URL of Harbor web UI (not the Docker endpoint on :5201); used by release-from-tag.
   GROUP_NAME: circuitgen
   REPO_NAME: graph
@@ -72,9 +73,9 @@ gitlab-os-matrix-check:
     - docker
 
 .docker-images-base:
-  image: docker:27
+  image: $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27
   services:
-    - docker:27-dind
+    - $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27-dind
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
@@ -158,9 +159,9 @@ docker-images-fedora-43:
 
 .docker-release-base:
   stage: docker-matrix
-  image: docker:27
+  image: $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27
   services:
-    - docker:27-dind
+    - $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27-dind
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
@@ -231,9 +232,9 @@ docker-release-fedora-43:
   stage: os-check
   # Full image build (--no-cache) + run-all (lint…docs) can exceed 1h on some OS runners.
   timeout: 3h
-  image: docker:27
+  image: $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27
   services:
-    - docker:27-dind
+    - $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27-dind
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
