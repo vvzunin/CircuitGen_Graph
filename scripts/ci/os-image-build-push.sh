@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Build and push an OS-specific CI image with project dependencies installed.
+# Build an OS-specific CI image with project dependencies installed.
 # Mirrors dockerfile/Dockerfile.ci after install-deps: shared venv with packages needed for docs (jinja2, …).
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -47,5 +47,4 @@ ENV CIRCUITGEN_PYTHON_VENV=/opt/circuitgen-venv
 ENV PATH="/opt/circuitgen-venv/bin:${PATH}"
 EOF
 
-echo "Pushing OS image: ${OS_IMAGE_TAG}"
-docker image push "${OS_IMAGE_TAG}"
+echo "OS image built locally (no registry push): ${OS_IMAGE_TAG}"
