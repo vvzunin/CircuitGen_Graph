@@ -35,7 +35,7 @@ option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
 
 # Подключаем папку с исходниками (новый формат)
 add_subdirectory(src)
-
+add_compile_options(-fno-rtti)
 if(ENABLE_COVERAGE)
   message(STATUS "Code coverage enabled")
   if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
