@@ -77,45 +77,6 @@ else()
   message(STATUS "clang-tidy not found")
 endif()
 
-target_include_directories(
-  ${PROJECT_NAME} ${warning_guard}
-  PUBLIC
-  "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
-)
-
-target_include_directories(
-  ${PROJECT_NAME} SYSTEM
-  PUBLIC
-  "\$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
-)
-
-target_include_directories(${PROJECT_NAME}
-  PRIVATE
-
-  # where the library itself will look for its internal headers
-  ${CMAKE_CURRENT_SOURCE_DIR}/src
-  PUBLIC
-
-  # where top-level project will look for the library's public headers
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-
-  # where external projects will look for the library's public headers
-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-)
-
-include_directories(${CMAKE_SOURCE_DIR}/include)
-include_directories(${CMAKE_SOURCE_DIR}/lib)
-
-set_target_properties(
-  "${PROJECT_NAME}" PROPERTIES
-  VERSION "${PROJECT_VERSION}"
-  SOVERSION "${PROJECT_VERSION_MAJOR}"
-  EXPORT_NAME "${PROJECT_NAME}"
-  OUTPUT_NAME "${PROJECT_NAME}"
-  PUBLIC_HEADER "${PUBLIC_HEADERS}")
-
-include(cmake/utils.cmake)
-
 if(ENABLE_LOGGING)
   message(STATUS "Logs enabled")
   install(TARGETS ${PROJECT_NAME} easylogging++

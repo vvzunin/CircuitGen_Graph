@@ -181,7 +181,8 @@ VertexPtr GraphVertexSequential::getRst() const {
 VertexPtr GraphVertexSequential::getSet() const {
   if (getSeqType() & SET)
     return d_inConnections[bool(getSeqType() & ff) + bool(getSeqType() & EN) +
-                           bool(getSeqType() & RST | getSeqType() & CLR) + 1];
+                           bool((getSeqType() & RST) | (getSeqType() & CLR)) +
+                           1];
   return nullptr;
 }
 

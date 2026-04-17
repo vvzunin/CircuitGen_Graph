@@ -317,6 +317,11 @@ std::string GraphVertexBusSlice::toOneBitVerilog() const {
     std::cerr << "Gate of type 'GateSlice' can not have"
               << "more than one vertex in d_inConnections " << d_name
               << std::endl;
+#ifdef LOGFLAG
+    LOG(INFO) << "Gate of type 'GateSlice' can not have"
+              << "more than one vertex in d_inConnections " << d_name
+              << std::endl;
+#endif
     return "";
   }
   std::stringstream stream;
