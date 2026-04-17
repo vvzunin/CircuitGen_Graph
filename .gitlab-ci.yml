@@ -18,7 +18,7 @@ workflow:
         DOCKER_CI_TAG: $CI_COMMIT_REF_SLUG
     - when: always
       variables:
-        DOCKER_CI_TAG: $CI_COMMIT_REF_SLUG
+        DOCKER_CI_TAG: $CI_COMMIT_SHORT_SHA
 
 stages:
   # Проверка согласованности .gitlab-ci.yml с матрицей ОС (generate-gitlab-os-matrix.sh --check).
@@ -47,7 +47,7 @@ variables:
   DOCKERFILE_DEV_NAME: dockerfile/Dockerfile.dev
   DOCKERFILE_RELEASE_NAME: dockerfile/Dockerfile.release
   DOCKER_CI_SYSTEM: ubuntu:22.04
-  DOCKER_CI_TAG: $CI_COMMIT_REF_SLUG
+  DOCKER_CI_TAG: $CI_COMMIT_SHORT_SHA
   REGISTRY_URL: vvzunin.me:5201
   DOCKER_HUB_PROXY_PROJECT: proxy_cache_docker_hub
   # Optional CI/CD variable: HARBOR_WEB_UI_URL — HTTPS URL of Harbor web UI (not the Docker endpoint on :5201); used by release-from-tag.
