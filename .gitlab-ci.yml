@@ -75,7 +75,8 @@ gitlab-os-matrix-check:
 .docker-images-base:
   image: $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27
   services:
-    - $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27-dind
+    - name: $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27-dind
+      alias: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
@@ -161,7 +162,8 @@ docker-images-fedora-43:
   stage: docker-matrix
   image: $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27
   services:
-    - $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27-dind
+    - name: $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27-dind
+      alias: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
@@ -234,7 +236,8 @@ docker-release-fedora-43:
   timeout: 3h
   image: $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27
   services:
-    - $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27-dind
+    - name: $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27-dind
+      alias: docker
   variables:
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
