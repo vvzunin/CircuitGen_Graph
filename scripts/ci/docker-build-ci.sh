@@ -64,11 +64,25 @@ if [[ -n "${CI:-}" ]]; then
   fi
   if bash "${ROOT_DIR}/scripts/ci/docker-skip-if-unchanged.sh" ci; then
     if [[ -n "${sha_image}" && "${sha_image}" != "${DOCKER_CI_IMAGE}" ]]; then
-      if ! docker manifest inspect "${sha_image}" >/dev/null 2>&1; then
+      main_exists=0
+      sha_exists=0
+      if docker manifest inspect "${DOCKER_CI_IMAGE}" >/dev/null 2>&1; then
+        main_exists=1
+      fi
+      if docker manifest inspect "${sha_image}" >/dev/null 2>&1; then
+        sha_exists=1
+      fi
+
+      if [[ "${main_exists}" -eq 1 && "${sha_exists}" -eq 0 ]]; then
         echo "Publishing immutable CI image tag from existing image: ${sha_image}"
         docker pull "${DOCKER_CI_IMAGE}"
         docker image tag "${DOCKER_CI_IMAGE}" "${sha_image}"
         docker image push "${sha_image}"
+      elif [[ "${main_exists}" -eq 0 && "${sha_exists}" -eq 1 ]]; then
+        echo "Promoting immutable SHA image to branch tag: ${DOCKER_CI_IMAGE}"
+        docker pull "${sha_image}"
+        docker image tag "${sha_image}" "${DOCKER_CI_IMAGE}"
+        docker image push "${DOCKER_CI_IMAGE}"
       fi
     fi
     exit 0

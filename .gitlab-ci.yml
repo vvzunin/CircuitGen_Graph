@@ -78,6 +78,7 @@ gitlab-os-matrix-check:
 
 .docker-images-base:
   image: $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27
+  resource_group: "$CI_PROJECT_PATH_SLUG:docker-images:$IMAGE_OS_SUFFIX"
   services:
     - name: $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27-dind
       alias: docker
@@ -165,6 +166,7 @@ docker-images-fedora-43:
 .docker-release-base:
   stage: docker-matrix
   image: $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27
+  resource_group: "$CI_PROJECT_PATH_SLUG:docker-release:$IMAGE_OS_SUFFIX"
   services:
     - name: $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27-dind
       alias: docker
@@ -236,6 +238,7 @@ docker-release-fedora-43:
 
 .os-setup-check-job:
   stage: os-check
+  resource_group: "$CI_PROJECT_PATH_SLUG:os-check:$TARGET_OS"
   # Full image build (--no-cache) + run-all (lint…docs) can exceed 1h on some OS runners.
   timeout: 3h
   image: $REGISTRY_URL/$DOCKER_HUB_PROXY_PROJECT/library/docker:27
