@@ -66,11 +66,21 @@ fi
 echo "Creating docker image with tag ${DOCKER_CI_TAG}"
 echo "Image will push to ${DOCKER_CI_IMAGE}"
 
+sha_image=""
+if [[ -n "${CI_COMMIT_SHORT_SHA:-}" ]]; then
+  sha_image="${DOCKER_CI_IMAGE%:*}:${CI_COMMIT_SHORT_SHA}"
+fi
+
 docker buildx build --pull --rm --provenance=false --no-cache \
   --build-arg "system=${DOCKER_CI_SYSTEM}" \
   "${build_secrets_args[@]}" \
   -f "${DOCKERFILE_CI_NAME}" \
   -t "${DOCKER_CI_IMAGE}" .
 docker image push "${DOCKER_CI_IMAGE}"
+if [[ -n "${sha_image}" && "${sha_image}" != "${DOCKER_CI_IMAGE}" ]]; then
+  echo "Publishing immutable CI image tag: ${sha_image}"
+  docker image tag "${DOCKER_CI_IMAGE}" "${sha_image}"
+  docker image push "${sha_image}"
+fi
 
 rm -f "${pip_conf_file}"
