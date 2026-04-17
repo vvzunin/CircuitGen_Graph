@@ -84,7 +84,9 @@ FROM ${BASE_IMAGE}
 WORKDIR /workspace
 COPY . /workspace
 ARG SETUP_SCRIPT
-RUN bash "${SETUP_SCRIPT}"
+RUN --mount=type=secret,id=pip_conf,target=/tmp/pip.conf,required=false \
+    PIP_CONFIG_FILE=/tmp/pip.conf \
+    bash "${SETUP_SCRIPT}"
 RUN --mount=type=secret,id=pip_conf,target=/tmp/pip.conf,required=false \
     PIP_CONFIG_FILE=/tmp/pip.conf \
     bash scripts/setup/ci-python-venv.sh jinja2 Pygments synology-drive-api

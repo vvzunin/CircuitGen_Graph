@@ -53,6 +53,7 @@ variables:
   DOCKER_CI_TAG: $CI_COMMIT_SHORT_SHA
   REGISTRY_URL: vvzunin.me:5201
   DOCKER_HUB_PROXY_PROJECT: proxy_cache_docker_hub
+  DOCKER_GITLAB_PROXY_PROJECT: proxy_cache_gitlab
   # Optional CI/CD variable: HARBOR_WEB_UI_URL — HTTPS URL of Harbor web UI (not the Docker endpoint on :5201); used by release-from-tag.
   GROUP_NAME: circuitgen
   REPO_NAME: graph
@@ -689,7 +690,7 @@ docs:
 
 release-from-tag:
   stage: release
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  image: $REGISTRY_URL/$DOCKER_GITLAB_PROXY_PROJECT/gitlab-org/release-cli:latest
   before_script:
     - sh scripts/ci/apk-install-with-retry.sh bash
   script:

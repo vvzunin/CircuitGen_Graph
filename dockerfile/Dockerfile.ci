@@ -8,7 +8,9 @@ WORKDIR /tmp/circuitgen-setup
 COPY scripts/config/supported-os.sh ./scripts/config/
 COPY scripts/setup ./scripts/setup
 
-RUN bash scripts/setup/install-deps-for-current-os.sh
+RUN --mount=type=secret,id=pip_conf,target=/tmp/pip.conf,required=false \
+    PIP_CONFIG_FILE=/tmp/pip.conf \
+    bash scripts/setup/install-deps-for-current-os.sh
 
 RUN --mount=type=secret,id=pip_conf,target=/tmp/pip.conf,required=false \
     PIP_CONFIG_FILE=/tmp/pip.conf \
