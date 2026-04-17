@@ -58,7 +58,19 @@ fi
 } > "${pip_conf_file}"
 
 if [[ -n "${CI:-}" ]]; then
+  sha_image=""
+  if [[ -n "${CI_COMMIT_SHORT_SHA:-}" ]]; then
+    sha_image="${DOCKER_CI_IMAGE%:*}:${CI_COMMIT_SHORT_SHA}"
+  fi
   if bash "${ROOT_DIR}/scripts/ci/docker-skip-if-unchanged.sh" ci; then
+    if [[ -n "${sha_image}" && "${sha_image}" != "${DOCKER_CI_IMAGE}" ]]; then
+      if ! docker manifest inspect "${sha_image}" >/dev/null 2>&1; then
+        echo "Publishing immutable CI image tag from existing image: ${sha_image}"
+        docker pull "${DOCKER_CI_IMAGE}"
+        docker image tag "${DOCKER_CI_IMAGE}" "${sha_image}"
+        docker image push "${sha_image}"
+      fi
+    fi
     exit 0
   fi
 fi
