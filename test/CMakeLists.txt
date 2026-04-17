@@ -19,7 +19,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(googletest)
 
-add_compile_options(-fno-rtti)
+#add_compile_options(-fno-rtti)
 add_compile_options(-g3 -Wall -Wignored-qualifiers -DYYERROR_VERBOSE)
 
 option(CircuitGenGraph_TESTS_ENABLE_ASAN "Enable AddressSanitizer for tests" ON)
