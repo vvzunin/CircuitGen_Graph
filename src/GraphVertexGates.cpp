@@ -298,7 +298,7 @@ GraphVertexBusSlice::GraphVertexBusSlice(std::string_view i_name,
 }
 
 std::string GraphVertexBusSlice::getSliceSuffix() const {
-  return fmt::format("[{}:{}];\n",d_begin + d_width, d_begin);
+  return fmt::format("[{}:{}];\n", d_begin + d_width, d_begin);
 }
 
 std::string GraphVertexBusSlice::toVerilog() const {
@@ -308,7 +308,8 @@ std::string GraphVertexBusSlice::toVerilog() const {
               << std::endl;
     return "";
   }
-  return fmt::format("assign {} = {}{}", getName(),getInConnections()[0]->getName(), getSliceSuffix());
+  return fmt::format("assign {} = {}{}", getName(),
+                     getInConnections()[0]->getName(), getSliceSuffix());
 }
 std::string GraphVertexBusSlice::toOneBitVerilog() const {
   if (d_inConnections.size() > 1) {

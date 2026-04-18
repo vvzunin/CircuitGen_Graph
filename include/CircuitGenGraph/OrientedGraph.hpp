@@ -862,7 +862,8 @@ private:
    */
   static void
   verilogConstantWriting(GraphPtr i_graph, std::ofstream &i_fileStream,
-                         std::function<void(VertexPtr)> i_getInstance);
+                         std::function<void(VertexPtr)> i_getInstance,
+                         std::function<void(VertexPtr)> i_getDefinition);
 
   /**
    * @brief The method is a stage of generating verilog output by toVerilog()
@@ -959,4 +960,3 @@ private:
 };
 
 } // namespace CG_Graph
->>>>>>> b566073 (oneBitVerilog for gates added, sequential refactoring started)

@@ -1,8 +1,10 @@
-#include "CircuitGenGraph/GraphUtils.hpp"
-#include "CircuitGenGraph/GraphVertexBus.hpp"
+#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
+#include <CircuitGenGraph/GraphVertexBus.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
+
 #include "TestSeqData.hpp"
+
 #include <gtest/gtest.h>
 #include <memory>
 
@@ -106,9 +108,9 @@ TEST(BusTest, oneBitVerilogForSequentials) {
       latchcs, inputVertex, inputBus, firstFF, anotherInputBus, "Latch", 6);
   VertexPtr secondFF =
       graph->addSequentialBus(ff, anotherInputBus, inputBus, "secondFF", 3);
-  VertexPtr emptyOutputLatch =
-      graph->addSequentialBus(latchrs, inputVertex, inputBus, constBus,
-                              anotherInputBus, "emptyLatch", 8);
+  // VertexPtr emptyOutputLatch =
+  graph->addSequentialBus(latchrs, inputVertex, inputBus, constBus,
+                          anotherInputBus, "emptyLatch", 8);
   VertexPtr gateBus = graph->addGateBus(GateOr, "or", 4);
   graph->addEdge(latch, gateBus);
   graph->addEdge(secondFF, gateBus);

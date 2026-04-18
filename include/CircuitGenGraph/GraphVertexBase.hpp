@@ -532,6 +532,8 @@ public:
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual size_t calculateHash();
 
+  VertexPtr minWidthVertex() const;
+
   /// @brief toVerilog
   /// Generates Verilog code for the vertex
   /// @return A string containing Verilog code for the vertex, or an empty

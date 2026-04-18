@@ -1,12 +1,15 @@
 #include "CircuitGenGraph/GraphUtils.hpp"
 #include "CircuitGenGraph/GraphVertexBase.hpp"
 #include "CircuitGenGraph/OrientedGraph.hpp"
-#include <fmt/format.h>
-#include <gtest/gtest.h>
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/SequentialVerilogStorage.hpp>
+
+#include <gtest/gtest.h>
+#include <fmt/format.h>
+
 #include <memory>
 #include <string>
+
 #ifdef LOGFLAG
 #include "easylogging++Init.hpp"
 #endif

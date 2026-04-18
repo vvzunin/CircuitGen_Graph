@@ -90,8 +90,9 @@ std::string parseGateToString(Gates gate) {
 std::string parseSequentialToString(SequentialTypes type) {
   return std::string(findPairByKey(sequentialToString, type)->second);
 }
-std::vector<std::string_view>parseSequentialToInputs(SequentialTypes type) {
-return std::vector<std::string_view>(findPairByKey(sequentialToInputList, type)->second);
+std::vector<std::string_view> parseSequentialToInputs(SequentialTypes type) {
+  return std::vector<std::string_view>(
+      findPairByKey(sequentialToInputList, type)->second);
 }
 std::string parseVertexToString(VertexTypes vertex) {
   return std::string(findPairByKey(vertexToString, vertex)->second);

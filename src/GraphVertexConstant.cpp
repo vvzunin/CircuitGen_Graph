@@ -90,20 +90,21 @@ std::string GraphVertexBusConstant::toVerilog() const {
          d_valueBus + ";";
 }
 std::string GraphVertexBusConstant::getVerilogInstance() {
-  return fmt::format("wire {}{};",getName(), getBusNameSuffix());
+  return fmt::format("wire {}{};", getName(), getBusNameSuffix());
 }
 std::string GraphVertexBusConstant::getVerilogInstanceSeparate() {
-  std::vector<std::string> ans;
-  for (int i = 0; i < getWidth(); ++i) {
-    ans.push_back(fmt::format("{}_{}", getName(), i));
+  std::vector<std::string> res;
+  for (size_t i = 0; i < getWidth(); ++i) {
+    res.push_back(fmt::format("{}_{}", getName(), i));
   }
-  return fmt::format("wire {};\n", fmt::join(ans, ", "));
+  return fmt::format("wire {};\n", fmt::join(res, ", "));
 }
 std::string GraphVertexBusConstant::toOneBitVerilog() const {
-  std::vector<std::string> ans;
-  for (int i = 0; i < getWidth(); ++i) {
-    ans.push_back(fmt::format("assign {}_{} = {};\n\t", getName(), i, d_valueBus[i]));
+  std::vector<std::string> res;
+  for (size_t i = 0; i < getWidth(); ++i) {
+    res.push_back(
+        fmt::format("assign {}_{} = {};\n\t", getName(), i, d_valueBus[i]));
   }
-  return fmt::format("{}\n", fmt::join(ans, ""));
+  return fmt::format("{}\n", fmt::join(res, ""));
 }
 } // namespace CG_Graph

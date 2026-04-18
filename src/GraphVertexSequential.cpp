@@ -71,8 +71,8 @@ inline bool validateSignal(SequentialTypes current, SequentialTypes found) {
   } while (0)
 
 unsigned short countSignalsInType(SequentialTypes i_type) {
-  return 1 + bool(i_type & ff) + bool(i_type & RST) + bool(i_type & CLR) + bool(i_type & EN) +
-         bool(i_type & SET);
+  return 1 + bool(i_type & ff) + bool(i_type & RST) + bool(i_type & CLR) +
+         bool(i_type & EN) + bool(i_type & SET);
 }
 // BRAND NEW SIGNALS SEQUENCE 0 -- data, 1 -- clk, 2 -- en, 3 -- RST/CLR, 4 --
 // SET
@@ -96,13 +96,13 @@ GraphVertexSequential::GraphVertexSequential(
   i_baseGraph->addEdges({i_data, i_clk, i_wire}, this);
   DEFAULT_CHECK_TYPE;
   short signals = countSignalsInType(i_type);
-  if (signals < 2)
+  if (signals < 2) {
     d_seqType = static_cast<SequentialTypes>(i_type | EN);
-  else if (signals > 3) {
-    if (signals > 4)
+  } else if (signals > 3) {
+    d_seqType = static_cast<SequentialTypes>(i_type & ~SET);
+    if (signals > 4) {
       d_seqType = static_cast<SequentialTypes>(i_type & ~SET & ~RST & ~CLR);
     }
-    d_seqType = static_cast<SequentialTypes>(i_type & ~SET);
   } else {
     d_seqType = i_type;
   }
@@ -213,135 +213,118 @@ size_t GraphVertexSequential::calculateHash() {
 
   return d_hashed;
 }
- std::string GraphVertexSequential::getSequentialString(SequentialTypes i_type,std::string_view i_name, std::vector<std::string_view> i_inputs) {
-    switch (countSignalsInType(i_type)) {
+std::string GraphVertexSequential::getSequentialString(
+    SequentialTypes i_type, std::string_view i_name,
+    std::vector<std::string_view> i_inputs) {
+  switch (countSignalsInType(i_type)) {
     case 2:
       return fmt::format(
-          SequentialVerilogInstance::SequentialTypeToVerilog[i_type],
-          i_name, i_inputs[0], i_inputs[1]);
+          SequentialVerilogInstance::SequentialTypeToVerilog[i_type], i_name,
+          i_inputs[0], i_inputs[1]);
     case 3:
       return fmt::format(
-          SequentialVerilogInstance::SequentialTypeToVerilog[i_type],
-          i_name, i_inputs[0], i_inputs[1], i_inputs[2]);
+          SequentialVerilogInstance::SequentialTypeToVerilog[i_type], i_name,
+          i_inputs[0], i_inputs[1], i_inputs[2]);
     case 4:
       return fmt::format(
-          SequentialVerilogInstance::SequentialTypeToVerilog[i_type],
-          i_name, i_inputs[0], i_inputs[1], i_inputs[2],
-          i_inputs[3]);
+          SequentialVerilogInstance::SequentialTypeToVerilog[i_type], i_name,
+          i_inputs[0], i_inputs[1], i_inputs[2], i_inputs[3]);
     case 5:
       return fmt::format(
-          SequentialVerilogInstance::SequentialTypeToVerilog[i_type],
-          i_name, i_inputs[0], i_inputs[1], i_inputs[2],
-          i_inputs[3], i_inputs[4]);
+          SequentialVerilogInstance::SequentialTypeToVerilog[i_type], i_name,
+          i_inputs[0], i_inputs[1], i_inputs[2], i_inputs[3], i_inputs[4]);
     default:
       return "ERROR";
-}}
+  }
+}
 std::string GraphVertexSequential::toVerilog() const {
   std::vector<std::string_view> names;
-  for (auto* v: d_inConnections)
-  names.push_back(v->getRawName());
+  for (auto *v: d_inConnections)
+    names.push_back(v->getRawName());
   return getSequentialString(d_seqType, getName(), names);
-      // std::string verilog;
-      // formatAlwaysBegin(verilog);
-      // std::string_view toFormat;
-      // std::string_view tab = "\t\t";
-      // bool flag = false;
-      // if (unsigned val = (d_seqType & RST) | (d_seqType & CLR)) {
-      //   simpleCheckFormat(verilog, getRst()->getRawName(), d_name, val, tab);
-      //   verilog += "\t\telse";
-      //   flag = true;
-      // }
-      // if (d_seqType & SET) {
-      //   simpleCheckFormat(verilog, getSet()->getRawName(), d_name, SET,
-      //                     flag ? " " : tab);
-      //   verilog += "\t\telse";
-      //   flag = true;
-      // }
-      // verilog += flag ? " " : tab;
-      // if (d_seqType & EN) {
-      //   toFormat = "if ({}) ";
-      //   verilog += fmt::format(toFormat, getEn()->getRawName());
-      // }
-      // toFormat = "{} <= {};\n\tend\n";
-      // verilog += fmt::format(toFormat, d_name, getData()->getRawName());
+  // std::string verilog;
+  // formatAlwaysBegin(verilog);
+  // std::string_view toFormat;
+  // std::string_view tab = "\t\t";
+  // bool flag = false;
+  // if (unsigned val = (d_seqType & RST) | (d_seqType & CLR)) {
+  //   simpleCheckFormat(verilog, getRst()->getRawName(), d_name, val, tab);
+  //   verilog += "\t\telse";
+  //   flag = true;
+  // }
+  // if (d_seqType & SET) {
+  //   simpleCheckFormat(verilog, getSet()->getRawName(), d_name, SET,
+  //                     flag ? " " : tab);
+  //   verilog += "\t\telse";
+  //   flag = true;
+  // }
+  // verilog += flag ? " " : tab;
+  // if (d_seqType & EN) {
+  //   toFormat = "if ({}) ";
+  //   verilog += fmt::format(toFormat, getEn()->getRawName());
+  // }
+  // toFormat = "{} <= {};\n\tend\n";
+  // verilog += fmt::format(toFormat, d_name, getData()->getRawName());
 
-      // return verilog;
-  }
+  // return verilog;
+}
 
 std::string GraphVertexSequential::getVerilogInstance() {
-  std::vector<std::string_view> inputsInstance = GraphUtils::parseSequentialToInputs(d_seqType);
+  std::vector<std::string_view> inputsInstance =
+      GraphUtils::parseSequentialToInputs(d_seqType);
   std::vector<std::string_view> inputNames;
-  for(auto* v : d_inConnections) inputNames.push_back(v->getRawName());
+  for (auto *v: d_inConnections)
+    inputNames.push_back(v->getRawName());
   return getVerilogInstance(this, d_inConnections[0]->getName(), getName());
 }
 std::string GraphVertexSequential::getVerilogInstance(
-  const VertexPtr vertex,
-  std::string_view i_inputDataName,
-  std::string_view i_qOutputName, 
-  std::string_view i_dataName,
-  std::string_view i_qName, 
-  std::string_view i_instanceName) {
+    const VertexPtr vertex, std::string_view i_inputDataName,
+    std::string_view i_qOutputName, std::string_view i_dataName,
+    std::string_view i_qName, std::string_view i_instanceName) {
   std::string inouts;
-  std::vector<std::string_view> inputsInstance = GraphUtils::parseSequentialToInputs(static_cast<const GraphVertexSequential*>(vertex)->getSeqType());
-  switch (countSignalsInType(static_cast<const GraphVertexSequential*>(vertex)->getSeqType())){
-  case 2:
-    inouts = fmt::format(
-      ".{}({}), .{}({}), .{}({})",
-      i_dataName, 
-      i_inputDataName,
-      inputsInstance[1], 
-      vertex->getInConnections()[1]->getName(), 
-      i_qName,
-      i_qOutputName);
-  break;
-  case 3:
-    inouts = fmt::format(
-      ".{}({}), .{}({}), .{}({}), .{}({})",
-      i_dataName, 
-      i_inputDataName,
-      inputsInstance[1], 
-      vertex->getInConnections()[1]->getName(),
-      inputsInstance[2], 
-      vertex->getInConnections()[2]->getName(), 
-      i_qName,
-      i_qOutputName);
-  break;
-   case 4:
-    inouts = fmt::format(
-      ".{}({}), .{}({}), .{}({}), .{}({}), .{}({})",
-      i_dataName, 
-      i_inputDataName,
-      inputsInstance[1], 
-      vertex->getInConnections()[1]->getName(),
-      inputsInstance[2], 
-      vertex->getInConnections()[2]->getName(),
-      inputsInstance[3], 
-      vertex->getInConnections()[3]->getName(), 
-      i_qName,
-      i_qOutputName);
-  break;
-  case 5:
-    inouts = fmt::format(
-      ".{}({}), .{}({}), .{}({}), .{}({}), .{}({}), .{}({})",
-      i_dataName, 
-      i_inputDataName,
-      inputsInstance[1], 
-      vertex->getInConnections()[1]->getName(),
-      inputsInstance[2], 
-      vertex->getInConnections()[2]->getName(),
-      inputsInstance[3], 
-      vertex->getInConnections()[3]->getName(),
-      inputsInstance[4], 
-      vertex->getInConnections()[4]->getName(), 
-      i_qName,
-      i_qOutputName);
-  break;
+  std::vector<std::string_view> inputsInstance =
+      GraphUtils::parseSequentialToInputs(
+          static_cast<const GraphVertexSequential *>(vertex)->getSeqType());
+  switch (countSignalsInType(
+      static_cast<const GraphVertexSequential *>(vertex)->getSeqType())) {
+    case 2:
+      inouts = fmt::format(".{}({}), .{}({}), .{}({})", i_dataName,
+                           i_inputDataName, inputsInstance[1],
+                           vertex->getInConnections()[1]->getName(), i_qName,
+                           i_qOutputName);
+      break;
+    case 3:
+      inouts = fmt::format(
+          ".{}({}), .{}({}), .{}({}), .{}({})", i_dataName, i_inputDataName,
+          inputsInstance[1], vertex->getInConnections()[1]->getName(),
+          inputsInstance[2], vertex->getInConnections()[2]->getName(), i_qName,
+          i_qOutputName);
+      break;
+    case 4:
+      inouts = fmt::format(
+          ".{}({}), .{}({}), .{}({}), .{}({}), .{}({})", i_dataName,
+          i_inputDataName, inputsInstance[1],
+          vertex->getInConnections()[1]->getName(), inputsInstance[2],
+          vertex->getInConnections()[2]->getName(), inputsInstance[3],
+          vertex->getInConnections()[3]->getName(), i_qName, i_qOutputName);
+      break;
+    case 5:
+      inouts = fmt::format(
+          ".{}({}), .{}({}), .{}({}), .{}({}), .{}({}), .{}({})", i_dataName,
+          i_inputDataName, inputsInstance[1],
+          vertex->getInConnections()[1]->getName(), inputsInstance[2],
+          vertex->getInConnections()[2]->getName(), inputsInstance[3],
+          vertex->getInConnections()[3]->getName(), inputsInstance[4],
+          vertex->getInConnections()[4]->getName(), i_qName, i_qOutputName);
+      break;
   }
-  return fmt::format("{} {} ({});", 
-    GraphUtils::parseSequentialToString(static_cast<const GraphVertexSequential*>(vertex)->getSeqType()),
-    i_instanceName == "" ? fmt::format("{}_ins",vertex->getName()) : i_instanceName,
-    inouts
-  );
+  return fmt::format(
+      "{} {} ({});",
+      GraphUtils::parseSequentialToString(
+          static_cast<const GraphVertexSequential *>(vertex)->getSeqType()),
+      i_instanceName == "" ? fmt::format("{}_ins", vertex->getName())
+                           : i_instanceName,
+      inouts);
 }
 DotReturn GraphVertexSequential::toDOT() {
   if (!d_inConnections.size()) {
@@ -389,7 +372,8 @@ GraphVertexBusSequential::GraphVertexBusSequential(
 GraphVertexBusSequential::GraphVertexBusSequential(
     SequentialTypes i_type, VertexPtr i_clk, VertexPtr i_data, VertexPtr i_wire,
     GraphPtr i_baseGraph, std::string_view i_name, size_t i_width) :
-    GraphVertexSequential(i_type, i_clk, i_data, i_wire, i_baseGraph, i_name, true),
+    GraphVertexSequential(i_type, i_clk, i_data, i_wire, i_baseGraph, i_name,
+                          true),
     GraphVertexBus(i_width) {
 }
 
@@ -432,18 +416,14 @@ std::string GraphVertexBusSequential::toVerilog() const {
 std::string GraphVertexBusSequential::toOneBitVerilog() const {
   std::string dataName, dataInputName, outputName, qName;
   std::vector<std::string> instances;
-  for (int i = 0;i<getWidth();++i) {
+  for (size_t i = 0; i < getWidth(); ++i) {
     dataName = GraphUtils::sequentialToInputList[getSeqType()].second[0];
-    dataInputName = fmt::format("{}_{}",d_inConnections[0]->getName(), i);
+    dataInputName = fmt::format("{}_{}", d_inConnections[0]->getName(), i);
     outputName = fmt::format("{}_{}", getName(), i);
     qName = "q";
-    instances.push_back(
-      getVerilogInstance(static_cast<const GraphVertexSequential*>(this), 
-        dataInputName,
-        outputName,
-        dataName,
-        qName,
-        fmt::format("{}_{}_ins",getName(),i)));
+    instances.push_back(getVerilogInstance(
+        static_cast<const GraphVertexSequential *>(this), dataInputName,
+        outputName, dataName, qName, fmt::format("{}_{}_ins", getName(), i)));
   }
   return fmt::format("{}\n\n", fmt::join(instances, "\n\t"));
 }
