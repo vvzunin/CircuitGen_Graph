@@ -2,8 +2,8 @@
 #include <CircuitGenGraph/GraphReader.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
-#include <fmt/core.h>
 #include <gtest/gtest.h>
+#include <fmt/core.h>
 #include <lorina/lorina.hpp>
 
 #include <memory>
