@@ -14,9 +14,8 @@ set(SOURCES
 )
 
 # set(LIBS
-#   ${PROJECT_SOURCE_DIR}/lib/fmt/format.cc
+# ${PROJECT_SOURCE_DIR}/lib/fmt/format.cc
 # )
-
 set(PUBLIC_HEADERS
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/enums.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertex.hpp
@@ -24,7 +23,6 @@ set(PUBLIC_HEADERS
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/OrientedGraph.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphUtils.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/DefaultAuxiliaryMethods.hpp
-  ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphReader.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphVertexBus.hpp
 )
@@ -53,7 +51,8 @@ if(ENABLE_LOGGING)
 endif()
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
-#add_compile_options(-fno-rtti)
+
+# add_compile_options(-fno-rtti)
 add_compile_options(-g3 -Wall -Wignored-qualifiers -DYYERROR_VERBOSE)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 
