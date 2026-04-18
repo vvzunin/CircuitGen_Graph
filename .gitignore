@@ -18,3 +18,5 @@ settings.json
 generation_results/*
 
 .cache
+coverage.info
+coverage_report
