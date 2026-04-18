@@ -278,8 +278,7 @@ void GraphVertexGates::log(el::base::type::ostream_t &os) const {
   os << "Vertex Name(BaseGraph): " << d_name << "(" << (gr ? gr->getName() : "")
      << ")\n";
   os << "Vertex Type: " << GraphUtils::parseVertexToString(VertexTypes::gate)
-     << "(" + GraphUtils::parseGateToString(d_gate) + ")"
-     << "\n";
+     << "(" + GraphUtils::parseGateToString(d_gate) + ")" << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
   os << "Vertex Hash: " << d_hashed << "\n";

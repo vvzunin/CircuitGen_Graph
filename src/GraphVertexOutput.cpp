@@ -90,12 +90,17 @@ void GraphVertexOutput::log(el::base::type::ostream_t &os) const {
      << "\n";
 }
 #endif
+
+// clang-format off
+
 GraphVertexBusOutput::GraphVertexBusOutput(std::string_view i_name,
                                            GraphPtr i_baseGraph,
-                                           size_t i_width) :
-    GraphVertexOutput(i_name, i_baseGraph, true),
-    GraphVertexBus(i_width) {
-}
+                                           size_t i_width)
+    : GraphVertexOutput(i_name, i_baseGraph, true)
+    , GraphVertexBus(i_width)
+{}
+
+// clang-format on
 
 std::string GraphVertexBusOutput::toOneBitVerilog() const {
   std::stringstream res;
