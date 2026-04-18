@@ -5,11 +5,11 @@
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
+#include <cassert>
 #include <cstddef>
 #include <regex>
 #include <string>
 #include <utility>
-#include <cassert>
 
 #include <lorina/lorina.hpp>
 
@@ -97,15 +97,13 @@ void GraphReader::on_assign(const std::string &lhs,
   if (std::regex_match(rhs.first, isConstant) ||
       std::regex_match(rhs.first, isSimpleConstant)) {
     on_parameter(lhs, rhs.first);
-  } 
-  else {
+  } else {
     if (d_context.d_currentGraphNamesList[lhs]->getType() != output) {
       VertexPtr leftVertex = d_context.d_currentGraphNamesList[lhs];
       if (!rhs.second) {
         static_cast<GraphVertexGates *>(leftVertex)->setGateIfDefault(GateBuf);
         d_context.d_currentGraph->addEdge(getRightHS(rhs.first), leftVertex);
-      } 
-      else {
+      } else {
         static_cast<GraphVertexGates *>(leftVertex)->setGateIfDefault(GateNot);
         if (d_context.d_currentGraphNamesList.find(rhs.first +
                                                    SUFFIX_INVERSION) ==
@@ -115,8 +113,7 @@ void GraphReader::on_assign(const std::string &lhs,
         d_context.d_currentGraphNamesList[lhs] = leftVertex;
         d_context.d_currentGraph->addEdge(getRightHS(rhs.first), leftVertex);
       }
-    } 
-    else {
+    } else {
       d_context.d_currentGraph->addEdge(getRightHS(rhs.first, rhs.second),
                                         get_vertex_by_name(lhs));
     }
@@ -261,8 +258,7 @@ void GraphReader::on_maj3(const std::string &lhs,
     d_context.d_currentGraph->majorityAsLogic(
         getRightHS(op1.first, op1.second), getRightHS(op2.first, op2.second),
         getRightHS(op3.first, op3.second), temp->second);
-  } 
-  else {
+  } else {
     d_context.d_currentGraphNamesList[lhs] =
         d_context.d_currentGraph->generateMajority(
             getRightHS(op1.first, op1.second),
@@ -277,4 +273,5 @@ void GraphReader::on_endmodule() const {
       d_context.d_currentGraph;
   d_context.d_currentGraphNamesList.clear();
 }
+
 } // namespace CG_Graph
