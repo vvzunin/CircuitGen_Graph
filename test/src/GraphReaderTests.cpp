@@ -1,12 +1,15 @@
 #include "CircuitGenGraph/GraphUtils.hpp"
-#include <fmt/core.h>
-#include <gtest/gtest.h>
 #include <CircuitGenGraph/GraphReader.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
+
+#include <fmt/core.h>
+#include <gtest/gtest.h>
 #include <lorina/lorina.hpp>
+
 #include <memory>
 #include <string>
 #include <string_view>
+
 using namespace CG_Graph;
 
 constexpr std::string_view simpleReadingFilename = "simpleReading";

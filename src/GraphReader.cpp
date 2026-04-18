@@ -18,7 +18,7 @@
 
 namespace CG_Graph {
 
-GraphReader::GraphReader(Context &i_context) : d_context(i_context){};
+GraphReader::GraphReader(Context &i_context) : d_context(i_context) {};
 
 void GraphReader::on_module_header(
     const std::string &module_name,
