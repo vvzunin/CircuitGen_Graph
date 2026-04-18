@@ -96,7 +96,7 @@ GraphVertexBusOutput::GraphVertexBusOutput(std::string_view i_name,
 
 std::string GraphVertexBusOutput::toOneBitVerilog() const {
   std::stringstream res;
-  size_t minWidth;
+  size_t minWidth = -1;
   if (!d_inConnections.empty())
     minWidth = getBusPointer(
                    (*std::min_element(d_inConnections.begin(),

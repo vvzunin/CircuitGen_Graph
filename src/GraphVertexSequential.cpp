@@ -147,8 +147,6 @@ GraphVertexSequential::GraphVertexSequential(
 
 #undef DEFAULT_CHECK_TYPE
 
-// clang-format on
-
 SequentialTypes GraphVertexSequential::getSeqType() const {
   return d_seqType;
 }

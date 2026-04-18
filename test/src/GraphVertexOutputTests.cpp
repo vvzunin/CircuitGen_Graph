@@ -1,5 +1,6 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
+
 #include <gtest/gtest.h>
 
 #ifdef LOGFLAG
@@ -238,8 +239,8 @@ TEST(TestIsConnectedWithSubGraphsTrivial, ConnectedSubGraphIsConnected) {
   subGraphPtr->addEdge(subGraphInput, testBuf);
   subGraphPtr->addEdge(testBuf, subGraphOutput);
 
-  auto subGraphOutput2 = graphPtr->addSubGraph(subGraphPtr, inputs).back();
-  auto inv = graphPtr->addGate(GateNot);
+  auto *subGraphOutput2 = graphPtr->addSubGraph(subGraphPtr, inputs).back();
+  auto *inv = graphPtr->addGate(GateNot);
 
   graphPtr->addEdge(subGraphOutput2, inv);
   graphPtr->addEdge(inv, output);

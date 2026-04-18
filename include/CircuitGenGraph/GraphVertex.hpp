@@ -117,7 +117,11 @@ public:
   GraphVertexConstant(char i_const, std::string_view i_name,
                       GraphPtr i_baseGraph, bool i_isBus = false);
 
-  ~GraphVertexConstant() override{};
+  // clang-format off
+                      
+  ~GraphVertexConstant() override {};
+
+  // clang-format on
 
   /// @brief calculates hash for constant.
   /// Calculates the hash value for the vertex based on its outgoing
@@ -200,7 +204,11 @@ public:
   GraphVertexSubGraph(GraphPtr i_subGraph, std::string_view i_name,
                       GraphPtr i_baseGraph);
 
-  ~GraphVertexSubGraph() override{};
+  // clang-format off
+
+  ~GraphVertexSubGraph() override {};
+
+  // clang-format on
 
   /// @brief updateValue A virtual function for updating the vertex value.
   /// The implementation is provided in derived classes
@@ -367,7 +375,11 @@ public:
   GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph,
                    bool i_isBus = false);
 
-  ~GraphVertexGates() override{};
+  // clang-format off
+
+  ~GraphVertexGates() override {};
+
+  // clang-format on
 
   /// @brief updateValue
   /// Updates the value of the vertex
@@ -533,9 +545,9 @@ public:
                         std::string_view i_name,
                         bool i_isBus = false);
 
-  // clang-format on
+  ~GraphVertexSequential() override {};
 
-  ~GraphVertexSequential() override{};
+  // clang-format on
 
   /// @brief calculateHash
   /// Calculates the hash value of the vertex. When running for a second time,
