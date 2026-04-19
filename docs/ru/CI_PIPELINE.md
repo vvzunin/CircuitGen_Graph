@@ -38,12 +38,12 @@ flowchart LR
 
 - Коммит с **`[skip ci]`** в сообщении — pipeline **не** запускается.
 - Черновики MR (**Draft** / флаг draft) — pipeline **не** запускается.
-- Переменная **`DOCKER_CI_TAG`** (тег образов `ci` / `dev` / `release` в registry) задаётся правилами `workflow` в зависимости от источника pipeline (упрощённо):
+- Переменная **`DOCKER_CI_TAG`** (тег образов `ci` / `dev` / `release` в registry) задаётся правилами `workflow` в зависимости от источника pipeline (упрощённо, как в `.gitlab-ci.yml`):
   - **тег** репозитория → `DOCKER_CI_TAG = CI_COMMIT_TAG`;
-  - **merge request** при наличии `CI_MERGE_REQUEST_REF_SLUG` → `DOCKER_CI_TAG = CI_COMMIT_REF_SLUG`;
+  - **merge request** при истинном **`CI_COMMIT_REF_SLUG`** → `DOCKER_CI_TAG = CI_COMMIT_REF_SLUG`;
   - **merge request** иначе → `DOCKER_CI_TAG = CI_COMMIT_SHORT_SHA`;
-  - **push в ветку** → `DOCKER_CI_TAG = CI_COMMIT_REF_SLUG`;
-  - иначе → `DOCKER_CI_TAG = CI_COMMIT_SHORT_SHA`.
+  - **push в ветку** (есть `CI_COMMIT_BRANCH`) → `DOCKER_CI_TAG = CI_COMMIT_REF_SLUG`;
+  - **fallback** (`when: always`) → `DOCKER_CI_TAG = CI_COMMIT_SHORT_SHA`.
 
 Точные условия смотрите в начале `.gitlab-ci.yml` в репозитории.
 

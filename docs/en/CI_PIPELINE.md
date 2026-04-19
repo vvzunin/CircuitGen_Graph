@@ -38,12 +38,12 @@ flowchart LR
 
 - Commit message contains **`[skip ci]`** → pipeline is **skipped**.
 - Draft merge requests → pipeline is **skipped**.
-- **`DOCKER_CI_TAG`** (tag for `ci` / `dev` / `release` images in the registry) is set by `workflow` rules depending on pipeline source (simplified):
+- **`DOCKER_CI_TAG`** (tag for `ci` / `dev` / `release` images in the registry) is set by `workflow` rules depending on pipeline source (simplified, as in `.gitlab-ci.yml`):
   - **Git tag** → `DOCKER_CI_TAG = CI_COMMIT_TAG`;
-  - **Merge request** when `CI_MERGE_REQUEST_REF_SLUG` is set → `DOCKER_CI_TAG = CI_COMMIT_REF_SLUG`;
+  - **Merge request** when **`CI_COMMIT_REF_SLUG`** is truthy → `DOCKER_CI_TAG = CI_COMMIT_REF_SLUG`;
   - **Merge request** otherwise → `DOCKER_CI_TAG = CI_COMMIT_SHORT_SHA`;
-  - **Branch push** → `DOCKER_CI_TAG = CI_COMMIT_REF_SLUG`;
-  - **Fallback** → `DOCKER_CI_TAG = CI_COMMIT_SHORT_SHA`.
+  - **Branch push** (`CI_COMMIT_BRANCH` set) → `DOCKER_CI_TAG = CI_COMMIT_REF_SLUG`;
+  - **Fallback** (`when: always`) → `DOCKER_CI_TAG = CI_COMMIT_SHORT_SHA`.
 
 See the top of `.gitlab-ci.yml` in the repo for the exact conditions.
 

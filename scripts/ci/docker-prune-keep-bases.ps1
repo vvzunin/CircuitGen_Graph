@@ -66,9 +66,9 @@
     Требования: Docker CLI в PATH; для -CompactDockerDataVhdx — админ, Hyper-V, Docker Desktop + WSL2.
     Документация (Markdown): docs/ru/CI_SCRIPTS.md и docs/en/CI_SCRIPTS.md — раздел 7 (якорь #docker-prune-runner-windows)
 
-    Справка в консоли:
-      Get-Help .\docker-prune-keep-bases.ps1 -Full
-      Get-Help .\docker-prune-keep-bases.ps1 -Parameter CompactDockerDataVhdx
+    Справка в консоли (из корня репозитория):
+      Get-Help .\scripts\ci\docker-prune-keep-bases.ps1 -Full
+      Get-Help .\scripts\ci\docker-prune-keep-bases.ps1 -Parameter CompactDockerDataVhdx
 
 .LINK
     https://learn.microsoft.com/powershell/module/hyper-v/optimize-vhd
@@ -79,41 +79,41 @@
     Показать полную встроенную справку (из этого блока).
 
 .EXAMPLE
-    .\docker-prune-keep-bases.ps1 -WhatIf
+    .\scripts\ci\docker-prune-keep-bases.ps1 -WhatIf
 
     Показать, какие образы были бы сняты (docker rmi), без удаления.
 
 .EXAMPLE
-    .\docker-prune-keep-bases.ps1 -Confirm
+    .\scripts\ci\docker-prune-keep-bases.ps1 -Confirm
 
     Запрос подтверждения перед каждым docker rmi и перед Optimize-VHD.
 
 .EXAMPLE
-    .\docker-prune-keep-bases.ps1 -ExtraKeepPattern '^mcr\.microsoft\.com/'
+    .\scripts\ci\docker-prune-keep-bases.ps1 -ExtraKeepPattern '^mcr\.microsoft\.com/'
 
     Дополнительно не удалять образы, чей REPOSITORY начинается с mcr.microsoft.com/
 
 .EXAMPLE
-    .\docker-prune-keep-bases.ps1 -ExtraKeepPattern @('^registry\.internal\.lan/', '^public\.ecr\.aws/')
+    .\scripts\ci\docker-prune-keep-bases.ps1 -ExtraKeepPattern @('^registry\.internal\.lan/', '^public\.ecr\.aws/')
 
     Несколько дополнительных шаблонов «оставить».
 
 .EXAMPLE
-    .\docker-prune-keep-bases.ps1 -SkipDanglingPrune
+    .\scripts\ci\docker-prune-keep-bases.ps1 -SkipDanglingPrune
 
     Только снять теги по правилам, без предварительного docker image prune -f.
 
 .EXAMPLE
     # Очистка образов и сжатие VHDX — PowerShell «От имени администратора»:
-    .\docker-prune-keep-bases.ps1 -CompactDockerDataVhdx
+    .\scripts\ci\docker-prune-keep-bases.ps1 -CompactDockerDataVhdx
 
 .EXAMPLE
-    .\docker-prune-keep-bases.ps1 -CompactDockerDataVhdx -DockerQuitWaitSeconds 120 -WslShutdownWaitSeconds 20
+    .\scripts\ci\docker-prune-keep-bases.ps1 -CompactDockerDataVhdx -DockerQuitWaitSeconds 120 -WslShutdownWaitSeconds 20
 
     Сжатие диска с увеличенными таймаутами ожидания Docker и WSL.
 
 .EXAMPLE
-    .\docker-prune-keep-bases.ps1 -SkipImagePrune -CompactDockerDataVhdx
+    .\scripts\ci\docker-prune-keep-bases.ps1 -SkipImagePrune -CompactDockerDataVhdx
 
     Только сжать docker_data.vhdx (образы уже чистили вручную или ранее).
 #>
