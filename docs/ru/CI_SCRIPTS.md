@@ -86,7 +86,7 @@ PowerShell-скрипт для **Windows 11** с **Docker Desktop (WSL2)** на 
 | Проблема | Что делает скрипт |
 |----------|-------------------|
 | Много CI-образов и тегов из частного registry на машине runner’а | Удаляет их через `docker rmi`, оставляя типовые базовые образы |
-| После `docker rmi` в проводнике **не** растёт свободное место на `C:` | Опционально: `Optimize-VHD` для `docker_data.vhdx` |
+| После `docker rmi` в проводнике **не** растет свободное место на `C:` | Опционально: `Optimize-VHD` для `docker_data.vhdx` |
 
 ### Требования
 
@@ -98,9 +98,9 @@ PowerShell-скрипт для **Windows 11** с **Docker Desktop (WSL2)** на 
 
 **Очистка (по умолчанию):** `docker image prune -f` (если не `-SkipDanglingPrune`); затем по каждому тегу сравнение **REPOSITORY** с правилами «оставить» — иначе `docker rmi repository:tag`; в конце `docker system df`. Если образ занят контейнером, `docker rmi` даст ошибку — это ожидаемо.
 
-**Сжатие VHDX:** корректный выход Docker Desktop (`--quit`, ожидание до `DockerQuitWaitSeconds`), `wsl --shutdown` и пауза `WslShutdownWaitSeconds`, затем `Optimize-VHD -Mode Full` для `%LOCALAPPDATA%\Docker\wsl\disk\docker_data.vhdx` (или `-DockerDataVhdxPath`). После сжатия **запустите Docker вручную**. Удаление слоёв освобождает место *внутри* VHDX; без compact размер файла на NTFS не уменьшается.
+**Сжатие VHDX:** корректный выход Docker Desktop (`--quit`, ожидание до `DockerQuitWaitSeconds`), `wsl --shutdown` и пауза `WslShutdownWaitSeconds`, затем `Optimize-VHD -Mode Full` для `%LOCALAPPDATA%\Docker\wsl\disk\docker_data.vhdx` (или `-DockerDataVhdxPath`). После сжатия **запустите Docker вручную**. Удаление слоев освобождает место *внутри* VHDX; без compact размер файла на NTFS не уменьшается.
 
-### Что остаётся по умолчанию
+### Что остается по умолчанию
 
 Образ сохраняется, если **REPOSITORY** совпадает с regex: `ubuntu`, `debian`, `fedora`, `docker` (в т.ч. dind), `alpine`, `busybox` (в т.ч. `docker.io/library/…`), либо `registry.gitlab.com/gitlab-org/release-cli`. Остальное удаляется. Свои исключения — **`-ExtraKeepPattern`**.
 

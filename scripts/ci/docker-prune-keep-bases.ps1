@@ -6,7 +6,7 @@
 .DESCRIPTION
     Скрипт рассчитан на хост с GitLab Runner под Windows 11 и Docker Desktop (бэкенд WSL2).
 
-    Этап «образы» (по умолчанию включён):
+    Этап «образы» (по умолчанию включен):
       1) docker image prune -f — снимает висячие слои (<none>), если не задан -SkipDanglingPrune.
       2) docker images — для каждого тега сравнивается поле REPOSITORY с наборами regex: совпало — образ
          сохраняется, иначе выполняется docker rmi repo:tag.
@@ -14,7 +14,7 @@
 
     По умолчанию сохраняются образы с REPOSITORY, похожим на официальные базы: ubuntu, debian, fedora,
     docker (включая теги dind), alpine, busybox (в т.ч. вид docker.io/library/...), а также
-    registry.gitlab.com/gitlab-org/release-cli. Всё остальное (частные registry, CI-образы и т.д.) удаляется.
+    registry.gitlab.com/gitlab-org/release-cli. Все остальное (частные registry, CI-образы и т.д.) удаляется.
 
     Ограничения: docker rmi не удалит образ, пока его использует контейнер — в консоли будет ошибка.
     Удаление образов освобождает место внутри файла docker_data.vhdx, но размер .vhdx на диске Windows

@@ -331,7 +331,7 @@ bash scripts/release/suggest-next-version.sh --verbose
 - `scripts/setup/install-deps-ubuntu-24.04.sh`  
   Устанавливает недостающие зависимости для Ubuntu 24.04.
 - `scripts/setup/install-deps-debian-13.sh`  
-  Устанавливает недостающие зависимости для Debian 13 (trixie). Пин `clang-format` **18.1.8** через `install-clang-format-ci.sh` (колёсо PyPI), как в остальных образах CI.
+  Устанавливает недостающие зависимости для Debian 13 (trixie). Пин `clang-format` **18.1.8** через `install-clang-format-ci.sh` (колесо PyPI), как в остальных образах CI.
 - `scripts/setup/install-deps-fedora-42.sh`  
   Устанавливает недостающие зависимости для Fedora Workstation 42.
 - `scripts/setup/install-deps-fedora-43.sh`  
