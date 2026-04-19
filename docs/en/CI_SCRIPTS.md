@@ -71,15 +71,80 @@ See `run-task.sh` for the supported task names (`lint`, `sanitize`, `static-anal
 
 ---
 
-## 7. Windows: runner disk maintenance
+<a id="docker-prune-runner-windows"></a>
 
-| File | Purpose |
-|------|---------|
-| **`scripts/ci/docker-prune-keep-bases.ps1`** | PowerShell: remove local images except base images; optionally **compact** `docker_data.vhdx` (`Optimize-VHD`). |
-| **[docker-prune-keep-bases.md](../ru/docker-prune-keep-bases.md)** | Manual in Russian (`docs/ru`). |
-| **[docker-prune-keep-bases.md](docker-prune-keep-bases.md)** | Manual in English (`docs/en`). |
+## 7. Windows runner maintenance: `docker-prune-keep-bases.ps1`
 
-Built-in help: `Get-Help .\scripts\ci\docker-prune-keep-bases.ps1 -Full`.
+PowerShell script for **Windows 11** hosts with **Docker Desktop (WSL2)** and **GitLab Runner**: removes accumulated **non-base** images and optionally **compacts** `docker_data.vhdx` so **free space on the Windows volume** grows. This is **not** a `.gitlab-ci.yml` job; it is **manual or scheduled** runner host maintenance.
+
+**Executable:** `scripts/ci/docker-prune-keep-bases.ps1` (the **`scripts/ci`** tree is synchronized across **Parameters**, **Graph**, and **Generator**).
+
+**Русский:** the same section in [docs/ru/CI_SCRIPTS.md](../ru/CI_SCRIPTS.md#docker-prune-runner-windows).
+
+### Purpose
+
+| Problem | What the script does |
+|---------|----------------------|
+| Many CI images / private-registry tags on the runner host | Removes them with `docker rmi`, keeping common base images |
+| After `docker rmi`, **no** extra free space on `C:` in Explorer | Optionally runs `Optimize-VHD` on `docker_data.vhdx` |
+
+### Requirements
+
+**Image cleanup:** PowerShell 5.1+, Docker CLI on `PATH`; **administrator not required**.
+
+**VHDX compaction (`-CompactDockerDataVhdx`):** elevated PowerShell, **Hyper-V** module (`Optimize-VHD`), Docker Desktop.
+
+### Two stages
+
+**Cleanup (default):** `docker image prune -f` (unless `-SkipDanglingPrune`); then for each tag compare **REPOSITORY** to “keep” rules — otherwise `docker rmi repository:tag`; finally `docker system df`. If a container still uses an image, `docker rmi` fails — expected.
+
+**VHDX compaction:** graceful Docker Desktop exit (`--quit`, wait up to `DockerQuitWaitSeconds`), `wsl --shutdown` and `WslShutdownWaitSeconds` delay, then `Optimize-VHD -Mode Full` on `%LOCALAPPDATA%\Docker\wsl\disk\docker_data.vhdx` (or `-DockerDataVhdxPath`). **Start Docker manually** afterwards. Layer deletion frees space *inside* the VHDX; the `.vhdx` file on NTFS does not shrink until **compact**.
+
+### Default “keep” rules
+
+Images whose **REPOSITORY** matches: `ubuntu`, `debian`, `fedora`, `docker` (incl. dind), `alpine`, `busybox` (incl. `docker.io/library/…`), or `registry.gitlab.com/gitlab-org/release-cli`, are **kept**. Everything else is removed. Add **`-ExtraKeepPattern`** for more exceptions.
+
+### Parameters
+
+| Parameter | Purpose |
+|-----------|---------|
+| `-KeepRepositoryRegex` | Custom “keep” regex list |
+| `-ExtraKeepPattern` | Additional regexes |
+| `-SkipDanglingPrune` | Skip `docker image prune -f` |
+| `-SkipImagePrune` | Image stage skipped (use with `-CompactDockerDataVhdx`) |
+| `-CompactDockerDataVhdx` | Compact `docker_data.vhdx` |
+| `-DockerDataVhdxPath` | Path to `.vhdx` |
+| `-DockerQuitWaitSeconds` / `-WslShutdownWaitSeconds` | Timeouts (defaults 90 / 15) |
+| `-WhatIf` / `-Confirm` | `ShouldProcess` |
+
+### Typical commands
+
+```powershell
+cd <repo_root>
+.\scripts\ci\docker-prune-keep-bases.ps1 -WhatIf
+.\scripts\ci\docker-prune-keep-bases.ps1
+.\scripts\ci\docker-prune-keep-bases.ps1 -CompactDockerDataVhdx   # elevated
+.\scripts\ci\docker-prune-keep-bases.ps1 -ExtraKeepPattern '^mcr\.microsoft\.com/'
+.\scripts\ci\docker-prune-keep-bases.ps1 -SkipImagePrune -CompactDockerDataVhdx
+```
+
+### Built-in help
+
+```powershell
+Get-Help .\scripts\ci\docker-prune-keep-bases.ps1 -Full
+```
+
+Matches the comment-based help at the top of the `.ps1`.
+
+### FAQ
+
+Long runs / stuck `docker system df` — common on huge stores or slow disks. **`C:` did not grow** after `rmi` — run **`-CompactDockerDataVhdx`**. **`Optimize-VHD` fails** — admin, Hyper-V, fully stop Docker/WSL. **Custom bases** — extend **`-ExtraKeepPattern`** on full `REPOSITORY`.
+
+### Automation and safety
+
+Windows Task Scheduler + `powershell.exe -File …\docker-prune-keep-bases.ps1`; for compact, **Run with highest privileges**. Use **`-WhatIf`** first. **`wsl --shutdown`** stops **all** WSL distros. Schedule a maintenance window on shared runners.
+
+**See also:** [CI_PIPELINE.md](CI_PIPELINE.md).
 
 ---
 

@@ -71,15 +71,80 @@
 
 ---
 
-## 7. Windows: обслуживание диска runner’а
+<a id="docker-prune-runner-windows"></a>
 
-| Файл | Назначение |
-|------|------------|
-| **`scripts/ci/docker-prune-keep-bases.ps1`** | PowerShell: удалить локальные образы, кроме базовых; опционально **сжать** `docker_data.vhdx` (`Optimize-VHD`). |
-| **[docker-prune-keep-bases.md](docker-prune-keep-bases.md)** | Руководство (в каталоге `docs/ru`). |
-| **[docker-prune-keep-bases.md (EN)](../en/docker-prune-keep-bases.md)** | Руководство на английском (в каталоге `docs/en`). |
+## 7. Обслуживание runner (Windows): `docker-prune-keep-bases.ps1`
 
-Встроенная справка: `Get-Help .\scripts\ci\docker-prune-keep-bases.ps1 -Full`.
+PowerShell-скрипт для **Windows 11** с **Docker Desktop (WSL2)** на хостах с **GitLab Runner**: снимает накопленные **небазовые** образы и при необходимости **сжимает** `docker_data.vhdx`, чтобы на томе Windows реально освободилось место. **Не** является шагом `.gitlab-ci.yml`; это ручное или плановое обслуживание машины runner’а.
+
+**Исполняемый файл:** `scripts/ci/docker-prune-keep-bases.ps1` (каталог `scripts/ci` синхронизируется между **Parameters**, **Graph** и **Generator**).
+
+**English:** тот же раздел в [docs/en/CI_SCRIPTS.md](../en/CI_SCRIPTS.md#docker-prune-runner-windows).
+
+### Назначение
+
+| Проблема | Что делает скрипт |
+|----------|-------------------|
+| Много CI-образов и тегов из частного registry на машине runner’а | Удаляет их через `docker rmi`, оставляя типовые базовые образы |
+| После `docker rmi` в проводнике **не** растёт свободное место на `C:` | Опционально: `Optimize-VHD` для `docker_data.vhdx` |
+
+### Требования
+
+**Очистка образов:** PowerShell 5.1+, Docker CLI в `PATH`; администратор **не** обязателен.
+
+**Сжатие VHDX (`-CompactDockerDataVhdx`):** PowerShell **от администратора**, модуль **Hyper-V** (`Optimize-VHD`), Docker Desktop.
+
+### Два этапа работы
+
+**Очистка (по умолчанию):** `docker image prune -f` (если не `-SkipDanglingPrune`); затем по каждому тегу сравнение **REPOSITORY** с правилами «оставить» — иначе `docker rmi repository:tag`; в конце `docker system df`. Если образ занят контейнером, `docker rmi` даст ошибку — это ожидаемо.
+
+**Сжатие VHDX:** корректный выход Docker Desktop (`--quit`, ожидание до `DockerQuitWaitSeconds`), `wsl --shutdown` и пауза `WslShutdownWaitSeconds`, затем `Optimize-VHD -Mode Full` для `%LOCALAPPDATA%\Docker\wsl\disk\docker_data.vhdx` (или `-DockerDataVhdxPath`). После сжатия **запустите Docker вручную**. Удаление слоёв освобождает место *внутри* VHDX; без compact размер файла на NTFS не уменьшается.
+
+### Что остаётся по умолчанию
+
+Образ сохраняется, если **REPOSITORY** совпадает с regex: `ubuntu`, `debian`, `fedora`, `docker` (в т.ч. dind), `alpine`, `busybox` (в т.ч. `docker.io/library/…`), либо `registry.gitlab.com/gitlab-org/release-cli`. Остальное удаляется. Свои исключения — **`-ExtraKeepPattern`**.
+
+### Параметры
+
+| Параметр | Назначение |
+|----------|------------|
+| `-KeepRepositoryRegex` | Свой список regex «оставить» |
+| `-ExtraKeepPattern` | Дополнительные regex |
+| `-SkipDanglingPrune` | Без `docker image prune -f` |
+| `-SkipImagePrune` | Только compact (вместе с `-CompactDockerDataVhdx`) |
+| `-CompactDockerDataVhdx` | Сжать `docker_data.vhdx` |
+| `-DockerDataVhdxPath` | Путь к `.vhdx` |
+| `-DockerQuitWaitSeconds` / `-WslShutdownWaitSeconds` | Таймауты (по умолчанию 90 / 15) |
+| `-WhatIf` / `-Confirm` | `ShouldProcess` |
+
+### Типовые команды
+
+```powershell
+cd <корень_репозитория>
+.\scripts\ci\docker-prune-keep-bases.ps1 -WhatIf
+.\scripts\ci\docker-prune-keep-bases.ps1
+.\scripts\ci\docker-prune-keep-bases.ps1 -CompactDockerDataVhdx   # от администратора
+.\scripts\ci\docker-prune-keep-bases.ps1 -ExtraKeepPattern '^mcr\.microsoft\.com/'
+.\scripts\ci\docker-prune-keep-bases.ps1 -SkipImagePrune -CompactDockerDataVhdx
+```
+
+### Встроенная справка
+
+```powershell
+Get-Help .\scripts\ci\docker-prune-keep-bases.ps1 -Full
+```
+
+Текст совпадает с комментариями в начале `.ps1`.
+
+### Частые вопросы
+
+Долгое выполнение / «висящий» `docker system df` — возможны на больших хранилищах и медленном диске. Место на `C:` не появилось после `rmi` — нужен **`-CompactDockerDataVhdx`**. `Optimize-VHD` падает — админ, Hyper-V, полная остановка Docker/WSL. Свои базовые образы — расширьте **`-ExtraKeepPattern`** по полному `REPOSITORY`.
+
+### Автоматизация и осторожность
+
+Планировщик заданий Windows + `powershell.exe -File …\docker-prune-keep-bases.ps1`; для compact — «с наивысшими правами». Перед первым запуском — **`-WhatIf`**. `wsl --shutdown` останавливает **все** дистрибутивы WSL. Согласуйте окно обслуживания на общих runner’ах.
+
+**См. также:** [CI_PIPELINE.md](CI_PIPELINE.md).
 
 ---
 
