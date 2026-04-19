@@ -6,6 +6,8 @@
 | [MergeRequests.md](MergeRequests.md) | Merge requests: ревью, слияние, ветки |
 | [BUILDING.md](BUILDING.md) | CMake, Docker, CI, сборка документации |
 | [SCRIPTS.md](SCRIPTS.md) | Справочник по `scripts/` |
+| [CI_PIPELINE.md](CI_PIPELINE.md) | GitLab CI: стадии, архитектура, матрица ОС |
+| [CI_SCRIPTS.md](CI_SCRIPTS.md) | Справочник по `scripts/ci` |
 | [HACKING.md](HACKING.md) | Режим разработчика, пресеты, цели |
 | [CodeStyle.md](CodeStyle.md) | Стиль кода и документирование |
 | [CmakeFlags.md](CmakeFlags.md) | Флаги CMake |

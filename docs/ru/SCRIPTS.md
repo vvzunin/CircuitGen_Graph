@@ -3,6 +3,12 @@
 В репозитории скрипты сгруппированы по каталогам в `scripts/`.
 Скрипты вызывают CMake presets и Docker-сборки, не дублируя логику конфигурации.
 
+## Документация CI
+
+- [CI_PIPELINE.md](CI_PIPELINE.md) — конвейер GitLab, стадии, архитектура
+- [CI_SCRIPTS.md](CI_SCRIPTS.md) — справочник по каждому файлу в `scripts/ci`
+- Обслуживание диска Windows (runner): `scripts/ci/docker-prune-keep-bases.ps1`, [руководство (RU)](../../scripts/ci/docker-prune-keep-bases.md), [manual (EN)](../../scripts/ci/docker-prune-keep-bases.en.md)
+
 ## Структура
 
 ```text

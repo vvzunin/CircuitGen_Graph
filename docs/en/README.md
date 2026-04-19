@@ -6,6 +6,8 @@
 | [MergeRequests.md](MergeRequests.md) | Merge requests: review, merge, branches |
 | [BUILDING.md](BUILDING.md) | CMake, Docker, CI, docs build |
 | [SCRIPTS.md](SCRIPTS.md) | `scripts/` reference |
+| [CI_PIPELINE.md](CI_PIPELINE.md) | GitLab CI: stages, architecture, OS matrix |
+| [CI_SCRIPTS.md](CI_SCRIPTS.md) | Reference for `scripts/ci` |
 | [HACKING.md](HACKING.md) | Developer mode, presets, targets |
 | [CodeStyle.md](CodeStyle.md) | Coding style |
 | [CmakeFlags.md](CmakeFlags.md) | CMake flags |
