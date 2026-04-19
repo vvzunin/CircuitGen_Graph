@@ -30,7 +30,11 @@ if [[ -n "${sha_img}" && docker manifest inspect "${sha_img}" >/dev/null 2>&1 ]]
 fi
 
 if docker manifest inspect "${img}" >/dev/null 2>&1; then
-  echo "Skipping ${role} build: ${img} exists and relevant paths unchanged."
+  if bash "${ROOT_DIR}/scripts/ci/docker-context-changed.sh" "${role}"; then
+    echo "${role} image ${img} exists in registry but context paths changed since merge base; rebuilding."
+    exit 1
+  fi
+  echo "Skipping ${role} build: ${img} exists and relevant paths unchanged since merge base."
   exit 0
 fi
 
@@ -54,7 +58,11 @@ if [[ "${CI_PIPELINE_SOURCE:-}" == "merge_request_event" ]]; then
       exit 0
     fi
     if docker manifest inspect "${img}" >/dev/null 2>&1; then
-      echo "Skipping ${role} build: ${img} appeared in registry and context is unchanged."
+      if bash "${ROOT_DIR}/scripts/ci/docker-context-changed.sh" "${role}"; then
+        echo "${role} image ${img} appeared but context paths changed; rebuilding."
+        exit 1
+      fi
+      echo "Skipping ${role} build: ${img} appeared in registry and context is unchanged since merge base."
       exit 0
     fi
   done

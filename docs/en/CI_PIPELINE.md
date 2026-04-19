@@ -133,7 +133,7 @@ See the top of `.gitlab-ci.yml` in the repo for the exact conditions.
 - **CI:** `Dockerfile.ci`, variables `DOCKERFILE_CI_NAME`, `DOCKER_CI_SYSTEM`, push to `$DOCKER_URL/<os>/ci:$DOCKER_CI_TAG`.
 - **Dev:** `Dockerfile.dev` — build in jobs is limited to **tags and the default branch** (see the embedded `if` in `.gitlab-ci.yml`); the local **dev** image is removed in **`after_script`** to avoid filling the dind disk.
 - **Release:** `Dockerfile.release` — for tags; the local **release** image is also removed in **`after_script`**.
-- Skip redundant rebuilds: **`docker-skip-if-unchanged.sh`** (manifest exists in registry and git diff does not touch Docker context paths), invoked from `docker-build-*.sh` when **`CI`** is set.
+- Skip redundant rebuilds: **`docker-skip-if-unchanged.sh`**, invoked from `docker-build-*.sh` when **`CI`** is set. Only paths listed in **`docker-context-changed.sh`** count (for **`ci`**: `Dockerfile.ci`, `scripts/setup`, …); **`docs/` is not part of the CI image context**. A skip happens when the registry already has **`$DOCKER_CI_IMAGE`** or **`ci:$CI_COMMIT_SHORT_SHA`**, and those paths did not change since the merge base. **If the tag is missing** (first pipeline for the ref, registry cleanup, failed previous push, or **`DOCKER_CI_TAG = CI_COMMIT_SHORT_SHA`** on every MR commit — see `workflow` in `.gitlab-ci.yml`), the job still runs a full **`docker build`**, even for docs-only commits.
 - **`resource_group`** on docker/os jobs serializes builds per project/OS.
 
 ---
