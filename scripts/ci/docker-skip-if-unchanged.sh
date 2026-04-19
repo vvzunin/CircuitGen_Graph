@@ -24,7 +24,7 @@ sha_img=""
 if [[ "${role}" == "ci" && -n "${CI_COMMIT_SHORT_SHA:-}" ]]; then
   sha_img="${img%:*}:${CI_COMMIT_SHORT_SHA}"
 fi
-if [[ -n "${sha_img}" && docker manifest inspect "${sha_img}" >/dev/null 2>&1 ]]; then
+if [[ -n "${sha_img}" ]] && docker manifest inspect "${sha_img}" >/dev/null 2>&1; then
   echo "Skipping ${role} build: immutable SHA image exists (${sha_img})."
   exit 0
 fi
@@ -53,7 +53,7 @@ if [[ "${CI_PIPELINE_SOURCE:-}" == "merge_request_event" ]]; then
     echo "Image ${img} not found yet; waiting ${interval_seconds}s (${elapsed}/${wait_seconds})..."
     sleep "${interval_seconds}"
     elapsed=$((elapsed + interval_seconds))
-    if [[ -n "${sha_img}" && docker manifest inspect "${sha_img}" >/dev/null 2>&1 ]]; then
+    if [[ -n "${sha_img}" ]] && docker manifest inspect "${sha_img}" >/dev/null 2>&1; then
       echo "Skipping ${role} build: immutable SHA image appeared (${sha_img})."
       exit 0
     fi
