@@ -286,9 +286,10 @@ DotReturn GraphVertexSequential::toDOT() {
 
   DotReturn dot;
 
+  const std::string kind = isFF() ? "ff" : "latch";
   dot.push_back({DotTypes::DotGate,
                  {{"name", getName()},
-                  {"label", getName()},
+                  {"label", fmt::format("{} ({})", getName(), kind)},
                   {"level", std::to_string(d_level)}}});
 
   for (VertexPtr ptr: d_inConnections) {

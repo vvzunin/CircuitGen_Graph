@@ -546,6 +546,53 @@ TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreSubEdges) {
       "source=\"input2\" target=\"gate1\"/>\n  </graph>\n</graphml>\n");
 }
 
+TEST(TestToGraphMLSequential, ExportTypesInClassicPseudoOpenABCD) {
+  OrientedGraph::resetCounter();
+  {
+    GraphPtr g = std::make_shared<OrientedGraph>("Gff");
+    auto *clk = g->addInput("clk");
+    auto *data = g->addInput("data");
+    auto *q = g->addSequential(ff, clk, data, "q");
+    g->addEdge(q, g->addOutput("out"));
+    const std::string classic = g->toGraphMLClassic(0);
+    EXPECT_NE(classic.find("<data key=\"t\">sequential/ff</data>"),
+              std::string::npos)
+        << classic;
+    const std::string pseudo = g->toGraphMLPseudoABCD();
+    const auto posQ = pseudo.find("<data key=\"d0\">q</data>");
+    EXPECT_NE(posQ, std::string::npos) << pseudo;
+    EXPECT_NE(pseudo.find("<data key=\"d1\">17</data>", posQ), std::string::npos)
+        << pseudo;
+    const std::string open = g->toGraphMLOpenABCD();
+    const auto posQopen = open.find("<data key=\"d0\">q</data>");
+    EXPECT_NE(posQopen, std::string::npos) << open;
+    EXPECT_NE(open.find("<data key=\"d1\">17</data>", posQopen), std::string::npos)
+        << open;
+  }
+  OrientedGraph::resetCounter();
+  {
+    GraphPtr g = std::make_shared<OrientedGraph>("Glatch");
+    auto *en = g->addInput("en");
+    auto *data = g->addInput("data");
+    auto *q = g->addSequential(latch, en, data, "q");
+    g->addEdge(q, g->addOutput("out"));
+    const std::string classic = g->toGraphMLClassic(0);
+    EXPECT_NE(classic.find("<data key=\"t\">sequential/latch</data>"),
+              std::string::npos)
+        << classic;
+    const std::string pseudo = g->toGraphMLPseudoABCD();
+    const auto posQ = pseudo.find("<data key=\"d0\">q</data>");
+    EXPECT_NE(posQ, std::string::npos) << pseudo;
+    EXPECT_NE(pseudo.find("<data key=\"d1\">18</data>", posQ), std::string::npos)
+        << pseudo;
+    const std::string open = g->toGraphMLOpenABCD();
+    const auto posQopen = open.find("<data key=\"d0\">q</data>");
+    EXPECT_NE(posQopen, std::string::npos) << open;
+    EXPECT_NE(open.find("<data key=\"d1\">18</data>", posQopen), std::string::npos)
+        << open;
+  }
+}
+
 // Unknown error
 // TEST(TestToGraphMLBoolReturn, CorrectWriteToFile) {
 //   std::string   filename = "ToGraphMLTest.txt";
