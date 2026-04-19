@@ -2,9 +2,7 @@
 
 PowerShell script for **Windows 11** hosts with **Docker Desktop (WSL2)** and **GitLab Runner**: removes accumulated **non-base** Docker images and optionally **compacts** the Docker data file `docker_data.vhdx` so **free space on the Windows volume** increases.
 
-The script and manuals live under **`scripts/ci/`** in this repository. The **`scripts/ci`** tree is **synchronized** across the **Parameters**, **Graph**, and **Generator** repositories.
-
-**Russian:** [docker-prune-keep-bases.md](docker-prune-keep-bases.md)
+The executable is **`scripts/ci/docker-prune-keep-bases.ps1`** (the **`scripts/ci`** tree is synchronized across **Parameters**, **Graph**, and **Generator**). **This manual** and the Russian version live only under **`docs/`** (see [../ru/docker-prune-keep-bases.md](../ru/docker-prune-keep-bases.md)).
 
 ---
 
@@ -144,7 +142,9 @@ Get-Help .\scripts\ci\docker-prune-keep-bases.ps1 -Examples
 Get-Help .\scripts\ci\docker-prune-keep-bases.ps1 -Parameter CompactDockerDataVhdx
 ```
 
-The text matches the comment-based help at the top of the `.ps1` file.
+The text matches the comment-based help at the top of `scripts/ci/docker-prune-keep-bases.ps1`.
+
+**Русский:** [docker-prune-keep-bases.md](../ru/docker-prune-keep-bases.md)
 
 ---
 
@@ -187,5 +187,5 @@ Add **`-ExtraKeepPattern`** matching the full **REPOSITORY** string from `docker
 
 ## 11. Related documentation
 
-- GitLab CI pipeline and architecture: [docs/en/CI_PIPELINE.md](../../docs/en/CI_PIPELINE.md)
-- Full `scripts/ci` reference: [docs/en/CI_SCRIPTS.md](../../docs/en/CI_SCRIPTS.md)
+- GitLab CI pipeline and architecture: [CI_PIPELINE.md](CI_PIPELINE.md)
+- Full `scripts/ci` reference: [CI_SCRIPTS.md](CI_SCRIPTS.md)

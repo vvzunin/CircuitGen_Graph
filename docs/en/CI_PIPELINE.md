@@ -94,4 +94,4 @@ More detail: [CI_SCRIPTS.md](CI_SCRIPTS.md), [SCRIPTS.md](SCRIPTS.md), [HACKING.
 
 ## 7. Windows runner maintenance
 
-For hosts using **Docker Desktop (WSL2)** where disk usage grows, use **`scripts/ci/docker-prune-keep-bases.ps1`** and the manuals **`docker-prune-keep-bases.md`** / **`docker-prune-keep-bases.en.md`**. This is **not** a default GitLab job step; it is manual or scheduled host maintenance.
+For hosts using **Docker Desktop (WSL2)** where disk usage grows, use **`scripts/ci/docker-prune-keep-bases.ps1`** and the manuals under **`docs/`**: [docker-prune-keep-bases.md](../ru/docker-prune-keep-bases.md) (RU), [docker-prune-keep-bases.md](docker-prune-keep-bases.md) (EN). This is **not** a default GitLab job step; it is manual or scheduled host maintenance.

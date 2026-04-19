@@ -94,4 +94,4 @@ flowchart LR
 
 ## 7. Обслуживание runner (Windows)
 
-Для хостов с **Docker Desktop (WSL2)** и накоплением данных используйте **`scripts/ci/docker-prune-keep-bases.ps1`** и руководства **`docker-prune-keep-bases.md`** / **`docker-prune-keep-bases.en.md`** — это **не** шаг GitLab job’а по умолчанию, а ручное/плановое обслуживание диска.
+Для хостов с **Docker Desktop (WSL2)** и накоплением данных используйте **`scripts/ci/docker-prune-keep-bases.ps1`** и руководства в **`docs/`**: [docker-prune-keep-bases.md](docker-prune-keep-bases.md) (RU), [../en/docker-prune-keep-bases.md](../en/docker-prune-keep-bases.md) (EN). Это **не** шаг GitLab job’а по умолчанию, а ручное/плановое обслуживание диска.

@@ -6,7 +6,7 @@ Scripts live under `scripts/`. They invoke CMake presets and Docker builds witho
 
 - [CI_PIPELINE.md](CI_PIPELINE.md) — GitLab pipeline, stages, architecture
 - [CI_SCRIPTS.md](CI_SCRIPTS.md) — per-file reference for `scripts/ci`
-- Windows runner disk maintenance: `scripts/ci/docker-prune-keep-bases.ps1`, [manual (RU)](../../scripts/ci/docker-prune-keep-bases.md), [manual (EN)](../../scripts/ci/docker-prune-keep-bases.en.md)
+- Windows runner disk maintenance: `scripts/ci/docker-prune-keep-bases.ps1`, [manual (RU)](../ru/docker-prune-keep-bases.md), [manual (EN)](docker-prune-keep-bases.md)
 
 ## Layout
 

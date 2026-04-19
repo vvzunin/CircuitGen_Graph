@@ -8,6 +8,7 @@
 | [SCRIPTS.md](SCRIPTS.md) | Справочник по `scripts/` |
 | [CI_PIPELINE.md](CI_PIPELINE.md) | GitLab CI: стадии, архитектура, матрица ОС |
 | [CI_SCRIPTS.md](CI_SCRIPTS.md) | Справочник по `scripts/ci` |
+| [docker-prune-keep-bases.md](docker-prune-keep-bases.md) | Runner (Windows): очистка Docker-образов и VHDX |
 | [HACKING.md](HACKING.md) | Режим разработчика, пресеты, цели |
 | [CodeStyle.md](CodeStyle.md) | Стиль кода и документирование |
 | [CmakeFlags.md](CmakeFlags.md) | Флаги CMake |

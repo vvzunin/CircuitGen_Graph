@@ -9,4 +9,4 @@ CI and `scripts/ci` (kept in sync across Parameters / Graph / Generator):
 
 - [CI pipeline (RU)](ru/CI_PIPELINE.md) · [CI pipeline (EN)](en/CI_PIPELINE.md)
 - [CI scripts reference (RU)](ru/CI_SCRIPTS.md) · [CI scripts reference (EN)](en/CI_SCRIPTS.md)
-- Windows runner maintenance: `scripts/ci/docker-prune-keep-bases.ps1` — [RU](../scripts/ci/docker-prune-keep-bases.md) · [EN](../scripts/ci/docker-prune-keep-bases.en.md)
+- Windows runner maintenance: `scripts/ci/docker-prune-keep-bases.ps1` — [RU](ru/docker-prune-keep-bases.md) · [EN](en/docker-prune-keep-bases.md)

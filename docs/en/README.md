@@ -8,6 +8,7 @@
 | [SCRIPTS.md](SCRIPTS.md) | `scripts/` reference |
 | [CI_PIPELINE.md](CI_PIPELINE.md) | GitLab CI: stages, architecture, OS matrix |
 | [CI_SCRIPTS.md](CI_SCRIPTS.md) | Reference for `scripts/ci` |
+| [docker-prune-keep-bases.md](docker-prune-keep-bases.md) | Windows runner: Docker image cleanup and VHDX compaction |
 | [HACKING.md](HACKING.md) | Developer mode, presets, targets |
 | [CodeStyle.md](CodeStyle.md) | Coding style |
 | [CmakeFlags.md](CmakeFlags.md) | CMake flags |

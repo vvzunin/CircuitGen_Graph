@@ -75,9 +75,9 @@ See `run-task.sh` for the supported task names (`lint`, `sanitize`, `static-anal
 
 | File | Purpose |
 |------|---------|
-| **`docker-prune-keep-bases.ps1`** | PowerShell: remove local images except base images; optionally **compact** `docker_data.vhdx` (`Optimize-VHD`). |
-| **`docker-prune-keep-bases.md`** | Manual (Russian). |
-| **`docker-prune-keep-bases.en.md`** | Manual (English). |
+| **`scripts/ci/docker-prune-keep-bases.ps1`** | PowerShell: remove local images except base images; optionally **compact** `docker_data.vhdx` (`Optimize-VHD`). |
+| **[docker-prune-keep-bases.md](../ru/docker-prune-keep-bases.md)** | Manual in Russian (`docs/ru`). |
+| **[docker-prune-keep-bases.md](docker-prune-keep-bases.md)** | Manual in English (`docs/en`). |
 
 Built-in help: `Get-Help .\scripts\ci\docker-prune-keep-bases.ps1 -Full`.
 

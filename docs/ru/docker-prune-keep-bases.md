@@ -2,7 +2,7 @@
 
 Скрипт для хоста **Windows 11** с **Docker Desktop (WSL2)** и **GitLab Runner**: убирает с диска накопленные **небазовые** Docker-образы и при необходимости **сжимает** файл данных Docker `docker_data.vhdx`, чтобы освободилось место на томе Windows.
 
-Файлы лежат в **`scripts/ci/`** этого репозитория; каталог **`scripts/ci`** синхронизируется между репозиториями **Parameters**, **Graph** и **Generator**.
+Исполняемый файл: **`scripts/ci/docker-prune-keep-bases.ps1`** (каталог `scripts/ci` синхронизируется между репозиториями **Parameters**, **Graph** и **Generator**). **Это руководство** и английская версия лежат только в **`docs/`** (см. [../en/docker-prune-keep-bases.md](../en/docker-prune-keep-bases.md)).
 
 ---
 
@@ -142,9 +142,9 @@ Get-Help .\scripts\ci\docker-prune-keep-bases.ps1 -Examples
 Get-Help .\scripts\ci\docker-prune-keep-bases.ps1 -Parameter CompactDockerDataVhdx
 ```
 
-Текст совпадает с комментариями в начале `.ps1`.
+Текст совпадает с комментариями в начале `scripts/ci/docker-prune-keep-bases.ps1`.
 
-**English:** [docker-prune-keep-bases.en.md](docker-prune-keep-bases.en.md)
+**English:** [docker-prune-keep-bases.md](../en/docker-prune-keep-bases.md)
 
 ---
 
@@ -187,5 +187,5 @@ Get-Help .\scripts\ci\docker-prune-keep-bases.ps1 -Parameter CompactDockerDataVh
 
 ## 11. Связь с остальной документацией
 
-- Конвейер GitLab и архитектура: [docs/ru/CI_PIPELINE.md](../../docs/ru/CI_PIPELINE.md)
-- Справочник по всем скриптам `scripts/ci`: [docs/ru/CI_SCRIPTS.md](../../docs/ru/CI_SCRIPTS.md)
+- Конвейер GitLab и архитектура: [CI_PIPELINE.md](CI_PIPELINE.md)
+- Справочник по всем скриптам `scripts/ci`: [CI_SCRIPTS.md](CI_SCRIPTS.md)

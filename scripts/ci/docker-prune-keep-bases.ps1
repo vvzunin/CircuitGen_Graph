@@ -64,6 +64,7 @@
 .NOTES
     Имя файла: docker-prune-keep-bases.ps1
     Требования: Docker CLI в PATH; для -CompactDockerDataVhdx — админ, Hyper-V, Docker Desktop + WSL2.
+    Полные руководства (Markdown): docs/ru/docker-prune-keep-bases.md, docs/en/docker-prune-keep-bases.md
 
     Справка в консоли:
       Get-Help .\docker-prune-keep-bases.ps1 -Full

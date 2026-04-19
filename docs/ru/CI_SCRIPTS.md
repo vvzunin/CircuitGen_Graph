@@ -75,9 +75,9 @@
 
 | Файл | Назначение |
 |------|------------|
-| **`docker-prune-keep-bases.ps1`** | PowerShell: удалить локальные образы, кроме базовых; опционально **сжать** `docker_data.vhdx` (`Optimize-VHD`). |
-| **`docker-prune-keep-bases.md`** | Руководство на русском. |
-| **`docker-prune-keep-bases.en.md`** | Руководство на английском. |
+| **`scripts/ci/docker-prune-keep-bases.ps1`** | PowerShell: удалить локальные образы, кроме базовых; опционально **сжать** `docker_data.vhdx` (`Optimize-VHD`). |
+| **[docker-prune-keep-bases.md](docker-prune-keep-bases.md)** | Руководство (в каталоге `docs/ru`). |
+| **[docker-prune-keep-bases.md (EN)](../en/docker-prune-keep-bases.md)** | Руководство на английском (в каталоге `docs/en`). |
 
 Встроенная справка: `Get-Help .\scripts\ci\docker-prune-keep-bases.ps1 -Full`.
 
