@@ -357,7 +357,7 @@ For `scripts/ci/docs.sh` additionally:
 ### Wrappers
 
 - `scripts/ci/run-task.sh <task>` — one CI stage (`lint`, `sanitize`, `static-analysis`, `coverage`, `tests`, `examples`, `docs`).
-- `scripts/ci/run-all.sh` — full pipeline: `lint -> static-analysis -> sanitize -> coverage -> tests -> examples -> docs`.
+- `scripts/ci/run-all.sh` — full pipeline: `lint -> static-analysis -> sanitize -> coverage -> tests -> examples -> docs` (serialized locally; GitLab runs several jobs in parallel).
 
 Examples:
 

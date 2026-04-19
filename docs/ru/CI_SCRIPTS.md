@@ -11,7 +11,7 @@
 | Скрипт | Назначение |
 |--------|------------|
 | **`run-task.sh`** | Одна задача: `bash scripts/ci/run-task.sh lint` (и т.д.). Переменные: `CI_RUNNER=local\|docker`, `CI_IMAGE_TAG`, `TARGET_OS`. |
-| **`run-all.sh`** | Последовательный прогон основных CI-задач (как в типичном pipeline). |
+| **`run-all.sh`** | Последовательный прогон основных CI-задач; порядок шагов см. внутри скрипта (в GitLab часть job’ов параллельна). |
 
 Список задач для `run-task.sh` см. внутри скрипта (например: `lint`, `sanitize`, `static-analysis`, `coverage`, `tests`, `examples`, `docs`).
 
@@ -138,7 +138,7 @@ Get-Help .\scripts\ci\docker-prune-keep-bases.ps1 -Full
 
 ### Частые вопросы
 
-Долгое выполнение / «висящий» `docker system df` — возможны на больших хранилищах и медленном диске. Место на `C:` не появилось после `rmi` — нужен **`-CompactDockerDataVhdx`**. `Optimize-VHD` падает — админ, Hyper-V, полная остановка Docker/WSL. Свои базовые образы — расширьте **`-ExtraKeepPattern`** по полному `REPOSITORY`.
+Долгое выполнение / «висящий» `docker system df` — возможны на больших хранилищах и медленном диске. Свободное место на `C:` не увеличилось после `rmi` — нужен **`-CompactDockerDataVhdx`**. `Optimize-VHD` падает — админ, Hyper-V, полная остановка Docker/WSL. Свои базовые образы — расширьте **`-ExtraKeepPattern`** по полному `REPOSITORY`.
 
 ### Автоматизация и осторожность
 

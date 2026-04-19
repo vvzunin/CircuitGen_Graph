@@ -34,7 +34,7 @@ flowchart LR
 
 ### Диаграмма стадий
 
-Порядок секции **`stages:`** в `.gitlab-ci.yml`: следующая стадия начинается после завершения всех job'ов предыдущей (с учетом правил GitLab на пропуски и ручные job'ы).
+Порядок секции **`stages:`** в `.gitlab-ci.yml`: следующая стадия начинается после завершения всех заданий предыдущей стадии (с учетом правил GitLab на пропуски и ручные задания).
 
 ```mermaid
 flowchart TB
@@ -51,7 +51,7 @@ flowchart TB
 
 ### Основной поток зависимостей (Ubuntu 24.04)
 
-Упрощенная цепочка **`needs:`** для дефолтного образа CI: проверка YAML, сборка и push **`ci`**, затем `check` / `test`; далее матрица образов для других ОС и **`docker-release`** (в основном на тегах, после успешных тестов).
+Упрощенная цепочка **`needs:`** для дефолтного образа CI: проверка YAML, сборка и push **`ci`**, затем `check` / `test`; далее матрица образов для других ОС и **`docker-release`** (в основном на тегах, после успешных тестов и примеров).
 
 ```mermaid
 flowchart LR
@@ -63,7 +63,7 @@ flowchart LR
   C[coverage]
   T[tests]
   X[examples]
-  M[docker-matrix other OS]
+  M[docker-images secondary OS]
   R[docker-release]
 
   V --> D
@@ -79,12 +79,13 @@ flowchart LR
   D --> T
   L --> X
   D --> X
-  C --> M
   T --> M
   X --> M
   T --> R
   X --> R
 ```
+
+Вторичные job’ы **`docker-images-*`** (не Ubuntu 24.04) в **`needs`** указывают только **`docker-images-ubuntu-24.04`**, **`tests`** и **`examples`** — job **`coverage`** для них не объявлен (см. `.gitlab-ci.yml`).
 
 ---
 
@@ -111,7 +112,7 @@ flowchart LR
 | **docker-ubuntu** | Сборка и push образов **ci** (и при правилах — **dev**) для **Ubuntu 24.04** — основной источник `$DOCKER_CI_IMAGE` для последующих стадий. |
 | **check** | Линт, статический анализ, санитайзеры в образе CI по умолчанию (Ubuntu 24.04). |
 | **test** | Юнит-тесты, покрытие, примеры в том же образе CI. |
-| **docker-matrix** | Образы **ci** для остальных ОС из матрицы; **release**-образы после успешных тестов (часть job’ов только на теги). |
+| **docker-matrix** | Образы **ci** для вторичных ОС после успешных **`tests`** и **`examples`** на Ubuntu 24.04; **release**-образы на тегах (`docker-release-*`, те же зависимости). |
 | **check-os** / **test-os** | Те же проверки на **вторичных ОС** (ограничения `rules`, см. `.secondary-os-matrix-rules`). |
 | **os-check** | Полная проверка установки зависимостей и сценариев на «чистых» образах ОС (`os-image-build-push` + `os-full-check`), увеличенный `timeout`. |
 | **docs** | Сборка документации (Doxygen и др.) по `rules` / изменениям путей. |
@@ -140,7 +141,7 @@ flowchart LR
 ## 6. Локальный запуск как в CI
 
 - **`bash scripts/ci/run-task.sh <task>`** — одна задача (`lint`, `tests`, …): локально или в контейнере (`CI_RUNNER=docker`, `CI_IMAGE_TAG=...`).
-- **`bash scripts/ci/run-all.sh`** — последовательный прогон набора скриптов.
+- **`bash scripts/ci/run-all.sh`** — последовательный прогон набора скриптов; порядок см. в скрипте (в GitLab часть шагов параллельна).
 
 Подробнее: [CI_SCRIPTS.md](CI_SCRIPTS.md), [SCRIPTS.md](SCRIPTS.md), [HACKING.md](HACKING.md).
 

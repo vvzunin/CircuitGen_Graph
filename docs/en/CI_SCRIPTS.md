@@ -11,7 +11,7 @@ Pipeline overview: [CI_PIPELINE.md](CI_PIPELINE.md).
 | Script | Purpose |
 |--------|---------|
 | **`run-task.sh`** | Single task: `bash scripts/ci/run-task.sh lint`, etc. Environment: `CI_RUNNER=local\|docker`, `CI_IMAGE_TAG`, `TARGET_OS`. |
-| **`run-all.sh`** | Runs the main CI scripts in sequence (similar to a typical pipeline). |
+| **`run-all.sh`** | Runs the main CI scripts in sequence; see the script for order (GitLab runs several jobs in parallel). |
 
 See `run-task.sh` for the supported task names (`lint`, `sanitize`, `static-analysis`, `coverage`, `tests`, `examples`, `docs`, …).
 
@@ -138,7 +138,7 @@ Matches the comment-based help at the top of the `.ps1`.
 
 ### FAQ
 
-Long runs / stuck `docker system df` — common on huge stores or slow disks. **`C:` did not grow** after `rmi` — run **`-CompactDockerDataVhdx`**. **`Optimize-VHD` fails** — admin, Hyper-V, fully stop Docker/WSL. **Custom bases** — extend **`-ExtraKeepPattern`** on full `REPOSITORY`.
+Long runs / stuck `docker system df` — common on huge stores or slow disks. **Free space on `C:` did not increase** after `rmi` — run **`-CompactDockerDataVhdx`**. **`Optimize-VHD` fails** — admin, Hyper-V, fully stop Docker/WSL. **Custom bases** — extend **`-ExtraKeepPattern`** on full `REPOSITORY`.
 
 ### Automation and safety
 

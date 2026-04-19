@@ -51,7 +51,7 @@ flowchart TB
 
 ### Main dependency flow (Ubuntu 24.04)
 
-Simplified **`needs:`** chain for the default CI image: YAML check, build/push **`ci`**, then `check` / `test`; then the image matrix for other OSes and **`docker-release`** (mostly on tags, after successful tests).
+Simplified **`needs:`** chain for the default CI image: YAML check, build/push **`ci`**, then `check` / `test`; then secondary OS image builds and **`docker-release`** (mostly on tags, after successful **tests** and **examples**).
 
 ```mermaid
 flowchart LR
@@ -63,7 +63,7 @@ flowchart LR
   C[coverage]
   T[tests]
   X[examples]
-  M[docker-matrix other OS]
+  M[docker-images secondary OS]
   R[docker-release]
 
   V --> D
@@ -79,12 +79,13 @@ flowchart LR
   D --> T
   L --> X
   D --> X
-  C --> M
   T --> M
   X --> M
   T --> R
   X --> R
 ```
+
+Secondary **`docker-images-*`** jobs (not Ubuntu 24.04) list **`needs`** on **`docker-images-ubuntu-24.04`**, **`tests`**, and **`examples`** only — not **`coverage`** (see `.gitlab-ci.yml`).
 
 ---
 
@@ -111,7 +112,7 @@ See the top of `.gitlab-ci.yml` in the repo for the exact conditions.
 | **docker-ubuntu** | Build and push **ci** images (and, per rules, **dev**) for **Ubuntu 24.04** — primary source of `$DOCKER_CI_IMAGE` for later stages. |
 | **check** | Lint, static analysis, sanitizers in the default CI image (Ubuntu 24.04). |
 | **test** | Unit tests, coverage, examples in the same CI image. |
-| **docker-matrix** | **ci** images for other OS entries; **release** images after tests succeed (some jobs are tag-only). |
+| **docker-matrix** | **ci** images for secondary OSes after successful **`tests`** and **`examples`** on Ubuntu 24.04; **`docker-release-*`** on tags (same **needs**). |
 | **check-os** / **test-os** | Same checks on **secondary OS** images (see `rules` / `.secondary-os-matrix-rules`). |
 | **os-check** | Full install-deps and scenario checks on “clean” OS images (`os-image-build-push` + `os-full-check`), higher `timeout`. |
 | **docs** | Documentation build (Doxygen, etc.) with path-based `rules`. |
@@ -140,7 +141,7 @@ See the top of `.gitlab-ci.yml` in the repo for the exact conditions.
 ## 6. Local runs (CI parity)
 
 - **`bash scripts/ci/run-task.sh <task>`** — one task (`lint`, `tests`, …): locally or in a container (`CI_RUNNER=docker`, `CI_IMAGE_TAG=...`).
-- **`bash scripts/ci/run-all.sh`** — runs a sequence of CI scripts.
+- **`bash scripts/ci/run-all.sh`** — runs CI scripts in sequence; see the script for order (GitLab runs several jobs in parallel).
 
 More detail: [CI_SCRIPTS.md](CI_SCRIPTS.md), [SCRIPTS.md](SCRIPTS.md), [HACKING.md](HACKING.md).
 

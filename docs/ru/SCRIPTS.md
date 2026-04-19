@@ -381,7 +381,7 @@ bash scripts/setup/verify-installers-docker.sh ubuntu-24.04
 - `scripts/ci/run-task.sh <task>`  
   Запускает один CI-этап (`lint`, `sanitize`, `static-analysis`, `coverage`, `tests`, `examples`, `docs`) в выбранном режиме.
 - `scripts/ci/run-all.sh`  
-  Запускает полный CI-пайплайн проверок: `lint -> static-analysis -> sanitize -> coverage -> tests -> examples -> docs`.
+  Запускает полный CI-пайплайн проверок: `lint -> static-analysis -> sanitize -> coverage -> tests -> examples -> docs` (локально по шагам; в GitLab часть job’ов параллельна).
 
 Примеры:
 
