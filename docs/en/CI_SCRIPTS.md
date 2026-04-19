@@ -1,6 +1,6 @@
 # Reference: `scripts/ci`
 
-This document is **kept in sync** across the Parameters, Graph, and Generator repositories. Script behaviour is the same; GitLab jobs inject variables (`REPO_NAME`, `DOCKER_URL`, …) from `.gitlab-ci.yml`.
+This document is **kept in sync** across the Parameters, Graph, and Generator repositories. Script behavior is the same; GitLab jobs inject variables (`REPO_NAME`, `DOCKER_URL`, …) from `.gitlab-ci.yml`.
 
 Pipeline overview: [CI_PIPELINE.md](CI_PIPELINE.md).
 
