@@ -32,6 +32,60 @@ flowchart LR
   E --> C
 ```
 
+### Stage diagram
+
+Order of the **`stages:`** section in `.gitlab-ci.yml`: the next stage starts after all jobs in the previous stage finish (subject to GitLab skip rules and manual jobs).
+
+```mermaid
+flowchart TB
+  S1["validate"] --> S2["docker-ubuntu"]
+  S2 --> S3["check"]
+  S3 --> S4["test"]
+  S4 --> S5["docker-matrix"]
+  S5 --> S6["check-os"]
+  S6 --> S7["test-os"]
+  S7 --> S8["os-check"]
+  S8 --> S9["docs"]
+  S9 --> S10["release"]
+```
+
+### Main dependency flow (Ubuntu 24.04)
+
+Simplified **`needs:`** chain for the default CI image: YAML check, build/push **`ci`**, then `check` / `test`; then the image matrix for other OSes and **`docker-release`** (mostly on tags, after successful tests).
+
+```mermaid
+flowchart LR
+  V[gitlab-os-matrix-check]
+  D[docker-images-ubuntu-24.04]
+  L[lint]
+  N[sanitize]
+  SA[static-analysis]
+  C[coverage]
+  T[tests]
+  X[examples]
+  M[docker-matrix other OS]
+  R[docker-release]
+
+  V --> D
+  D --> L
+  D --> N
+  D --> SA
+  L --> C
+  N --> C
+  SA --> C
+  L --> T
+  N --> T
+  SA --> T
+  D --> T
+  L --> X
+  D --> X
+  C --> M
+  T --> M
+  X --> M
+  T --> R
+  X --> R
+```
+
 ---
 
 ## 2. Workflow rules (`.gitlab-ci.yml`)

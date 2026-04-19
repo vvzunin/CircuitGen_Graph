@@ -32,6 +32,60 @@ flowchart LR
   E --> C
 ```
 
+### Диаграмма стадий
+
+Порядок секции **`stages:`** в `.gitlab-ci.yml`: следующая стадия начинается после завершения всех job'ов предыдущей (с учетом правил GitLab на пропуски и ручные job'ы).
+
+```mermaid
+flowchart TB
+  S1["validate"] --> S2["docker-ubuntu"]
+  S2 --> S3["check"]
+  S3 --> S4["test"]
+  S4 --> S5["docker-matrix"]
+  S5 --> S6["check-os"]
+  S6 --> S7["test-os"]
+  S7 --> S8["os-check"]
+  S8 --> S9["docs"]
+  S9 --> S10["release"]
+```
+
+### Основной поток зависимостей (Ubuntu 24.04)
+
+Упрощенная цепочка **`needs:`** для дефолтного образа CI: проверка YAML, сборка и push **`ci`**, затем `check` / `test`; далее матрица образов для других ОС и **`docker-release`** (в основном на тегах, после успешных тестов).
+
+```mermaid
+flowchart LR
+  V[gitlab-os-matrix-check]
+  D[docker-images-ubuntu-24.04]
+  L[lint]
+  N[sanitize]
+  SA[static-analysis]
+  C[coverage]
+  T[tests]
+  X[examples]
+  M[docker-matrix other OS]
+  R[docker-release]
+
+  V --> D
+  D --> L
+  D --> N
+  D --> SA
+  L --> C
+  N --> C
+  SA --> C
+  L --> T
+  N --> T
+  SA --> T
+  D --> T
+  L --> X
+  D --> X
+  C --> M
+  T --> M
+  X --> M
+  T --> R
+  X --> R
+```
+
 ---
 
 ## 2. Правила workflow (`.gitlab-ci.yml`)
