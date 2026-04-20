@@ -143,7 +143,7 @@ cmake --build --preset=release-examples -j "$(nproc)"
 cmake --build --preset=release-examples --target run-examples -j "$(nproc)"
 ```
 
-JSON files under `examples/json/` feed the generation scenarios; the current **`empty_example`** links the library and sanity-checks the examples build.
+The `examples/` directory contains small C++ programs: **`empty_example`** is a no-op smoke test; **`example_build_and_gate`**, **`example_export_graphml_classic`**, **`example_export_dot`**, **`example_sequential_ff`**, and **`example_export_graphml_pseudo`** show building a graph and exporting Verilog-related views (GraphML, DOT). See `examples/CMakeLists.txt`.
 
 ### Building with MSVC
 

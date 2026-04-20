@@ -143,7 +143,7 @@ cmake --build --preset=release-examples -j "$(nproc)"
 cmake --build --preset=release-examples --target run-examples -j "$(nproc)"
 ```
 
-JSON-файлы в `examples/json/` — входные данные для сценариев генерации; текущий пример **`empty_example`** линкуется с библиотекой и проверяет, что цепочка сборки примеров работает.
+В каталоге `examples/` лежат небольшие программы на C++: **`empty_example`** — дымовой тест сборки; **`example_build_and_gate`**, **`example_export_graphml_classic`**, **`example_export_dot`**, **`example_sequential_ff`**, **`example_export_graphml_pseudo`** — построение графа и экспорт представлений (GraphML, DOT). См. `examples/CMakeLists.txt`.
 
 ### Сборка с MSVC
 
