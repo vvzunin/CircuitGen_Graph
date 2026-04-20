@@ -900,7 +900,8 @@ void OrientedGraph::parseVertexToGraphML(
         break;
       case VertexTypes::sequential: {
         const auto *seq = static_cast<const GraphVertexSequential *>(v);
-        vertexKindName = GraphUtils::parseVertexToString(VertexTypes::sequential);
+        vertexKindName =
+            GraphUtils::parseVertexToString(VertexTypes::sequential);
         vertexKindName += seq->isFF() ? "/ff" : "/latch";
         break;
       }

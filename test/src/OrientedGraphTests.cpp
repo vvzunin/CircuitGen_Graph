@@ -561,12 +561,14 @@ TEST(TestToGraphMLSequential, ExportTypesInClassicPseudoOpenABCD) {
     const std::string pseudo = g->toGraphMLPseudoABCD();
     const auto posQ = pseudo.find("<data key=\"d0\">q</data>");
     EXPECT_NE(posQ, std::string::npos) << pseudo;
-    EXPECT_NE(pseudo.find("<data key=\"d1\">17</data>", posQ), std::string::npos)
+    EXPECT_NE(pseudo.find("<data key=\"d1\">17</data>", posQ),
+              std::string::npos)
         << pseudo;
     const std::string open = g->toGraphMLOpenABCD();
     const auto posQopen = open.find("<data key=\"d0\">q</data>");
     EXPECT_NE(posQopen, std::string::npos) << open;
-    EXPECT_NE(open.find("<data key=\"d1\">17</data>", posQopen), std::string::npos)
+    EXPECT_NE(open.find("<data key=\"d1\">17</data>", posQopen),
+              std::string::npos)
         << open;
   }
   OrientedGraph::resetCounter();
@@ -583,12 +585,14 @@ TEST(TestToGraphMLSequential, ExportTypesInClassicPseudoOpenABCD) {
     const std::string pseudo = g->toGraphMLPseudoABCD();
     const auto posQ = pseudo.find("<data key=\"d0\">q</data>");
     EXPECT_NE(posQ, std::string::npos) << pseudo;
-    EXPECT_NE(pseudo.find("<data key=\"d1\">18</data>", posQ), std::string::npos)
+    EXPECT_NE(pseudo.find("<data key=\"d1\">18</data>", posQ),
+              std::string::npos)
         << pseudo;
     const std::string open = g->toGraphMLOpenABCD();
     const auto posQopen = open.find("<data key=\"d0\">q</data>");
     EXPECT_NE(posQopen, std::string::npos) << open;
-    EXPECT_NE(open.find("<data key=\"d1\">18</data>", posQopen), std::string::npos)
+    EXPECT_NE(open.find("<data key=\"d1\">18</data>", posQopen),
+              std::string::npos)
         << open;
   }
 }

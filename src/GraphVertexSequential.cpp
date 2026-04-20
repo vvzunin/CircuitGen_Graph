@@ -15,15 +15,15 @@
 
 namespace CG_Graph {
 
-inline bool GraphVertexSequential::isFF() const {
+bool GraphVertexSequential::isFF() const {
   return d_seqType & ff;
 }
 
-inline bool GraphVertexSequential::isAsync() const {
+bool GraphVertexSequential::isAsync() const {
   return d_seqType & ASYNC;
 }
 
-inline bool GraphVertexSequential::isNegedge() const {
+bool GraphVertexSequential::isNegedge() const {
   return d_seqType & NEGEDGE;
 }
 
@@ -54,9 +54,9 @@ inline bool validateSignal(SequentialTypes current, SequentialTypes found) {
   return false;
 }
 
-inline void GraphVertexSequential::setSignalByType(VertexPtr i_wire,
-                                                   SequentialTypes i_type,
-                                                   unsigned &factType) {
+void GraphVertexSequential::setSignalByType(VertexPtr i_wire,
+                                            SequentialTypes i_type,
+                                            unsigned &factType) {
   if ((i_type & RST) && !d_rst) {
     factType |= RST;
     // d_clk has trigger only
