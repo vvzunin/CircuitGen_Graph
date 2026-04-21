@@ -18,7 +18,7 @@ cp CMakeUserPresets.json.example CMakeUserPresets.json
 | Файл | Назначение |
 |------|------------|
 | `CMakePresets.json` | Общие пресеты в git: **release**, **release-ci**, **release-examples**, CI-профили (**ci-ubuntu**, **ci-coverage**, **ci-sanitize**, **ci-static-analysis**, …), **ci-examples-dev**, а также скрытые базовые пресеты (**dev-mode**, наборы флагов компилятора, Ninja/C++17). |
-| `CMakeUserPresets.json` | **Только локально** (в `.gitignore`). После клона: `cp CMakeUserPresets.json.example CMakeUserPresets.json`. Задаёт **dev**, **coverage**, **dev-msvc**, … и подключает `CMakePresets.json` через `include`. |
+| `CMakeUserPresets.json` | **Только локально** (в `.gitignore`). После клона: `cp CMakeUserPresets.json.example CMakeUserPresets.json`. Задает **dev**, **coverage**, **dev-msvc**, … и подключает `CMakePresets.json` через `include`. |
 
 Типичная цепочка **конфигурация → сборка → тесты** (Debug):
 
@@ -38,7 +38,7 @@ ctest --preset=release-ci
 
 Список доступных пресетов: `cmake --list-presets`.
 
-**Сводка по трём репозиториям:** переключатели режима разработчика и примеров отличаются только именами переменных кэша CMake (их выставляет скрытый набор **dev-mode**, от которого наследуются `dev` и многие CI-пресеты):
+**Сводка по трем репозиториям:** переключатели режима разработчика и примеров отличаются только именами переменных кэша CMake (их выставляет скрытый набор **dev-mode**, от которого наследуются `dev` и многие CI-пресеты):
 
 | Репозиторий | Режим разработчика | Примеры |
 |-------------|-------------------|---------|
@@ -69,7 +69,7 @@ ctest --preset=release-ci
 **Особенности по репозиториям**
 
 - **Generator:** много мелких статических библиотек в `src/generators/simple/<имя>/CMakeLists.txt`; образец — `src/generators/simple/simple/CMakeLists.txt`. Родитель `src/generators/simple/CMakeLists.txt` вызывает цепочку `add_subdirectory`.
-- **Graph:** основная цель `CircuitGenGraph` задаётся в `src/CMakeLists.txt` списками `SOURCES`, `LIBS` и заголовками в `include/CircuitGenGraph/` (`PUBLIC_HEADER` и правила установки). Новые `.cpp` и заголовки добавляйте туда при расширении библиотеки.
+- **Graph:** основная цель `CircuitGenGraph` задается в `src/CMakeLists.txt` списками `SOURCES`, `LIBS` и заголовками в `include/CircuitGenGraph/` (`PUBLIC_HEADER` и правила установки). Новые `.cpp` и заголовки добавляйте туда при расширении библиотеки.
 - **Parameters:** основная библиотека и CLI OpenLane в `src/CMakeLists.txt` (`SOURCES` для `CircuitGenParameters`, цель **`CircuitGenParameters_exe`** с именем исполняемого файла **`CircuitGenParameters`** — как у `CircuitGenGenerator_exe` / `CircuitGenGenerator`; точка входа `CircuitGenToOpenLane.cpp`; алиасы `OptimizationsVerilogLib::…`). Подкаталог `examples/` включается при `-D optimizationsveriloglib_BUILD_EXAMPLES=ON` на верхнем уровне; новые модули — через расширение `SOURCES` или отдельный `add_library` по аналогии с соседними целями.
 
 Базовые сценарии:
@@ -184,7 +184,7 @@ ctest --preset=dev
 Часть сценариев **GoogleTest**, вызывающих **Icarus**, помечена префиксом **`DISABLED_`**, чтобы обычный `ctest` не требовал симулятор. Запуск вручную после установки `iverilog` (при отсутствии симулятора внутри теста сработает `GTEST_SKIP`):
 
 ```sh
-# Только отключённые (в т.ч. Icarus) тесты
+# Только отключенные (в т.ч. Icarus) тесты
 ./build/dev/test/CircuitGenGraph_tests --gtest_filter='*DISABLED_*' --gtest_also_run_disabled_tests
 
 # Один характерный тест
@@ -192,7 +192,7 @@ ctest --preset=dev
   --gtest_filter='TestbenchGeneratorTests.DISABLED_IcarusVerificationAndGate' \
   --gtest_also_run_disabled_tests
 
-# Все тесты из бинарника: обычные + отключённые
+# Все тесты из бинарника: обычные + отключенные
 ./build/dev/test/CircuitGenGraph_tests --gtest_also_run_disabled_tests
 ```
 

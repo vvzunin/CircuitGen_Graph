@@ -65,6 +65,6 @@ endmodule
 
 ### Экспорт в GraphML и DOT
 
-В классическом GraphML тип узла последовательностной ячейки записывается как `sequential/ff` или `sequential/latch`. В GraphML схем PseudoABCD и OpenABCD для `node_type` используются коды **17** (триггер) и **18** (защёлка). В экспорте DOT после имени экземпляра добавляется пометка `(ff)` или `(latch)`.
+В классическом GraphML тип узла последовательностной ячейки записывается как `sequential/ff` или `sequential/latch`. В GraphML схем PseudoABCD и OpenABCD для `node_type` используются коды **17** (триггер) и **18** (защелка). В экспорте DOT после имени экземпляра добавляется пометка `(ff)` или `(latch)`.
 
 **English:** [Sequential.md](../en/Sequential.md)

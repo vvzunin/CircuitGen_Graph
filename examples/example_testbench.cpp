@@ -15,7 +15,7 @@
 
 using namespace CG_Graph;
 
-/// @brief Создаёт полусумматор
+/// @brief Создает полусумматор
 GraphPtr createHalfAdder() {
   auto graph = std::make_shared<OrientedGraph>("half_adder");
 
@@ -35,7 +35,7 @@ GraphPtr createHalfAdder() {
   return graph;
 }
 
-/// @brief Создаёт полный сумматор
+/// @brief Создает полный сумматор
 GraphPtr createFullAdder() {
   auto graph = std::make_shared<OrientedGraph>("full_adder");
 

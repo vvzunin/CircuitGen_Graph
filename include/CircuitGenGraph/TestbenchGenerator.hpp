@@ -21,7 +21,7 @@ struct TestVector {
   std::vector<char> inputs; ///< Входные значения
   std::vector<char> expected; ///< Ожидаемые выходные значения
   std::vector<char> actual; ///< Фактические выходные значения (после симуляции)
-  bool passed = false;      ///< Прошёл ли тест
+  bool passed = false;      ///< Прошел ли тест
 };
 
 /// @brief Результат верификации схемы

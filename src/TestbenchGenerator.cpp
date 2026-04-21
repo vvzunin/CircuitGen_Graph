@@ -344,7 +344,7 @@ std::string TestbenchGenerator::generateStimulusBlock() const {
     ss << "\n";
   }
 
-  // Итоговый отчёт
+  // Итоговый отчет
   ss << "    // Final report\n";
   ss << "    $display(\"========================================\");\n";
   ss << "    $display(\"Test Summary:\");\n";
@@ -440,7 +440,7 @@ VerificationResult TestbenchGenerator::runInternalSimulation() {
   result.totalTests = d_testVectors.size();
 
   for (auto &tv : d_testVectors) {
-    // Пересчитываем expected, если содержит 'x' (неопределённые значения)
+    // Пересчитываем expected, если содержит 'x' (неопределенные значения)
     bool hasUndefined = false;
     for (char c : tv.expected) {
       if (c == 'x' || c == 'X' || c == 'z' || c == 'Z') {
@@ -537,7 +537,7 @@ TestbenchGenerator::executeCommandSafe(const std::vector<std::string> &i_argv) {
   }
   close(pipefd[0]);
 
-  // Ждём завершения дочернего процесса
+  // Ждем завершения дочернего процесса
   int status;
   waitpid(pid, &status, 0);
 
@@ -624,7 +624,7 @@ TestbenchGenerator::runIcarusVerification(const std::string &i_workDir,
     return result;
   }
 
-  // Создаём рабочую директорию
+  // Создаем рабочую директорию
   std::filesystem::create_directories(i_workDir);
   std::filesystem::create_directories(i_workDir + "/submodules");
 

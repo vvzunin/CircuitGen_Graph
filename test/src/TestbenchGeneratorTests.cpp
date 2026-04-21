@@ -23,7 +23,7 @@ std::string readFile(const std::string &path) {
   return buffer.str();
 }
 
-/// @brief Создаёт простую комбинационную схему (AND gate)
+/// @brief Создает простую комбинационную схему (AND gate)
 GraphPtr createSimpleAndGate() {
   auto graph = std::make_shared<OrientedGraph>("simple_and");
   auto *inA = graph->addInput("a");
@@ -38,7 +38,7 @@ GraphPtr createSimpleAndGate() {
   return graph;
 }
 
-/// @brief Создаёт полусумматор
+/// @brief Создает полусумматор
 GraphPtr createHalfAdder() {
   auto graph = std::make_shared<OrientedGraph>("half_adder");
   auto *inA = graph->addInput("a");
@@ -57,7 +57,7 @@ GraphPtr createHalfAdder() {
   return graph;
 }
 
-/// @brief Создаёт схему с NOT gate
+/// @brief Создает схему с NOT gate
 GraphPtr createNotGate() {
   auto graph = std::make_shared<OrientedGraph>("not_gate");
   auto *in = graph->addInput("a");
@@ -71,7 +71,7 @@ GraphPtr createNotGate() {
   return graph;
 }
 
-/// @brief Создаёт более сложную схему (XOR через NAND)
+/// @brief Создает более сложную схему (XOR через NAND)
 GraphPtr createXorFromNand() {
   auto graph = std::make_shared<OrientedGraph>("xor_nand");
   auto *a = graph->addInput("a");
@@ -394,8 +394,8 @@ TEST(TestbenchGeneratorTests, InternalSimulationXorFromNand) {
 
   auto result = tbGen.runInternalSimulation();
 
-  // XOR через NAND создаёт бистабильную цепь, которая может давать 'x'
-  // при определённых комбинациях входов из-за особенностей симуляции.
+  // XOR через NAND создает бистабильную цепь, которая может давать 'x'
+  // при определенных комбинациях входов из-за особенностей симуляции.
   // Проверяем, что симуляция завершается без ошибок.
   EXPECT_EQ(result.totalTests, 4);
   // Как минимум часть тестов должна пройти
