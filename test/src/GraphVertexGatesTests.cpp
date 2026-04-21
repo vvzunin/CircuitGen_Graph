@@ -16,6 +16,8 @@ using namespace CG_Graph;
 GraphPtr memoryOwnerGateGr = std::make_shared<OrientedGraph>();
 
 TEST(TestConstructorWithoutIName, WithoutDefaultGatesParametrs) {
+  CG_Graph::GraphVertexBase::resetCounter();
+  CG_Graph::OrientedGraph::resetCounter();
   VertexPtr gate = memoryOwnerGateGr->addGate(Gates::GateAnd);
   std::string graphNum = std::to_string(0);
   EXPECT_EQ(gate->getType(), VertexTypes::gate);
@@ -33,6 +35,8 @@ graphNum)
 */
 
 TEST(TestConstructorWithoutIName, WithDefaultGatesParametrs) {
+  CG_Graph::GraphVertexBase::resetCounter();
+  CG_Graph::OrientedGraph::resetCounter();
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
   std::string graphNum = std::to_string(0);
   GraphVertexGates gate(Gates::GateAnd, graphPtr);

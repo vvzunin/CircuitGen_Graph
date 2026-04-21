@@ -19,18 +19,19 @@ include(cmake/variables.cmake)
 include(cmake/lint-targets.cmake)
 include(cmake/spell-targets.cmake)
 include(cmake/CMakeGraphVizOptions.cmake)
-
 include(GNUInstallDirs)
 include(CheckIPOSupported)
+
 check_ipo_supported(RESULT ipo_supported)
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ${ipo_supported})
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_INIT} -std=c++17 -fPIC")
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(ENABLE_LOGGING "Enable logging" OFF)
 option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
+
+# Подключаем папку с исходниками (новый формат)
 add_subdirectory(src)
 
 if(ENABLE_COVERAGE)
@@ -54,6 +55,7 @@ find_program(CLANG_TIDY NAMES clang-tidy)
 if(PROJECT_IS_TOP_LEVEL)
   option(CircuitGenGraph_ENABLE_CLANG_TIDY "Run clang-tidy during build" OFF)
 endif()
+
 if(CLANG_TIDY AND CircuitGenGraph_ENABLE_CLANG_TIDY)
   set(GRAPH_CLANG_TIDY
     ${CLANG_TIDY};
@@ -74,7 +76,6 @@ if(ENABLE_LOGGING)
     EXPORT "${PROJECT_NAME}Targets"
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   )
@@ -84,7 +85,6 @@ else()
     EXPORT "${PROJECT_NAME}Targets"
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   )
@@ -122,7 +122,6 @@ endif()
 
 if(PROJECT_IS_TOP_LEVEL)
   option(CircuitGenGraph_BUILD_EXAMPLES "Build examples tree." "${CircuitGenGraph_DEVELOPER_MODE}")
-
   if(CircuitGenGraph_BUILD_EXAMPLES)
     add_subdirectory(examples)
   endif()
@@ -166,5 +165,4 @@ endif()
 
 target_compile_options(${PROJECT_NAME} PUBLIC -Wpedantic)
 target_compile_options(${PROJECT_NAME} PUBLIC -Wall)
-
 add_folders(Project)
