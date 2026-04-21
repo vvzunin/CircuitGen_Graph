@@ -167,6 +167,8 @@ sudo apt install iverilog
 sudo dnf install iverilog
 ```
 
+The per-OS **`scripts/setup/install-deps-*.sh`** scripts in this repo list **`iverilog`** so CI/dev images built with them already include Icarus unless you trimmed the package set.
+
 Source walkthrough: [`examples/example_testbench.cpp`](../../examples/example_testbench.cpp).
 
 <a id="tests-and-icarus"></a>

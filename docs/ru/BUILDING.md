@@ -167,6 +167,8 @@ sudo apt install iverilog
 sudo dnf install iverilog
 ```
 
+В репозитории скрипты **`scripts/setup/install-deps-*.sh`** для Ubuntu/Debian/Fedora уже включают пакет **`iverilog`**, поэтому образы CI/dev, собранные через них, обычно содержат Icarus.
+
 Исходный разбор: [`examples/example_testbench.cpp`](../../examples/example_testbench.cpp).
 
 <a id="tests-and-icarus"></a>
