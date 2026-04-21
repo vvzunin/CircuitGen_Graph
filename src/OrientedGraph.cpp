@@ -414,7 +414,7 @@ GraphPtr OrientedGraph::createMajoritySubgraph() {
 VertexPtr OrientedGraph::generateMajority(VertexPtr a, VertexPtr b,
                                           VertexPtr c) {
   static GraphPtr majoritySubgraph =
-      createMajoritySubgraph(); // создаётся один раз
+      createMajoritySubgraph(); // создается один раз
 
   std::vector<VertexPtr> outputs =
       this->addSubGraph(majoritySubgraph, {a, b, c});
@@ -882,6 +882,7 @@ void OrientedGraph::parseVertexToGraphML(
       return;
     case VertexTypes::input:
     case VertexTypes::output:
+    case VertexTypes::sequential:
       vertexKindName = GraphUtils::parseVertexToString(vertexType);
       break;
     default:
@@ -897,6 +898,13 @@ void OrientedGraph::parseVertexToGraphML(
       case VertexTypes::gate:
         vertexKindName = GraphUtils::parseGateToString(v->getGate());
         break;
+      case VertexTypes::sequential: {
+        const auto *seq = static_cast<const GraphVertexSequential *>(v);
+        vertexKindName =
+            GraphUtils::parseVertexToString(VertexTypes::sequential);
+        vertexKindName += seq->isFF() ? "/ff" : "/latch";
+        break;
+      }
       default:
         break;
     }
@@ -1061,6 +1069,12 @@ std::string OrientedGraph::toGraphMLPseudoABCD() {
         case VertexTypes::gate:
           nodeType = gateToABCDType.at(v->getGate());
           break;
+        case VertexTypes::sequential: {
+          const auto *seq = static_cast<const GraphVertexSequential *>(v);
+          // Dedicated codes (not used by gateToABCDType): flip-flop vs latch.
+          nodeType = seq->isFF() ? "17" : "18";
+          break;
+        }
       }
       actualName = v->getName();
       if (nodeNames.find(actualName) == nodeNames.end()) {
@@ -1127,6 +1141,11 @@ std::string OrientedGraph::toGraphMLOpenABCD() {
           }
           nodeType = gateToABCDType.at(vGate);
           break;
+        case VertexTypes::sequential: {
+          const auto *seq = static_cast<const GraphVertexSequential *>(v);
+          nodeType = seq->isFF() ? "17" : "18";
+          break;
+        }
       }
 
       actualName = v->getName();

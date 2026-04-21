@@ -47,6 +47,7 @@ namespace VertexUtils {
 /// Converts a gate type enum value to its string representation
 /// @param i_type The gate type enum value
 /// @return The string representation of the gate type.
+/// @par Example
 /// @code
 /// Gates gateType = Gates::GateAnd;
 /// std::string gateString = VertexUtils::gateToString(gateType);
@@ -62,6 +63,7 @@ std::string gateToString(Gates i_type);
 /// Converts a vertex type enum value to its Verilog representation
 /// @param i_type The vertex type enum value.
 /// @return The Verilog representation of the vertex type
+/// @par Example
 /// @code
 /// VertexTypes vertexType = VertexTypes::Input;
 /// std::string verilogType = VertexUtils::vertexTypeToVerilog(vertexType);
@@ -81,6 +83,7 @@ std::string vertexTypeToVerilog(VertexTypes i_type);
 /// documentation
 /// @param i_type The vertex type enum value (from the VertexTypes enum)
 /// @return The comment representation of the vertex type.
+/// @par Example
 /// @code
 /// VertexTypes vertexType = VertexTypes::Input;
 /// std::string comment = VertexUtils::vertexTypeToComment(vertexType);
@@ -98,6 +101,7 @@ std::string vertexTypeToComment(VertexTypes i_type);
 /// clear and some more) and is used for generating comments or documentation
 /// @param i_seq Sequential element to getting information
 /// @return The comment representation of the GraphVertexSequental object.
+/// @par Example
 /// @code
 /// GraphPtr graph = std::make_shared<OrientedGraph>();
 /// auto *clk = graph->addInput("clk");
@@ -230,6 +234,7 @@ public:
   /// This method returns the type of the vertex as a value of the VertexTypes
   /// enum
   /// @return The type of the vertex (from the VertexTypes enum).
+  /// @par Example
   /// @code
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// VertexTypes type = vertex.getType();
@@ -246,6 +251,7 @@ public:
   /// parsing the vertex type enum value using the settings object
   /// associated with the vertex
   /// @return The string representation of the vertex type.
+  /// @par Example
   /// @code
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// std::string typeName = vertex.getTypeName();
@@ -260,6 +266,7 @@ public:
   /// @brief setName
   /// This method sets the name of the vertex to the specified string.
   /// @param i_name The new name for the vertex.
+  /// @par Example
   /// @code
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// vertex.setName("new_vertex_name");
@@ -273,6 +280,7 @@ public:
   /// @brief getName
   /// Returns the name of the vertex
   /// @return The name of the vertex.
+  /// @par Example
   /// @code
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// std::string name = vertex.getName();
@@ -284,6 +292,7 @@ public:
   /// @brief getName
   /// Returns concatenation of the name of the vertex and i_prefix
   /// @return The concatenation of name of the vertex and i_prefix
+  /// @par Example
   /// @code
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// std::string s = vertex.getName("some prefix");
@@ -296,6 +305,7 @@ public:
   /// @brief getRawName
   /// Returns string_view object with name of the vertex
   /// @return The string_view object with name of the vertex
+  /// @par Example
   /// @code
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// std::string s = vertex.getName("some prefix");
@@ -309,6 +319,7 @@ public:
   /// @brief getValue
   /// Returns the value of the vertex.
   /// @return The value of the vertex.
+  /// @par Example
   /// @code
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// char value = vertex.getValue();
@@ -333,6 +344,7 @@ public:
   /// @brief getLevel
   /// Returns the level of the vertex
   /// @return The level of the vertex
+  /// @par Example
   /// @code
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// uint32_t level = vertex.getLevel();
@@ -370,6 +382,7 @@ public:
   /// the vertex does not correspond to any basic logic gate, it returns Gate
   /// Default
   /// @return The type of the basic logic gate represented by this vertex
+  /// @par Example
   /// @code
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
   /// Gates gateType = vertex.getGate();
@@ -406,6 +419,7 @@ public:
 
   /// @brief getInConnections
   /// @return A vector of weak pointers to the input connections of this vertex
+  /// @par Example
   /// @code
   /// // Creating an instance of the GraphVertexBase class
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
@@ -436,6 +450,7 @@ public:
   /// @param i_vert The vertex to be added to the input connections
   /// @return The count of occurrences of the given vertex in the input
   /// connections after adding it
+  /// @par Example
   /// @code
   /// // Creating an instance of the GraphVertexBase class
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
@@ -456,6 +471,7 @@ public:
   /// @brief getOutConnections
   /// @return A vector of shared pointers to the output connections of this
   /// vertex
+  /// @par Example
   /// @code
   /// // Creating an instance of the GraphVertexBase class
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
@@ -483,6 +499,7 @@ public:
   /// @param i_vert The vertex to be added to the output connections
   /// @return true if the vertex was successfully added, false if it was
   /// already present in the output connections.
+  /// @par Example
   /// @code
   /// @endcode
   /// @author Fuuulkrum7 <ilka747428@gmail.com>
@@ -493,6 +510,7 @@ public:
   /// connections.
   ///  When running for a second time, set hash flags to default state
   /// @return The hash value of the vertex based on its outgoing connections.
+  /// @par Example
   /// @code
   /// // Creating an instance of the GraphVertexBase class
   /// GraphVertexBase vertex(VertexTypes::output, "vertex1");
@@ -517,6 +535,7 @@ public:
   /// @return A string containing Verilog code for the vertex, or an empty
   /// string if the vertex type is not "output" or if the incoming connection
   /// is invalid
+  /// @par Example
   /// @code
   /// // Creating an instance of the GraphVertexBase class with the type
   /// "output" and the name "output_vertex"
@@ -566,6 +585,7 @@ protected:
   /// Removes a vertex from the output connections of this vertex.
   /// @param i_vert The vertex to be removed from the output connections.
   /// @return true if the vertex was successfully removed, false otherwise.
+  /// @par Example
   /// @code
   /// // Creating an instance of the GraphVertexBase class
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");
@@ -599,6 +619,7 @@ protected:
   /// If true, all occurrences will be removed. If false, only the first
   /// occurrence will be removed. Default - false
   /// @return true if the vertex was successfully removed, false otherwise.
+  /// @par Example
   /// @code
   /// // Creating an instance of the GraphVertexBase class
   /// GraphVertexBase vertex(VertexTypes::input, "vertex1");

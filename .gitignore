@@ -6,38 +6,25 @@
 .idea/*
 .vs/
 .vscode/
-build/
+.venv/
+.venv-docs/
+.cache/
+build*/
 cmake-build-*/
 CMakeLists.txt.user
 CMakeUserPresets.json
-Testing/*
-
-logs/
+dataset/
+example_*/
+settings.json
 *.log
-
-coverage.info
-coverage_report/
-
-.cache/
 
 # Build artifacts
 *.o
 *.a
 *.exe
-example_usage
-example_half_adder
-example_dff
-example_testbench
 
 # Generated simulation files
 *.vcd
 *_sim
 
-# Output directory for generated files (testbenches, graphs, etc.)
-output/
-
-# Documentation artifacts (generated)
-refman.pdf
-
-# Downloaded sources
-doxygen-*.tar.gz
+generation_results/*

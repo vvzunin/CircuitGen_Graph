@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.26)
 
-project(CircuitGenGeneratorExamples CXX)
+project(CircuitGenGraphExamples CXX)
 
-include(../cmake/project-is-top-level.cmake)
+include(../cmake/checks.cmake)
 include(../cmake/folders.cmake)
 
 if(PROJECT_IS_TOP_LEVEL)
@@ -20,6 +20,12 @@ function(add_example NAME)
   add_dependencies(run-examples "run_${NAME}")
 endfunction()
 
-#add_example(empty_example)
+add_example(empty_example)
+add_example(example_build_and_gate)
+add_example(example_export_graphml_classic)
+add_example(example_export_dot)
+add_example(example_sequential_ff)
+add_example(example_export_graphml_pseudo)
+add_example(example_testbench)
 
 add_folders(Example)

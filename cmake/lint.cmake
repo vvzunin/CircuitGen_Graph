@@ -15,6 +15,20 @@ default(
 )
 default(FIX NO)
 
+# Resolve formatter binary robustly across environments:
+# prefer explicit value, then try common names.
+find_program(
+  FORMAT_COMMAND_BIN
+  NAMES
+    "${FORMAT_COMMAND}"
+    clang-format-18
+    clang-format
+)
+if(NOT FORMAT_COMMAND_BIN)
+  message(FATAL_ERROR "Formatter '${FORMAT_COMMAND}' is not found. Install clang-format or override FORMAT_COMMAND.")
+endif()
+set(FORMAT_COMMAND "${FORMAT_COMMAND_BIN}")
+
 set(flag --output-replacements-xml)
 set(args OUTPUT_VARIABLE output)
 if(FIX)
@@ -25,15 +39,15 @@ endif()
 file(GLOB_RECURSE files ${PATTERNS})
 set(badly_formatted "")
 set(output "")
-string(LENGTH "${CMAKE_SOURCE_DIR}/" path_prefix_length)
+string(LENGTH "${PROJECT_SOURCE_DIR}/" path_prefix_length)
 
 
 foreach(file IN LISTS files)
-  message("${FORMAT_COMMAND} " --style=file " ${flag} " "${file}")
+  message("${FORMAT_COMMAND}" --style=file "${flag}" "${file}")
 
   execute_process(
       COMMAND "${FORMAT_COMMAND}" --style=file "${flag}" "${file}"
-      WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+      WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
       RESULT_VARIABLE result
       ${args}
   )
