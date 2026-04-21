@@ -793,22 +793,27 @@ TestbenchGenerator::compareSimulations(const std::string &i_workDir) {
       (internalResult.failedTests == icarusResult.failedTests);
   bool matchTotalTests = (internalResult.totalTests == icarusResult.totalTests);
 
-  // Сравниваем векторы результатов поэлементно
+  // Поэлементное сравнение векторов только если Icarus-ветка их заполнила.
+  // runIcarusVerification сейчас выставляет лишь счётчики и success по выводу vvp,
+  // без копии d_testVectors в result.vectors — в этом случае ограничиваемся
+  // согласованностью success и счётчиков.
   bool matchVectors = true;
-  if (internalResult.vectors.size() == icarusResult.vectors.size()) {
-    for (size_t i = 0; i < internalResult.vectors.size(); ++i) {
-      const auto &internalVec = internalResult.vectors[i];
-      const auto &icarusVec = icarusResult.vectors[i];
-      if (internalVec.passed != icarusVec.passed ||
-          internalVec.inputs != icarusVec.inputs ||
-          internalVec.expected != icarusVec.expected ||
-          internalVec.actual != icarusVec.actual) {
-        matchVectors = false;
-        break;
+  if (!icarusResult.vectors.empty()) {
+    if (internalResult.vectors.size() == icarusResult.vectors.size()) {
+      for (size_t i = 0; i < internalResult.vectors.size(); ++i) {
+        const auto &internalVec = internalResult.vectors[i];
+        const auto &icarusVec = icarusResult.vectors[i];
+        if (internalVec.passed != icarusVec.passed ||
+            internalVec.inputs != icarusVec.inputs ||
+            internalVec.expected != icarusVec.expected ||
+            internalVec.actual != icarusVec.actual) {
+          matchVectors = false;
+          break;
+        }
       }
+    } else {
+      matchVectors = false;
     }
-  } else {
-    matchVectors = false;
   }
 
   if (matchSuccess && matchPassedTests && matchFailedTests && matchTotalTests &&

@@ -433,6 +433,8 @@ TEST(TestbenchGeneratorTests, ConfigSetterGetter) {
 }
 
 // ==================== Тесты Icarus Verilog (условные) ====================
+// Если iverilog/vvp нет в PATH, тесты ниже помечаются как skipped (GTEST_SKIP),
+// а не падают — это нормально для CI без Icarus.
 
 TEST(TestbenchGeneratorTests, IcarusAvailabilityCheck) {
   // Этот тест просто проверяет, что функция не падает
@@ -441,8 +443,7 @@ TEST(TestbenchGeneratorTests, IcarusAvailabilityCheck) {
   (void)available;
 }
 
-// Этот тест запускается только если Icarus Verilog установлен
-TEST(TestbenchGeneratorTests, DISABLED_IcarusVerificationAndGate) {
+TEST(TestbenchGeneratorTests, IcarusVerificationAndGate) {
   if (!TestbenchGenerator::isIcarusAvailable()) {
     GTEST_SKIP() << "Icarus Verilog not installed";
   }
@@ -462,7 +463,7 @@ TEST(TestbenchGeneratorTests, DISABLED_IcarusVerificationAndGate) {
   std::filesystem::remove_all(testDir);
 }
 
-TEST(TestbenchGeneratorTests, DISABLED_IcarusVerificationHalfAdder) {
+TEST(TestbenchGeneratorTests, IcarusVerificationHalfAdder) {
   if (!TestbenchGenerator::isIcarusAvailable()) {
     GTEST_SKIP() << "Icarus Verilog not installed";
   }
@@ -481,7 +482,7 @@ TEST(TestbenchGeneratorTests, DISABLED_IcarusVerificationHalfAdder) {
   std::filesystem::remove_all(testDir);
 }
 
-TEST(TestbenchGeneratorTests, DISABLED_CompareSimulations) {
+TEST(TestbenchGeneratorTests, CompareSimulations) {
   if (!TestbenchGenerator::isIcarusAvailable()) {
     GTEST_SKIP() << "Icarus Verilog not installed";
   }
