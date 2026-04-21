@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# release-ci + ctest (default tests only). TestbenchGenerator Icarus cases are DISABLED_* gtest;
+# run them manually with --gtest_also_run_disabled_tests after install-deps (iverilog). See docs/en/BUILDING.md#tests-and-icarus.
+
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "${ROOT_DIR}"
 

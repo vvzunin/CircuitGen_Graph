@@ -8,11 +8,23 @@
 .vscode/
 .venv/
 .venv-docs/
+.cache/
 build*/
 cmake-build-*/
 CMakeLists.txt.user
 CMakeUserPresets.json
 dataset/
+example_*/
 settings.json
 *.log
+
+# Build artifacts
+*.o
+*.a
+*.exe
+
+# Generated simulation files
+*.vcd
+*_sim
+
 generation_results/*

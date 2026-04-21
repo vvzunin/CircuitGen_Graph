@@ -7,7 +7,7 @@
 
 ## Нормы поведения
 
-См. документ [`CODE_OF_CONDUCT.md`](/docs/CODE_OF_CONDUCT.md).
+См. [Contributor Covenant Code of Conduct 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/) (официальный текст; есть [переводы](https://www.contributor-covenant.org/translations), в т.ч. русский для версии 2.0).
 
 ## Начальные шаги
 

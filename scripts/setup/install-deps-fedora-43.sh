@@ -27,6 +27,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # texlive-wasysym: wasy7 metrics for \\usepackage{wasysym} in Doxygen refman (avoids mktextfm hang).
 # Doxygen 1.13+ latex/header.tex loads unicode-math and etoc ([deeplevels]) under XeTeX/LuaTeX; on Fedora these are
 # separate texlive-* RPMs and are not always pulled by texlive-collection-latexextra alone (CI refman.pdf would fail).
+# TestbenchGenerator: optional integration tests call Icarus Verilog (iverilog RPM); needed to run DISABLED_* gtest cases.
 PACKAGES=(
   bison
   clang
@@ -46,6 +47,7 @@ PACKAGES=(
   libgs
   git
   graphviz
+  iverilog
   lcov
   libasan
   libstdc++-devel
