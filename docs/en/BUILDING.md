@@ -143,7 +143,60 @@ cmake --build --preset=release-examples -j "$(nproc)"
 cmake --build --preset=release-examples --target run-examples -j "$(nproc)"
 ```
 
-The `examples/` directory contains small C++ programs: **`empty_example`** is a no-op smoke test; **`example_build_and_gate`**, **`example_export_graphml_classic`**, **`example_export_dot`**, **`example_sequential_ff`**, and **`example_export_graphml_pseudo`** show building a graph and exporting Verilog-related views (GraphML, DOT). See `examples/CMakeLists.txt`.
+The `examples/` directory contains small C++ programs: **`empty_example`** is a no-op smoke test; **`example_build_and_gate`**, **`example_export_graphml_classic`**, **`example_export_dot`**, **`example_sequential_ff`**, and **`example_export_graphml_pseudo`** show building a graph and exporting Verilog-related views (GraphML, DOT). **`example_testbench`** demonstrates the Verilog testbench generator API. See `examples/CMakeLists.txt`.
+
+### Testbench example (`example_testbench`)
+
+Build examples (same `CircuitGenGraph_BUILD_EXAMPLES=ON` flag as above), then run the testbench demo:
+
+```sh
+cmake --preset=dev
+cmake --build --preset=dev -j "$(nproc)"
+./build/dev/examples/example_testbench
+```
+
+Equivalent with helper scripts: `bash scripts/dev/build-debug.sh`, then run the binary from `build/dev/examples/`.
+
+For full gate-level simulation checks with **Icarus Verilog**, install the simulator (optional):
+
+```sh
+# Ubuntu/Debian
+sudo apt install iverilog
+
+# Fedora
+sudo dnf install iverilog
+```
+
+The per-OS **`scripts/setup/install-deps-*.sh`** scripts in this repo list **`iverilog`** so CI/dev images built with them already include Icarus unless you trimmed the package set.
+
+Source walkthrough: [`examples/example_testbench.cpp`](../../examples/example_testbench.cpp).
+
+<a id="tests-and-icarus"></a>
+
+### Unit tests and optional Icarus-backed tests
+
+Default unit tests (preset-driven):
+
+```sh
+ctest --preset=dev
+```
+
+Some **GoogleTest** cases that shell out to **Icarus** are named with the `DISABLED_` prefix so they are skipped in ordinary `ctest` runs when the toolchain is absent. Run them explicitly after installing `iverilog` (they call `GTEST_SKIP` if the simulator is not found):
+
+```sh
+# Only disabled (Icarus-related) tests
+./build/dev/test/CircuitGenGraph_tests --gtest_filter='*DISABLED_*' --gtest_also_run_disabled_tests
+
+# One representative test
+./build/dev/test/CircuitGenGraph_tests \
+  --gtest_filter='TestbenchGeneratorTests.DISABLED_IcarusVerificationAndGate' \
+  --gtest_also_run_disabled_tests
+
+# Full test binary: default + disabled
+./build/dev/test/CircuitGenGraph_tests --gtest_also_run_disabled_tests
+```
+
+For a broader local gate before push (format, spell, dev + release-ci tests — **without** enabling disabled tests by default), use [`scripts/dev/pre-push.sh`](../../scripts/dev/pre-push.sh).
 
 ### Building with MSVC
 
@@ -326,13 +379,15 @@ After linking, you typically use the graph type and vertices:
 #include <CircuitGenGraph/OrientedGraph.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphUtils.hpp>
+#include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp> // helpers in namespace AuxMethodsGraph
+#include <CircuitGenGraph/TestbenchGenerator.hpp>      // Verilog testbench generation
 ```
 
-Main types include `OrientedGraph`, input/output/gate/constant/subgraph vertices, and helpers under `CircuitGenGraph` (see Doxygen output for details).
+Main types include `OrientedGraph`, input/output/gate/constant/subgraph vertices, helpers under `CircuitGenGraph`, utilities in `AuxMethodsGraph`, and `TestbenchGenerator` for bench generation (see Doxygen / HTML docs for API details).
 
 ### Note to packagers
 
-Install rules are defined in the top-level `CMakeLists.txt` (export `CircuitGenGraph::CircuitGenGraph`, config files under `cmake/`).
+Install rules are defined in the top-level `CMakeLists.txt` and in [`cmake/install-rules.cmake`](../../cmake/install-rules.cmake) (including header layout when configured as a top-level project — see `CMAKE_INSTALL_INCLUDEDIR` and related export metadata).
 
 **Русский:** [Сборка](../ru/BUILDING.md)
 

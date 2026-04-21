@@ -26,5 +26,6 @@ add_example(example_export_graphml_classic)
 add_example(example_export_dot)
 add_example(example_sequential_ff)
 add_example(example_export_graphml_pseudo)
+add_example(example_testbench)
 
 add_folders(Example)
