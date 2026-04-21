@@ -34,7 +34,6 @@
 <a name="content_rus"></a>
 - [Правила именования переменных](#hacking)
 - [Сборка программы](#generator_build_rus)
-- [Авторы проекта](docs/AUTHORS.md)
 - [Генерация тестбенчей](#testbench)
 - [Лицензия](#license)
 
