@@ -180,7 +180,7 @@ uint32_t GraphVertexBase::getLevel() const {
 }
 
 void GraphVertexBase::removeValue() {
-  d_value = ValueStates::UndefindedState;
+  d_value = ValueStates::UndefinedState;
   if (d_inConnections.empty()) {
     return;
   }

@@ -9,6 +9,7 @@ set(SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/GraphUtils.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/DefaultAuxiliaryMethods.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/GraphVertexSequential.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/TestbenchGenerator.cpp
 )
 
 set(LIBS
@@ -23,6 +24,7 @@ set(PUBLIC_HEADERS
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphUtils.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/DefaultAuxiliaryMethods.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
+  ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/TestbenchGenerator.hpp
 )
 
 if(ENABLE_LOGGING)
