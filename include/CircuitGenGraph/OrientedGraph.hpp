@@ -21,6 +21,7 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <string_view>
 #include <unordered_set>
 #include <vector>
 
@@ -28,7 +29,6 @@
 
 #include <CircuitGenGraph/GraphMemory.hpp>
 #include <CircuitGenGraph/GraphReader.hpp>
-#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/GraphVertexBus.hpp>
@@ -45,6 +45,7 @@
 #define VertexPtr CG_Graph::GraphVertexBase *
 
 namespace CG_Graph {
+
 class GraphVertexBase;
 class GraphReader;
 class Context;
@@ -591,9 +592,11 @@ public:
   /// @param i_filename name of a file, which should be created
   /// @return flag, if file was correctly created or not
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
-  bool toVerilog(std::string i_path, std::string i_filename = "");
+  bool toVerilog(std::string i_path, std::string i_filename = "",
+                 bool i_sequentialByInstance = false);
 
-  bool toVerilogBusEnabled(std::string i_path, std::string i_filename = "");
+  bool toVerilogBusEnabled(std::string i_path, std::string i_filename = "",
+                           bool i_sequentialByInstance = false);
 
   bool toVerilogBusEnabledAsOneBit(std::string i_path,
                                    std::string i_filename = "");
@@ -802,6 +805,9 @@ protected:
            std::unordered_set<VertexPtr> &i_dsg);
 
 private:
+  static bool printSequentialModules(GraphPtr i_graph,
+                                     std::ofstream &i_fileStream);
+
   /**
    * @brief This method is a stage of generating verilog output by toVerilog()
    * toVerilogBusEnabled() or toVerilogSeparateVariables().
@@ -856,7 +862,8 @@ private:
    */
   static void
   verilogConstantWriting(GraphPtr i_graph, std::ofstream &i_fileStream,
-                         std::function<void(VertexPtr)> i_getInstance);
+                         std::function<void(VertexPtr)> i_getInstance,
+                         std::function<void(VertexPtr)> i_getDefinition);
 
   /**
    * @brief The method is a stage of generating verilog output by toVerilog()
@@ -882,7 +889,8 @@ private:
    */
   static void verilogVerticesDefining(
       GraphPtr i_graph, std::ofstream &i_fileStream,
-      std::function<void(const VertexPtr)> i_printDefinition);
+      std::function<void(VertexPtr)> i_printDefinitionSequential,
+      std::function<void(const VertexPtr)> i_printDefinitionGates);
 
   /**
    * @brief The method is a stage of generating verilog output by toVerilog()

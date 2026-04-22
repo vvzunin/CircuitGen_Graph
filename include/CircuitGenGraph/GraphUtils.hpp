@@ -11,8 +11,10 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <fmt/core.h>
 #include <map>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -23,10 +25,11 @@ namespace CG_Graph {
   std::vector<std::pair<DotTypes, std::map<std::string, std::string>>>
 #endif
 
+static constexpr size_t d_busInType = 8;
+
 /// @brief VertexTypes
 /// Enumeration of vertex types
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */ static constexpr size_t
-    d_busInType = 8;
+/** @author Fuuulkrum7 <ilka747428@gmail.com> */
 enum VertexTypes : uint8_t {
   input = 0,      ///  input vertex
   output = 5,     ///  output vertex
@@ -340,6 +343,9 @@ std::string parseVertexToString(VertexTypes vertex);
  */
 std::string parseGateToString(Gates gate);
 
+std::string parseSequentialToString(SequentialTypes type);
+std::vector<std::string_view> parseSequentialToInputs(SequentialTypes type);
+
 /**
  * @brief Looks for a std::pair with a given key (pair - <key, value>).
  * Most of all functions in GraphUtils use arrays of pairs, and looking
@@ -401,7 +407,59 @@ static std::pair<Gates, std::string_view> gateToString[] = {
     {Gates::GateXor, "xor"},        {Gates::GateXnor, "xnor"},
     {Gates::GateNot, "not"},        {Gates::GateBuf, "buf"},
     {Gates::GateSlice, "busSlice"}, {Gates::GateDefault, "ERROR"}};
-
+static std::pair<SequentialTypes, std::string_view> sequentialToString[]{
+    {affr, "affr"},       {affre, "affre"},   {affrs, "affrs"},
+    {affrse, "affrse"},   {latch, "latch"},   {latchr, "latchr"},
+    {latchc, "latchc"},   {latchs, "latchs"}, {latchrs, "latchrs"},
+    {latchcs, "latchcs"}, {ff, "ff"},         {ffe, "ffe"},
+    {ffr, "ffr"},         {ffc, "ffc"},       {ffs, "ffs"},
+    {ffre, "ffre"},       {ffce, "ffce"},     {ffse, "ffse"},
+    {ffrs, "ffrs"},       {ffcs, "ffcs"},     {ffrse, "ffrse"},
+    {ffcse, "ffcse"},     {nff, "nff"},       {nffe, "nffe"},
+    {nffr, "nffr"},       {nffc, "nffc"},     {nffs, "nffs"},
+    {nffre, "nffre"},     {nffce, "nffce"},   {nffse, "nffse"},
+    {nffrs, "nffrs"},     {nffcs, "nffcs"},   {nffrse, "nffrse"},
+    {nffcse, "nffcse"},   {naffrs, "naffrs"}, {naffrse, "naffrse"},
+    {naffr, "naffr"},     {naffre, "naffre"}};
+static std::pair<SequentialTypes, std::vector<std::string_view>>
+    sequentialToInputList[38] = {
+        {affr, {"data", "clk", "rst_n"}},
+        {affre, {"data", "clk", "en", "rst_n"}},
+        {affrs, {"data", "clk", "rst_n", "set"}},
+        {affrse, {"data", "clk", "en", "rst_n", "set"}},
+        {latch, {"data", "en"}},
+        {latchr, {"data", "en", "rst_n"}},
+        {latchc, {"data", "en", "clr"}},
+        {latchs, {"data", "en", "set"}},
+        {latchrs, {"data", "en", "rst_n", "set"}},
+        {latchcs, {"data", "en", "clr", "set"}},
+        {ff, {"data", "clk"}},
+        {ffe, {"data", "clk", "en"}},
+        {ffr, {"data", "clk", "rst_n"}},
+        {ffc, {"data", "clk", "clr"}},
+        {ffs, {"data", "clk", "set"}},
+        {ffre, {"data", "clk", "en", "rst_n"}},
+        {ffce, {"data", "clk", "en", "clr"}},
+        {ffse, {"data", "clk", "en", "set"}},
+        {ffrs, {"data", "clk", "rst_n", "set"}},
+        {ffcs, {"data", "clk", "clr", "set"}},
+        {ffrse, {"data", "clk", "en", "rst_n", "set"}},
+        {ffcse, {"data", "clk", "en", "clr", "set"}},
+        {nff, {"data", "clk"}},
+        {nffe, {"data", "clk", "en"}},
+        {nffr, {"data", "clk", "rst_n"}},
+        {nffc, {"data", "clk", "clr"}},
+        {nffs, {"data", "clk", "set"}},
+        {nffre, {"data", "clk", "en", "rst_n"}},
+        {nffce, {"data", "clk", "en", "clr"}},
+        {nffse, {"data", "clk", "en", "set"}},
+        {nffrs, {"data", "clk", "rst_n", "set"}},
+        {nffcs, {"data", "clk", "clr", "set"}},
+        {nffrse, {"data", "clk", "en", "rst_n", "set"}},
+        {nffcse, {"data", "clk", "en", "clr", "set"}},
+        {naffrs, {"data", "clk", "rst_n", "set"}},
+        {naffrse, {"data", "clk", "en", "rst_n", "set"}},
+        {naffr, {"data", "clk", "rst_n"}},
+        {naffre, {"data", "clk", "en", "rst_n"}}};
 } // namespace GraphUtils
-
 } // namespace CG_Graph
