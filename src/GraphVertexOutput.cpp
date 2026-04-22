@@ -2,8 +2,13 @@
  * @file GraphVertexOutput.cpp
  * @brief Реализация вершины-выхода графа.
  */
+#include "CircuitGenGraph/GraphUtils.hpp"
 #include "CircuitGenGraph/GraphVertexBase.hpp"
 #include <CircuitGenGraph/GraphVertex.hpp>
+#include <algorithm>
+#include <cstddef>
+#include <sstream>
+#include <string>
 
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
@@ -11,13 +16,14 @@
 
 namespace CG_Graph {
 
-GraphVertexOutput::GraphVertexOutput(GraphPtr i_baseGraph) :
-    GraphVertexBase(VertexTypes::output, i_baseGraph) {
+GraphVertexOutput::GraphVertexOutput(GraphPtr i_baseGraph, bool i_isBus) :
+    GraphVertexBase(i_isBus ? VertexTypes::outputBus : output, i_baseGraph) {
 }
 
 GraphVertexOutput::GraphVertexOutput(std::string_view i_name,
-                                     GraphPtr i_baseGraph) :
-    GraphVertexBase(VertexTypes::output, i_name, i_baseGraph) {
+                                     GraphPtr i_baseGraph, bool i_isBus) :
+    GraphVertexBase(i_isBus ? VertexTypes::outputBus : output, i_name,
+                    i_baseGraph) {
 }
 
 char GraphVertexOutput::updateValue() {
@@ -82,5 +88,25 @@ void GraphVertexOutput::log(el::base::type::ostream_t &os) const {
   os << "Vertex Hash: " << "NuN" << "\n";
 }
 #endif
+GraphVertexBusOutput::GraphVertexBusOutput(std::string_view i_name,
+                                           GraphPtr i_baseGraph,
+                                           size_t i_width) :
+    GraphVertexOutput(i_name, i_baseGraph, true), GraphVertexBus(i_width) {
+}
+
+std::string GraphVertexBusOutput::toOneBitVerilog() const {
+  std::stringstream res;
+  size_t minWidth = -1;
+  if (!d_inConnections.empty())
+    minWidth = getBusPointer(
+                   (*std::min_element(d_inConnections.begin(),
+                                      d_inConnections.end(), hasSmallerWidth)))
+                   ->getWidth();
+  for (size_t i = 0; i < std::min(minWidth, getWidth()); ++i)
+    res << "assign " << getName() << "_" << std::to_string(i) << " = "
+        << d_inConnections.back()->getName() << "_" << std::to_string(i)
+        << ";\n\t";
+  return res.str();
+}
 
 } // namespace CG_Graph

@@ -1,9 +1,10 @@
+#include <CircuitGenGraph/GraphVertex.hpp>
+
+#include <gtest/gtest.h>
+
 #include <filesystem>
 #include <fstream>
 #include <string>
-
-#include <CircuitGenGraph/GraphVertex.hpp>
-#include <gtest/gtest.h>
 
 using namespace CG_Graph;
 

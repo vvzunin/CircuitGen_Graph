@@ -1,12 +1,15 @@
 #include "CircuitGenGraph/GraphUtils.hpp"
-#include <fmt/core.h>
-#include <gtest/gtest.h>
 #include <CircuitGenGraph/GraphReader.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
+
+#include <gtest/gtest.h>
+#include <fmt/core.h>
 #include <lorina/lorina.hpp>
+
 #include <memory>
 #include <string>
 #include <string_view>
+
 using namespace CG_Graph;
 
 constexpr std::string_view simpleReadingFilename = "simpleReading";
@@ -30,7 +33,6 @@ TEST(VerilogReadingTest, SimplestGraphsIsRead) {
   GraphPtr graph = context.d_graphs[simpleReadingFilename.data()];
   EXPECT_EQ(graph->getGatesCount()[GateAnd], 1);
   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
-
   VertexPtr clk = graphCreated->addInput();
   VertexPtr someInput = graphCreated->addInput();
   VertexPtr gate = graphCreated->addGate(GateAnd);

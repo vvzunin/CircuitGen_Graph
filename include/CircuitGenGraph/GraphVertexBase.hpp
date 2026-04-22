@@ -33,7 +33,7 @@ namespace CG_Graph {
 
 class OrientedGraph;
 class GraphVertexSequential;
-
+class GraphVertexBus;
 /// @brief VertexUtils
 /// Namespace containing utility functions for working with vertices
 /// @author Vladimir Zunin <vzunin@hse.ru>
@@ -143,6 +143,7 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
 
 class GraphVertexBase {
   friend class OrientedGraph;
+  friend class GraphVertexBus;
 
 public:
   /// @brief resetes counter of unique id-s for vertices
@@ -243,6 +244,7 @@ public:
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexTypes getType() const;
+  VertexTypes getFullType() const;
 
   // Get для типа вершины в фомате строки
 
@@ -553,7 +555,6 @@ public:
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual std::string toVerilog() const;
-
   /// @brief calls toVerilog and allows to write vertex as string
   /// to a stream
   /// @author Fuuulkrum7 <ilka747428@gmail.com>
@@ -572,7 +573,8 @@ public:
   /// or false if not
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual bool isSubgraphBuffer() const { return false; }
-
+  virtual bool
+  isBus() const; // или можно сделать метод для получения *ширины* вершины
   /// @brief log Used for easylogging++
   /// @param os Stream for easylogging
 #ifdef LOGFLAG
@@ -646,10 +648,10 @@ protected:
 
   /** @author rainbowkittensss <viktorrrrry20@gmail.com> */
   bool removeVertexToInConnections(VertexPtr i_vert);
+
   std::vector<VertexPtr> d_inConnections;
   std::vector<VertexPtr> d_outConnections;
   GraphPtrWeak d_baseGraph;
-
   std::string_view d_name;
 
   size_t d_hashed = 0;

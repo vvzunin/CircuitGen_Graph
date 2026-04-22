@@ -13,7 +13,10 @@
 #pragma once
 #include <array>
 #include <atomic>
+#include <cstddef>
 #include <ctime>
+#include <fstream>
+#include <functional>
 #include <map>
 #include <memory>
 #include <set>
@@ -26,7 +29,9 @@
 #include <CircuitGenGraph/GraphMemory.hpp>
 #include <CircuitGenGraph/GraphReader.hpp>
 #include <CircuitGenGraph/GraphUtils.hpp>
+#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
+#include <CircuitGenGraph/GraphVertexBus.hpp>
 
 #ifdef LOGFLAG
 #include "easyloggingpp/easylogging++.h"
@@ -40,12 +45,13 @@
 #define VertexPtr CG_Graph::GraphVertexBase *
 
 namespace CG_Graph {
-
 class GraphVertexBase;
 class GraphReader;
 class Context;
+class GraphVertexBus;
 
-/// \class OrientedGraph
+/// class OrientedGraph
+///
 /// @param d_countNewGraphInstance Static variable to count new graph
 /// instances
 /// @param d_countGraph Current instance counter. Is used for setting a
@@ -250,7 +256,7 @@ public:
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr addInput(const std::string &i_name = "");
-
+  VertexPtr addInputBus(const std::string &i_name = "", size_t width = 1);
   /// @brief addOutput
   /// Adds an output vertex to the current graph
   /// @param i_name The name of the output vertex to be added
@@ -266,7 +272,7 @@ public:
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr addOutput(const std::string &i_name = "");
-
+  VertexPtr addOutputBus(const std::string &i_name = "", size_t width = 1);
   /// @brief addConst
   /// Adds a constant vertex to the current graph
   /// @param i_value The value of the constant vertex to be added
@@ -284,7 +290,7 @@ public:
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr addConst(const char &i_value, const std::string &i_name = "");
-
+  VertexPtr addConstBus(const std::string &i_name = "", size_t width = 1);
   /// @brief addGate
   /// Adds a gate vertex to the current graph
   /// @param i_gate The type of the gate vertex to be added
@@ -301,7 +307,10 @@ public:
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr addGate(const Gates &i_gate, const std::string &i_name = "");
-
+  VertexPtr addGateBus(const Gates &i_gate, const std::string &i_name = "",
+                       size_t width = 1);
+  VertexPtr addSliceBus(VertexPtr i_bus, size_t begin, size_t i_width,
+                        const std::string &i_name = "");
   /// @brief addSequential Adds a sequential vertex to the current graph.
   /// @param i_type The type of the sequential to be added;
   /// can be flip-flop (ff) or latch only
@@ -321,7 +330,9 @@ public:
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, const std::string &i_name = "");
-
+  VertexPtr addSequentialBus(const SequentialTypes &i_type, VertexPtr i_clk,
+                             VertexPtr i_data, const std::string &i_name = "",
+                             size_t i_width = 1);
   /// @brief addSequential Adds a sequential vertex to the current graph.
   /// @param i_type The type of the sequential to be added;
   /// can be any type that needs one additional signal.
@@ -345,7 +356,10 @@ public:
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_wire,
                           const std::string &i_name = "");
-
+  VertexPtr addSequentialBus(const SequentialTypes &i_type, VertexPtr i_clk,
+                             VertexPtr i_data, VertexPtr i_wire,
+                             const std::string &i_name = "",
+                             size_t i_width = 1);
   /// @brief addSequential Adds a sequential vertex to the current graph.
   /// @param i_type The type of the sequential to be added;
   /// can be flip-flop (ff) or latch only
@@ -371,7 +385,10 @@ public:
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_wire1,
                           VertexPtr i_wire2, const std::string &i_name = "");
-
+  VertexPtr addSequentialBus(const SequentialTypes &i_type, VertexPtr i_clk,
+                             VertexPtr i_data, VertexPtr i_wire1,
+                             VertexPtr i_wire2, const std::string &i_name = "",
+                             size_t i_width = 1);
   /// @brief addSequential Adds a sequential vertex to the current graph.
   /// Use with FF only!
   /// @param i_clk CLK signal
@@ -397,7 +414,10 @@ public:
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_rst, VertexPtr i_set,
                           VertexPtr i_en, const std::string &i_name = "");
-
+  VertexPtr addSequentialBus(const SequentialTypes &i_type, VertexPtr i_clk,
+                             VertexPtr i_data, VertexPtr i_rst, VertexPtr i_set,
+                             VertexPtr i_en, const std::string &i_name = "",
+                             size_t i_width = 1);
   /// @brief addSubGraph
   /// Adds a subgraph to the current graph
   /// @param i_subGraph A shared pointer to the subgraph to be added
@@ -572,6 +592,11 @@ public:
   /// @return flag, if file was correctly created or not
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool toVerilog(std::string i_path, std::string i_filename = "");
+
+  bool toVerilogBusEnabled(std::string i_path, std::string i_filename = "");
+
+  bool toVerilogBusEnabledAsOneBit(std::string i_path,
+                                   std::string i_filename = "");
 
   /// @brief
   /// @return
@@ -777,6 +802,100 @@ protected:
            std::unordered_set<VertexPtr> &i_dsg);
 
 private:
+  /**
+   * @brief This method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_path path for output verilog file
+   * @param i_filename file name
+   *@return true if file created correctly, false otherwise
+   */
+  static bool verilogFileCreating(GraphPtr i_graph, std::string i_path,
+                                  std::string i_filename,
+                                  std::ofstream &i_fileStream);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_printPin function, defined in toVerilog..(), print correct
+   * name of vertex to i_fileStream
+   *
+   */
+  static void verilogInoutsWriting(GraphPtr i_graph,
+                                   std::ofstream &i_fileStream,
+                                   std::function<void(VertexPtr)> i_printPin);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_printFunction function, defined in toVerilog..(), print all
+   * vertices of type (i_usedType from VertexTypes) to i_fileStream
+   */
+  static void
+  verilogVerticesDeclaration(GraphPtr i_graph, std::ofstream &i_fileStream,
+                             std::function<void(std::vector<GraphVertexBase *>,
+                                                VertexTypes i_usedType)>
+                                 i_printFunction);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_getInstance function, defined in toVerilog..(),
+   * print correct constant instance to i_fileStream
+   */
+  static void
+  verilogConstantWriting(GraphPtr i_graph, std::ofstream &i_fileStream,
+                         std::function<void(VertexPtr)> i_getInstance);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_path path to create verilog files for subgraphs
+   * @return true if all files created correctly, false otherwise
+   */
+  static bool verilogSubgraphWriting(GraphPtr i_graph,
+                                     std::ofstream &i_fileStream,
+                                     std::string i_path);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_printDefinition function, defined in toVerilog..(),
+   * print correct definitions to i_fileStream
+   */
+  static void verilogVerticesDefining(
+      GraphPtr i_graph, std::ofstream &i_fileStream,
+      std::function<void(const VertexPtr)> i_printDefinition);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @return true if file saved correctly, false otherwise
+   */
+  static bool verilogFinalOperations(GraphPtr i_graph,
+                                     std::ofstream &i_fileStream);
+
+private:
   static std::atomic_size_t d_countNewGraphInstance;
   static std::atomic_size_t d_countGraph;
 
@@ -786,7 +905,6 @@ private:
     HC_IN_PROGRESS = 1,
     HC_CALC = 2
   };
-
   // used for quick gates count
   std::map<Gates, size_t> d_gatesCount = {
       {Gates::GateAnd, 0}, {Gates::GateNand, 0}, {Gates::GateOr, 0},
