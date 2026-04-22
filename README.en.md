@@ -24,9 +24,13 @@ ctest --preset=dev
 
 Docker image paths for local CI-like builds use the `circuitgen/graph/...` prefix (see `scripts/docker/docker-paths.sh`).
 
+## Testbench generation
+
+The library can emit Verilog testbenches for verification. See **[docs/en/BUILDING.md](docs/en/BUILDING.md#tests-and-icarus)** (Russian: [`docs/ru/BUILDING.md`](docs/ru/BUILDING.md#tests-and-icarus)) for the **`example_testbench`** walkthrough, `CTest` / GoogleTest usage, and optional **Icarus Verilog** (`iverilog`) setup.
+
 ## Installing dependencies
 
-Use the per-OS scripts in **[`scripts/setup/`](scripts/setup/)** (same as CI): e.g. [`install-deps-ubuntu-24.04.sh`](scripts/setup/install-deps-ubuntu-24.04.sh), [`install-deps-debian-13.sh`](scripts/setup/install-deps-debian-13.sh), Fedora variants — run as root: `sudo bash scripts/setup/install-deps-ubuntu-24.04.sh`.
+Use the per-OS scripts in **[scripts/setup/](scripts/setup/)** (same as CI): e.g. [`install-deps-ubuntu-24.04.sh`](scripts/setup/install-deps-ubuntu-24.04.sh), [`install-deps-debian-13.sh`](scripts/setup/install-deps-debian-13.sh), Fedora variants — run as root: `sudo bash scripts/setup/install-deps-ubuntu-24.04.sh`.
 
 Details: [BUILDING.md](docs/en/BUILDING.md), [SCRIPTS.md](docs/en/SCRIPTS.md).
 

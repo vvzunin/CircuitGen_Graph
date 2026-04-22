@@ -21,5 +21,11 @@ function(add_example NAME)
 endfunction()
 
 add_example(empty_example)
+add_example(example_build_and_gate)
+add_example(example_export_graphml_classic)
+add_example(example_export_dot)
+add_example(example_sequential_ff)
+add_example(example_export_graphml_pseudo)
+add_example(example_testbench)
 
 add_folders(Example)

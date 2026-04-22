@@ -26,6 +26,8 @@ std::string loadStringFileSubGraph(const std::filesystem::path &p) {
 }
 
 TEST(TestConstructorWithoutIName, WithoutDefaulParametrs) {
+  CG_Graph::GraphVertexBase::resetCounter();
+  CG_Graph::OrientedGraph::resetCounter();
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSubGr);
   std::string graphNum = std::to_string(0);
@@ -39,6 +41,8 @@ TEST(TestConstructorWithoutIName, WithoutDefaulParametrs) {
 }
 
 TEST(TestConstructorWithoutIName, SubGraphWithDefaultInputParametrs) {
+  CG_Graph::GraphVertexBase::resetCounter();
+  CG_Graph::OrientedGraph::resetCounter();
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
   GraphVertexSubGraph subGraph1(graphPtr1, graphPtr2);

@@ -16,6 +16,8 @@ using namespace CG_Graph;
 GraphPtr memoryOwnerOutputGr = std::make_shared<OrientedGraph>();
 
 TEST(TestConstructorWithoutIName, OutputWithoutDefaultInputParametrs) {
+  CG_Graph::GraphVertexBase::resetCounter();
+  CG_Graph::OrientedGraph::resetCounter();
   GraphVertexOutput output(memoryOwnerOutputGr);
   std::string graphNum = std::to_string(0);
   EXPECT_EQ(output.getType(), VertexTypes::output);
@@ -28,6 +30,8 @@ TEST(TestConstructorWithoutIName, OutputWithoutDefaultInputParametrs) {
 }
 
 TEST(TestConstructorWithoutIName, OutputWithDefaultInputParametrs) {
+  CG_Graph::GraphVertexBase::resetCounter();
+  CG_Graph::OrientedGraph::resetCounter();
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
   std::string graphNum = std::to_string(0);
   GraphVertexOutput output(graphPtr);

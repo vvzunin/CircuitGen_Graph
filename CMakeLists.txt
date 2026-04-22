@@ -33,6 +33,8 @@ option(ENABLE_LOGGING "Enable logging" OFF)
 option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
 
 # Подключаем папку с исходниками (новый формат)
+
+# Подключаем папку с исходниками (новый формат)
 add_subdirectory(src)
 
 if(ENABLE_COVERAGE)
