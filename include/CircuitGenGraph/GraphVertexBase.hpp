@@ -290,7 +290,7 @@ public:
   /// @endcode
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
-  std::string getName() const;
+  virtual std::string getName() const;
   /// @brief getName
   /// Returns concatenation of the name of the vertex and i_prefix
   /// @return The concatenation of name of the vertex and i_prefix
@@ -531,6 +531,8 @@ public:
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   virtual size_t calculateHash();
+
+  VertexPtr minWidthVertex() const;
 
   /// @brief toVerilog
   /// Generates Verilog code for the vertex

@@ -11,6 +11,7 @@
  */
 #pragma once
 
+#include "CircuitGenGraph/GraphUtils.hpp"
 #include "CircuitGenGraph/GraphVertexBus.hpp"
 #include <cstddef>
 #include <string>
@@ -522,10 +523,14 @@ public:
   /// @param i_wire1 EN or RST or CLR
   /// @param i_wire2 RST or CLR or SET
   /// @param i_baseGraph
-  GraphVertexSequential(SequentialTypes i_type, VertexPtr i_clk,
-                           VertexPtr i_data,VertexPtr i_wire1,
-                           VertexPtr i_wire2, GraphPtr i_baseGraph,
-                           std::string_view i_name, bool i_isBus = false);
+  GraphVertexSequential(SequentialTypes i_type,
+                        VertexPtr i_clk,
+                        VertexPtr i_data,
+                        VertexPtr i_wire1,
+                        VertexPtr i_wire2,
+                        GraphPtr i_baseGraph,
+                        std::string_view i_name,
+                        bool i_isBus = false);
 
   /// @brief GraphVertexSequential
   /// @param i_type type of Sequential - (a/n/an)ff(r/c)se, 
@@ -568,6 +573,18 @@ public:
   virtual std::string
   toVerilog() const override; // помечен виртуальным потому что у этого класса
                               // есть потомок-шина со своим методом
+
+  virtual std::string getVerilogInstance();
+  static std::string
+  getSequentialString(SequentialTypes i_type, std::string_view i_name,
+                      std::vector<std::string_view> i_inputs);
+
+  static std::string getVerilogInstance(const VertexPtr vertex,
+                                        std::string_view i_inputDataName,
+                                        std::string_view i_qOutputName,
+                                        std::string_view i_dataName = "data",
+                                        std::string_view i_qName = "q",
+                                        std::string_view i_instanceName = "");
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   DotReturn toDOT() override;
 
@@ -602,8 +619,6 @@ protected:
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void setSignalByType(VertexPtr i_wire, SequentialTypes i_type,
                        unsigned &factType);
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
-  void formatAlwaysBegin(std::string &verilog) const;
 
 protected:
   SequentialTypes d_seqType;

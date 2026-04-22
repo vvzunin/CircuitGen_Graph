@@ -2,20 +2,14 @@ add_definitions((-w))
 
 add_library(Lorina INTERFACE)
 target_include_directories(Lorina SYSTEM INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lorina/include>
-    $<INSTALL_INTERFACE:include>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lorina/include>
+  $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(Lorina INTERFACE fmt)
 
 set(LORINA_EXAMPLES OFF CACHE BOOL "Disable examples build")
 
 add_subdirectory(lorina)
-
-# install(
-#   TARGETS Lorina
-#   EXPORT CircuitGenGraphTargets
-#   INCLUDES DESTINATION "${CircuitGenGraph_INSTALL_CMAKEDIR}"
-# )
 
 if(ENABLE_LOGGING)
   add_library(
@@ -26,4 +20,3 @@ if(ENABLE_LOGGING)
 endif()
 
 remove_definitions(-w)
-

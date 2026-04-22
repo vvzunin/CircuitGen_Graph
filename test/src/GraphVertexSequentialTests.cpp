@@ -1,6 +1,15 @@
+#include "CircuitGenGraph/GraphUtils.hpp"
+#include "CircuitGenGraph/GraphVertexBase.hpp"
+#include "CircuitGenGraph/OrientedGraph.hpp"
 #include <CircuitGenGraph/GraphVertex.hpp>
+#include <CircuitGenGraph/SequentialVerilogStorage.hpp>
 
 #include <gtest/gtest.h>
+#include <fmt/format.h>
+
+#include <memory>
+#include <string>
+
 #ifdef LOGFLAG
 #include "easylogging++Init.hpp"
 #endif
@@ -62,9 +71,12 @@ TEST(SequentialTests, TestSimpleLatch) {
   auto *data = graph->addInput("data");
   auto *seq = graph->addSequential(latch, en, data, "q");
 
-  EXPECT_EQ(seq->toVerilog(), "always @(*) begin\n"
-                              "\t\tif (en) q <= data;\n"
-                              "\tend\n");
+  EXPECT_EQ(seq->toVerilog(),
+            "// EN signal \"en\" - when it is in a logical one state, "
+            "trigger writes data to the output\n"
+            "\talways @(*) begin\n"
+            "\t\tif (en) q <= data;\n"
+            "\tend\n");
 
   auto *out = graph->addOutput("res");
   graph->addEdge(seq, out);
@@ -82,10 +94,15 @@ TEST(SequentialTests, TestLatchRstN) {
   auto *rst = graph->addInput("rst");
   auto *seq = graph->addSequential(latchr, en, data, rst, "q");
 
-  EXPECT_EQ(seq->toVerilog(), "always @(*) begin\n"
-                              "\t\tif (!rst) q <= 1'b0;\n"
-                              "\t\telse if (en) q <= data;\n"
-                              "\tend\n");
+  EXPECT_EQ(seq->toVerilog(),
+            "// RST signal \"rst\" - when it is in a logical zero "
+            "state, trigger writes logical zero to the output\n"
+            "\t// EN signal \"en\" - when it is in a logical one state, "
+            "trigger writes data to the output\n"
+            "\talways @(*) begin\n"
+            "\t\tif (!rst) q <= 1'b0;\n"
+            "\t\telse if (en) q <= data;\n"
+            "\tend\n");
 
   auto *out = graph->addOutput("res");
   graph->addEdge(seq, out);
@@ -110,11 +127,18 @@ TEST(SequentialTests, TestLatchClrSet) {
   auto *set = graph->addInput("set");
   auto *seq = graph->addSequential(latchcs, en, data, clr, set, "q");
 
-  EXPECT_EQ(seq->toVerilog(), "always @(*) begin\n"
-                              "\t\tif (clr) q <= 1'b0;\n"
-                              "\t\telse if (set) q <= 1'b1;\n"
-                              "\t\telse if (en) q <= data;\n"
-                              "\tend\n");
+  EXPECT_EQ(seq->toVerilog(),
+            "// CLR signal \"clr\" - when it is in a logical one "
+            "state, trigger writes logical zero to the output\n"
+            "\t// SET signal \"set\" - when it is in a logical one "
+            "state, trigger writes logical one to the output\n"
+            "\t// EN signal \"en\" - when it is in a logical one state, "
+            "trigger writes data to the output\n"
+            "\talways @(*) begin\n"
+            "\t\tif (clr) q <= 1'b0;\n"
+            "\t\telse if (set) q <= 1'b1;\n"
+            "\t\telse if (en) q <= data;\n"
+            "\tend\n");
 
   auto *out = graph->addOutput("res");
   graph->addEdge(seq, out);
@@ -134,11 +158,18 @@ TEST(SequentialTests, TestFullTrigger) {
   auto *en = graph->addInput("en");
   auto *seq = graph->addSequential(ffrse, clk, data, rst, set, en, "q");
 
-  EXPECT_EQ(seq->toVerilog(), "always @(posedge clk) begin\n"
-                              "\t\tif (!rst) q <= 1'b0;\n"
-                              "\t\telse if (set) q <= 1'b1;\n"
-                              "\t\telse if (en) q <= data;\n"
-                              "\tend\n");
+  EXPECT_EQ(seq->toVerilog(),
+            "// RST signal \"rst\" - when it is in a logical zero state, "
+            "trigger writes logical zero to the output\n"
+            "\t// SET signal \"set\" - when it is in a logical one state, "
+            "trigger writes logical one to the output\n"
+            "\t// EN signal \"en\" - when it is in a logical one state, "
+            "trigger writes data to the output\n"
+            "\talways @(posedge clk) begin\n"
+            "\t\tif (!rst) q <= 1'b0;\n"
+            "\t\telse if (set) q <= 1'b1;\n"
+            "\t\telse if (en) q <= data;\n"
+            "\tend\n");
 
   auto *out = graph->addOutput("res");
   graph->addEdge(seq, out);
@@ -147,6 +178,10 @@ TEST(SequentialTests, TestFullTrigger) {
   const std::string fileName = "testSeq5.v";
   graph->toVerilog("./", fileName);
   testFile(fileName, TestData::SEQ_5_TEST);
+}
+unsigned short countSignalsInType(SequentialTypes i_type) {
+  return 1 + bool(i_type & ff) + bool(i_type & RST) + bool(i_type & CLR) +
+         bool(i_type & EN) + bool(i_type & SET);
 }
 
 TEST(SequentialTests, TestNegedgeTriggerAsyncRstN_Set) {
@@ -158,11 +193,18 @@ TEST(SequentialTests, TestNegedgeTriggerAsyncRstN_Set) {
   auto *set = graph->addInput("set");
   auto *seq = graph->addSequential(naffrs, clk, data, rst_n, set, "q");
 
-  EXPECT_EQ(seq->toVerilog(), "always @(negedge clk or negedge rst_n) begin\n"
-                              "\t\tif (!rst_n) q <= 1'b0;\n"
-                              "\t\telse if (set) q <= 1'b1;\n"
-                              "\t\telse q <= data;\n"
-                              "\tend\n");
+  EXPECT_EQ(seq->toVerilog(),
+            "// RST signal \"rst_n\" - when it is in a logical zero "
+            "state, trigger writes logical zero to the output\n"
+            "\t// RST signal \"rst_n\" is async - always block enables on "
+            "negedge of RST\n"
+            "\t// SET signal \"set\" - when it is in a logical one state, "
+            "trigger writes logical one to the output\n"
+            "\talways @(negedge clk or negedge rst_n) begin\n"
+            "\t\tif (!rst_n) q <= 1'b0;\n"
+            "\t\telse if (set) q <= 1'b1;\n"
+            "\t\telse q <= data;\n"
+            "\tend\n");
 
   auto *out = graph->addOutput("res");
   graph->addEdge(seq, out);
@@ -182,10 +224,17 @@ TEST(SequentialTests, TestTriggerHashCycle) {
   auto *en = graph->addInput("en");
   auto *seq = graph->addSequential(affre, clk, data, en, rst_n, "q");
 
-  EXPECT_EQ(seq->toVerilog(), "always @(posedge clk or negedge rst_n) begin\n"
-                              "\t\tif (!rst_n) q <= 1'b0;\n"
-                              "\t\telse if (en) q <= data;\n"
-                              "\tend\n");
+  EXPECT_EQ(seq->toVerilog(),
+            "// RST signal \"rst_n\" - when it is in a logical zero state, "
+            "trigger writes logical zero to the output\n"
+            "\t// RST signal \"rst_n\" is async - always block enables on "
+            "negedge of RST\n"
+            "\t// EN signal \"en\" - when it is in a logical one state, "
+            "trigger writes data to the output\n"
+            "\talways @(posedge clk or negedge rst_n) begin\n"
+            "\t\tif (!rst_n) q <= 1'b0;\n"
+            "\t\telse if (en) q <= data;\n"
+            "\tend\n");
 
   auto *out = graph->addOutput("res");
   graph->addEdge(seq, out);
@@ -248,6 +297,14 @@ TEST(SequentialTests, TestTriggerAsyncRstN_En) {
   EXPECT_TRUE(graph->calculateHash().size());
 }
 
+// TEST(SequentialToVerilog, VerilogByInstance) {
+//   GraphPtr graph = std::make_shared<OrientedGraph>();
+//   VertexPtr clkInput = graph->addInput();
+//   VertexPtr enInput = graph->addInput();
+//   VertexPtr rstInput = graph->addInput();
+//   VertexPtr clrInput = graph->addInput();
+//   VertexPtr setInput = graph->addInput();
+// }
 TEST(ErrorOutputTest, CapturesCerr) {
   std::stringstream buffer;
   // перенаправляем cerr
