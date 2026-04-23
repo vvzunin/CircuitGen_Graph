@@ -2,8 +2,8 @@ add_definitions((-w))
 
 add_library(Lorina INTERFACE)
 target_include_directories(Lorina SYSTEM INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lorina/include>
-    $<INSTALL_INTERFACE:include>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lorina/include>
+  $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(Lorina INTERFACE fmt::fmt)
 

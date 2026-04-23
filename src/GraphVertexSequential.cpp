@@ -20,15 +20,15 @@
 
 namespace CG_Graph {
 
-inline bool GraphVertexSequential::isFF() const {
+bool GraphVertexSequential::isFF() const {
   return d_seqType & ff;
 }
 
-inline bool GraphVertexSequential::isAsync() const {
+bool GraphVertexSequential::isAsync() const {
   return d_seqType & ASYNC;
 }
 
-inline bool GraphVertexSequential::isNegedge() const {
+bool GraphVertexSequential::isNegedge() const {
   return d_seqType & NEGEDGE;
 }
 
@@ -338,9 +338,10 @@ DotReturn GraphVertexSequential::toDOT() {
 
   DotReturn dot;
 
+  const std::string kind = isFF() ? "ff" : "latch";
   dot.push_back({DotTypes::DotGate,
                  {{"name", getName()},
-                  {"label", getName()},
+                  {"label", fmt::format("{} ({})", getName(), kind)},
                   {"level", std::to_string(d_level)}}});
 
   for (VertexPtr ptr: d_inConnections) {

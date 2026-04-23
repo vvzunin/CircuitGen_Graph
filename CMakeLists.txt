@@ -35,6 +35,8 @@ option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
 find_package(fmt REQUIRED)
 
 # Подключаем папку с исходниками (новый формат)
+
+# Подключаем папку с исходниками (новый формат)
 add_subdirectory(src)
 
 if(ENABLE_COVERAGE)
@@ -54,6 +56,9 @@ if(ENABLE_LOGGING)
     easylogging++
   )
 endif()
+
+include_directories(lib)
+link_directories(lib)
 
 add_subdirectory(lib)
 

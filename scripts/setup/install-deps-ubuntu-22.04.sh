@@ -32,6 +32,7 @@ EOF
 
 # Docs: Doxygen + m.css + LaTeX PDF need xelatex + DejaVu (fontspec in docs/doxygen-cyrillic.sty), Ghostscript (libgs),
 # and texlive-lang-cyrillic (t2aenc.def) when Doxygen emits Russian LaTeX with [T2A]{fontenc} (also if pdfLaTeX is used).
+# TestbenchGenerator: optional integration tests call Icarus Verilog (iverilog); needed to run DISABLED_* gtest cases.
 PACKAGES=(
   bison
   build-essential
@@ -49,6 +50,7 @@ PACKAGES=(
   libgs9
   git
   graphviz
+  iverilog
   lcov
   libcapture-tiny-perl
   libdatetime-perl

@@ -14,17 +14,37 @@
 
 #include "fmt/core.h"
 
-/// @todo ToEnum
-/// @todo if need LineReader
-/// @todo if need CopyDirectory
+/*!
+ * \file AuxiliaryMethods.hpp
+ *
+ * \~english
+ * @todo ToEnum
+ * @todo if need LineReader
+ * @todo if need CopyDirectory
+ *
+ * \~russian
+ * @todo ToEnum
+ * @todo если нужен LineReader (построчное чтение)
+ * @todo если нужен CopyDirectory (копирование директорий)
+ */
 
-/// namespace CG_Graph::AuxMethodsGraph was created to organize a set
-/// of auxiliary functions and methods that can be used
-/// in various parts of a software project.
-/// Functions: print to an string stream, used to replace % to str,
-/// format, needed for for backward compatibility (now fmt is used)
-/// </summary>
-
+/*!
+ * <summary>
+ * \~english
+ * @brief namespace CG_Graph::AuxMethodsGraph was created to organize a set
+ * of auxiliary functions and methods that can be used in various parts of a
+ * software project.
+ * Functions: print to an string stream, used to replace % to str,
+ * format, needed for for backward compatibility (now fmt is used)
+ *
+ * \~russian
+ * @brief Пространство имен CG_Graph::AuxMethodsGraph создано для
+ * организации набора вспомогательных функций и методов, которые могут
+ * применяться в различных частях программного проекта.
+ * Функции: вывод в строковый поток; замена % на строку;
+ * format — оставлен для обратной совместимости (сейчас используется fmt).
+ * </summary>
+ */
 namespace CG_Graph::AuxMethodsGraph {
 
 /**
@@ -75,11 +95,17 @@ struct TuplePrinter<Tuple, 1> {
   }
 };
 
-/**
- * @brief A simple function, which calls fmt
+/*!
  * @author Vladimir Zunin <vzunin@hse.ru>
  * @author Fuuulkrum7 <ilka747428@gmail.com>
+ *
+ * \~english
+ * @brief A simple function, which calls fmt
  * @return formatted string
+ *
+ * \~russian
+ * @brief Простая функция, вызывающая fmt
+ * @return отформатированная строка
  */
 template<typename... Args>
 auto format(Args &&...args)
