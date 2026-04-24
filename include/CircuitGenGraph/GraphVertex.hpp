@@ -3,11 +3,10 @@
  * @brief Объявления вершин графа: GraphVertexInput, GraphVertexOutput,
  * GraphVertexGates, GraphVertexConstant, GraphVertexSubGraph,
  * GraphVertexSequential.
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
- * @author Theossr <feolab05@gmail.com>
- * @author rainbowkittensss <viktorrrrry20@gmail.com>
- * @author Чернявских Илья Игоревич <fuuulkrum7@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
+ * @author Theossr
+ * @author rainbowkittensss
  */
 #pragma once
 #include <string>
@@ -76,7 +75,7 @@ public:
                    const VertexTypes i_type = VertexTypes::input);
 
   /**
-   * @author Theossr <feolab05@gmail.com>
+   * @author Theossr
    * \~english
    * @brief Sets a new value for the vertex.
    * @param value The value to set.
@@ -88,7 +87,7 @@ public:
   void setValue(const char value);
 
   /**
-   * @author Vladimir Zunin <vzunin@hse.ru>
+   * @author Vladimir Zunin
    * \~english
    * @brief updateValue A virtual function for updating the vertex value.
    * The implementation is provided in derived classes
@@ -101,11 +100,11 @@ public:
    */
   virtual char updateValue() override;
 
-  /** @author Theossr <feolab05@gmail.com> */
+  /** @author Theossr */
   virtual void removeValue() override;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    * \~english
    * @brief updateLevel This method updates the level of the vertex based
    * on the levels of its input connections. It iterates through each input
@@ -126,7 +125,7 @@ public:
   virtual void updateLevel() override;
 
   /**
-   * @author Vladimir Zunin <vzunin@hse.ru>
+   * @author Vladimir Zunin
    * \~english
    * @brief writes vertex to dot
    *
@@ -137,7 +136,7 @@ public:
 
 #ifdef LOGFLAG
   /**
-   * @author Vladimir Zunin <vzunin@hse.ru>
+   * @author Vladimir Zunin
    * \~english
    * @brief log Used for easylogging++
    * @param os Stream for easylogging
@@ -202,7 +201,7 @@ public:
   ~GraphVertexConstant() override {};
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief calculates hash for constant.
@@ -238,7 +237,7 @@ public:
   size_t calculateHash() override;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief toVerilog Generates Verilog code for the constant vertex
@@ -269,11 +268,11 @@ public:
    */
   std::string toVerilog() const override;
 
-  /** @author Vladimir Zunin <vzunin@hse.ru> */
+  /** @author Vladimir Zunin */
   DotReturn toDOT() override;
 
   /**
-   * @author Vladimir Zunin <vzunin@hse.ru>
+   * @author Vladimir Zunin
    *
    * \~english
    * @brief getDefaultInstance Creates simple verilog const instance
@@ -287,7 +286,7 @@ public:
 
 #ifdef LOGFLAG
   /**
-   * @author Vladimir Zunin <vzunin@hse.ru>
+   * @author Vladimir Zunin
    * \~english
    * @brief log Used for easylogging++
    * @param os Stream for easylogging
@@ -335,7 +334,7 @@ public:
   ~GraphVertexSubGraph() override {};
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief updateValue A virtual function for updating the vertex value.
@@ -349,11 +348,11 @@ public:
    */
   char updateValue() override;
 
-  /** @author Theossr <feolab05@gmail.com> */
+  /** @author Theossr */
   void removeValue() override;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief updateLevel
@@ -375,7 +374,7 @@ public:
   void updateLevel() override;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief toVerilog Generates Verilog code for the vertex
@@ -412,11 +411,11 @@ public:
    */
   std::string toVerilog() const override;
 
-  /** @author Vladimir Zunin <vzunin@hse.ru> */
+  /** @author Vladimir Zunin */
   DotReturn toDOT() override;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief This method is used as a substructure for OrientedGraph methods
@@ -437,11 +436,11 @@ public:
    */
   bool toVerilog(std::string i_path, std::string i_filename = "");
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   bool toDOT(std::string i_path, std::string i_filename = "");
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief This method is used as a substructure for OrientedGraph methods
@@ -453,7 +452,7 @@ public:
   bool toGraphML(std::ofstream &i_fileStream) const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief This method is used as a substructure for OrientedGraph
@@ -472,7 +471,7 @@ public:
   std::string toGraphML(uint16_t i_indent = 0, std::string i_prefix = "") const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief This method is used as a substructure for OrientedGraph
@@ -487,7 +486,7 @@ public:
   size_t calculateHash() override;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief sets new subgraph to the vertex
@@ -498,7 +497,7 @@ public:
   void setSubGraph(GraphPtr i_subGraph);
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @return pointer to subgraph, being stored in vertex
@@ -542,7 +541,7 @@ public:
 
 #ifdef LOGFLAG
   /**
-   * @author Vladimir Zunin <vzunin@hse.ru>
+   * @author Vladimir Zunin
    * \~english
    * @brief log Used for easylogging++
    * @param os Stream for easylogging
@@ -574,11 +573,11 @@ class GraphVertexOutput : public GraphVertexBase {
 public:
   GraphVertexOutput(GraphPtr i_baseGraph);
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   GraphVertexOutput(std::string_view i_name, GraphPtr i_baseGraph);
 
   /**
-   * @author Theossr <feolab05@gmail.com>
+   * @author Theossr
    *
    * \~english
    * @brief updateValue updates the value of the current vertex of the
@@ -604,7 +603,7 @@ public:
   char updateValue() override;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief updateLevel updates the level of the current vertex in the
@@ -622,12 +621,12 @@ public:
    */
   void updateLevel() override;
 
-  /** @author Vladimir Zunin <vzunin@hse.ru> */
+  /** @author Vladimir Zunin */
   DotReturn toDOT() override;
 
 #ifdef LOGFLAG
   /**
-   * @author Vladimir Zunin <vzunin@hse.ru>
+   * @author Vladimir Zunin
    * \~english
    * @brief log Used for easylogging++
    * @param os Stream for easylogging
@@ -654,13 +653,13 @@ class GraphVertexGates : public GraphVertexBase {
 public:
   GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph);
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph);
 
   ~GraphVertexGates() override {};
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief updateValue Updates the value of the vertex
@@ -678,11 +677,11 @@ public:
    */
   virtual char updateValue() override;
 
-  /** @author Theossr <feolab05@gmail.com> */
+  /** @author Theossr */
   void removeValue() override;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief calculateHash Calculates the hash value of the vertex. When
@@ -697,7 +696,7 @@ public:
   size_t calculateHash() override;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief getVerilogString Gets a string in Verilog format representing
@@ -715,7 +714,7 @@ public:
   std::string getVerilogString() const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief getGate Returns the type of valve associated with the current
@@ -735,7 +734,7 @@ public:
   Gates getGate() const override;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief addVertexToInConnections
@@ -763,7 +762,7 @@ public:
   uint32_t addVertexToInConnections(VertexPtr i_vert) override;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief toVerilog generates a string in Verilog format for the current
@@ -786,15 +785,15 @@ public:
    */
   std::string toVerilog() const override;
 
-  /** @author Vladimir Zunin <vzunin@hse.ru> */
+  /** @author Vladimir Zunin */
   DotReturn toDOT() override;
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   bool isSubgraphBuffer() const override;
 
 #ifdef LOGFLAG
   /**
-   * @author Vladimir Zunin <vzunin@hse.ru>
+   * @author Vladimir Zunin
    * \~english
    * @brief log Used for easylogging++
    * @param os Stream for easylogging
@@ -942,7 +941,7 @@ public:
   ~GraphVertexSequential() override {};
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief calculateHash Calculates the hash value of the vertex.
@@ -961,7 +960,7 @@ public:
   size_t calculateHash() override;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief toVerilog generates a string in Verilog format for the
@@ -984,11 +983,11 @@ public:
    */
   std::string toVerilog() const override;
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   DotReturn toDOT() override;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief updateValue A virtual function for updating the vertex value.
@@ -1009,31 +1008,31 @@ public:
    * \~russian
    * @brief возвращает true, если последовательностная ячейка
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   bool isFF() const;
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   bool isAsync() const;
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   bool isNegedge() const;
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   SequentialTypes getSeqType() const;
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   VertexPtr getClk() const;
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   VertexPtr getData() const;
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   VertexPtr getEn() const;
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   VertexPtr getRst() const;
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   VertexPtr getSet() const;
 
 private:
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   void setSignalByType(VertexPtr i_wire, SequentialTypes i_type,
                        unsigned &factType);
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   void formatAlwaysBegin(std::string &verilog) const;
 
 private:

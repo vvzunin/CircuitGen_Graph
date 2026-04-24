@@ -1,6 +1,6 @@
 /**
  * @file enums.hpp
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief Enumerations and truth tables for graph simulation (Gates,

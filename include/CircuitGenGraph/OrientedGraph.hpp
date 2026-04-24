@@ -2,13 +2,12 @@
  * @file OrientedGraph.hpp
  * @brief Ориентированный граф схемы: вершины, связи, экспорт в
  * Verilog/DOT/GraphML.
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
- * @author Theossr <feolab05@gmail.com>
- * @author rainbowkittensss <viktorrrrry20@gmail.com>
- * @author Andrey <shapkin.andrey123@gmail.com>
- * @author Чернявских Илья Игоревич <fuuulkrum7@gmail.com>
- * @author NonDif <shapkin.andrey123@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
+ * @author Theossr
+ * @author rainbowkittensss
+ * @author Andrey
+ * @author NonDif
  */
 #pragma once
 
@@ -124,15 +123,15 @@ public:
 
   ~OrientedGraph();
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   OrientedGraph &operator=(const OrientedGraph &other) = delete;
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   OrientedGraph &operator=(OrientedGraph &&other) = delete;
   OrientedGraph(const OrientedGraph &other) = delete;
   OrientedGraph(OrientedGraph &&other) = delete;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief baseSize returns the number of "gate" type vertices in the
@@ -150,7 +149,7 @@ public:
   size_t baseSize() const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief fullSize returns the total number of vertices in the graph,
@@ -171,7 +170,7 @@ public:
   size_t fullSize() const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief sumFullSize returns the total number of vertices of all types
@@ -192,7 +191,7 @@ public:
   size_t sumFullSize() const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief Checks, if there are any gates in graph (including subrapgs).
@@ -209,7 +208,7 @@ public:
   bool isEmpty() const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief Resets all internal states for all types of vertices
@@ -220,7 +219,7 @@ public:
   void clearAllStates();
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief Resets hash states for all vertices of current graph (including
@@ -233,7 +232,7 @@ public:
   void clearHashStates();
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief Resets update for all vertices of current graph (including
@@ -246,7 +245,7 @@ public:
   void clearNeedUpdateStates();
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief Sets for all vertices state, that shows, that all vertices
@@ -261,7 +260,7 @@ public:
   void clearUsedLevelStates();
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief isEmptyFull It is used to check the emptiness of a graph,
@@ -280,7 +279,7 @@ public:
   bool isEmptyFull() const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief setName Used to set the name of the graph. It takes a string as
@@ -295,7 +294,7 @@ public:
   void setName(const std::string &i_name);
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief getName Used to get the name of the graph
@@ -308,7 +307,7 @@ public:
   std::string getName() const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief needToUpdateLevel it is used to check whether the vertex levels
@@ -325,7 +324,7 @@ public:
   bool needToUpdateLevel() const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief updateLevels Calculates level for all vertices inside graph.
@@ -345,7 +344,7 @@ public:
   void updateLevels();
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief getMaxLevel
@@ -370,7 +369,7 @@ public:
   uint32_t getMaxLevel();
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief setCurrentParent
@@ -397,7 +396,7 @@ public:
   void setCurrentParent(GraphPtr parent);
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief resetCounters
@@ -414,7 +413,7 @@ public:
   void resetCounters(GraphPtr where);
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief addInput
@@ -439,7 +438,7 @@ public:
   VertexPtr addInput(const std::string &i_name = "");
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief addOutput
@@ -464,7 +463,7 @@ public:
   VertexPtr addOutput(const std::string &i_name = "");
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief addConst
@@ -491,7 +490,7 @@ public:
   VertexPtr addConst(const char &i_value, const std::string &i_name = "");
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief addGate
@@ -518,7 +517,7 @@ public:
   VertexPtr addGate(const Gates &i_gate, const std::string &i_name = "");
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief addSequential Adds a sequential vertex to the current graph.
@@ -552,7 +551,7 @@ public:
                           VertexPtr i_data, const std::string &i_name = "");
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief addSequential Adds a sequential vertex to the current graph.
@@ -591,7 +590,7 @@ public:
                           const std::string &i_name = "");
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief addSequential Adds a sequential vertex to the current graph.
@@ -634,7 +633,7 @@ public:
                           VertexPtr i_wire2, const std::string &i_name = "");
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief addSequential Adds a sequential vertex to the current graph.
@@ -716,28 +715,28 @@ public:
   std::vector<VertexPtr> addSubGraph(GraphPtr i_subGraph,
                                      std::vector<VertexPtr> i_inputs);
 
-  /** * @author Theossr <feolab05@gmail.com>
+  /** @author Theossr
    * \~english
    * @brief Starts graph simulation
    * @param values Vector of input values
    * @return Vector of output simulation results
-   * * \~russian
+   * \~russian
    * @brief Запускает симуляцию графа
    * @param values Вектор входных значений
    * @return Вектор выходных результатов симуляции
    */
   std::vector<char> graphSimulation(std::vector<char> values);
 
-  /** * @author Theossr <feolab05@gmail.com>
+  /** @author Theossr
    * \~english
    * @brief Resets values after simulation
-   * * \~russian
+   * \~russian
    * @brief Сбрасывает значения после симуляции
    */
   void simulationRemove();
 
   /**
-   * @author rainbowkittensss <viktorrrrry20@gmail.com>
+   * @author rainbowkittensss
    *
    * \~english
    * @brief removeWasteVertices()
@@ -766,7 +765,7 @@ public:
   void removeWasteVertices();
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief addEdge
@@ -809,7 +808,7 @@ public:
   bool addEdge(VertexPtr from, VertexPtr to);
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief addEdges
@@ -856,7 +855,7 @@ public:
   bool addEdges(std::vector<VertexPtr> from1, VertexPtr to);
 
   /**
-   * @author rainbowkittensss <viktorrrrry20@gmail.com>
+   * @author rainbowkittensss
    *
    * \~english
    * @brief removeEdge
@@ -889,7 +888,7 @@ public:
   bool removeEdge(VertexPtr from1, VertexPtr to);
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief getEdgesCount Retrieves the total number of edges in the graph
@@ -902,7 +901,7 @@ public:
   size_t getEdgesCount() { return d_edgesCount; }
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief Returns set af all subGraphs (graphs, which instances has
@@ -931,7 +930,7 @@ public:
   getBaseVertexes() const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief getVerticeByIndex returns a vertex from graph. Index should be
@@ -955,7 +954,7 @@ public:
   VertexPtr getVerticeByIndex(size_t idx) const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief method used for translating graph to verilog
@@ -972,7 +971,7 @@ public:
   bool toVerilog(std::string i_path, std::string i_filename = "");
 
   /**
-   * @author Vladimir Zunin <vzunin@hse.ru>
+   * @author Vladimir Zunin
    *
    * \~english
    * @brief toDOT returns DOT format representation
@@ -985,7 +984,7 @@ public:
   DotReturn toDOT();
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief toDOT translates graph to DOT format
@@ -1002,7 +1001,7 @@ public:
   bool toDOT(std::string i_path, std::string i_filename = "");
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief toGraphMLClassic Writes the graph structure in GraphML format
@@ -1027,7 +1026,7 @@ public:
   bool toGraphMLClassic(std::ofstream &i_fileStream);
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief toGraphMLPseudoABCD Writes the graph structure in GraphML
@@ -1050,7 +1049,7 @@ public:
   bool toGraphMLPseudoABCD(std::ofstream &i_fileStream);
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief toGraphMLOpenABCD Writes the graph structure in GraphML format
@@ -1103,7 +1102,7 @@ public:
                             std::string &edges);
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief Is called by toGraphMLClassic. Generates classical GraphML format.
@@ -1124,7 +1123,7 @@ public:
                                const std::string &i_prefix = "");
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief Is called by toGraphMLPseudoABCD.
@@ -1139,7 +1138,7 @@ public:
   std::string toGraphMLPseudoABCD();
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief Is called by toGraphMLOpenABCD.
@@ -1173,7 +1172,7 @@ public:
                     const bool &i_addSubGraphs = false) const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief gets all vertices with requires level
@@ -1209,7 +1208,7 @@ public:
                     const bool i_addSubGraphs = false) const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief Call calculateHash before this check!!!!
@@ -1224,7 +1223,7 @@ public:
   bool operator==(const OrientedGraph &rhs);
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief calculateHash calculates hash values for a graph based on the
@@ -1241,7 +1240,7 @@ public:
   std::string calculateHash();
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief getGatesCount Returns a display containing the number of each
@@ -1258,7 +1257,7 @@ public:
   std::map<Gates, size_t> getGatesCount() const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief getEdgesGatesCount Returns a mapping containing the number of
@@ -1277,7 +1276,7 @@ public:
   std::map<Gates, std::map<Gates, size_t>> getEdgesGatesCount() const;
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief reserve additional place in vector for given number of
@@ -1296,7 +1295,7 @@ public:
   }
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief resets counter for graph IDs
@@ -1307,7 +1306,7 @@ public:
   static void resetCounter() { d_countGraph = 0ul; }
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief Checks graph connectivity
@@ -1322,7 +1321,7 @@ public:
   bool isConnected(bool i_recalculate = false);
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief A simple counter for subGrpah instances to give them unique
@@ -1341,7 +1340,7 @@ public:
   }
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief A simple counter for subGrpah instances to give them unique
@@ -1360,7 +1359,7 @@ public:
   }
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief getter for unique graph ID
@@ -1373,7 +1372,7 @@ public:
   GraphID getID() { return d_graphID; }
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief Unrolls graph.
@@ -1388,7 +1387,7 @@ public:
   GraphPtr unrollGraph();
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief creates a majority element, represented by a graph.
@@ -1401,7 +1400,7 @@ public:
   static GraphPtr createMajoritySubgraph();
 
   /**
-   * @author Andrey <shapkin.andrey123@gmail.com>
+   * @author Andrey
    *
    * \~english
    * @brief creates majority element inside current graph
@@ -1421,7 +1420,7 @@ public:
 
 #ifdef LOGFLAG
   /**
-   * @author Vladimir Zunin <vzunin@hse.ru>
+   * @author Vladimir Zunin
    * \~english
    * @brief log Used for easylogging++
    * @param os Stream for easylogging
@@ -1437,7 +1436,7 @@ protected:
   /* memory management block */
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    *
    * \~english
    * @brief Allocates memory and creates an instance of required type. Is
@@ -1461,13 +1460,13 @@ protected:
   }
 
   /**
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Fuuulkrum7
    * \~english
    * @brief Depth-first search traversal
    * @param i_startVertex Starting vertex for traversal
    * @param i_visited Set tracking visited vertices
    * @param i_dsg Set tracking subgraphs
-   * * \~russian
+   * \~russian
    * @brief Обход в глубину (DFS)
    * @param i_startVertex Стартовая вершина для обхода
    * @param i_visited Множество отслеживаемых посещенных вершин

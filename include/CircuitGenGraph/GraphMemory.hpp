@@ -1,9 +1,9 @@
 /**
  * @file GraphMemory.hpp
  * @brief Аллокатор MultiLinearAllocator и утилиты управления памятью графа.
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
- * @author Theossr <feolab05@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
+ * @author Theossr
  */
 #pragma once
 #include <cassert>
@@ -20,7 +20,7 @@ constexpr int CHUNK_SIZE = 13312;
 typedef unsigned char bytea;
 
 /**
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief This is a custom allocator, which allocates firstly `buf_size`
@@ -54,7 +54,7 @@ struct MultiLinearAllocator {
    * меньше значения `buf_size`)
    */
   MultiLinearAllocator(size_t buf_size, size_t chunk_size)
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 */
       : buf_size(buf_size)
       , chunk_size(chunk_size) {
     assert(buf_size >= 154);
@@ -65,10 +65,10 @@ struct MultiLinearAllocator {
 
   // clang-format on
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   MultiLinearAllocator &operator=(MultiLinearAllocator &&other) = delete;
   MultiLinearAllocator(MultiLinearAllocator &&other) = delete;
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   MultiLinearAllocator &operator=(const MultiLinearAllocator &other) = delete;
   MultiLinearAllocator(const MultiLinearAllocator &other) = delete;
 
@@ -114,7 +114,7 @@ struct MultiLinearAllocator {
     return reinterpret_cast<T *>(current);
   }
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   void deallocate() {}
 
 private:
@@ -128,7 +128,7 @@ private:
    * \tparam T тип, выравнивание которого мы должны получить
    */
   template<typename T>
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   void align() {
     size_t suboffset = (uintptr_t)offset & (alignof(T) - 1);
     if (suboffset) {
@@ -177,7 +177,7 @@ private:
 };
 
 /**
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief This class is used for memory management. It has a
@@ -217,17 +217,17 @@ public:
   GraphMemory(
         size_t buf_size = DEFAULT_BUF,
         size_t chunk_size = CHUNK_SIZE)
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 */
       : d_vertexMemory(buf_size, chunk_size)
       , d_strings {&d_stringMemory}
   {}
 
   // clang-format on
 
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   GraphMemory &operator=(GraphMemory &&other) = delete;
   GraphMemory(GraphMemory &&other) = delete;
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   GraphMemory &operator=(const GraphMemory &other) = delete;
   GraphMemory(const GraphMemory &other) = delete;
 
@@ -244,7 +244,7 @@ public:
    * @param s сохраняемая строка
    * @return string_view из строки в множестве
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   std::string_view internalize(std::string_view s) {
     return *d_strings.emplace(s).first;
   }
@@ -262,7 +262,7 @@ public:
    * @param s сохраняемая строка
    * @return string_view из строки в множестве
    */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
+  /** @author Fuuulkrum7 */
   std::string_view internalize(const std::string &s) {
     return *d_strings.emplace(s).first;
   }
