@@ -794,9 +794,9 @@ TestbenchGenerator::compareSimulations(const std::string &i_workDir) {
   bool matchTotalTests = (internalResult.totalTests == icarusResult.totalTests);
 
   // Поэлементное сравнение векторов только если Icarus-ветка их заполнила.
-  // runIcarusVerification сейчас выставляет лишь счетчики и success по выводу vvp,
-  // без копии d_testVectors в result.vectors — в этом случае ограничиваемся
-  // согласованностью success и счетчиков.
+  // runIcarusVerification сейчас выставляет лишь счетчики и success по выводу
+  // vvp, без копии d_testVectors в result.vectors — в этом случае
+  // ограничиваемся согласованностью success и счетчиков.
   bool matchVectors = true;
   if (!icarusResult.vectors.empty()) {
     if (internalResult.vectors.size() == icarusResult.vectors.size()) {
