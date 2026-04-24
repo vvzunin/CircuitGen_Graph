@@ -267,24 +267,6 @@ public:
     return *d_strings.emplace(s).first;
   }
 
-  /**
-   * \~english
-   * @brief puts string_view to strings set and returns a string_view on
-   * the added string
-   * @param s string to be stored
-   * @return string_view from string in the set
-   *
-   * \~russian
-   * @brief помещает string_view в множество строк и возвращает
-   * string_view на добавленную строку
-   * @param s сохраняемая строка
-   * @return string_view из строки в множестве
-   */
-  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
-  std::string_view internalize(const std::string &s) {
-    return *d_strings.emplace(s).first;
-  }
-
   /*!
    * \~english
    * \brief allocates memory for graph vertex

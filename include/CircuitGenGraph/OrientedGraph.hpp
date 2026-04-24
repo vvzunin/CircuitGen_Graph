@@ -56,6 +56,8 @@ class GraphReader;
 class Context;
 class GraphVertexBus;
 
+using NameGenerator = std::function<std::string(size_t)>;
+
 /**
  * @class CG_Graph::OrientedGraph
  *
@@ -446,6 +448,13 @@ public:
    * @return Указатель (поинтер) на вновь созданную входную вершину
    */
   VertexPtr addInput(const std::string &i_name = "");
+
+  std::vector<VertexPtr> addInputs(size_t i_num);
+  std::vector<VertexPtr> addInputs(size_t i_num, NameGenerator generator);
+
+  std::vector<VertexPtr> addOutputs(size_t i_num);
+  std::vector<VertexPtr> addOutputs(const std::vector<VertexPtr> &gates);
+
   VertexPtr addInputBus(const std::string &i_name = "", size_t width = 1);
   /**
    * @author Fuuulkrum7 <ilka747428@gmail.com>

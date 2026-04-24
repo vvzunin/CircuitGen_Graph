@@ -346,7 +346,8 @@ public:
    * @param i_type Тип вершины (из перечисления VertexTypes).
    * @param i_graph Опциональный указатель на граф, содержащий вершину
    */
-  GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph);
+  GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph,
+                  bool i_isBus = false);
 
   /**
    * \~english
@@ -364,7 +365,7 @@ public:
    * @param i_graph Опциональный указатель на граф, содержащий вершину.
    */
   GraphVertexBase(const VertexTypes i_type, std::string_view i_name,
-                  GraphPtr i_graph);
+                  GraphPtr i_graph, bool i_isBus = false);
 
   /**
    * @author Fuuulkrum7 <ilka747428@gmail.com>
@@ -496,7 +497,7 @@ public:
    * @brief getName Возвращает имя вершины
    * @return Имя вершины.
    */
-  std::string getName() const;
+  virtual std::string getName() const;
 
   /**
    * @author Fuuulkrum7 <ilka747428@gmail.com>

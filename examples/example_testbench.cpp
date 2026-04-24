@@ -1,12 +1,4 @@
 /// @file example_testbench.cpp
-/// @brief Пример использования системы генерации тестбенчей
-///
-/// Компиляция:
-///   g++ -std=c++17 -I./include -L./build example_testbench.cpp \
-///       -o example_testbench -lCircuitGenGraph
-///
-/// Запуск:
-///   LD_LIBRARY_PATH=./build:$LD_LIBRARY_PATH ./example_testbench
 
 #include <iostream>
 

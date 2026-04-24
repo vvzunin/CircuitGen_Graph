@@ -32,6 +32,8 @@ option(ENABLE_LOGGING "Enable logging" OFF)
 
 option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
 
+find_package(fmt REQUIRED)
+
 # Подключаем папку с исходниками (новый формат)
 
 # Подключаем папку с исходниками (новый формат)
@@ -59,8 +61,6 @@ include_directories(lib)
 link_directories(lib)
 
 add_subdirectory(lib)
-target_link_libraries(${PROJECT_NAME} PRIVATE Lorina)
-target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 
 find_program(CLANG_TIDY NAMES clang-tidy)
 
@@ -81,6 +81,11 @@ elseif(CLANG_TIDY)
 else()
   message(STATUS "clang-tidy not found")
 endif()
+
+
+target_link_libraries(${PROJECT_NAME} PUBLIC
+  Lorina
+  fmt::fmt)
 
 if(ENABLE_LOGGING)
   message(STATUS "Logs enabled")

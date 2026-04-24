@@ -85,14 +85,22 @@ void GraphVertexOutput::log(el::base::type::ostream_t &os) const {
      << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
-  os << "Vertex Hash: " << "NuN" << "\n";
+  os << "Vertex Hash: "
+     << "NuN"
+     << "\n";
 }
 #endif
+
+// clang-format off
+
 GraphVertexBusOutput::GraphVertexBusOutput(std::string_view i_name,
                                            GraphPtr i_baseGraph,
-                                           size_t i_width) :
-    GraphVertexOutput(i_name, i_baseGraph, true), GraphVertexBus(i_width) {
-}
+                                           size_t i_width)
+    : GraphVertexOutput(i_name, i_baseGraph, true)
+    , GraphVertexBus(i_width)
+{}
+
+// clang-format on
 
 std::string GraphVertexBusOutput::toOneBitVerilog() const {
   std::stringstream res;

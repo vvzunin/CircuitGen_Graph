@@ -65,14 +65,22 @@ void GraphVertexInput::log(el::base::type::ostream_t &os) const {
      << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << 0 << "\n";
-  os << "Vertex Hash: " << "NuN" << "\n";
+  os << "Vertex Hash: "
+     << "NuN"
+     << "\n";
 }
 #endif
 
+// clang-format off
+
 GraphVertexBusInput::GraphVertexBusInput(std::string_view i_name,
-                                         GraphPtr i_baseGraph, size_t i_width) :
-    GraphVertexInput(i_name, i_baseGraph, inputBus), GraphVertexBus(i_width) {
-}
+                                         GraphPtr i_baseGraph, size_t i_width)
+    : GraphVertexInput(i_name, i_baseGraph, inputBus)
+    , GraphVertexBus(i_width)
+{}
+
+// clang-format on
+
 std::string GraphVertexBusInput::toOneBitVerilog() const {
   return "";
 }

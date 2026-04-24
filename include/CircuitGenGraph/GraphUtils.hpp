@@ -61,8 +61,6 @@ namespace CG_Graph {
 
 static constexpr size_t d_busInType = 8;
 
-static constexpr size_t d_busInType = 8;
-
 /**
  * @author Fuuulkrum7 <ilka747428@gmail.com>
  *
