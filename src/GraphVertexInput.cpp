@@ -1,3 +1,7 @@
+/**
+ * @file GraphVertexInput.cpp
+ * @brief Реализация вершины-входа графа.
+ */
 #include <CircuitGenGraph/GraphVertex.hpp>
 
 #ifdef LOGFLAG
@@ -26,7 +30,7 @@ char GraphVertexInput::updateValue() {
 }
 
 void GraphVertexInput::removeValue() {
-  d_value = ValueStates::UndefindedState;
+  d_value = ValueStates::UndefinedState;
 }
 
 void GraphVertexInput::updateLevel() {

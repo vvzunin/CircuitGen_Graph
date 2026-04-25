@@ -1,3 +1,7 @@
+/**
+ * @file GraphUtils.cpp
+ * @brief Реализация утилит графа (логические операции, парсинг, константы).
+ */
 #include <cassert>
 
 #include <CircuitGenGraph/GraphUtils.hpp>

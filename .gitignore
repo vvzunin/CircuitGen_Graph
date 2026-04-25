@@ -6,16 +6,25 @@
 .idea/*
 .vs/
 .vscode/
-build/
+.venv/
+.venv-docs/
+.cache/
+build*/
 cmake-build-*/
 CMakeLists.txt.user
 CMakeUserPresets.json
-Testing/*
-
-logs/
+dataset/
+example_*/
+settings.json
 *.log
 
-coverage.info
-coverage_report/
+# Build artifacts
+*.o
+*.a
+*.exe
 
-.cache/
+# Generated simulation files
+*.vcd
+*_sim
+
+generation_results/*

@@ -1,15 +1,12 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.26)
 
 project(CircuitGenGraphTests LANGUAGES CXX)
-
-set(GCC_COVERAGE_COMPILE_FLAGS "-fprofile-arcs -ftest-coverage")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_INIT} -std=c++17 -fPIC")
-SET(GCC_COVERAGE_LINK_FLAGS "-lgcov")
-set(CMAKE_CXX_STANDARD 17)
 
 include(ExternalProject)
 include(FetchContent)
 include(CTest)
+include(../cmake/checks.cmake)
+include(../cmake/folders.cmake)
 
 FetchContent_Declare(
   gtest
@@ -21,14 +18,16 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(gtest)
+add_folders(Libraries gtest)
 
 add_compile_options(-fno-rtti)
 add_compile_options(-g3 -Wall -Wignored-qualifiers -DYYERROR_VERBOSE)
-# option for looking for possible memory leaks
-add_compile_options(-fsanitize=address)
-add_link_options(-fsanitize=address)
 
-enable_testing()
+option(CircuitGenGraph_TESTS_ENABLE_ASAN "Enable AddressSanitizer for tests" ON)
+if(CircuitGenGraph_TESTS_ENABLE_ASAN AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+  add_compile_options(-fsanitize=address)
+  add_link_options(-fsanitize=address)
+endif()
 
 if(ENABLE_LOGGING)
   configure_file(
@@ -56,6 +55,7 @@ add_executable(${TEST_NAME}
   src/DefaultAuxiliaryMethodsTests.cpp
   src/GraphVertexSequentialTests.cpp
   src/GraphUtilsTests.cpp
+  src/TestbenchGeneratorTests.cpp
 )
 
 # Include directories
@@ -70,7 +70,7 @@ target_link_libraries(${TEST_NAME} PUBLIC
 )
 
 if(ENABLE_LOGGING)
-  target_link_libraries( PRIVATE easylogging++)
+  target_link_libraries(${TEST_NAME} PRIVATE easylogging++)
 endif()
 
 if(ENABLE_COVERAGE)
