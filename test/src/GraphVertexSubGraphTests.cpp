@@ -189,10 +189,7 @@ TEST(PortsParsing_SubGraph, ParseVerilogPortsSimple) {
       std::filesystem::current_path() / "tmp_ports_subgraph_test.v";
   {
     std::ofstream file(tmpPath);
-    file << "module m(\n";
-    file << "  input wire a, b,\n";
-    file << "  output reg y,\n";
-    file << ");\n";
+    file << "module m(a, b, c, y, z);\n";
     file << "input wire a, b, c; // comment\n";
     file << "output reg y, z;\n";
     file << "endmodule\n";
