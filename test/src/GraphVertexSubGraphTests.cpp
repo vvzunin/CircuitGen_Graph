@@ -205,6 +205,50 @@ TEST(PortsParsing_SubGraph, ParseVerilogPortsSimple) {
   EXPECT_EQ(outputs, (std::set<std::string>{"y", "z"}));
 }
 
+TEST(PortsParsing_SubGraph, ParseVerilogPortsAnsiStyle) {
+  const std::filesystem::path tmpPath =
+      std::filesystem::current_path() / "tmp_ansi_ports.v";
+  {
+    std::ofstream file(tmpPath);
+    file << "module m (\n";
+    file << "  input wire a, b,\n";
+    file << "  output reg y, z\n";
+    file << ");\n";
+    file << "endmodule\n";
+  }
+  const VerilogPorts ports = parseVerilogPorts(tmpPath.string());
+  std::filesystem::remove(tmpPath);
+
+  const std::set<std::string> inputs(ports.inputs.begin(), ports.inputs.end());
+  const std::set<std::string> outputs(ports.outputs.begin(),
+                                      ports.outputs.end());
+  EXPECT_EQ(inputs, (std::set<std::string>{"a", "b"}));
+  EXPECT_EQ(outputs, (std::set<std::string>{"y", "z"}));
+}
+
+TEST(PortsParsing_SubGraph, ParseVerilogPortsIgnoresDataTypeKeywords) {
+  const std::filesystem::path tmpPath =
+      std::filesystem::current_path() / "tmp_type_keywords.v";
+  {
+    std::ofstream file(tmpPath);
+    file << "module m (\n";
+    file << "  input logic a, b,\n";
+    file << "  output signed y,\n";
+    file << "  input unsigned c\n";
+    file << ");\n";
+    file << "endmodule\n";
+  }
+  const VerilogPorts ports = parseVerilogPorts(tmpPath.string());
+  std::filesystem::remove(tmpPath);
+
+  const std::set<std::string> inputs(ports.inputs.begin(), ports.inputs.end());
+  const std::set<std::string> outputs(ports.outputs.begin(),
+                                      ports.outputs.end());
+
+  EXPECT_EQ(inputs, (std::set<std::string>{"a", "b", "c"}));
+  EXPECT_EQ(outputs, (std::set<std::string>{"y"}));
+}
+
 TEST(PortsParsing_SubGraph, ParseVerilogPortsThrowsWhenFileMissing) {
   EXPECT_THROW(parseVerilogPorts("definitely_missing_ports_file.v"),
                std::runtime_error);
