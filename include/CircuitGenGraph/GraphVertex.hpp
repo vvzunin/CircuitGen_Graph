@@ -316,6 +316,31 @@ class GraphVertexSubGraph : public GraphVertexBase {
 public:
   /**
    * \~english
+   * @brief Sets path to an external Verilog file for this subgraph vertex.
+   * @param verilogPath Path to Verilog file.
+   *
+   * \~russian
+   * @brief Устанавливает путь к внешнему Verilog-файлу для этой
+   * вершины-подграфа.
+   * @param verilogPath Путь к Verilog-файлу.
+   */
+  void setVerilogPath(const std::string &verilogPath) {
+    d_verilogPath = verilogPath;
+  }
+
+  /**
+   * \~english
+   * @brief Returns path to an external Verilog file.
+   * @return Path string, or empty string if it is not set.
+   *
+   * \~russian
+   * @brief Возвращает путь к внешнему Verilog-файлу.
+   * @return Строка пути или пустая строка, если путь не задан.
+   */
+  const std::string &getVerilogPath() const { return d_verilogPath; }
+
+  /**
+   * \~english
    * @brief Initializes the GraphVertexSubGraph object with the provided
    * base graph pointer and subGraph pointer
    * @param i_subGraph Pointer to the subGraph.
@@ -555,6 +580,7 @@ public:
 
 private:
   GraphPtr d_subGraph;
+  std::string d_verilogPath = ""; /// Путь к внешнему Verilog файлу
 };
 
 /**
@@ -1044,5 +1070,71 @@ private:
   VertexPtr d_rst = nullptr;
   VertexPtr d_set = nullptr;
 };
+
+/**
+ * @struct VerilogPorts
+ * \~english
+ * @brief Container with parsed Verilog module ports.
+ *
+ * \~russian
+ * @brief Контейнер с распарсенными портами Verilog-модуля.
+ */
+struct VerilogPorts {
+  /// \~english
+  /// @brief Names of input ports.
+  ///
+  /// \~russian
+  /// @brief Имена входных портов.
+  std::vector<std::string> inputs;
+
+  /// \~english
+  /// @brief Names of output ports.
+  ///
+  /// \~russian
+  /// @brief Имена выходных портов.
+  std::vector<std::string> outputs;
+};
+
+/**
+ * \~english
+ * @brief Parses a Verilog file and extracts input/output port names.
+ * Supports both ANSI-style module headers and separate input/output
+ * declarations. Ignores Verilog type keywords (wire, reg, logic, signed,
+ * unsigned, etc.).
+ * @param filepath Path to the Verilog file.
+ * @return Parsed Verilog ports.
+ * @throws std::runtime_error if the file cannot be opened.
+ *
+ * \~russian
+ * @brief Разбирает Verilog-файл и извлекает имена входных и выходных портов.
+ * Поддерживает ANSI-описание портов в заголовке модуля и отдельные
+ * объявления input/output. Игнорирует ключевые слова типов Verilog
+ * (wire, reg, logic, signed, unsigned и т.д.).
+ * @param filepath Путь к Verilog-файлу.
+ * @return Распарсенные порты Verilog.
+ * @throws std::runtime_error если файл не удалось открыть.
+ */
+VerilogPorts parseVerilogPorts(const std::string &filepath);
+
+/**
+ * \~english
+ * @brief Checks whether graph ports match parsed Verilog ports.
+ * @param graph Graph whose input and output ports are checked.
+ * @param verilogPorts Parsed Verilog ports for comparison.
+ * @param errorMsg Output parameter for error description on mismatch;
+ * cleared on success.
+ * @return true if ports match; otherwise false.
+ *
+ * \~russian
+ * @brief Проверяет совпадение портов графа с портами, распарсенными из
+ * Verilog.
+ * @param graph Граф, у которого проверяются входные и выходные порты.
+ * @param verilogPorts Распарсенные Verilog-порты для сравнения.
+ * @param errorMsg Выходной параметр с описанием ошибки при несовпадении;
+ * при успехе очищается.
+ * @return true, если порты совпадают; иначе false.
+ */
+bool checkPortsMatch(const GraphPtr &graph, const VerilogPorts &verilogPorts,
+                     std::string &errorMsg);
 
 } // namespace CG_Graph
