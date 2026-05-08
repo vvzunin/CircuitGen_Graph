@@ -280,6 +280,50 @@ TEST(PortsMatching_SubGraph, CheckPortsMatchGraphPtrFail) {
   EXPECT_FALSE(errorMsg.empty());
 }
 
+TEST(VerilogParameters_SubGraph, ParseAndStoreParametersFromVerilogFile) {
+  const std::filesystem::path cwd = std::filesystem::current_path();
+  const std::filesystem::path verilogInPath = cwd / "tmp_verilog_params_src.v";
+  const std::filesystem::path verilogOutPath = cwd / "tmp_verilog_params_out.v";
+
+  {
+    std::ofstream file(verilogInPath);
+    file << "module m #(\n";
+    file << "  parameter WIDTH = 8,\n";
+    file << "  parameter signed [3:0] MODE = 4'd2\n";
+    file << ") (\n";
+    file << "  input wire a,\n";
+    file << "  output wire y\n";
+    file << ");\n";
+    file << "localparam integer LATENCY = WIDTH + 1;\n";
+    file << "endmodule\n";
+  }
+
+  GraphPtr subGraph = std::make_shared<OrientedGraph>("ParamsGraph");
+  GraphPtr owner = std::make_shared<OrientedGraph>("ParamsOwner");
+  GraphVertexSubGraph subGraphVertex(subGraph, owner);
+  subGraphVertex.setVerilogPath(verilogInPath.string());
+
+  EXPECT_TRUE(
+      subGraphVertex.toVerilog(cwd.string(), verilogOutPath.filename().string()));
+
+  const auto &parameters = subGraph->getVerilogParameters();
+  ASSERT_EQ(parameters.size(), 3);
+  EXPECT_EQ(parameters[0], std::make_pair(std::string("WIDTH"), std::string("8")));
+  EXPECT_EQ(parameters[1],
+            std::make_pair(std::string("MODE"), std::string("4'd2")));
+  EXPECT_EQ(parameters[2], std::make_pair(std::string("LATENCY"),
+                                          std::string("WIDTH + 1")));
+
+  const std::string generatedVerilog = loadStringFileSubGraph(verilogOutPath);
+  EXPECT_NE(generatedVerilog.find("parameter WIDTH = 8;"), std::string::npos);
+  EXPECT_NE(generatedVerilog.find("parameter MODE = 4'd2;"), std::string::npos);
+  EXPECT_NE(generatedVerilog.find("parameter LATENCY = WIDTH + 1;"),
+            std::string::npos);
+
+  std::filesystem::remove(verilogInPath);
+  std::filesystem::remove(verilogOutPath);
+}
+
 // Do not know what to do with it
 
 // TEST(TestAddInConnections, AddConnections) {
