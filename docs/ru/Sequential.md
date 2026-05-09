@@ -67,4 +67,86 @@ endmodule
 
 В классическом GraphML тип узла последовательностной ячейки записывается как `sequential/ff` или `sequential/latch`. В GraphML схем PseudoABCD и OpenABCD для `node_type` используются коды **17** (триггер) и **18** (защелка). В экспорте DOT после имени экземпляра добавляется пометка `(ff)` или `(latch)`.
 
+---
+
+## Генерация тестбенчей для последовательностных схем
+
+Класс `TestbenchGenerator` автоматически определяет наличие последовательностных элементов в графе и использует специализированную логику генерации тестбенчей для таких схем.
+
+### Автоматическое определение сигналов
+
+При инициализации `TestbenchGenerator` для схемы с элементами `GraphVertexSequential` автоматически определяются:
+- **Тактовые сигналы** (`clk`) — из метода `getClk()` каждого последовательностного элемента
+- **Сигналы сброса** (`rst`, `rst_n`) — из метода `getRst()`
+- **Входы данных** — все остальные входы, не являющиеся управляющими
+
+### API для генерации тестбенчей
+
+```cpp
+GraphPtr graph = std::make_shared<OrientedGraph>();
+auto *clk = graph->addInput("clk");
+auto *data = graph->addInput("data");
+auto *rst_n = graph->addInput("rst_n");
+auto *seq = graph->addSequential(affr, clk, data, rst_n, "q");
+auto *out = graph->addOutput("res");
+graph->addEdge(seq, out);
+
+// Проверка типа схемы
+TestbenchConfig config;
+config.clockPeriod = 10;      // Период тактового сигнала
+config.resetDuration = 25;    // Длительность фазы сброса
+config.resetActiveValue = 0;  // Active-low сброс
+
+TestbenchGenerator gen(graph, config);
+assert(gen.isSequentialCircuit() == true);
+
+// Генерация случайных тестовых векторов (10 тактов)
+gen.generateSequentialTestVectors(10, 42);
+
+// Или ручное добавление вектора
+gen.addSequentialTestVector(
+    {'1'},          // data = 1
+    {'1'},          // ожидаемый res = 1
+    true            // проверять выход
+);
+
+// Запись тестбенча в файл
+gen.toVerilogTestbench("./output/", "my_ff_tb");
+```
+
+### Структура генерируемого тестбенча
+
+Для последовательностной схемы генерируемый тестбенч содержит:
+
+1. **Объявления сигналов** — `reg` для входов (clk, rst, data), `wire` для выходов
+2. **Тактовый блок** — `always #(PERIOD/2) clk = ~clk;`
+3. **Инстанцирование DUT** — подключение всех портов
+4. **Стимулы** — `initial begin ... end` с:
+   - Инициализацией всех сигналов
+   - Фазой сброса (активация → ожидание → снятие сброса)
+   - Подачей данных по тактам с ожиданием фронта `@(posedge clk)`
+   - Проверкой выходов (если заданы ожидаемые значения)
+   - Итоговым отчётом и `$finish`
+
+### Верификация с Icarus Verilog
+
+```cpp
+// Полный цикл: генерация Verilog + тестбенч + компиляция + симуляция
+auto result = gen.runIcarusVerification("./work_dir");
+
+if (result.success) {
+    std::cout << "Все тесты пройдены!" << std::endl;
+} else {
+    std::cerr << "Ошибка: " << result.errorMessage << std::endl;
+}
+```
+
+Метод `runIcarusVerification` автоматически:
+1. Генерирует Verilog-файл модуля
+2. Генерирует тестбенч
+3. Компилирует через `iverilog`
+4. Запускает симуляцию через `vvp`
+5. Анализирует вывод и заполняет `VerificationResult`
+
 **English:** [Sequential.md](../en/Sequential.md)
+

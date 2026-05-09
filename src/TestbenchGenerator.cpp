@@ -1,4 +1,5 @@
 #include "CircuitGenGraph/TestbenchGenerator.hpp"
+#include "CircuitGenGraph/GraphVertex.hpp"
 
 #include <algorithm>
 #include <array>
@@ -11,6 +12,7 @@
 #include <fstream>
 #include <iostream>
 #include <regex>
+#include <set>
 #include <sstream>
 
 #ifndef _WIN32
@@ -47,6 +49,13 @@ TestbenchGenerator::TestbenchGenerator(GraphPtr i_graph,
 
   // Проверяем наличие последовательностных элементов
   d_hasSequential = !vertices[VertexTypes::sequential].empty();
+
+  // Определяем тактовые/сбросовые сигналы для последовательностных схем
+  if (d_hasSequential) {
+    detectClockSignals();
+  } else {
+    d_dataInputNames = d_inputNames;
+  }
 
 #ifdef LOGFLAG
   LOG(INFO) << "TestbenchGenerator: initialized for graph '"
@@ -376,11 +385,23 @@ std::string TestbenchGenerator::getTestbenchCode() const {
 
   ss << generateHeader();
   ss << "module " << d_graph->getName() << "_tb;\n\n";
-  ss << generateSignalDeclarations();
-  ss << generateDUTInstantiation();
-  ss << generateVCDDump();
-  ss << generateStimulusBlock();
-  ss << generateCheckBlock();
+
+  if (d_hasSequential) {
+    // Последовательностный тестбенч
+    ss << generateSequentialSignalDeclarations();
+    ss << generateSequentialDUTInstantiation();
+    ss << generateVCDDump();
+    ss << generateClockBlock();
+    ss << generateSequentialStimulusBlock();
+  } else {
+    // Комбинационный тестбенч
+    ss << generateSignalDeclarations();
+    ss << generateDUTInstantiation();
+    ss << generateVCDDump();
+    ss << generateStimulusBlock();
+    ss << generateCheckBlock();
+  }
+
   ss << "\nendmodule\n";
 
   return ss.str();
@@ -388,7 +409,9 @@ std::string TestbenchGenerator::getTestbenchCode() const {
 
 bool TestbenchGenerator::toVerilogTestbench(const std::string &i_path,
                                             const std::string &i_filename) {
-  if (d_testVectors.empty()) {
+  bool hasVectors = d_hasSequential ? !d_seqTestVectors.empty()
+                                    : !d_testVectors.empty();
+  if (!hasVectors) {
 #ifdef LOGFLAG
     LOG(WARNING) << "TestbenchGenerator: no test vectors to generate testbench";
 #else
@@ -437,6 +460,17 @@ TestbenchGenerator::computeExpectedOutputs(const std::vector<char> &i_inputs) {
 
 VerificationResult TestbenchGenerator::runInternalSimulation() {
   VerificationResult result;
+
+  // Внутренняя симуляция (graphSimulation) работает только для
+  // комбинационных схем — она не моделирует состояние регистров
+  if (d_hasSequential) {
+    result.success = false;
+    result.errorMessage =
+        "Internal simulation is not supported for sequential circuits. "
+        "Use runIcarusVerification() instead.";
+    return result;
+  }
+
   result.totalTests = d_testVectors.size();
 
   for (auto &tv: d_testVectors) {
@@ -730,7 +764,8 @@ TestbenchGenerator::runIcarusVerification(const std::string &i_workDir,
   result.simulatorOutput = simOutput;
 
   // Парсим результаты
-  result.totalTests = d_testVectors.size();
+  result.totalTests =
+      d_hasSequential ? d_seqTestVectors.size() : d_testVectors.size();
 
   // Ищем строки PASS/FAIL в выводе
   std::regex passRegex(R"(PASS:\s*Test\s*(\d+))");
@@ -782,7 +817,8 @@ TestbenchGenerator::compareSimulations(const std::string &i_workDir) {
   auto icarusResult = runIcarusVerification(i_workDir);
 
   // Сравниваем результаты
-  result.totalTests = d_testVectors.size();
+  result.totalTests =
+      d_hasSequential ? d_seqTestVectors.size() : d_testVectors.size();
   result.passedTests = 0;
   result.failedTests = 0;
 
@@ -1041,6 +1077,389 @@ bool TestbenchGenerator::generate(std::shared_ptr<OrientedGraph> graph,
 
   tbFile.close();
   return true;
+}
+
+// ==================== Последовательностная генерация ====================
+
+void TestbenchGenerator::detectClockSignals() {
+  auto vertices = d_graph->getBaseVertexes();
+
+  // Множества для уникальных имён
+  std::set<std::string> clockSet;
+  std::set<std::string> resetSet;
+  std::set<std::string> controlSet; // все управляющие сигналы (clk + rst + en + set)
+
+  for (auto *seqVertex : vertices[VertexTypes::sequential]) {
+    auto *seq = static_cast<GraphVertexSequential *>(seqVertex);
+
+    if (auto *clk = seq->getClk()) {
+      std::string name = std::string(clk->getRawName());
+      clockSet.insert(name);
+      controlSet.insert(name);
+    }
+
+    if (auto *en = seq->getEn()) {
+      // Для защелок EN — это управляющий сигнал, аналог clk
+      if (!seq->isFF()) {
+        std::string name = std::string(en->getRawName());
+        controlSet.insert(name);
+      }
+    }
+
+    if (auto *rst = seq->getRst()) {
+      std::string name = std::string(rst->getRawName());
+      resetSet.insert(name);
+      controlSet.insert(name);
+    }
+
+    if (auto *set = seq->getSet()) {
+      std::string name = std::string(set->getRawName());
+      controlSet.insert(name);
+    }
+  }
+
+  d_clockNames.assign(clockSet.begin(), clockSet.end());
+  d_resetNames.assign(resetSet.begin(), resetSet.end());
+
+  // Входы данных — все входы минус управляющие сигналы
+  d_dataInputNames.clear();
+  for (const auto &inputName : d_inputNames) {
+    if (controlSet.find(inputName) == controlSet.end()) {
+      d_dataInputNames.push_back(inputName);
+    }
+  }
+
+#ifdef LOGFLAG
+  LOG(INFO) << "TestbenchGenerator: detected " << d_clockNames.size()
+            << " clock signals, " << d_resetNames.size()
+            << " reset signals, " << d_dataInputNames.size()
+            << " data inputs";
+#endif
+}
+
+size_t TestbenchGenerator::generateSequentialTestVectors(size_t i_numCycles,
+                                                        uint32_t i_seed) {
+  size_t numDataInputs = d_dataInputNames.size();
+
+  std::mt19937 gen;
+  if (i_seed == 0) {
+    std::random_device rd;
+    gen.seed(rd());
+  } else {
+    gen.seed(i_seed);
+  }
+  std::uniform_int_distribution<> dist(0, 1);
+
+  d_seqTestVectors.clear();
+
+  for (size_t cycle = 0; cycle < i_numCycles; ++cycle) {
+    SequentialTestVector stv;
+    stv.dataInputs.resize(numDataInputs);
+    for (size_t bit = 0; bit < numDataInputs; ++bit) {
+      stv.dataInputs[bit] = dist(gen) ? '1' : '0';
+    }
+    stv.checkOutputs = false; // По умолчанию не проверяем
+    d_seqTestVectors.push_back(std::move(stv));
+  }
+
+#ifdef LOGFLAG
+  LOG(INFO) << "TestbenchGenerator: generated " << i_numCycles
+            << " sequential test vectors";
+#endif
+
+  return i_numCycles;
+}
+
+void TestbenchGenerator::addSequentialTestVector(
+    const std::vector<char> &i_dataInputs,
+    const std::vector<char> &i_expectedOutputs, bool i_checkOutputs) {
+  if (i_dataInputs.size() != d_dataInputNames.size()) {
+    throw std::invalid_argument(
+        "TestbenchGenerator: data input vector size mismatch. Expected " +
+        std::to_string(d_dataInputNames.size()) + ", got " +
+        std::to_string(i_dataInputs.size()));
+  }
+
+  if (i_checkOutputs && !i_expectedOutputs.empty() &&
+      i_expectedOutputs.size() != d_outputNames.size()) {
+    throw std::invalid_argument(
+        "TestbenchGenerator: expected output vector size mismatch");
+  }
+
+  d_seqTestVectors.push_back({i_dataInputs, i_expectedOutputs, i_checkOutputs});
+}
+
+void TestbenchGenerator::clearSequentialTestVectors() {
+  d_seqTestVectors.clear();
+}
+
+std::string TestbenchGenerator::generateSequentialSignalDeclarations() const {
+  std::ostringstream ss;
+
+  // Тактовые сигналы
+  if (!d_clockNames.empty()) {
+    ss << "  // Clock signals\n";
+    for (const auto &name : d_clockNames) {
+      ss << "  reg " << name << ";\n";
+    }
+    ss << "\n";
+  }
+
+  // Сигналы сброса
+  if (!d_resetNames.empty()) {
+    ss << "  // Reset signals\n";
+    for (const auto &name : d_resetNames) {
+      ss << "  reg " << name << ";\n";
+    }
+    ss << "\n";
+  }
+
+  // Входные данные (без clk/rst)
+  if (!d_dataInputNames.empty()) {
+    ss << "  // Data input signals\n";
+    for (const auto &name : d_dataInputNames) {
+      ss << "  reg " << name << ";\n";
+    }
+    ss << "\n";
+  }
+
+  // Прочие управляющие входы (en, set), которые не clk/rst и не data
+  // Обходим все входы и проверяем, не попали ли мы куда-то
+  std::set<std::string> declared;
+  for (const auto &n : d_clockNames) declared.insert(n);
+  for (const auto &n : d_resetNames) declared.insert(n);
+  for (const auto &n : d_dataInputNames) declared.insert(n);
+
+  std::vector<std::string> otherInputs;
+  for (const auto &name : d_inputNames) {
+    if (declared.find(name) == declared.end()) {
+      otherInputs.push_back(name);
+    }
+  }
+
+  if (!otherInputs.empty()) {
+    ss << "  // Other control signals\n";
+    for (const auto &name : otherInputs) {
+      ss << "  reg " << name << ";\n";
+    }
+    ss << "\n";
+  }
+
+  // Выходные провода
+  ss << "  // Output signals\n";
+  for (const auto &name : d_outputNames) {
+    ss << "  wire " << name << "_dut;\n";
+  }
+  ss << "\n";
+
+  // Переменные для тестирования
+  ss << "  // Test control variables\n";
+  ss << "  integer test_num;\n";
+  ss << "  integer errors;\n";
+  ss << "  integer passed;\n";
+  ss << "\n";
+
+  return ss.str();
+}
+
+std::string TestbenchGenerator::generateClockBlock() const {
+  std::ostringstream ss;
+
+  for (const auto &clkName : d_clockNames) {
+    ss << "  // Clock generation for " << clkName << "\n";
+    ss << "  always #" << (d_config.clockPeriod / 2) << " " << clkName
+       << " = ~" << clkName << ";\n\n";
+  }
+
+  return ss.str();
+}
+
+std::string TestbenchGenerator::generateSequentialDUTInstantiation() const {
+  std::ostringstream ss;
+
+  ss << "  // Device Under Test instantiation\n";
+  ss << "  " << d_graph->getName() << " dut (\n";
+
+  // Все входы (включая clk/rst)
+  for (size_t i = 0; i < d_inputNames.size(); ++i) {
+    ss << "    ." << d_inputNames[i] << "(" << d_inputNames[i] << ")";
+    if (i < d_inputNames.size() - 1 || !d_outputNames.empty()) {
+      ss << ",";
+    }
+    ss << "\n";
+  }
+
+  // Выходы
+  for (size_t i = 0; i < d_outputNames.size(); ++i) {
+    ss << "    ." << d_outputNames[i] << "(" << d_outputNames[i] << "_dut)";
+    if (i < d_outputNames.size() - 1) {
+      ss << ",";
+    }
+    ss << "\n";
+  }
+
+  ss << "  );\n\n";
+
+  return ss.str();
+}
+
+std::string TestbenchGenerator::generateSequentialStimulusBlock() const {
+  std::ostringstream ss;
+
+  // Определяем тип фронта для тактового сигнала
+  // По умолчанию posedge, но проверяем через GraphVertexSequential
+  bool useNegedge = false;
+  auto vertices = d_graph->getBaseVertexes();
+  for (auto *seqVertex : vertices[VertexTypes::sequential]) {
+    auto *seq = static_cast<GraphVertexSequential *>(seqVertex);
+    if (seq->isFF() && seq->isNegedge()) {
+      useNegedge = true;
+      break;
+    }
+  }
+  std::string edgeType = useNegedge ? "negedge" : "posedge";
+
+  ss << "  // Main test block\n";
+  ss << "  initial begin\n";
+  ss << "    // Initialize\n";
+  ss << "    errors = 0;\n";
+  ss << "    passed = 0;\n";
+  ss << "    test_num = 0;\n";
+  ss << "\n";
+
+  // Инициализация clk
+  for (const auto &clkName : d_clockNames) {
+    ss << "    " << clkName << " = 1'b0;\n";
+  }
+
+  // Инициализация сигналов сброса — начинаем с активного состояния
+  for (const auto &rstName : d_resetNames) {
+    if (d_config.resetActiveValue == 0) {
+      // Active-low reset: начинаем со сброса (= 0)
+      ss << "    " << rstName << " = 1'b0;\n";
+    } else {
+      // Active-high reset: начинаем со сброса (= 1)
+      ss << "    " << rstName << " = 1'b1;\n";
+    }
+  }
+
+  // Инициализация data-входов
+  for (const auto &name : d_dataInputNames) {
+    ss << "    " << name << " = 1'b0;\n";
+  }
+
+  // Инициализация прочих управляющих входов
+  std::set<std::string> declaredSet;
+  for (const auto &n : d_clockNames) declaredSet.insert(n);
+  for (const auto &n : d_resetNames) declaredSet.insert(n);
+  for (const auto &n : d_dataInputNames) declaredSet.insert(n);
+  for (const auto &name : d_inputNames) {
+    if (declaredSet.find(name) == declaredSet.end()) {
+      ss << "    " << name << " = 1'b0;\n";
+    }
+  }
+
+  ss << "\n";
+  ss << "    $display(\"========================================\");\n";
+  ss << "    $display(\"Starting sequential testbench for "
+     << d_graph->getName() << "\");\n";
+  ss << "    $display(\"Total test cycles: "
+     << d_seqTestVectors.size() << "\");\n";
+  ss << "    $display(\"========================================\");\n";
+  ss << "\n";
+
+  // Фаза сброса
+  ss << "    // Reset phase\n";
+  ss << "    #" << d_config.resetDuration << ";\n";
+
+  // Снимаем сброс
+  for (const auto &rstName : d_resetNames) {
+    if (d_config.resetActiveValue == 0) {
+      // Active-low: снимаем сброс, устанавливаем 1
+      ss << "    " << rstName << " = 1'b1;\n";
+    } else {
+      // Active-high: снимаем сброс, устанавливаем 0
+      ss << "    " << rstName << " = 1'b0;\n";
+    }
+  }
+
+  if (!d_clockNames.empty()) {
+    ss << "    @(" << edgeType << " " << d_clockNames[0] << ");\n";
+  }
+  ss << "\n";
+
+  // Генерируем тестовые векторы по тактам
+  for (size_t i = 0; i < d_seqTestVectors.size(); ++i) {
+    const auto &stv = d_seqTestVectors[i];
+
+    ss << "    // Test cycle " << i << "\n";
+    ss << "    test_num = " << i << ";\n";
+
+    // Устанавливаем data-входы
+    for (size_t j = 0; j < d_dataInputNames.size() && j < stv.dataInputs.size();
+         ++j) {
+      ss << "    " << d_dataInputNames[j] << " = 1'b" << stv.dataInputs[j]
+         << ";\n";
+    }
+
+    // Ждём фронта clk
+    if (!d_clockNames.empty()) {
+      ss << "    @(" << edgeType << " " << d_clockNames[0] << ");\n";
+      ss << "    #1;\n"; // Небольшая задержка для установки выходов
+    } else {
+      // Для защелок — просто ждём задержку
+      ss << "    #" << d_config.stimulusDelay << ";\n";
+    }
+
+    // Вывод текущего состояния
+    ss << "    $display(\"Cycle %0d: \", test_num";
+    for (const auto &outName : d_outputNames) {
+      ss << ", \" " << outName << "=%b\", " << outName << "_dut";
+    }
+    ss << ");\n";
+
+    // Проверка ожидаемых значений (если задано)
+    if (stv.checkOutputs && !stv.expectedOutputs.empty()) {
+      ss << "    if (";
+      for (size_t j = 0; j < d_outputNames.size(); ++j) {
+        ss << d_outputNames[j] << "_dut === 1'b" << stv.expectedOutputs[j];
+        if (j < d_outputNames.size() - 1) {
+          ss << " && ";
+        }
+      }
+      ss << ") begin\n";
+      ss << "      passed = passed + 1;\n";
+      ss << "      $display(\"PASS: Test %0d\", test_num);\n";
+      ss << "    end else begin\n";
+      ss << "      errors = errors + 1;\n";
+      ss << "      $display(\"FAIL: Test %0d\", test_num);\n";
+      ss << "    end\n";
+    } else {
+      ss << "    passed = passed + 1;\n";
+    }
+
+    ss << "\n";
+  }
+
+  // Итоговый отчет
+  ss << "    // Final report\n";
+  ss << "    $display(\"========================================\");\n";
+  ss << "    $display(\"Test Summary:\");\n";
+  ss << "    $display(\"  Total:  %0d\", "
+     << d_seqTestVectors.size() << ");\n";
+  ss << "    $display(\"  Passed: %0d\", passed);\n";
+  ss << "    $display(\"  Failed: %0d\", errors);\n";
+  ss << "    if (errors == 0) begin\n";
+  ss << "      $display(\"STATUS: ALL TESTS PASSED\");\n";
+  ss << "    end else begin\n";
+  ss << "      $display(\"STATUS: SOME TESTS FAILED\");\n";
+  ss << "    end\n";
+  ss << "    $display(\"========================================\");\n";
+  ss << "\n";
+  ss << "    $finish;\n";
+  ss << "  end\n";
+
+  return ss.str();
 }
 
 } // namespace CG_Graph

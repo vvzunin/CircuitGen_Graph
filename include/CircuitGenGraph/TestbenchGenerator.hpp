@@ -13,6 +13,7 @@
 
 /// @file TestbenchGenerator.hpp
 /// @brief Система генерации тестбенчей и верификации для сгенерированных схем
+/// (комбинационных и последовательностных)
 
 namespace CG_Graph {
 
@@ -54,6 +55,15 @@ struct TestbenchConfig {
   std::string vcdFilename = "dump.vcd"; ///< Имя VCD файла
   bool verbose = false;                 ///< Подробный вывод
   uint32_t timeout = 1000; ///< Таймаут симуляции (в единицах timescale)
+  uint32_t resetActiveValue =
+      0; ///< Активный уровень сброса (0 = active-low, 1 = active-high)
+};
+
+/// @brief Тестовый вектор для одного такта последовательностной схемы
+struct SequentialTestVector {
+  std::vector<char> dataInputs; ///< Входные данные (без clk/rst)
+  std::vector<char> expectedOutputs; ///< Ожидаемые выходные значения (опционально)
+  bool checkOutputs = false; ///< Нужно ли проверять выходы на этом такте
 };
 
 /// @brief Стратегия генерации тестовых векторов
@@ -131,6 +141,32 @@ public:
   /// @brief Очищает все тестовые векторы
   void clearTestVectors();
 
+  // ==================== Генерация последовательностных тестов ====================
+
+  /// @brief Генерирует случайные тестовые векторы для последовательностной схемы
+  /// @param i_numCycles Количество тактов симуляции
+  /// @param i_seed Seed для генератора (0 = случайный)
+  /// @return Количество сгенерированных тактов
+  size_t generateSequentialTestVectors(size_t i_numCycles,
+                                      uint32_t i_seed = 0);
+
+  /// @brief Добавляет тестовый вектор для одного такта последовательностной схемы
+  /// @param i_dataInputs Входные значения (без clk/rst)
+  /// @param i_expectedOutputs Ожидаемые выходы (опционально)
+  /// @param i_checkOutputs Проверять ли выходы на этом такте
+  void addSequentialTestVector(
+      const std::vector<char> &i_dataInputs,
+      const std::vector<char> &i_expectedOutputs = {},
+      bool i_checkOutputs = false);
+
+  /// @brief Очищает последовательностные тестовые векторы
+  void clearSequentialTestVectors();
+
+  /// @brief Возвращает количество последовательностных тестовых векторов
+  size_t getSequentialTestVectorCount() const {
+    return d_seqTestVectors.size();
+  }
+
   /// @brief Возвращает количество тестовых векторов
   size_t getTestVectorCount() const { return d_testVectors.size(); }
 
@@ -185,6 +221,25 @@ public:
 
   // ==================== Утилиты ====================
 
+  /// @brief Проверяет, содержит ли схема последовательностные элементы
+  /// @return true если есть триггеры или защелки
+  bool isSequentialCircuit() const { return d_hasSequential; }
+
+  /// @brief Возвращает имена входов данных (без clk/rst)
+  const std::vector<std::string> &getDataInputNames() const {
+    return d_dataInputNames;
+  }
+
+  /// @brief Возвращает имена тактовых сигналов
+  const std::vector<std::string> &getClockNames() const {
+    return d_clockNames;
+  }
+
+  /// @brief Возвращает имена сигналов сброса
+  const std::vector<std::string> &getResetNames() const {
+    return d_resetNames;
+  }
+
   /// @brief Проверяет, установлен ли Icarus Verilog
   /// @param i_icarusPath Путь к iverilog
   /// @return true если Icarus Verilog доступен
@@ -234,12 +289,35 @@ private:
   static std::vector<PortInfo> parseGoldenModel(const std::string &filepath,
                                                 std::string &moduleName);
 
+  // ==================== Последовательностная генерация ====================
+
+  /// @brief Определяет тактовые и сбросовые сигналы из графа
+  void detectClockSignals();
+
+  /// @brief Генерирует объявления сигналов для последовательностного тестбенча
+  std::string generateSequentialSignalDeclarations() const;
+
+  /// @brief Генерирует блок тактового сигнала
+  std::string generateClockBlock() const;
+
+  /// @brief Генерирует инстанцирование DUT для последовательностного тестбенча
+  std::string generateSequentialDUTInstantiation() const;
+
+  /// @brief Генерирует блок стимулов для последовательностного тестбенча
+  std::string generateSequentialStimulusBlock() const;
+
   GraphPtr d_graph;         ///< Указатель на граф схемы
   TestbenchConfig d_config; ///< Конфигурация генератора
-  std::vector<TestVector> d_testVectors;  ///< Тестовые векторы
-  std::vector<std::string> d_inputNames;  ///< Имена входов
+  std::vector<TestVector> d_testVectors;  ///< Тестовые векторы (комбинационные)
+  std::vector<std::string> d_inputNames;  ///< Имена всех входов
   std::vector<std::string> d_outputNames; ///< Имена выходов
   bool d_hasSequential = false; ///< Есть ли последовательностные элементы
+
+  // Последовательностные данные
+  std::vector<SequentialTestVector> d_seqTestVectors; ///< Тестовые векторы по тактам
+  std::vector<std::string> d_clockNames;   ///< Имена тактовых сигналов
+  std::vector<std::string> d_resetNames;   ///< Имена сигналов сброса
+  std::vector<std::string> d_dataInputNames; ///< Имена входов данных (без clk/rst)
 };
 
 } // namespace CG_Graph

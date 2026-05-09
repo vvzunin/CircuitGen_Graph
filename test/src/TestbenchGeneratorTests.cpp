@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
+#include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 #include <CircuitGenGraph/TestbenchGenerator.hpp>
 
@@ -584,4 +585,241 @@ TEST_F(TestbenchGeneratorGoldenTests, SuccessfulGeneration) {
   EXPECT_TRUE(tbContent.find("test_in[0]") != std::string::npos);
   EXPECT_TRUE(tbContent.find("if (golden_out !== graph_out) begin") !=
               std::string::npos);
+}
+
+// ==================== Sequential Testbench Tests ====================
+
+namespace {
+
+/// @brief Создаёт простую последовательностную схему (D-триггер)
+GraphPtr createSimpleFFGraph() {
+  GraphPtr graph = std::make_shared<OrientedGraph>("SeqTestFF");
+  auto *clk = graph->addInput("clk");
+  auto *data = graph->addInput("data");
+  auto *seq = graph->addSequential(ff, clk, data, "q");
+  auto *out = graph->addOutput("res");
+  graph->addEdge(seq, out);
+  return graph;
+}
+
+/// @brief Создаёт D-триггер с асинхронным сбросом
+GraphPtr createFFWithResetGraph() {
+  GraphPtr graph = std::make_shared<OrientedGraph>("SeqTestFFR");
+  auto *clk = graph->addInput("clk");
+  auto *data = graph->addInput("data");
+  auto *rst_n = graph->addInput("rst_n");
+  auto *seq = graph->addSequential(affr, clk, data, rst_n, "q");
+  auto *out = graph->addOutput("res");
+  graph->addEdge(seq, out);
+  return graph;
+}
+
+/// @brief Создаёт защелку (latch)
+GraphPtr createLatchGraph() {
+  GraphPtr graph = std::make_shared<OrientedGraph>("SeqTestLatch");
+  auto *en = graph->addInput("en");
+  auto *data = graph->addInput("data");
+  auto *seq = graph->addSequential(latch, en, data, "q");
+  auto *out = graph->addOutput("res");
+  graph->addEdge(seq, out);
+  return graph;
+}
+
+} // namespace
+
+// Тест 1: Определение последовательностной схемы
+TEST(SequentialTestbench, SequentialDetection) {
+  OrientedGraph::resetCounter();
+  GraphPtr seqGraph = createSimpleFFGraph();
+  TestbenchConfig config;
+  TestbenchGenerator gen(seqGraph, config);
+
+  EXPECT_TRUE(gen.isSequentialCircuit());
+}
+
+// Тест 2: Определение комбинационной схемы
+TEST(SequentialTestbench, CombinationalDetection) {
+  OrientedGraph::resetCounter();
+  GraphPtr combGraph = createSimpleAndGate();
+  TestbenchConfig config;
+  TestbenchGenerator gen(combGraph, config);
+
+  EXPECT_FALSE(gen.isSequentialCircuit());
+}
+
+// Тест 3: Генерация последовательностных тестовых векторов
+TEST(SequentialTestbench, SequentialTestVectorGeneration) {
+  OrientedGraph::resetCounter();
+  GraphPtr graph = createSimpleFFGraph();
+  TestbenchConfig config;
+  TestbenchGenerator gen(graph, config);
+
+  size_t numCycles = 10;
+  size_t result = gen.generateSequentialTestVectors(numCycles, 42);
+
+  EXPECT_EQ(result, numCycles);
+  EXPECT_EQ(gen.getSequentialTestVectorCount(), numCycles);
+}
+
+// Тест 4: Генерация кода последовательностного тестбенча
+TEST(SequentialTestbench, SequentialTestbenchCodeGeneration) {
+  OrientedGraph::resetCounter();
+  GraphPtr graph = createSimpleFFGraph();
+  TestbenchConfig config;
+  config.clockPeriod = 10;
+  TestbenchGenerator gen(graph, config);
+  gen.generateSequentialTestVectors(5, 42);
+
+  std::string code = gen.getTestbenchCode();
+
+  // Проверяем наличие ключевых элементов последовательностного тестбенча
+  EXPECT_NE(code.find("always #"), std::string::npos)
+      << "Testbench must contain clock generation block";
+  EXPECT_NE(code.find("posedge clk"), std::string::npos)
+      << "Testbench must reference posedge clk";
+  EXPECT_NE(code.find("$dumpfile"), std::string::npos)
+      << "Testbench must contain VCD dump";
+  EXPECT_NE(code.find("clk = 1'b0"), std::string::npos)
+      << "Clock must be initialized to 0";
+  EXPECT_NE(code.find("$finish"), std::string::npos)
+      << "Testbench must call $finish";
+  EXPECT_NE(code.find("SeqTestFF_tb"), std::string::npos)
+      << "Module name must contain _tb suffix";
+  EXPECT_NE(code.find("dut"), std::string::npos)
+      << "DUT instance must be present";
+}
+
+// Тест 5: Тестбенч с сигналом сброса
+TEST(SequentialTestbench, SequentialTestbenchWithReset) {
+  OrientedGraph::resetCounter();
+  GraphPtr graph = createFFWithResetGraph();
+  TestbenchConfig config;
+  config.clockPeriod = 10;
+  config.resetDuration = 25;
+  TestbenchGenerator gen(graph, config);
+  gen.generateSequentialTestVectors(5, 42);
+
+  std::string code = gen.getTestbenchCode();
+
+  // Проверяем наличие управления сигналом rst
+  EXPECT_NE(code.find("rst_n"), std::string::npos)
+      << "Reset signal must be present in testbench";
+  EXPECT_NE(code.find("rst_n = 1'b0"), std::string::npos)
+      << "Reset must start in active state (low)";
+  EXPECT_NE(code.find("rst_n = 1'b1"), std::string::npos)
+      << "Reset must be deasserted";
+  EXPECT_NE(code.find("#25"), std::string::npos)
+      << "Reset duration must match config";
+
+  // Проверяем что rst_n определён как reset
+  EXPECT_FALSE(gen.getResetNames().empty());
+  EXPECT_EQ(gen.getResetNames()[0], "rst_n");
+}
+
+// Тест 6: Тестбенч с защелкой (latch)
+TEST(SequentialTestbench, SequentialTestbenchWithLatch) {
+  OrientedGraph::resetCounter();
+  GraphPtr graph = createLatchGraph();
+  TestbenchConfig config;
+  TestbenchGenerator gen(graph, config);
+  gen.generateSequentialTestVectors(5, 42);
+
+  std::string code = gen.getTestbenchCode();
+
+  // Для защелок не должно быть posedge clk (нет clk)
+  EXPECT_TRUE(gen.getClockNames().empty())
+      << "Latch should not have clock signals";
+  EXPECT_NE(code.find("SeqTestLatch_tb"), std::string::npos);
+  EXPECT_NE(code.find("$finish"), std::string::npos);
+}
+
+// Тест 7: Запись тестбенча в файл
+TEST(SequentialTestbench, SequentialWriteToFile) {
+  OrientedGraph::resetCounter();
+  GraphPtr graph = createSimpleFFGraph();
+
+  // Сначала генерируем Verilog файл схемы
+  graph->toVerilog("./test_seq_output/", "SeqTestFF");
+
+  TestbenchConfig config;
+  TestbenchGenerator gen(graph, config);
+  gen.generateSequentialTestVectors(5, 42);
+
+  std::string tbPath = "./test_seq_output/";
+  bool result = gen.toVerilogTestbench(tbPath, "SeqTestFF_tb");
+
+  EXPECT_TRUE(result);
+  EXPECT_TRUE(std::filesystem::exists(tbPath + "SeqTestFF_tb.v"));
+
+  // Проверяем содержимое
+  std::string content = readFile(tbPath + "SeqTestFF_tb.v");
+  EXPECT_NE(content.find("always #"), std::string::npos);
+
+  // Очистка
+  std::filesystem::remove_all("./test_seq_output/");
+}
+
+// Тест 8: Интеграция с Icarus Verilog (условный тест)
+TEST(SequentialTestbench, SequentialIcarusVerification) {
+  if (!TestbenchGenerator::isIcarusAvailable()) {
+    GTEST_SKIP() << "Icarus Verilog not available, skipping";
+  }
+
+  OrientedGraph::resetCounter();
+  GraphPtr graph = createSimpleFFGraph();
+
+  // Создаём тестбенч
+  TestbenchConfig config;
+  config.clockPeriod = 10;
+  config.resetDuration = 20;
+  TestbenchGenerator gen(graph, config);
+  gen.generateSequentialTestVectors(8, 42);
+
+  std::string outDir = "./test_icarus_seq";
+  auto icarusResult = gen.runIcarusVerification(outDir);
+
+  // Проверяем что симуляция не упала
+  EXPECT_TRUE(icarusResult.success)
+      << "Icarus verification failed: " << icarusResult.errorMessage;
+
+  // Очистка
+  std::filesystem::remove_all(outDir);
+}
+
+// Тест 9: Комбинационная схема не получает последовательностный тестбенч
+TEST(SequentialTestbench, SequentialTestbenchDoesNotBreakCombinational) {
+  OrientedGraph::resetCounter();
+  GraphPtr combGraph = createSimpleAndGate();
+  TestbenchConfig config;
+  TestbenchGenerator gen(combGraph, config);
+  gen.generateExhaustiveVectors();
+
+  std::string code = gen.getTestbenchCode();
+
+  // Комбинационный тестбенч НЕ должен содержать always # (тактовый блок)
+  EXPECT_EQ(code.find("always #"), std::string::npos)
+      << "Combinational testbench must NOT contain clock generation";
+  EXPECT_EQ(code.find("Reset phase"), std::string::npos)
+      << "Combinational testbench must NOT contain reset phase";
+}
+
+// Тест 10: Определение тактовых и сбросовых сигналов
+TEST(SequentialTestbench, SequentialClockDetection) {
+  OrientedGraph::resetCounter();
+  GraphPtr graph = createFFWithResetGraph();
+  TestbenchConfig config;
+  TestbenchGenerator gen(graph, config);
+
+  // Проверяем что clk определён как clock
+  EXPECT_EQ(gen.getClockNames().size(), 1u);
+  EXPECT_EQ(gen.getClockNames()[0], "clk");
+
+  // Проверяем что rst_n определён как reset
+  EXPECT_EQ(gen.getResetNames().size(), 1u);
+  EXPECT_EQ(gen.getResetNames()[0], "rst_n");
+
+  // Проверяем что data — это входной сигнал данных
+  const auto &dataInputs = gen.getDataInputNames();
+  EXPECT_EQ(dataInputs.size(), 1u);
+  EXPECT_EQ(dataInputs[0], "data");
 }
