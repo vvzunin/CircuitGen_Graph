@@ -26,9 +26,7 @@
 #include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
-#ifdef LOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
+#include <CircuitGenGraph/Logging.hpp>
 
 /**
  * \~english
