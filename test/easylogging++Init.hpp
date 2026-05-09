@@ -1,7 +1,6 @@
 #ifdef LOGFLAG
 
 #include "easyloggingpp/easylogging++.h"
-INITIALIZE_EASYLOGGINGPP
 
 #include "string.h"
 

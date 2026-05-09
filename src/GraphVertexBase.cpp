@@ -291,8 +291,11 @@ std::vector<VertexPtr> GraphVertexBase::getInConnections() const {
 uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
   assert(i_vert != this);
   assert(d_type != input && d_type != constant);
-  uint32_t n = 0;
+#ifdef LOGFLAG
+  VLOG(3) << "Vertex " << getName() << ": adding in connection from " << i_vert->getName();
+#endif
   d_inConnections.push_back(i_vert);
+  uint32_t n = 0;
   // @todo is rly needed?
   for (VertexPtr vert: d_inConnections)
     n += (vert == i_vert);
@@ -311,6 +314,9 @@ bool GraphVertexBase::addVertexToOutConnections(VertexPtr i_vert) {
   for (VertexPtr vert: d_outConnections)
     n += (vert == i_vert);
   if (n == 0) {
+#ifdef LOGFLAG
+    VLOG(3) << "Vertex " << getName() << ": adding out connection to " << i_vert->getName();
+#endif
     d_outConnections.push_back(i_vert);
     return true;
   }

@@ -1,4 +1,5 @@
 #include "CircuitGenGraph/TestbenchGenerator.hpp"
+#include <CircuitGenGraph/Logging.hpp>
 
 #include <algorithm>
 #include <array>
@@ -17,10 +18,6 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#endif
-
-#ifdef LOGFLAG
-#include "easyloggingpp/easylogging++.h"
 #endif
 
 namespace CG_Graph {
@@ -48,11 +45,9 @@ TestbenchGenerator::TestbenchGenerator(GraphPtr i_graph,
   // Проверяем наличие последовательностных элементов
   d_hasSequential = !vertices[VertexTypes::sequential].empty();
 
-#ifdef LOGFLAG
-  LOG(INFO) << "TestbenchGenerator: initialized for graph '"
-            << d_graph->getName() << "' with " << d_inputNames.size()
-            << " inputs and " << d_outputNames.size() << " outputs";
-#endif
+  CG_LOG_INFO << "TestbenchGenerator: initialized for graph '"
+              << d_graph->getName() << "' with " << d_inputNames.size()
+              << " inputs and " << d_outputNames.size() << " outputs";
 }
 
 // ==================== Генерация тестовых векторов ====================
@@ -403,6 +398,10 @@ bool TestbenchGenerator::toVerilogTestbench(const std::string &i_path,
   std::filesystem::create_directories(i_path);
   std::string fullPath = i_path + "/" + filename;
 
+#ifdef LOGFLAG
+  LOG(INFO) << "TestbenchGenerator: generating Verilog testbench at " << fullPath;
+#endif
+
   std::ofstream file(fullPath);
   if (!file) {
 #ifdef LOGFLAG
@@ -417,7 +416,7 @@ bool TestbenchGenerator::toVerilogTestbench(const std::string &i_path,
   file.close();
 
 #ifdef LOGFLAG
-  LOG(INFO) << "TestbenchGenerator: testbench written to " << fullPath;
+  LOG(INFO) << "TestbenchGenerator: testbench written to " << fullPath << " with " << d_testVectors.size() << " vectors";
 #endif
 
   return true;
