@@ -309,12 +309,9 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
       addEdge(newGraph, newVertex);
     }
   } else {
-#ifdef LOGFLAG
-    LOG(ERROR) << "Error, SubGraph without outputs" << std::endl;
-#else
-    std::cerr << "Error, SubGraph without outputs" << std::endl;
-#endif
+    CG_LOG_ERROR << "Error, SubGraph without outputs" << std::endl;
   }
+
   // here we use i_subGraph like an instance of BasicType,
   // and we call it's toVerilog, having in multiple instance
   // of one i_subGraph, so we can have many times "moduleName name (inp, out);"
@@ -432,21 +429,17 @@ VertexPtr OrientedGraph::generateMajority(VertexPtr a, VertexPtr b,
 }
 
 bool OrientedGraph::addEdge(VertexPtr from, VertexPtr to) {
-#ifdef LOGFLAG
-  VLOG(2) << "Adding edge from " << from->getName() << " to " << to->getName();
-#endif
+  CG_VLOG(2) << "Adding edge from " << (from ? from->getName() : "nullptr") << " to " << (to ? to->getName() : "nullptr");
   bool f;
   uint32_t n;
-  if (from->getBaseGraph().lock() == to->getBaseGraph().lock()) {
+  if (from && to && from->getBaseGraph().lock() == to->getBaseGraph().lock()) {
     f = from->addVertexToOutConnections(to);
     n = to->addVertexToInConnections(from);
   } else {
-#ifdef LOGFLAG
-    LOG(ERROR) << "Attempted to add edge between different graphs/subgraphs: "
-               << from->getName() << " and " << to->getName();
-#endif
+    CG_LOG_ERROR << "Attempted to add edge between different graphs/subgraphs (or null pointers): "
+               << (from ? from->getName() : "nullptr") << " and " << (to ? to->getName() : "nullptr");
     throw std::invalid_argument(
-        "Not allowed to add edge from one subgraph to another");
+        "Not allowed to add edge from one subgraph to another (or null pointers)");
   }
   d_edgesCount += f && (n > 0);
 

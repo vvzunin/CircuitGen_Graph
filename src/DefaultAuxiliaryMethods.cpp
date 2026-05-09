@@ -5,9 +5,8 @@
  */
 #include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
 
-#ifdef LOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
+#include <CircuitGenGraph/Logging.hpp>
+
 
 namespace CG_Graph {
 
@@ -79,9 +78,7 @@ std::string AuxMethodsGraph::dotReturnToString(DotReturn dot) {
         printingSubGraph = true;
         break;
       case DotTypes::DotExit:
-#ifdef LOGFLAG
-        LOG(INFO) << "tab: " << tab;
-#endif
+        CG_LOG_INFO << "tab: " << tab;
         if (printingSubGraph)
           s += dotTab * --tab + "}\n";
         break;

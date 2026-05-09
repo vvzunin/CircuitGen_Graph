@@ -9,9 +9,8 @@
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
-#ifdef LOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
+#include <CircuitGenGraph/Logging.hpp>
+
 #include "../lib/fmt/core.h"
 
 namespace CG_Graph {
@@ -201,10 +200,8 @@ void GraphVertexBase::updateLevel() {
   }
   d_needUpdate = VS_IN_PROGRESS;
   for (VertexPtr vert: d_inConnections) {
-#ifdef LOGLFLAG
-    LOG(INFO) << counter++ << ". " << vert->getName() << " ("
+    CG_LOG_INFO << counter++ << ". " << vert->getName() << " ("
               << vert->getTypeName() << ")";
-#endif
     vert->updateLevel();
     d_level = (vert->getLevel() >= d_level) ? vert->getLevel() + 1 : d_level;
   }
@@ -291,9 +288,7 @@ std::vector<VertexPtr> GraphVertexBase::getInConnections() const {
 uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
   assert(i_vert != this);
   assert(d_type != input && d_type != constant);
-#ifdef LOGFLAG
-  VLOG(3) << "Vertex " << getName() << ": adding in connection from " << i_vert->getName();
-#endif
+  CG_VLOG(3) << "Vertex " << getName() << ": adding in connection from " << (i_vert ? i_vert->getName() : "nullptr");
   d_inConnections.push_back(i_vert);
   uint32_t n = 0;
   // @todo is rly needed?
@@ -314,9 +309,7 @@ bool GraphVertexBase::addVertexToOutConnections(VertexPtr i_vert) {
   for (VertexPtr vert: d_outConnections)
     n += (vert == i_vert);
   if (n == 0) {
-#ifdef LOGFLAG
-    VLOG(3) << "Vertex " << getName() << ": adding out connection to " << i_vert->getName();
-#endif
+    CG_VLOG(3) << "Vertex " << getName() << ": adding out connection to " << (i_vert ? i_vert->getName() : "nullptr");
     d_outConnections.push_back(i_vert);
     return true;
   }
@@ -338,6 +331,7 @@ std::vector<std::pair<DotTypes, std::map<std::string, std::string>>>
 GraphVertexBase::toDOT() {
   return {};
 }
+
 
 #ifdef LOGFLAG
 void GraphVertexBase::log(el::base::type::ostream_t &os) const {

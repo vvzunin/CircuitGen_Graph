@@ -7,9 +7,7 @@
 
 #include <CircuitGenGraph/GraphVertex.hpp>
 
-#ifdef lOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
+#include <CircuitGenGraph/Logging.hpp>
 
 namespace CG_Graph {
 
@@ -54,6 +52,7 @@ DotReturn GraphVertexConstant::toDOT() {
                   {"level", std::to_string(d_level)}}});
   return dot;
 }
+
 
 #ifdef LOGFLAG
 void GraphVertexConstant::log(el::base::type::ostream_t &os) const {

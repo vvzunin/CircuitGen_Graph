@@ -248,21 +248,29 @@ TEST(SequentialTests, TestTriggerAsyncRstN_En) {
   EXPECT_TRUE(graph->calculateHash().size());
 }
 
-TEST(ErrorOutputTest, CapturesCerr) {
+#ifdef LOGFLAG
+TEST(ErrorOutputTest, CapturesLog) {
   std::stringstream buffer;
-  // перенаправляем cerr
-  std::streambuf *old = std::cerr.rdbuf(buffer.rdbuf());
+  // Redirect both cout and cerr since easylogging++ might use either depending on config
+  std::streambuf *old_cerr = std::cerr.rdbuf(buffer.rdbuf());
+  std::streambuf *old_cout = std::cout.rdbuf(buffer.rdbuf());
 
   OrientedGraph::resetCounter();
   GraphPtr graph = std::make_shared<OrientedGraph>();
   auto *en = graph->addInput("en");
   auto *data = graph->addInput("data");
   auto *rst = graph->addInput("rst");
+  
+  // latchrs is latch | RST | SET. We provide only RST wire, so SET will be missing/invalid.
   graph->addSequential(latchrs, en, data, rst, "q");
 
-  // возвращаем старый буфер
-  std::cerr.rdbuf(old);
+  // Restore buffers
+  std::cerr.rdbuf(old_cerr);
+  std::cout.rdbuf(old_cout);
 
   std::string output = buffer.str();
-  EXPECT_EQ(output, "Invalid flag found in used type: SET\n");
+  // Check that the error message is present in the output
+  EXPECT_TRUE(output.find("Invalid flag found in used type: SET") != std::string::npos)
+      << "Expected error message not found in output: " << output;
 }
+#endif

@@ -230,6 +230,7 @@ bool GraphVertexGates::isSubgraphBuffer() const {
   return d_inConnections.front()->getType() == VertexTypes::subGraph;
 }
 
+
 #ifdef LOGFLAG
 void GraphVertexGates::log(el::base::type::ostream_t &os) const {
   GraphPtr gr = d_baseGraph.lock();
