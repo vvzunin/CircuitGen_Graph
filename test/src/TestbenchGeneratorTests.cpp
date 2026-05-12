@@ -1,3 +1,12 @@
+/**
+ * @file TestbenchGeneratorTests.cpp
+ * @author Theossr <feolab05@gmail.com>
+ * * \~english
+ * @brief Unit tests for the TestbenchGenerator class.
+ * * \~russian
+ * @brief Юнит-тесты для класса TestbenchGenerator.
+ */
+
 #include <gtest/gtest.h>
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
@@ -16,7 +25,16 @@ using namespace CG_Graph;
 
 namespace {
 
-/// @brief Вспомогательная функция для чтения файла
+/**
+ * \~english
+ * @brief Helper function to read a file.
+ * @param path Path to the file.
+ * @return File content as a string.
+ * * \~russian
+ * @brief Вспомогательная функция для чтения файла.
+ * @param path Путь к файлу.
+ * @return Содержимое файла в виде строки.
+ */
 std::string readFile(const std::string &path) {
   std::ifstream file(path);
   if (!file) {
@@ -27,7 +45,14 @@ std::string readFile(const std::string &path) {
   return buffer.str();
 }
 
-/// @brief Создает простую комбинационную схему (AND gate)
+/**
+ * \~english
+ * @brief Creates a simple combinational circuit (AND gate).
+ * @return Shared pointer to the created graph.
+ * * \~russian
+ * @brief Создает простую комбинационную схему (AND gate).
+ * @return Умный указатель на созданный граф.
+ */
 GraphPtr createSimpleAndGate() {
   auto graph = std::make_shared<OrientedGraph>("simple_and");
   auto *inA = graph->addInput("a");
@@ -42,7 +67,14 @@ GraphPtr createSimpleAndGate() {
   return graph;
 }
 
-/// @brief Создает полусумматор
+/**
+ * \~english
+ * @brief Creates a half-adder circuit.
+ * @return Shared pointer to the created graph.
+ * * \~russian
+ * @brief Создает полусумматор.
+ * @return Умный указатель на созданный граф.
+ */
 GraphPtr createHalfAdder() {
   auto graph = std::make_shared<OrientedGraph>("half_adder");
   auto *inA = graph->addInput("a");
@@ -61,7 +93,14 @@ GraphPtr createHalfAdder() {
   return graph;
 }
 
-/// @brief Создает схему с NOT gate
+/**
+ * \~english
+ * @brief Creates a circuit with a NOT gate.
+ * @return Shared pointer to the created graph.
+ * * \~russian
+ * @brief Создает схему с NOT gate.
+ * @return Умный указатель на созданный граф.
+ */
 GraphPtr createNotGate() {
   auto graph = std::make_shared<OrientedGraph>("not_gate");
   auto *in = graph->addInput("a");
@@ -75,7 +114,14 @@ GraphPtr createNotGate() {
   return graph;
 }
 
-/// @brief Создает более сложную схему (XOR через NAND)
+/**
+ * \~english
+ * @brief Creates a more complex circuit (XOR built from NAND gates).
+ * @return Shared pointer to the created graph.
+ * * \~russian
+ * @brief Создает более сложную схему (XOR через NAND).
+ * @return Умный указатель на созданный граф.
+ */
 GraphPtr createXorFromNand() {
   auto graph = std::make_shared<OrientedGraph>("xor_nand");
   auto *a = graph->addInput("a");
@@ -101,7 +147,8 @@ GraphPtr createXorFromNand() {
 
 } // namespace
 
-// ==================== Тесты конструктора ====================
+// ==================== Constructor Tests / Тесты конструктора
+// ====================
 
 TEST(TestbenchGeneratorTests, ConstructorWithValidGraph) {
   auto graph = createSimpleAndGate();
@@ -125,7 +172,8 @@ TEST(TestbenchGeneratorTests, ConstructorWithConfig) {
   EXPECT_FALSE(tbGen.getConfig().generateVCD);
 }
 
-// ==================== Тесты генерации тестовых векторов ====================
+// ==================== Test Vectors Generation Tests / Тесты генерации тестовых
+// векторов ====================
 
 TEST(TestbenchGeneratorTests, GenerateExhaustiveVectorsSimple) {
   auto graph = createSimpleAndGate();
@@ -133,7 +181,8 @@ TEST(TestbenchGeneratorTests, GenerateExhaustiveVectorsSimple) {
 
   size_t count = tbGen.generateExhaustiveVectors();
 
-  // 2 входа = 2^2 = 4 комбинации
+  /// \~english 2 inputs = 2^2 = 4 combinations
+  /// \~russian 2 входа = 2^2 = 4 комбинации
   EXPECT_EQ(count, 4);
   EXPECT_EQ(tbGen.getTestVectorCount(), 4);
 }
@@ -144,7 +193,8 @@ TEST(TestbenchGeneratorTests, GenerateExhaustiveVectorsHalfAdder) {
 
   size_t count = tbGen.generateExhaustiveVectors();
 
-  // 2 входа = 2^2 = 4 комбинации
+  /// \~english 2 inputs = 2^2 = 4 combinations
+  /// \~russian 2 входа = 2^2 = 4 комбинации
   EXPECT_EQ(count, 4);
 }
 
@@ -169,7 +219,8 @@ TEST(TestbenchGeneratorTests, GenerateRandomVectorsWithDifferentSeeds) {
   tbGen2.generateRandomVectors(5, 2);
   auto vectors2 = tbGen2.getTestVectors();
 
-  // Разные seeds должны давать разные последовательности
+  /// \~english Different seeds should yield different sequences
+  /// \~russian Разные seeds должны давать разные последовательности
   bool allSame = true;
   for (size_t i = 0; i < vectors1.size(); ++i) {
     if (vectors1[i].inputs != vectors2[i].inputs) {
@@ -210,10 +261,12 @@ TEST(TestbenchGeneratorTests, AddCustomTestVectorWrongSize) {
   auto graph = createSimpleAndGate();
   TestbenchGenerator tbGen(graph);
 
-  // Неправильный размер входного вектора
+  /// \~english Incorrect input vector size
+  /// \~russian Неправильный размер входного вектора
   EXPECT_THROW(tbGen.addTestVector({'0'}), std::invalid_argument);
 
-  // Неправильный размер ожидаемого вектора
+  /// \~english Incorrect expected vector size
+  /// \~russian Неправильный размер ожидаемого вектора
   EXPECT_THROW(tbGen.addTestVector({'0', '0'}, {'1', '0'}),
                std::invalid_argument);
 }
@@ -229,7 +282,7 @@ TEST(TestbenchGeneratorTests, ClearTestVectors) {
   EXPECT_EQ(tbGen.getTestVectorCount(), 0);
 }
 
-// ==================== Тесты корректности тестовых векторов
+// ==================== Correctness Tests / Тесты корректности тестовых векторов
 // ====================
 
 TEST(TestbenchGeneratorTests, AndGateVectorsCorrectness) {
@@ -239,7 +292,8 @@ TEST(TestbenchGeneratorTests, AndGateVectorsCorrectness) {
 
   auto vectors = tbGen.getTestVectors();
 
-  // Проверяем таблицу истинности AND
+  /// \~english Check AND truth table
+  /// \~russian Проверяем таблицу истинности AND
   for (const auto &tv: vectors) {
     char a = tv.inputs[0];
     char b = tv.inputs[1];
@@ -256,7 +310,8 @@ TEST(TestbenchGeneratorTests, NotGateVectorsCorrectness) {
 
   auto vectors = tbGen.getTestVectors();
 
-  // Проверяем таблицу истинности NOT
+  /// \~english Check NOT truth table
+  /// \~russian Проверяем таблицу истинности NOT
   for (const auto &tv: vectors) {
     char a = tv.inputs[0];
     char expected = (a == '1') ? '0' : '1';
@@ -271,7 +326,8 @@ TEST(TestbenchGeneratorTests, HalfAdderVectorsCorrectness) {
 
   auto vectors = tbGen.getTestVectors();
 
-  // Проверяем таблицу истинности полусумматора
+  /// \~english Check half-adder truth table
+  /// \~russian Проверяем таблицу истинности полусумматора
   for (const auto &tv: vectors) {
     char a = tv.inputs[0];
     char b = tv.inputs[1];
@@ -285,7 +341,8 @@ TEST(TestbenchGeneratorTests, HalfAdderVectorsCorrectness) {
   }
 }
 
-// ==================== Тесты генерации тестбенча ====================
+// ==================== Testbench Generation Tests / Тесты генерации тестбенча
+// ====================
 
 TEST(TestbenchGeneratorTests, GenerateTestbenchCode) {
   auto graph = createSimpleAndGate();
@@ -294,7 +351,8 @@ TEST(TestbenchGeneratorTests, GenerateTestbenchCode) {
 
   std::string code = tbGen.getTestbenchCode();
 
-  // Проверяем наличие ключевых элементов
+  /// \~english Check for key elements
+  /// \~russian Проверяем наличие ключевых элементов
   EXPECT_NE(code.find("module simple_and_tb"), std::string::npos);
   EXPECT_NE(code.find("simple_and dut"), std::string::npos);
   EXPECT_NE(code.find("reg a"), std::string::npos);
@@ -346,11 +404,13 @@ TEST(TestbenchGeneratorTests, WriteTestbenchToFile) {
   EXPECT_TRUE(result);
   EXPECT_TRUE(std::filesystem::exists(testDir + "/test_tb.v"));
 
-  // Проверяем содержимое файла
+  /// \~english Check file content
+  /// \~russian Проверяем содержимое файла
   std::string content = readFile(testDir + "/test_tb.v");
   EXPECT_NE(content.find("module simple_and_tb"), std::string::npos);
 
-  // Очистка
+  /// \~english Cleanup
+  /// \~russian Очистка
   std::filesystem::remove_all(testDir);
 }
 
@@ -358,13 +418,15 @@ TEST(TestbenchGeneratorTests, WriteTestbenchWithoutVectors) {
   auto graph = createSimpleAndGate();
   TestbenchGenerator tbGen(graph);
 
-  // Не генерируем тестовые векторы
+  /// \~english Do not generate test vectors
+  /// \~russian Не генерируем тестовые векторы
   bool result = tbGen.toVerilogTestbench("./", "test_tb");
 
   EXPECT_FALSE(result);
 }
 
-// ==================== Тесты внутренней симуляции ====================
+// ==================== Internal Simulation Tests / Тесты внутренней симуляции
+// ====================
 
 TEST(TestbenchGeneratorTests, InternalSimulationAndGate) {
   auto graph = createSimpleAndGate();
@@ -398,15 +460,16 @@ TEST(TestbenchGeneratorTests, InternalSimulationXorFromNand) {
 
   auto result = tbGen.runInternalSimulation();
 
-  // XOR через NAND создает бистабильную цепь, которая может давать 'x'
-  // при определенных комбинациях входов из-за особенностей симуляции.
-  // Проверяем, что симуляция завершается без ошибок.
+  /// \~english XOR via NAND creates a bistable loop which might output 'x'
+  /// in certain combinations. Check that simulation finishes without crashing.
+  /// \~russian XOR через NAND создает бистабильную цепь, которая может давать
+  /// 'x' при определенных комбинациях входов. Проверяем, что симуляция
+  /// завершается без ошибок.
   EXPECT_EQ(result.totalTests, 4);
-  // Как минимум часть тестов должна пройти
   EXPECT_GE(result.passedTests, 2);
 }
 
-// ==================== Тесты утилит ====================
+// ==================== Utility Tests / Тесты утилит ====================
 
 TEST(TestbenchGeneratorTests, ToVerilogLiteral) {
   EXPECT_EQ(TestbenchGenerator::toVerilogLiteral({'0'}), "1'b0");
@@ -432,14 +495,17 @@ TEST(TestbenchGeneratorTests, ConfigSetterGetter) {
   EXPECT_TRUE(tbGen.getConfig().verbose);
 }
 
-// ==================== Тесты Icarus Verilog (условные) ====================
-// Если iverilog/vvp нет в PATH, тесты ниже помечаются как skipped (GTEST_SKIP),
-// а не падают — это нормально для CI без Icarus.
+// ==================== Icarus Verilog Tests / Тесты Icarus Verilog (условные)
+// ====================
+/// \~english If iverilog/vvp is not in PATH, tests are marked as skipped
+/// (GTEST_SKIP).
+/// \~russian Если iverilog/vvp нет в PATH, тесты помечаются как skipped
+/// (GTEST_SKIP).
 
 TEST(TestbenchGeneratorTests, IcarusAvailabilityCheck) {
-  // Этот тест просто проверяет, что функция не падает
+  /// \~english Just verifies that the function does not crash.
+  /// \~russian Просто проверяет, что функция не падает.
   bool available = TestbenchGenerator::isIcarusAvailable();
-  // Результат зависит от установки Icarus Verilog в системе
   (void)available;
 }
 
@@ -459,7 +525,8 @@ TEST(TestbenchGeneratorTests, IcarusVerificationAndGate) {
   EXPECT_EQ(result.passedTests, 4);
   EXPECT_EQ(result.failedTests, 0);
 
-  // Очистка
+  /// \~english Cleanup
+  /// \~russian Очистка
   std::filesystem::remove_all(testDir);
 }
 
@@ -478,7 +545,8 @@ TEST(TestbenchGeneratorTests, IcarusVerificationHalfAdder) {
   EXPECT_TRUE(result.success);
   EXPECT_EQ(result.passedTests, 4);
 
-  // Очистка
+  /// \~english Cleanup
+  /// \~russian Очистка
   std::filesystem::remove_all(testDir);
 }
 
@@ -496,18 +564,21 @@ TEST(TestbenchGeneratorTests, CompareSimulations) {
 
   EXPECT_TRUE(result.success);
 
-  // Очистка
+  /// \~english Cleanup
+  /// \~russian Очистка
   std::filesystem::remove_all(testDir);
 }
 
-// ==================== Тесты обработки ошибок ====================
+// ==================== Error Handling Tests / Тесты обработки ошибок
+// ====================
 
 TEST(TestbenchGeneratorTests, IcarusNotAvailable) {
   auto graph = createSimpleAndGate();
   TestbenchGenerator tbGen(graph);
   tbGen.generateExhaustiveVectors();
 
-  // Пытаемся использовать несуществующий путь к iverilog
+  /// \~english Attempt to use a non-existent path for iverilog
+  /// \~russian Пытаемся использовать несуществующий путь к iverilog
   auto result = tbGen.runIcarusVerification("./test_output",
                                             "/nonexistent/iverilog", "vvp");
 
@@ -515,9 +586,15 @@ TEST(TestbenchGeneratorTests, IcarusNotAvailable) {
   EXPECT_FALSE(result.errorMessage.empty());
 }
 
-// ==================== Сравнение графа с эталонной Verilog-моделью
-// ====================
+// ==================== Golden Model Comparison Tests / Сравнение графа с
+// эталонной Verilog-моделью ====================
 
+/**
+ * \~english
+ * @brief Test fixture for Golden Model comparison.
+ * \~russian
+ * @brief Фикстура для тестов сравнения с эталонной моделью.
+ */
 class TestbenchGeneratorGoldenTests : public ::testing::Test {
 protected:
   void TearDown() override {
@@ -526,6 +603,16 @@ protected:
     std::remove("test_tb_output.v");
   }
 
+  /**
+   * \~english
+   * @brief Helper to create a dummy file.
+   * @param filename Name of the file.
+   * @param content Content to write.
+   * * \~russian
+   * @brief Вспомогательная функция для создания временного файла.
+   * @param filename Имя файла.
+   * @param content Содержимое для записи.
+   */
   void createDummyFile(const std::string &filename,
                        const std::string &content) {
     std::ofstream f(filename);
