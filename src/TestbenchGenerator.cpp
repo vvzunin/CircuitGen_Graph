@@ -57,8 +57,8 @@ size_t TestbenchGenerator::generateExhaustiveVectors() {
 
   if (numInputs > 20) {
     CG_LOG_WARNING << "TestbenchGenerator: exhaustive generation for "
-                 << numInputs << " inputs will create " << (1ULL << numInputs)
-                 << " test vectors. Consider using random vectors.";
+                   << numInputs << " inputs will create " << (1ULL << numInputs)
+                   << " test vectors. Consider using random vectors.";
   }
 
   d_testVectors.clear();
@@ -74,7 +74,7 @@ size_t TestbenchGenerator::generateExhaustiveVectors() {
   }
 
   CG_LOG_INFO << "TestbenchGenerator: generated " << d_testVectors.size()
-            << " exhaustive test vectors";
+              << " exhaustive test vectors";
 
   return d_testVectors.size();
 }
@@ -102,7 +102,7 @@ size_t TestbenchGenerator::generateRandomVectors(size_t i_count,
   }
 
   CG_LOG_INFO << "TestbenchGenerator: generated " << i_count
-            << " random test vectors";
+              << " random test vectors";
 
   return i_count;
 }
@@ -374,7 +374,8 @@ std::string TestbenchGenerator::getTestbenchCode() const {
 bool TestbenchGenerator::toVerilogTestbench(const std::string &i_path,
                                             const std::string &i_filename) {
   if (d_testVectors.empty()) {
-    CG_LOG_WARNING << "TestbenchGenerator: no test vectors to generate testbench";
+    CG_LOG_WARNING
+        << "TestbenchGenerator: no test vectors to generate testbench";
     return false;
   }
 
@@ -384,7 +385,8 @@ bool TestbenchGenerator::toVerilogTestbench(const std::string &i_path,
   std::filesystem::create_directories(i_path);
   std::string fullPath = i_path + "/" + filename;
 
-  CG_LOG_INFO << "TestbenchGenerator: generating Verilog testbench at " << fullPath;
+  CG_LOG_INFO << "TestbenchGenerator: generating Verilog testbench at "
+              << fullPath;
 
   std::ofstream file(fullPath);
   if (!file) {
@@ -395,7 +397,8 @@ bool TestbenchGenerator::toVerilogTestbench(const std::string &i_path,
   file << getTestbenchCode();
   file.close();
 
-  CG_LOG_INFO << "TestbenchGenerator: testbench written to " << fullPath << " with " << d_testVectors.size() << " vectors";
+  CG_LOG_INFO << "TestbenchGenerator: testbench written to " << fullPath
+              << " with " << d_testVectors.size() << " vectors";
 
   return true;
 }
@@ -443,7 +446,7 @@ VerificationResult TestbenchGenerator::runInternalSimulation() {
   result.success = (result.failedTests == 0);
 
   CG_LOG_INFO << "TestbenchGenerator: internal simulation completed. "
-            << result.passedTests << "/" << result.totalTests << " passed";
+              << result.passedTests << "/" << result.totalTests << " passed";
 
   return result;
 }
@@ -685,7 +688,7 @@ TestbenchGenerator::runIcarusVerification(const std::string &i_workDir,
   std::vector<std::string> simArgs = {i_vvpPath, outPath};
 
   CG_LOG_INFO << "TestbenchGenerator: running simulation: " << i_vvpPath << " "
-            << outPath;
+              << outPath;
 
   auto [simExitCode, simOutput] = executeCommandSafe(simArgs);
 
@@ -723,7 +726,7 @@ TestbenchGenerator::runIcarusVerification(const std::string &i_workDir,
   }
 
   CG_LOG_INFO << "TestbenchGenerator: Icarus verification completed. "
-            << result.passedTests << "/" << result.totalTests << " passed";
+              << result.passedTests << "/" << result.totalTests << " passed";
 
   if (d_config.verbose) {
     std::cout << simOutput << std::endl;

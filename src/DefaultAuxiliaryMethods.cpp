@@ -7,7 +7,6 @@
 
 #include <CircuitGenGraph/Logging.hpp>
 
-
 namespace CG_Graph {
 
 std::string operator*(std::string a, unsigned int b) {

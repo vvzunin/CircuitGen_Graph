@@ -53,7 +53,6 @@ DotReturn GraphVertexConstant::toDOT() {
   return dot;
 }
 
-
 #ifdef LOGFLAG
 void GraphVertexConstant::log(el::base::type::ostream_t &os) const {
   GraphPtr gr = d_baseGraph.lock();

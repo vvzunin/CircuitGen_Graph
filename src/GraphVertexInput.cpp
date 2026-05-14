@@ -6,7 +6,6 @@
 
 #include <CircuitGenGraph/Logging.hpp>
 
-
 namespace CG_Graph {
 
 GraphVertexInput::GraphVertexInput(GraphPtr i_baseGraph,

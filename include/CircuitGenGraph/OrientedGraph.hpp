@@ -113,7 +113,8 @@ public:
    * @brief Initializes logging system.
    * @param i_configPath Path to easylogging++.conf file.
    */
-  static void initLogging(const std::string &i_configPath = "easylogging++.conf");
+  static void
+  initLogging(const std::string &i_configPath = "easylogging++.conf");
 
   using GraphID = std::size_t;
 

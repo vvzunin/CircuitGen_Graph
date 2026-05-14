@@ -52,7 +52,8 @@ OrientedGraph::OrientedGraph(const std::string &i_name, size_t buffer_size,
   else
     d_name = i_name;
 
-  CG_LOG_INFO << "Creating OrientedGraph '" << d_name << "' (ID: " << d_graphID << ")";
+  CG_LOG_INFO << "Creating OrientedGraph '" << d_name << "' (ID: " << d_graphID
+              << ")";
 
   // filling edges
   for (auto cur_gate: GraphUtils::getLogicOperationsKeys()) {
@@ -65,7 +66,8 @@ OrientedGraph::OrientedGraph(const std::string &i_name, size_t buffer_size,
 }
 
 OrientedGraph::~OrientedGraph() {
-  CG_LOG_INFO << "Destroying OrientedGraph '" << d_name << "' (ID: " << d_graphID << ")";
+  CG_LOG_INFO << "Destroying OrientedGraph '" << d_name
+              << "' (ID: " << d_graphID << ")";
   for (auto sub: d_subGraphs) {
     sub->d_currentParentGraph.lock() = nullptr;
   }
@@ -429,17 +431,20 @@ VertexPtr OrientedGraph::generateMajority(VertexPtr a, VertexPtr b,
 }
 
 bool OrientedGraph::addEdge(VertexPtr from, VertexPtr to) {
-  CG_VLOG(2) << "Adding edge from " << (from ? from->getName() : "nullptr") << " to " << (to ? to->getName() : "nullptr");
+  CG_VLOG(2) << "Adding edge from " << (from ? from->getName() : "nullptr")
+             << " to " << (to ? to->getName() : "nullptr");
   bool f;
   uint32_t n;
   if (from && to && from->getBaseGraph().lock() == to->getBaseGraph().lock()) {
     f = from->addVertexToOutConnections(to);
     n = to->addVertexToInConnections(from);
   } else {
-    CG_LOG_ERROR << "Attempted to add edge between different graphs/subgraphs (or null pointers): "
-               << (from ? from->getName() : "nullptr") << " and " << (to ? to->getName() : "nullptr");
-    throw std::invalid_argument(
-        "Not allowed to add edge from one subgraph to another (or null pointers)");
+    CG_LOG_ERROR << "Attempted to add edge between different graphs/subgraphs "
+                    "(or null pointers): "
+                 << (from ? from->getName() : "nullptr") << " and "
+                 << (to ? to->getName() : "nullptr");
+    throw std::invalid_argument("Not allowed to add edge from one subgraph to "
+                                "another (or null pointers)");
   }
   d_edgesCount += f && (n > 0);
 

@@ -251,7 +251,8 @@ TEST(SequentialTests, TestTriggerAsyncRstN_En) {
 #ifdef LOGFLAG
 TEST(ErrorOutputTest, CapturesLog) {
   std::stringstream buffer;
-  // Redirect both cout and cerr since easylogging++ might use either depending on config
+  // Redirect both cout and cerr since easylogging++ might use either depending
+  // on config
   std::streambuf *old_cerr = std::cerr.rdbuf(buffer.rdbuf());
   std::streambuf *old_cout = std::cout.rdbuf(buffer.rdbuf());
 
@@ -260,8 +261,9 @@ TEST(ErrorOutputTest, CapturesLog) {
   auto *en = graph->addInput("en");
   auto *data = graph->addInput("data");
   auto *rst = graph->addInput("rst");
-  
-  // latchrs is latch | RST | SET. We provide only RST wire, so SET will be missing/invalid.
+
+  // latchrs is latch | RST | SET. We provide only RST wire, so SET will be
+  // missing/invalid.
   graph->addSequential(latchrs, en, data, rst, "q");
 
   // Restore buffers
@@ -270,7 +272,8 @@ TEST(ErrorOutputTest, CapturesLog) {
 
   std::string output = buffer.str();
   // Check that the error message is present in the output
-  EXPECT_TRUE(output.find("Invalid flag found in used type: SET") != std::string::npos)
+  EXPECT_TRUE(output.find("Invalid flag found in used type: SET") !=
+              std::string::npos)
       << "Expected error message not found in output: " << output;
 }
 #endif

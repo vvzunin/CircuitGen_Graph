@@ -41,7 +41,7 @@ inline bool validateSignal(SequentialTypes current, SequentialTypes found) {
     if (delta & flag) {
       SequentialTypes foundFlag = static_cast<SequentialTypes>(delta & flag);
       CG_LOG_ERROR << "Invalid flag found in used type: "
-                 << convertSequentialFlag(foundFlag) << '\n';
+                   << convertSequentialFlag(foundFlag) << '\n';
     }
   }
   return false;
@@ -286,6 +286,5 @@ DotReturn GraphVertexSequential::toDOT() {
         {DotTypes::DotEdge, {{"from", ptr->getName()}, {"to", getName()}}});
   }
   return dot;
-  }
-  } // namespace CG_Graph
-
+}
+} // namespace CG_Graph

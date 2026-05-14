@@ -17,11 +17,11 @@ getLogicOperation(const std::string &i_op) {
   const auto *iter =
       std::find_if(d_logicOperations.begin(), d_logicOperations.end(),
                    [&](const auto &x) { return x.first == i_op; });
-  
+
   if (iter == d_logicOperations.end()) {
-      CG_LOG_ERROR << "Logic operation '" << i_op << "' not found in container";
+    CG_LOG_ERROR << "Logic operation '" << i_op << "' not found in container";
   }
-  
+
   assert(iter != d_logicOperations.end() &&
          "value not found in operations' container");
   return iter->second;
@@ -58,11 +58,12 @@ std::string_view fromHierarchyToOperation(int32_t i_key) {
     }
     filled = true;
   }
-  
+
   if (i_key >= d_hierarchySize) {
-      CG_LOG_ERROR << "Hierarchy key " << i_key << " out of range (max: " << d_hierarchySize - 1 << ")";
+    CG_LOG_ERROR << "Hierarchy key " << i_key
+                 << " out of range (max: " << d_hierarchySize - 1 << ")";
   }
-  
+
   assert(i_key < d_hierarchySize);
   return operationByHierarchy[i_key];
 }
@@ -83,39 +84,41 @@ std::string fromOperationsToName(std::string_view i_op) {
   auto *iter =
       std::find_if(std::begin(operationsToName), std::end(operationsToName),
                    [&](const auto &x) { return x.first == i_op; });
-                   
+
   if (iter == std::end(operationsToName)) {
-      CG_LOG_ERROR << "Operation name for symbol '" << i_op << "' not found";
+    CG_LOG_ERROR << "Operation name for symbol '" << i_op << "' not found";
   }
-  
+
   assert(iter != std::end(operationsToName) &&
          "name not found in operations' container");
   return std::string(iter->second);
 }
 
 Gates parseStringToGate(std::string i_gate) {
-  auto* pair = findPairByKey(stringToGate, i_gate);
+  auto *pair = findPairByKey(stringToGate, i_gate);
   if (!pair) {
-      CG_LOG_ERROR << "Failed to parse string to Gate: " << i_gate;
-      return Gates::GateDefault;
+    CG_LOG_ERROR << "Failed to parse string to Gate: " << i_gate;
+    return Gates::GateDefault;
   }
   return pair->second;
 }
 
 std::string parseGateToString(Gates gate) {
-  auto* pair = findPairByKey(gateToString, gate);
+  auto *pair = findPairByKey(gateToString, gate);
   if (!pair) {
-      CG_LOG_ERROR << "Failed to parse Gate enum to string: " << static_cast<int>(gate);
-      return "ERROR";
+    CG_LOG_ERROR << "Failed to parse Gate enum to string: "
+                 << static_cast<int>(gate);
+    return "ERROR";
   }
   return std::string(pair->second);
 }
 
 std::string parseVertexToString(VertexTypes vertex) {
-  auto* pair = findPairByKey(vertexToString, vertex);
+  auto *pair = findPairByKey(vertexToString, vertex);
   if (!pair) {
-      CG_LOG_ERROR << "Failed to parse VertexType enum to string: " << static_cast<int>(vertex);
-      return "ERROR";
+    CG_LOG_ERROR << "Failed to parse VertexType enum to string: "
+                 << static_cast<int>(vertex);
+    return "ERROR";
   }
   return std::string(pair->second);
 };

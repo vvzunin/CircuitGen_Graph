@@ -71,7 +71,9 @@ char GraphVertexGates::updateValue() {
           table = tableXnor.at(d_value);
           break;
         default:
-          CG_LOG_ERROR << "GraphVertexGates: Unknown gate type in updateValue for vertex '" << d_name << "'";
+          CG_LOG_ERROR << "GraphVertexGates: Unknown gate type in updateValue "
+                          "for vertex '"
+                       << d_name << "'";
       }
       d_value = table.at(d_inConnections.at(i)->getValue());
     }
@@ -153,7 +155,9 @@ std::string GraphVertexGates::getVerilogString() const {
 
       s += " " + VertexUtils::gateToString(d_gate) + " " + name;
       if (d_gate == GateDefault)
-          CG_LOG_ERROR << "GraphVertexGates: Default gate used in getVerilogString for vertex '" << d_name << "'";
+        CG_LOG_ERROR << "GraphVertexGates: Default gate used in "
+                        "getVerilogString for vertex '"
+                     << d_name << "'";
     }
 
     if ((d_gate == Gates::GateNand) || (d_gate == Gates::GateNor) ||
@@ -166,7 +170,9 @@ std::string GraphVertexGates::getVerilogString() const {
 
 std::string GraphVertexGates::toVerilog() const {
   if (!(d_inConnections.size())) {
-    CG_LOG_ERROR << "GraphVertexGates: Attempted to generate Verilog for empty vertex '" << d_name << "'";
+    CG_LOG_ERROR
+        << "GraphVertexGates: Attempted to generate Verilog for empty vertex '"
+        << d_name << "'";
     return "";
   }
   std::string basic = "assign " + getName() + " = ";
@@ -183,8 +189,8 @@ std::string GraphVertexGates::toVerilog() const {
     return basic;
   }
   if (d_inConnections.size() == 1) {
-      CG_LOG_WARNING << "GraphVertexGates: multiple-input vertex \"" << d_name
-                     << "\" has only one input";
+    CG_LOG_WARNING << "GraphVertexGates: multiple-input vertex \"" << d_name
+                   << "\" has only one input";
   }
 
   std::string end = "";
@@ -205,7 +211,9 @@ std::string GraphVertexGates::toVerilog() const {
 
 DotReturn GraphVertexGates::toDOT() {
   if (!d_inConnections.size()) {
-    CG_LOG_ERROR << "GraphVertexGates: Attempted to generate DOT for empty vertex '" << d_name << "'";
+    CG_LOG_ERROR
+        << "GraphVertexGates: Attempted to generate DOT for empty vertex '"
+        << d_name << "'";
     return {};
   }
 
@@ -229,7 +237,6 @@ bool GraphVertexGates::isSubgraphBuffer() const {
   }
   return d_inConnections.front()->getType() == VertexTypes::subGraph;
 }
-
 
 #ifdef LOGFLAG
 void GraphVertexGates::log(el::base::type::ostream_t &os) const {

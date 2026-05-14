@@ -22,7 +22,6 @@
 
 #include <CircuitGenGraph/Logging.hpp>
 
-
 namespace CG_Graph {
 
 GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
@@ -495,6 +494,5 @@ bool checkPortsMatch(const GraphPtr &graph, const VerilogPorts &verilogPorts,
   errorMsg.clear();
   return true;
 }
-
 
 } // namespace CG_Graph

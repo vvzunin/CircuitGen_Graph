@@ -7,7 +7,6 @@
 
 #include <CircuitGenGraph/Logging.hpp>
 
-
 namespace CG_Graph {
 
 GraphVertexOutput::GraphVertexOutput(GraphPtr i_baseGraph) :
@@ -40,7 +39,7 @@ void GraphVertexOutput::updateLevel() {
   int counter = 0;
   for (VertexPtr ptr: d_inConnections) {
     CG_LOG_INFO << counter++ << ". " << ptr->getName() << " ("
-              << ptr->getTypeName() << ")";
+                << ptr->getTypeName() << ")";
     ptr->updateLevel();
     uint32_t lvl = ptr->getLevel() + 1;
     d_level = (lvl > d_level) ? lvl : d_level;
