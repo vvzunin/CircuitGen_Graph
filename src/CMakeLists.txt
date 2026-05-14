@@ -24,7 +24,6 @@ set(PUBLIC_HEADERS
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/OrientedGraph.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphUtils.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/DefaultAuxiliaryMethods.hpp
-  ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/TestbenchGenerator.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphReader.hpp
 )
