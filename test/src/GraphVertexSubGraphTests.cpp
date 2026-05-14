@@ -303,16 +303,17 @@ TEST(VerilogParameters_SubGraph, ParseAndStoreParametersFromVerilogFile) {
   GraphVertexSubGraph subGraphVertex(subGraph, owner);
   subGraphVertex.setVerilogPath(verilogInPath.string());
 
-  EXPECT_TRUE(
-      subGraphVertex.toVerilog(cwd.string(), verilogOutPath.filename().string()));
+  EXPECT_TRUE(subGraphVertex.toVerilog(cwd.string(),
+                                       verilogOutPath.filename().string()));
 
   const auto &parameters = subGraph->getVerilogParameters();
   ASSERT_EQ(parameters.size(), 3);
-  EXPECT_EQ(parameters[0], std::make_pair(std::string("WIDTH"), std::string("8")));
+  EXPECT_EQ(parameters[0],
+            std::make_pair(std::string("WIDTH"), std::string("8")));
   EXPECT_EQ(parameters[1],
             std::make_pair(std::string("MODE"), std::string("4'd2")));
-  EXPECT_EQ(parameters[2], std::make_pair(std::string("LATENCY"),
-                                          std::string("WIDTH + 1")));
+  EXPECT_EQ(parameters[2],
+            std::make_pair(std::string("LATENCY"), std::string("WIDTH + 1")));
 
   const std::string generatedVerilog = loadStringFileSubGraph(verilogOutPath);
   EXPECT_NE(generatedVerilog.find("parameter WIDTH = 8;"), std::string::npos);

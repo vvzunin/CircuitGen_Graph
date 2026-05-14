@@ -366,11 +366,11 @@ const std::set<std::string> ignoredPortKeywords = {
     "longint", "integer", "time",   "signed",  "unsigned"};
 
 const std::set<std::string> ignoredParameterKeywords = {
-    "wire",      "tri",      "tri0",      "tri1",     "wand",    "wor",
-    "triand",    "trior",    "trireg",    "supply0",  "supply1", "uwire",
-    "reg",       "logic",    "bit",       "byte",     "shortint",
-    "int",       "longint",  "integer",   "time",     "signed",
-    "unsigned",  "parameter","localparam","real",     "realtime"};
+    "wire",       "tri",     "tri0",    "tri1",    "wand",     "wor",
+    "triand",     "trior",   "trireg",  "supply0", "supply1",  "uwire",
+    "reg",        "logic",   "bit",     "byte",    "shortint", "int",
+    "longint",    "integer", "time",    "signed",  "unsigned", "parameter",
+    "localparam", "real",    "realtime"};
 
 std::string trimWhitespace(const std::string &s) {
   const auto begin = s.find_first_not_of(" \t\n\r");
@@ -453,7 +453,7 @@ void collectPortNamesByType(const GraphPtr &graph, const VertexTypes i_type,
                             std::set<std::string> &ports) {
   const auto vertices = graph->getVerticesByType(i_type);
   for (const auto *vertex: vertices) {
-      ports.insert(std::string(vertex->getRawName()));
+    ports.insert(std::string(vertex->getRawName()));
   }
 }
 
@@ -518,7 +518,8 @@ std::string extractParameterName(const std::string &text) {
   for (auto it = std::sregex_iterator(text.begin(), text.end(), nameRegex);
        it != std::sregex_iterator(); ++it) {
     const std::string token = it->str();
-    if (ignoredParameterKeywords.find(token) == ignoredParameterKeywords.end()) {
+    if (ignoredParameterKeywords.find(token) ==
+        ignoredParameterKeywords.end()) {
       parameterName = token;
     }
   }
@@ -574,7 +575,8 @@ parseVerilogParametersFromText(const std::string &clean) {
   }
 
   const std::regex bodyParamRegex(R"(\b(?:parameter|localparam)\b([^;]*);)");
-  for (std::sregex_iterator it(bodyClean.begin(), bodyClean.end(), bodyParamRegex),
+  for (std::sregex_iterator
+           it(bodyClean.begin(), bodyClean.end(), bodyParamRegex),
        end;
        it != end; ++it) {
     collectParameterAssignments((*it)[1], parameters);
