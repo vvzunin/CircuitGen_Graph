@@ -48,6 +48,7 @@ PACKAGES=(
   git
   graphviz
   iverilog
+  fmt-devel
   lcov
   libasan
   libstdc++-devel

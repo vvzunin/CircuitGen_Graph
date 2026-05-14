@@ -759,6 +759,18 @@ public:
    */
   Gates getGate() const override;
 
+  /// @brief setGateIfDefault
+  /// If type of current gate is gateDefault, method change it
+  /// on provided one. In other cases nothing happens.
+  /// @code
+  /// GraphVertexGates vertex(Gates::GateDefault);
+  /// vertex.setGateIfDefault(GateAnd);
+  /// Gates gateType = vertex.getGate();
+  /// std:: cout << "Gate type : " << gateType << std::endl;
+  /// @endcode
+
+  void setGateIfDefault(Gates type);
+
   /**
    * @author Fuuulkrum7
    *

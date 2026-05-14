@@ -1,3 +1,4 @@
+
 # Минимальная версия CMake для сборки
 cmake_minimum_required(VERSION 3.26)
 
@@ -22,9 +23,18 @@ include(cmake/CMakeGraphVizOptions.cmake)
 include(GNUInstallDirs)
 include(CheckIPOSupported)
 
-check_ipo_supported(RESULT ipo_supported)
-set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ${ipo_supported})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_INIT} -std=c++17 -fPIC")
+check_ipo_supported(RESULT ipo_supported OUTPUT ipo_output)
+
+if(ipo_supported)
+  set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+else()
+  message(WARNING "IPO/LTO is not supported: ${ipo_output}")
+endif()
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -33,7 +43,6 @@ option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
 
 # Подключаем папку с исходниками (новый формат)
 add_subdirectory(src)
-
 if(ENABLE_COVERAGE)
   message(STATUS "Code coverage enabled")
   if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -50,6 +59,12 @@ if(ENABLE_LOGGING)
     easylogging++
   )
 endif()
+include_directories(lib)
+link_directories(lib)
+
+add_subdirectory(lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC Lorina)
+target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 
 find_program(CLANG_TIDY NAMES clang-tidy)
 if(PROJECT_IS_TOP_LEVEL)
@@ -72,7 +87,7 @@ endif()
 
 if(ENABLE_LOGGING)
   message(STATUS "Logs enabled")
-  install(TARGETS ${PROJECT_NAME} easylogging++
+  install(TARGETS ${PROJECT_NAME} easylogging++ Lorina
     EXPORT "${PROJECT_NAME}Targets"
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -94,6 +109,11 @@ install(EXPORT "${PROJECT_NAME}Targets"
   FILE "${PROJECT_NAME}Targets.cmake"
   DESTINATION cmake
   NAMESPACE CircuitGenGraph::
+)
+
+install(
+  DIRECTORY "${PROJECT_SOURCE_DIR}/lib/lorina/include/"
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
 )
 
 include(CMakePackageConfigHelpers)

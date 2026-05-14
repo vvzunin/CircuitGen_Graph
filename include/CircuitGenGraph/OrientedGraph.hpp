@@ -23,6 +23,7 @@
 
 #include <CircuitGenGraph/enums.hpp>
 #include <CircuitGenGraph/GraphMemory.hpp>
+#include <CircuitGenGraph/GraphReader.hpp>
 #include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
@@ -43,6 +44,8 @@
 namespace CG_Graph {
 
 class GraphVertexBase;
+class GraphReader;
+class Context;
 
 /**
  * @class CG_Graph::OrientedGraph
@@ -769,6 +772,8 @@ public:
    */
   void removeWasteVertices();
 
+  void updateEdgesGatesCount(VertexPtr vertex, Gates type);
+
   /**
    * @author Fuuulkrum7
    *
@@ -957,6 +962,9 @@ public:
    * @throw out_of_range, если idx больше количества всех вершин в графе
    */
   VertexPtr getVerticeByIndex(size_t idx) const;
+
+  static void readVerilog(std::string i_path, Context &context);
+  static CG_Graph::Context readVerilog(std::string i_path);
 
   /**
    * \~english
@@ -1331,9 +1339,7 @@ public:
    * @param i_type Тип, для которого должно быть зарезервировано место
    * @param i_capacity Количество вершин, которые будут добавлены позже
    */
-  void reserve(VertexTypes i_type, size_t i_capacity) {
-    d_vertices[i_type].reserve(d_vertices[i_type].size() + i_capacity);
-  }
+  void reserve(VertexTypes i_type, size_t i_capacity);
 
   /**
    * @author Fuuulkrum7
@@ -1439,6 +1445,8 @@ public:
    * @return GraphPtr на созданный граф
    */
   static GraphPtr createMajoritySubgraph();
+  VertexPtr majorityAsLogic(VertexPtr a, VertexPtr b, VertexPtr c,
+                            VertexPtr output);
 
   /**
    * @author Andrey
@@ -1572,6 +1580,7 @@ private:
 
   // -1 if false, 0 if undefined, 1 if true
   int8_t d_connected = 0;
+  static GraphReader *graphReader;
 };
 
 } // namespace CG_Graph

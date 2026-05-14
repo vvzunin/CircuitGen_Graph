@@ -28,3 +28,8 @@ settings.json
 *_sim
 
 generation_results/*
+
+.cache
+
+coverage.info
+coverage_report/

@@ -4,12 +4,12 @@
  */
 #include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
+#include <CircuitGenGraph/Logging.hpp>
+
+#include "fmt/core.h"
 
 #include <cassert>
 #include <iostream>
-
-#include <CircuitGenGraph/Logging.hpp>
-#include "../lib/fmt/core.h"
 
 namespace CG_Graph {
 
