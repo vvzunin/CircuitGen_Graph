@@ -954,6 +954,42 @@ public:
   VertexPtr getVerticeByIndex(size_t idx) const;
 
   /**
+   * \~english
+   * @brief Clears parsed Verilog parameters stored in graph metadata
+   *
+   * \~russian
+   * @brief Очищает распарсенные параметры Verilog, сохраненные в метаданных
+   * графа
+   */
+  void clearVerilogParameters();
+
+  /**
+   * \~english
+   * @brief Adds or updates a Verilog parameter in graph metadata
+   * @param i_name Parameter name
+   * @param i_value Parameter value/expression
+   * @return true if parameter name is valid and was stored
+   *
+   * \~russian
+   * @brief Добавляет или обновляет параметр Verilog в метаданных графа
+   * @param i_name Имя параметра
+   * @param i_value Значение/выражение параметра
+   * @return true, если имя параметра корректно и параметр сохранен
+   */
+  bool addVerilogParameter(const std::string &i_name,
+                           const std::string &i_value);
+
+  /**
+   * \~english
+   * @brief Returns stored Verilog parameters
+   *
+   * \~russian
+   * @brief Возвращает сохраненные параметры Verilog
+   */
+  const std::vector<std::pair<std::string, std::string>> &
+  getVerilogParameters() const;
+
+  /**
    * @author Fuuulkrum7
    *
    * \~english
@@ -1507,6 +1543,7 @@ private:
 
   std::set<GraphPtr> d_subGraphs;
   std::array<std::vector<VertexPtr>, VertexTypes::output + 1> d_vertices;
+  std::vector<std::pair<std::string, std::string>> d_verilogParameters;
 
   // as we can have multiple parents, we save
   // for toVerilog current parent graph

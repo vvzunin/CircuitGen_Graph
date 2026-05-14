@@ -484,6 +484,32 @@ VertexPtr OrientedGraph::getVerticeByIndex(size_t idx) const {
   return d_vertices.at(VertexTypes::output).at(idx);
 }
 
+void OrientedGraph::clearVerilogParameters() {
+  d_verilogParameters.clear();
+}
+
+bool OrientedGraph::addVerilogParameter(const std::string &i_name,
+                                        const std::string &i_value) {
+  if (i_name.empty()) {
+    return false;
+  }
+
+  for (auto &parameter: d_verilogParameters) {
+    if (parameter.first == i_name) {
+      parameter.second = i_value;
+      return true;
+    }
+  }
+
+  d_verilogParameters.push_back({i_name, i_value});
+  return true;
+}
+
+const std::vector<std::pair<std::string, std::string>> &
+OrientedGraph::getVerilogParameters() const {
+  return d_verilogParameters;
+}
+
 std::vector<VertexPtr> OrientedGraph::getVerticesByLevel(uint32_t i_level) {
   updateLevels();
   std::vector<VertexPtr> a;
@@ -651,6 +677,16 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
                                                                        : ", ");
   }
   fileStream << ");\n" << verilogTab;
+
+  if (!d_verilogParameters.empty()) {
+    fileStream << "// Writing parameters\n" << verilogTab;
+    for (const auto &parameter: d_verilogParameters) {
+      fileStream << "parameter " << parameter.first << " = " << parameter.second
+                 << ";\n"
+                 << verilogTab;
+    }
+    fileStream << "\n" << verilogTab;
+  }
 
   // parsing inputs, outputs and wires for subgraphs. And wires for operations
   // too

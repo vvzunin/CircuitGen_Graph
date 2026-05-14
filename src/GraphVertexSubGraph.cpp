@@ -26,6 +26,11 @@
 
 namespace CG_Graph {
 
+namespace {
+void parseAndStoreVerilogParameters(const GraphPtr &graph,
+                                    const std::string &filepath);
+}
+
 GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
                                          GraphPtr i_baseGraph) :
     GraphVertexBase(VertexTypes::subGraph, i_baseGraph) {
@@ -112,6 +117,10 @@ bool GraphVertexSubGraph::toVerilog(std::string i_path,
     d_subGraph->setCurrentParent(parentPtr);
   } else {
     throw std::invalid_argument("Dead pointer!");
+  }
+
+  if (!d_verilogPath.empty()) {
+    parseAndStoreVerilogParameters(d_subGraph, d_verilogPath);
   }
 
   return d_subGraph->toVerilog(i_path, i_filename);
@@ -356,6 +365,13 @@ const std::set<std::string> ignoredPortKeywords = {
     "reg",     "logic",   "bit",    "byte",    "shortint", "int",
     "longint", "integer", "time",   "signed",  "unsigned"};
 
+const std::set<std::string> ignoredParameterKeywords = {
+    "wire",       "tri",     "tri0",    "tri1",    "wand",     "wor",
+    "triand",     "trior",   "trireg",  "supply0", "supply1",  "uwire",
+    "reg",        "logic",   "bit",     "byte",    "shortint", "int",
+    "longint",    "integer", "time",    "signed",  "unsigned", "parameter",
+    "localparam", "real",    "realtime"};
+
 std::string trimWhitespace(const std::string &s) {
   const auto begin = s.find_first_not_of(" \t\n\r");
   if (begin == std::string::npos) {
@@ -363,6 +379,29 @@ std::string trimWhitespace(const std::string &s) {
   }
   const auto end = s.find_last_not_of(" \t\n\r");
   return s.substr(begin, end - begin + 1);
+}
+
+std::string readVerilogFileWithoutLineComments(const std::string &filepath) {
+  std::ifstream file(filepath);
+  if (!file.is_open()) {
+    throw std::runtime_error("Cannot open Verilog file: " + filepath);
+  }
+
+  std::stringstream buffer;
+  buffer << file.rdbuf();
+  std::string content = buffer.str();
+
+  std::string clean;
+  std::istringstream iss(content);
+  std::string line;
+  while (std::getline(iss, line)) {
+    auto comment_pos = line.find("//");
+    if (comment_pos != std::string::npos) {
+      line = line.substr(0, comment_pos);
+    }
+    clean += line + "\n";
+  }
+  return clean;
 }
 
 void appendPortNames(const std::string &text, std::vector<std::string> &ports) {
@@ -418,30 +457,154 @@ void collectPortNamesByType(const GraphPtr &graph, const VertexTypes i_type,
   }
 }
 
+std::vector<std::string> splitTopLevelByComma(const std::string &text) {
+  std::vector<std::string> chunks;
+  size_t chunkBegin = 0;
+  int roundDepth = 0;
+  int squareDepth = 0;
+  int braceDepth = 0;
+  bool insideDoubleQuote = false;
+
+  for (size_t i = 0; i < text.size(); ++i) {
+    const char symbol = text[i];
+
+    if (symbol == '\"' && (i == 0 || text[i - 1] != '\\')) {
+      insideDoubleQuote = !insideDoubleQuote;
+      continue;
+    }
+
+    if (insideDoubleQuote) {
+      continue;
+    }
+
+    switch (symbol) {
+      case '(':
+        ++roundDepth;
+        break;
+      case ')':
+        roundDepth = std::max(0, roundDepth - 1);
+        break;
+      case '[':
+        ++squareDepth;
+        break;
+      case ']':
+        squareDepth = std::max(0, squareDepth - 1);
+        break;
+      case '{':
+        ++braceDepth;
+        break;
+      case '}':
+        braceDepth = std::max(0, braceDepth - 1);
+        break;
+      case ',':
+        if (roundDepth == 0 && squareDepth == 0 && braceDepth == 0) {
+          chunks.push_back(text.substr(chunkBegin, i - chunkBegin));
+          chunkBegin = i + 1;
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  chunks.push_back(text.substr(chunkBegin));
+  return chunks;
+}
+
+std::string extractParameterName(const std::string &text) {
+  const std::regex nameRegex(R"([a-zA-Z_][a-zA-Z0-9_]*)");
+  std::string parameterName;
+
+  for (auto it = std::sregex_iterator(text.begin(), text.end(), nameRegex);
+       it != std::sregex_iterator(); ++it) {
+    const std::string token = it->str();
+    if (ignoredParameterKeywords.find(token) ==
+        ignoredParameterKeywords.end()) {
+      parameterName = token;
+    }
+  }
+
+  return parameterName;
+}
+
+void collectParameterAssignments(
+    const std::string &declaration,
+    std::vector<std::pair<std::string, std::string>> &parameters) {
+  for (const auto &segment: splitTopLevelByComma(declaration)) {
+    const std::string token = trimWhitespace(segment);
+    if (token.empty()) {
+      continue;
+    }
+
+    const auto eqPos = token.find('=');
+    if (eqPos == std::string::npos) {
+      continue;
+    }
+
+    const std::string lhs = trimWhitespace(token.substr(0, eqPos));
+    const std::string rhs = trimWhitespace(token.substr(eqPos + 1));
+    if (lhs.empty() || rhs.empty()) {
+      continue;
+    }
+
+    const std::string name = extractParameterName(lhs);
+    if (name.empty()) {
+      continue;
+    }
+
+    parameters.push_back({name, rhs});
+  }
+}
+
+std::vector<std::pair<std::string, std::string>>
+parseVerilogParametersFromText(const std::string &clean) {
+  std::vector<std::pair<std::string, std::string>> parameters;
+  std::string bodyClean = clean;
+
+  const std::regex moduleParamRegex(
+      R"(module\s+\w+\s*#\s*\(([\s\S]*?)\)\s*\()");
+  std::smatch moduleParamMatch;
+  if (std::regex_search(clean, moduleParamMatch, moduleParamRegex)) {
+    collectParameterAssignments(moduleParamMatch[1], parameters);
+
+    const size_t headerParamPos =
+        static_cast<size_t>(moduleParamMatch.position(1));
+    const size_t headerParamLen =
+        static_cast<size_t>(moduleParamMatch.length(1));
+    bodyClean.erase(headerParamPos, headerParamLen);
+  }
+
+  const std::regex bodyParamRegex(R"(\b(?:parameter|localparam)\b([^;]*);)");
+  for (std::sregex_iterator
+           it(bodyClean.begin(), bodyClean.end(), bodyParamRegex),
+       end;
+       it != end; ++it) {
+    collectParameterAssignments((*it)[1], parameters);
+  }
+
+  return parameters;
+}
+
+void parseAndStoreVerilogParameters(const GraphPtr &graph,
+                                    const std::string &filepath) {
+  if (!graph || filepath.empty()) {
+    return;
+  }
+
+  const std::string clean = readVerilogFileWithoutLineComments(filepath);
+  const auto parsedParameters = parseVerilogParametersFromText(clean);
+
+  graph->clearVerilogParameters();
+  for (const auto &parameter: parsedParameters) {
+    graph->addVerilogParameter(parameter.first, parameter.second);
+  }
+}
+
 } // namespace
 
 VerilogPorts parseVerilogPorts(const std::string &filepath) {
   VerilogPorts ports;
-  std::ifstream file(filepath);
-  if (!file.is_open()) {
-    throw std::runtime_error("Cannot open Verilog file: " + filepath);
-  }
-
-  std::stringstream buffer;
-  buffer << file.rdbuf();
-  std::string content = buffer.str();
-
-  std::string clean;
-  {
-    std::istringstream iss(content);
-    std::string line;
-    while (std::getline(iss, line)) {
-      auto comment_pos = line.find("//");
-      if (comment_pos != std::string::npos)
-        line = line.substr(0, comment_pos);
-      clean += line + "\n";
-    }
-  }
+  std::string clean = readVerilogFileWithoutLineComments(filepath);
 
   std::regex moduleRegex(R"(module\s+\w+\s*\(([^)]*)\)\s*;)");
   std::smatch moduleMatch;
