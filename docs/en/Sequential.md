@@ -4,4 +4,8 @@
 
 Example (async reset + enable) and generated Verilog are documented in detail in the Russian version.
 
+### Export (GraphML and DOT)
+
+Classic GraphML stores the sequential vertex `type` as `sequential/ff` or `sequential/latch`. PseudoABCD and OpenABCD GraphML use node_type codes **17** (flip-flop) and **18** (latch). DOT export appends `(ff)` or `(latch)` after the instance name.
+
 **Русский:** [Sequential.md](../ru/Sequential.md)

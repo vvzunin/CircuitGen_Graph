@@ -34,6 +34,7 @@
 <a name="content_rus"></a>
 - [Правила именования переменных](#hacking)
 - [Сборка программы](#generator_build_rus)
+- [Генерация тестбенчей](#testbench)
 - [Лицензия](#license)
 
 > Главный репозиторий проекта: https://hub.mos.ru/circuitgen/CircuitGen
@@ -48,7 +49,7 @@
 
 ## Установка зависимостей
 
-Актуальные списки пакетов и доп. шаги (CMake с Kitware, **clang-format** с PyPI, **lcov** 2+ на Ubuntu 22.04, Doxygen и т.д.) собраны в скриптах каталога **[`scripts/setup/`](scripts/setup/)** — по одному файлу на ОС из CI-матрицы, например:
+Актуальные списки пакетов и доп. шаги (CMake с Kitware, **clang-format** с PyPI, **lcov** 2+ на Ubuntu 22.04, Doxygen и т.д.) собраны в скриптах каталога **[scripts/setup/](scripts/setup/)** — по одному файлу на ОС из CI-матрицы, например:
 
 - [`install-deps-ubuntu-22.04.sh`](scripts/setup/install-deps-ubuntu-22.04.sh)
 - [`install-deps-ubuntu-24.04.sh`](scripts/setup/install-deps-ubuntu-24.04.sh)
@@ -82,6 +83,19 @@ bash scripts/dev/build-debug.sh
 <a name="format"></a>
 
 Предварительные действия перед работой с кодом в VS Code, а также информацию о стиле кода и локальных `.json` можно посмотреть [здесь](docs/ru/Format.md).
+
+[&#8593; Contents](#content_rus)
+
+## Генерация тестбенчей
+<a name="testbench"></a>
+
+Библиотека поддерживает автоматическую генерацию Verilog-тестбенчей для верификации схем. Кратко:
+
+- пример программы: [`examples/example_testbench.cpp`](examples/example_testbench.cpp) (сборка вместе с остальными `examples/` при **`CircuitGenGraph_BUILD_EXAMPLES=ON`**, см. пресет **dev**);
+- заголовок API: `#include <CircuitGenGraph/TestbenchGenerator.hpp>`;
+- для симуляции в части тестов — **Icarus Verilog** (`iverilog` / `vvp`), пакеты: `sudo apt install iverilog` или `sudo dnf install iverilog`.
+
+Пошаговая сборка примера, запуск `ctest` и сценарии с префиксом **`DISABLED_`** (Icarus) описаны в **[docs/ru/BUILDING.md](docs/ru/BUILDING.md#tests-and-icarus)**; английский вариант — [`docs/en/BUILDING.md`](docs/en/BUILDING.md#tests-and-icarus).
 
 [&#8593; Contents](#content_rus)
 

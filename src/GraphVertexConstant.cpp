@@ -7,9 +7,7 @@
 
 #include <CircuitGenGraph/GraphVertex.hpp>
 
-#ifdef lOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
+#include <CircuitGenGraph/Logging.hpp>
 
 namespace CG_Graph {
 

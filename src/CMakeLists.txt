@@ -9,6 +9,7 @@ set(SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/GraphUtils.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/DefaultAuxiliaryMethods.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/GraphVertexSequential.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/TestbenchGenerator.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/GraphReader.cpp
 )
 
@@ -24,12 +25,9 @@ set(PUBLIC_HEADERS
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphUtils.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/DefaultAuxiliaryMethods.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
+  ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/TestbenchGenerator.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphReader.hpp
 )
-
-if(ENABLE_LOGGING)
-  add_compile_definitions(LOGFLAG)
-endif()
 
 if(BUILD_SHARED_LIBS)
   add_library(${PROJECT_NAME} SHARED ${SOURCES})
@@ -37,18 +35,14 @@ else()
   add_library(${PROJECT_NAME} STATIC ${SOURCES})
 endif()
 
+if(ENABLE_LOGGING)
+  target_compile_definitions(${PROJECT_NAME} PUBLIC LOGFLAG)
+endif()
+
 add_library(CircuitGenGraph::CircuitGenGraph ALIAS ${PROJECT_NAME})
 
 include_directories(${PROJECT_SOURCE_DIR}/lib)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
-
-if(ENABLE_LOGGING)
-  add_library(
-    easylogging++ STATIC
-    ${PROJECT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.cc
-    ${PROJECT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.h
-  )
-endif()
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 #add_compile_options(-fno-rtti)
@@ -59,6 +53,7 @@ target_include_directories(
   ${PROJECT_NAME} ${warning_guard}
   PUBLIC
   "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
+  "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/lib>"
 )
 
 target_include_directories(

@@ -546,6 +546,57 @@ TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreSubEdges) {
       "source=\"input2\" target=\"gate1\"/>\n  </graph>\n</graphml>\n");
 }
 
+TEST(TestToGraphMLSequential, ExportTypesInClassicPseudoOpenABCD) {
+  OrientedGraph::resetCounter();
+  {
+    GraphPtr g = std::make_shared<OrientedGraph>("Gff");
+    auto *clk = g->addInput("clk");
+    auto *data = g->addInput("data");
+    auto *q = g->addSequential(ff, clk, data, "q");
+    g->addEdge(q, g->addOutput("out"));
+    const std::string classic = g->toGraphMLClassic(0);
+    EXPECT_NE(classic.find("<data key=\"t\">sequential/ff</data>"),
+              std::string::npos)
+        << classic;
+    const std::string pseudo = g->toGraphMLPseudoABCD();
+    const auto posQ = pseudo.find("<data key=\"d0\">q</data>");
+    EXPECT_NE(posQ, std::string::npos) << pseudo;
+    EXPECT_NE(pseudo.find("<data key=\"d1\">17</data>", posQ),
+              std::string::npos)
+        << pseudo;
+    const std::string open = g->toGraphMLOpenABCD();
+    const auto posQopen = open.find("<data key=\"d0\">q</data>");
+    EXPECT_NE(posQopen, std::string::npos) << open;
+    EXPECT_NE(open.find("<data key=\"d1\">17</data>", posQopen),
+              std::string::npos)
+        << open;
+  }
+  OrientedGraph::resetCounter();
+  {
+    GraphPtr g = std::make_shared<OrientedGraph>("Glatch");
+    auto *en = g->addInput("en");
+    auto *data = g->addInput("data");
+    auto *q = g->addSequential(latch, en, data, "q");
+    g->addEdge(q, g->addOutput("out"));
+    const std::string classic = g->toGraphMLClassic(0);
+    EXPECT_NE(classic.find("<data key=\"t\">sequential/latch</data>"),
+              std::string::npos)
+        << classic;
+    const std::string pseudo = g->toGraphMLPseudoABCD();
+    const auto posQ = pseudo.find("<data key=\"d0\">q</data>");
+    EXPECT_NE(posQ, std::string::npos) << pseudo;
+    EXPECT_NE(pseudo.find("<data key=\"d1\">18</data>", posQ),
+              std::string::npos)
+        << pseudo;
+    const std::string open = g->toGraphMLOpenABCD();
+    const auto posQopen = open.find("<data key=\"d0\">q</data>");
+    EXPECT_NE(posQopen, std::string::npos) << open;
+    EXPECT_NE(open.find("<data key=\"d1\">18</data>", posQopen),
+              std::string::npos)
+        << open;
+  }
+}
+
 // Unknown error
 // TEST(TestToGraphMLBoolReturn, CorrectWriteToFile) {
 //   std::string   filename = "ToGraphMLTest.txt";
@@ -768,7 +819,7 @@ TEST(TestToVerilog, Simple) {
   std::string loadFile = loadStringFileOrientedGraph(curPath + "/testSimple.v");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing Verilog file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing Verilog file: " << "" << "\n" << loadFile;
 #endif
 }
 
@@ -803,7 +854,7 @@ TEST(TestToVerilog, SubGraph) {
       loadStringFileOrientedGraph(curPath + "/testSubGraph.v");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing DOT file: " << "" << "\n" << loadFile;
 #endif
 }
 
@@ -836,7 +887,7 @@ TEST(TestToDOT, Simple) {
 #endif
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing DOT file: " << "" << "\n" << loadFile;
 #endif
 }
 
@@ -876,7 +927,7 @@ TEST(TestToDOT, SubGraph) {
       loadStringFileOrientedGraph(curPath + "/testSubGraph.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing DOT file: " << "" << "\n" << loadFile;
 #endif
 }
 
@@ -919,7 +970,7 @@ TEST(TestToDOT, SubGraphUnroll) {
       loadStringFileOrientedGraph(curPath + "/testSubGraphUnroll.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing DOT file: " << "" << "\n" << loadFile;
 #endif
 }
 
@@ -1016,7 +1067,7 @@ TEST(TestToDOT, SubGraphUnroll2) {
       loadStringFileOrientedGraph(curPath + "/testSubGraphUnroll2.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing DOT file: " << "" << "\n" << loadFile;
 #endif
 }
 
@@ -1099,7 +1150,7 @@ TEST(TestToDOT, SubGraphUnroll3) {
       loadStringFileOrientedGraph(curPath + "/testSubGraphUnroll3.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing DOT file: " << "" << "\n" << loadFile;
 #endif
 }
 
@@ -1171,7 +1222,7 @@ TEST(TestToDOT, SubGraph3) {
       loadStringFileOrientedGraph(curPath + "/testSubGraph3.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing DOT file: " << "" << "\n" << loadFile;
 #endif
 }
 

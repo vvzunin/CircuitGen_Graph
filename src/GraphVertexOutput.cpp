@@ -5,9 +5,7 @@
 #include "CircuitGenGraph/GraphVertexBase.hpp"
 #include <CircuitGenGraph/GraphVertex.hpp>
 
-#ifdef LOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
+#include <CircuitGenGraph/Logging.hpp>
 
 namespace CG_Graph {
 
@@ -42,10 +40,8 @@ void GraphVertexOutput::updateLevel() {
   int counter = 0;
 #endif
   for (VertexPtr ptr: d_inConnections) {
-#ifdef LOGFLAG
-    LOG(INFO) << counter++ << ". " << ptr->getName() << " ("
-              << ptr->getTypeName() << ")";
-#endif
+    CG_LOG_INFO << counter++ << ". " << ptr->getName() << " ("
+                << ptr->getTypeName() << ")";
     ptr->updateLevel();
     uint32_t lvl = ptr->getLevel() + 1;
     d_level = (lvl > d_level) ? lvl : d_level;

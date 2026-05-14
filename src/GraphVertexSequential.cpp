@@ -4,26 +4,24 @@
  */
 #include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
+#include <CircuitGenGraph/Logging.hpp>
+
+#include "fmt/core.h"
 
 #include <cassert>
 #include <iostream>
 
-#ifdef LOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
-#include "fmt/core.h"
-
 namespace CG_Graph {
 
-inline bool GraphVertexSequential::isFF() const {
+bool GraphVertexSequential::isFF() const {
   return d_seqType & ff;
 }
 
-inline bool GraphVertexSequential::isAsync() const {
+bool GraphVertexSequential::isAsync() const {
   return d_seqType & ASYNC;
 }
 
-inline bool GraphVertexSequential::isNegedge() const {
+bool GraphVertexSequential::isNegedge() const {
   return d_seqType & NEGEDGE;
 }
 
@@ -42,21 +40,16 @@ inline bool validateSignal(SequentialTypes current, SequentialTypes found) {
   for (const auto &flag: {EN, RST, CLR, SET, NEGEDGE, ASYNC}) {
     if (delta & flag) {
       SequentialTypes foundFlag = static_cast<SequentialTypes>(delta & flag);
-#ifdef LOGFLAG
-      LOG(ERROR) << "Invalid flag found in used type: "
-                 << convertSequentialFlag(foundFlag) << '\n';
-#else
-      std::cerr << "Invalid flag found in used type: "
-                << convertSequentialFlag(foundFlag) << '\n';
-#endif
+      CG_LOG_ERROR << "Invalid flag found in used type: "
+                   << convertSequentialFlag(foundFlag) << '\n';
     }
   }
   return false;
 }
 
-inline void GraphVertexSequential::setSignalByType(VertexPtr i_wire,
-                                                   SequentialTypes i_type,
-                                                   unsigned &factType) {
+void GraphVertexSequential::setSignalByType(VertexPtr i_wire,
+                                            SequentialTypes i_type,
+                                            unsigned &factType) {
   if ((i_type & RST) && !d_rst) {
     factType |= RST;
     // d_clk has trigger only
@@ -276,19 +269,16 @@ std::string GraphVertexSequential::toVerilog() const {
 
 DotReturn GraphVertexSequential::toDOT() {
   if (!d_inConnections.size()) {
-#ifdef LOGFLAG
-    LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
-#else
-    std::cerr << "TODO: delete empty vertices: " << d_name << std::endl;
-#endif
+    CG_LOG_ERROR << "TODO: delete empty vertices: " << d_name << std::endl;
     return {};
   }
 
   DotReturn dot;
 
+  const std::string kind = isFF() ? "ff" : "latch";
   dot.push_back({DotTypes::DotGate,
                  {{"name", getName()},
-                  {"label", getName()},
+                  {"label", fmt::format("{} ({})", getName(), kind)},
                   {"level", std::to_string(d_level)}}});
 
   for (VertexPtr ptr: d_inConnections) {
@@ -297,5 +287,4 @@ DotReturn GraphVertexSequential::toDOT() {
   }
   return dot;
 }
-
 } // namespace CG_Graph

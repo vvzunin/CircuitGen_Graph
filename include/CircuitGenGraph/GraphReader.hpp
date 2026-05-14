@@ -2,9 +2,10 @@
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
-#include <cstddef>
+
 #include <lorina/lorina.hpp>
 
+#include <cstddef>
 #include <map>
 
 #define GraphPtr std::shared_ptr<CG_Graph::OrientedGraph>

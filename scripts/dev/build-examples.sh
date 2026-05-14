@@ -3,6 +3,7 @@ set -euo pipefail
 
 # Debug build with examples using the local `dev` preset (CMakeUserPresets.json).
 # Copy CMakeUserPresets.json.example to CMakeUserPresets.json if you have not already.
+# Runs run-examples (includes example_testbench). For Icarus-backed tests see docs/ru/BUILDING.md#tests-and-icarus.
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "${ROOT_DIR}"

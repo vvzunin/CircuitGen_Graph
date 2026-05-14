@@ -8,10 +8,8 @@
 
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
+#include <CircuitGenGraph/Logging.hpp>
 
-#ifdef LOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
 #include <fmt/core.h>
 
 namespace CG_Graph {
@@ -180,7 +178,7 @@ uint32_t GraphVertexBase::getLevel() const {
 }
 
 void GraphVertexBase::removeValue() {
-  d_value = ValueStates::UndefindedState;
+  d_value = ValueStates::UndefinedState;
   if (d_inConnections.empty()) {
     return;
   }
@@ -190,23 +188,19 @@ void GraphVertexBase::removeValue() {
 }
 
 void GraphVertexBase::updateLevel() {
-// 2 - IN PROGRESS, 1 - HC_CALC
-// 2 == 010
-// 1 == 001
-// d_needUpdate = static_cast<MY_ENUM>(HC_CALC | ADDED); // ADDED = 4 // 100
-// 101
-#ifdef LOGLFLAG
+  // 2 - IN PROGRESS, 1 - HC_CALC
+  // 2 == 010
+  // 1 == 001
+  // d_needUpdate = static_cast<MY_ENUM>(HC_CALC | ADDED); // ADDED = 4 // 100
+  // 101
   int counter = 0;
-#endif
   if (d_needUpdate != VS_NOT_CALC) {
     return;
   }
   d_needUpdate = VS_IN_PROGRESS;
   for (VertexPtr vert: d_inConnections) {
-#ifdef LOGLFLAG
-    LOG(INFO) << counter++ << ". " << vert->getName() << " ("
-              << vert->getTypeName() << ")";
-#endif
+    CG_LOG_INFO << counter++ << ". " << vert->getName() << " ("
+                << vert->getTypeName() << ")";
     vert->updateLevel();
     d_level = (vert->getLevel() >= d_level) ? vert->getLevel() + 1 : d_level;
   }
@@ -293,8 +287,10 @@ std::vector<VertexPtr> GraphVertexBase::getInConnections() const {
 uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
   assert(i_vert != this);
   assert(d_type != input && d_type != constant);
-  uint32_t n = 0;
+  CG_VLOG(3) << "Vertex " << getName() << ": adding in connection from "
+             << (i_vert ? i_vert->getName() : "nullptr");
   d_inConnections.push_back(i_vert);
+  uint32_t n = 0;
   // @todo is rly needed?
   for (VertexPtr vert: d_inConnections)
     n += (vert == i_vert);
@@ -313,6 +309,8 @@ bool GraphVertexBase::addVertexToOutConnections(VertexPtr i_vert) {
   for (VertexPtr vert: d_outConnections)
     n += (vert == i_vert);
   if (n == 0) {
+    CG_VLOG(3) << "Vertex " << getName() << ": adding out connection to "
+               << (i_vert ? i_vert->getName() : "nullptr");
     d_outConnections.push_back(i_vert);
     return true;
   }

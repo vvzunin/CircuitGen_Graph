@@ -5,10 +5,7 @@
 #include <iostream>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
-
-#ifdef LOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
+#include <CircuitGenGraph/Logging.hpp>
 
 namespace CG_Graph {
 
@@ -44,7 +41,7 @@ char GraphVertexGates::updateValue() {
   std::map<char, char> table;
   d_value = ValueStates::NoSignal;
   if (d_inConnections.size() > 0) {
-    if (d_inConnections.front()->getValue() == ValueStates::UndefindedState) {
+    if (d_inConnections.front()->getValue() == ValueStates::UndefinedState) {
       d_inConnections.front()->updateValue();
     }
     d_value = d_inConnections.front()->getValue();
@@ -56,7 +53,7 @@ char GraphVertexGates::updateValue() {
       d_value = table.at(d_value);
     }
     for (size_t i = 1; i < d_inConnections.size(); i++) {
-      if (d_inConnections.at(i)->getValue() == ValueStates::UndefindedState) {
+      if (d_inConnections.at(i)->getValue() == ValueStates::UndefinedState) {
         d_inConnections.at(i)->updateValue();
       }
       switch (d_gate) {
@@ -79,11 +76,9 @@ char GraphVertexGates::updateValue() {
           table = tableXnor.at(d_value);
           break;
         default:
-#ifdef LOGFLAG
-          LOG(ERROR) << "Error" << std::endl;
-#else
-          std::cerr << "Error" << std::endl;
-#endif
+          CG_LOG_ERROR << "GraphVertexGates: Unknown gate type in updateValue "
+                          "for vertex '"
+                       << d_name << "'";
       }
       d_value = table.at(d_inConnections.at(i)->getValue());
     }
@@ -92,10 +87,10 @@ char GraphVertexGates::updateValue() {
 }
 
 void GraphVertexGates::removeValue() {
-  d_value = ValueStates::UndefindedState;
+  d_value = ValueStates::UndefinedState;
   if (d_inConnections.size() > 0) {
     for (VertexPtr ptr: d_inConnections) {
-      if (ptr->getValue() != ValueStates::UndefindedState) {
+      if (ptr->getValue() != ValueStates::UndefinedState) {
         ptr->removeValue();
       }
     }
@@ -165,11 +160,9 @@ std::string GraphVertexGates::getVerilogString() const {
 
       s += " " + VertexUtils::gateToString(d_gate) + " " + name;
       if (d_gate == GateDefault)
-#ifdef LOGFLAG
-        LOG(ERROR) << "Error" << std::endl;
-#else
-        std::cerr << "Error" << std::endl;
-#endif
+        CG_LOG_ERROR << "GraphVertexGates: Default gate used in "
+                        "getVerilogString for vertex '"
+                     << d_name << "'";
     }
 
     if ((d_gate == Gates::GateNand) || (d_gate == Gates::GateNor) ||
@@ -182,11 +175,9 @@ std::string GraphVertexGates::getVerilogString() const {
 
 std::string GraphVertexGates::toVerilog() const {
   if (!(d_inConnections.size())) {
-#ifdef LOGFLAG
-    LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
-#else
-    std::cerr << "TODO: delete empty vertices: " << d_name << std::endl;
-#endif
+    CG_LOG_ERROR
+        << "GraphVertexGates: Attempted to generate Verilog for empty vertex '"
+        << d_name << "'";
     return "";
   }
   std::string basic = "assign " + getName() + " = ";
@@ -195,16 +186,16 @@ std::string GraphVertexGates::toVerilog() const {
   VertexPtr ptr = d_inConnections.back();
   if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
     if (d_inConnections.size() > 1) {
-      std::cerr << "Invalid: one-input vertex \"" << d_name
-                << "\" has inputs: " << d_inConnections.size() << '\n';
+      CG_LOG_WARNING << "GraphVertexGates: one-input vertex \"" << d_name
+                     << "\" has inputs: " << d_inConnections.size();
     }
     basic += oper + ptr->getName() + ";";
 
     return basic;
   }
   if (d_inConnections.size() == 1) {
-    std::cerr << "Invalid: multiple-input vertex \"" << d_name
-              << "\" has one input\n";
+    CG_LOG_WARNING << "GraphVertexGates: multiple-input vertex \"" << d_name
+                   << "\" has only one input";
   }
 
   std::string end = "";
@@ -225,11 +216,9 @@ std::string GraphVertexGates::toVerilog() const {
 
 DotReturn GraphVertexGates::toDOT() {
   if (!d_inConnections.size()) {
-#ifdef LOGFLAG
-    LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
-#else
-    std::cerr << "TODO: delete empty vertices: " << d_name << std::endl;
-#endif
+    CG_LOG_ERROR
+        << "GraphVertexGates: Attempted to generate DOT for empty vertex '"
+        << d_name << "'";
     return {};
   }
 

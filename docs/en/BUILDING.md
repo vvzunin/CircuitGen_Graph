@@ -11,6 +11,67 @@ cp CMakeUserPresets.json.example CMakeUserPresets.json
 
 The project defaults to the `Ninja` generator.
 
+### CMake presets (reference)
+
+This repository uses [CMake presets](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html): schema **version 6** and `cmakeMinimumRequired` **3.26** (see `CMakePresets.json` in the repo root).
+
+| File | Role |
+|------|------|
+| `CMakePresets.json` | Committed presets: **release**, **release-ci**, **release-examples**, CI profiles (**ci-ubuntu**, **ci-coverage**, **ci-sanitize**, **ci-static-analysis**, …), **ci-examples-dev**, plus hidden presets (**dev-mode**, compiler flag bundles, Ninja/C++17 bases). |
+| `CMakeUserPresets.json` | **Local only** (gitignored). After clone: `cp CMakeUserPresets.json.example CMakeUserPresets.json`. Defines **dev**, **coverage**, **dev-msvc**, … and `include`s this repo’s `CMakePresets.json`. |
+
+Configure, build, and test a typical **Debug** tree:
+
+```sh
+cmake --preset=dev
+cmake --build --preset=dev -j"$(nproc)"
+ctest --preset=dev
+```
+
+**Release + tests** using only committed presets (CI parity, no `CMakeUserPresets.json`):
+
+```sh
+cmake --preset=release-ci
+cmake --build --preset=release-ci -j"$(nproc)"
+ctest --preset=release-ci
+```
+
+Run `cmake --list-presets` to see every configure preset visible from your working copy.
+
+**Cross-repository reference:** developer/examples toggles differ only by cache variable names (set through the hidden **dev-mode** bundle used by `dev` / many CI presets):
+
+| Repository | Developer mode | Examples |
+|------------|-----------------|----------|
+| Generator | `CircuitGenGenerator_DEVELOPER_MODE` | `CircuitGenGenerator_BUILD_EXAMPLES` |
+| Graph | `CircuitGenGraph_DEVELOPER_MODE` | `CircuitGenGraph_BUILD_EXAMPLES` |
+| Parameters | `OptimizationsVerilogLib_DEVELOPER_MODE` | `optimizationsveriloglib_BUILD_EXAMPLES` |
+
+### CMake: adding new C++ sources
+
+Sources are grouped into **libraries** declared beside the code; parents use `add_subdirectory`.
+
+1. **Directory** — place files under `src/` (and public headers under `include/...` when exporting an API).
+2. **Register** — from the parent `CMakeLists.txt`, `add_subdirectory(<subdir>)` if you added a new folder.
+3. **Leaf `CMakeLists.txt`** — typical internal library skeleton:
+
+   ```cmake
+   add_library(myLeaf STATIC MyLeaf.cpp)
+   target_include_directories(myLeaf PUBLIC
+     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
+   )
+   target_link_libraries(myLeaf PUBLIC …)  # existing targets your code uses
+   add_folders(MyLeaf)  # optional IDE grouping (cmake/folders.cmake)
+   ```
+
+4. **Wire upward** — executables or larger libraries that call your code must `target_link_libraries(... myLeaf ...)`.
+5. **Reconfigure** — any `CMakeLists.txt` edit requires a fresh CMake run (`cmake --preset=dev` or equivalent).
+
+**Repository-specific layout hints**
+
+- **Generator:** many features are small static libraries under `src/generators/simple/<name>/CMakeLists.txt`; see `src/generators/simple/simple/CMakeLists.txt` for a canonical pattern. Parents under `src/generators/simple/CMakeLists.txt` chain `add_subdirectory` calls.
+- **Graph:** the primary `CircuitGenGraph` target lists `.cpp` files in `src/CMakeLists.txt` (`SOURCES`, `LIBS`) and public headers in `include/CircuitGenGraph/` (`PUBLIC_HEADER` / install metadata). Append new translation units and headers there when you extend the core library.
+- **Parameters:** the main library and OpenLane CLI live in `src/CMakeLists.txt` (`SOURCES` for `CircuitGenParameters`, executable target **`CircuitGenParameters_exe`** with runtime name **`CircuitGenParameters`** — same pattern as `CircuitGenGenerator_exe` / `CircuitGenGenerator`; entry source `CircuitGenToOpenLane.cpp`; `OptimizationsVerilogLib::…` aliases). Enable `add_subdirectory(examples)` with `-D optimizationsveriloglib_BUILD_EXAMPLES=ON` at the top level; extend `SOURCES` or add another `add_library` next to existing patterns when you add modules.
+
 Common workflows:
 
 ```sh
@@ -82,7 +143,60 @@ cmake --build --preset=release-examples -j "$(nproc)"
 cmake --build --preset=release-examples --target run-examples -j "$(nproc)"
 ```
 
-JSON files under `examples/json/` feed the generation scenarios; the current **`empty_example`** links the library and sanity-checks the examples build.
+The `examples/` directory contains small C++ programs: **`empty_example`** is a no-op smoke test; **`example_build_and_gate`**, **`example_export_graphml_classic`**, **`example_export_dot`**, **`example_sequential_ff`**, and **`example_export_graphml_pseudo`** show building a graph and exporting Verilog-related views (GraphML, DOT). **`example_testbench`** demonstrates the Verilog testbench generator API. See `examples/CMakeLists.txt`.
+
+### Testbench example (`example_testbench`)
+
+Build examples (same `CircuitGenGraph_BUILD_EXAMPLES=ON` flag as above), then run the testbench demo:
+
+```sh
+cmake --preset=dev
+cmake --build --preset=dev -j "$(nproc)"
+./build/dev/examples/example_testbench
+```
+
+Equivalent with helper scripts: `bash scripts/dev/build-debug.sh`, then run the binary from `build/dev/examples/`.
+
+For full gate-level simulation checks with **Icarus Verilog**, install the simulator (optional):
+
+```sh
+# Ubuntu/Debian
+sudo apt install iverilog
+
+# Fedora
+sudo dnf install iverilog
+```
+
+The per-OS **`scripts/setup/install-deps-*.sh`** scripts in this repo list **`iverilog`** so CI/dev images built with them already include Icarus unless you trimmed the package set.
+
+Source walkthrough: [`examples/example_testbench.cpp`](../../examples/example_testbench.cpp).
+
+<a id="tests-and-icarus"></a>
+
+### Unit tests and optional Icarus-backed tests
+
+Default unit tests (preset-driven):
+
+```sh
+ctest --preset=dev
+```
+
+Some **GoogleTest** cases that shell out to **Icarus** are named with the `DISABLED_` prefix so they are skipped in ordinary `ctest` runs when the toolchain is absent. Run them explicitly after installing `iverilog` (they call `GTEST_SKIP` if the simulator is not found):
+
+```sh
+# Only disabled (Icarus-related) tests
+./build/dev/test/CircuitGenGraph_tests --gtest_filter='*DISABLED_*' --gtest_also_run_disabled_tests
+
+# One representative test
+./build/dev/test/CircuitGenGraph_tests \
+  --gtest_filter='TestbenchGeneratorTests.DISABLED_IcarusVerificationAndGate' \
+  --gtest_also_run_disabled_tests
+
+# Full test binary: default + disabled
+./build/dev/test/CircuitGenGraph_tests --gtest_also_run_disabled_tests
+```
+
+For a broader local gate before push (format, spell, dev + release-ci tests — **without** enabling disabled tests by default), use [`scripts/dev/pre-push.sh`](../../scripts/dev/pre-push.sh).
 
 ### Building with MSVC
 
@@ -265,13 +379,15 @@ After linking, you typically use the graph type and vertices:
 #include <CircuitGenGraph/OrientedGraph.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphUtils.hpp>
+#include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp> // helpers in namespace AuxMethodsGraph
+#include <CircuitGenGraph/TestbenchGenerator.hpp>      // Verilog testbench generation
 ```
 
-Main types include `OrientedGraph`, input/output/gate/constant/subgraph vertices, and helpers under `CircuitGenGraph` (see Doxygen output for details).
+Main types include `OrientedGraph`, input/output/gate/constant/subgraph vertices, helpers under `CircuitGenGraph`, utilities in `AuxMethodsGraph`, and `TestbenchGenerator` for bench generation (see Doxygen / HTML docs for API details).
 
 ### Note to packagers
 
-Install rules are defined in the top-level `CMakeLists.txt` (export `CircuitGenGraph::CircuitGenGraph`, config files under `cmake/`).
+Install rules are defined in the top-level `CMakeLists.txt` and in [`cmake/install-rules.cmake`](../../cmake/install-rules.cmake) (including header layout when configured as a top-level project — see `CMAKE_INSTALL_INCLUDEDIR` and related export metadata).
 
 **Русский:** [Сборка](../ru/BUILDING.md)
 
