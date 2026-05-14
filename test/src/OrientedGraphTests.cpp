@@ -819,7 +819,7 @@ TEST(TestToVerilog, Simple) {
   std::string loadFile = loadStringFileOrientedGraph(curPath + "/testSimple.v");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing Verilog file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing Verilog file: " << "" << "\n" << loadFile;
 #endif
 }
 
@@ -854,7 +854,7 @@ TEST(TestToVerilog, SubGraph) {
       loadStringFileOrientedGraph(curPath + "/testSubGraph.v");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing DOT file: " << "" << "\n" << loadFile;
 #endif
 }
 
@@ -887,7 +887,7 @@ TEST(TestToDOT, Simple) {
 #endif
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing DOT file: " << "" << "\n" << loadFile;
 #endif
 }
 
@@ -927,7 +927,7 @@ TEST(TestToDOT, SubGraph) {
       loadStringFileOrientedGraph(curPath + "/testSubGraph.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing DOT file: " << "" << "\n" << loadFile;
 #endif
 }
 
@@ -970,7 +970,7 @@ TEST(TestToDOT, SubGraphUnroll) {
       loadStringFileOrientedGraph(curPath + "/testSubGraphUnroll.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing DOT file: " << "" << "\n" << loadFile;
 #endif
 }
 
@@ -1067,7 +1067,7 @@ TEST(TestToDOT, SubGraphUnroll2) {
       loadStringFileOrientedGraph(curPath + "/testSubGraphUnroll2.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing DOT file: " << "" << "\n" << loadFile;
 #endif
 }
 
@@ -1150,7 +1150,7 @@ TEST(TestToDOT, SubGraphUnroll3) {
       loadStringFileOrientedGraph(curPath + "/testSubGraphUnroll3.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing DOT file: " << "" << "\n" << loadFile;
 #endif
 }
 
@@ -1222,7 +1222,7 @@ TEST(TestToDOT, SubGraph3) {
       loadStringFileOrientedGraph(curPath + "/testSubGraph3.dot");
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
-  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+  LOG(INFO) << "Printing DOT file: " << "" << "\n" << loadFile;
 #endif
 }
 

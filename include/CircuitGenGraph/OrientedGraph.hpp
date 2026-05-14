@@ -26,9 +26,7 @@
 #include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
-#ifdef LOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
+#include <CircuitGenGraph/Logging.hpp>
 
 /**
  * \~english
@@ -110,6 +108,13 @@ public:
   OrientedGraph(const std::string &i_name = "",
                 size_t buffer_size = DEFAULT_BUF,
                 size_t chunk_size = CHUNK_SIZE);
+
+  /**
+   * @brief Initializes logging system.
+   * @param i_configPath Path to easylogging++.conf file.
+   */
+  static void
+  initLogging(const std::string &i_configPath = "easylogging++.conf");
 
   using GraphID = std::size_t;
 

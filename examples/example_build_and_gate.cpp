@@ -7,6 +7,10 @@
 
 auto main() -> int {
   using namespace CG_Graph;
+
+  // Initialize logging (optional)
+  OrientedGraph::initLogging();
+
   GraphPtr g = std::make_shared<OrientedGraph>("demo_and");
   VertexPtr a = g->addInput("a");
   VertexPtr b = g->addInput("b");
