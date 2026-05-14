@@ -27,14 +27,14 @@ set(PUBLIC_HEADERS
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/TestbenchGenerator.hpp
 )
 
-if(ENABLE_LOGGING)
-  add_compile_definitions(LOGFLAG)
-endif()
-
 if(BUILD_SHARED_LIBS)
   add_library(${PROJECT_NAME} SHARED ${SOURCES} ${LIBS})
 else()
   add_library(${PROJECT_NAME} STATIC ${SOURCES} ${LIBS})
+endif()
+
+if(ENABLE_LOGGING)
+  target_compile_definitions(${PROJECT_NAME} PUBLIC LOGFLAG)
 endif()
 
 add_library(CircuitGenGraph::CircuitGenGraph ALIAS ${PROJECT_NAME})
@@ -59,6 +59,7 @@ target_include_directories(
   ${PROJECT_NAME} ${warning_guard}
   PUBLIC
   "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
+  "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/lib>"
 )
 
 target_include_directories(

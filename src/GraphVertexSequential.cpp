@@ -8,9 +8,7 @@
 #include <cassert>
 #include <iostream>
 
-#ifdef LOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
+#include <CircuitGenGraph/Logging.hpp>
 #include "../lib/fmt/core.h"
 
 namespace CG_Graph {
@@ -42,13 +40,8 @@ inline bool validateSignal(SequentialTypes current, SequentialTypes found) {
   for (const auto &flag: {EN, RST, CLR, SET, NEGEDGE, ASYNC}) {
     if (delta & flag) {
       SequentialTypes foundFlag = static_cast<SequentialTypes>(delta & flag);
-#ifdef LOGFLAG
-      LOG(ERROR) << "Invalid flag found in used type: "
-                 << convertSequentialFlag(foundFlag) << '\n';
-#else
-      std::cerr << "Invalid flag found in used type: "
-                << convertSequentialFlag(foundFlag) << '\n';
-#endif
+      CG_LOG_ERROR << "Invalid flag found in used type: "
+                   << convertSequentialFlag(foundFlag) << '\n';
     }
   }
   return false;
@@ -276,11 +269,7 @@ std::string GraphVertexSequential::toVerilog() const {
 
 DotReturn GraphVertexSequential::toDOT() {
   if (!d_inConnections.size()) {
-#ifdef LOGFLAG
-    LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
-#else
-    std::cerr << "TODO: delete empty vertices: " << d_name << std::endl;
-#endif
+    CG_LOG_ERROR << "TODO: delete empty vertices: " << d_name << std::endl;
     return {};
   }
 
@@ -298,5 +287,4 @@ DotReturn GraphVertexSequential::toDOT() {
   }
   return dot;
 }
-
 } // namespace CG_Graph

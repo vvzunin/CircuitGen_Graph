@@ -28,7 +28,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_INIT} -std=c++17 -fPIC")
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-option(ENABLE_LOGGING "Enable logging" OFF)
+option(ENABLE_LOGGING "Enable logging" ON)
 option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
 
 # Подключаем папку с исходниками (новый формат)

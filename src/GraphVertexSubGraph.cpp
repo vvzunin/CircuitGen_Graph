@@ -20,9 +20,7 @@
 #include <unordered_set>
 #include <vector>
 
-#ifdef LOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
+#include <CircuitGenGraph/Logging.hpp>
 
 namespace CG_Graph {
 
@@ -63,11 +61,7 @@ char GraphVertexSubGraph::updateValue() {
     }
     return outputsValues.at(0);
   }
-#ifdef LOGFLAG
-  LOG(ERROR) << "Error, SubGraph without inputs" << std::endl;
-#else
-  std::cerr << "Error, SubGraph without inputs" << std::endl;
-#endif
+  CG_LOG_ERROR << "Error, SubGraph without inputs" << std::endl;
   return ValueStates::NoSignal;
 }
 
@@ -80,11 +74,7 @@ void GraphVertexSubGraph::removeValue() {
       }
     }
   } else {
-#ifdef LOGFLAG
-    LOG(ERROR) << "Error, SubGraph without inputs" << std::endl;
-#else
-    std::cerr << "Error, SubGraph without inputs" << std::endl;
-#endif
+    CG_LOG_ERROR << "Error, SubGraph without inputs" << std::endl;
   }
 }
 
