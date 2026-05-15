@@ -6,9 +6,7 @@
 #include "CircuitGenGraph/GraphVertexBus.hpp"
 #include <CircuitGenGraph/GraphVertex.hpp>
 
-#ifdef LOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
+#include <CircuitGenGraph/Logging.hpp>
 
 namespace CG_Graph {
 
@@ -39,9 +37,7 @@ void GraphVertexInput::updateLevel() {
   if (d_needUpdate != VS_NOT_CALC) {
     return;
   }
-#ifdef LOGFLAG
-  LOG(INFO) << "0. " << d_name << " (" << getTypeName() << ")";
-#endif
+  CG_LOG_INFO << "0. " << d_name << " (" << getTypeName() << ")";
   d_level = 0;
   d_needUpdate = VS_CALC;
 }

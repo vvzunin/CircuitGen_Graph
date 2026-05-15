@@ -9,13 +9,13 @@
 #include <iostream>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
+
 #include <sstream>
 #include <string>
 #include <string_view>
 
-#ifdef LOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
+#include <CircuitGenGraph/Logging.hpp>
+
 #include "fmt/core.h"
 
 namespace CG_Graph {
@@ -88,11 +88,9 @@ char GraphVertexGates::updateValue() {
           table = tableXnor.at(d_value);
           break;
         default:
-#ifdef LOGFLAG
-          LOG(ERROR) << "Error" << std::endl;
-#else
-          std::cerr << "Error" << std::endl;
-#endif
+          CG_LOG_ERROR << "GraphVertexGates: Unknown gate type in updateValue "
+                          "for vertex '"
+                       << d_name << "'";
       }
       d_value = table.at(d_inConnections.at(i)->getValue());
     }
@@ -174,11 +172,9 @@ std::string GraphVertexGates::getVerilogString() const {
 
       s += " " + VertexUtils::gateToString(d_gate) + " " + name;
       if (d_gate == GateDefault)
-#ifdef LOGFLAG
-        LOG(ERROR) << "Error" << std::endl;
-#else
-        std::cerr << "Error" << std::endl;
-#endif
+        CG_LOG_ERROR << "GraphVertexGates: Default gate used in "
+                        "getVerilogString for vertex '"
+                     << d_name << "'";
     }
 
     if ((d_gate == Gates::GateNand) || (d_gate == Gates::GateNor) ||
@@ -190,6 +186,12 @@ std::string GraphVertexGates::getVerilogString() const {
 }
 
 std::string GraphVertexGates::toVerilog() const {
+  if (!(d_inConnections.size())) {
+    CG_LOG_ERROR
+        << "GraphVertexGates: Attempted to generate Verilog for empty vertex '"
+        << d_name << "'";
+    return "";
+  }
   std::string end;
   std::string oper = VertexUtils::gateToString(d_gate);
   auto printUnaryOperators = [&]() {
@@ -218,11 +220,9 @@ std::string GraphVertexGates::toVerilog() const {
 
 DotReturn GraphVertexGates::toDOT() {
   if (!d_inConnections.size()) {
-#ifdef LOGFLAG
-    LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
-#else
-    std::cerr << "TODO: delete empty vertices: " << d_name << std::endl;
-#endif
+    CG_LOG_ERROR
+        << "GraphVertexGates: Attempted to generate DOT for empty vertex '"
+        << d_name << "'";
     return {};
   }
 

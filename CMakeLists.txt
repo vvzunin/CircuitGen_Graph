@@ -28,8 +28,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_INIT} -std=c++17 -fPIC")
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-option(ENABLE_LOGGING "Enable logging" OFF)
-
+option(ENABLE_LOGGING "Enable logging" ON)
 option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
 
 # Подключаем папку с исходниками (новый формат)
@@ -59,7 +58,7 @@ include_directories(lib)
 link_directories(lib)
 
 add_subdirectory(lib)
-target_link_libraries(${PROJECT_NAME} PRIVATE Lorina)
+target_link_libraries(${PROJECT_NAME} PUBLIC Lorina)
 target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 
 find_program(CLANG_TIDY NAMES clang-tidy)
@@ -84,7 +83,7 @@ endif()
 
 if(ENABLE_LOGGING)
   message(STATUS "Logs enabled")
-  install(TARGETS ${PROJECT_NAME} easylogging++
+  install(TARGETS ${PROJECT_NAME} easylogging++ Lorina
     EXPORT "${PROJECT_NAME}Targets"
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -93,7 +92,7 @@ if(ENABLE_LOGGING)
   )
 else()
   message(STATUS "Logs disabled")
-  install(TARGETS ${PROJECT_NAME}
+  install(TARGETS ${PROJECT_NAME} Lorina
     EXPORT "${PROJECT_NAME}Targets"
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -101,6 +100,11 @@ else()
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   )
 endif()
+
+install(
+  DIRECTORY "${PROJECT_SOURCE_DIR}/lib/lorina/include/"
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+)
 
 install(EXPORT "${PROJECT_NAME}Targets"
   FILE "${PROJECT_NAME}Targets.cmake"

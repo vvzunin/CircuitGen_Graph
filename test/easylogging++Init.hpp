@@ -1,13 +1,13 @@
 #ifdef LOGFLAG
 
 #include "easyloggingpp/easylogging++.h"
-INITIALIZE_EASYLOGGINGPP
 
 #include "string.h"
 
-void initLogging(std::string testName, std::string subtestName) {
+inline void initLogging(std::string testName, std::string subtestName) {
   el::Configurations conf("easylogging++.conf");
   el::Loggers::reconfigureAllLoggers(conf);
+  el::Loggers::reconfigureAllLoggers(el::ConfigurationType::ToFile, "true");
   el::Loggers::reconfigureAllLoggers(el::ConfigurationType::Filename,
                                      "logs/" + testName + "/" + subtestName +
                                          ".log");

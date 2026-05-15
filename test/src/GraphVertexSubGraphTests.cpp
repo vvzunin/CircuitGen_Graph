@@ -4,6 +4,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <set>
 #include <string>
 
 using namespace CG_Graph;
@@ -183,6 +184,147 @@ TEST(TestSetName_SubGraph, InputCorrectName) {
   GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSubGr);
   subGraph1.setName("Anything");
   EXPECT_EQ(subGraph1.getRawName(), "Anything");
+}
+
+TEST(PortsParsing_SubGraph, ParseVerilogPortsSimple) {
+  const std::filesystem::path tmpPath =
+      std::filesystem::current_path() / "tmp_ports_subgraph_test.v";
+  {
+    std::ofstream file(tmpPath);
+    file << "module m(a, b, c, y, z);\n";
+    file << "input wire a, b, c; // comment\n";
+    file << "output reg y, z;\n";
+    file << "endmodule\n";
+  }
+
+  const VerilogPorts ports = parseVerilogPorts(tmpPath.string());
+  std::filesystem::remove(tmpPath);
+
+  const std::set<std::string> inputs(ports.inputs.begin(), ports.inputs.end());
+  const std::set<std::string> outputs(ports.outputs.begin(),
+                                      ports.outputs.end());
+
+  EXPECT_EQ(inputs, (std::set<std::string>{"a", "b", "c"}));
+  EXPECT_EQ(outputs, (std::set<std::string>{"y", "z"}));
+}
+
+TEST(PortsParsing_SubGraph, ParseVerilogPortsAnsiStyle) {
+  const std::filesystem::path tmpPath =
+      std::filesystem::current_path() / "tmp_ansi_ports.v";
+  {
+    std::ofstream file(tmpPath);
+    file << "module m (\n";
+    file << "  input wire a, b,\n";
+    file << "  output reg y, z\n";
+    file << ");\n";
+    file << "endmodule\n";
+  }
+  const VerilogPorts ports = parseVerilogPorts(tmpPath.string());
+  std::filesystem::remove(tmpPath);
+
+  const std::set<std::string> inputs(ports.inputs.begin(), ports.inputs.end());
+  const std::set<std::string> outputs(ports.outputs.begin(),
+                                      ports.outputs.end());
+  EXPECT_EQ(inputs, (std::set<std::string>{"a", "b"}));
+  EXPECT_EQ(outputs, (std::set<std::string>{"y", "z"}));
+}
+
+TEST(PortsParsing_SubGraph, ParseVerilogPortsIgnoresDataTypeKeywords) {
+  const std::filesystem::path tmpPath =
+      std::filesystem::current_path() / "tmp_type_keywords.v";
+  {
+    std::ofstream file(tmpPath);
+    file << "module m (\n";
+    file << "  input logic a, b,\n";
+    file << "  output signed y,\n";
+    file << "  input unsigned c\n";
+    file << ");\n";
+    file << "endmodule\n";
+  }
+  const VerilogPorts ports = parseVerilogPorts(tmpPath.string());
+  std::filesystem::remove(tmpPath);
+
+  const std::set<std::string> inputs(ports.inputs.begin(), ports.inputs.end());
+  const std::set<std::string> outputs(ports.outputs.begin(),
+                                      ports.outputs.end());
+
+  EXPECT_EQ(inputs, (std::set<std::string>{"a", "b", "c"}));
+  EXPECT_EQ(outputs, (std::set<std::string>{"y"}));
+}
+
+TEST(PortsParsing_SubGraph, ParseVerilogPortsThrowsWhenFileMissing) {
+  EXPECT_THROW(parseVerilogPorts("definitely_missing_ports_file.v"),
+               std::runtime_error);
+}
+
+TEST(PortsMatching_SubGraph, CheckPortsMatchGraphPtrSuccess) {
+  GraphPtr graph = std::make_shared<OrientedGraph>("PortsGraph");
+  graph->addInput("a");
+  graph->addInput("b");
+  graph->addOutput("y");
+
+  VerilogPorts verilogPorts = {{"b", "a"}, {"y"}};
+  std::string errorMsg;
+
+  EXPECT_TRUE(checkPortsMatch(graph, verilogPorts, errorMsg));
+  EXPECT_TRUE(errorMsg.empty());
+}
+
+TEST(PortsMatching_SubGraph, CheckPortsMatchGraphPtrFail) {
+  GraphPtr graph = std::make_shared<OrientedGraph>("PortsGraph");
+  graph->addInput("a");
+  graph->addOutput("y");
+
+  VerilogPorts verilogPorts = {{"a", "b"}, {"y"}};
+  std::string errorMsg;
+
+  EXPECT_FALSE(checkPortsMatch(graph, verilogPorts, errorMsg));
+  EXPECT_FALSE(errorMsg.empty());
+}
+
+TEST(VerilogParameters_SubGraph, ParseAndStoreParametersFromVerilogFile) {
+  const std::filesystem::path cwd = std::filesystem::current_path();
+  const std::filesystem::path verilogInPath = cwd / "tmp_verilog_params_src.v";
+  const std::filesystem::path verilogOutPath = cwd / "tmp_verilog_params_out.v";
+
+  {
+    std::ofstream file(verilogInPath);
+    file << "module m #(\n";
+    file << "  parameter WIDTH = 8,\n";
+    file << "  parameter signed [3:0] MODE = 4'd2\n";
+    file << ") (\n";
+    file << "  input wire a,\n";
+    file << "  output wire y\n";
+    file << ");\n";
+    file << "localparam integer LATENCY = WIDTH + 1;\n";
+    file << "endmodule\n";
+  }
+
+  GraphPtr subGraph = std::make_shared<OrientedGraph>("ParamsGraph");
+  GraphPtr owner = std::make_shared<OrientedGraph>("ParamsOwner");
+  GraphVertexSubGraph subGraphVertex(subGraph, owner);
+  subGraphVertex.setVerilogPath(verilogInPath.string());
+
+  EXPECT_TRUE(subGraphVertex.toVerilog(cwd.string(),
+                                       verilogOutPath.filename().string()));
+
+  const auto &parameters = subGraph->getVerilogParameters();
+  ASSERT_EQ(parameters.size(), 3);
+  EXPECT_EQ(parameters[0],
+            std::make_pair(std::string("WIDTH"), std::string("8")));
+  EXPECT_EQ(parameters[1],
+            std::make_pair(std::string("MODE"), std::string("4'd2")));
+  EXPECT_EQ(parameters[2],
+            std::make_pair(std::string("LATENCY"), std::string("WIDTH + 1")));
+
+  const std::string generatedVerilog = loadStringFileSubGraph(verilogOutPath);
+  EXPECT_NE(generatedVerilog.find("parameter WIDTH = 8;"), std::string::npos);
+  EXPECT_NE(generatedVerilog.find("parameter MODE = 4'd2;"), std::string::npos);
+  EXPECT_NE(generatedVerilog.find("parameter LATENCY = WIDTH + 1;"),
+            std::string::npos);
+
+  std::filesystem::remove(verilogInPath);
+  std::filesystem::remove(verilogOutPath);
 }
 
 // Do not know what to do with it

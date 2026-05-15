@@ -2,8 +2,8 @@
  * @file DefaultAuxiliaryMethods.hpp
  * @brief Вспомогательные методы: AuxMethodsGraph (replacer, dotReturnToString,
  * TuplePrinter).
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
  */
 #pragma once
 #include <fstream>
@@ -48,27 +48,27 @@
 namespace CG_Graph::AuxMethodsGraph {
 
 /**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
  */
 std::string replacer(const std::string &i_s, const std::string &i_r);
 
 /**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
  */
 std::string dotReturnToString(DotReturn dot);
 
 /**
  * @details code from here https://gist.github.com/en4bz/f07ef13706c3ae3a4fb2
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
  */
 template<class Tuple, std::size_t N>
 struct TuplePrinter {
   /**
-   * @author Vladimir Zunin <vzunin@hse.ru>
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Vladimir Zunin
+   * @author Fuuulkrum7
    */
   static void print(const std::string &fmt, std::ostream &os, const Tuple &t) {
     const size_t idx = fmt.find_last_of('%');
@@ -78,15 +78,15 @@ struct TuplePrinter {
 };
 
 /**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
  */
 template<class Tuple>
-/** @author Fuuulkrum7 <ilka747428@gmail.com> */
+/** @author Fuuulkrum7 */
 struct TuplePrinter<Tuple, 1> {
   /**
-   * @author Vladimir Zunin <vzunin@hse.ru>
-   * @author Fuuulkrum7 <ilka747428@gmail.com>
+   * @author Vladimir Zunin
+   * @author Fuuulkrum7
    */
   static void print(const std::string &fmt, std::ostream &os, const Tuple &t) {
     const size_t idx = fmt.find_first_of('%');
@@ -96,8 +96,8 @@ struct TuplePrinter<Tuple, 1> {
 };
 
 /*!
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief A simple function, which calls fmt

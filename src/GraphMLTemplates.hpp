@@ -1,6 +1,6 @@
 /**
  * @file GraphMLTemplates.hpp
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief Definitions of GraphML templates for various output formats

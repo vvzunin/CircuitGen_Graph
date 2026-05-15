@@ -12,9 +12,7 @@
 #include <string>
 #include <string_view>
 
-#ifdef lOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
+#include <CircuitGenGraph/Logging.hpp>
 
 namespace CG_Graph {
 

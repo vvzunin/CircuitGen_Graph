@@ -22,10 +22,9 @@
  * - Утилиты преобразования строк
  * - Шаблонные функции для поиска пар
  * - Сопоставления логических операций
- * * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
- * @author Theossr <feolab05@gmail.com>
- * @author Чернявских Илья Игоревич <fuuulkrum7@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
+ * @author Theossr
  */
 #pragma once
 
@@ -61,10 +60,8 @@ namespace CG_Graph {
 
 static constexpr size_t d_busInType = 8;
 
-static constexpr size_t d_busInType = 8;
-
 /**
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief Enumeration of all possible vertex types in a graph
@@ -136,8 +133,8 @@ enum VertexTypes : uint8_t {
 #define CGG_FF_TYPE(S, V) S = V, n##S = NEGEDGE | V
 
 /**
- * @author Fuuulkrum7 <ilka747428@gmail.com>
- * @author Theossr <feolab05@gmail.com>
+ * @author Fuuulkrum7
+ * @author Theossr
  *
  * \~english
  * @brief Types of all sequential cells being supported
@@ -229,7 +226,7 @@ enum SequentialTypes : uint8_t {
 };
 
 /**
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief Enumeration of logic gate types
@@ -294,7 +291,7 @@ enum Gates : uint8_t {
 };
 
 /**
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief Enumeration for DOT graph generation components
@@ -347,8 +344,8 @@ enum DotTypes : uint8_t {
 };
 
 /**
- * @author Fuuulkrum7 <ilka747428@gmail.com>
- * @author Theossr <feolab05@gmail.com>
+ * @author Fuuulkrum7
+ * @author Theossr
  *
  * \~english
  * @brief Enumeration of possible signal values in circuit simulation
@@ -406,8 +403,8 @@ enum ValueStates : char {
 namespace GraphUtils {
 
 /**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief Gets information about a logical operation by its name
@@ -434,8 +431,8 @@ namespace GraphUtils {
 std::pair<std::string_view, int32_t> getLogicOperation(const std::string &i_op);
 
 /**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief Returns the keys of logical operations
@@ -449,8 +446,8 @@ std::pair<std::string_view, int32_t> getLogicOperation(const std::string &i_op);
 std::vector<Gates> getLogicOperationsKeys();
 
 /**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief Returns logical operations along with information about single
@@ -484,8 +481,8 @@ std::vector<Gates> getLogicOperationsKeys();
 std::pair<std::vector<bool>, std::vector<Gates>> getLogicOperationsWithGates();
 
 /**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief Converts operation string to its formal name
@@ -506,8 +503,8 @@ std::pair<std::vector<bool>, std::vector<Gates>> getLogicOperationsWithGates();
 std::string fromOperationsToName(std::string_view i_op);
 
 /**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief Converts hierarchy key to its corresponding operation value
@@ -543,8 +540,8 @@ std::string_view fromHierarchyToOperation(uint32_t key);
 /// @endcode
 
 /**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief Converts a string representation of a gate to its corresponding
@@ -569,8 +566,8 @@ std::string_view fromHierarchyToOperation(uint32_t key);
 Gates parseStringToGate(std::string i_gate);
 
 /**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief Converts an enum value of a vertex type to its string
@@ -595,8 +592,8 @@ Gates parseStringToGate(std::string i_gate);
 std::string parseVertexToString(VertexTypes vertex);
 
 /**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief Converts an enum value of a gate to its string representation
@@ -623,8 +620,8 @@ std::string parseSequentialToString(SequentialTypes type);
 std::vector<std::string_view> parseSequentialToInputs(SequentialTypes type);
 
 /**
- * @author Vladimir Zunin <vzunin@hse.ru>
- * @author Fuuulkrum7 <ilka747428@gmail.com>
+ * @author Vladimir Zunin
+ * @author Fuuulkrum7
  *
  * \~english
  * @brief Looks for a std::pair with a given key in an array of pairs

@@ -1,4 +1,5 @@
 #include "CircuitGenGraph/TestbenchGenerator.hpp"
+#include <CircuitGenGraph/Logging.hpp>
 
 #include <algorithm>
 #include <array>
@@ -17,10 +18,6 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#endif
-
-#ifdef LOGFLAG
-#include "easyloggingpp/easylogging++.h"
 #endif
 
 namespace CG_Graph {
@@ -48,11 +45,9 @@ TestbenchGenerator::TestbenchGenerator(GraphPtr i_graph,
   // Проверяем наличие последовательностных элементов
   d_hasSequential = !vertices[VertexTypes::sequential].empty();
 
-#ifdef LOGFLAG
-  LOG(INFO) << "TestbenchGenerator: initialized for graph '"
-            << d_graph->getName() << "' with " << d_inputNames.size()
-            << " inputs and " << d_outputNames.size() << " outputs";
-#endif
+  CG_LOG_INFO << "TestbenchGenerator: initialized for graph '"
+              << d_graph->getName() << "' with " << d_inputNames.size()
+              << " inputs and " << d_outputNames.size() << " outputs";
 }
 
 // ==================== Генерация тестовых векторов ====================
@@ -61,15 +56,9 @@ size_t TestbenchGenerator::generateExhaustiveVectors() {
   size_t numInputs = d_inputNames.size();
 
   if (numInputs > 20) {
-#ifdef LOGFLAG
-    LOG(WARNING) << "TestbenchGenerator: exhaustive generation for "
-                 << numInputs << " inputs will create " << (1ULL << numInputs)
-                 << " test vectors. Consider using random vectors.";
-#else
-    std::cerr << "Warning: exhaustive generation for " << numInputs
-              << " inputs will create " << (1ULL << numInputs)
-              << " test vectors." << std::endl;
-#endif
+    CG_LOG_WARNING << "TestbenchGenerator: exhaustive generation for "
+                   << numInputs << " inputs will create " << (1ULL << numInputs)
+                   << " test vectors. Consider using random vectors.";
   }
 
   d_testVectors.clear();
@@ -84,10 +73,8 @@ size_t TestbenchGenerator::generateExhaustiveVectors() {
     d_testVectors.push_back({inputs, expected, {}, false});
   }
 
-#ifdef LOGFLAG
-  LOG(INFO) << "TestbenchGenerator: generated " << d_testVectors.size()
-            << " exhaustive test vectors";
-#endif
+  CG_LOG_INFO << "TestbenchGenerator: generated " << d_testVectors.size()
+              << " exhaustive test vectors";
 
   return d_testVectors.size();
 }
@@ -114,10 +101,8 @@ size_t TestbenchGenerator::generateRandomVectors(size_t i_count,
     d_testVectors.push_back({inputs, expected, {}, false});
   }
 
-#ifdef LOGFLAG
-  LOG(INFO) << "TestbenchGenerator: generated " << i_count
-            << " random test vectors";
-#endif
+  CG_LOG_INFO << "TestbenchGenerator: generated " << i_count
+              << " random test vectors";
 
   return i_count;
 }
@@ -389,11 +374,8 @@ std::string TestbenchGenerator::getTestbenchCode() const {
 bool TestbenchGenerator::toVerilogTestbench(const std::string &i_path,
                                             const std::string &i_filename) {
   if (d_testVectors.empty()) {
-#ifdef LOGFLAG
-    LOG(WARNING) << "TestbenchGenerator: no test vectors to generate testbench";
-#else
-    std::cerr << "Warning: no test vectors to generate testbench" << std::endl;
-#endif
+    CG_LOG_WARNING
+        << "TestbenchGenerator: no test vectors to generate testbench";
     return false;
   }
 
@@ -403,22 +385,20 @@ bool TestbenchGenerator::toVerilogTestbench(const std::string &i_path,
   std::filesystem::create_directories(i_path);
   std::string fullPath = i_path + "/" + filename;
 
+  CG_LOG_INFO << "TestbenchGenerator: generating Verilog testbench at "
+              << fullPath;
+
   std::ofstream file(fullPath);
   if (!file) {
-#ifdef LOGFLAG
-    LOG(ERROR) << "TestbenchGenerator: cannot create file " << fullPath;
-#else
-    std::cerr << "Error: cannot create file " << fullPath << std::endl;
-#endif
+    CG_LOG_ERROR << "TestbenchGenerator: cannot create file " << fullPath;
     return false;
   }
 
   file << getTestbenchCode();
   file.close();
 
-#ifdef LOGFLAG
-  LOG(INFO) << "TestbenchGenerator: testbench written to " << fullPath;
-#endif
+  CG_LOG_INFO << "TestbenchGenerator: testbench written to " << fullPath
+              << " with " << d_testVectors.size() << " vectors";
 
   return true;
 }
@@ -465,10 +445,8 @@ VerificationResult TestbenchGenerator::runInternalSimulation() {
   result.vectors = d_testVectors;
   result.success = (result.failedTests == 0);
 
-#ifdef LOGFLAG
-  LOG(INFO) << "TestbenchGenerator: internal simulation completed. "
-            << result.passedTests << "/" << result.totalTests << " passed";
-#endif
+  CG_LOG_INFO << "TestbenchGenerator: internal simulation completed. "
+              << result.passedTests << "/" << result.totalTests << " passed";
 
   return result;
 }
@@ -521,7 +499,7 @@ TestbenchGenerator::executeCommandSafe(const std::vector<std::string> &i_argv) {
     execvp(argv_c[0], argv_c.data());
 
     // Если execvp вернулся, произошла ошибка
-    std::cerr << "Failed to execute: " << i_argv[0] << std::endl;
+    CG_LOG_ERROR << "Failed to execute: " << i_argv[0];
     _exit(127);
   }
 
@@ -616,11 +594,7 @@ TestbenchGenerator::runIcarusVerification(const std::string &i_workDir,
     result.success = false;
     result.errorMessage = "Icarus Verilog not found. Please install it with: "
                           "sudo apt install iverilog";
-#ifdef LOGFLAG
-    LOG(ERROR) << "TestbenchGenerator: " << result.errorMessage;
-#else
-    std::cerr << "Error: " << result.errorMessage << std::endl;
-#endif
+    CG_LOG_ERROR << "TestbenchGenerator: " << result.errorMessage;
     return result;
   }
 
@@ -664,13 +638,11 @@ TestbenchGenerator::runIcarusVerification(const std::string &i_workDir,
     }
   }
 
-#ifdef LOGFLAG
   std::ostringstream cmdLog;
   for (const auto &arg: compileArgs) {
     cmdLog << arg << " ";
   }
-  LOG(INFO) << "TestbenchGenerator: compiling with command: " << cmdLog.str();
-#endif
+  CG_LOG_INFO << "TestbenchGenerator: compiling with command: " << cmdLog.str();
 
   auto [compileExitCode, compileOutput] = executeCommandSafe(compileArgs);
 
@@ -708,21 +680,15 @@ TestbenchGenerator::runIcarusVerification(const std::string &i_workDir,
     result.simulatorOutput =
         filteredOutput.empty() ? compileOutput : filteredOutput;
     result.errorMessage = "Compilation failed";
-#ifdef LOGFLAG
-    LOG(ERROR) << "TestbenchGenerator: compilation failed: " << compileOutput;
-#else
-    std::cerr << "Compilation error: " << compileOutput << std::endl;
-#endif
+    CG_LOG_ERROR << "TestbenchGenerator: compilation failed: " << compileOutput;
     return result;
   }
 
   // Запускаем симуляцию
   std::vector<std::string> simArgs = {i_vvpPath, outPath};
 
-#ifdef LOGFLAG
-  LOG(INFO) << "TestbenchGenerator: running simulation: " << i_vvpPath << " "
-            << outPath;
-#endif
+  CG_LOG_INFO << "TestbenchGenerator: running simulation: " << i_vvpPath << " "
+              << outPath;
 
   auto [simExitCode, simOutput] = executeCommandSafe(simArgs);
 
@@ -759,10 +725,8 @@ TestbenchGenerator::runIcarusVerification(const std::string &i_workDir,
     result.success = (result.failedTests == 0) && (simExitCode == 0);
   }
 
-#ifdef LOGFLAG
-  LOG(INFO) << "TestbenchGenerator: Icarus verification completed. "
-            << result.passedTests << "/" << result.totalTests << " passed";
-#endif
+  CG_LOG_INFO << "TestbenchGenerator: Icarus verification completed. "
+              << result.passedTests << "/" << result.totalTests << " passed";
 
   if (d_config.verbose) {
     std::cout << simOutput << std::endl;
@@ -794,9 +758,9 @@ TestbenchGenerator::compareSimulations(const std::string &i_workDir) {
   bool matchTotalTests = (internalResult.totalTests == icarusResult.totalTests);
 
   // Поэлементное сравнение векторов только если Icarus-ветка их заполнила.
-  // runIcarusVerification сейчас выставляет лишь счетчики и success по выводу vvp,
-  // без копии d_testVectors в result.vectors — в этом случае ограничиваемся
-  // согласованностью success и счетчиков.
+  // runIcarusVerification сейчас выставляет лишь счетчики и success по выводу
+  // vvp, без копии d_testVectors в result.vectors — в этом случае
+  // ограничиваемся согласованностью success и счетчиков.
   bool matchVectors = true;
   if (!icarusResult.vectors.empty()) {
     if (internalResult.vectors.size() == icarusResult.vectors.size()) {
@@ -902,7 +866,7 @@ TestbenchGenerator::parseGoldenModel(const std::string &filepath,
   std::ifstream file(filepath);
 
   if (!file.is_open()) {
-    std::cerr << "Error: Cannot open golden model file: " << filepath << "\n";
+    CG_LOG_ERROR << "Error: Cannot open golden model file: " << filepath;
     return ports;
   }
 
@@ -954,7 +918,7 @@ bool TestbenchGenerator::generate(std::shared_ptr<OrientedGraph> graph,
       parseGoldenModel(goldenModelPath, goldenModuleName);
 
   if (goldenModuleName.empty() || goldenPorts.empty()) {
-    std::cerr << "Error: Failed to parse golden model.\n";
+    CG_LOG_ERROR << "Error: Failed to parse golden model.";
     return false;
   }
 
