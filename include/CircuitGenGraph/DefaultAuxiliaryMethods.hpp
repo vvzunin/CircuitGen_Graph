@@ -12,7 +12,7 @@
 
 #include <CircuitGenGraph/GraphUtils.hpp>
 
-#include "fmt/core.h"
+#include "../../lib/fmt/core.h"
 
 /*!
  * \file AuxiliaryMethods.hpp

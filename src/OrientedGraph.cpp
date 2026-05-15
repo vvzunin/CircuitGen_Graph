@@ -1,12 +1,9 @@
-﻿/**
+/**
  * @file OrientedGraph.cpp
  * @brief Реализация ориентированного графа схемы.
  */
 #include <algorithm>
 #include <cassert>
-#include <cstddef>
-#include <cstdint>
-#include <fmt/format.h>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -16,17 +13,12 @@
 #include <vector>
 
 #include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
-#include <CircuitGenGraph/GraphReader.hpp>
+#include <CircuitGenGraph/GraphMLTemplates.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
 #include <CircuitGenGraph/Logging.hpp>
-
-#include "CircuitGenGraph/GraphUtils.hpp"
-#include "GraphMLTemplates.hpp"
-
-#include <lorina/lorina.hpp>
 
 #ifdef LOGFLAG
 INITIALIZE_EASYLOGGINGPP
@@ -309,7 +301,7 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
 
   if (outSize > 0) {
     newGraph->reserveOutConnections(outSize);
-    for (size_t i = 0; i < outSize; ++i) {
+    for (int i = 0; i < outSize; ++i) {
       VertexPtr newVertex =
           create<GraphVertexGates>(Gates::GateBuf, shared_from_this());
 
@@ -348,25 +340,6 @@ OrientedGraph::graphSimulation(std::vector<char> inputsValues) {
 void OrientedGraph::simulationRemove() {
   for (VertexPtr ptr: d_vertices[VertexTypes::output]) {
     ptr->removeValue();
-  }
-}
-
-void OrientedGraph::updateEdgesGatesCount(VertexPtr vertex, Gates type) {
-  if (type == GateDefault) {
-    for (auto *i: vertex->getOutConnections())
-      if (i->getType() == gate)
-        --d_edgesGatesCount[type][i->getGate()];
-    --d_gatesCount[GateDefault];
-  } else {
-    assert(vertex->getGate() == GateDefault);
-    --d_gatesCount[GateDefault];
-    ++d_gatesCount[type];
-    for (auto *i: vertex->getInConnections())
-      if (i->getType() == gate)
-        ++d_edgesGatesCount[i->getGate()][type];
-    for (auto *i: vertex->getOutConnections())
-      if (i->getType() == gate)
-        ++d_edgesGatesCount[type][i->getGate()];
   }
 }
 
@@ -456,29 +429,7 @@ VertexPtr OrientedGraph::generateMajority(VertexPtr a, VertexPtr b,
       this->addSubGraph(majoritySubgraph, {a, b, c});
   return outputs.back();
 }
-VertexPtr OrientedGraph::majorityAsLogic(VertexPtr a, VertexPtr b, VertexPtr c,
-                                         VertexPtr output = nullptr) {
-  VertexPtr and_ab = addGate(Gates::GateAnd);
-  addEdges({a, b}, and_ab);
 
-  VertexPtr and_ac = addGate(Gates::GateAnd);
-  addEdges({a, c}, and_ac);
-
-  VertexPtr and_bc = addGate(Gates::GateAnd);
-  addEdges({b, c}, and_bc);
-
-  VertexPtr or1 = addGate(Gates::GateOr);
-  addEdges({and_ab, and_ac}, or1);
-
-  VertexPtr or2;
-  if (output != nullptr && output->getGate() == GateDefault) {
-    static_cast<GraphVertexGates *>(output)->setGateIfDefault(GateOr);
-    or2 = output;
-  } else
-    or2 = addGate(Gates::GateOr);
-  addEdges({or1, and_bc}, or2);
-  return or2;
-}
 bool OrientedGraph::addEdge(VertexPtr from, VertexPtr to) {
   CG_VLOG(2) << "Adding edge from " << (from ? from->getName() : "nullptr")
              << " to " << (to ? to->getName() : "nullptr");
@@ -523,32 +474,6 @@ bool OrientedGraph::removeEdge(VertexPtr from1, VertexPtr to) {
     }
   }
   return deleted;
-}
-
-void OrientedGraph::readVerilog(std::string i_path, Context &context) {
-  GraphReader *reader = new GraphReader(context);
-  std::ifstream in(i_path.c_str(), std::ifstream::in);
-  if (!in.is_open())
-    throw std::runtime_error("File do not exist. Current path:" + i_path +
-                             "\n");
-  std::string word;
-  in >> word;
-  while (word != "module") {
-    in.ignore(256, '\n');
-    in >> word;
-  }
-  in.seekg(-6, std::ios::cur);
-  lorina::return_code returnCode = lorina::read_verilog(in, *reader);
-  if (returnCode == lorina::return_code::parse_error)
-    throw std::runtime_error("File is incorrect\n");
-  in.close();
-  delete reader;
-}
-
-CG_Graph::Context OrientedGraph::readVerilog(std::string i_path) {
-  Context context;
-  readVerilog(i_path, context);
-  return context;
 }
 
 std::set<GraphPtr> OrientedGraph::getSubGraphs() const {
@@ -685,10 +610,6 @@ OrientedGraph::getEdgesGatesCount() const {
   return d_edgesGatesCount;
 }
 
-void OrientedGraph::reserve(VertexTypes i_type, size_t i_capacity) {
-  d_vertices[i_type].reserve(d_vertices[i_type].size() + i_capacity);
-}
-
 std::string OrientedGraph::calculateHash() {
   if (d_hashState)
     return std::to_string(d_hashed);
@@ -814,16 +735,13 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
   }
 
   if (d_vertices[VertexTypes::constant].size()) {
-    fileStream << VertexUtils::vertexTypeToComment(constant) << "\n"
-               << verilogTab << "wire ";
-    for (auto *oper: d_vertices[VertexTypes::constant]) {
-      fileStream << static_cast<GraphVertexConstant *>(oper)->getRawName()
-                 << (oper != d_vertices[VertexTypes::constant].back() ? ", "
-                                                                      : ";\n");
-    }
+    fileStream << "\n";
   }
   // writing consts
   for (auto *oper: d_vertices[VertexTypes::constant]) {
+    fileStream << verilogTab
+               << static_cast<GraphVertexConstant *>(oper)->getVerilogInstance()
+               << "\n";
     fileStream << verilogTab << (*oper) << "\n";
   }
 
@@ -899,11 +817,13 @@ DotReturn OrientedGraph::toDOT() {
        {d_vertices[VertexTypes::input], d_vertices[VertexTypes::output],
         d_vertices[VertexTypes::gate], d_vertices[VertexTypes::sequential],
         d_vertices[VertexTypes::constant]}) {
+    int counter = 0;
     for (auto *value: eachVertex) {
       DotReturn dotVertex = value->toDOT();
       dot.insert(std::end(dot), std::begin(dotVertex), std::end(dotVertex));
     }
   }
+  int counter = 0;
   for (auto *value: d_allSubGraphsOutputs) {
     dot.push_back(value->toDOT()[0]);
   }
@@ -931,7 +851,7 @@ DotReturn OrientedGraph::toDOT() {
     auto buffers = subGraphPair.first->getOutConnections();
     auto outs = subGraphPair.first->getSubGraph()->getVerticesByType(
         VertexTypes::output);
-    for (uint32_t i = 0; i < outs.size(); i++) {
+    for (auto i = 0; i < outs.size(); i++) {
       dot.push_back({DotTypes::DotEdge,
                      {{"from", subGraphPair.second[0].second.at("instName") +
                                    "_" + outs[i]->getName()},

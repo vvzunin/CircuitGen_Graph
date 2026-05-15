@@ -53,7 +53,6 @@ PACKAGES=(
   iverilog
   lcov
   libclang-dev
-  libfmt-dev
   llvm-dev
   make
   ninja-build

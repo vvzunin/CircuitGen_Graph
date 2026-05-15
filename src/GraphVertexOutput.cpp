@@ -36,9 +36,7 @@ void GraphVertexOutput::updateLevel() {
   if (d_needUpdate != VS_NOT_CALC) {
     return;
   }
-#ifdef LOGFLAG
   int counter = 0;
-#endif
   for (VertexPtr ptr: d_inConnections) {
     CG_LOG_INFO << counter++ << ". " << ptr->getName() << " ("
                 << ptr->getTypeName() << ")";
@@ -75,7 +73,9 @@ void GraphVertexOutput::log(el::base::type::ostream_t &os) const {
      << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << d_level << "\n";
-  os << "Vertex Hash: " << "NuN" << "\n";
+  os << "Vertex Hash: "
+     << "NuN"
+     << "\n";
 }
 #endif
 

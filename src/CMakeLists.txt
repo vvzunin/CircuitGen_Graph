@@ -10,12 +10,11 @@ set(SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/DefaultAuxiliaryMethods.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/GraphVertexSequential.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/TestbenchGenerator.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/GraphReader.cpp
 )
 
-# set(LIBS
-#   ${PROJECT_SOURCE_DIR}/lib/fmt/format.cc
-# )
+set(LIBS
+  ${PROJECT_SOURCE_DIR}/lib/fmt/format.cc
+)
 
 set(PUBLIC_HEADERS
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/enums.hpp
@@ -24,14 +23,14 @@ set(PUBLIC_HEADERS
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/OrientedGraph.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphUtils.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/DefaultAuxiliaryMethods.hpp
+  ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphMLTemplates.hpp
   ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/TestbenchGenerator.hpp
-  ${PROJECT_SOURCE_DIR}/include/CircuitGenGraph/GraphReader.hpp
 )
 
 if(BUILD_SHARED_LIBS)
-  add_library(${PROJECT_NAME} SHARED ${SOURCES})
+  add_library(${PROJECT_NAME} SHARED ${SOURCES} ${LIBS})
 else()
-  add_library(${PROJECT_NAME} STATIC ${SOURCES})
+  add_library(${PROJECT_NAME} STATIC ${SOURCES} ${LIBS})
 endif()
 
 if(ENABLE_LOGGING)
@@ -43,8 +42,16 @@ add_library(CircuitGenGraph::CircuitGenGraph ALIAS ${PROJECT_NAME})
 include_directories(${PROJECT_SOURCE_DIR}/lib)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 
+if(ENABLE_LOGGING)
+  add_library(
+    easylogging++ STATIC
+    ${PROJECT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.cc
+    ${PROJECT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.h
+  )
+endif()
+
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
-#add_compile_options(-fno-rtti)
+add_compile_options(-fno-rtti)
 add_compile_options(-g3 -Wall -Wignored-qualifiers -DYYERROR_VERBOSE)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 

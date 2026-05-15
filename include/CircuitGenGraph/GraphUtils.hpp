@@ -523,7 +523,7 @@ std::string fromOperationsToName(std::string_view i_op);
  * @return std::string_view Значение, представляющее операцию
  * @throws std::out_of_range, если предоставленный ключ не существует
  */
-std::string_view fromHierarchyToOperation(uint32_t key);
+std::string_view fromHierarchyToOperation(int32_t key);
 
 /**
  * @author Vladimir Zunin
@@ -654,7 +654,7 @@ static constexpr size_t d_hierarchySize = 11;
  * представлениями и ID
  */
 static constexpr std::array<
-    std::pair<std::string_view, std::pair<std::string_view, uint32_t>>,
+    std::pair<std::string_view, std::pair<std::string_view, int32_t>>,
     d_hierarchySize>
     d_logicOperations = {{{"input", {"", 10}},
                           {"output", {"=", 0}},

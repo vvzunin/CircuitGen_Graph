@@ -9,7 +9,7 @@ include(../cmake/checks.cmake)
 include(../cmake/folders.cmake)
 
 FetchContent_Declare(
-  googletest
+  gtest
 
   # Url for googletest download.
   GIT_REPOSITORY https://github.com/google/googletest
@@ -17,9 +17,10 @@ FetchContent_Declare(
 )
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
-FetchContent_MakeAvailable(googletest)
+FetchContent_MakeAvailable(gtest)
+add_folders(Libraries gtest)
 
-#add_compile_options(-fno-rtti)
+add_compile_options(-fno-rtti)
 add_compile_options(-g3 -Wall -Wignored-qualifiers -DYYERROR_VERBOSE)
 
 option(CircuitGenGraph_TESTS_ENABLE_ASAN "Enable AddressSanitizer for tests" ON)
@@ -45,7 +46,7 @@ add_executable(${TEST_NAME}
   src/GraphVertexGatesTests.cpp
   src/GraphVertexOutputTests.cpp
   src/GraphVertexSubGraphTests.cpp
-  src/GraphReaderTests.cpp
+
   src/GraphVertexBaseTests.cpp
   src/GraphVertexConstantTests.cpp
   src/GraphVertexInputTests.cpp
@@ -66,8 +67,6 @@ target_include_directories(${TEST_NAME} PUBLIC
 target_link_libraries(${TEST_NAME} PUBLIC
   GTest::gtest_main
   CircuitGenGraph::CircuitGenGraph
-  Lorina
-  fmt
 )
 
 if(ENABLE_LOGGING)

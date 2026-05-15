@@ -8,9 +8,10 @@
 
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
+
 #include <CircuitGenGraph/Logging.hpp>
 
-#include <fmt/core.h>
+#include "../lib/fmt/core.h"
 
 namespace CG_Graph {
 
@@ -303,7 +304,7 @@ std::vector<VertexPtr> GraphVertexBase::getOutConnections() const {
 
 bool GraphVertexBase::addVertexToOutConnections(VertexPtr i_vert) {
   assert(i_vert != this);
-  // assert(d_type != output);
+  assert(d_type != output);
 
   size_t n = 0;
   for (VertexPtr vert: d_outConnections)

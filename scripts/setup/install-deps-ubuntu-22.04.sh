@@ -55,7 +55,6 @@ PACKAGES=(
   libcapture-tiny-perl
   libdatetime-perl
   libclang-dev
-  libfmt-dev
   llvm-dev
   make
   ninja-build
