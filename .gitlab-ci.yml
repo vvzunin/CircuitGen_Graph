@@ -683,6 +683,8 @@ docs:
         - docs/**/*
         - scripts/docs/**/*
         - scripts/docs/deploy-synology.sh
+        - scripts/docs/nas-docs-names.sh
+        - scripts/ci/test_deploy_mock.sh
         # Doxygen inputs include the public API headers and (some) sources.
         - include/**/*
         - src/**/*
