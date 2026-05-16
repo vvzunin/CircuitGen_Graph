@@ -4,6 +4,7 @@
 #include <CircuitGenGraph/OrientedGraph.hpp>
 #include <CircuitGenGraph/TestbenchGenerator.hpp>
 
+#include <chrono>
 #include <cstdio>
 #include <filesystem>
 #include <fstream>
@@ -520,10 +521,30 @@ TEST(TestbenchGeneratorTests, IcarusNotAvailable) {
 
 class TestbenchGeneratorGoldenTests : public ::testing::Test {
 protected:
+  void SetUp() override {
+    // Unique names avoid parallel ctest races on shared filenames.
+    suffix_ = std::to_string(
+        std::chrono::duration_cast<std::chrono::nanoseconds>(
+            std::chrono::steady_clock::now().time_since_epoch())
+            .count());
+  }
+
   void TearDown() override {
-    std::remove("test_golden_valid.v");
-    std::remove("test_golden_invalid.v");
-    std::remove("test_tb_output.v");
+    std::remove(goldenValidPath().c_str());
+    std::remove(goldenInvalidPath().c_str());
+    std::remove(tbOutputPath().c_str());
+  }
+
+  [[nodiscard]] std::string goldenValidPath() const {
+    return "test_golden_valid_" + suffix_ + ".v";
+  }
+
+  [[nodiscard]] std::string goldenInvalidPath() const {
+    return "test_golden_invalid_" + suffix_ + ".v";
+  }
+
+  [[nodiscard]] std::string tbOutputPath() const {
+    return "test_tb_output_" + suffix_ + ".v";
   }
 
   void createDummyFile(const std::string &filename,
@@ -532,6 +553,8 @@ protected:
     f << content;
     f.close();
   }
+
+  std::string suffix_;
 };
 
 TEST_F(TestbenchGeneratorGoldenTests, NullGraphReturnsFalse) {
@@ -546,11 +569,11 @@ TEST_F(TestbenchGeneratorGoldenTests, MissingGoldenModelReturnsFalse) {
 
 TEST_F(TestbenchGeneratorGoldenTests, InvalidGoldenModelReturnsFalse) {
   GraphPtr graph = std::make_shared<OrientedGraph>("TestGraph");
-  createDummyFile("test_golden_invalid.v",
+  createDummyFile(goldenInvalidPath(),
                   "// Just some random comments\n// No module here");
 
   EXPECT_FALSE(
-      TestbenchGenerator::generate(graph, "test_golden_invalid.v", "out.v"));
+      TestbenchGenerator::generate(graph, goldenInvalidPath(), "out.v"));
 }
 
 TEST_F(TestbenchGeneratorGoldenTests, SuccessfulGeneration) {
@@ -566,12 +589,12 @@ TEST_F(TestbenchGeneratorGoldenTests, SuccessfulGeneration) {
                               ");\n"
                               "    always @(*) out = a & b;\n"
                               "endmodule\n";
-  createDummyFile("test_golden_valid.v", goldenContent);
+  createDummyFile(goldenValidPath(), goldenContent);
 
-  EXPECT_TRUE(TestbenchGenerator::generate(graph, "test_golden_valid.v",
-                                           "test_tb_output.v"));
+  EXPECT_TRUE(TestbenchGenerator::generate(graph, goldenValidPath(),
+                                           tbOutputPath()));
 
-  std::ifstream tbFile("test_tb_output.v");
+  std::ifstream tbFile(tbOutputPath());
   ASSERT_TRUE(tbFile.is_open());
 
   std::string tbContent((std::istreambuf_iterator<char>(tbFile)),
