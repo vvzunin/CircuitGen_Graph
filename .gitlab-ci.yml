@@ -649,12 +649,16 @@ docs:
   needs:
     - job: docker-images-ubuntu-24.04
       artifacts: false
+    # Docs build/deploy does not depend on test results; still wait for jobs to start when present.
     - job: coverage
       artifacts: false
+      optional: true
     - job: tests
       artifacts: false
+      optional: true
     - job: examples
       artifacts: false
+      optional: true
   dependencies: []
   before_script:
     - python3 --version
@@ -685,6 +689,8 @@ docs:
         - scripts/docs/deploy-synology.sh
         - scripts/docs/nas-docs-names.sh
         - scripts/ci/test_deploy_mock.sh
+        # CI job definition (docs stage, NAS deploy variables, rules).
+        - .gitlab-ci.yml
         # Doxygen inputs include the public API headers and (some) sources.
         - include/**/*
         - src/**/*
@@ -700,6 +706,7 @@ docs:
         - cmake/docs-ci.cmake
         - scripts/setup/install-deps-*.sh
         - README.md
+        - README.en.md
 
 release-from-tag:
   stage: release
