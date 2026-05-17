@@ -22,7 +22,7 @@ string(REGEX MATCH "[0-9]+\\.[0-9]+([.][0-9]+)?" LCOV_VERSION "${lcov_version_ou
 # Paths to exclude from report to keep product coverage meaningful.
 set(
   COVERAGE_EXCLUDE_PATTERNS
-  "${PROJECT_BINARY_DIR}/*;${PROJECT_SOURCE_DIR}/test/*;${PROJECT_SOURCE_DIR}/lib/*;${PROJECT_SOURCE_DIR}/_deps/*;/usr/*"
+  "${PROJECT_BINARY_DIR}/*;${PROJECT_SOURCE_DIR}/test/*;${PROJECT_SOURCE_DIR}/lib/*;${PROJECT_SOURCE_DIR}/examples/*;${PROJECT_SOURCE_DIR}/_deps/*;/usr/*"
   CACHE STRING
   "Semicolon-separated lcov --remove patterns"
 )

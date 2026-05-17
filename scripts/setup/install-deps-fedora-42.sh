@@ -40,6 +40,7 @@ PACKAGES=(
   dejavu-sans-mono-fonts
   dejavu-serif-fonts
   flex
+  fmt-devel
   gcc
   gcc-c++
   glibc-devel
