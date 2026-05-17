@@ -523,10 +523,10 @@ class TestbenchGeneratorGoldenTests : public ::testing::Test {
 protected:
   void SetUp() override {
     // Unique names avoid parallel ctest races on shared filenames.
-    suffix_ = std::to_string(
-        std::chrono::duration_cast<std::chrono::nanoseconds>(
-            std::chrono::steady_clock::now().time_since_epoch())
-            .count());
+    suffix_ =
+        std::to_string(std::chrono::duration_cast<std::chrono::nanoseconds>(
+                           std::chrono::steady_clock::now().time_since_epoch())
+                           .count());
   }
 
   void TearDown() override {
@@ -591,8 +591,8 @@ TEST_F(TestbenchGeneratorGoldenTests, SuccessfulGeneration) {
                               "endmodule\n";
   createDummyFile(goldenValidPath(), goldenContent);
 
-  EXPECT_TRUE(TestbenchGenerator::generate(graph, goldenValidPath(),
-                                           tbOutputPath()));
+  EXPECT_TRUE(
+      TestbenchGenerator::generate(graph, goldenValidPath(), tbOutputPath()));
 
   std::ifstream tbFile(tbOutputPath());
   ASSERT_TRUE(tbFile.is_open());
