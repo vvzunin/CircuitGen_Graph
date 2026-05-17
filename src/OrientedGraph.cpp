@@ -862,7 +862,14 @@ void OrientedGraph::verilogInoutsWriting(
                          ? "\n"
                          : ", ");
   }
-  i_fileStream << ");\n" << verilogTab;
+  i_fileStream << ");\n";
+
+  for (const auto &parameter: i_graph->d_verilogParameters) {
+    i_fileStream << verilogTab << "parameter " << parameter.first << " = "
+                 << parameter.second << ";\n";
+  }
+
+  i_fileStream << verilogTab;
 }
 
 void OrientedGraph::verilogVerticesDeclaration(
