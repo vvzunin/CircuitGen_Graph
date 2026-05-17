@@ -31,8 +31,10 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <fmt/core.h>
 #include <map>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -56,6 +58,8 @@ namespace CG_Graph {
   std::vector<std::pair<DotTypes, std::map<std::string, std::string>>>
 #endif
 
+static constexpr size_t d_busInType = 8;
+
 /**
  * @author Fuuulkrum7
  *
@@ -77,7 +81,7 @@ enum VertexTypes : uint8_t {
    * \~english Output vertex
    * \~russian Выходная вершина
    */
-  output = 6,
+  output = 5,
   /*!
    * \~english Constant vertex
    * \~russian Константная вершина
@@ -89,20 +93,20 @@ enum VertexTypes : uint8_t {
    */
   gate = 2,
   /*!
-   * \~english Subgraph that makes up the vertex
-   * \~russian Подграф, составляющий вершину
-   */
-  subGraph = 3,
-  /*!
    * \~english Bus vertex type. Not supported yet
    * \~russian Тип вершины шины. Пока не поддерживается
    */
-  dataBus = 4,
+  subGraph = 3,
   /*!
    * \~english Sequential vertex type (d-latch or d-flip-flop)
    * \~russian Последовательностный тип вершины (D-защелка или D-триггер)
    */
-  sequential = 5
+  sequential = 4,
+  inputBus = input | d_busInType,
+  constantBus = constant | d_busInType,
+  gateBus = gate | d_busInType,
+  sequentialBus = sequential | d_busInType,
+  outputBus = output | d_busInType
 };
 
 /*!
@@ -148,29 +152,24 @@ enum SequentialTypes : uint8_t {
    */
   EN = 1 << 0,
   /*!
-   * \~english Set signal, writes 1'b1 to output if is equal to 1'b1
-   * \~russian Сигнал установки (Set), записывает 1'b1 на выход,
-   * если равен 1'b1
+   * \~english Reset signal, writes 1'b0 to output if is equal to 1'b0
+   * \~russian Сигнал сброса (Reset), записывает 1'b0 на выход,
+   * если равен 1'b0
    */
-  SET = 1 << 1,
-  /*!
-   * \~english Clear signal, writes 1'b0 to output if is equal to 1'b1
-   * \~russian Сигнал очистки (Clear), записывает 1'b0 на выход,
-   * если равен 1'b1
-   */
-  CLR = 1 << 2,
+  RST = 1 << 1,
   /*!
    * \~english Reset signal, writes 1'b0 to output if is equal to 1'b0
    * \~russian Сигнал сброса (Reset), записывает 1'b0 на выход,
    * если равен 1'b0
    */
-  RST = 1 << 3,
+  CLR = 1 << 2,
   /*!
-   * \~english Use with reset only, makes ff async (adds negedge rst to
-   * signals list)
-   * \~russian Использовать только со сбросом, делает триггер асинхронным
-   * (добавляет negedge rst в список сигналов)
+   * \~english Set signal, writes 1'b1 to output if is equal to 1'b1
+   * \~russian Сигнал установки (Set), записывает 1'b1 на выход,
+   * если равен 1'b1
    */
+  SET = 1 << 3,
+  /// use with reset only, makes ff async (adds negedge rst to signals list)
   ASYNC = 1 << 5,
   /*!
    * \~english If used, activates always on negedge of clk signal (ff-only)
@@ -281,6 +280,9 @@ enum Gates : uint8_t {
    * \~russian Логический элемент - Буфер (BUF)
    */
   GateBuf,
+  GateConcatenation, /// logical element - concatenation of several vertices or
+                     /// buses
+  GateSlice,         /// logical element - slice of bus
   /*!
    * \~english Default logical element (error state)
    * \~russian Логический элемент по умолчанию (состояние ошибки)
@@ -523,7 +525,19 @@ std::string fromOperationsToName(std::string_view i_op);
  * @return std::string_view Значение, представляющее операцию
  * @throws std::out_of_range, если предоставленный ключ не существует
  */
-std::string_view fromHierarchyToOperation(int32_t key);
+std::string_view fromHierarchyToOperation(uint32_t key);
+
+/// @brief parseStringToGate Converts a string representation of a gate to
+/// its corresponding enum value
+/// @param i_gate The string representation of the gate
+/// @return Gates The enum value corresponding to the provided string
+/// representation of the gate
+/// @par Example
+/// @code
+/// // Convert the string representation "and" to its corresponding enum value
+/// Gates gate = GraphUtils::parseStringToGate("and");
+/// std::cout << "Enum value of 'and': " << gate << std::endl;
+/// @endcode
 
 /**
  * @author Vladimir Zunin
@@ -602,6 +616,9 @@ std::string parseVertexToString(VertexTypes vertex);
  */
 std::string parseGateToString(Gates gate);
 
+std::string parseSequentialToString(SequentialTypes type);
+std::vector<std::string_view> parseSequentialToInputs(SequentialTypes type);
+
 /**
  * @author Vladimir Zunin
  * @author Fuuulkrum7
@@ -654,7 +671,7 @@ static constexpr size_t d_hierarchySize = 11;
  * представлениями и ID
  */
 static constexpr std::array<
-    std::pair<std::string_view, std::pair<std::string_view, int32_t>>,
+    std::pair<std::string_view, std::pair<std::string_view, uint32_t>>,
     d_hierarchySize>
     d_logicOperations = {{{"input", {"", 10}},
                           {"output", {"=", 0}},
@@ -677,9 +694,11 @@ static constexpr std::array<
  * @brief Массив для преобразования строк в значения перечисления Gates
  */
 static std::pair<std::string, Gates> stringToGate[] = {
-    {"and", Gates::GateAnd}, {"nand", Gates::GateNand}, {"or", Gates::GateOr},
-    {"nor", Gates::GateNor}, {"not", Gates::GateNot},   {"buf", Gates::GateBuf},
-    {"xor", Gates::GateXor}, {"xnor", Gates::GateXnor}};
+    {"and", Gates::GateAnd},       {"nand", Gates::GateNand},
+    {"or", Gates::GateOr},         {"nor", Gates::GateNor},
+    {"not", Gates::GateNot},       {"buf", Gates::GateBuf},
+    {"xor", Gates::GateXor},       {"xnor", Gates::GateXnor},
+    {"busSlice", Gates::GateSlice}};
 
 /*!
  * @var vertexToString
@@ -712,11 +731,64 @@ static std::pair<VertexTypes, std::string_view> vertexToString[] = {
  * @note Текущая реализация требует линейного поиска через findPairByKey
  */
 static std::pair<Gates, std::string_view> gateToString[] = {
-    {Gates::GateAnd, "and"},      {Gates::GateNand, "nand"},
-    {Gates::GateOr, "or"},        {Gates::GateNor, "nor"},
-    {Gates::GateXor, "xor"},      {Gates::GateXnor, "xnor"},
-    {Gates::GateNot, "not"},      {Gates::GateBuf, "buf"},
-    {Gates::GateDefault, "ERROR"}};
-
+    {Gates::GateAnd, "and"},        {Gates::GateNand, "nand"},
+    {Gates::GateOr, "or"},          {Gates::GateNor, "nor"},
+    {Gates::GateXor, "xor"},        {Gates::GateXnor, "xnor"},
+    {Gates::GateNot, "not"},        {Gates::GateBuf, "buf"},
+    {Gates::GateSlice, "busSlice"}, {Gates::GateDefault, "ERROR"}};
+static std::pair<SequentialTypes, std::string_view> sequentialToString[]{
+    {affr, "affr"},       {affre, "affre"},   {affrs, "affrs"},
+    {affrse, "affrse"},   {latch, "latch"},   {latchr, "latchr"},
+    {latchc, "latchc"},   {latchs, "latchs"}, {latchrs, "latchrs"},
+    {latchcs, "latchcs"}, {ff, "ff"},         {ffe, "ffe"},
+    {ffr, "ffr"},         {ffc, "ffc"},       {ffs, "ffs"},
+    {ffre, "ffre"},       {ffce, "ffce"},     {ffse, "ffse"},
+    {ffrs, "ffrs"},       {ffcs, "ffcs"},     {ffrse, "ffrse"},
+    {ffcse, "ffcse"},     {nff, "nff"},       {nffe, "nffe"},
+    {nffr, "nffr"},       {nffc, "nffc"},     {nffs, "nffs"},
+    {nffre, "nffre"},     {nffce, "nffce"},   {nffse, "nffse"},
+    {nffrs, "nffrs"},     {nffcs, "nffcs"},   {nffrse, "nffrse"},
+    {nffcse, "nffcse"},   {naffrs, "naffrs"}, {naffrse, "naffrse"},
+    {naffr, "naffr"},     {naffre, "naffre"}};
+static std::pair<SequentialTypes, std::vector<std::string_view>>
+    sequentialToInputList[38] = {
+        {affr, {"data", "clk", "rst_n"}},
+        {affre, {"data", "clk", "en", "rst_n"}},
+        {affrs, {"data", "clk", "rst_n", "set"}},
+        {affrse, {"data", "clk", "en", "rst_n", "set"}},
+        {latch, {"data", "en"}},
+        {latchr, {"data", "en", "rst_n"}},
+        {latchc, {"data", "en", "clr"}},
+        {latchs, {"data", "en", "set"}},
+        {latchrs, {"data", "en", "rst_n", "set"}},
+        {latchcs, {"data", "en", "clr", "set"}},
+        {ff, {"data", "clk"}},
+        {ffe, {"data", "clk", "en"}},
+        {ffr, {"data", "clk", "rst_n"}},
+        {ffc, {"data", "clk", "clr"}},
+        {ffs, {"data", "clk", "set"}},
+        {ffre, {"data", "clk", "en", "rst_n"}},
+        {ffce, {"data", "clk", "en", "clr"}},
+        {ffse, {"data", "clk", "en", "set"}},
+        {ffrs, {"data", "clk", "rst_n", "set"}},
+        {ffcs, {"data", "clk", "clr", "set"}},
+        {ffrse, {"data", "clk", "en", "rst_n", "set"}},
+        {ffcse, {"data", "clk", "en", "clr", "set"}},
+        {nff, {"data", "clk"}},
+        {nffe, {"data", "clk", "en"}},
+        {nffr, {"data", "clk", "rst_n"}},
+        {nffc, {"data", "clk", "clr"}},
+        {nffs, {"data", "clk", "set"}},
+        {nffre, {"data", "clk", "en", "rst_n"}},
+        {nffce, {"data", "clk", "en", "clr"}},
+        {nffse, {"data", "clk", "en", "set"}},
+        {nffrs, {"data", "clk", "rst_n", "set"}},
+        {nffcs, {"data", "clk", "clr", "set"}},
+        {nffrse, {"data", "clk", "en", "rst_n", "set"}},
+        {nffcse, {"data", "clk", "en", "clr", "set"}},
+        {naffrs, {"data", "clk", "rst_n", "set"}},
+        {naffrse, {"data", "clk", "en", "rst_n", "set"}},
+        {naffr, {"data", "clk", "rst_n"}},
+        {naffre, {"data", "clk", "en", "rst_n"}}};
 } // namespace GraphUtils
 } // namespace CG_Graph

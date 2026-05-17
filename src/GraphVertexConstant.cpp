@@ -2,23 +2,31 @@
  * @file GraphVertexConstant.cpp
  * @brief Реализация вершины-константы графа.
  */
+#include "CircuitGenGraph/GraphUtils.hpp"
 #include <cassert>
+#include <fmt/core.h>
+#include <fmt/format.h>
 #include <memory>
 
 #include <CircuitGenGraph/GraphVertex.hpp>
+#include <string>
+#include <string_view>
 
 #include <CircuitGenGraph/Logging.hpp>
 
 namespace CG_Graph {
 
-GraphVertexConstant::GraphVertexConstant(char i_const, GraphPtr i_baseGraph) :
-    GraphVertexInput(i_baseGraph, VertexTypes::constant) {
+GraphVertexConstant::GraphVertexConstant(char i_const, GraphPtr i_baseGraph,
+                                         bool i_isBus) :
+    GraphVertexInput(i_baseGraph,
+                     i_isBus ? constantBus : VertexTypes::constant) {
   d_value = i_const;
 }
 
 GraphVertexConstant::GraphVertexConstant(char i_const, std::string_view i_name,
-                                         GraphPtr i_baseGraph) :
-    GraphVertexInput(i_name, i_baseGraph, VertexTypes::constant) {
+                                         GraphPtr i_baseGraph, bool i_isBus) :
+    GraphVertexInput(i_name, i_baseGraph,
+                     i_isBus ? constantBus : VertexTypes::constant) {
   d_value = i_const;
 }
 
@@ -40,7 +48,6 @@ std::string GraphVertexConstant::getVerilogInstance() {
 std::string GraphVertexConstant::toVerilog() const {
   return "assign " + getName() + " = 1'b" + d_value + ";";
 }
-
 DotReturn GraphVertexConstant::toDOT() {
   DotReturn dot;
   std::string str(1, d_value);
@@ -62,10 +69,40 @@ void GraphVertexConstant::log(el::base::type::ostream_t &os) const {
      << GraphUtils::parseVertexToString(VertexTypes::constant) << "\n";
   os << "Vertex Value: " << d_value << "\n";
   os << "Vertex Level: " << 0 << "\n";
-  os << "Vertex Hash: "
-     << "NuN"
-     << "\n";
+  os << "Vertex Hash: " << "NuN" << "\n";
 }
 #endif
+GraphVertexBusConstant::GraphVertexBusConstant(std::string_view i_name,
+                                               GraphPtr i_baseGraph,
+                                               size_t i_width) :
+    GraphVertexConstant('x', i_name, i_baseGraph, true),
+    GraphVertexBus(i_width) {
+  d_valueBus = std::string(i_width, 'x');
+}
+void GraphVertexBusConstant::setValue(std::string i_value) {
+  d_valueBus = i_value;
+}
 
+std::string GraphVertexBusConstant::toVerilog() const {
+  return "assign " + getName() + " = " + std::to_string(getWidth()) + "'b" +
+         d_valueBus + ";";
+}
+std::string GraphVertexBusConstant::getVerilogInstance() {
+  return fmt::format("wire {}{};", getName(), getBusNameSuffix());
+}
+std::string GraphVertexBusConstant::getVerilogInstanceSeparate() {
+  std::vector<std::string> res;
+  for (size_t i = 0; i < getWidth(); ++i) {
+    res.push_back(fmt::format("{}_{}", getName(), i));
+  }
+  return fmt::format("wire {};\n", fmt::join(res, ", "));
+}
+std::string GraphVertexBusConstant::toOneBitVerilog() const {
+  std::vector<std::string> res;
+  for (size_t i = 0; i < getWidth(); ++i) {
+    res.push_back(
+        fmt::format("assign {}_{} = {};\n\t", getName(), i, d_valueBus[i]));
+  }
+  return fmt::format("{}\n", fmt::join(res, ""));
+}
 } // namespace CG_Graph

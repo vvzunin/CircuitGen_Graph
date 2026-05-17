@@ -1,25 +1,41 @@
-/**
+﻿/**
  * @file OrientedGraph.cpp
  * @brief Реализация ориентированного графа схемы.
  */
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
+#include <cstdint>
+#include <fmt/core.h>
+#include <fmt/format.h>
 #include <fstream>
+#include <functional>
 #include <iomanip>
 #include <iostream>
+#include <map>
+#include <set>
 #include <stack>
 #include <stdexcept>
 #include <string>
+#include <string_view>
+#include <unordered_set>
+#include <utility>
 #include <vector>
 
+#include "CircuitGenGraph/GraphUtils.hpp"
+#include "CircuitGenGraph/GraphVertexBus.hpp"
 #include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
-#include <CircuitGenGraph/GraphMLTemplates.hpp>
+#include <CircuitGenGraph/GraphReader.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
 #include <CircuitGenGraph/Logging.hpp>
 
+#include "CircuitGenGraph/GraphUtils.hpp"
+#include "GraphMLTemplates.hpp"
+
+#include <lorina/lorina.hpp>
 #ifdef LOGFLAG
 INITIALIZE_EASYLOGGINGPP
 #endif
@@ -175,10 +191,24 @@ VertexPtr OrientedGraph::addInput(const std::string &i_name) {
 
   return newVertex;
 }
+VertexPtr OrientedGraph::addInputBus(const std::string &i_name, size_t width) {
+  VertexPtr newVertex = create<GraphVertexBusInput>(
+      i_name.empty() ? "" : internalize(i_name), shared_from_this(), width);
+  d_vertices[VertexTypes::input].push_back(newVertex);
+
+  return newVertex;
+}
 
 VertexPtr OrientedGraph::addOutput(const std::string &i_name) {
   VertexPtr newVertex = create<GraphVertexOutput>(
       i_name.empty() ? "" : internalize(i_name), shared_from_this());
+  d_vertices[VertexTypes::output].push_back(newVertex);
+
+  return newVertex;
+}
+VertexPtr OrientedGraph::addOutputBus(const std::string &i_name, size_t width) {
+  VertexPtr newVertex = create<GraphVertexBusOutput>(
+      i_name.empty() ? "" : internalize(i_name), shared_from_this(), width);
   d_vertices[VertexTypes::output].push_back(newVertex);
 
   return newVertex;
@@ -194,6 +224,13 @@ VertexPtr OrientedGraph::addConst(const char &i_value,
   return newVertex;
 }
 
+VertexPtr OrientedGraph::addConstBus(const std::string &i_name, size_t width) {
+  VertexPtr newVertex = create<GraphVertexBusConstant>(
+      i_name.empty() ? "" : internalize(i_name), shared_from_this(), width);
+  d_vertices[VertexTypes::constant].push_back(newVertex);
+
+  return newVertex;
+}
 VertexPtr OrientedGraph::addGate(const Gates &i_gate,
                                  const std::string &i_name) {
   VertexPtr newVertex = create<GraphVertexGates>(
@@ -205,6 +242,45 @@ VertexPtr OrientedGraph::addGate(const Gates &i_gate,
   return newVertex;
 }
 
+VertexPtr OrientedGraph::addGateBus(const Gates &i_gate,
+                                    const std::string &i_name, size_t i_width) {
+  VertexPtr newVertex = create<GraphVertexBusGate>(
+      i_gate, i_name.empty() ? "" : internalize(i_name), shared_from_this(),
+      i_width);
+  d_vertices[VertexTypes::gate].push_back(newVertex);
+  ++d_gatesCount[i_gate];
+  return newVertex;
+}
+VertexPtr OrientedGraph::addSliceBus(VertexPtr i_bus, size_t i_begin,
+                                     size_t i_width,
+                                     const std::string &i_name) {
+  VertexPtr newVertex;
+  size_t correctWidth = i_width;
+  size_t correctBegin = i_begin;
+  if (!i_bus->isBus()) {
+    std::cerr << "Created slice with name " +
+                     (i_name.empty() ? "(name is not defined)" : i_name)
+              << " is connected with vertex, which is not a bus\n";
+    correctWidth = 1;
+    correctBegin = 0;
+  } else if (i_width == 0) {
+    std::cerr << "Width of bus must be an positive value\n";
+    correctWidth = 1;
+  } else if (i_bus->isBus() &&
+             i_begin + i_width >
+                 GraphVertexBus::getBusPointer(i_bus)->getWidth()) {
+    std::cerr << "Width of slice is out of range of bus\n";
+    correctWidth = GraphVertexBus::getBusPointer(i_bus)->getWidth() - i_begin;
+  }
+  newVertex = create<GraphVertexBusSlice>(
+      i_name.empty() ? "" : internalize(i_name), shared_from_this(),
+      correctBegin, correctWidth);
+  d_vertices[gate].push_back(newVertex);
+  ++d_gatesCount[GateSlice];
+
+  addEdge(i_bus, newVertex);
+  return newVertex;
+}
 VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
                                        VertexPtr i_clk, VertexPtr i_data,
                                        const std::string &i_name) {
@@ -212,13 +288,19 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
   VertexPtr newVertex = create<GraphVertexSequential>(i_type, i_clk, i_data,
                                                       shared_from_this(), name);
   d_vertices[VertexTypes::sequential].push_back(newVertex);
-  newVertex->reserveInConnections(2ul);
-  addEdge(i_clk, newVertex);
-  addEdge(i_data, newVertex);
-
   return newVertex;
 }
 
+VertexPtr OrientedGraph::addSequentialBus(const SequentialTypes &i_type,
+                                          VertexPtr i_clk, VertexPtr i_data,
+                                          const std::string &i_name,
+                                          size_t i_width) {
+  auto name = i_name.empty() ? "" : internalize(i_name);
+  VertexPtr newVertex = create<GraphVertexBusSequential>(
+      i_type, i_clk, i_data, shared_from_this(), name, i_width);
+  d_vertices[VertexTypes::sequential].push_back(newVertex);
+  return newVertex;
+}
 VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
                                        VertexPtr i_clk, VertexPtr i_data,
                                        VertexPtr i_wire,
@@ -227,15 +309,21 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
   VertexPtr newVertex = create<GraphVertexSequential>(
       i_type, i_clk, i_data, i_wire, shared_from_this(), name);
   d_vertices[VertexTypes::sequential].push_back(newVertex);
-
-  newVertex->reserveInConnections(3ul);
-  addEdge(i_clk, newVertex);
-  addEdge(i_data, newVertex);
-  addEdge(i_wire, newVertex);
-
   return newVertex;
 }
+VertexPtr OrientedGraph::addSequentialBus(const SequentialTypes &i_type,
+                                          VertexPtr i_clk, VertexPtr i_data,
+                                          VertexPtr i_wire,
+                                          const std::string &i_name,
+                                          size_t i_width) {
+  auto name = i_name.empty() ? "" : internalize(i_name);
+  VertexPtr newVertex = create<GraphVertexBusSequential>(
+      i_type, i_clk, i_data, i_wire, shared_from_this(), name, i_width);
+  d_vertices[VertexTypes::sequential].push_back(newVertex);
 
+  newVertex->reserveInConnections(3ul);
+  return newVertex;
+}
 VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
                                        VertexPtr i_clk, VertexPtr i_data,
                                        VertexPtr i_wire1, VertexPtr i_wire2,
@@ -244,16 +332,21 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
   VertexPtr newVertex = create<GraphVertexSequential>(
       i_type, i_clk, i_data, i_wire1, i_wire2, shared_from_this(), name);
   d_vertices[VertexTypes::sequential].push_back(newVertex);
-
-  newVertex->reserveInConnections(4ul);
-  addEdge(i_clk, newVertex);
-  addEdge(i_data, newVertex);
-  addEdge(i_wire1, newVertex);
-  addEdge(i_wire2, newVertex);
-
   return newVertex;
 }
 
+VertexPtr OrientedGraph::addSequentialBus(const SequentialTypes &i_type,
+                                          VertexPtr i_clk, VertexPtr i_data,
+                                          VertexPtr i_wire1, VertexPtr i_wire2,
+                                          const std::string &i_name,
+                                          size_t i_width) {
+  auto name = i_name.empty() ? "" : internalize(i_name);
+  VertexPtr newVertex =
+      create<GraphVertexBusSequential>(i_type, i_clk, i_data, i_wire1, i_wire2,
+                                       shared_from_this(), name, i_width);
+  d_vertices[VertexTypes::sequential].push_back(newVertex);
+  return newVertex;
+}
 VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
                                        VertexPtr i_clk, VertexPtr i_data,
                                        VertexPtr i_rst, VertexPtr i_set,
@@ -263,17 +356,22 @@ VertexPtr OrientedGraph::addSequential(const SequentialTypes &i_type,
   VertexPtr newVertex = create<GraphVertexSequential>(
       i_type, i_clk, i_data, i_rst, i_set, i_en, shared_from_this(), name);
   d_vertices[VertexTypes::sequential].push_back(newVertex);
-
-  newVertex->reserveInConnections(5ul);
-  addEdge(i_clk, newVertex);
-  addEdge(i_data, newVertex);
-  addEdge(i_rst, newVertex);
-  addEdge(i_set, newVertex);
-  addEdge(i_en, newVertex);
-
   return newVertex;
 }
 
+VertexPtr OrientedGraph::addSequentialBus(const SequentialTypes &i_type,
+                                          VertexPtr i_clk, VertexPtr i_data,
+                                          VertexPtr i_rst, VertexPtr i_set,
+                                          VertexPtr i_en,
+                                          const std::string &i_name,
+                                          size_t i_width) {
+  auto name = i_name.empty() ? "" : internalize(i_name);
+  VertexPtr newVertex =
+      create<GraphVertexBusSequential>(i_type, i_clk, i_data, i_rst, i_set,
+                                       i_en, shared_from_this(), name, i_width);
+  d_vertices[VertexTypes::sequential].push_back(newVertex);
+  return newVertex;
+}
 std::vector<VertexPtr>
 OrientedGraph::addSubGraph(GraphPtr i_subGraph,
                            std::vector<VertexPtr> i_inputs) {
@@ -301,7 +399,7 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
 
   if (outSize > 0) {
     newGraph->reserveOutConnections(outSize);
-    for (int i = 0; i < outSize; ++i) {
+    for (size_t i = 0; i < outSize; ++i) {
       VertexPtr newVertex =
           create<GraphVertexGates>(Gates::GateBuf, shared_from_this());
 
@@ -340,6 +438,25 @@ OrientedGraph::graphSimulation(std::vector<char> inputsValues) {
 void OrientedGraph::simulationRemove() {
   for (VertexPtr ptr: d_vertices[VertexTypes::output]) {
     ptr->removeValue();
+  }
+}
+
+void OrientedGraph::updateEdgesGatesCount(VertexPtr vertex, Gates type) {
+  if (type == GateDefault) {
+    for (auto *i: vertex->getOutConnections())
+      if (i->getType() == gate)
+        --d_edgesGatesCount[type][i->getGate()];
+    --d_gatesCount[GateDefault];
+  } else {
+    assert(vertex->getGate() == GateDefault);
+    --d_gatesCount[GateDefault];
+    ++d_gatesCount[type];
+    for (auto *i: vertex->getInConnections())
+      if (i->getType() == gate)
+        ++d_edgesGatesCount[i->getGate()][type];
+    for (auto *i: vertex->getOutConnections())
+      if (i->getType() == gate)
+        ++d_edgesGatesCount[type][i->getGate()];
   }
 }
 
@@ -429,7 +546,29 @@ VertexPtr OrientedGraph::generateMajority(VertexPtr a, VertexPtr b,
       this->addSubGraph(majoritySubgraph, {a, b, c});
   return outputs.back();
 }
+VertexPtr OrientedGraph::majorityAsLogic(VertexPtr a, VertexPtr b, VertexPtr c,
+                                         VertexPtr output = nullptr) {
+  VertexPtr and_ab = addGate(Gates::GateAnd);
+  addEdges({a, b}, and_ab);
 
+  VertexPtr and_ac = addGate(Gates::GateAnd);
+  addEdges({a, c}, and_ac);
+
+  VertexPtr and_bc = addGate(Gates::GateAnd);
+  addEdges({b, c}, and_bc);
+
+  VertexPtr or1 = addGate(Gates::GateOr);
+  addEdges({and_ab, and_ac}, or1);
+
+  VertexPtr or2;
+  if (output != nullptr && output->getGate() == GateDefault) {
+    static_cast<GraphVertexGates *>(output)->setGateIfDefault(GateOr);
+    or2 = output;
+  } else
+    or2 = addGate(Gates::GateOr);
+  addEdges({or1, and_bc}, or2);
+  return or2;
+}
 bool OrientedGraph::addEdge(VertexPtr from, VertexPtr to) {
   CG_VLOG(2) << "Adding edge from " << (from ? from->getName() : "nullptr")
              << " to " << (to ? to->getName() : "nullptr");
@@ -474,6 +613,32 @@ bool OrientedGraph::removeEdge(VertexPtr from1, VertexPtr to) {
     }
   }
   return deleted;
+}
+
+void OrientedGraph::readVerilog(std::string i_path, Context &context) {
+  GraphReader *reader = new GraphReader(context);
+  std::ifstream in(i_path.c_str(), std::ifstream::in);
+  if (!in.is_open())
+    throw std::runtime_error("File do not exist. Current path:" + i_path +
+                             "\n");
+  std::string word;
+  in >> word;
+  while (word != "module") {
+    in.ignore(256, '\n');
+    in >> word;
+  }
+  in.seekg(-6, std::ios::cur);
+  lorina::return_code returnCode = lorina::read_verilog(in, *reader);
+  if (returnCode == lorina::return_code::parse_error)
+    throw std::runtime_error("File is incorrect\n");
+  in.close();
+  delete reader;
+}
+
+CG_Graph::Context OrientedGraph::readVerilog(std::string i_path) {
+  Context context;
+  readVerilog(i_path, context);
+  return context;
 }
 
 std::set<GraphPtr> OrientedGraph::getSubGraphs() const {
@@ -610,6 +775,10 @@ OrientedGraph::getEdgesGatesCount() const {
   return d_edgesGatesCount;
 }
 
+void OrientedGraph::reserve(VertexTypes i_type, size_t i_capacity) {
+  d_vertices[i_type].reserve(d_vertices[i_type].size() + i_capacity);
+}
+
 std::string OrientedGraph::calculateHash() {
   if (d_hashState)
     return std::to_string(d_hashed);
@@ -646,154 +815,420 @@ void OrientedGraph::resetCounters(GraphPtr i_where) {
   d_graphInstanceToVerilogCount[i_where->d_graphID] = 0;
   d_graphInstanceToDotCount[i_where->d_graphID] = 0;
 }
-
-bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename) {
-  if (d_alreadyParsedVerilog && d_isSubGraph) {
+bool OrientedGraph::verilogFileCreating(GraphPtr i_graph, std::string i_path,
+                                        std::string i_filename,
+                                        std::ofstream &i_fileStream) {
+  if (i_graph->d_alreadyParsedVerilog && i_graph->d_isSubGraph) {
     return true;
   }
   // В данном методе происходит только генерация одного графа. Без подграфов.
+  std::string res;
   std::string verilogTab = "\t";
 
   if (!i_filename.size()) {
-    i_filename = d_name + ".v";
+    i_filename = fmt::format("{}.v", i_graph->d_name);
   }
-  std::string path = i_path + (d_isSubGraph ? "/submodules" : "");
-
-  auto correctPath = path + "/" + i_filename;
-  std::ofstream fileStream(correctPath);
-
-  if (!fileStream) {
-    CG_LOG_ERROR << "cannot write file to " << correctPath;
+  if (!i_fileStream) {
+    CG_LOG_ERROR << "cannot write file to " << i_path;
     return false;
   }
 
   auto t = std::time(nullptr);
   auto tm = *std::localtime(&t);
-  fileStream
-      << "//This file was generated automatically using CircuitGen_Graph at ";
-  fileStream << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << "." << std::endl
-             << std::endl;
-  fileStream << "module " << d_name << "(\n" << verilogTab;
+  i_fileStream
+      << "//This file was generated automatically using CircuitGen_Graph at "
+      << std::put_time(&tm, "%d-%m-%Y %H-%M-%S") << ".\n\n";
+  return true;
+}
+
+void OrientedGraph::verilogInoutsWriting(
+    GraphPtr i_graph, std::ofstream &i_fileStream,
+    std::function<void(VertexPtr i_usedType)> i_printPin) {
+  std::string verilogTab = "\t";
+  i_fileStream << "module " << i_graph->d_name << "(\n" << verilogTab;
 
   // here we are parsing inputs by their wire size
-  for (auto *inp: d_vertices[VertexTypes::input]) {
-    fileStream << inp->getRawName() << ", ";
+  for (auto *inp: i_graph->d_vertices[VertexTypes::input]) {
+    i_printPin(inp);
+    i_fileStream << ", ";
   }
-  fileStream << '\n' << verilogTab;
+  i_fileStream << '\n' << verilogTab;
 
   // and outputs
-  for (auto *outVert: d_vertices[VertexTypes::output]) {
-    fileStream << outVert->getRawName()
-               << ((outVert == d_vertices[VertexTypes::output].back()) ? "\n"
-                                                                       : ", ");
+  for (auto *outVert: i_graph->d_vertices[VertexTypes::output]) {
+    i_printPin(outVert);
+    i_fileStream << ((outVert ==
+                      i_graph->d_vertices[VertexTypes::output].back())
+                         ? "\n"
+                         : ", ");
   }
-  fileStream << ");\n" << verilogTab;
+  i_fileStream << ");\n";
 
-  if (!d_verilogParameters.empty()) {
-    fileStream << "// Writing parameters\n" << verilogTab;
-    for (const auto &parameter: d_verilogParameters) {
-      fileStream << "parameter " << parameter.first << " = " << parameter.second
-                 << ";\n"
-                 << verilogTab;
-    }
-    fileStream << "\n" << verilogTab;
+  for (const auto &parameter: i_graph->d_verilogParameters) {
+    i_fileStream << verilogTab << "parameter " << parameter.first << " = "
+                 << parameter.second << ";\n";
   }
 
-  // parsing inputs, outputs and wires for subgraphs. And wires for operations
-  // too
+  i_fileStream << verilogTab;
+}
+
+void OrientedGraph::verilogVerticesDeclaration(
+    GraphPtr i_graph, std::ofstream &i_fileStream,
+    std::function<void(std::vector<GraphVertexBase *>, VertexTypes i_usedType)>
+        i_printFunction) {
+  std::string verilogTab = "\t";
   uint8_t count = 0;
   for (auto eachVertex:
-       {d_vertices[VertexTypes::input], d_vertices[VertexTypes::output],
-        d_allSubGraphsOutputs, d_vertices[VertexTypes::gate],
-        d_vertices[VertexTypes::sequential]}) {
+       {i_graph->d_vertices[VertexTypes::input],
+        i_graph->d_vertices[VertexTypes::output],
+        i_graph->d_allSubGraphsOutputs, i_graph->d_vertices[VertexTypes::gate],
+        i_graph->d_vertices[VertexTypes::sequential]}) {
     if (eachVertex.size()) {
-      auto usedType = eachVertex.back()->getType();
-
-      fileStream << VertexUtils::vertexTypeToComment(usedType);
-
+      auto i_usedType = eachVertex.back()->getType();
+      i_fileStream << VertexUtils::vertexTypeToComment(i_usedType);
       switch (count) {
         case 2:
-          fileStream << " for subGraphs outputs";
+          i_fileStream << " for subGraphs outputs";
           break;
         case 3:
-          fileStream << " for main graph";
+          i_fileStream << " for main graph";
           break;
       }
-      fileStream << std::endl << verilogTab;
-
-      fileStream << VertexUtils::vertexTypeToVerilog(usedType) << " ";
-    }
-
-    for (auto *value: eachVertex) {
-      fileStream << value->getRawName()
-                 << (value != eachVertex.back() ? ", " : ";\n");
+      i_fileStream << std::endl << verilogTab;
+      i_printFunction(eachVertex, i_usedType);
     }
     if (eachVertex.size())
-      fileStream << verilogTab;
-
+      i_fileStream << verilogTab;
     ++count;
   }
+}
 
-  if (d_vertices[VertexTypes::constant].size()) {
-    fileStream << "\n";
+void OrientedGraph::verilogConstantWriting(
+    GraphPtr i_graph, std::ofstream &i_fileStream,
+    std::function<void(VertexPtr)> i_getInstance,
+    std::function<void(VertexPtr)> i_getDefinition) {
+  std::string verilogTab = "\t";
+
+  if (i_graph->d_vertices[VertexTypes::constant].size()) {
+    i_fileStream << VertexUtils::vertexTypeToComment(constant);
+    i_fileStream << "\n";
   }
   // writing consts
-  for (auto *oper: d_vertices[VertexTypes::constant]) {
-    fileStream << verilogTab
-               << static_cast<GraphVertexConstant *>(oper)->getVerilogInstance()
-               << "\n";
-    fileStream << verilogTab << (*oper) << "\n";
+  for (auto *oper: i_graph->d_vertices[VertexTypes::constant]) {
+    i_fileStream << verilogTab;
+    i_getInstance(oper);
   }
+  if (!i_graph->d_vertices[constant].empty())
+    i_fileStream << "\n";
+  for (auto *oper: i_graph->d_vertices[VertexTypes::constant]) {
+    i_getDefinition(oper);
+    i_fileStream << "\n";
+  }
+}
 
-  if (d_subGraphs.size()) {
-    fileStream << "\n";
+bool OrientedGraph::verilogSubgraphWriting(GraphPtr i_graph,
+                                           std::ofstream &i_fileStream,
+                                           std::string i_path) {
+  if (i_graph->d_subGraphs.size()) {
+    i_fileStream << "\n";
   }
   // and all modules
-  for (auto *subPtr: d_vertices[VertexTypes::subGraph]) {
+  for (auto *subPtr: i_graph->d_vertices[VertexTypes::subGraph]) {
     auto *sub = static_cast<GraphVertexSubGraph *>(subPtr);
 
     if (!sub->toVerilog(i_path)) {
       return false;
     }
-    fileStream << sub->toVerilog();
+    i_fileStream << sub->toVerilog();
   }
-
-  if (d_vertices[VertexTypes::sequential].size()) {
-    fileStream << "\n";
-  }
-  // and all operations
-  for (const auto *oper: d_vertices[VertexTypes::sequential]) {
-    fileStream << VertexUtils::getSequentialComment(
-        static_cast<const GraphVertexSequential *>(oper));
-    fileStream << verilogTab << (*oper);
-  }
-
-  if (d_vertices[VertexTypes::gate].size()) {
-    fileStream << "\n";
-  }
-  // and all operations
-  for (auto *oper: d_vertices[VertexTypes::gate]) {
-    fileStream << verilogTab << (*oper) << "\n";
-  }
-
-  fileStream << "\n";
-  // and all outputs
-  for (auto *oper: d_vertices[VertexTypes::output]) {
-    fileStream << verilogTab << (*oper) << "\n";
-  }
-
-  fileStream << "endmodule\n";
-
-  d_alreadyParsedVerilog = true;
-
-  if (d_isSubGraph) {
-    return true;
-  }
-
-  fileStream.close();
   return true;
 }
 
+void OrientedGraph::verilogVerticesDefining(
+    GraphPtr i_graph, std::ofstream &i_fileStream,
+    std::function<void(VertexPtr)> i_printDefinitionSequential,
+    std::function<void(const VertexPtr)> i_printDefinitionGates) {
+
+  if (i_graph->d_vertices[VertexTypes::sequential].size())
+    i_fileStream << "\n";
+
+  for (auto *oper: i_graph->d_vertices[VertexTypes::sequential]) {
+    i_printDefinitionSequential(oper);
+  }
+
+  if (i_graph->d_vertices[VertexTypes::gate].size()) {
+    i_fileStream << "\n";
+  }
+  // and all operations
+  for (auto *oper: i_graph->d_vertices[VertexTypes::gate]) {
+    i_printDefinitionGates(oper);
+    i_fileStream << "\n";
+  }
+
+  i_fileStream << "\n";
+  // and all outputs
+  for (auto *oper: i_graph->d_vertices[VertexTypes::output]) {
+    i_printDefinitionGates(oper);
+    i_fileStream << "\n";
+  }
+}
+
+bool OrientedGraph::verilogFinalOperations(GraphPtr i_graph,
+                                           std::ofstream &i_fileStream) {
+  i_fileStream << "endmodule\n";
+
+  i_graph->d_alreadyParsedVerilog = true;
+
+  if (i_graph->d_isSubGraph) {
+    return true;
+  }
+
+  i_fileStream.close();
+  return true;
+}
+bool OrientedGraph::printSequentialModules(GraphPtr i_graph,
+                                           std::ofstream &i_fileStream) {
+  std::string_view module =
+      "module {}({}, q{})\n\tinput {};\n\toutput q{};\n\t{}\n\tendmodule\n\n";
+  std::string inoutsList, inputList;
+  std::unordered_set<SequentialTypes> typesToPrint;
+
+  for (auto *v: i_graph->getVerticesByType(sequential)) {
+    typesToPrint.insert(static_cast<GraphVertexSequential *>(v)->getSeqType());
+  }
+
+  for (SequentialTypes type: typesToPrint) {
+    i_fileStream << fmt::format(
+        module, GraphUtils::parseSequentialToString(type),
+        fmt::join(GraphUtils::parseSequentialToInputs(type), ", "), "",
+        fmt::join(GraphUtils::parseSequentialToInputs(type), ", "), "",
+        GraphVertexSequential::getSequentialString(
+            type, GraphUtils::parseSequentialToString(type),
+            GraphUtils::parseSequentialToInputs(type)));
+  }
+  return true;
+}
+
+bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename,
+                              bool i_sequentialByInstance) {
+  std::string path = i_path + (d_isSubGraph ? "/submodules" : "");
+  auto correctPath = path + "/" + i_filename;
+  std::ofstream i_fileStream(correctPath);
+
+  auto lambdaConstant = [&](VertexPtr oper) {
+    i_fileStream
+        << static_cast<GraphVertexConstant *>(oper)->getVerilogInstance();
+    i_fileStream << "\n";
+  };
+  auto lambdaDeclaration = [&](std::vector<GraphVertexBase *> eachVertex,
+                               VertexTypes usedType) {
+    i_fileStream << ((usedType == sequential) && i_sequentialByInstance
+                         ? "wire"
+                         : VertexUtils::vertexTypeToVerilog(usedType))
+                 << " ";
+    for (auto *value: eachVertex) {
+      i_fileStream << value->getRawName()
+                   << (value != eachVertex.back() ? ", " : ";\n");
+    }
+  };
+  auto lambdaInouts = [&](VertexPtr vertex) {
+    i_fileStream << vertex->getRawName();
+  };
+  auto lambdaDefining = [&](const VertexPtr vertex) {
+    i_fileStream << "\t" << *vertex;
+  };
+  auto lambdaSequentialDefining = [&](VertexPtr oper) {
+    i_fileStream
+        << static_cast<GraphVertexSequential *>(oper)->getVerilogInstance();
+    i_fileStream << "\n";
+  };
+
+  verilogFileCreating(shared_from_this(), correctPath, i_filename,
+                      i_fileStream);
+  if (i_sequentialByInstance)
+    printSequentialModules(shared_from_this(), i_fileStream);
+
+  verilogInoutsWriting(shared_from_this(), i_fileStream, lambdaInouts);
+  verilogVerticesDeclaration(shared_from_this(), i_fileStream,
+                             lambdaDeclaration);
+  verilogConstantWriting(shared_from_this(), i_fileStream, lambdaConstant,
+                         lambdaDefining);
+  verilogSubgraphWriting(shared_from_this(), i_fileStream, i_path);
+
+  if (i_sequentialByInstance)
+    verilogVerticesDefining(shared_from_this(), i_fileStream,
+                            lambdaSequentialDefining, lambdaDefining);
+
+  else
+    verilogVerticesDefining(shared_from_this(), i_fileStream, lambdaDefining,
+                            lambdaDefining);
+  return verilogFinalOperations(shared_from_this(), i_fileStream);
+}
+
+bool OrientedGraph::toVerilogBusEnabled(std::string i_path,
+                                        std::string i_filename,
+                                        bool i_sequentialByInstance) {
+  std::string path = i_path + (d_isSubGraph ? "/submodules" : "");
+  auto correctPath = path + "/" + i_filename;
+  std::ofstream i_fileStream(correctPath);
+  auto lambdaConstant = [&](VertexPtr ptr) {
+    if (ptr->isBus())
+      i_fileStream
+          << static_cast<GraphVertexBusConstant *>(ptr)->getVerilogInstance();
+    else
+      i_fileStream
+          << static_cast<GraphVertexConstant *>(ptr)->getVerilogInstance();
+  };
+  auto lambdaDeclaration = [&](std::vector<GraphVertexBase *> eachVertex,
+                               VertexTypes usedType) {
+    size_t length = -1;
+    std::multimap<size_t, VertexPtr> busSet;
+    for (auto *value: eachVertex) {
+      if (value->isBus())
+        busSet.emplace(std::make_pair(
+            GraphVertexBus::getBusPointer(value)->getWidth(), value));
+    }
+
+    if (busSet.size() < eachVertex.size()) {
+      i_fileStream << ((usedType == sequential) && i_sequentialByInstance
+                           ? "wire"
+                           : VertexUtils::vertexTypeToVerilog(usedType))
+                   << " ";
+      for (auto *value: eachVertex) {
+        if (!value->isBus())
+          i_fileStream << value->getRawName()
+                       << (value != eachVertex.back() ? ", " : ";\n\t");
+      }
+    }
+    for (auto value: busSet) {
+      if (GraphVertexBus::getBusPointer(value.second)->getWidth() == length)
+        i_fileStream << value.second->getRawName()
+                     << (value != *busSet.rbegin() ? ", " : ";\n");
+      else
+        i_fileStream
+            << VertexUtils::vertexTypeToVerilog(usedType) << " "
+            << GraphVertexBus::getBusPointer(value.second)->getBusNameSuffix()
+            << " " << value.second->getRawName()
+            << (value != *busSet.rbegin() ? ", " : ";\n");
+      length = value.first;
+    }
+    i_fileStream << "\n";
+  };
+  auto lambdaInouts = [&](VertexPtr vertex) {
+    i_fileStream << vertex->getRawName();
+  };
+  auto lambdaDefining = [&](const VertexPtr vertex) {
+    i_fileStream << "\t" << *vertex;
+  };
+  auto lambdaSequentialDefining = [&](VertexPtr vertex) {
+    i_fileStream
+        << "\t"
+        << static_cast<GraphVertexSequential *>(vertex)->getVerilogInstance();
+  };
+
+  verilogFileCreating(shared_from_this(), i_path, i_filename, i_fileStream);
+  if (i_sequentialByInstance)
+    printSequentialModules(shared_from_this(), i_fileStream);
+
+  verilogInoutsWriting(shared_from_this(), i_fileStream, lambdaInouts);
+  verilogVerticesDeclaration(shared_from_this(), i_fileStream,
+                             lambdaDeclaration);
+  verilogConstantWriting(shared_from_this(), i_fileStream, lambdaConstant,
+                         lambdaDefining);
+  verilogSubgraphWriting(shared_from_this(), i_fileStream, i_path);
+  if (i_sequentialByInstance)
+    verilogVerticesDefining(shared_from_this(), i_fileStream,
+                            lambdaSequentialDefining, lambdaDefining);
+  else
+    verilogVerticesDefining(shared_from_this(), i_fileStream, lambdaDefining,
+                            lambdaDefining);
+  return verilogFinalOperations(shared_from_this(), i_fileStream);
+}
+
+bool OrientedGraph::toVerilogBusEnabledAsOneBit(std::string i_path,
+                                                std::string i_filename) {
+  std::string path = i_path + (d_isSubGraph ? "/submodules" : "");
+  auto correctPath = path + "/" + i_filename;
+  std::ofstream i_fileStream(correctPath);
+
+  auto lambdaConstantInstance = [&](VertexPtr ptr) {
+    if (ptr->isBus())
+      i_fileStream << static_cast<GraphVertexBusConstant *>(ptr)
+                          ->getVerilogInstanceSeparate();
+    else
+      i_fileStream
+          << static_cast<GraphVertexConstant *>(ptr)->getVerilogInstance();
+  };
+
+  auto lambdaDeclaration = [&](std::vector<GraphVertexBase *> eachVertex,
+                               VertexTypes usedType) {
+    std::multimap<size_t, VertexPtr> busSet;
+    std::vector<std::string> singleVertices;
+    for (auto *value: eachVertex) {
+      if (!value->isBus())
+        singleVertices.push_back(value->getName());
+      else
+        busSet.emplace(std::make_pair(
+            GraphVertexBus::getBusPointer(value)->getWidth(), value));
+    }
+    if (!singleVertices.empty()) {
+      i_fileStream << fmt::format(
+          "{} {};\n\t",
+          ((usedType == sequential)
+               ? "wire"
+               : VertexUtils::vertexTypeToVerilog(usedType)),
+          fmt::join(singleVertices, ", "));
+    }
+    singleVertices.clear();
+    for (auto value = busSet.begin(); value != busSet.end(); ++value) {
+      i_fileStream << ((usedType == sequential)
+                           ? "wire"
+                           : VertexUtils::vertexTypeToVerilog(usedType))
+                   << " ";
+      for (size_t i = 0;
+           i < GraphVertexBus::getBusPointer(value->second)->getWidth(); ++i)
+        i_fileStream
+            << value->second->getRawName() << "_" << i
+            << (i != GraphVertexBus::getBusPointer(value->second)->getWidth() -
+                            1
+                    ? ", "
+                    : ";\n\t");
+    }
+    i_fileStream << "\n";
+  };
+
+  auto lambdaInouts = [&](VertexPtr vertex) {
+    if (vertex->isBus()) {
+      for (size_t i = 0;
+           i < GraphVertexBus::getBusPointer(vertex)->getWidth() - 1; ++i) {
+        i_fileStream << vertex->getName() << "_" << std::to_string(i) << ", ";
+      }
+      i_fileStream << vertex->getName() << "_"
+                   << std::to_string(
+                          GraphVertexBus::getBusPointer(vertex)->getWidth() -
+                          1);
+    } else
+      i_fileStream << vertex->getRawName();
+  };
+  auto lambdaDefining = [&](const VertexPtr vertex) {
+    if (!vertex->isBus())
+      i_fileStream << "\t" << *vertex << "\n";
+    else
+      i_fileStream << "\t"
+                   << GraphVertexBus::getBusPointer(vertex)->toOneBitVerilog();
+  };
+  verilogFileCreating(shared_from_this(), i_path, i_filename, i_fileStream);
+  printSequentialModules(shared_from_this(), i_fileStream);
+  verilogInoutsWriting(shared_from_this(), i_fileStream, lambdaInouts);
+  verilogVerticesDeclaration(shared_from_this(), i_fileStream,
+                             lambdaDeclaration);
+  verilogConstantWriting(shared_from_this(), i_fileStream,
+                         lambdaConstantInstance, lambdaDefining);
+  verilogSubgraphWriting(shared_from_this(), i_fileStream, i_path);
+  verilogVerticesDefining(shared_from_this(), i_fileStream, lambdaDefining,
+                          lambdaDefining);
+  return verilogFinalOperations(shared_from_this(), i_fileStream);
+}
 DotReturn OrientedGraph::toDOT() {
   DotReturn dot = {{DotTypes::DotGraph, {{"name", d_name}}}};
 
@@ -817,13 +1252,11 @@ DotReturn OrientedGraph::toDOT() {
        {d_vertices[VertexTypes::input], d_vertices[VertexTypes::output],
         d_vertices[VertexTypes::gate], d_vertices[VertexTypes::sequential],
         d_vertices[VertexTypes::constant]}) {
-    int counter = 0;
     for (auto *value: eachVertex) {
       DotReturn dotVertex = value->toDOT();
       dot.insert(std::end(dot), std::begin(dotVertex), std::end(dotVertex));
     }
   }
-  int counter = 0;
   for (auto *value: d_allSubGraphsOutputs) {
     dot.push_back(value->toDOT()[0]);
   }
@@ -851,7 +1284,7 @@ DotReturn OrientedGraph::toDOT() {
     auto buffers = subGraphPair.first->getOutConnections();
     auto outs = subGraphPair.first->getSubGraph()->getVerticesByType(
         VertexTypes::output);
-    for (auto i = 0; i < outs.size(); i++) {
+    for (uint32_t i = 0; i < outs.size(); i++) {
       dot.push_back({DotTypes::DotEdge,
                      {{"from", subGraphPair.second[0].second.at("instName") +
                                    "_" + outs[i]->getName()},

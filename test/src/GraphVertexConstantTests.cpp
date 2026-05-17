@@ -1,5 +1,6 @@
 #include <CircuitGenGraph/DefaultAuxiliaryMethods.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
+
 #include <gtest/gtest.h>
 
 #ifdef LOGFLAG

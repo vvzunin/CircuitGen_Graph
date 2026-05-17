@@ -32,10 +32,13 @@ option(ENABLE_LOGGING "Enable logging" ON)
 option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
 
 # Подключаем папку с исходниками (новый формат)
+
+# Подключаем папку с исходниками (новый формат)
 add_subdirectory(src)
 
 if(ENABLE_COVERAGE)
   message(STATUS "Code coverage enabled")
+
   if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     target_compile_options(${PROJECT_NAME} PRIVATE -fprofile-arcs -ftest-coverage -O0)
     target_link_options(${PROJECT_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
@@ -51,7 +54,15 @@ if(ENABLE_LOGGING)
   )
 endif()
 
+include_directories(lib)
+link_directories(lib)
+
+add_subdirectory(lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC Lorina)
+target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
+
 find_program(CLANG_TIDY NAMES clang-tidy)
+
 if(PROJECT_IS_TOP_LEVEL)
   option(CircuitGenGraph_ENABLE_CLANG_TIDY "Run clang-tidy during build" OFF)
 endif()
@@ -72,7 +83,7 @@ endif()
 
 if(ENABLE_LOGGING)
   message(STATUS "Logs enabled")
-  install(TARGETS ${PROJECT_NAME} easylogging++
+  install(TARGETS ${PROJECT_NAME} easylogging++ Lorina
     EXPORT "${PROJECT_NAME}Targets"
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -81,7 +92,7 @@ if(ENABLE_LOGGING)
   )
 else()
   message(STATUS "Logs disabled")
-  install(TARGETS ${PROJECT_NAME}
+  install(TARGETS ${PROJECT_NAME} Lorina
     EXPORT "${PROJECT_NAME}Targets"
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -89,6 +100,11 @@ else()
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   )
 endif()
+
+install(
+  DIRECTORY "${PROJECT_SOURCE_DIR}/lib/lorina/include/"
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+)
 
 install(EXPORT "${PROJECT_NAME}Targets"
   FILE "${PROJECT_NAME}Targets.cmake"
@@ -116,12 +132,14 @@ install(FILES
 )
 
 include(CTest)
+
 if(BUILD_TESTING)
   add_subdirectory(test)
 endif()
 
 if(PROJECT_IS_TOP_LEVEL)
   option(CircuitGenGraph_BUILD_EXAMPLES "Build examples tree." "${CircuitGenGraph_DEVELOPER_MODE}")
+
   if(CircuitGenGraph_BUILD_EXAMPLES)
     add_subdirectory(examples)
   endif()
@@ -129,9 +147,11 @@ endif()
 
 if(PROJECT_IS_TOP_LEVEL)
   option(BUILD_MCSS_DOCS "Build documentation using Doxygen and m.css" OFF)
+
   if(BUILD_MCSS_DOCS)
     include(cmake/docs.cmake)
   endif()
+
   if(ENABLE_COVERAGE)
     include(cmake/coverage.cmake)
   endif()

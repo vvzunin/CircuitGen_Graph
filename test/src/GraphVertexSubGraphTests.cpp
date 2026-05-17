@@ -1,10 +1,11 @@
+#include <CircuitGenGraph/GraphVertex.hpp>
+
+#include <gtest/gtest.h>
+
 #include <filesystem>
 #include <fstream>
 #include <set>
 #include <string>
-
-#include <CircuitGenGraph/GraphVertex.hpp>
-#include <gtest/gtest.h>
 
 using namespace CG_Graph;
 
@@ -123,8 +124,9 @@ TEST(TestToVerilog, TestReturnPairCreateCorrectFile) {
   std::string loadFile = loadStringFileSubGraph(curPath + '/' + fileName);
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
   // LOG(INFO) << loadFile;
-  EXPECT_EQ(loadFile, "module testGraph(\n\t\n\t);\n\t\n\twire "
-                      "testConst;\n\tassign testConst = 1'bx;\n\nendmodule\n");
+  EXPECT_EQ(loadFile,
+            "module testGraph(\n\t\n\t);\n\t// Writing consts\n\twire "
+            "testConst;\n\n\tassign testConst = 1'bx;\n\nendmodule\n");
   std::filesystem::remove(curPath + '/' + fileName);
 }
 

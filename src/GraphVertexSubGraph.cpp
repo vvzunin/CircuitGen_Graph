@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -79,7 +80,7 @@ void GraphVertexSubGraph::removeValue() {
 }
 
 void GraphVertexSubGraph::updateLevel() {
-  int counter = 0, max_inLevel = 0;
+  size_t max_inLevel = 0;
   if (d_needUpdate != VS_NOT_CALC) {
     return;
   }
@@ -91,7 +92,7 @@ void GraphVertexSubGraph::updateLevel() {
     max_inLevel =
         (vert->getLevel() > max_inLevel) ? vert->getLevel() : max_inLevel;
   }
-  for (int i = 0; i < d_outConnections.size(); ++i) {
+  for (size_t i = 0; i < d_outConnections.size(); ++i) {
     assert(d_outConnections.at(i)->getType() == gate);
     GraphVertexGates *out_connectionVert =
         static_cast<GraphVertexGates *>(d_outConnections.at(i));
@@ -130,7 +131,7 @@ DotReturn GraphVertexSubGraph::toDOT() {
 
   dot[0].first = DotTypes::DotSubGraph;
   dot[0].second["instName"] = instName;
-  for (int i = 0; i < dot.size(); i++) {
+  for (size_t i = 0; i < dot.size(); i++) {
     dot[i].second["name"] = instName + "_" + dot[i].second["name"];
     if (dot[i].second.find("from") != dot[i].second.end()) {
       dot[i].second["from"] = instName + "_" + dot[i].second["from"];

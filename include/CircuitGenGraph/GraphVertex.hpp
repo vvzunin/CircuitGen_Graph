@@ -9,16 +9,18 @@
  * @author rainbowkittensss
  */
 #pragma once
-#include <string>
-#include <vector>
+
+#include "CircuitGenGraph/GraphUtils.hpp"
+#include "CircuitGenGraph/GraphVertexBus.hpp"
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 
-#ifdef LOGFLAG
-#include "easyloggingpp/easylogging++.h"
-#endif
+#include <cstddef>
+#include <string>
+#include <string_view>
+#include <vector>
 
 namespace CG_Graph {
-
+class GraphVertexBus;
 /**
  * \~english
  * @todo Maybe Description some virtual methods for Graph's classes,
@@ -178,7 +180,7 @@ public:
    * @param i_const символ char для константы (1, 0, z, x)
    * @param i_baseGraph Указатель на базовый граф.
    */
-  GraphVertexConstant(char i_const, GraphPtr i_baseGraph);
+  GraphVertexConstant(char i_const, GraphPtr i_baseGraph, bool i_isBus = false);
 
   /**
    * \~english
@@ -196,9 +198,13 @@ public:
    * @param i_baseGraph Указатель на базовый граф.
    */
   GraphVertexConstant(char i_const, std::string_view i_name,
-                      GraphPtr i_baseGraph);
+                      GraphPtr i_baseGraph, bool i_isBus = false);
 
+  // clang-format off
+                      
   ~GraphVertexConstant() override {};
+
+  // clang-format on
 
   /**
    * @author Fuuulkrum7
@@ -266,7 +272,7 @@ public:
    * если тип вершины не "output" или если входящее соединение
    * недействительно
    */
-  std::string toVerilog() const override;
+  virtual std::string toVerilog() const override;
 
   /** @author Vladimir Zunin */
   DotReturn toDOT() override;
@@ -282,7 +288,7 @@ public:
    * @brief getDefaultInstance Создает простой экземпляр константы
    * verilog (как wire)
    */
-  std::string getVerilogInstance();
+  virtual std::string getVerilogInstance();
 
 #ifdef LOGFLAG
   /**
@@ -356,7 +362,11 @@ public:
   GraphVertexSubGraph(GraphPtr i_subGraph, std::string_view i_name,
                       GraphPtr i_baseGraph);
 
+  // clang-format off
+
   ~GraphVertexSubGraph() override {};
+
+  // clang-format on
 
   /**
    * @author Fuuulkrum7
@@ -597,10 +607,11 @@ private:
  */
 class GraphVertexOutput : public GraphVertexBase {
 public:
-  GraphVertexOutput(GraphPtr i_baseGraph);
+  GraphVertexOutput(GraphPtr i_baseGraph, bool i_isBus = false);
 
   /** @author Fuuulkrum7 */
-  GraphVertexOutput(std::string_view i_name, GraphPtr i_baseGraph);
+  GraphVertexOutput(std::string_view i_name, GraphPtr i_baseGraph,
+                    bool i_isBus = false);
 
   /**
    * @author Theossr
@@ -677,12 +688,16 @@ private:
  */
 class GraphVertexGates : public GraphVertexBase {
 public:
-  GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph);
+  GraphVertexGates(Gates i_gate, GraphPtr i_baseGraph, bool i_isBus = false);
 
   /** @author Fuuulkrum7 */
-  GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph);
+  GraphVertexGates(Gates i_gate, std::string_view i_name, GraphPtr i_baseGraph,
+                   bool i_isBus = false);
+
+  // clang-format off
 
   ~GraphVertexGates() override {};
+
 
   /**
    * @author Fuuulkrum7
@@ -759,6 +774,18 @@ public:
    */
   Gates getGate() const override;
 
+  /// @brief setGateIfDefault
+  /// If type of current gate is gateDefault, method change it
+  /// on provided one. In other cases nothing happens.
+  /// @code
+  /// GraphVertexGates vertex(Gates::GateDefault);
+  /// vertex.setGateIfDefault(GateAnd);
+  /// Gates gateType = vertex.getGate();
+  /// std:: cout << "Gate type : " << gateType << std::endl;
+  /// @endcode
+
+  void setGateIfDefault(Gates type);
+
   /**
    * @author Fuuulkrum7
    *
@@ -809,7 +836,9 @@ public:
    * @throws std::invalid_argument, если какое-либо входное соединение
    * недействительно
    */
-  std::string toVerilog() const override;
+  virtual std::string
+  toVerilog() const override; // помечен виртуальным потому что у этого класса
+                              // есть потомок-шина со своим методом
 
   /** @author Vladimir Zunin */
   DotReturn toDOT() override;
@@ -830,8 +859,10 @@ public:
    */
   virtual void log(el::base::type::ostream_t &os) const override;
 #endif
-
-private:
+protected:
+  std::string
+  toVerilogCommon(std::function<std::string()> printBinaryOperators,
+                  std::function<std::string()> printUnaryOperators) const;
   Gates d_gate;
   friend class GraphVertexSubGraph;
 };
@@ -872,7 +903,8 @@ public:
                         VertexPtr i_clk,
                         VertexPtr i_data,
                         GraphPtr i_baseGraph,
-                        std::string_view i_name);
+                        std::string_view i_name,
+                        bool i_isBus = false);
 
   /**
    * \~english
@@ -899,7 +931,8 @@ public:
                         VertexPtr i_data,
                         VertexPtr i_wire,
                         GraphPtr i_baseGraph,
-                        std::string_view i_name);
+                        std::string_view i_name,
+                        bool i_isBus = false);
 
   /**
    * \~english
@@ -928,7 +961,8 @@ public:
                         VertexPtr i_wire1,
                         VertexPtr i_wire2,
                         GraphPtr i_baseGraph,
-                        std::string_view i_name);
+                        std::string_view i_name,
+                        bool i_isBus = false);
 
   /**
    * \~english
@@ -960,11 +994,12 @@ public:
                         VertexPtr i_set,
                         VertexPtr i_en,
                         GraphPtr i_baseGraph,
-                        std::string_view i_name);
-
-  // clang-format on
+                        std::string_view i_name,
+                        bool i_isBus = false);
 
   ~GraphVertexSequential() override {};
+
+  // clang-format on
 
   /**
    * @author Fuuulkrum7
@@ -1007,8 +1042,19 @@ public:
    * @throws std::invalid_argument, если какое-либо входное соединение
    * недействительно
    */
-  std::string toVerilog() const override;
+  virtual std::string toVerilog() const override;
 
+  virtual std::string getVerilogInstance();
+  static std::string
+  getSequentialString(SequentialTypes i_type, std::string_view i_name,
+                      std::vector<std::string_view> i_inputs);
+
+  static std::string getVerilogInstance(const VertexPtr vertex,
+                                        std::string_view i_inputDataName,
+                                        std::string_view i_qOutputName,
+                                        std::string_view i_dataName = "data",
+                                        std::string_view i_qName = "q",
+                                        std::string_view i_instanceName = "");
   /** @author Fuuulkrum7 */
   DotReturn toDOT() override;
 
@@ -1054,23 +1100,133 @@ public:
   /** @author Fuuulkrum7 */
   VertexPtr getSet() const;
 
-private:
-  /** @author Fuuulkrum7 */
+protected:
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   void setSignalByType(VertexPtr i_wire, SequentialTypes i_type,
                        unsigned &factType);
-  /** @author Fuuulkrum7 */
-  void formatAlwaysBegin(std::string &verilog) const;
 
-private:
+protected:
   SequentialTypes d_seqType;
-
-  VertexPtr d_clk = nullptr;
-  VertexPtr d_data = nullptr;
-  VertexPtr d_en = nullptr;
-  VertexPtr d_rst = nullptr;
-  VertexPtr d_set = nullptr;
 };
 
+class GraphVertexBusInput : public GraphVertexInput, public GraphVertexBus {
+public:
+  GraphVertexBusInput(std::string_view i_name, GraphPtr i_baseGraph,
+                      size_t i_width);
+  std::string toOneBitVerilog() const override final;
+
+  //  size_t calculateHash() override final;
+  //  std::string updateValueBus() override final;
+};
+class GraphVertexBusOutput : public GraphVertexOutput, public GraphVertexBus {
+public:
+  GraphVertexBusOutput(std::string_view i_name, GraphPtr i_baseGraph,
+                       size_t i_width);
+  // size_t calculateHash() override final;
+  //  std::string updateValueBus() override final;
+  std::string toOneBitVerilog() const override final;
+  //
+};
+
+class GraphVertexBusConstant :
+    public GraphVertexConstant,
+    public GraphVertexBus {
+public:
+  GraphVertexBusConstant(std::string_view i_name, GraphPtr i_baseGraph,
+                         size_t i_width);
+  // size_t calculateHash() override final;
+  // std::string updateValueBus() override final;
+  std::string toVerilog() const override final;
+  std::string getVerilogInstance() override final;
+  std::string getVerilogInstanceSeparate();
+  void setValue(std::string i_value);
+  std::string toOneBitVerilog() const override final;
+
+private:
+  std::string d_valueBus;
+};
+
+class GraphVertexBusGate : public GraphVertexGates, public GraphVertexBus {
+public:
+  GraphVertexBusGate(Gates i_gate, std::string_view i_name,
+                     GraphPtr i_baseGraph, size_t i_width);
+  //  size_t calculateHash() override;
+  //  std::string updateValueBus() override;
+  std::string toVerilog() const override;
+  std::string toOneBitVerilog() const override;
+};
+
+class GraphVertexBusSlice : public GraphVertexBusGate {
+public:
+  GraphVertexBusSlice(std::string_view i_name, GraphPtr i_baseGraph,
+                      size_t i_begin, size_t i_width);
+  // size_t calculateHash() override final; // может и не понадобится.........
+  //  std::string updateValueBus() override final;
+  std::string getSliceSuffix() const;
+  std::string toVerilog() const override final;
+  std::string toOneBitVerilog() const override final;
+
+private:
+  size_t d_begin;
+};
+
+class GraphVertexBusSequential :
+    public GraphVertexSequential,
+    public GraphVertexBus {
+public:
+  /// @brief GraphVertexSequential Constructor for default types
+  /// @param i_type type of sequential vertex (can be only (n)ff or latch = EN)
+  /// @param i_clk is clock signal for a ff and enable signal for a latch
+  /// @param i_data
+  /// @param i_baseGraph
+  /// @param i_name
+  GraphVertexBusSequential(SequentialTypes i_type, VertexPtr i_clk,
+                           VertexPtr i_data, GraphPtr i_baseGraph,
+                           std::string_view i_name, size_t i_width);
+
+  /// @brief
+  /// @param i_type
+  /// @param i_clk is clock signal for a ff and enable signal for a latch
+  /// @param i_data
+  /// @param i_wire RST or CLR or SET or EN
+  /// @param i_baseGraph
+  /// @param i_name
+  GraphVertexBusSequential(SequentialTypes i_type, VertexPtr i_clk,
+                           VertexPtr i_data, VertexPtr i_wire,
+                           GraphPtr i_baseGraph, std::string_view i_name,
+                           size_t i_width);
+
+  /// @brief GraphVertexSequential
+  /// @param i_type
+  /// @param i_clk EN for latch and CLK for ff
+  /// @param i_data
+  /// @param i_wire1 RST or CLR or SET
+  /// @param i_wire2 SET or EN
+  /// @param i_wire3 SET or EN
+  /// @param i_baseGraph
+  GraphVertexBusSequential(SequentialTypes i_type, VertexPtr i_clk,
+                           VertexPtr i_data, VertexPtr i_wire1,
+                           VertexPtr i_wire2, GraphPtr i_baseGraph,
+                           std::string_view i_name, size_t i_width);
+
+  /// @brief GraphVertexSequential
+  /// @param i_type type of Sequential - (a/n/an)ff(r/c)se,
+  /// @param i_clk clock for flip=flop
+  /// @param i_data data value
+  /// @param i_rst clear (or reset signal)
+  /// @param i_set set signal
+  /// @param i_en enable
+  /// @param i_baseGraph
+  GraphVertexBusSequential(SequentialTypes i_type, VertexPtr i_clk,
+                           VertexPtr i_data, VertexPtr i_rst, VertexPtr i_set,
+                           VertexPtr i_en, GraphPtr i_baseGraph,
+                           std::string_view i_name, size_t i_width);
+
+  //  size_t calculateHash() override final;
+  //  std::string updateValueBus() override final;
+  std::string toVerilog() const override final;
+  std::string toOneBitVerilog() const override final;
+};
 /**
  * @struct VerilogPorts
  * \~english

@@ -801,6 +801,7 @@ TEST(TestGetEdgesGatesCount, ReturnCorrectGates) {
 }
 
 TEST(TestToVerilog, Simple) {
+  // TODO: check why has no checks and remove file
 #ifdef LOGFLAG
   initLogging("TestToVerilog", "Simple");
 #endif

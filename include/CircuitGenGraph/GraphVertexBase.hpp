@@ -55,7 +55,7 @@ namespace CG_Graph {
 
 class OrientedGraph;
 class GraphVertexSequential;
-
+class GraphVertexBus;
 /**
  * @namespace VertexUtils
  * @author Vladimir Zunin
@@ -242,6 +242,7 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
  */
 class GraphVertexBase {
   friend class OrientedGraph;
+  friend class GraphVertexBus;
 
 public:
   /**
@@ -430,6 +431,7 @@ public:
    * @return Тип вершины (из перечисления VertexTypes).
    */
   VertexTypes getType() const;
+  VertexTypes getFullType() const;
 
   /**
    * @author Fuuulkrum7
@@ -890,6 +892,8 @@ public:
    */
   virtual size_t calculateHash();
 
+  VertexPtr minWidthVertex() const;
+
   /**
    * @author Fuuulkrum7
    *
@@ -966,7 +970,10 @@ public:
    * false, если нет
    */
   virtual bool isSubgraphBuffer() const { return false; }
-
+  virtual bool
+  isBus() const; // или можно сделать метод для получения *ширины* вершины
+  /// @brief log Used for easylogging++
+  /// @param os Stream for easylogging
 #ifdef LOGFLAG
   /**
    * @author Vladimir Zunin
@@ -1064,7 +1071,6 @@ protected:
   std::vector<VertexPtr> d_inConnections;
   std::vector<VertexPtr> d_outConnections;
   GraphPtrWeak d_baseGraph;
-
   std::string_view d_name;
 
   size_t d_hashed = 0;

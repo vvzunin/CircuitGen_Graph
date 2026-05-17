@@ -13,18 +13,24 @@
 
 #include <array>
 #include <atomic>
+#include <cstddef>
 #include <ctime>
+#include <fstream>
+#include <functional>
 #include <map>
 #include <memory>
 #include <set>
 #include <string>
+#include <string_view>
 #include <unordered_set>
 #include <vector>
 
-#include <CircuitGenGraph/enums.hpp>
 #include <CircuitGenGraph/GraphMemory.hpp>
+#include <CircuitGenGraph/GraphReader.hpp>
 #include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
+#include <CircuitGenGraph/GraphVertexBus.hpp>
+#include <CircuitGenGraph/enums.hpp>
 
 #include <CircuitGenGraph/Logging.hpp>
 
@@ -43,6 +49,9 @@
 namespace CG_Graph {
 
 class GraphVertexBase;
+class GraphReader;
+class Context;
+class GraphVertexBus;
 
 /**
  * @class CG_Graph::OrientedGraph
@@ -441,7 +450,7 @@ public:
    * @return Указатель (поинтер) на вновь созданную входную вершину
    */
   VertexPtr addInput(const std::string &i_name = "");
-
+  VertexPtr addInputBus(const std::string &i_name = "", size_t width = 1);
   /**
    * @author Fuuulkrum7
    *
@@ -466,7 +475,7 @@ public:
    * @return Указатель на вновь созданную выходную вершину
    */
   VertexPtr addOutput(const std::string &i_name = "");
-
+  VertexPtr addOutputBus(const std::string &i_name = "", size_t width = 1);
   /**
    * @author Fuuulkrum7
    *
@@ -493,7 +502,7 @@ public:
    * @return Указатель на вновь созданную константную вершину
    */
   VertexPtr addConst(const char &i_value, const std::string &i_name = "");
-
+  VertexPtr addConstBus(const std::string &i_name = "", size_t width = 1);
   /**
    * @author Fuuulkrum7
    *
@@ -520,7 +529,10 @@ public:
    * @return Указатель на вновь созданную вершину-вентиль
    */
   VertexPtr addGate(const Gates &i_gate, const std::string &i_name = "");
-
+  VertexPtr addGateBus(const Gates &i_gate, const std::string &i_name = "",
+                       size_t width = 1);
+  VertexPtr addSliceBus(VertexPtr i_bus, size_t begin, size_t i_width,
+                        const std::string &i_name = "");
   /**
    * @author Fuuulkrum7
    *
@@ -554,7 +566,9 @@ public:
    */
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, const std::string &i_name = "");
-
+  VertexPtr addSequentialBus(const SequentialTypes &i_type, VertexPtr i_clk,
+                             VertexPtr i_data, const std::string &i_name = "",
+                             size_t i_width = 1);
   /**
    * @author Fuuulkrum7
    *
@@ -593,7 +607,10 @@ public:
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_wire,
                           const std::string &i_name = "");
-
+  VertexPtr addSequentialBus(const SequentialTypes &i_type, VertexPtr i_clk,
+                             VertexPtr i_data, VertexPtr i_wire,
+                             const std::string &i_name = "",
+                             size_t i_width = 1);
   /**
    * @author Fuuulkrum7
    *
@@ -636,7 +653,10 @@ public:
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_wire1,
                           VertexPtr i_wire2, const std::string &i_name = "");
-
+  VertexPtr addSequentialBus(const SequentialTypes &i_type, VertexPtr i_clk,
+                             VertexPtr i_data, VertexPtr i_wire1,
+                             VertexPtr i_wire2, const std::string &i_name = "",
+                             size_t i_width = 1);
   /**
    * @author Fuuulkrum7
    *
@@ -679,44 +699,51 @@ public:
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_rst, VertexPtr i_set,
                           VertexPtr i_en, const std::string &i_name = "");
-  /**
-   * \~english
-   * @brief addSubGraph
-   * Adds a subgraph to the current graph
-   * @param i_subGraph A shared pointer to the subgraph to be added
-   * @param i_inputs A vector containing the input vertices to be connected
-   * to the subgraph
-   * @return A vector containing the output vertices of the subgraph
-   * @par Example
-   * @code
-   * // Create an instance of OrientedGraph
-   * auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
-   * // Create a subgraph
-   * auto subGraph = std::make_shared<OrientedGraph>("SubGraph");
-   * // Create input vertices for the subgraph
-   * std::vector<VertexPtr> subGraphInputs;
-   * for (size_t i = 0; i < 3; ++i) {
-   * auto inputVertex = graph->addInput("SubGraphInput" +
-   * std::to_string(i + 1));
-   * subGraphInputs.push_back(inputVertex);
-   * }
-   * // Add the subgraph to the graph with its inputs
-   * auto subGraphOutputs = graph->addSubGraph(subGraph, subGraphInputs);
-   * // Now subGraphOutputs contains the output vertices of the subgraph
-   * @endcode
-   * @throws std::invalid_argument if the number of inputs does not match
-   * the number of input vertices in the subgraph
-   *
-   * \~russian
-   * @brief addSubGraph
-   * Добавляет подграф в текущий граф
-   * @param i_subGraph Shared-указатель на добавляемый подграф
-   * @param i_inputs Вектор, содержащий входные вершины для подключения к
-   * подграфу
-   * @return Вектор, содержащий выходные вершины подграфа
-   * @throws std::invalid_argument, если количество входов не совпадает с
-   * количеством входных вершин в подграфе
-   */
+  VertexPtr addSequentialBus(
+      const SequentialTypes &i_type, VertexPtr i_clk, VertexPtr i_data,
+      VertexPtr i_rst, VertexPtr i_set, VertexPtr i_en,
+      const std::string &i_name = "",
+      size_t i_width =
+          1); /**
+               * \~english
+               * @brief addSubGraph
+               * Adds a subgraph to the current graph
+               * @param i_subGraph A shared pointer to the subgraph to be added
+               * @param i_inputs A vector containing the input vertices to be
+               * connected to the subgraph
+               * @return A vector containing the output vertices of the subgraph
+               * @par Example
+               * @code
+               * // Create an instance of OrientedGraph
+               * auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
+               * // Create a subgraph
+               * auto subGraph = std::make_shared<OrientedGraph>("SubGraph");
+               * // Create input vertices for the subgraph
+               * std::vector<VertexPtr> subGraphInputs;
+               * for (size_t i = 0; i < 3; ++i) {
+               * auto inputVertex = graph->addInput("SubGraphInput" +
+               * std::to_string(i + 1));
+               * subGraphInputs.push_back(inputVertex);
+               * }
+               * // Add the subgraph to the graph with its inputs
+               * auto subGraphOutputs = graph->addSubGraph(subGraph,
+               * subGraphInputs);
+               * // Now subGraphOutputs contains the output vertices of the
+               * subgraph
+               * @endcode
+               * @throws std::invalid_argument if the number of inputs does not
+               * match the number of input vertices in the subgraph
+               *
+               * \~russian
+               * @brief addSubGraph
+               * Добавляет подграф в текущий граф
+               * @param i_subGraph Shared-указатель на добавляемый подграф
+               * @param i_inputs Вектор, содержащий входные вершины для
+               * подключения к подграфу
+               * @return Вектор, содержащий выходные вершины подграфа
+               * @throws std::invalid_argument, если количество входов не
+               * совпадает с количеством входных вершин в подграфе
+               */
   std::vector<VertexPtr> addSubGraph(GraphPtr i_subGraph,
                                      std::vector<VertexPtr> i_inputs);
 
@@ -768,6 +795,7 @@ public:
    * также будут удалены.
    */
   void removeWasteVertices();
+  void updateEdgesGatesCount(VertexPtr vertex, Gates type);
 
   /**
    * @author Fuuulkrum7
@@ -958,6 +986,8 @@ public:
    */
   VertexPtr getVerticeByIndex(size_t idx) const;
 
+  static void readVerilog(std::string i_path, Context &context);
+  static CG_Graph::Context readVerilog(std::string i_path);
   /**
    * \~english
    * @brief Clears parsed Verilog parameters stored in graph metadata
@@ -1009,7 +1039,14 @@ public:
    * @param i_filename имя файла, который должен быть создан
    * @return флаг, указывающий, был ли файл корректно создан или нет
    */
-  bool toVerilog(std::string i_path, std::string i_filename = "");
+  bool toVerilog(std::string i_path, std::string i_filename = "",
+                 bool i_sequentialByInstance = false);
+
+  bool toVerilogBusEnabled(std::string i_path, std::string i_filename = "",
+                           bool i_sequentialByInstance = false);
+
+  bool toVerilogBusEnabledAsOneBit(std::string i_path,
+                                   std::string i_filename = "");
 
   /**
    * @author Vladimir Zunin
@@ -1315,7 +1352,6 @@ public:
    * количество ребер между различными типами вентилей в графе
    */
   std::map<Gates, std::map<Gates, size_t>> getEdgesGatesCount() const;
-
   /**
    * @author Fuuulkrum7
    *
@@ -1331,9 +1367,7 @@ public:
    * @param i_type Тип, для которого должно быть зарезервировано место
    * @param i_capacity Количество вершин, которые будут добавлены позже
    */
-  void reserve(VertexTypes i_type, size_t i_capacity) {
-    d_vertices[i_type].reserve(d_vertices[i_type].size() + i_capacity);
-  }
+  void reserve(VertexTypes i_type, size_t i_capacity);
 
   /**
    * @author Fuuulkrum7
@@ -1439,6 +1473,8 @@ public:
    * @return GraphPtr на созданный граф
    */
   static GraphPtr createMajoritySubgraph();
+  VertexPtr majorityAsLogic(VertexPtr a, VertexPtr b, VertexPtr c,
+                            VertexPtr output);
 
   /**
    * @author Andrey
@@ -1517,6 +1553,105 @@ protected:
            std::unordered_set<VertexPtr> &i_dsg);
 
 private:
+  static bool printSequentialModules(GraphPtr i_graph,
+                                     std::ofstream &i_fileStream);
+
+  /**
+   * @brief This method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_path path for output verilog file
+   * @param i_filename file name
+   *@return true if file created correctly, false otherwise
+   */
+  static bool verilogFileCreating(GraphPtr i_graph, std::string i_path,
+                                  std::string i_filename,
+                                  std::ofstream &i_fileStream);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_printPin function, defined in toVerilog..(), print correct
+   * name of vertex to i_fileStream
+   *
+   */
+  static void verilogInoutsWriting(GraphPtr i_graph,
+                                   std::ofstream &i_fileStream,
+                                   std::function<void(VertexPtr)> i_printPin);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_printFunction function, defined in toVerilog..(), print all
+   * vertices of type (i_usedType from VertexTypes) to i_fileStream
+   */
+  static void
+  verilogVerticesDeclaration(GraphPtr i_graph, std::ofstream &i_fileStream,
+                             std::function<void(std::vector<GraphVertexBase *>,
+                                                VertexTypes i_usedType)>
+                                 i_printFunction);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_getInstance function, defined in toVerilog..(),
+   * print correct constant instance to i_fileStream
+   */
+  static void
+  verilogConstantWriting(GraphPtr i_graph, std::ofstream &i_fileStream,
+                         std::function<void(VertexPtr)> i_getInstance,
+                         std::function<void(VertexPtr)> i_getDefinition);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_path path to create verilog files for subgraphs
+   * @return true if all files created correctly, false otherwise
+   */
+  static bool verilogSubgraphWriting(GraphPtr i_graph,
+                                     std::ofstream &i_fileStream,
+                                     std::string i_path);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @param i_printDefinition function, defined in toVerilog..(),
+   * print correct definitions to i_fileStream
+   */
+  static void verilogVerticesDefining(
+      GraphPtr i_graph, std::ofstream &i_fileStream,
+      std::function<void(VertexPtr)> i_printDefinitionSequential,
+      std::function<void(const VertexPtr)> i_printDefinitionGates);
+
+  /**
+   * @brief The method is a stage of generating verilog output by toVerilog()
+   * toVerilogBusEnabled() or toVerilogSeparateVariables().
+   * @param i_graph graph for output
+   * @param i_fileStream output stream
+   *
+   * @return true if file saved correctly, false otherwise
+   */
+  static bool verilogFinalOperations(GraphPtr i_graph,
+                                     std::ofstream &i_fileStream);
+
+private:
   static std::atomic_size_t d_countNewGraphInstance;
   static std::atomic_size_t d_countGraph;
 
@@ -1526,7 +1661,6 @@ private:
     HC_IN_PROGRESS = 1,
     HC_CALC = 2
   };
-
   // used for quick gates count
   std::map<Gates, size_t> d_gatesCount = {
       {Gates::GateAnd, 0}, {Gates::GateNand, 0}, {Gates::GateOr, 0},
@@ -1572,6 +1706,7 @@ private:
 
   // -1 if false, 0 if undefined, 1 if true
   int8_t d_connected = 0;
+  static GraphReader *graphReader;
 };
 
 } // namespace CG_Graph

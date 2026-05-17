@@ -28,3 +28,5 @@ settings.json
 *_sim
 
 generation_results/*
+
+.cache

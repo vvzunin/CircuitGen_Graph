@@ -1,6 +1,6 @@
 #include <CircuitGenGraph/GraphUtils.hpp>
-#include <gtest/gtest.h>
 
+#include <gtest/gtest.h>
 #ifdef LOGFLAG
 #include "easylogging++Init.hpp"
 #endif

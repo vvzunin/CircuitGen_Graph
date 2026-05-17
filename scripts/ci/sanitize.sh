@@ -7,7 +7,7 @@ export UBSAN_OPTIONS="${UBSAN_OPTIONS:-print_stacktrace=1}"
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "${ROOT_DIR}"
-
+git submodule update --init
 # Sanitizer builds use much more RAM per compiler/link job than a normal build.
 # Full nproc parallelism on small GitLab runners often triggers OOM (SIGKILL, exit 137).
 if [[ -z "${JOBS:-}" ]]; then

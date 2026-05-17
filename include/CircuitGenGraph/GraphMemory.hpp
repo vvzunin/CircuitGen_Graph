@@ -262,7 +262,7 @@ public:
    * @param s сохраняемая строка
    * @return string_view из строки в множестве
    */
-  /** @author Fuuulkrum7 */
+  /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   std::string_view internalize(const std::string &s) {
     return *d_strings.emplace(s).first;
   }
