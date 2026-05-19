@@ -18,7 +18,6 @@
 
 namespace CG_Graph {
 
-
 // clang-format off
 
 GraphReader::GraphReader(Context &i_context) 
