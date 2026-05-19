@@ -171,7 +171,9 @@ TEST(VerilogReadingTest, UseOutputAsGate) {
   graphCreated->addEdge(gateQ4, outputQ4);
 
   EXPECT_EQ(graph->calculateHash(), graphCreated->calculateHash());
+  remove(pathToSecondTest.data());
 }
+
 TEST(VerilogReadingTest, AllGateTypesCreating) {
   Context context = Context();
   GraphPtr graph = std::make_shared<OrientedGraph>();
