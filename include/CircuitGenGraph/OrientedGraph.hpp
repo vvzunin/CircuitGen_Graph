@@ -781,7 +781,7 @@ public:
                * // Now subGraphOutputs contains the output vertices of the
                * subgraph
                * @endcode
-               * @throws std::invalid_argument if the number of inputs does not
+               * @throws{std::invalid_argument} if the number of inputs does not
                * match the number of input vertices in the subgraph
                *
                * \~russian
@@ -791,7 +791,7 @@ public:
                * @param i_inputs Вектор, содержащий входные вершины для
                * подключения к подграфу
                * @return Вектор, содержащий выходные вершины подграфа
-               * @throws std::invalid_argument если количество входов не
+               * @throws{std::invalid_argument} если количество входов не
                * совпадает с количеством входных вершин в подграфе
                */
   std::vector<VertexPtr> addSubGraph(GraphPtr i_subGraph,
@@ -882,7 +882,7 @@ public:
    * LOG(ERROR) << "Failed to add edge between Vertex1 and Vertex2\n";
    * }
    * @endcode
-   * @throws std::invalid_argument if attempting to add an edge from one
+   * @throws{std::invalid_argument} if attempting to add an edge from one
    * subgraph to another when the 'from' vertex is not an output, or when
    * attempting to add an edge to another subgraph when the 'to' vertex is
    * not an input
@@ -894,7 +894,7 @@ public:
    * @param to Указатель на вершину, в которой ребро заканчивается
    * @return true, если ребро было успешно добавлено, false в противном
    * случае
-   * @throws std::invalid_argument при попытке добавить ребро из одного
+   * @throws{std::invalid_argument} при попытке добавить ребро из одного
    * подграфа в другой, когда вершина 'from' не является выходом, или при
    * попытке добавить ребро в другой подграф, когда вершина 'to' не
    * является входом
@@ -1033,7 +1033,7 @@ public:
    * sequential, subGraphs and than - outputs.
    * @param idx Index of the vertex to retrieve
    * @return Pointer to the requested vertex
-   * @throws std::out_of_range if idx is bigger than number of all vertices in
+   * @throws{std::out_of_range} if idx is bigger than number of all vertices in
    * graph
    *
    * \~russian
@@ -1043,7 +1043,7 @@ public:
    * последовательностных элементов, подграфов и затем - выходов.
    * @param idx Индекс вершины для получения
    * @return Указатель на запрошенную вершину
-   * @throws std::out_of_range если idx больше количества всех вершин в графе
+   * @throws{std::out_of_range} если idx больше количества всех вершин в графе
    */
   VertexPtr getVerticeByIndex(size_t idx) const;
 

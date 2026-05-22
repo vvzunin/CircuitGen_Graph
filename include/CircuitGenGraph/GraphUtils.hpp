@@ -423,14 +423,14 @@ namespace GraphUtils {
  * std::cout << "Operation name: " << operationInfo.first << std::endl;
  * std::cout << "Operation ID: " << operationInfo.second << std::endl;
  * @endcode
- * @throws std::runtime_error if operation name is not found
+ * @throws{std::runtime_error} if operation name is not found
  *
  * \~russian
  * @brief Получает информацию о логической операции по ее имени
  * @param i_op Строка, содержащая имя логической операции
  * @return std::pair<std::string_view, int32_t> Пара, содержащая имя и ID
  * логической операции
- * @throws std::runtime_error если имя операции не найдено
+ * @throws{std::runtime_error} если имя операции не найдено
  */
 std::pair<std::string_view, int32_t> getLogicOperation(const std::string &i_op);
 
@@ -514,7 +514,7 @@ std::string fromOperationsToName(std::string_view i_op);
  * @brief Converts hierarchy key to its corresponding operation value
  * @param key Required hierarchy key
  * @return std::string_view The value representing the operation
- * @throws std::out_of_range if the provided key does not exist
+ * @throws{std::out_of_range} if the provided key does not exist
  * @par Example
  * @code
  * // Get the hierarchy associated with the operation key 5
@@ -527,7 +527,7 @@ std::string fromOperationsToName(std::string_view i_op);
  * @brief Преобразует ключ иерархии в соответствующее значение операции
  * @param key Требуемый ключ иерархии
  * @return std::string_view Значение, представляющее операцию
- * @throws std::out_of_range если предоставленный ключ не существует
+ * @throws{std::out_of_range} если предоставленный ключ не существует
  */
 std::string_view fromHierarchyToOperation(uint32_t key);
 

@@ -691,14 +691,14 @@ public:
    * @brief updateValue Updates the value of the vertex
    * @return The updated value of the vertex
    * @todo Add example of usage
-   * @throws std::invalid_argument if any of the input connections point
+   * @throws{std::invalid_argument} if any of the input connections point
    * to a nullptr
    *
    * \~russian
    * @brief updateValue Обновляет значение вершины
    * @return Обновленное значение вершины
    * @todo Добавить пример использования
-   * @throws std::invalid_argument если любое из входных соединений
+   * @throws{std::invalid_argument} если любое из входных соединений
    * указывает на nullptr
    */
   virtual char updateValue() override;
@@ -728,13 +728,13 @@ public:
    * @brief getVerilogString Gets a string in Verilog format representing
    * the current vertex
    * @return A string in Verilog format representing the current vertex
-   * @throws std::invalid_argument if any input connection is invalid
+   * @throws{std::invalid_argument} if any input connection is invalid
    *
    * \~russian
    * @brief getVerilogString Получает строку в формате Verilog,
    * представляющую текущую вершину
    * @return Строка в формате Verilog, представляющая текущую вершину
-   * @throws std::invalid_argument если какое-либо входное соединение
+   * @throws{std::invalid_argument} если какое-либо входное соединение
    * недействительно
    */
   std::string getVerilogString() const;
@@ -795,7 +795,7 @@ public:
    * @param i_vert Vertex that will be added to d_inConnections of this
    * @return The count of occurrences of the given vertex in the input
    * connections after adding it
-   * @throws std::overflow_error in case of connecting more than one
+   * @throws{std::overflow_error} in case of connecting more than one
    * vertex in d_inConnections
    *
    * \~russian
@@ -807,7 +807,7 @@ public:
    * этой вершины
    * @return Количество вхождений данной вершины во входные соединения
    * после ее добавления
-   * @throws std::overflow_error в случае подключения более одной
+   * @throws{std::overflow_error} в случае подключения более одной
    * вершины в d_inConnections
    */
   uint32_t addVertexToInConnections(VertexPtr i_vert) override;
@@ -821,7 +821,7 @@ public:
    * is returned. If any input connection is invalid, an exception is
    * thrown.
    * @return A Verilog format string for the current vertex
-   * @throws std::invalid_argument if any input connection is invalid
+   * @throws{std::invalid_argument} if any input connection is invalid
    *
    * \~russian
    * @brief Генерирует Verilog-код для текущей вершины-вентиля с учетом ее
@@ -830,7 +830,7 @@ public:
    * пустая строка. Если какое-либо входное соединение недействительно,
    * выбрасывается исключение.
    * @return Строка в формате Verilog для текущей вершины
-   * @throws std::invalid_argument если какое-либо входное соединение
+   * @throws{std::invalid_argument} если какое-либо входное соединение
    * недействительно
    */
   virtual std::string
@@ -1024,7 +1024,7 @@ public:
    * Returns an empty string when there are no input connections.
    * Throws if any input connection is invalid.
    * @return Verilog string for current vertex.
-   * @throws std::invalid_argument if any input connection is invalid
+   * @throws{std::invalid_argument} if any input connection is invalid
    *
    * \~russian
    * @brief Генерирует Verilog-код для текущей последовательностной вершины
@@ -1032,7 +1032,7 @@ public:
    * Если входных соединений нет, возвращается пустая строка.
    * При недействительном входном соединении выбрасывается исключение.
    * @return Строка Verilog для текущей вершины.
-   * @throws std::invalid_argument если какое-либо входное соединение
+   * @throws{std::invalid_argument} если какое-либо входное соединение
    * недействительно
    */
   virtual std::string toVerilog() const override;
@@ -1506,7 +1506,7 @@ struct VerilogPorts {
  * unsigned, etc.).
  * @param filepath Path to the Verilog file.
  * @return Parsed Verilog ports.
- * @throws std::runtime_error if the file cannot be opened.
+ * @throws{std::runtime_error} if the file cannot be opened.
  *
  * \~russian
  * @brief Разбирает Verilog-файл и извлекает имена входных и выходных портов.
@@ -1515,7 +1515,7 @@ struct VerilogPorts {
  * (wire, reg, logic, signed, unsigned и т.д.).
  * @param filepath Путь к Verilog-файлу.
  * @return Распарсенные порты Verilog.
- * @throws std::runtime_error если файл не удалось открыть.
+ * @throws{std::runtime_error} если файл не удалось открыть.
  */
 VerilogPorts parseVerilogPorts(const std::string &filepath);
 
