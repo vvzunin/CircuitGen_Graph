@@ -16,10 +16,10 @@ child->addEdge(buf, outY);
 
 std::vector<VertexPtr> bindings = { parent->addInput("x") };
 std::vector<VertexPtr> outputs = parent->addSubGraph(child, bindings);
-// outputs — выходные вершины-обёртки экземпляра подграфа на parent
+// outputs — выходные вершины-обертки экземпляра подграфа на parent
 ```
 
-- `addSubGraph(GraphPtr i_subGraph, std::vector<VertexPtr> i_inputs)` регистрирует `child` в `d_subGraphs` родителя и создаёт вершину-подграф с привязкой входов.
+- `addSubGraph(GraphPtr i_subGraph, std::vector<VertexPtr> i_inputs)` регистрирует `child` в `d_subGraphs` родителя и создает вершину-подграф с привязкой входов.
 - `getSubGraphs()` возвращает множество вложенных графов.
 
 ## Внешний Verilog-файл
@@ -39,13 +39,13 @@ sgVertex->setVerilogPath("/path/to/child_module.v");
 
 Поддерживаются `parameter` и `localparam` (см. `GraphVertexSubGraph` / `src/GraphVertexSubGraph.cpp`).
 
-## Развёртывание (unroll)
+## Развертывание (unroll)
 
-`toVerilog`, `toDOT` и **OpenABCD GraphML** могут работать с плоским представлением: метод **`unrollGraph()`** создаёт копию графа без иерархии подграфов (все уровни «вшиты» в один граф). Это важно для инструментов, не понимающих иерархию.
+`toVerilog`, `toDOT` и **OpenABCD GraphML** могут работать с плоским представлением: метод **`unrollGraph()`** создает копию графа без иерархии подграфов (все уровни «вшиты» в один граф). Это важно для инструментов, не понимающих иерархию.
 
 ## Экспорт и GraphML
 
-- **Classic GraphML** пропускает вершины `subGraph` как отдельные узлы; используйте его для плоских графов или для верхнего уровня без необходимости развёрнутой иерархии.
+- **Classic GraphML** пропускает вершины `subGraph` как отдельные узлы; используйте его для плоских графов или для верхнего уровня без необходимости развернутой иерархии.
 - **PseudoABCD** и **OpenABCD** вызывают `unrollGraph()` перед сериализацией, если в графе есть подграфы.
 
 Подробнее: [GraphML.md](GraphML.md).

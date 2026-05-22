@@ -160,15 +160,9 @@ std::string vertexTypeToComment(VertexTypes i_type);
  * @author Fuuulkrum7
  *
  * \~english
- * @brief getSequentialComment
- * Converts a Sequential vertex object to its comment representation
- * This function takes a GraphVertexSequental object and returns its
- * corresponding comment representation. The comment representation
- * is based on the signals, included for current element (enable, reset,
- * clear and some more) and is used for generating comments or
- * documentation
- * @param i_seq Sequential element to getting information
- * @return The comment representation of the GraphVertexSequental object.
+ * @brief Builds a human-readable comment for a sequential vertex.
+ * @param i_seq Sequential vertex to describe.
+ * @return Comment text for the specified sequential vertex.
  * @par Example
  * @code
  * GraphPtr graph = std::make_shared<OrientedGraph>();
@@ -180,15 +174,10 @@ std::string vertexTypeToComment(VertexTypes i_type);
  * @endcode
  *
  * \~russian
- * @brief getSequentialComment
- * Преобразует объект последовательностной вершины в его представление в
- * виде комментария. Эта функция принимает объект GraphVertexSequential и
- * возвращает соответствующее ему представление в виде комментария.
- * Представление в виде комментария основано на сигналах, включенных для
- * текущего элемента (enable, reset, clear и некоторые другие), и
- * используется для генерации комментариев или документации.
- * @param i_seq Последовательностный элемент для получения информации
- * @return Представление объекта GraphVertexSequential в виде комментария.
+ * @brief Формирует человекочитаемый комментарий для последовательностной
+ * вершины.
+ * @param i_seq Последовательностная вершина, для которой формируется описание.
+ * @return Текст комментария для указанной последовательностной вершины.
  */
 std::string getSequentialComment(const GraphVertexSequential *i_seq);
 
@@ -203,16 +192,16 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
  * @author NonDif
  *
  * \~english
- * @brief Base class for graph vertices
+ * @brief Base class for all graph vertices.
  * - d_baseGraph: A weak pointer to the base graph containing this vertex
  * - d_name: The name of the vertex. It is a string containing the name of a
  * vertex
  * - d_value: The value of the vertex
  * - d_level: The vertex level is represented by the uint32_t type
- * - d_inConnections: vector of weak pointers to input connections with other
+ * - d_inConnections: vector of pointers to input connections with other
  * vertices
- * - d_outConnections: vector of strong pointers to output connections with
- * other vertices
+ * - d_outConnections: vector of pointers to output connections with other
+ * vertices
  * - d_type: Vertex Type - Defined by the VertexTypes enumeration
  * - d_count: Vertex counter for naming and other purposes. Represented by the
  * uint_fast64_t type
@@ -222,16 +211,16 @@ std::string getSequentialComment(const GraphVertexSequential *i_seq);
  * level calculating
  *
  * \~russian
- * @brief Базовый класс для вершин графа
+ * @brief Базовый класс для всех вершин графа.
  * - d_baseGraph: Слабый указатель (weak pointer) на базовый граф, содержащий
  * эту вершину
  * - d_name: Имя вершины. Это строка, содержащая имя вершины
  * - d_value: Значение вершины
  * - d_level: Уровень вершины, представленный типом uint32_t
- * - d_inConnections: вектор слабых указателей на входные соединения с другими
+ * - d_inConnections: вектор указателей на входные соединения с другими
  * вершинами
- * - d_outConnections: вектор сильных указателей на выходные соединения с
- * другими вершинами
+ * - d_outConnections: вектор указателей на выходные соединения с другими
+ * вершинами
  * - d_type: Тип вершины - определяется перечислением VertexTypes
  * - d_count: Счетчик вершин для именования и других целей. Представлен типом
  * uint_fast64_t
@@ -249,10 +238,10 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief resetes counter of unique id-s for vertices
+   * @brief Resets the global vertex ID counter.
    *
    * \~russian
-   * @brief сбрасывает счетчик уникальных идентификаторов для вершин
+   * @brief Сбрасывает глобальный счетчик уникальных идентификаторов вершин.
    */
   static void resetCounter() { d_count = 0ul; }
 
@@ -285,12 +274,11 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief used for reset for all states being used (hash, updateValue,
-   * etc)
+   * @brief Resets all cached calculation states (hash, level flags, etc.).
    *
    * \~russian
-   * @brief используется для сброса всех используемых состояний (hash,
-   * updateValue и т.д.)
+   * @brief Сбрасывает все кэшированные состояния вычислений (хэш, флаги
+   * уровня и т.д.).
    */
   void resetAllStates() {
     d_needUpdate = VS_NOT_CALC;
@@ -301,10 +289,10 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief required before recalculation of the levels of graph
+   * @brief Clears level-update state before level recomputation.
    *
    * \~russian
-   * @brief требуется перед пересчетом уровней графа
+   * @brief Сбрасывает состояние обновления уровней перед пересчетом.
    */
   void resetNeedUpdateState() { d_needUpdate = VS_NOT_CALC; }
 
@@ -312,10 +300,10 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief required before hash recalculation
+   * @brief Clears hash state before hash recomputation.
    *
    * \~russian
-   * @brief требуется перед пересчетом хэша
+   * @brief Сбрасывает состояние хэша перед его пересчетом.
    */
   void resetHashState() { d_hasHash = HC_NOT_CALC; }
 
@@ -323,10 +311,10 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief required before get vertices by level
+   * @brief Clears helper flags used by level-based traversal.
    *
    * \~russian
-   * @brief требуется перед получением вершин по уровню
+   * @brief Сбрасывает служебные флаги, используемые при обходе по уровням.
    */
   void resetUsedLevelState() {
     // remove flag using bitwise operations
@@ -335,33 +323,29 @@ public:
 
   /**
    * \~english
-   * @brief GraphVertexBase Constructs a GraphVertexBase object with the
-   * specified vertex type and optional graph
+   * @brief Constructs vertex with specified type and optional owner graph.
    * @param i_type The type of the vertex (from the VertexTypes enum).
-   * @param i_graph Optional pointer to the graph containing the vertex
+   * @param i_graph Optional shared pointer to the graph containing the vertex.
    *
    * \~russian
-   * @brief GraphVertexBase Создает объект GraphVertexBase с указанным
-   * типом вершины и опциональным графом
+   * @brief Создает вершину с указанным типом и опциональным графом-владельцем.
    * @param i_type Тип вершины (из перечисления VertexTypes).
-   * @param i_graph Опциональный указатель на граф, содержащий вершину
+   * @param i_graph Опциональный shared-указатель на граф, содержащий вершину.
    */
   GraphVertexBase(const VertexTypes i_type, GraphPtr i_graph);
 
   /**
    * \~english
-   * @brief GraphVertexBase Constructs a GraphVertexBase object with the
-   * specified vertex type, name, and optional graph.
+   * @brief Constructs vertex with specified type, name, and optional owner graph.
    * @param i_type The type of the vertex (from the VertexTypes enum)
    * @param i_name The name of the vertex.
-   * @param i_graph Optional pointer to the graph containing the vertex.
+   * @param i_graph Optional shared pointer to the graph containing the vertex.
    *
    * \~russian
-   * @brief GraphVertexBase Создает объект GraphVertexBase с указанным
-   * типом вершины, именем и опциональным графом.
+   * @brief Создает вершину с указанными типом, именем и опциональным графом-владельцем.
    * @param i_type Тип вершины (из перечисления VertexTypes)
    * @param i_name Имя вершины.
-   * @param i_graph Опциональный указатель на граф, содержащий вершину.
+   * @param i_graph Опциональный shared-указатель на граф, содержащий вершину.
    */
   GraphVertexBase(const VertexTypes i_type, std::string_view i_name,
                   GraphPtr i_graph);
@@ -386,37 +370,40 @@ public:
 
   /**
    * \~english
-   * @brief GraphVertexBase Constructs a GraphVertexBase object with
-   * parameters similar to other GraphVertexBase object
+   * @brief Copy constructor.
    * @param other The other vertex
    *
    * \~russian
-   * @brief GraphVertexBase Создает объект GraphVertexBase с параметрами,
-   * аналогичными другому объекту GraphVertexBase
+   * @brief Конструктор копирования.
    * @param other Другая вершина
    */
   GraphVertexBase(const GraphVertexBase &other) = default;
 
   /**
    * \~english
-   * @brief GraphVertexBase Move constructor for the class
-   * @param other Vertex to move or copy
+   * @brief Move constructor.
+   * @param other Vertex to move from.
    *
    * \~russian
-   * @brief GraphVertexBase Конструктор перемещения для класса
-   * @param other Вершина для перемещения или копирования
+   * @brief Конструктор перемещения.
+   * @param other Вершина-источник для перемещения.
    */
   GraphVertexBase(GraphVertexBase &&other) = default;
 
+  /**
+   * \~english
+   * @brief Virtual destructor.
+   *
+   * \~russian
+   * @brief Виртуальный деструктор.
+   */
   virtual ~GraphVertexBase();
 
   /**
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief getType
-   * This method returns the type of the vertex as a value of the
-   * VertexTypes enum
+   * @brief Returns vertex type as `VertexTypes` value.
    * @return The type of the vertex (from the VertexTypes enum).
    * @par Example
    * @code
@@ -426,21 +413,27 @@ public:
    * @endcode
    *
    * \~russian
-   * @brief getType
-   * Этот метод возвращает тип вершины как значение перечисления VertexTypes
+   * @brief Возвращает тип вершины как значение `VertexTypes`.
    * @return Тип вершины (из перечисления VertexTypes).
    */
   VertexTypes getType() const;
+  /**
+   * \~english
+   * @brief Returns full (extended) vertex type, including bus variants.
+   * @return Full vertex type.
+   *
+   * \~russian
+   * @brief Возвращает полный (расширенный) тип вершины, включая шинные
+   * варианты.
+   * @return Полный тип вершины.
+   */
   VertexTypes getFullType() const;
 
   /**
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief getTypeName
-   * This method returns the string representation of the vertex type by
-   * parsing the vertex type enum value using the settings object
-   * associated with the vertex
+   * @brief Returns string representation of vertex type.
    * @return The string representation of the vertex type.
    * @par Example
    * @code
@@ -450,10 +443,7 @@ public:
    * @endcode
    *
    * \~russian
-   * @brief getTypeName
-   * Этот метод возвращает строковое представление типа вершины путем
-   * разбора значения перечисления типа вершины с использованием объекта
-   * настроек, связанного с вершиной
+   * @brief Возвращает строковое представление типа вершины.
    * @return Строковое представление типа вершины.
    */
   std::string getTypeName() const;
@@ -462,8 +452,7 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief setName This method sets the name of the vertex to the
-   * specified string.
+   * @brief Sets vertex name.
    * @param i_name The new name for the vertex.
    * @par Example
    * @code
@@ -474,7 +463,7 @@ public:
    * @endcode
    *
    * \~russian
-   * @brief setName Этот метод устанавливает имя вершины в указанную строку.
+   * @brief Устанавливает имя вершины.
    * @param i_name Новое имя для вершины.
    */
   void setName(std::string_view i_name);
@@ -483,7 +472,7 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief getName Returns the name of the vertex
+   * @brief Returns vertex name.
    * @return The name of the vertex.
    * @par Example
    * @code
@@ -493,7 +482,7 @@ public:
    * @endcode
    *
    * \~russian
-   * @brief getName Возвращает имя вершины
+   * @brief Возвращает имя вершины.
    * @return Имя вершины.
    */
   std::string getName() const;
@@ -524,8 +513,8 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief getRawName Returns string_view object with name of the vertex
-   * @return The string_view object with name of the vertex
+   * @brief Returns vertex name as `std::string_view`.
+   * @return Vertex name as `std::string_view`.
    * @par Example
    * @code
    * GraphVertexBase vertex(VertexTypes::input, "vertex1");
@@ -534,8 +523,8 @@ public:
    * @endcode
    *
    * \~russian
-   * @brief getRawName Возвращает объект string_view с именем вершины
-   * @return Объект string_view с именем вершины
+   * @brief Возвращает имя вершины как `std::string_view`.
+   * @return Имя вершины как `std::string_view`.
    */
   std::string_view getRawName() const;
 
@@ -543,7 +532,7 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief getValue Returns the value of the vertex.
+   * @brief Returns current vertex value.
    * @return The value of the vertex.
    * @par Example
    * @code
@@ -553,7 +542,7 @@ public:
    * @endcode
    *
    * \~russian
-   * @brief getValue Возвращает значение вершины.
+   * @brief Возвращает текущее значение вершины.
    * @return Значение вершины.
    */
   char getValue() const;
@@ -586,7 +575,7 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief getLevel Returns the level of the vertex
+   * @brief Returns vertex level.
    * @return The level of the vertex
    * @par Example
    * @code
@@ -596,7 +585,7 @@ public:
    * @endcode
    *
    * \~russian
-   * @brief getLevel Возвращает уровень вершины
+   * @brief Возвращает уровень вершины.
    * @return Уровень вершины
    */
   uint32_t getLevel() const;
@@ -605,21 +594,14 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief updateLevel
-   * This method updates the level of the vertex based on the levels of its
-   * input connections. It iterates through each input connection and sets
-   * the vertex level to the maximum level of its input connections plus
-   * one. If you are going to call this method for a second time, please,
-   * set all flags, used in updateLevel to their default state.
+   * @brief Recalculates vertex level from input connections.
+   * The level becomes `max(input levels) + 1`.
+   * Before repeated calls, reset state flags used by level traversal.
    *
    * \~russian
-   * @brief updateLevel
-   * Этот метод обновляет уровень вершины на основе уровней ее
-   * входных соединений. Он итерируется по каждому входному соединению и
-   * устанавливает уровень вершины равным максимальному уровню ее входных
-   * соединений плюс один. Если вы собираетесь вызвать этот метод во второй
-   * раз, пожалуйста, установите все флаги, используемые в updateLevel,
-   * в их состояние по умолчанию.
+   * @brief Пересчитывает уровень вершины по входным соединениям.
+   * Уровень становится равным `max(уровни входов) + 1`.
+   * Перед повторным вызовом сбросьте служебные флаги обхода по уровням.
    */
   virtual void updateLevel();
 
@@ -655,10 +637,8 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief getGate
-   * Returns the type of the basic logic gate represented by this vertex. If
-   * the vertex does not correspond to any basic logic gate, it returns Gate
-   * Default
+   * @brief Returns logic gate type represented by this vertex.
+   * If the vertex is not a gate, returns `Gates::GateDefault`.
    * @return The type of the basic logic gate represented by this vertex
    * @par Example
    * @code
@@ -667,10 +647,8 @@ public:
    * @endcode
    *
    * \~russian
-   * @brief getGate
-   * Возвращает тип базового логического вентиля, представленного этой
-   * вершиной. Если вершина не соответствует ни одному базовому
-   * логическому вентилю, возвращает Gate Default (по умолчанию)
+   * @brief Возвращает тип логического вентиля для вершины.
+   * Если вершина не является вентилем, возвращает `Gates::GateDefault`.
    * @return Тип базового логического вентиля, представленного этой вершиной
    */
   virtual Gates getGate() const { return Gates::GateDefault; }
@@ -679,13 +657,12 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief getBaseGraph
-   * @return a weak pointer to the base graph associated with this vertex.
+   * @brief Returns weak pointer to owning graph.
+   * @return Weak pointer to graph associated with this vertex.
    *
    * \~russian
-   * @brief getBaseGraph
-   * @return слабый указатель (weak pointer) на базовый граф, связанный с
-   * этой вершиной.
+   * @brief Возвращает слабый указатель на граф-владелец.
+   * @return Слабый указатель на граф, связанный с этой вершиной.
    */
   GraphPtrWeak getBaseGraph() const;
 
@@ -734,33 +711,25 @@ public:
    *
    * \~english
    * @brief getInConnections
-   * @return A vector of weak pointers to the input connections of this
-   * vertex
+   * @return Vector of pointers to this vertex's input connections.
    * @par Example
    * @code
-   * // Creating an instance of the GraphVertexBase class
-   * GraphVertexBase vertex(VertexTypes::input, "vertex1");
-   * // Get the vector of the input connections of this vertex
-   * std::pmr::vector<VertexPtr>& inConnections = vertex.getInConnections();
-   * // Iterate over the input connections and do something with them
-   * for (const auto& connection : inConnections)
-   * {
-   * // Checking if the connection is valid
-   * if (!connection.expired())
-   * {
-   * // Getting shared_ptr from weak_ptr
-   * VertexPtr inputVertex = connection.lock();
-   * if (inputVertex)
-   * {
-   * // Doing something with the input Vertex
-   * }
-   * }
+   * GraphPtr graph = std::make_shared<OrientedGraph>();
+   * VertexPtr input = graph->addInput("input");
+   * VertexPtr gate = graph->addGate(Gates::GateBuf, "buf");
+   * graph->addEdge(input, gate);
+   *
+   * std::vector<VertexPtr> inConnections = gate->getInConnections();
+   * for (VertexPtr connection : inConnections) {
+   *   if (connection != nullptr) {
+   *     std::cout << connection->getName() << std::endl;
+   *   }
    * }
    * @endcode
    *
    * \~russian
    * @brief getInConnections
-   * @return Вектор слабых указателей на входные соединения этой вершины
+   * @return Вектор указателей на входные соединения этой вершины.
    */
   std::vector<VertexPtr> getInConnections() const;
 
@@ -804,8 +773,7 @@ public:
    *
    * \~english
    * @brief getOutConnections
-   * @return A vector of shared pointers to the output connections of this
-   * vertex
+   * @return Vector of pointers to this vertex's output connections.
    * @par Example
    * @code
    * // Creating an instance of the GraphVertexBase class
@@ -827,7 +795,7 @@ public:
    *
    * \~russian
    * @brief getOutConnections
-   * @return Вектор сильных указателей на выходные соединения этой вершины
+   * @return Вектор указателей на выходные соединения этой вершины.
    */
   std::vector<VertexPtr> getOutConnections() const;
 
@@ -867,18 +835,13 @@ public:
    * @return The hash value of the vertex based on its outgoing connections.
    * @par Example
    * @code
-   * // Creating an instance of the GraphVertexBase class
-   * GraphVertexBase vertex(VertexTypes::output, "vertex1");
-   * // Creating two more vertices
-   * VertexPtr vertex2 = std::make_shared<GraphVertexInput>(
-   * VertexTypes::input, "vertex2");
-   * VertexPtr vertex3 = std::make_shared<GraphVertexInput>(
-   * VertexTypes::input, "vertex3");
-   * // Adding the second and third vertices to the output connections
-   * vertex.addVertexToOutConnections(vertex2);
-   * vertex.addVertexToOutConnections(vertex3);
-   * // Calculating the hash for the first vertex
-   * std::string hashValue = vertex.calculateHash();
+   * GraphPtr graph = std::make_shared<OrientedGraph>();
+   * VertexPtr vertex = graph->addOutput("out");
+   * VertexPtr vertex2 = graph->addInput("in2");
+   * VertexPtr vertex3 = graph->addInput("in3");
+   * graph->addEdge(vertex, vertex2);
+   * graph->addEdge(vertex, vertex3);
+   * std::string hashValue = std::to_string(vertex->calculateHash());
    * // Output of the result
    * std::cout << "Hash for the first vertex: " << hashValue << std::endl;
    * @endcode
@@ -892,6 +855,15 @@ public:
    */
   virtual size_t calculateHash();
 
+  /**
+   * \~english
+   * @brief Returns input vertex with the smallest bus width.
+   * @return Pointer to minimal-width input vertex.
+   *
+   * \~russian
+   * @brief Возвращает входную вершину с минимальной шириной шины.
+   * @return Указатель на входную вершину с минимальной шириной.
+   */
   VertexPtr minWidthVertex() const;
 
   /**
@@ -972,8 +944,15 @@ public:
   virtual bool isSubgraphBuffer() const { return false; }
   virtual bool
   isBus() const; // или можно сделать метод для получения *ширины* вершины
-  /// @brief log Used for easylogging++
-  /// @param os Stream for easylogging
+  /**
+   * \~english
+   * @brief Log helper for easylogging++.
+   * @param os Output stream for easylogging++.
+   *
+   * \~russian
+   * @brief Вспомогательный метод логирования для easylogging++.
+   * @param os Поток вывода для easylogging++.
+   */
 #ifdef LOGFLAG
   /**
    * @author Vladimir Zunin

@@ -22,9 +22,9 @@
 | Константа | символ значения (`0`, `1`, …) |
 | Вентиль | имя вентиля из `GraphUtils::parseGateToString` (например `and`, `nand`) |
 | Последовательность | `sequential/ff` или `sequential/latch` |
-| Подграф | вершины `subGraph` пропускаются; связи с развёрнутыми подграфами лучше экспортировать через ABCD-форматы |
+| Подграф | вершины `subGraph` пропускаются; связи с развернутыми подграфами лучше экспортировать через ABCD-форматы |
 
-Рёбра — направленные `<edge source="…" target="…"/>`. Подробнее о sequential: [Sequential.md](Sequential.md).
+Ребра — направленные `<edge source="…" target="…"/>`. Подробнее о sequential: [Sequential.md](Sequential.md).
 
 ## PseudoABCD и OpenABCD
 
@@ -49,9 +49,9 @@
 | Выход (только OpenABCD) | 1 |
 | Константа | `100` + значение (`1000`, `1001`, …) |
 | Триггер (ff) | 17 |
-| Защёлка (latch) | 18 |
+| Защелка (latch) | 18 |
 
-При наличии подграфов **PseudoABCD** и **OpenABCD** сначала вызывают `unrollGraph()`. **OpenABCD** дополнительно пропускает узлы BUF/NOT при построении (инверсия учитывается в `num_inverted_predecessors` на рёбрах). **PseudoABCD** использует упрощённые шаблоны узлов и рёбер без `edge_type`.
+При наличии подграфов **PseudoABCD** и **OpenABCD** сначала вызывают `unrollGraph()`. **OpenABCD** дополнительно пропускает узлы BUF/NOT при построении (инверсия учитывается в `num_inverted_predecessors` на ребрах). **PseudoABCD** использует упрощенные шаблоны узлов и ребер без `edge_type`.
 
 ## Связь с Generator
 
@@ -60,7 +60,7 @@
 ## См. также
 
 - [FUNCTIONALITY.md](FUNCTIONALITY.md) — обзор возможностей  
-- [Subgraphs.md](Subgraphs.md) — иерархия и развёртывание  
+- [Subgraphs.md](Subgraphs.md) — иерархия и развертывание  
 - [BUILDING.md](BUILDING.md) — сборка и каталог `examples/` (программы `example_export_graphml_*`)
 
 **English:** [GraphML.md](../en/GraphML.md)

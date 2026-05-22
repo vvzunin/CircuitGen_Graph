@@ -34,7 +34,7 @@ auto ctx = CG_Graph::OrientedGraph::readVerilog("/path/to/module.v");
 
 1. Открывается файл; парсер ищет первое ключевое слово `module`.
 2. Вызывается `lorina::read_verilog` с экземпляром `GraphReader`.
-3. При `parse_error` выбрасывается `std::runtime_error`; при отсутствии файла — сообщение с путём.
+3. При `parse_error` выбрасывается `std::runtime_error`; при отсутствии файла — сообщение с путем.
 
 `GraphReader` реализует колбэки: заголовок модуля, `input`/`output`/`wire`, `parameter`, `assign`, инстанцирование и др. (см. заголовок и `src/GraphReader.cpp`).
 

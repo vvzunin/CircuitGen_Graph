@@ -66,6 +66,17 @@ public:
    * иначе `nullptr`.
    */
   static GraphVertexBus *getBusPointer(VertexPtr i_vertex);
+  /**
+   * \~english
+   * @brief Const overload of bus pointer extractor.
+   * @param i_vertex Pointer to a graph vertex.
+   * @return Const pointer to GraphVertexBus if available, otherwise `nullptr`.
+   *
+   * \~russian
+   * @brief Константная перегрузка получения указателя на шину.
+   * @param i_vertex Указатель на вершину графа.
+   * @return Константный указатель на GraphVertexBus либо `nullptr`.
+   */
   static const GraphVertexBus *getBusPointer(const VertexPtr i_vertex);
 
   /**
@@ -144,6 +155,15 @@ public:
   virtual void updateValueBus(std::string i_value = "");
 
 private:
+  /**
+   * \~english
+   * @brief Sets bus width.
+   * @param i_width New width value.
+   *
+   * \~russian
+   * @brief Устанавливает ширину шины.
+   * @param i_width Новое значение ширины.
+   */
   void setWidth(size_t i_width);
   std::string d_value;
   size_t d_width;

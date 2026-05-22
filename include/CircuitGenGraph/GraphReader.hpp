@@ -15,16 +15,24 @@ namespace CG_Graph {
 class OrientedGraph;
 class GraphVertexBase;
 
+/**
+ * \~english
+ * @brief Parsing context shared across Verilog modules.
+ * @param d_currentTopName Name of the current top module.
+ * @param d_graphs Already parsed module graphs.
+ * @param d_currentGraph Graph currently being built.
+ * @param d_currentGraphNamesList Fast lookup by vertex name.
+ * @param d_numberOfVertices Hint for upfront memory reservation.
+ *
+ * \~russian
+ * @brief Контекст разбора, общий для Verilog-модулей.
+ * @param d_currentTopName Имя текущего верхнего модуля.
+ * @param d_graphs Уже распарсенные графы модулей.
+ * @param d_currentGraph Граф, который сейчас строится.
+ * @param d_currentGraphNamesList Быстрый поиск по имени вершины.
+ * @param d_numberOfVertices Подсказка для предварительного резерва памяти.
+ */
 class Context {
-  /// class Context contains information used for parsing each graph
-  /// and provides possibility to parse module, if it's submodules
-  /// locates in several files (not ready yet)
-  /// @param d_currentTopName name of top module in operation of
-  /// reading module with instantiation of other modules
-  /// @param d_graphs contains all already parsed modules
-  /// @param d_currentGraph storage for graph while it is creating
-  /// @param d_currentGraphNamesList using for fast search vertices by name
-  /// @param d_numberOfVertices using to reserve memory at the beginning of
 public:
   Context() = default;
   std::string d_currentTopName;
@@ -34,13 +42,18 @@ public:
   size_t d_numberOfVertices;
 };
 
+/**
+ * \~english
+ * @brief Verilog reader adapter that builds `OrientedGraph` via lorina
+ * callbacks.
+ * @param d_context Shared parse context (@see Context).
+ *
+ * \~russian
+ * @brief Адаптер чтения Verilog, строящий `OrientedGraph` через callbacks
+ * lorina.
+ * @param d_context Общий контекст разбора (@see Context).
+ */
 class GraphReader final : public lorina::verilog_reader {
-  /// @file GraphReader.hpp
-  /// class GraphReader using for parsing a object of class OrientedGraph from
-  /// verilog file by module "lorina". Library calls methods from that class,
-  /// which overrides virtual methods of verilog_reader.
-  /// @param d_context @see Context
-  /// */
 public:
   GraphReader(Context &i_context);
   /*! \brief Callback method for parsed module.
@@ -87,13 +100,19 @@ public:
   void on_parameter(const std::string &name,
                     const std::string &value) const override;
 
-  /// @brief This method is used to find or create valid vertex by
-  /// name and inversion parameter provided by lorina
-  /// @param i_name name of verilog variable
-  /// @param i_isInverted method returns (creates if it is not exist yet)
-  /// an inversion of given variable if the
-  /// parameter = true and original vertex otherwise
-  /// @return pointer for requested vertex
+  /**
+   * \~english
+   * @brief Finds or creates a vertex by name and optional inversion flag.
+   * @param i_name Verilog signal name.
+   * @param i_isInverted If true, returns/creates inverted signal vertex.
+   * @return Pointer to requested vertex.
+   *
+   * \~russian
+   * @brief Находит или создает вершину по имени и флагу инверсии.
+   * @param i_name Имя Verilog-сигнала.
+   * @param i_isInverted Если true, возвращает/создает инверсную вершину.
+   * @return Указатель на требуемую вершину.
+   */
   VertexPtr get_vertex_by_name(const std::string &i_name,
                                bool i_isInverted = false) const;
   VertexPtr get_or_create_inversion(const std::string &i_name,
@@ -107,17 +126,33 @@ public:
   void on_assign(const std::string &lhs,
                  const std::pair<std::string, bool> &rhs) const override;
 
-  /// @brief This method is used to create all types of gates by provided
-  /// Gates gateType and connect it with its input signals
-  /// @param i_lhs name of gate that will be defined
-  /// @param i_op1, i_op2 input signals of the gate
+  /**
+   * \~english
+   * @brief Creates a gate of requested type and connects its inputs.
+   * @param i_lhs Name of gate output signal.
+   * @param i_op1 First input signal.
+   * @param i_op2 Second input signal.
+   *
+   * \~russian
+   * @brief Создает вентиль заданного типа и подключает его входы.
+   * @param i_lhs Имя выходного сигнала вентиля.
+   * @param i_op1 Первый входной сигнал.
+   * @param i_op2 Второй входной сигнал.
+   */
   void on_elem(const std::string &i_lhs,
                const std::pair<std::string, bool> &i_op1,
                const std::pair<std::string, bool> &i_op2,
                Gates i_gateType) const;
 
-  /// @brief @see on_elem
-  /// @param i_op3 also input signals of the gate
+  /**
+   * \~english
+   * @brief Variant of @ref on_elem for three-input gates.
+   * @param i_op3 Third input signal.
+   *
+   * \~russian
+   * @brief Вариант @ref on_elem для вентилей с тремя входами.
+   * @param i_op3 Третий входной сигнал.
+   */
   void on_elem3(const std::string &i_lhs,
                 const std::pair<std::string, bool> &i_op1,
                 const std::pair<std::string, bool> &i_op2,
@@ -229,6 +264,13 @@ public:
                const std::pair<std::string, bool> &op2,
                const std::pair<std::string, bool> &op3) const override;
 
+  /**
+   * \~english
+   * @brief Callback invoked at end of current module.
+   *
+   * \~russian
+   * @brief Callback, вызываемый при завершении текущего модуля.
+   */
   void on_endmodule() const override;
 
   VertexPtr getRightHS(const std::string &i_name,

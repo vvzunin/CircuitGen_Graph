@@ -21,14 +21,14 @@
 ### Changed
 
 - Единое логирование через макросы `CG_LOG_*` и **easylogging++**.
-- Полный перевод `docs/en/Sequential.md`; уточнён порядок сигналов для `affre`.
+- Полный перевод `docs/en/Sequential.md`; уточнен порядок сигналов для `affre`.
 - Устаревшие `docs/HACKING.md` и `docs/BUILDING.md` заменены редиректами на `docs/ru|en/`.
-- Журнал изменений перенесён в `docs/ru|en/CHANGELOG.md`.
+- Журнал изменений перенесен в `docs/ru|en/CHANGELOG.md`.
 
 ### Fixed
 
 - Вывод `parameter` / `localparam` при генерации Verilog иерархических модулей.
-- CI/docs: деплой на NAS (Auth v3, учётные данные, пути DSM).
+- CI/docs: деплой на NAS (Auth v3, учетные данные, пути DSM).
 - Тесты testbench: уникальные временные файлы; покрытие и загрузка **fmt**.
 - Документация GraphML/Subgraphs: фактическое поведение Classic GraphML и `unrollGraph()`.
 
@@ -47,7 +47,7 @@
 
 - Крупный рефакторинг CMake, GitLab CI (мульти-ОС), скриптов сборки и `docs/`.
 - Синхронизация `BUILDING.md` с репозиториями Generator и Parameters.
-- Усиление надёжности CI: кэш, повторное использование Docker-образов, таймауты.
+- Усиление надежности CI: кэш, повторное использование Docker-образов, таймауты.
 
 ### Fixed
 
@@ -128,7 +128,7 @@
 
 ### Added
 
-- Резервирование памяти для графа, вершин и рёбер (`reserve`, `reserveInConnections` / `reserveOutConnections`).
+- Резервирование памяти для графа, вершин и ребер (`reserve`, `reserveInConnections` / `reserveOutConnections`).
 - Метод `getVerticesByLevel`.
 - Миграция на расширенную систему тестов; `Dockerfile`.
 
@@ -147,7 +147,7 @@
 
 ### Changed
 
-- Пространства имён и структура CMake.
+- Пространства имен и структура CMake.
 
 ### Fixed
 
@@ -178,7 +178,7 @@
 ### Added
 
 - Интеграция clang-tidy в сборку.
-- Обновление расчёта уровней и хеша графа.
+- Обновление расчета уровней и хеша графа.
 
 ### Changed
 
