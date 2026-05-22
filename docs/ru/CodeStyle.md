@@ -55,4 +55,77 @@
 double divide(double i_dividend, double i_divisor);
 ```
 
+## Подробные примеры документирования
+
+### Полное описание класса
+
+```hpp
+/// @brief Граф.
+/// @details Пример структуры класса для Doxygen-описания.
+class Graph
+{
+private:
+  int d_verticesCount;
+  std::vector<std::vector<int>> d_adj;
+
+public:
+  /// @brief Создает граф с заданным числом вершин.
+  /// @param i_verticesCount Количество вершин.
+  explicit Graph(int i_verticesCount)
+      : d_verticesCount(i_verticesCount), d_adj(i_verticesCount)
+  {
+  }
+
+  /// @brief Добавляет ребро.
+  /// @param i_from Начальная вершина.
+  /// @param i_to Конечная вершина.
+  void addEdge(int i_from, int i_to);
+};
+```
+
+### Полное описание функции с `@code`
+
+```hpp
+#include <stdexcept>
+
+/// @brief Делит два числа.
+/// @param i_dividend Делимое.
+/// @param i_divisor Делитель.
+/// @return Частное.
+/// @code
+/// double result = divide(10.0, 2.0); // 5.0
+/// @endcode
+/// @throw std::runtime_error Если делитель равен нулю.
+double divide(double i_dividend, double i_divisor)
+{
+  if (i_divisor == 0.0)
+  {
+    throw std::runtime_error("Division by zero");
+  }
+  return i_dividend / i_divisor;
+}
+```
+
+### Пример enum с комментариями значений
+
+```hpp
+/// @brief Типы вершин графа.
+enum class VertexType
+{
+  Input,    ///< Вход схемы.
+  Output,   ///< Выход схемы.
+  Constant, ///< Константа.
+  Gate,     ///< Логический элемент.
+  SubGraph  ///< Подграф.
+};
+```
+
+### Пример перекрестной ссылки
+
+```hpp
+/// @brief Строит топологический порядок.
+/// @see Graph::addEdge
+void buildTopologicalOrder();
+```
+
 **English:** [CodeStyle.md](../en/CodeStyle.md)
