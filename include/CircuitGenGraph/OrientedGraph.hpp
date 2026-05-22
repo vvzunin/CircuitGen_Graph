@@ -1,5 +1,10 @@
 /**
  * @file OrientedGraph.hpp
+ * \~english
+ * @brief Directed circuit graph: vertices, edges, and export to
+ * Verilog/DOT/GraphML.
+ *
+ * \~russian
  * @brief Ориентированный граф схемы: вершины, связи, экспорт в
  * Verilog/DOT/GraphML.
  * @author Vladimir Zunin
@@ -119,8 +124,13 @@ public:
                 size_t chunk_size = CHUNK_SIZE);
 
   /**
-   * @brief Initializes logging system.
-   * @param i_configPath Path to easylogging++.conf file.
+   * \~english
+   * @brief Initializes the logging system.
+   * @param i_configPath Path to the easylogging++.conf file.
+   *
+   * \~russian
+   * @brief Инициализирует систему логирования.
+   * @param i_configPath Путь к файлу easylogging++.conf.
    */
   static void
   initLogging(const std::string &i_configPath = "easylogging++.conf");
@@ -1577,27 +1587,46 @@ private:
                                      std::ofstream &i_fileStream);
 
   /**
-   * @brief This method is a stage of generating verilog output by toVerilog()
-   * toVerilogBusEnabled() or toVerilogSeparateVariables().
-   * @param i_graph graph for output
-   * @param i_fileStream output stream
+   * \~english
+   * @brief Stage of Verilog generation for `toVerilog()`,
+   * `toVerilogBusEnabled()`, and `toVerilogSeparateVariables()`.
+   * @param i_graph Graph to be exported.
+   * @param i_fileStream Output stream.
    *
-   * @param i_path path for output verilog file
-   * @param i_filename file name
-   *@return true if file created correctly, false otherwise
+   * @param i_path Path for the output Verilog file.
+   * @param i_filename File name.
+   * @return `true` if the file was created correctly, `false` otherwise.
+   *
+   * \~russian
+   * @brief Этап генерации Verilog для `toVerilog()`,
+   * `toVerilogBusEnabled()` и `toVerilogSeparateVariables()`.
+   * @param i_graph Граф для экспорта.
+   * @param i_fileStream Поток вывода.
+   * @param i_path Путь к выходному Verilog-файлу.
+   * @param i_filename Имя файла.
+   * @return `true`, если файл создан корректно, иначе `false`.
    */
   static bool verilogFileCreating(GraphPtr i_graph, std::string i_path,
                                   std::string i_filename,
                                   std::ofstream &i_fileStream);
 
   /**
-   * @brief The method is a stage of generating verilog output by toVerilog()
-   * toVerilogBusEnabled() or toVerilogSeparateVariables().
-   * @param i_graph graph for output
-   * @param i_fileStream output stream
+   * \~english
+   * @brief Stage of Verilog generation for `toVerilog()`,
+   * `toVerilogBusEnabled()`, and `toVerilogSeparateVariables()`.
+   * @param i_graph Graph to be exported.
+   * @param i_fileStream Output stream.
    *
-   * @param i_printPin function, defined in toVerilog..(), print correct
-   * name of vertex to i_fileStream
+   * @param i_printPin Function defined in `toVerilog*()` that prints
+   * the correct pin/vertex name to `i_fileStream`.
+   *
+   * \~russian
+   * @brief Этап генерации Verilog для `toVerilog()`,
+   * `toVerilogBusEnabled()` и `toVerilogSeparateVariables()`.
+   * @param i_graph Граф для экспорта.
+   * @param i_fileStream Поток вывода.
+   * @param i_printPin Функция из `toVerilog*()`, печатающая корректное
+   * имя пина/вершины в `i_fileStream`.
    *
    */
   static void verilogInoutsWriting(GraphPtr i_graph,
@@ -1605,13 +1634,23 @@ private:
                                    std::function<void(VertexPtr)> i_printPin);
 
   /**
-   * @brief The method is a stage of generating verilog output by toVerilog()
-   * toVerilogBusEnabled() or toVerilogSeparateVariables().
-   * @param i_graph graph for output
-   * @param i_fileStream output stream
+   * \~english
+   * @brief Stage of Verilog generation for `toVerilog()`,
+   * `toVerilogBusEnabled()`, and `toVerilogSeparateVariables()`.
+   * @param i_graph Graph to be exported.
+   * @param i_fileStream Output stream.
    *
-   * @param i_printFunction function, defined in toVerilog..(), print all
-   * vertices of type (i_usedType from VertexTypes) to i_fileStream
+   * @param i_printFunction Function defined in `toVerilog*()` that prints all
+   * vertices of requested type (`i_usedType` from `VertexTypes`) to
+   * `i_fileStream`.
+   *
+   * \~russian
+   * @brief Этап генерации Verilog для `toVerilog()`,
+   * `toVerilogBusEnabled()` и `toVerilogSeparateVariables()`.
+   * @param i_graph Граф для экспорта.
+   * @param i_fileStream Поток вывода.
+   * @param i_printFunction Функция из `toVerilog*()`, печатающая все вершины
+   * заданного типа (`i_usedType` из `VertexTypes`) в `i_fileStream`.
    */
   static void
   verilogVerticesDeclaration(GraphPtr i_graph, std::ofstream &i_fileStream,
@@ -1620,13 +1659,22 @@ private:
                                  i_printFunction);
 
   /**
-   * @brief The method is a stage of generating verilog output by toVerilog()
-   * toVerilogBusEnabled() or toVerilogSeparateVariables().
-   * @param i_graph graph for output
-   * @param i_fileStream output stream
+   * \~english
+   * @brief Stage of Verilog generation for `toVerilog()`,
+   * `toVerilogBusEnabled()`, and `toVerilogSeparateVariables()`.
+   * @param i_graph Graph to be exported.
+   * @param i_fileStream Output stream.
    *
-   * @param i_getInstance function, defined in toVerilog..(),
-   * print correct constant instance to i_fileStream
+   * @param i_getInstance Function defined in `toVerilog*()` that prints
+   * a constant instance to `i_fileStream`.
+   *
+   * \~russian
+   * @brief Этап генерации Verilog для `toVerilog()`,
+   * `toVerilogBusEnabled()` и `toVerilogSeparateVariables()`.
+   * @param i_graph Граф для экспорта.
+   * @param i_fileStream Поток вывода.
+   * @param i_getInstance Функция из `toVerilog*()`, печатающая корректный
+   * инстанс константы в `i_fileStream`.
    */
   static void
   verilogConstantWriting(GraphPtr i_graph, std::ofstream &i_fileStream,
@@ -1634,26 +1682,44 @@ private:
                          std::function<void(VertexPtr)> i_getDefinition);
 
   /**
-   * @brief The method is a stage of generating verilog output by toVerilog()
-   * toVerilogBusEnabled() or toVerilogSeparateVariables().
-   * @param i_graph graph for output
-   * @param i_fileStream output stream
+   * \~english
+   * @brief Stage of Verilog generation for `toVerilog()`,
+   * `toVerilogBusEnabled()`, and `toVerilogSeparateVariables()`.
+   * @param i_graph Graph to be exported.
+   * @param i_fileStream Output stream.
    *
-   * @param i_path path to create verilog files for subgraphs
-   * @return true if all files created correctly, false otherwise
+   * @param i_path Path where Verilog files for subgraphs are created.
+   * @return `true` if all files were created correctly, `false` otherwise.
+   *
+   * \~russian
+   * @brief Этап генерации Verilog для `toVerilog()`,
+   * `toVerilogBusEnabled()` и `toVerilogSeparateVariables()`.
+   * @param i_graph Граф для экспорта.
+   * @param i_fileStream Поток вывода.
+   * @param i_path Путь для создания Verilog-файлов подграфов.
+   * @return `true`, если все файлы созданы корректно, иначе `false`.
    */
   static bool verilogSubgraphWriting(GraphPtr i_graph,
                                      std::ofstream &i_fileStream,
                                      std::string i_path);
 
   /**
-   * @brief The method is a stage of generating verilog output by toVerilog()
-   * toVerilogBusEnabled() or toVerilogSeparateVariables().
-   * @param i_graph graph for output
-   * @param i_fileStream output stream
+   * \~english
+   * @brief Stage of Verilog generation for `toVerilog()`,
+   * `toVerilogBusEnabled()`, and `toVerilogSeparateVariables()`.
+   * @param i_graph Graph to be exported.
+   * @param i_fileStream Output stream.
    *
-   * @param i_printDefinition function, defined in toVerilog..(),
-   * print correct definitions to i_fileStream
+   * @param i_printDefinition Function defined in `toVerilog*()` that prints
+   * correct definitions to `i_fileStream`.
+   *
+   * \~russian
+   * @brief Этап генерации Verilog для `toVerilog()`,
+   * `toVerilogBusEnabled()` и `toVerilogSeparateVariables()`.
+   * @param i_graph Граф для экспорта.
+   * @param i_fileStream Поток вывода.
+   * @param i_printDefinition Функция из `toVerilog*()`, печатающая
+   * корректные определения в `i_fileStream`.
    */
   static void verilogVerticesDefining(
       GraphPtr i_graph, std::ofstream &i_fileStream,
@@ -1661,12 +1727,20 @@ private:
       std::function<void(const VertexPtr)> i_printDefinitionGates);
 
   /**
-   * @brief The method is a stage of generating verilog output by toVerilog()
-   * toVerilogBusEnabled() or toVerilogSeparateVariables().
-   * @param i_graph graph for output
-   * @param i_fileStream output stream
+   * \~english
+   * @brief Final stage of Verilog generation for `toVerilog()`,
+   * `toVerilogBusEnabled()`, and `toVerilogSeparateVariables()`.
+   * @param i_graph Graph to be exported.
+   * @param i_fileStream Output stream.
    *
-   * @return true if file saved correctly, false otherwise
+   * @return `true` if the file was saved correctly, `false` otherwise.
+   *
+   * \~russian
+   * @brief Финальный этап генерации Verilog для `toVerilog()`,
+   * `toVerilogBusEnabled()` и `toVerilogSeparateVariables()`.
+   * @param i_graph Граф для экспорта.
+   * @param i_fileStream Поток вывода.
+   * @return `true`, если файл сохранен корректно, иначе `false`.
    */
   static bool verilogFinalOperations(GraphPtr i_graph,
                                      std::ofstream &i_fileStream);

@@ -1,5 +1,11 @@
 /**
  * @file GraphVertex.hpp
+ * \~english
+ * @brief Graph vertex declarations: GraphVertexInput, GraphVertexOutput,
+ * GraphVertexGates, GraphVertexConstant, GraphVertexSubGraph,
+ * GraphVertexSequential.
+ *
+ * \~russian
  * @brief Объявления вершин графа: GraphVertexInput, GraphVertexOutput,
  * GraphVertexGates, GraphVertexConstant, GraphVertexSubGraph,
  * GraphVertexSequential.

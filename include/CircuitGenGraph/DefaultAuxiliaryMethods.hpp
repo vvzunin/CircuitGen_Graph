@@ -1,5 +1,10 @@
 /**
  * @file DefaultAuxiliaryMethods.hpp
+ * \~english
+ * @brief Auxiliary methods: AuxMethodsGraph (replacer, dotReturnToString,
+ * TuplePrinter).
+ *
+ * \~russian
  * @brief Вспомогательные методы: AuxMethodsGraph (replacer, dotReturnToString,
  * TuplePrinter).
  * @author Vladimir Zunin

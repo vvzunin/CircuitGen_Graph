@@ -1090,7 +1090,11 @@ static_assert(sizeof(GraphVertexBase) <= 104u);
 
 /**
  * @author Fuuulkrum7
- * @brief Operator overloader for string conversion
+ * \~english
+ * @brief Stream output operator for string conversion.
+ *
+ * \~russian
+ * @brief Перегрузка оператора вывода в поток для строкового представления.
  */
 std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex);
 
