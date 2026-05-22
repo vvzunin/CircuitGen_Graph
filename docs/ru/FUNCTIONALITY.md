@@ -61,7 +61,7 @@ Graph — это ядро модели данных для генерации и
 
 - CMake 3.26+, C++17, пресеты `dev`, `release-ci` и др.
 - Статическая/разделяемая библиотека `CircuitGenGraph`, опционально примеры (`examples/`) и тесты (`test/`).
-- Документация: Doxygen (HTML/PDF, ru/en), публикация на Synology NAS из CI (`scripts/docs/deploy-synology.sh`).
+- Документация: Doxygen (HTML/PDF, ru/en). Задание CI **`docs`** публикует на общий портал Synology NAS: актуальная ветка **`versions/main/`**, снимки по тегам **`versions/<tag>/`**, слияние `manifest.json` и `versions.json` ([DEPLOY.md](DEPLOY.md)).
 
 ## Зависимости
 

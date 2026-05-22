@@ -61,7 +61,7 @@ Graph is the data-model core for circuit generation and analysis. A design is an
 
 - CMake 3.26+, C++17, presets `dev`, `release-ci`, etc.
 - Static/shared library `CircuitGenGraph`; optional `examples/` and `test/`.
-- Docs: Doxygen (HTML/PDF, ru/en), Synology NAS deploy from CI (`scripts/docs/deploy-synology.sh`).
+- Docs: Doxygen (HTML/PDF, ru/en). CI job **`docs`** publishes to a shared portal on Synology NAS: rolling **`versions/main/`**, frozen **`versions/<tag>/`**, merged `manifest.json` and `versions.json` ([DEPLOY.md](DEPLOY.md)).
 
 ## Dependencies
 

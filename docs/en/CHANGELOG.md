@@ -12,7 +12,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 - Verilog import into the graph (`GraphReader`, `OrientedGraph::readVerilog`, **lorina** submodule).
 - External Verilog file binding for subgraph vertices; `parameter` / `localparam` parsing.
-- Synology NAS documentation deploy from CI.
+- Synology NAS documentation deploy from CI: shared portal, `manifest.json` schema v2, multi-version trees (`versions/main/`, `versions/<tag>/`).
+- `scripts/docs/` deploy toolkit (`versions-index.sh`, `manifest-merge.sh`, `modules-registry.json`, portal UI); `scripts/ci/test_deploy_mock.sh`.
 - Topic guides: GraphML, Verilog import, subgraphs, TestbenchGenerator (ru/en).
 - Documentation index entries for `FUNCTIONALITY`, `Sequential`, `MEMORY_MANAGEMENT`, and new guides.
 - Functionality overview in `docs/ru|en/FUNCTIONALITY.md`.
@@ -28,7 +29,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ### Fixed
 
 - `parameter` / `localparam` emission in hierarchical Verilog generation.
-- CI/docs: NAS deploy (Auth v3, credentials, DSM volume paths).
+- CI/docs: NAS deploy (Auth v3, credentials, DSM paths); manifest merge across parallel module pipelines; portal language toggle without duplicate cards; `versions.json` built from all staged channels.
 - Testbench tests: unique temp files; coverage and **fmt** fetch.
 - GraphML/Subgraphs docs aligned with Classic GraphML behavior and `unrollGraph()`.
 

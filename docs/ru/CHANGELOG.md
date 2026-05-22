@@ -12,7 +12,8 @@
 
 - Импорт Verilog в граф (`GraphReader`, `OrientedGraph::readVerilog`, подмодуль **lorina**).
 - Внешний Verilog-файл для вершин подграфа; разбор `parameter` / `localparam`.
-- Публикация собранной документации на Synology NAS из CI.
+- Публикация документации на Synology NAS из CI: общий портал, `manifest.json` схема v2, деревья версий (`versions/main/`, `versions/<tag>/`).
+- Набор скриптов `scripts/docs/` (`versions-index.sh`, `manifest-merge.sh`, `modules-registry.json`, UI портала); `scripts/ci/test_deploy_mock.sh`.
 - Тематические руководства: GraphML, импорт Verilog, подграфы, TestbenchGenerator (ru/en).
 - Оглавления документации: `FUNCTIONALITY`, `Sequential`, `MEMORY_MANAGEMENT`, новые гайды.
 - Обзор функционала в `docs/ru|en/FUNCTIONALITY.md`.
@@ -28,7 +29,7 @@
 ### Fixed
 
 - Вывод `parameter` / `localparam` при генерации Verilog иерархических модулей.
-- CI/docs: деплой на NAS (Auth v3, учетные данные, пути DSM).
+- CI/docs: деплой на NAS (Auth v3, учётные данные, пути DSM); слияние manifest при параллельном CI модулей; переключение языка портала без дублирования карточек; `versions.json` из всех каналов в стадии.
 - Тесты testbench: уникальные временные файлы; покрытие и загрузка **fmt**.
 - Документация GraphML/Subgraphs: фактическое поведение Classic GraphML и `unrollGraph()`.
 
