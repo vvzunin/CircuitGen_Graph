@@ -2,7 +2,9 @@
 
 **Language:** [Русский](README.md) | English  
 **Documentation:** [Russian](docs/ru/README.md) | [English](docs/en/README.md)  
+**Functionality:** [Russian](docs/ru/FUNCTIONALITY.md) | [English](docs/en/FUNCTIONALITY.md)  
 **Versioning (SemVer):** [Russian](docs/ru/Versioning.md) | [English](docs/en/Versioning.md)  
+**Changelog:** [Russian](docs/ru/CHANGELOG.md) | [English](docs/en/CHANGELOG.md)  
 **Contributing:** [Russian](docs/ru/CONTRIBUTING.md) | [English](docs/en/CONTRIBUTING.md)  
 **Merge requests:** [Russian](docs/ru/MergeRequests.md) | [English](docs/en/MergeRequests.md)
 
@@ -11,7 +13,7 @@
 
 ## Overview
 
-This repository provides **CircuitGenGraph** — an oriented graph library used by the CircuitGen toolchain for representing and manipulating circuit structures. Build with CMake presets; see [BUILDING.md](docs/en/BUILDING.md) and [HACKING.md](docs/en/HACKING.md).
+This repository provides **CircuitGenGraph** — an oriented graph library used by the CircuitGen toolchain for representing and manipulating circuit structures. Build with CMake presets; see [BUILDING.md](docs/en/BUILDING.md) and [HACKING.md](docs/en/HACKING.md). Topic guides: [GraphML](docs/en/GraphML.md), [Verilog import](docs/en/VerilogImport.md), [Subgraphs](docs/en/Subgraphs.md), [Sequential](docs/en/Sequential.md), [Testbench](docs/en/TestbenchGenerator.md), [Memory](docs/en/MEMORY_MANAGEMENT.md).
 
 ### Quick start (local)
 
@@ -26,7 +28,7 @@ Docker image paths for local CI-like builds use the `circuitgen/graph/...` prefi
 
 ## Testbench generation
 
-The library can emit Verilog testbenches for verification. See **[docs/en/BUILDING.md](docs/en/BUILDING.md#tests-and-icarus)** (Russian: [`docs/ru/BUILDING.md`](docs/ru/BUILDING.md#tests-and-icarus)) for the **`example_testbench`** walkthrough, `CTest` / GoogleTest usage, and optional **Icarus Verilog** (`iverilog`) setup.
+The library can emit Verilog testbenches for verification. See **[docs/en/BUILDING.md](docs/en/BUILDING.md#tests-and-icarus)** (Russian: [`docs/ru/BUILDING.md`](docs/ru/BUILDING.md#tests-and-icarus)) and **[TestbenchGenerator.md](docs/en/TestbenchGenerator.md)** for the API, **`example_testbench`**, `CTest` / GoogleTest, and optional **Icarus Verilog** (`iverilog`).
 
 ## Installing dependencies
 

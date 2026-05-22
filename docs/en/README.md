@@ -14,5 +14,12 @@
 | [Versioning.md](Versioning.md) | Semantic versioning (SemVer) for releases |
 | [Format.md](Format.md) | Formatting and style helper |
 | [FUNCTIONALITY.md](FUNCTIONALITY.md) | Repository purpose and main Graph capabilities |
+| [Sequential.md](Sequential.md) | Sequential logic (flip-flops, latches) |
+| [MEMORY_MANAGEMENT.md](MEMORY_MANAGEMENT.md) | Vertex and adjacency memory reservation |
+| [GraphML.md](GraphML.md) | Classic / PseudoABCD / OpenABCD export |
+| [VerilogImport.md](VerilogImport.md) | Verilog import (`GraphReader`, `Context`) |
+| [Subgraphs.md](Subgraphs.md) | Hierarchy, subgraphs, external RTL |
+| [TestbenchGenerator.md](TestbenchGenerator.md) | Verilog testbench generation and Icarus |
+| [CHANGELOG.md](CHANGELOG.md) | Release history (SemVer tags) |
 
 **Русский:** [Документация на русском](../ru/README.md)

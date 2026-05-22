@@ -1,5 +1,10 @@
 /**
  * @file OrientedGraph.hpp
+ * \~english
+ * @brief Directed circuit graph: vertices, edges, and export to
+ * Verilog/DOT/GraphML.
+ *
+ * \~russian
  * @brief Ориентированный граф схемы: вершины, связи, экспорт в
  * Verilog/DOT/GraphML.
  * @author Vladimir Zunin
@@ -121,8 +126,13 @@ public:
                 size_t chunk_size = CHUNK_SIZE);
 
   /**
-   * @brief Initializes logging system.
-   * @param i_configPath Path to easylogging++.conf file.
+   * \~english
+   * @brief Initializes the logging system.
+   * @param i_configPath Path to the easylogging++.conf file.
+   *
+   * \~russian
+   * @brief Инициализирует систему логирования.
+   * @param i_configPath Путь к файлу easylogging++.conf.
    */
   static void
   initLogging(const std::string &i_configPath = "easylogging++.conf");
@@ -279,18 +289,12 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief isEmptyFull It is used to check the emptiness of a graph,
-   * including all its subgraphs. It recursively traverses all the subgraphs
-   * and checks if they are empty
-   * @return bool - true if the graph and all its subgraphs are empty, and
-   * false if at least one of them contains vertice
+   * @brief Checks whether graph and all nested subgraphs are empty.
+   * @return `true` if graph and all subgraphs are empty, otherwise `false`.
    *
    * \~russian
-   * @brief isEmptyFull Используется для проверки пустоты графа,
-   * включая все его подграфы. Рекурсивно обходит все подграфы
-   * и проверяет, пусты ли они
-   * @return bool - true, если граф и все его подграфы пусты, и false,
-   * если хотя бы один из них содержит вершины
+   * @brief Проверяет, пуст ли граф вместе со всеми вложенными подграфами.
+   * @return `true`, если граф и все подграфы пусты, иначе `false`.
    */
   bool isEmptyFull() const;
 
@@ -298,14 +302,12 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief setName Used to set the name of the graph. It takes a string as
-   * an argument and sets the d_name field to this string
-   * @param i_name the new name of the graph
+   * @brief Sets graph name.
+   * @param i_name New graph name.
    *
    * \~russian
-   * @brief setName Используется для установки имени графа. Принимает строку
-   * в качестве аргумента и устанавливает поле d_name в эту строку
-   * @param i_name новое имя графа
+   * @brief Устанавливает имя графа.
+   * @param i_name Новое имя графа.
    */
   void setName(const std::string &i_name);
 
@@ -313,12 +315,12 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief getName Used to get the name of the graph
-   * @return the name of the graph
+   * @brief Returns graph name.
+   * @return Graph name.
    *
    * \~russian
-   * @brief getName Используется для получения имени графа
-   * @return имя графа
+   * @brief Возвращает имя графа.
+   * @return Имя графа.
    */
   std::string getName() const;
 
@@ -363,10 +365,8 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief getMaxLevel
-   * Calculates and returns the maximum level of the output vertices in the
-   * graph
-   * @return maximum level of the output vertices
+   * @brief Returns maximum level among output vertices.
+   * @return Maximum output level.
    * @par Example
    * @code
    * OrientedGraph graph("ExampleGraph");
@@ -378,9 +378,8 @@ public:
    * @endcode
    *
    * \~russian
-   * @brief getMaxLevel
-   * Вычисляет и возвращает максимальный уровень выходных вершин в графе
-   * @return максимальный уровень выходных вершин
+   * @brief Возвращает максимальный уровень среди выходных вершин.
+   * @return Максимальный уровень выходов.
    */
   uint32_t getMaxLevel();
 
@@ -388,10 +387,8 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief setCurrentParent
-   * Sets the current parent graph of the current graph
-   * @param parent A shared pointer to the parent graph to be set as the
-   * current parent
+   * @brief Sets parent graph for current graph instance.
+   * @param parent Shared pointer to parent graph.
    * @par Example
    * @code
    * // Create an instance of OrientedGraph
@@ -404,10 +401,8 @@ public:
    * @endcode
    *
    * \~russian
-   * @brief setCurrentParent
-   * Устанавливает текущий родительский граф для текущего графа
-   * @param parent Shared-указатель на родительский граф, который будет
-   * установлен в качестве текущего родителя
+   * @brief Устанавливает родительский граф для текущего графа.
+   * @param parent Shared-указатель на родительский граф.
    */
   void setCurrentParent(GraphPtr parent);
 
@@ -415,16 +410,13 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief resetCounters
-   * Resets counters associated with a specific graph instance
-   * @param where A shared pointer to the subgraph whose counters need to
-   * be reset
+   * @brief Resets counters for a graph instance.
+   * @param where Shared pointer to graph/subgraph whose counters are reset.
    *
    * \~russian
-   * @brief resetCounters
-   * Сбрасывает счетчики, связанные с конкретным экземпляром графа
-   * @param where Shared-указатель на подграф, счетчики которого
-   * необходимо сбросить
+   * @brief Сбрасывает счетчики конкретного экземпляра графа.
+   * @param where Shared-указатель на граф/подграф, счетчики которого
+   * сбрасываются.
    */
   void resetCounters(GraphPtr where);
 
@@ -432,26 +424,37 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief addInput
-   * Adds an input vertex to the current graph
-   * @param i_name The name of the input vertex to be added
-   * @return A shared pointer to the newly created input vertex
+   * @brief Adds an input vertex to the graph.
+   * @param i_name Input vertex name.
+   * @return Pointer to created input vertex.
    * @par Example
    * @code
    * // Create an instance of OrientedGraph
    * auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
    * // Add an input vertex to the graph
    * auto inputVertex = graph->addInput("Input1");
-   * // Now inputVertex is a shared pointer to the newly added input vertex
+   * // Now inputVertex points to the newly added input vertex
    * @endcode
    *
    * \~russian
-   * @brief addInput
-   * Добавляет входную вершину в текущий граф
-   * @param i_name Имя добавляемой входной вершины
-   * @return Указатель (поинтер) на вновь созданную входную вершину
+   * @brief Добавляет входную вершину в граф.
+   * @param i_name Имя входной вершины.
+   * @return Указатель на созданную входную вершину.
    */
   VertexPtr addInput(const std::string &i_name = "");
+  /**
+   * \~english
+   * @brief Adds a bus input vertex to the current graph.
+   * @param i_name Input bus name.
+   * @param width Bus width.
+   * @return Pointer to created bus input vertex.
+   *
+   * \~russian
+   * @brief Добавляет входную шинную вершину в текущий граф.
+   * @param i_name Имя входной шины.
+   * @param width Ширина шины.
+   * @return Указатель на созданную входную шинную вершину.
+   */
   VertexPtr addInputBus(const std::string &i_name = "", size_t width = 1);
 
   std::vector<VertexPtr> addInputs(size_t i_num);
@@ -461,26 +464,37 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief addOutput
-   * Adds an output vertex to the current graph
-   * @param i_name The name of the output vertex to be added
-   * @return A shared pointer to the newly created output vertex
+   * @brief Adds an output vertex to the graph.
+   * @param i_name Output vertex name.
+   * @return Pointer to created output vertex.
    * @par Example
    * @code
    * // Create an instance of OrientedGraph
    * auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
    * // Add an output vertex to the graph
    * auto outputVertex = graph->addOutput("Output1");
-   * // Now outputVertex is a shared pointer to the newly added output
+   * // Now outputVertex points to the newly added output
    * @endcode
    *
    * \~russian
-   * @brief addOutput
-   * Добавляет выходную вершину в текущий граф
-   * @param i_name Имя добавляемой выходной вершины
-   * @return Указатель на вновь созданную выходную вершину
+   * @brief Добавляет выходную вершину в граф.
+   * @param i_name Имя выходной вершины.
+   * @return Указатель на созданную выходную вершину.
    */
   VertexPtr addOutput(const std::string &i_name = "");
+  /**
+   * \~english
+   * @brief Adds a bus output vertex to the current graph.
+   * @param i_name Output bus name.
+   * @param width Bus width.
+   * @return Pointer to created bus output vertex.
+   *
+   * \~russian
+   * @brief Добавляет выходную шинную вершину в текущий граф.
+   * @param i_name Имя выходной шины.
+   * @param width Ширина шины.
+   * @return Указатель на созданную выходную шинную вершину.
+   */
   VertexPtr addOutputBus(const std::string &i_name = "", size_t width = 1);
 
   std::vector<VertexPtr> addOutputs(size_t i_num);
@@ -490,53 +504,62 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief addConst
-   * Adds a constant vertex to the current graph
-   * @param i_value The value of the constant vertex to be added
-   * @param i_name The name of the constant vertex to be added
-   * @return A shared pointer to the newly created constant vertex
+   * @brief Adds a constant vertex to the graph.
+   * @param i_value Constant literal value.
+   * @param i_name Constant vertex name.
+   * @return Pointer to created constant vertex.
    * @par Example
    * @code
    * // Create an instance of OrientedGraph
    * auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
    * // Add a constant vertex to the graph with value 'A', name "Constant1"
    * auto constantVertex = graph->addConst('A', "Constant1");
-   * // Now constantVertex is a shared pointer to the newly added constant
+   * // Now constantVertex points to the newly added constant
    * @endcode
    *
    * \~russian
-   * @brief addConst
-   * Добавляет константную вершину в текущий граф
-   * @param i_value Значение добавляемой константной вершины
-   * @param i_name Имя добавляемой константной вершины
-   * @return Указатель на вновь созданную константную вершину
+   * @brief Добавляет константную вершину в граф.
+   * @param i_value Значение константы.
+   * @param i_name Имя константной вершины.
+   * @return Указатель на созданную константную вершину.
    */
   VertexPtr addConst(const char &i_value, const std::string &i_name = "");
+  /**
+   * \~english
+   * @brief Adds a bus constant vertex to the current graph.
+   * @param i_name Constant bus name.
+   * @param width Bus width.
+   * @return Pointer to created bus constant vertex.
+   *
+   * \~russian
+   * @brief Добавляет шинную константу в текущий граф.
+   * @param i_name Имя константной шины.
+   * @param width Ширина шины.
+   * @return Указатель на созданную шинную константу.
+   */
   VertexPtr addConstBus(const std::string &i_name = "", size_t width = 1);
   /**
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief addGate
-   * Adds a gate vertex to the current graph
-   * @param i_gate The type of the gate vertex to be added
-   * @param i_name The name of the gate vertex to be added
-   * @return A shared pointer to the newly created gate vertex
+   * @brief Adds a gate vertex to the graph.
+   * @param i_gate Gate type.
+   * @param i_name Gate vertex name.
+   * @return Pointer to created gate vertex.
    * @par Example
    * @code
    * // Create an instance of OrientedGraph
    * auto graph = std::make_shared<OrientedGraph>("ExampleGraph");
    * // Add a gate vertex to the graph with type GateAnd and name "Gate1"
    * auto gateVertex = graph->addGate(Gates::GateAnd, "Gate1");
-   * // Now gateVertex is a shared pointer to the newly added gate vertex
+   * // Now gateVertex points to the newly added gate vertex
    * @endcode
    *
    * \~russian
-   * @brief addGate
-   * Добавляет вершину-вентиль (gate) в текущий граф
-   * @param i_gate Тип добавляемой вершины-вентиля
-   * @param i_name Имя добавляемой вершины-вентиля
-   * @return Указатель на вновь созданную вершину-вентиль
+   * @brief Добавляет вершину-вентиль в граф.
+   * @param i_gate Тип вентиля.
+   * @param i_name Имя вершины-вентиля.
+   * @return Указатель на созданную вершину-вентиль.
    */
   VertexPtr addGate(const Gates &i_gate, const std::string &i_name = "");
   VertexPtr addGateBus(const Gates &i_gate, const std::string &i_name = "",
@@ -547,13 +570,14 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief addSequential Adds a sequential vertex to the current graph.
-   * @param i_type The type of the gsequential to be added; can be
-   * flip-flop (ff) or latch only
-   * @param i_clk Vertex, that is used as clock (or enable for latch)
-   * @param i_data Data vertex, should be written to a reg
-   * @param i_name The name of the gate vertex to be added
-   * @return A shared pointer to the newly created gate vertex
+   * @brief Adds a sequential vertex to the graph.
+   * @note Internal input order for sequential vertices is fixed:
+   * `data`, `clk`, `en`, `rst/clr`, `set`.
+   * @param i_type Sequential element type (`ff` or `latch`).
+   * @param i_clk Clock signal for FF or enable signal for latch.
+   * @param i_data Data input.
+   * @param i_name Name of the created vertex.
+   * @return Pointer to created vertex.
    * @par Example
    * @code
    * // Create an instance of OrientedGraph
@@ -565,14 +589,17 @@ public:
    * @endcode
    *
    * \~russian
-   * @brief addSequential Добавляет последовательностную вершину в граф.
+   * @brief Добавляет последовательностную вершину в граф.
+   * @note Внутренний порядок входов для последовательностной вершины
+   * фиксирован:
+   * `data`, `clk`, `en`, `rst/clr`, `set`.
    * @param i_type Тип добавляемого последовательностного элемента; может
    * быть только триггером (ff) или защелкой (latch)
-   * @param i_clk Вершина, которая используется как синхросигнал (или
-   * enable для защелки)
-   * @param i_data Вершина данных, должна быть записана в регистр
-   * @param i_name Имя добавляемой вершины
-   * @return Указатель на вновь созданную вершину
+   * @param i_clk Сигнал синхронизации для FF или сигнал разрешения для
+   * защелки.
+   * @param i_data Вход данных.
+   * @param i_name Имя создаваемой вершины.
+   * @return Указатель на созданную вершину.
    */
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, const std::string &i_name = "");
@@ -583,15 +610,15 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief addSequential Adds a sequential vertex to the current graph.
-   * @param i_type The type of the gsequential to be added; can be any
-   * type, that need one additional signal.
-   * @param i_clk Vertex, that is used as clock (or enable for latch) EN
-   * for latch and CLK for FF
-   * @param i_data Data vertex, should be written to a reg
-   * @param i_wire RST or CLR or SET or EN (enable only if flip-flop)
-   * @param i_name The name of the gate vertex to be added
-   * @return A shared pointer to the newly created gate vertex
+   * @brief Adds a sequential vertex to the graph.
+   * @param i_type Sequential element type that uses one extra control signal.
+   * @param i_clk Clock signal for FF or enable signal for latch.
+   * @param i_data Data input.
+   * @param i_wire One extra control input: `RST` / `CLR` / `SET` / `EN`
+   * (enable is valid for flip-flops only). The exact role is defined by
+   * `i_type`.
+   * @param i_name Name of the created vertex.
+   * @return Pointer to created vertex.
    * @par Example
    * @code
    * // Create an instance of OrientedGraph
@@ -604,15 +631,17 @@ public:
    * @endcode
    *
    * \~russian
-   * @brief addSequential Добавляет последовательностную вершину в граф.
-   * @param i_type Тип добавляемого последовательностного элемента; может
-   * быть любым типом, требующим один дополнительный сигнал.
-   * @param i_clk Вершина, которая используется как синхросигнал. EN для
-   * защелки и CLK для триггера
-   * @param i_data Вершина данных, должна быть записана в регистр
-   * @param i_wire RST или CLR или SET или EN (enable только для триггера)
-   * @param i_name Имя добавляемой вершины
-   * @return Указатель на вновь созданную вершину
+   * @brief Добавляет последовательностную вершину в граф.
+   * @param i_type Тип последовательностного элемента с одним дополнительным
+   * управляющим сигналом.
+   * @param i_clk Сигнал синхронизации для FF или сигнал разрешения для
+   * защелки.
+   * @param i_data Вход данных.
+   * @param i_wire Один дополнительный управляющий сигнал: `RST` / `CLR` /
+   * `SET` / `EN` (enable допустим только для триггера). Точная роль
+   * определяется `i_type`.
+   * @param i_name Имя создаваемой вершины.
+   * @return Указатель на созданную вершину.
    */
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_wire,
@@ -625,16 +654,18 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief addSequential Adds a sequential vertex to the current graph.
-   * @param i_type The type of the gsequential to be added; can be
-   * flip-flop (ff) or latch only
-   * @param i_clk Vertex, that is used as clock (or enable for latch)
-   * @param i_data Data vertex, should be written to a reg
-   * @param i_wire1 RST or CLR or SET
-   * @param i_wire2 SET (double set is not allowed, for sure) or EN (en for
-   * flip-flop only)
-   * @param i_name The name of the gate vertex to be added
-   * @return A shared pointer to the newly created gate vertex
+   * @brief Adds a sequential vertex to the graph.
+   * @param i_type Sequential element type (`ff` or `latch`).
+   * @param i_clk Clock signal for FF or enable signal for latch.
+   * @param i_data Data input.
+   * @param i_wire1 First extra control input.
+   * @param i_wire2 Second extra control input.
+   * @note For `*re`/`*ce` types (for example `affre`, `nffre`) pass
+   * `EN` first, then `RST/CLR`: `addSequential(type, clk, data, en, rst, ...)`.
+   * This matches the fixed internal order `data`, `clk`, `en`, `rst/clr`,
+   * `set`.
+   * @param i_name Name of the created vertex.
+   * @return Pointer to created vertex.
    * @par Example
    * @code
    * // Create an instance of OrientedGraph
@@ -648,17 +679,21 @@ public:
    * @endcode
    *
    * \~russian
-   * @brief addSequential Добавляет последовательностную вершину в граф.
+   * @brief Добавляет последовательностную вершину в граф.
    * @param i_type Тип добавляемого последовательностного элемента; может
    * быть только триггером (ff) или защелкой
-   * @param i_clk Вершина, которая используется как синхросигнал (или
-   * enable для защелки)
-   * @param i_data Вершина данных, должна быть записана в регистр
-   * @param i_wire1 RST или CLR или SET
-   * @param i_wire2 SET (двойной set не допускается) или EN (en только
-   * для триггера)
-   * @param i_name Имя добавляемой вершины
-   * @return Указатель на вновь созданную вершину
+   * @param i_clk Сигнал синхронизации для FF или сигнал разрешения для
+   * защелки.
+   * @param i_data Вход данных.
+   * @param i_wire1 Первый дополнительный управляющий сигнал.
+   * @param i_wire2 Второй дополнительный управляющий сигнал.
+   * @note Для типов `*re`/`*ce` (например `affre`, `nffre`) передавайте
+   * сначала `EN`, затем `RST/CLR`:
+   * `addSequential(type, clk, data, en, rst, ...)`.
+   * Это соответствует фиксированному внутреннему порядку
+   * `data`, `clk`, `en`, `rst/clr`, `set`.
+   * @param i_name Имя создаваемой вершины.
+   * @return Указатель на созданную вершину.
    */
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_wire1,
@@ -671,16 +706,18 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief addSequential Adds a sequential vertex to the current graph.
+   * @brief Adds a sequential vertex to the graph.
    * Use with FF only!
-   * @param i_type The type of the gsequential to be added
+   * @param i_type Sequential element type.
    * @param i_clk CLK signal
-   * @param i_data what to write, D
+   * @param i_data Data input (`D`).
    * @param i_rst RST (or CLR) signal
    * @param i_set SET signal
    * @param i_en EN signal
-   * @param i_name The name of the gate vertex to be added
-   * @return A shared pointer to the newly created gate vertex
+   * @note For this overload, caller order is `(rst, set, en)`, while
+   * internal connection order remains `data`, `clk`, `en`, `rst/clr`, `set`.
+   * @param i_name Name of the created vertex.
+   * @return Pointer to created vertex.
    * @par Example
    * @code
    * // Create an instance of OrientedGraph
@@ -695,16 +732,19 @@ public:
    * @endcode
    *
    * \~russian
-   * @brief addSequential Добавляет последовательностную вершину в граф.
+   * @brief Добавляет последовательностную вершину в граф.
    * Использовать ТОЛЬКО с триггерами (FF)!
    * @param i_type Тип добавляемого последовательностного элемента
    * @param i_clk Сигнал CLK (синхронизация)
-   * @param i_data что записать, данные D
+   * @param i_data Вход данных (`D`).
    * @param i_rst Сигнал сброса RST (или CLR)
    * @param i_set Сигнал установки SET
    * @param i_en Сигнал разрешения EN
-   * @param i_name Имя добавляемой вершины
-   * @return Указатель на вновь созданную вершину
+   * @note В этой перегрузке порядок аргументов `(rst, set, en)`, при этом
+   * внутренний порядок подключений остается `data`, `clk`, `en`, `rst/clr`,
+   * `set`.
+   * @param i_name Имя создаваемой вершины.
+   * @return Указатель на созданную вершину.
    */
   VertexPtr addSequential(const SequentialTypes &i_type, VertexPtr i_clk,
                           VertexPtr i_data, VertexPtr i_rst, VertexPtr i_set,
@@ -805,6 +845,17 @@ public:
    * также будут удалены.
    */
   void removeWasteVertices();
+  /**
+   * \~english
+   * @brief Updates edge counters grouped by gate types.
+   * @param vertex Vertex whose edges are counted.
+   * @param type Gate type used for the counter bucket.
+   *
+   * \~russian
+   * @brief Обновляет счетчики ребер, сгруппированных по типам вентилей.
+   * @param vertex Вершина, для которой учитываются ребра.
+   * @param type Тип вентиля для целевого счетчика.
+   */
   void updateEdgesGatesCount(VertexPtr vertex, Gates type);
 
   /**
@@ -813,8 +864,8 @@ public:
    * \~english
    * @brief addEdge
    * Adds an edge between two vertices in the current graph
-   * @param from A shared pointer to the vertex where the edge originates
-   * @param to A shared pointer to the vertex where the edge terminates
+   * @param from Pointer to the vertex where the edge originates.
+   * @param to Pointer to the vertex where the edge terminates.
    * @return true if the edge was successfully added, false otherwise
    * @par Example
    * @code
@@ -858,7 +909,7 @@ public:
    * Adds multiple edges from a vector of source vertices to a target vertex
    * @param from1 A vector containing the source vertices from which edges
    * will originate
-   * @param to A shared pointer to the target vertex where the edges will
+   * @param to Pointer to the target vertex where the edges will
    * terminate
    * @return true if all edges were successfully added, false if at least
    * one edge failed to be added
@@ -996,7 +1047,29 @@ public:
    */
   VertexPtr getVerticeByIndex(size_t idx) const;
 
+  /**
+   * \~english
+   * @brief Reads Verilog into an existing parsing context.
+   * @param i_path Path to Verilog file.
+   * @param context Parsing context to update.
+   *
+   * \~russian
+   * @brief Считывает Verilog в существующий контекст разбора.
+   * @param i_path Путь к Verilog-файлу.
+   * @param context Контекст разбора для обновления.
+   */
   static void readVerilog(std::string i_path, Context &context);
+  /**
+   * \~english
+   * @brief Reads Verilog and returns a new parsing context.
+   * @param i_path Path to Verilog file.
+   * @return Filled parsing context.
+   *
+   * \~russian
+   * @brief Считывает Verilog и возвращает новый контекст разбора.
+   * @param i_path Путь к Verilog-файлу.
+   * @return Заполненный контекст разбора.
+   */
   static CG_Graph::Context readVerilog(std::string i_path);
   /**
    * \~english
@@ -1461,12 +1534,12 @@ public:
    *
    * \~english
    * @brief Unrolls graph.
-   * @return Pointer to unrolled graph
+   * @return Shared pointer to unrolled graph.
    * @todo add normal description
    *
    * \~russian
    * @brief Разворачивает граф.
-   * @return Указатель на развернутый граф
+   * @return Shared-указатель на развернутый граф.
    * @todo добавить нормальное описание
    */
   GraphPtr unrollGraph();
@@ -1475,12 +1548,12 @@ public:
    * @author Fuuulkrum7
    *
    * \~english
-   * @brief creates a majority element, represented by a graph.
-   * @return GraphPtr to created graph
+   * @brief Creates a majority element represented by a graph.
+   * @return Shared pointer to created graph.
    *
    * \~russian
-   * @brief создает мажоритарный элемент, представленный графом.
-   * @return GraphPtr на созданный граф
+   * @brief Создает мажоритарный элемент, представленный графом.
+   * @return Shared-указатель на созданный граф.
    */
   static GraphPtr createMajoritySubgraph();
   VertexPtr majorityAsLogic(VertexPtr a, VertexPtr b, VertexPtr c,
@@ -1567,27 +1640,46 @@ private:
                                      std::ofstream &i_fileStream);
 
   /**
-   * @brief This method is a stage of generating verilog output by toVerilog()
-   * toVerilogBusEnabled() or toVerilogSeparateVariables().
-   * @param i_graph graph for output
-   * @param i_fileStream output stream
+   * \~english
+   * @brief Stage of Verilog generation for `toVerilog()`,
+   * `toVerilogBusEnabled()`, and `toVerilogSeparateVariables()`.
+   * @param i_graph Graph to be exported.
+   * @param i_fileStream Output stream.
    *
-   * @param i_path path for output verilog file
-   * @param i_filename file name
-   *@return true if file created correctly, false otherwise
+   * @param i_path Path for the output Verilog file.
+   * @param i_filename File name.
+   * @return `true` if the file was created correctly, `false` otherwise.
+   *
+   * \~russian
+   * @brief Этап генерации Verilog для `toVerilog()`,
+   * `toVerilogBusEnabled()` и `toVerilogSeparateVariables()`.
+   * @param i_graph Граф для экспорта.
+   * @param i_fileStream Поток вывода.
+   * @param i_path Путь к выходному Verilog-файлу.
+   * @param i_filename Имя файла.
+   * @return `true`, если файл создан корректно, иначе `false`.
    */
   static bool verilogFileCreating(GraphPtr i_graph, std::string i_path,
                                   std::string i_filename,
                                   std::ofstream &i_fileStream);
 
   /**
-   * @brief The method is a stage of generating verilog output by toVerilog()
-   * toVerilogBusEnabled() or toVerilogSeparateVariables().
-   * @param i_graph graph for output
-   * @param i_fileStream output stream
+   * \~english
+   * @brief Stage of Verilog generation for `toVerilog()`,
+   * `toVerilogBusEnabled()`, and `toVerilogSeparateVariables()`.
+   * @param i_graph Graph to be exported.
+   * @param i_fileStream Output stream.
    *
-   * @param i_printPin function, defined in toVerilog..(), print correct
-   * name of vertex to i_fileStream
+   * @param i_printPin Function defined in `toVerilog*()` that prints
+   * the correct pin/vertex name to `i_fileStream`.
+   *
+   * \~russian
+   * @brief Этап генерации Verilog для `toVerilog()`,
+   * `toVerilogBusEnabled()` и `toVerilogSeparateVariables()`.
+   * @param i_graph Граф для экспорта.
+   * @param i_fileStream Поток вывода.
+   * @param i_printPin Функция из `toVerilog*()`, печатающая корректное
+   * имя пина/вершины в `i_fileStream`.
    *
    */
   static void verilogInoutsWriting(GraphPtr i_graph,
@@ -1595,13 +1687,23 @@ private:
                                    std::function<void(VertexPtr)> i_printPin);
 
   /**
-   * @brief The method is a stage of generating verilog output by toVerilog()
-   * toVerilogBusEnabled() or toVerilogSeparateVariables().
-   * @param i_graph graph for output
-   * @param i_fileStream output stream
+   * \~english
+   * @brief Stage of Verilog generation for `toVerilog()`,
+   * `toVerilogBusEnabled()`, and `toVerilogSeparateVariables()`.
+   * @param i_graph Graph to be exported.
+   * @param i_fileStream Output stream.
    *
-   * @param i_printFunction function, defined in toVerilog..(), print all
-   * vertices of type (i_usedType from VertexTypes) to i_fileStream
+   * @param i_printFunction Function defined in `toVerilog*()` that prints all
+   * vertices of requested type (`i_usedType` from `VertexTypes`) to
+   * `i_fileStream`.
+   *
+   * \~russian
+   * @brief Этап генерации Verilog для `toVerilog()`,
+   * `toVerilogBusEnabled()` и `toVerilogSeparateVariables()`.
+   * @param i_graph Граф для экспорта.
+   * @param i_fileStream Поток вывода.
+   * @param i_printFunction Функция из `toVerilog*()`, печатающая все вершины
+   * заданного типа (`i_usedType` из `VertexTypes`) в `i_fileStream`.
    */
   static void
   verilogVerticesDeclaration(GraphPtr i_graph, std::ofstream &i_fileStream,
@@ -1610,13 +1712,22 @@ private:
                                  i_printFunction);
 
   /**
-   * @brief The method is a stage of generating verilog output by toVerilog()
-   * toVerilogBusEnabled() or toVerilogSeparateVariables().
-   * @param i_graph graph for output
-   * @param i_fileStream output stream
+   * \~english
+   * @brief Stage of Verilog generation for `toVerilog()`,
+   * `toVerilogBusEnabled()`, and `toVerilogSeparateVariables()`.
+   * @param i_graph Graph to be exported.
+   * @param i_fileStream Output stream.
    *
-   * @param i_getInstance function, defined in toVerilog..(),
-   * print correct constant instance to i_fileStream
+   * @param i_getInstance Function defined in `toVerilog*()` that prints
+   * a constant instance to `i_fileStream`.
+   *
+   * \~russian
+   * @brief Этап генерации Verilog для `toVerilog()`,
+   * `toVerilogBusEnabled()` и `toVerilogSeparateVariables()`.
+   * @param i_graph Граф для экспорта.
+   * @param i_fileStream Поток вывода.
+   * @param i_getInstance Функция из `toVerilog*()`, печатающая корректный
+   * инстанс константы в `i_fileStream`.
    */
   static void
   verilogConstantWriting(GraphPtr i_graph, std::ofstream &i_fileStream,
@@ -1624,26 +1735,44 @@ private:
                          std::function<void(VertexPtr)> i_getDefinition);
 
   /**
-   * @brief The method is a stage of generating verilog output by toVerilog()
-   * toVerilogBusEnabled() or toVerilogSeparateVariables().
-   * @param i_graph graph for output
-   * @param i_fileStream output stream
+   * \~english
+   * @brief Stage of Verilog generation for `toVerilog()`,
+   * `toVerilogBusEnabled()`, and `toVerilogSeparateVariables()`.
+   * @param i_graph Graph to be exported.
+   * @param i_fileStream Output stream.
    *
-   * @param i_path path to create verilog files for subgraphs
-   * @return true if all files created correctly, false otherwise
+   * @param i_path Path where Verilog files for subgraphs are created.
+   * @return `true` if all files were created correctly, `false` otherwise.
+   *
+   * \~russian
+   * @brief Этап генерации Verilog для `toVerilog()`,
+   * `toVerilogBusEnabled()` и `toVerilogSeparateVariables()`.
+   * @param i_graph Граф для экспорта.
+   * @param i_fileStream Поток вывода.
+   * @param i_path Путь для создания Verilog-файлов подграфов.
+   * @return `true`, если все файлы созданы корректно, иначе `false`.
    */
   static bool verilogSubgraphWriting(GraphPtr i_graph,
                                      std::ofstream &i_fileStream,
                                      std::string i_path);
 
   /**
-   * @brief The method is a stage of generating verilog output by toVerilog()
-   * toVerilogBusEnabled() or toVerilogSeparateVariables().
-   * @param i_graph graph for output
-   * @param i_fileStream output stream
+   * \~english
+   * @brief Stage of Verilog generation for `toVerilog()`,
+   * `toVerilogBusEnabled()`, and `toVerilogSeparateVariables()`.
+   * @param i_graph Graph to be exported.
+   * @param i_fileStream Output stream.
    *
-   * @param i_printDefinition function, defined in toVerilog..(),
-   * print correct definitions to i_fileStream
+   * @param i_printDefinition Function defined in `toVerilog*()` that prints
+   * correct definitions to `i_fileStream`.
+   *
+   * \~russian
+   * @brief Этап генерации Verilog для `toVerilog()`,
+   * `toVerilogBusEnabled()` и `toVerilogSeparateVariables()`.
+   * @param i_graph Граф для экспорта.
+   * @param i_fileStream Поток вывода.
+   * @param i_printDefinition Функция из `toVerilog*()`, печатающая
+   * корректные определения в `i_fileStream`.
    */
   static void verilogVerticesDefining(
       GraphPtr i_graph, std::ofstream &i_fileStream,
@@ -1651,12 +1780,20 @@ private:
       std::function<void(const VertexPtr)> i_printDefinitionGates);
 
   /**
-   * @brief The method is a stage of generating verilog output by toVerilog()
-   * toVerilogBusEnabled() or toVerilogSeparateVariables().
-   * @param i_graph graph for output
-   * @param i_fileStream output stream
+   * \~english
+   * @brief Final stage of Verilog generation for `toVerilog()`,
+   * `toVerilogBusEnabled()`, and `toVerilogSeparateVariables()`.
+   * @param i_graph Graph to be exported.
+   * @param i_fileStream Output stream.
    *
-   * @return true if file saved correctly, false otherwise
+   * @return `true` if the file was saved correctly, `false` otherwise.
+   *
+   * \~russian
+   * @brief Финальный этап генерации Verilog для `toVerilog()`,
+   * `toVerilogBusEnabled()` и `toVerilogSeparateVariables()`.
+   * @param i_graph Граф для экспорта.
+   * @param i_fileStream Поток вывода.
+   * @return `true`, если файл сохранен корректно, иначе `false`.
    */
   static bool verilogFinalOperations(GraphPtr i_graph,
                                      std::ofstream &i_fileStream);

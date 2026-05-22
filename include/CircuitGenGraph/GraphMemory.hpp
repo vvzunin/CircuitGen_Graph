@@ -1,5 +1,9 @@
 /**
  * @file GraphMemory.hpp
+ * \~english
+ * @brief MultiLinearAllocator and graph memory-management utilities.
+ *
+ * \~russian
  * @brief Аллокатор MultiLinearAllocator и утилиты управления памятью графа.
  * @author Vladimir Zunin
  * @author Fuuulkrum7

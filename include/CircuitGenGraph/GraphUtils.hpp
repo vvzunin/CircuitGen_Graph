@@ -169,7 +169,9 @@ enum SequentialTypes : uint8_t {
    * если равен 1'b1
    */
   SET = 1 << 3,
-  /// use with reset only, makes ff async (adds negedge rst to signals list)
+  /**
+   * use with reset only, makes ff async (adds negedge rst to signals list)
+   */
   ASYNC = 1 << 5,
   /*!
    * \~english If used, activates always on negedge of clk signal (ff-only)
@@ -281,7 +283,9 @@ enum Gates : uint8_t {
    */
   GateBuf,
   GateConcatenation, /// logical element - concatenation of several vertices or
-                     /// buses
+                     /**
+                      * buses
+                      */
   GateSlice,         /// logical element - slice of bus
   /*!
    * \~english Default logical element (error state)
@@ -527,17 +531,17 @@ std::string fromOperationsToName(std::string_view i_op);
  */
 std::string_view fromHierarchyToOperation(uint32_t key);
 
-/// @brief parseStringToGate Converts a string representation of a gate to
-/// its corresponding enum value
-/// @param i_gate The string representation of the gate
-/// @return Gates The enum value corresponding to the provided string
-/// representation of the gate
-/// @par Example
-/// @code
-/// // Convert the string representation "and" to its corresponding enum value
-/// Gates gate = GraphUtils::parseStringToGate("and");
-/// std::cout << "Enum value of 'and': " << gate << std::endl;
-/// @endcode
+/**
+ * \~english
+ * @brief Converts string representation of a gate to enum value.
+ * @param i_gate String representation of gate.
+ * @return Corresponding `Gates` enum value.
+ *
+ * \~russian
+ * @brief Преобразует строковое представление вентиля в enum-значение.
+ * @param i_gate Строковое представление вентиля.
+ * @return Соответствующее значение enum `Gates`.
+ */
 
 /**
  * @author Vladimir Zunin
@@ -616,7 +620,31 @@ std::string parseVertexToString(VertexTypes vertex);
  */
 std::string parseGateToString(Gates gate);
 
+/**
+ * \~english
+ * @brief Converts a sequential type enum value to its string representation.
+ * @param type Sequential type.
+ * @return String representation of sequential type.
+ *
+ * \~russian
+ * @brief Преобразует тип последовательностной ячейки в строковое представление.
+ * @param type Тип последовательностной ячейки.
+ * @return Строковое представление типа последовательностной ячейки.
+ */
 std::string parseSequentialToString(SequentialTypes type);
+
+/**
+ * \~english
+ * @brief Returns ordered input names for a sequential type.
+ * @param type Sequential type.
+ * @return Input-name list in internal order.
+ *
+ * \~russian
+ * @brief Возвращает упорядоченный список входов для последовательностного
+ * типа.
+ * @param type Тип последовательностной ячейки.
+ * @return Список имен входов во внутреннем порядке.
+ */
 std::vector<std::string_view> parseSequentialToInputs(SequentialTypes type);
 
 /**

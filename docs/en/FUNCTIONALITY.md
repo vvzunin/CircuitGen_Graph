@@ -85,9 +85,13 @@ Graph is the data-model core for circuit generation and analysis. A design is an
 
 ## See also
 
-- [README.md](../../README.en.md) — quick start  
+- [README.en.md](../../README.en.md) — quick start  
 - [BUILDING.md](BUILDING.md) — presets and CI parity  
 - [HACKING.md](HACKING.md) — developer workflow  
-- [Sequential.md](Sequential.md) — sequential logic  
-
-**Русский:** [FUNCTIONALITY.md](../ru/FUNCTIONALITY.md)
+- [Sequential.md](Sequential.md) — sequential logic
+- [GraphML.md](GraphML.md) — GraphML export and limitations
+- [VerilogImport.md](VerilogImport.md) — Verilog import
+- [Subgraphs.md](Subgraphs.md) — subgraph workflows
+- [TestbenchGenerator.md](TestbenchGenerator.md) — testbench generation
+- [MEMORY_MANAGEMENT.md](MEMORY_MANAGEMENT.md) — memory management
+- Russian version: [FUNCTIONALITY.md](../ru/FUNCTIONALITY.md)
