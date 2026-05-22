@@ -1,0 +1,8 @@
+Release CircuitGen Graph v1.7.0
+
+Verilog import (lorina), subgraph external RTL, Synology NAS documentation
+portal with version channels, testbench improvements, unified logging, and
+a full docs/CI refresh.
+
+Full notes: docs/release-notes/v1.7.0.md
+Changelog: docs/en/CHANGELOG.md (section 1.7.0)

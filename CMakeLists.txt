@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.26)
 
 project(
   CircuitGenGraph
-  VERSION 1.6.0
+  VERSION 1.7.0
   DESCRIPTION "Graph for circuits dataset generation"
   HOMEPAGE_URL "https://hub.mos.ru/circuitgen/CircuitGen_Graph"
   LANGUAGES CXX

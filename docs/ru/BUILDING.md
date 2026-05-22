@@ -354,7 +354,7 @@ CI_RUNNER=docker CI_IMAGE_TAG=circuitgen/graph/ubuntu-24.04/ci:local bash script
 FetchContent_Declare(
   CircuitGen_Graph
   GIT_REPOSITORY https://github.com/vvzunin/CircuitGen_Graph
-  GIT_TAG v1.6.0
+  GIT_TAG v1.7.0
 )
 FetchContent_MakeAvailable(CircuitGen_Graph)
 ```

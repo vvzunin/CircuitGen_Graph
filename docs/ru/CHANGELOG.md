@@ -10,6 +10,16 @@
 
 ### Added
 
+### Changed
+
+### Fixed
+
+---
+
+## [1.7.0] - 2026-05-22
+
+### Added
+
 - Импорт Verilog в граф (`GraphReader`, `OrientedGraph::readVerilog`, подмодуль **lorina**).
 - Внешний Verilog-файл для вершин подграфа; разбор `parameter` / `localparam`.
 - Публикация документации на Synology NAS из CI: общий портал, `manifest.json` схема v2, деревья версий (`versions/main/`, `versions/<tag>/`).

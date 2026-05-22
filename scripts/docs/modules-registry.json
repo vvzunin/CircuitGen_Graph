@@ -16,7 +16,7 @@
         "en": "Graph representation of digital circuits"
       },
       "repo": "https://hub.mos.ru/circuitgen/CircuitGen_Graph",
-      "docker": { "imageRepo": "graph", "releaseTag": "v1.6.0" }
+      "docker": { "imageRepo": "graph", "releaseTag": "v1.7.0" }
     },
     {
       "id": "generator",

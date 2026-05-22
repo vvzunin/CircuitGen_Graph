@@ -10,6 +10,16 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ### Added
 
+### Changed
+
+### Fixed
+
+---
+
+## [1.7.0] - 2026-05-22
+
+### Added
+
 - Verilog import into the graph (`GraphReader`, `OrientedGraph::readVerilog`, **lorina** submodule).
 - External Verilog file binding for subgraph vertices; `parameter` / `localparam` parsing.
 - Synology NAS documentation deploy from CI: shared portal, `manifest.json` schema v2, multi-version trees (`versions/main/`, `versions/<tag>/`).
