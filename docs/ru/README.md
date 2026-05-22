@@ -14,5 +14,12 @@
 | [Versioning.md](Versioning.md) | Семантическое версионирование (SemVer) релизов |
 | [Format.md](Format.md) | Памятка по форматированию и стилю |
 | [FUNCTIONALITY.md](FUNCTIONALITY.md) | Назначение репозитория и основные возможности Graph |
+| [Sequential.md](Sequential.md) | Последовательностная логика (триггеры, защёлки) |
+| [MEMORY_MANAGEMENT.md](MEMORY_MANAGEMENT.md) | Резервирование памяти под вершины и связи |
+| [GraphML.md](GraphML.md) | Экспорт Classic / PseudoABCD / OpenABCD |
+| [VerilogImport.md](VerilogImport.md) | Импорт Verilog (`GraphReader`, `Context`) |
+| [Subgraphs.md](Subgraphs.md) | Иерархия, подграфы, внешний RTL |
+| [TestbenchGenerator.md](TestbenchGenerator.md) | Генерация Verilog testbench и Icarus |
+| [CHANGELOG.md](CHANGELOG.md) | Журнал изменений по релизам (SemVer-теги) |
 
 **English:** [Documentation in English](../en/README.md)

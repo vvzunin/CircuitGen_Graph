@@ -88,6 +88,6 @@ Graph — это ядро модели данных для генерации и
 - [README.md](../../README.md) — быстрый старт  
 - [BUILDING.md](BUILDING.md) — пресеты и CI parity  
 - [HACKING.md](HACKING.md) — workflow разработчика  
-- [Sequential.md](Sequential.md) — последовательностная логика  
+- [Sequential.md](Sequential.md) · [GraphML.md](GraphML.md) · [VerilogImport.md](VerilogImport.md) · [Subgraphs.md](Subgraphs.md) · [TestbenchGenerator.md](TestbenchGenerator.md) · [MEMORY_MANAGEMENT.md](MEMORY_MANAGEMENT.md)
 
 **English:** [FUNCTIONALITY.md](../en/FUNCTIONALITY.md)

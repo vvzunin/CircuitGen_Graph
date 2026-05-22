@@ -14,3 +14,13 @@ CMake presets, CI-parity build commands, and **how to add new sources / `CMakeLi
 
 - [BUILDING (EN)](en/BUILDING.md) · [BUILDING (RU)](ru/BUILDING.md)
 - [FUNCTIONALITY (EN)](en/FUNCTIONALITY.md) · [FUNCTIONALITY (RU)](ru/FUNCTIONALITY.md) — repository role and capabilities
+
+Graph-specific guides:
+
+- Sequential: [RU](ru/Sequential.md) · [EN](en/Sequential.md)
+- Memory management: [RU](ru/MEMORY_MANAGEMENT.md) · [EN](en/MEMORY_MANAGEMENT.md)
+- GraphML: [RU](ru/GraphML.md) · [EN](en/GraphML.md)
+- Verilog import: [RU](ru/VerilogImport.md) · [EN](en/VerilogImport.md)
+- Subgraphs: [RU](ru/Subgraphs.md) · [EN](en/Subgraphs.md)
+- Testbench: [RU](ru/TestbenchGenerator.md) · [EN](en/TestbenchGenerator.md)
+- Changelog: [RU](ru/CHANGELOG.md) · [EN](en/CHANGELOG.md)
