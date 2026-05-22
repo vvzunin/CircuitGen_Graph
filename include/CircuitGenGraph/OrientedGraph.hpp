@@ -538,6 +538,8 @@ public:
    *
    * \~english
    * @brief addSequential Adds a sequential vertex to the current graph.
+   * @note Internal input order for sequential vertices is fixed:
+   * `data`, `clk`, `en`, `rst/clr`, `set`.
    * @param i_type The type of the gsequential to be added; can be
    * flip-flop (ff) or latch only
    * @param i_clk Vertex, that is used as clock (or enable for latch)
@@ -556,6 +558,8 @@ public:
    *
    * \~russian
    * @brief addSequential Добавляет последовательностную вершину в граф.
+   * @note Внутренний порядок входов для sequential-вершины фиксирован:
+   * `data`, `clk`, `en`, `rst/clr`, `set`.
    * @param i_type Тип добавляемого последовательностного элемента; может
    * быть только триггером (ff) или защелкой (latch)
    * @param i_clk Вершина, которая используется как синхросигнал (или
@@ -579,7 +583,9 @@ public:
    * @param i_clk Vertex, that is used as clock (or enable for latch) EN
    * for latch and CLK for FF
    * @param i_data Data vertex, should be written to a reg
-   * @param i_wire RST or CLR or SET or EN (enable only if flip-flop)
+   * @param i_wire One extra control input: `RST` / `CLR` / `SET` / `EN`
+   * (enable is valid for flip-flops only). The exact role is defined by
+   * `i_type`.
    * @param i_name The name of the gate vertex to be added
    * @return A shared pointer to the newly created gate vertex
    * @par Example
@@ -600,7 +606,9 @@ public:
    * @param i_clk Вершина, которая используется как синхросигнал. EN для
    * защелки и CLK для триггера
    * @param i_data Вершина данных, должна быть записана в регистр
-   * @param i_wire RST или CLR или SET или EN (enable только для триггера)
+   * @param i_wire Один дополнительный управляющий сигнал: `RST` / `CLR` /
+   * `SET` / `EN` (enable допустим только для триггера). Точная роль
+   * определяется `i_type`.
    * @param i_name Имя добавляемой вершины
    * @return Указатель на вновь созданную вершину
    */
@@ -620,9 +628,12 @@ public:
    * flip-flop (ff) or latch only
    * @param i_clk Vertex, that is used as clock (or enable for latch)
    * @param i_data Data vertex, should be written to a reg
-   * @param i_wire1 RST or CLR or SET
-   * @param i_wire2 SET (double set is not allowed, for sure) or EN (en for
-   * flip-flop only)
+   * @param i_wire1 First extra control input.
+   * @param i_wire2 Second extra control input.
+   * @note For `*re`/`*ce` types (for example `affre`, `nffre`) pass
+   * `EN` first, then `RST/CLR`: `addSequential(type, clk, data, en, rst, ...)`.
+   * This matches the fixed internal order `data`, `clk`, `en`, `rst/clr`,
+   * `set`.
    * @param i_name The name of the gate vertex to be added
    * @return A shared pointer to the newly created gate vertex
    * @par Example
@@ -644,9 +655,13 @@ public:
    * @param i_clk Вершина, которая используется как синхросигнал (или
    * enable для защелки)
    * @param i_data Вершина данных, должна быть записана в регистр
-   * @param i_wire1 RST или CLR или SET
-   * @param i_wire2 SET (двойной set не допускается) или EN (en только
-   * для триггера)
+   * @param i_wire1 Первый дополнительный управляющий сигнал.
+   * @param i_wire2 Второй дополнительный управляющий сигнал.
+   * @note Для типов `*re`/`*ce` (например `affre`, `nffre`) передавайте
+   * сначала `EN`, затем `RST/CLR`:
+   * `addSequential(type, clk, data, en, rst, ...)`.
+   * Это соответствует фиксированному внутреннему порядку
+   * `data`, `clk`, `en`, `rst/clr`, `set`.
    * @param i_name Имя добавляемой вершины
    * @return Указатель на вновь созданную вершину
    */
@@ -669,6 +684,8 @@ public:
    * @param i_rst RST (or CLR) signal
    * @param i_set SET signal
    * @param i_en EN signal
+   * @note For this overload, caller order is `(rst, set, en)`, while
+   * internal connection order remains `data`, `clk`, `en`, `rst/clr`, `set`.
    * @param i_name The name of the gate vertex to be added
    * @return A shared pointer to the newly created gate vertex
    * @par Example
@@ -693,6 +710,9 @@ public:
    * @param i_rst Сигнал сброса RST (или CLR)
    * @param i_set Сигнал установки SET
    * @param i_en Сигнал разрешения EN
+   * @note В этой перегрузке порядок аргументов `(rst, set, en)`, при этом
+   * внутренний порядок подключений остается `data`, `clk`, `en`, `rst/clr`,
+   * `set`.
    * @param i_name Имя добавляемой вершины
    * @return Указатель на вновь созданную вершину
    */
