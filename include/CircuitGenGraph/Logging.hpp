@@ -2,7 +2,11 @@
 
 /**
  * @file Logging.hpp
+ * \~english
  * @brief Centralized logging wrapper for CircuitGenGraph.
+ *
+ * \~russian
+ * @brief Централизованная обертка логирования для CircuitGenGraph.
  */
 
 #ifdef LOGFLAG
@@ -20,7 +24,11 @@
 #include <ostream>
 
 /**
+ * \~english
  * @brief Dummy stream buffer that discards all input.
+ *
+ * \~russian
+ * @brief Временный буфер потока, отбрасывающий все входные данные.
  */
 class NullBuffer : public std::streambuf {
 public:
@@ -28,7 +36,11 @@ public:
 };
 
 /**
+ * \~english
  * @brief Dummy output stream that uses NullBuffer.
+ *
+ * \~russian
+ * @brief Временный выходной поток, использующий NullBuffer.
  */
 class NullStream : public std::ostream {
 public:
@@ -39,7 +51,11 @@ private:
 };
 
 /**
+ * \~english
  * @brief Returns a reference to a global NullStream instance.
+ *
+ * \~russian
+ * @brief Возвращает ссылку на глобальный экземпляр NullStream.
  */
 inline NullStream &getNullStream() {
   static NullStream ns;

@@ -1,5 +1,10 @@
 /**
  * @file DefaultAuxiliaryMethods.hpp
+ * \~english
+ * @brief Auxiliary methods: AuxMethodsGraph (replacer, dotReturnToString,
+ * TuplePrinter).
+ *
+ * \~russian
  * @brief Вспомогательные методы: AuxMethodsGraph (replacer, dotReturnToString,
  * TuplePrinter).
  * @author Vladimir Zunin
@@ -65,6 +70,14 @@ std::string dotReturnToString(DotReturn dot);
  * @author Fuuulkrum7
  */
 template<class Tuple, std::size_t N>
+/**
+ * \~english
+ * @brief Helper for recursive tuple formatting by `%` placeholders.
+ *
+ * \~russian
+ * @brief Вспомогательная структура для рекурсивного форматирования tuple
+ * через плейсхолдеры `%`.
+ */
 struct TuplePrinter {
   /**
    * @author Vladimir Zunin

@@ -2,7 +2,9 @@
 
 **Язык:** Русский | [English](README.en.md)
 **Документация:** [Русский](docs/ru/README.md) | [English](docs/en/README.md)
+**Функционал:** [русский](docs/ru/FUNCTIONALITY.md) | [English](docs/en/FUNCTIONALITY.md)
 **Версионирование (SemVer):** [русский](docs/ru/Versioning.md) | [English](docs/en/Versioning.md)
+**Журнал изменений:** [русский](docs/ru/CHANGELOG.md) | [English](docs/en/CHANGELOG.md)
 **Вклад:** [русский](docs/ru/CONTRIBUTING.md) | [English](docs/en/CONTRIBUTING.md)
 **Запросы на слияние (MR):** [русский](docs/ru/MergeRequests.md) | [English](docs/en/MergeRequests.md)
 
@@ -35,6 +37,7 @@
 - [Правила именования переменных](#hacking)
 - [Сборка программы](#generator_build_rus)
 - [Генерация тестбенчей](#testbench)
+- [Тематические руководства](#topic-guides)
 - [Лицензия](#license)
 
 > Главный репозиторий проекта: https://hub.mos.ru/circuitgen/CircuitGen
@@ -95,7 +98,20 @@ bash scripts/dev/build-debug.sh
 - заголовок API: `#include <CircuitGenGraph/TestbenchGenerator.hpp>`;
 - для симуляции в части тестов — **Icarus Verilog** (`iverilog` / `vvp`), пакеты: `sudo apt install iverilog` или `sudo dnf install iverilog`.
 
-Пошаговая сборка примера, запуск `ctest` и сценарии с префиксом **`DISABLED_`** (Icarus) описаны в **[docs/ru/BUILDING.md](docs/ru/BUILDING.md#tests-and-icarus)**; английский вариант — [`docs/en/BUILDING.md`](docs/en/BUILDING.md#tests-and-icarus).
+Пошаговая сборка примера, запуск `ctest` и сценарии с префиксом **`DISABLED_`** (Icarus) описаны в **[docs/ru/BUILDING.md](docs/ru/BUILDING.md#tests-and-icarus)**; английский вариант — [`docs/en/BUILDING.md`](docs/en/BUILDING.md#tests-and-icarus). Подробнее об API: [docs/ru/TestbenchGenerator.md](docs/ru/TestbenchGenerator.md).
+
+[&#8593; Contents](#content_rus)
+
+## Тематические руководства
+<a name="topic-guides"></a>
+
+| Тема | Русский | English |
+|------|---------|---------|
+| GraphML | [GraphML.md](docs/ru/GraphML.md) | [GraphML.md](docs/en/GraphML.md) |
+| Импорт Verilog | [VerilogImport.md](docs/ru/VerilogImport.md) | [VerilogImport.md](docs/en/VerilogImport.md) |
+| Подграфы | [Subgraphs.md](docs/ru/Subgraphs.md) | [Subgraphs.md](docs/en/Subgraphs.md) |
+| Sequential | [Sequential.md](docs/ru/Sequential.md) | [Sequential.md](docs/en/Sequential.md) |
+| Память | [MEMORY_MANAGEMENT.md](docs/ru/MEMORY_MANAGEMENT.md) | [MEMORY_MANAGEMENT.md](docs/en/MEMORY_MANAGEMENT.md) |
 
 [&#8593; Contents](#content_rus)
 
