@@ -161,7 +161,8 @@ public:
   ///
   /// \~russian
   /// @brief Генерирует все возможные комбинации входов (полный перебор).
-  /// @warning Для N входов генерируется 2^N тестов. Не рекомендуется для N > 20.
+  /// @warning Для N входов генерируется 2^N тестов. Не рекомендуется для N
+  /// > 20.
   /// @return Количество сгенерированных тестовых векторов.
   size_t generateExhaustiveVectors();
 
@@ -186,7 +187,8 @@ public:
   /// \~russian
   /// @brief Добавляет пользовательский тестовый вектор.
   /// @param i_inputs Входные значения.
-  /// @param i_expected Ожидаемые выходные значения (опционально, будут вычислены).
+  /// @param i_expected Ожидаемые выходные значения (опционально, будут
+  /// вычислены).
   void addTestVector(const std::vector<char> &i_inputs,
                      const std::vector<char> &i_expected = {});
 
@@ -405,7 +407,7 @@ private:
   static std::vector<PortInfo> parseGoldenModel(const std::string &filepath,
                                                 std::string &moduleName);
 
-  GraphPtr d_graph;         ///< Shared-указатель на граф схемы
+  GraphPtr d_graph; ///< Shared-указатель на граф схемы
   TestbenchConfig d_config; ///< Конфигурация генератора
   std::vector<TestVector> d_testVectors;  ///< Тестовые векторы
   std::vector<std::string> d_inputNames;  ///< Имена входов

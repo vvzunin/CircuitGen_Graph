@@ -336,13 +336,15 @@ public:
 
   /**
    * \~english
-   * @brief Constructs vertex with specified type, name, and optional owner graph.
+   * @brief Constructs vertex with specified type, name, and optional owner
+   * graph.
    * @param i_type The type of the vertex (from the VertexTypes enum)
    * @param i_name The name of the vertex.
    * @param i_graph Optional shared pointer to the graph containing the vertex.
    *
    * \~russian
-   * @brief Создает вершину с указанными типом, именем и опциональным графом-владельцем.
+   * @brief Создает вершину с указанными типом, именем и опциональным
+   * графом-владельцем.
    * @param i_type Тип вершины (из перечисления VertexTypes)
    * @param i_name Имя вершины.
    * @param i_graph Опциональный shared-указатель на граф, содержащий вершину.
