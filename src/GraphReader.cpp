@@ -18,7 +18,13 @@
 
 namespace CG_Graph {
 
-GraphReader::GraphReader(Context &i_context) : d_context(i_context) {};
+// clang-format off
+
+GraphReader::GraphReader(Context &i_context) 
+    : d_context(i_context)
+{};
+
+// clang-format on
 
 void GraphReader::on_module_header(
     const std::string &module_name,

@@ -53,6 +53,8 @@ class GraphReader;
 class Context;
 class GraphVertexBus;
 
+using NameGenerator = std::function<std::string(size_t)>;
+
 /**
  * @class CG_Graph::OrientedGraph
  *
@@ -451,6 +453,10 @@ public:
    */
   VertexPtr addInput(const std::string &i_name = "");
   VertexPtr addInputBus(const std::string &i_name = "", size_t width = 1);
+
+  std::vector<VertexPtr> addInputs(size_t i_num);
+  std::vector<VertexPtr> addInputs(size_t i_num, NameGenerator generator);
+
   /**
    * @author Fuuulkrum7
    *
@@ -476,6 +482,10 @@ public:
    */
   VertexPtr addOutput(const std::string &i_name = "");
   VertexPtr addOutputBus(const std::string &i_name = "", size_t width = 1);
+
+  std::vector<VertexPtr> addOutputs(size_t i_num);
+  std::vector<VertexPtr> addOutputs(const std::vector<VertexPtr> &gates);
+
   /**
    * @author Fuuulkrum7
    *
