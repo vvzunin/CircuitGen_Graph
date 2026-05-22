@@ -791,7 +791,7 @@ public:
                * @param i_inputs Вектор, содержащий входные вершины для
                * подключения к подграфу
                * @return Вектор, содержащий выходные вершины подграфа
-               * @throws std::invalid_argument, если количество входов не
+               * @throws std::invalid_argument если количество входов не
                * совпадает с количеством входных вершин в подграфе
                */
   std::vector<VertexPtr> addSubGraph(GraphPtr i_subGraph,
@@ -1033,7 +1033,7 @@ public:
    * sequential, subGraphs and than - outputs.
    * @param idx Index of the vertex to retrieve
    * @return Pointer to the requested vertex
-   * @throw out_of_range if idx is bigger than number of all vertices in
+   * @throws std::out_of_range if idx is bigger than number of all vertices in
    * graph
    *
    * \~russian
@@ -1043,7 +1043,7 @@ public:
    * последовательностных элементов, подграфов и затем - выходов.
    * @param idx Индекс вершины для получения
    * @return Указатель на запрошенную вершину
-   * @throw out_of_range, если idx больше количества всех вершин в графе
+   * @throws std::out_of_range если idx больше количества всех вершин в графе
    */
   VertexPtr getVerticeByIndex(size_t idx) const;
 

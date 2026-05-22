@@ -430,7 +430,7 @@ namespace GraphUtils {
  * @param i_op Строка, содержащая имя логической операции
  * @return std::pair<std::string_view, int32_t> Пара, содержащая имя и ID
  * логической операции
- * @throws std::runtime_error, если имя операции не найдено
+ * @throws std::runtime_error если имя операции не найдено
  */
 std::pair<std::string_view, int32_t> getLogicOperation(const std::string &i_op);
 
@@ -527,7 +527,7 @@ std::string fromOperationsToName(std::string_view i_op);
  * @brief Преобразует ключ иерархии в соответствующее значение операции
  * @param key Требуемый ключ иерархии
  * @return std::string_view Значение, представляющее операцию
- * @throws std::out_of_range, если предоставленный ключ не существует
+ * @throws std::out_of_range если предоставленный ключ не существует
  */
 std::string_view fromHierarchyToOperation(uint32_t key);
 

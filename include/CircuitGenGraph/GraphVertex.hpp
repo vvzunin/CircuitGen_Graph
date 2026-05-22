@@ -698,7 +698,7 @@ public:
    * @brief updateValue Обновляет значение вершины
    * @return Обновленное значение вершины
    * @todo Добавить пример использования
-   * @throws std::invalid_argument, если любое из входных соединений
+   * @throws std::invalid_argument если любое из входных соединений
    * указывает на nullptr
    */
   virtual char updateValue() override;
@@ -734,7 +734,7 @@ public:
    * @brief getVerilogString Получает строку в формате Verilog,
    * представляющую текущую вершину
    * @return Строка в формате Verilog, представляющая текущую вершину
-   * @throws std::invalid_argument, если какое-либо входное соединение
+   * @throws std::invalid_argument если какое-либо входное соединение
    * недействительно
    */
   std::string getVerilogString() const;
@@ -830,7 +830,7 @@ public:
    * пустая строка. Если какое-либо входное соединение недействительно,
    * выбрасывается исключение.
    * @return Строка в формате Verilog для текущей вершины
-   * @throws std::invalid_argument, если какое-либо входное соединение
+   * @throws std::invalid_argument если какое-либо входное соединение
    * недействительно
    */
   virtual std::string
@@ -1005,14 +1005,12 @@ public:
    * @brief calculateHash Calculates the hash value of the vertex.
    * When running for a second time, set hash flags to default state
    * @return The calculated hash value as a number
-   * @throws None.
    * @todo Add example of usage
    *
    * \~russian
    * @brief calculateHash Вычисляет значение хэша вершины. При повторном
    * запуске установите флаги хэша в состояние по умолчанию
    * @return Вычисленное значение хэша в виде числа
-   * @throws Нет.
    * @todo Добавить пример использования
    */
   size_t calculateHash() override;
@@ -1034,7 +1032,7 @@ public:
    * Если входных соединений нет, возвращается пустая строка.
    * При недействительном входном соединении выбрасывается исключение.
    * @return Строка Verilog для текущей вершины.
-   * @throws std::invalid_argument, если какое-либо входное соединение
+   * @throws std::invalid_argument если какое-либо входное соединение
    * недействительно
    */
   virtual std::string toVerilog() const override;
