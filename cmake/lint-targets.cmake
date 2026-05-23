@@ -13,25 +13,20 @@ set(
 # CI pins 18.x via scripts/setup/install-clang-format-ci.sh; override FORMAT_COMMAND if needed.
 set(FORMAT_COMMAND clang-format CACHE STRING "Formatter to use")
 
+if(NOT TARGET format-check)
 add_custom_target(
     format-check
-    COMMAND "${CMAKE_COMMAND}"
-    -D "FORMAT_COMMAND=${FORMAT_COMMAND}"
-    -D "PATTERNS=${FORMAT_PATTERNS}"
-    -P "${PROJECT_SOURCE_DIR}/cmake/lint.cmake"
-    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+...
     COMMENT "Linting the code"
     VERBATIM
 )
+endif()
 
+if(NOT TARGET format-fix)
 add_custom_target(
     format-fix
-    COMMAND "${CMAKE_COMMAND}"
-    -D "FORMAT_COMMAND=${FORMAT_COMMAND}"
-    -D "PATTERNS=${FORMAT_PATTERNS}"
-    -D FIX=YES
-    -P "${PROJECT_SOURCE_DIR}/cmake/lint.cmake"
-    WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+...
     COMMENT "Fixing the code"
     VERBATIM
 )
+endif()

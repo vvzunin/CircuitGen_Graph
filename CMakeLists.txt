@@ -59,7 +59,6 @@ link_directories(lib)
 
 add_subdirectory(lib)
 target_link_libraries(${PROJECT_NAME} PUBLIC Lorina)
-target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 
 find_program(CLANG_TIDY NAMES clang-tidy)
 

@@ -1,6 +1,6 @@
 #include <CircuitGenGraph/GraphReader.hpp>
-
-#include "CircuitGenGraph/GraphUtils.hpp"
+#include <CircuitGenGraph/Logging.hpp>
+#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
@@ -26,9 +26,31 @@ GraphReader::GraphReader(Context &i_context)
 
 // clang-format on
 
+void LogDiagnosticConsumer::handle_diagnostic(lorina::diagnostic_level level,
+                                              const std::string &message) const {
+  switch (level) {
+  case lorina::diagnostic_level::fatal:
+    CG_LOG_FATAL << "Lorina: " << message;
+    break;
+  case lorina::diagnostic_level::error:
+    CG_LOG_ERROR << "Lorina: " << message;
+    break;
+  case lorina::diagnostic_level::warning:
+    CG_LOG_WARNING << "Lorina: " << message;
+    break;
+  case lorina::diagnostic_level::note:
+  case lorina::diagnostic_level::remark:
+  case lorina::diagnostic_level::ignore:
+  default:
+    CG_VLOG(1) << "Lorina: " << message;
+    break;
+  }
+}
+
 void GraphReader::on_module_header(
     const std::string &module_name,
     const std::vector<std::string> &inouts) const {
+  CG_LOG_INFO << "Parsing module '" << module_name << "' with " << inouts.size() << " ports";
   d_context.d_currentGraph = std::make_shared<OrientedGraph>(module_name);
   if (d_context.d_currentGraphNamesList.max_load_factor() != 1)
     d_context.d_currentGraphNamesList.max_load_factor(1);
@@ -36,6 +58,7 @@ void GraphReader::on_module_header(
 
 void GraphReader::on_inputs(const std::vector<std::string> &inputs,
                             std::string const &size) const {
+  CG_VLOG(1) << "Adding " << inputs.size() << " inputs to graph";
   d_context.d_currentGraph->reserve(input, inputs.size());
   d_context.d_numberOfVertices += inputs.size();
   d_context.d_currentGraphNamesList.reserve(d_context.d_numberOfVertices);
@@ -47,6 +70,7 @@ void GraphReader::on_inputs(const std::vector<std::string> &inputs,
 
 void GraphReader::on_outputs(const std::vector<std::string> &outputs,
                              std::string const &size) const {
+  CG_VLOG(1) << "Adding " << outputs.size() << " outputs to graph";
   d_context.d_currentGraph->reserve(output, outputs.size());
   d_context.d_currentGraph->reserve(gate, outputs.size());
   d_context.d_numberOfVertices += outputs.size() * 2;
@@ -60,6 +84,7 @@ void GraphReader::on_outputs(const std::vector<std::string> &outputs,
 
 void GraphReader::on_wires(const std::vector<std::string> &wires,
                            std::string const &size) const {
+  CG_VLOG(1) << "Adding " << wires.size() << " wires as internal gates";
   d_context.d_currentGraph->reserve(gate, wires.size());
   d_context.d_numberOfVertices += wires.size();
   d_context.d_currentGraphNamesList.reserve(d_context.d_numberOfVertices);

@@ -10,6 +10,7 @@
 #define GraphPtr std::shared_ptr<CG_Graph::OrientedGraph>
 #define GraphPtrWeak std::weak_ptr<CG_Graph::OrientedGraph>
 #define VertexPtr CG_Graph::GraphVertexBase *
+
 namespace CG_Graph {
 
 class OrientedGraph;
@@ -282,4 +283,14 @@ public:
 private:
   Context &d_context;
 };
+
+/**
+ * @brief Custom diagnostic consumer for lorina that redirects diagnostics to CG_LOG.
+ */
+class LogDiagnosticConsumer : public lorina::diagnostic_consumer {
+public:
+  void handle_diagnostic(lorina::diagnostic_level level,
+                         const std::string &message) const override;
+};
+
 } // namespace CG_Graph

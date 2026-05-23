@@ -8,6 +8,7 @@ include(CTest)
 include(../cmake/checks.cmake)
 include(../cmake/folders.cmake)
 
+if(NOT TARGET gtest)
 FetchContent_Declare(
   googletest
 
@@ -18,6 +19,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(googletest)
+endif()
 
 # add_compile_options(-fno-rtti)
 add_compile_options(-g3 -Wall -Wignored-qualifiers -DYYERROR_VERBOSE)
