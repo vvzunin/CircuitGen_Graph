@@ -980,20 +980,15 @@ void OrientedGraph::verilogConstantWriting(
   }
 }
 
-bool OrientedGraph::verilogSubgraphWriting(GraphPtr i_graph,
-                                           std::ofstream &i_fileStream,
-                                           std::string i_path) {
+bool OrientedGraph::verilogSubgraphWriting(
+    GraphPtr i_graph, std::ofstream &i_fileStream,
+    std::function<bool(VertexPtr)> i_getDefinition) {
   if (i_graph->d_subGraphs.size()) {
     i_fileStream << "\n";
   }
   // and all modules
   for (auto *subPtr: i_graph->d_vertices[VertexTypes::subGraph]) {
-    auto *sub = static_cast<GraphVertexSubGraph *>(subPtr);
-
-    if (!sub->toVerilog(i_path)) {
-      return false;
-    }
-    i_fileStream << sub->toVerilog();
+    i_getDefinition(subPtr);
   }
   return true;
 }
@@ -1088,6 +1083,14 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename,
   auto lambdaInouts = [&](VertexPtr vertex) {
     i_fileStream << vertex->getRawName();
   };
+  auto lambdaSubgraphs = [&](VertexPtr subPtr) {
+    auto *sub = static_cast<GraphVertexSubGraph *>(subPtr);
+    if (!sub->toVerilog(i_path)) {
+      return false;
+    }
+    i_fileStream << sub->toVerilog();
+    return true;
+  };
   auto lambdaDefining = [&](const VertexPtr vertex) {
     i_fileStream << "\t" << *vertex;
   };
@@ -1107,7 +1110,7 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename,
                              lambdaDeclaration);
   verilogConstantWriting(shared_from_this(), i_fileStream, lambdaConstant,
                          lambdaDefining);
-  verilogSubgraphWriting(shared_from_this(), i_fileStream, i_path);
+  verilogSubgraphWriting(shared_from_this(), i_fileStream, lambdaSubgraphs);
 
   if (i_sequentialByInstance)
     verilogVerticesDefining(shared_from_this(), i_fileStream,
@@ -1174,6 +1177,14 @@ bool OrientedGraph::toVerilogBusEnabled(std::string i_path,
   auto lambdaDefining = [&](const VertexPtr vertex) {
     i_fileStream << "\t" << *vertex;
   };
+  auto lambdaSubgraphs = [&](VertexPtr subPtr) {
+    auto *sub = static_cast<GraphVertexSubGraph *>(subPtr);
+    if (!sub->toVerilogBusEnabled(path)) {
+      return false;
+    }
+    i_fileStream << sub->toVerilog();
+    return true;
+  };
   auto lambdaSequentialDefining = [&](VertexPtr vertex) {
     i_fileStream
         << "\t"
@@ -1189,7 +1200,7 @@ bool OrientedGraph::toVerilogBusEnabled(std::string i_path,
                              lambdaDeclaration);
   verilogConstantWriting(shared_from_this(), i_fileStream, lambdaConstant,
                          lambdaDefining);
-  verilogSubgraphWriting(shared_from_this(), i_fileStream, i_path);
+  verilogSubgraphWriting(shared_from_this(), i_fileStream, lambdaSubgraphs);
   if (i_sequentialByInstance)
     verilogVerticesDefining(shared_from_this(), i_fileStream,
                             lambdaSequentialDefining, lambdaDefining);
@@ -1271,6 +1282,14 @@ bool OrientedGraph::toVerilogBusEnabledAsOneBit(std::string i_path,
       i_fileStream << "\t"
                    << GraphVertexBus::getBusPointer(vertex)->toOneBitVerilog();
   };
+  auto lambdaSubgraphs = [&](VertexPtr subPtr) {
+    auto *sub = static_cast<GraphVertexSubGraph *>(subPtr);
+    if (!sub->toVerilogBusEnabledAsOneBit(path)) {
+      return false;
+    }
+    i_fileStream << sub->toVerilog();
+    return true;
+  };
   verilogFileCreating(shared_from_this(), i_path, i_filename, i_fileStream);
   printSequentialModules(shared_from_this(), i_fileStream);
   verilogInoutsWriting(shared_from_this(), i_fileStream, lambdaInouts);
@@ -1278,7 +1297,7 @@ bool OrientedGraph::toVerilogBusEnabledAsOneBit(std::string i_path,
                              lambdaDeclaration);
   verilogConstantWriting(shared_from_this(), i_fileStream,
                          lambdaConstantInstance, lambdaDefining);
-  verilogSubgraphWriting(shared_from_this(), i_fileStream, i_path);
+  verilogSubgraphWriting(shared_from_this(), i_fileStream, lambdaSubgraphs);
   verilogVerticesDefining(shared_from_this(), i_fileStream, lambdaDefining,
                           lambdaDefining);
   return verilogFinalOperations(shared_from_this(), i_fileStream);

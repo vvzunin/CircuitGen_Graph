@@ -1752,9 +1752,9 @@ private:
    * @param i_path Путь для создания Verilog-файлов подграфов.
    * @return `true`, если все файлы созданы корректно, иначе `false`.
    */
-  static bool verilogSubgraphWriting(GraphPtr i_graph,
-                                     std::ofstream &i_fileStream,
-                                     std::string i_path);
+  static bool
+  verilogSubgraphWriting(GraphPtr i_graph, std::ofstream &i_fileStream,
+                         std::function<bool(VertexPtr)> i_getDefinition);
 
   /**
    * \~english
