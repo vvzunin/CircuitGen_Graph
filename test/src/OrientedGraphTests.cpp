@@ -859,6 +859,41 @@ TEST(TestToVerilog, SubGraph) {
 #endif
 }
 
+TEST(TestToVerilog, SubGraphBus) {
+#ifdef LOGFLAG
+  initLogging("TestToVerilog", "SubGraph");
+#endif
+  GraphPtr subGraphPtr = std::make_shared<OrientedGraph>("testSubGraph");
+  VertexPtr inA = subGraphPtr->addInputBus("a", 4);
+  VertexPtr inB = subGraphPtr->addInput("b");
+  VertexPtr out = subGraphPtr->addOutput("c");
+  VertexPtr gateAnd1 = subGraphPtr->addGate(Gates::GateAnd, "andAB");
+  VertexPtr const1 = subGraphPtr->addConst('1', "const1");
+  VertexPtr gateOr1 = subGraphPtr->addGate(Gates::GateOr, "orAnd11");
+  subGraphPtr->addEdges({inA, inB}, gateAnd1);
+  subGraphPtr->addEdges({gateAnd1, const1}, gateOr1);
+  subGraphPtr->addEdge(gateOr1, out);
+
+  GraphPtr graphPtr = std::make_shared<OrientedGraph>("testGraph");
+  inA = graphPtr->addInputBus("a", 4);
+  inB = graphPtr->addInput("b");
+  out = graphPtr->addOutput("c");
+
+  std::vector<VertexPtr> outs = graphPtr->addSubGraph(subGraphPtr, {inA, inB});
+
+  graphPtr->addEdge(outs[0], out);
+
+  std::filesystem::create_directories("./submodules");
+  graphPtr->toVerilogBusEnabled(".", "testSubGraphBus.v");
+  std::string curPath = std::filesystem::current_path();
+  std::string loadFile =
+      loadStringFileOrientedGraph(curPath + "/testSubGraphBus.v");
+  loadFile = loadFile.substr(loadFile.find("\n") + 2);
+#ifdef LOGFLAG
+  LOG(INFO) << "Printing DOT file: " << strs.first << "\n" << loadFile;
+#endif
+}
+
 TEST(TestToDOT, Simple) {
 #ifdef LOGFLAG
   initLogging("TestToDOT", "Simple");

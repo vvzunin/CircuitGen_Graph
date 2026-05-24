@@ -423,8 +423,11 @@ public:
    * если тип вершины не "output" или если входящее соединение
    * недействительно
    */
+  std::string toVerilogCommon(
+      std::function<void(VertexPtr, VertexPtr, std::string &)> printPin,
+      std::string &module_ver) const;
   std::string toVerilog() const override;
-
+  std::string toVerilogBusEnabledAsOneBit() const;
   /** @author Vladimir Zunin <vzunin@hse.ru> */
   DotReturn toDOT() override;
 
@@ -449,6 +452,9 @@ public:
    * @return bool, означающий, была ли запись файла успешной или нет
    */
   bool toVerilog(std::string i_path, std::string i_filename = "");
+  bool toVerilogBusEnabled(std::string i_path, std::string i_filename = "");
+  bool toVerilogBusEnabledAsOneBit(std::string i_path,
+                                   std::string i_filename = "");
 
   /** @author Fuuulkrum7 <ilka747428@gmail.com> */
   bool toDOT(std::string i_path, std::string i_filename = "");

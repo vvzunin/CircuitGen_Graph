@@ -1591,9 +1591,9 @@ private:
    * @param i_path path to create verilog files for subgraphs
    * @return true if all files created correctly, false otherwise
    */
-  static bool verilogSubgraphWriting(GraphPtr i_graph,
-                                     std::ofstream &i_fileStream,
-                                     std::string i_path);
+  static bool
+  verilogSubgraphWriting(GraphPtr i_graph, std::ofstream &i_fileStream,
+                         std::function<bool(VertexPtr)> i_getDefinition);
 
   /**
    * @brief The method is a stage of generating verilog output by toVerilog()
