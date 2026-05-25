@@ -18,10 +18,8 @@ namespace fs = std::filesystem;
 class ScopedTempDir {
 public:
   ScopedTempDir() {
-    const auto uniqueSuffix =
-        std::to_string(std::chrono::steady_clock::now()
-                           .time_since_epoch()
-                           .count());
+    const auto uniqueSuffix = std::to_string(
+        std::chrono::steady_clock::now().time_since_epoch().count());
 
     d_path = fs::temp_directory_path() /
              ("cg_graph_verilog_submodules_test_" + uniqueSuffix);
@@ -34,9 +32,7 @@ public:
     fs::remove_all(d_path, ec);
   }
 
-  const fs::path &path() const {
-    return d_path;
-  }
+  const fs::path &path() const { return d_path; }
 
 private:
   fs::path d_path;
@@ -98,8 +94,10 @@ TEST(TestToVerilogSubmodules, CreatesSingleSubmodulesDirAndWritesAllModules) {
   topGraph->addEdge(wrapperOutputs0.at(0), topOut0);
   topGraph->addEdge(wrapperOutputs1.at(0), topOut1);
 
-  const auto wrapperInstances = topGraph->getVerticesByType(VertexTypes::subGraph);
-  const auto leafInstances = wrapperGraph->getVerticesByType(VertexTypes::subGraph);
+  const auto wrapperInstances =
+      topGraph->getVerticesByType(VertexTypes::subGraph);
+  const auto leafInstances =
+      wrapperGraph->getVerticesByType(VertexTypes::subGraph);
 
   ASSERT_EQ(wrapperInstances.size(), 2u);
   ASSERT_EQ(leafInstances.size(), 1u);

@@ -52,7 +52,8 @@ TEST(BusTest, SimpleBusPrintedSeparate) {
   EXPECT_NO_THROW(graph->toVerilogBusEnabledAsOneBit("./", "oneBitVerilog.v"));
   testFile(
       "./oneBitVerilog.v",
-      "module oneBitVerilog(\n\tinputBus_0, inputBus_1, inputBus_2, inputBus_3, "
+      "module oneBitVerilog(\n\tinputBus_0, inputBus_1, inputBus_2, "
+      "inputBus_3, "
       "inputBus_4, anotherInputBus_0, anotherInputBus_1, anotherInputBus_2, "
       "inputVertex, \n\tresAnd_0, resAnd_1, resAnd_2, resAnd_3, resNot_0, "
       "resNot_1, resNot_2, resNot_3, resNot_4, outputVertex\n);\n\t// Writing "

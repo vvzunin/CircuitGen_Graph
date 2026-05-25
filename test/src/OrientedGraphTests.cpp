@@ -170,8 +170,7 @@ TEST(TestIsEmptyAndIsEmptyFull, ReturnCorrectSize) {
   auto inp = graphPtr5->addInputs(
       subGraphPtr->getVerticesByType(VertexTypes::input).size());
 
-  graphPtr5->addSubGraph(subGraphPtr,
-                         inp);
+  graphPtr5->addSubGraph(subGraphPtr, inp);
   EXPECT_EQ(graphPtr5->isEmpty(), true);
   // Does graph with empty subGraph isEmptyFull?
   // EXPECT_EQ(graph5.isEmptyFull(), false);

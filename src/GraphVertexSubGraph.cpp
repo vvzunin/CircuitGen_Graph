@@ -194,7 +194,8 @@ std::string GraphVertexSubGraph::toVerilogCommon(
   auto &&outputs = d_subGraph->getVerticesByType(VertexTypes::output);
 
   if (outputs.empty()) {
-    throw std::invalid_argument("Subgraph without outputs cannot be written to Verilog");
+    throw std::invalid_argument(
+        "Subgraph without outputs cannot be written to Verilog");
   }
   if (d_inConnections.size() < inputs.size()) {
     throw std::invalid_argument(
@@ -215,8 +216,7 @@ std::string GraphVertexSubGraph::toVerilogCommon(
   for (size_t i = 0; i + 1 < outputs.size(); ++i) {
     printPin(outputs[i], d_outConnections[i], module_ver);
   }
-  module_ver += fmt::format("    .{}( {} )\n  );\n",
-                            outputs.back()->getName(),
+  module_ver += fmt::format("    .{}( {} )\n  );\n", outputs.back()->getName(),
                             d_outConnections.back()->getName());
 
   return module_ver;
