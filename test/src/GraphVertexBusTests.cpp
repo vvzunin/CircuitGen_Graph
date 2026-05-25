@@ -32,7 +32,7 @@ inline void testFile(const std::string &fileName, std::string_view text) {
       << "Не удалось удалить файл: " << fileName;
 }
 TEST(BusTest, SimpleBusPrintedSeparate) {
-  GraphPtr graph = std::make_shared<OrientedGraph>();
+  GraphPtr graph = std::make_shared<OrientedGraph>("oneBitVerilog");
   VertexPtr inputBus = graph->addInputBus("inputBus", 5);
   VertexPtr anotherInputBus = graph->addInputBus("anotherInputBus", 3);
   VertexPtr inputVertex = graph->addInput("inputVertex");
@@ -52,7 +52,7 @@ TEST(BusTest, SimpleBusPrintedSeparate) {
   EXPECT_NO_THROW(graph->toVerilogBusEnabledAsOneBit("./", "oneBitVerilog.v"));
   testFile(
       "./oneBitVerilog.v",
-      "module graph_5(\n\tinputBus_0, inputBus_1, inputBus_2, inputBus_3, "
+      "module oneBitVerilog(\n\tinputBus_0, inputBus_1, inputBus_2, inputBus_3, "
       "inputBus_4, anotherInputBus_0, anotherInputBus_1, anotherInputBus_2, "
       "inputVertex, \n\tresAnd_0, resAnd_1, resAnd_2, resAnd_3, resNot_0, "
       "resNot_1, resNot_2, resNot_3, resNot_4, outputVertex\n);\n\t// Writing "
@@ -78,7 +78,7 @@ TEST(BusTest, SimpleBusPrintedSeparate) {
       "buf;\n\nendmodule\n");
 }
 TEST(BusTest, oneBitVerilogForGates) {
-  GraphPtr graph = std::make_shared<OrientedGraph>();
+  GraphPtr graph = std::make_shared<OrientedGraph>("oneBitVerilog");
   VertexPtr inputBus = graph->addInputBus("inputBus", 5);
   VertexPtr anotherInputBus = graph->addInputBus("anotherInputBus", 3);
   VertexPtr inputVertex = graph->addInput("inputVertex");
@@ -97,7 +97,7 @@ TEST(BusTest, oneBitVerilogForGates) {
             "\tassign andGate_2 = anotherInputBus_2 & 1'bx & const_0_2;\n\t");
 }
 TEST(BusTest, oneBitVerilogForSequentials) {
-  GraphPtr graph = std::make_shared<OrientedGraph>();
+  GraphPtr graph = std::make_shared<OrientedGraph>("oneBitVerilog");
   VertexPtr inputBus = graph->addInputBus("inputBus", 5);
   VertexPtr anotherInputBus = graph->addInputBus("anotherInputBus", 3);
   VertexPtr inputVertex = graph->addInput("inputVertex");
@@ -129,7 +129,7 @@ TEST(BusTest, oneBitVerilogForSequentials) {
   testFile("./sequentialTest.v", TestData::SEQ_8_TEST);
 }
 TEST(BusTest, severalBusModulePrintedToVerilog) {
-  GraphPtr graph = std::make_shared<OrientedGraph>();
+  GraphPtr graph = std::make_shared<OrientedGraph>("oneBitVerilog");
   VertexPtr inputBus = graph->addInputBus("inputBus", 5);
   VertexPtr inputVertex = graph->addInput("inputVertex");
   VertexPtr notBus = graph->addGateBus(GateNot, "not", 5);
@@ -143,7 +143,7 @@ TEST(BusTest, severalBusModulePrintedToVerilog) {
   EXPECT_NO_THROW(graph->toVerilogBusEnabled("./", "lalala.v"));
   testFile(
       "./lalala.v",
-      "module graph_5(\n\tinputBus, inputVertex, \n\tres, "
+      "module oneBitVerilog(\n\tinputBus, inputVertex, \n\tres, "
       "outputVertex\n);\n\t// Writing inputs\n\tinput inputVertex;\n\tinput "
       "[4:0] inputBus;\n\n\t// Writing outputs\n\toutput "
       "outputVertex;\n\toutput [4:0] res;\n\n\t// Writing gates for main "

@@ -113,6 +113,7 @@ bool GraphVertexSubGraph::toVerilog(std::string i_path,
   }
   return d_subGraph->toVerilog(i_path, i_filename);
 }
+
 bool GraphVertexSubGraph::toVerilogBusEnabled(std::string i_path,
                                               std::string i_filename) {
   if (auto parentPtr = d_baseGraph.lock()) {
@@ -123,6 +124,7 @@ bool GraphVertexSubGraph::toVerilogBusEnabled(std::string i_path,
 
   return d_subGraph->toVerilogBusEnabled(i_path, i_filename);
 }
+
 bool GraphVertexSubGraph::toVerilogBusEnabledAsOneBit(std::string i_path,
                                                       std::string i_filename) {
   if (auto parentPtr = d_baseGraph.lock()) {
@@ -133,6 +135,7 @@ bool GraphVertexSubGraph::toVerilogBusEnabledAsOneBit(std::string i_path,
 
   return d_subGraph->toVerilogBusEnabledAsOneBit(i_path, i_filename);
 }
+
 DotReturn GraphVertexSubGraph::toDOT() {
   auto parentPtr = d_baseGraph.lock();
   if (parentPtr) {
@@ -180,69 +183,46 @@ std::string GraphVertexSubGraph::toGraphML(uint16_t i_indent,
 std::string GraphVertexSubGraph::toVerilogCommon(
     std::function<void(VertexPtr, VertexPtr, std::string &)> printPin,
     std::string &module_ver) const {
+  if (!d_subGraph) {
+    throw std::invalid_argument("Subgraph pointer is null");
+  }
   auto base = d_baseGraph.lock();
-  uint64_t verilogCount = base->getGraphInstVerilog(d_subGraph->getID());
-
-  std::string verilogTab = "  ";
-  std::string nameSub = d_subGraph->getName();
-  // module_name module_name_inst_1 (
-  module_ver =
-      fmt::format("  {} {}_inst_{} (\n", nameSub, nameSub, verilogCount);
-
+  if (!base) {
+    throw std::invalid_argument("Dead pointer!");
+  }
   auto &&inputs = d_subGraph->getVerticesByType(VertexTypes::input);
   auto &&outputs = d_subGraph->getVerticesByType(VertexTypes::output);
-  for (size_t i = 0; i < inputs.size(); ++i) {
-    std::string inp_name = inputs[i]->getName();
 
+  if (outputs.empty()) {
+    throw std::invalid_argument("Subgraph without outputs cannot be written to Verilog");
+  }
+  if (d_inConnections.size() < inputs.size()) {
+    throw std::invalid_argument(
+        "Subgraph instance has fewer input connections than subgraph inputs");
+  }
+  if (d_outConnections.size() < outputs.size()) {
+    throw std::invalid_argument(
+        "Subgraph instance has fewer output connections than subgraph outputs");
+  }
+  const std::string moduleName = d_subGraph->getName();
+  const std::string instanceName = getName();
+
+  module_ver = fmt::format("  {} {} (\n", moduleName, instanceName);
+
+  for (size_t i = 0; i < inputs.size(); ++i) {
     printPin(inputs[i], d_inConnections[i], module_ver);
   }
-
-  for (size_t i = 0; i < outputs.size() - 1; ++i) {
-    std::string out_name = outputs[i]->getName();
-
+  for (size_t i = 0; i + 1 < outputs.size(); ++i) {
     printPin(outputs[i], d_outConnections[i], module_ver);
   }
-
-  std::string out_name = outputs.back()->getName();
-  module_ver += fmt::format("    .{}( {} )\n  );\n", out_name,
+  module_ver += fmt::format("    .{}( {} )\n  );\n",
+                            outputs.back()->getName(),
                             d_outConnections.back()->getName());
+
   return module_ver;
-};
+}
+
 std::string GraphVertexSubGraph::toVerilog() const {
-  // auto base = d_baseGraph.lock();
-  // uint64_t verilogCount = base->getGraphInstVerilog(d_subGraph->getID());
-
-  // std::string verilogTab = "  ";
-  // std::string nameSub = base->getName();
-  // // module_name module_name_inst_1 (
-  // std::string module_ver = verilogTab + nameSub + " " + nameSub + "_inst_" +
-  //                          std::to_string(verilogCount) + " (\n";
-
-  // auto &&inputs = d_subGraph->getVerticesByType(VertexTypes::input);
-  // auto &&outputs = d_subGraph->getVerticesByType(VertexTypes::output);
-  // for (size_t i = 0; i < inputs.size(); ++i) {
-  //   VertexPtr inp = d_inConnections[i];
-  //   std::string inp_name = inputs[i]->getName();
-
-  //   module_ver += verilogTab + verilogTab + "." + inp_name + "( ";
-  //   module_ver += inp->getName() + " ),\n";
-  // }
-
-  // for (size_t i = 0; i < outputs.size() - 1; ++i) {
-  //   VertexPtr out = d_outConnections[i];
-  //   std::string out_name = outputs[i]->getName();
-
-  //   module_ver += verilogTab + verilogTab + "." + out_name + "( ";
-  //   module_ver += out->getName() + " ),\n";
-  // }
-
-  // std::string out_name = outputs.back()->getName();
-
-  // module_ver += verilogTab + verilogTab + "." + out_name + "( ";
-  // module_ver += d_outConnections.back()->getName() + " )\n";
-  // module_ver += verilogTab + "); \n";
-
-  // return module_ver;
   std::string module_ver;
   auto printPin = [&](VertexPtr innerPinI, VertexPtr connectionI,
                       std::string &module_ver) {
@@ -263,9 +243,10 @@ std::string GraphVertexSubGraph::toVerilogBusEnabledAsOneBit() const {
             fmt::format("    .{}_{}( {}_{} ),\n", innerPinI->getName(), j,
                         connectionI->getName(), j);
       }
-    } else
+    } else {
       module_ver += fmt::format("    .{}( {} ),\n", innerPinI->getName(),
                                 connectionI->getName());
+    }
   };
   return toVerilogCommon(printPin, module_ver);
 }

@@ -163,8 +163,15 @@ TEST(TestIsEmptyAndIsEmptyFull, ReturnCorrectSize) {
   EXPECT_EQ(graphPtr4->isEmpty(), false);
 
   GraphPtr subGraphPtr = std::make_shared<OrientedGraph>();
+  auto *subIn = subGraphPtr->addInput("Anything");
+  auto *subOut = subGraphPtr->addOutput("Anything");
+  subGraphPtr->addEdge(subIn, subOut);
+
+  auto inp = graphPtr5->addInputs(
+      subGraphPtr->getVerticesByType(VertexTypes::input).size());
+
   graphPtr5->addSubGraph(subGraphPtr,
-                         subGraphPtr->getVerticesByType(VertexTypes::input));
+                         inp);
   EXPECT_EQ(graphPtr5->isEmpty(), true);
   // Does graph with empty subGraph isEmptyFull?
   // EXPECT_EQ(graph5.isEmptyFull(), false);
@@ -224,19 +231,35 @@ TEST(TestGetEdgesCount, ReturnCorrectCount) {
 TEST(TestGetSubGraphs, ReturnCorrectSubGraphs) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>();
   EXPECT_EQ(graphPtr->getSubGraphs().size(), 0);
+  graphPtr->addInput("Anything");
 
   GraphPtr subGraphPtr1 = std::make_shared<OrientedGraph>();
+
+  auto *subIn = subGraphPtr1->addInput("Anything");
+  auto *subOut = subGraphPtr1->addOutput("Anything");
+  subGraphPtr1->addEdge(subIn, subOut);
+
   graphPtr->addSubGraph(subGraphPtr1,
                         graphPtr->getVerticesByType(VertexTypes::input));
   EXPECT_NE(graphPtr->getSubGraphs().find(subGraphPtr1),
             graphPtr->getSubGraphs().end());
 
   GraphPtr subGraphPtr2 = std::make_shared<OrientedGraph>();
+
+  subIn = subGraphPtr2->addInput("Anything");
+  subOut = subGraphPtr2->addOutput("Anything");
+  subGraphPtr2->addEdge(subIn, subOut);
+
   GraphPtr subGraphPtr3 = std::make_shared<OrientedGraph>();
+
+  subIn = subGraphPtr3->addInput("Anything");
+  subOut = subGraphPtr3->addOutput("Anything");
+  subGraphPtr3->addEdge(subIn, subOut);
+
   graphPtr->addSubGraph(subGraphPtr2,
-                        subGraphPtr2->getVerticesByType(VertexTypes::input));
+                        graphPtr->getVerticesByType(VertexTypes::input));
   subGraphPtr3->addSubGraph(
-      subGraphPtr1, subGraphPtr1->getVerticesByType(VertexTypes::input));
+      subGraphPtr1, subGraphPtr3->getVerticesByType(VertexTypes::input));
   EXPECT_EQ(graphPtr->getSubGraphs().size(), 2);
   EXPECT_NE(graphPtr->getSubGraphs().find(subGraphPtr1),
             graphPtr->getSubGraphs().end());
@@ -269,13 +292,19 @@ TEST(TestGetBaseVertexes, ReturnCorrectVertexes) {
 
   // with subGraph
   GraphPtr subGraphPtr = std::make_shared<OrientedGraph>();
-  graphPtr->addSubGraph(subGraphPtr,
-                        subGraphPtr->getVerticesByType(VertexTypes::input));
+  auto *subIn = subGraphPtr->addInput("Anything");
+  auto *subOut = subGraphPtr->addOutput("Anything");
+  subGraphPtr->addEdge(subIn, subOut);
+
+  auto inp = graphPtr->addInputs(
+      subGraphPtr->getVerticesByType(VertexTypes::input).size());
+
+  graphPtr->addSubGraph(subGraphPtr, inp);
   subGraphPtr->addGate(Gates::GateAnd, "Anything");
   EXPECT_EQ(graphPtr->getBaseVertexes()[VertexTypes::gate].size(), 1);
 
   subGraphPtr->addInput("Anything");
-  EXPECT_EQ(graphPtr->getBaseVertexes()[VertexTypes::input].size(), 1);
+  EXPECT_EQ(graphPtr->getBaseVertexes()[VertexTypes::input].size(), 2);
 
   subGraphPtr->addOutput("Anything");
   EXPECT_EQ(graphPtr->getBaseVertexes()[VertexTypes::output].size(), 1);
@@ -386,13 +415,15 @@ TEST(TestGetVerticesByName, ReturnCorrectVertices) {
 
   // With subGraph
   GraphPtr subGraphPtr = std::make_shared<OrientedGraph>();
-  subGraphPtr->addInput("Anything");
+  auto *subIn = subGraphPtr->addInput("Anything");
+  auto *subOut = subGraphPtr->addOutput("Anything");
+  subGraphPtr->addEdge(subIn, subOut);
 
   graphPtr->addSubGraph(subGraphPtr,
                         graphPtr->getVerticesByType(VertexTypes::input));
   subGraphPtr->addGate(Gates::GateAnd, "Anything");
   EXPECT_EQ(graphPtr->getVerticesByName("Anything").size(), 4);
-  EXPECT_EQ(graphPtr->getVerticesByName("Anything", true).size(), 6);
+  EXPECT_EQ(graphPtr->getVerticesByName("Anything", true).size(), 7);
   // Why return GateDefault?
   EXPECT_EQ(graphPtr->getVerticesByName("Anything", true)[4]->getGate(),
             Gates::GateDefault);

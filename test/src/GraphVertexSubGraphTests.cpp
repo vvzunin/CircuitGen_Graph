@@ -2,447 +2,156 @@
 
 #include <gtest/gtest.h>
 
+#include <chrono>
 #include <filesystem>
 #include <fstream>
 #include <set>
 #include <string>
+#include <vector>
 
 using namespace CG_Graph;
 
-#ifdef LOGFLAG
-#include "easylogging++Init.hpp"
-#endif
+namespace {
 
-GraphPtr memoryOwnerSubGr = std::make_shared<OrientedGraph>();
+namespace fs = std::filesystem;
 
-std::string loadStringFileSubGraph(const std::filesystem::path &p) {
-  std::string str;
-  std::ifstream file;
-  file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-  file.open(p, std::ios_base::binary);
-  std::size_t sz = static_cast<std::size_t>(file_size(p));
-  str.resize(sz, '\0');
-  file.read(&str[0], sz);
-  return str;
+class ScopedTempDir {
+public:
+  ScopedTempDir() {
+    const auto uniqueSuffix =
+        std::to_string(std::chrono::steady_clock::now()
+                           .time_since_epoch()
+                           .count());
+
+    d_path = fs::temp_directory_path() /
+             ("cg_graph_verilog_submodules_test_" + uniqueSuffix);
+
+    fs::create_directories(d_path);
+  }
+
+  ~ScopedTempDir() {
+    std::error_code ec;
+    fs::remove_all(d_path, ec);
+  }
+
+  const fs::path &path() const {
+    return d_path;
+  }
+
+private:
+  fs::path d_path;
+};
+
+std::string loadTextFile(const fs::path &p) {
+  std::ifstream file(p, std::ios_base::binary);
+  if (!file) {
+    throw std::runtime_error("Cannot open file: " + p.string());
+  }
+
+  return std::string(std::istreambuf_iterator<char>(file),
+                     std::istreambuf_iterator<char>());
 }
 
-TEST(TestConstructorWithoutIName, WithoutDefaulParametrs) {
+bool contains(const std::string &text, const std::string &pattern) {
+  return text.find(pattern) != std::string::npos;
+}
+
+} // namespace
+
+TEST(TestToVerilogSubmodules, CreatesSingleSubmodulesDirAndWritesAllModules) {
   CG_Graph::GraphVertexBase::resetCounter();
   CG_Graph::OrientedGraph::resetCounter();
-  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSubGr);
-  std::string graphNum = std::to_string(0);
-  EXPECT_EQ(subGraph1.getType(), VertexTypes::subGraph);
-  EXPECT_EQ(subGraph1.getTypeName(), "subGraph");
-  EXPECT_EQ(subGraph1.getRawName(), "subGraph_" + graphNum);
-  EXPECT_EQ(subGraph1.getLevel(), 0);
-  EXPECT_EQ(subGraph1.getValue(), 'x');
-  EXPECT_EQ(subGraph1.getBaseGraph().lock(), memoryOwnerSubGr);
-  EXPECT_EQ(subGraph1.getOutConnections().size(), 0);
-}
 
-TEST(TestConstructorWithoutIName, SubGraphWithDefaultInputParametrs) {
-  CG_Graph::GraphVertexBase::resetCounter();
-  CG_Graph::OrientedGraph::resetCounter();
-  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
-  GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph1(graphPtr1, graphPtr2);
-  std::string graphNum = std::to_string(0);
-  EXPECT_EQ(subGraph1.getType(), VertexTypes::subGraph);
-  EXPECT_EQ(subGraph1.getTypeName(), "subGraph");
-  EXPECT_EQ(subGraph1.getRawName(), "subGraph_" + graphNum);
-  EXPECT_EQ(subGraph1.getLevel(), 0);
-  EXPECT_EQ(subGraph1.getValue(), 'x');
-  EXPECT_EQ(subGraph1.getBaseGraph().lock(), graphPtr2);
-  EXPECT_EQ(subGraph1.getOutConnections().size(), 0);
-}
+  ScopedTempDir tempDir;
 
-TEST(TestConstructorWithIName_SubGraph, WithoutDefaultInputParametrs) {
-  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph1(graphPtr1, "Anything", memoryOwnerSubGr);
-  EXPECT_EQ(subGraph1.getBaseGraph().lock(), memoryOwnerSubGr);
-  EXPECT_EQ(subGraph1.getType(), VertexTypes::subGraph);
-  EXPECT_EQ(subGraph1.getTypeName(), "subGraph");
-  EXPECT_EQ(subGraph1.getRawName(), "Anything");
-  EXPECT_EQ(subGraph1.getLevel(), 0);
-  EXPECT_EQ(subGraph1.getValue(), 'x');
-  EXPECT_EQ(subGraph1.getOutConnections().size(), 0);
-}
+  GraphPtr leafGraph = std::make_shared<OrientedGraph>("leafGraph");
+  VertexPtr leafIn = leafGraph->addInput("leaf_in");
+  VertexPtr leafOut = leafGraph->addOutput("leaf_out");
+  leafGraph->addEdge(leafIn, leafOut);
 
-TEST(TestConstructorWithIName_SubGraph, SubGraphWithDefaultInputParametrs) {
-  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
-  GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph1(graphPtr1, "Anything", graphPtr2);
-  EXPECT_EQ(subGraph1.getType(), VertexTypes::subGraph);
-  EXPECT_EQ(subGraph1.getTypeName(), "subGraph");
-  EXPECT_EQ(subGraph1.getRawName(), "Anything");
-  EXPECT_EQ(subGraph1.getLevel(), 0);
-  EXPECT_EQ(subGraph1.getValue(), 'x');
-  EXPECT_EQ(subGraph1.getBaseGraph().lock(), graphPtr2);
-  EXPECT_EQ(subGraph1.getOutConnections().size(), 0);
-}
-// ------------------------OverrideMethodsTests
+  GraphPtr wrapperGraph = std::make_shared<OrientedGraph>("wrapperGraph");
+  VertexPtr wrapperIn = wrapperGraph->addInput("wrapper_in");
 
-// Do not know what to do with it
+  std::vector<VertexPtr> leafOutputs =
+      wrapperGraph->addSubGraph(leafGraph, {wrapperIn});
 
-// GraphPtr graph = std::make_shared<OrientedGraph>();
-// TEST(TestUpdateValue, Test) {
-//   VertexPtr subGraphPtr1 = memoryOwnerSubGr->addSubGraph(graph);
-//   EXPECT_EQ(subGraphPtr1->updateValue(), 'x');
-// }
+  ASSERT_EQ(leafOutputs.size(), 1u);
 
-// return "DO NOT CALL IT" TEST(TestToVerilog, TestReturnString) {}
-// TEST(TestToVerilog, TestReturnPairThereIsNoBaseGraph) {
-//   GraphPtr            graphPtr1 = std::make_shared<OrientedGraph>();
-//   GraphVertexSubGraph subGraph1(graphPtr1, "Anything", nullptr);
-//   EXPECT_THROW(subGraph1.toVerilog("path"), std::invalid_argument);
-// }
+  VertexPtr wrapperOut = wrapperGraph->addOutput("wrapper_out");
+  wrapperGraph->addEdge(leafOutputs.at(0), wrapperOut);
 
-// @todo Update with easylogging
-// TEST(TestToVerilog, TestReturnPairWrongPath) {
-//   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
-//   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
-//   GraphVertexSubGraph subGraph1(graphPtr1, "Anything", graphPtr2);
+  GraphPtr topGraph = std::make_shared<OrientedGraph>("topGraph");
+  VertexPtr topIn0 = topGraph->addInput("top_in_0");
+  VertexPtr topIn1 = topGraph->addInput("top_in_1");
 
-//   std::stringstream capturedOutput;
-//   std::streambuf *originalStderr = std::cerr.rdbuf(capturedOutput.rdbuf());
-//   subGraph1.toVerilog("wrong_path");
+  std::vector<VertexPtr> wrapperOutputs0 =
+      topGraph->addSubGraph(wrapperGraph, {topIn0});
+  std::vector<VertexPtr> wrapperOutputs1 =
+      topGraph->addSubGraph(wrapperGraph, {topIn1});
 
-//   std::cerr.rdbuf(originalStderr);
-//   std::string output = capturedOutput.str();
-//   EXPECT_EQ(output, "cannot write file to wrong_path\n");
-// }
+  ASSERT_EQ(wrapperOutputs0.size(), 1u);
+  ASSERT_EQ(wrapperOutputs1.size(), 1u);
 
-TEST(TestToVerilog, TestReturnPairCreateCorrectFile) {
-  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("testGraph");
-  graphPtr1->addInput("testInput");
-  GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
-  GraphPtr graphPtr3 = std::make_shared<OrientedGraph>("topGraph");
-  GraphVertexSubGraph subGraph1(graphPtr1, "Anything", graphPtr2);
-  graphPtr3->addSubGraph(graphPtr1, {graphPtr3->addConst('x', "testConst")});
-  std::string curPath = std::filesystem::current_path();
-  std::string fileName = "testGraph.v";
-  EXPECT_TRUE(subGraph1.toVerilog(curPath, fileName));
-  EXPECT_TRUE(graphPtr3->toVerilog(curPath, "graphWithSubgraph.v"));
-  std::string loadFile = loadStringFileSubGraph(curPath + '/' + fileName);
-  loadFile = loadFile.substr(loadFile.find("\n") + 2);
-  // LOG(INFO) << loadFile;
-  EXPECT_EQ(loadFile,
-            "module testGraph(\n\t\n\t);\n\t// Writing consts\n\twire "
-            "testConst;\n\n\tassign testConst = 1'bx;\n\nendmodule\n");
-  std::string loadSubgraph =
-      loadStringFileSubGraph(curPath + "submodules/testGraph.v");
-  std::string loadTopgraph = loadStringFileSubGraph(curPath + "/topGraph.v");
-  EXPECT_EQ(loadSubgraph, "");
-  EXPECT_EQ(loadTopgraph, "");
-  std::filesystem::remove(curPath + '/' + fileName);
-  std::filesystem::remove(curPath + "submodules/testGraph.v");
-  std::filesystem::remove(curPath + "/topGraph.v");
-}
+  VertexPtr topOut0 = topGraph->addOutput("top_out_0");
+  VertexPtr topOut1 = topGraph->addOutput("top_out_1");
 
-TEST(TestToGraphML, Test) {
-  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("testGraph");
-  graphPtr1->addConst('x', "testConst");
-  GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph1(graphPtr1, "Anything", graphPtr2);
+  topGraph->addEdge(wrapperOutputs0.at(0), topOut0);
+  topGraph->addEdge(wrapperOutputs1.at(0), topOut1);
 
-  EXPECT_EQ(subGraph1.toGraphML(),
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-            "<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" "
-            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
-            "xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns "
-            "http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\">\n"
-            "  <key id=\"t\" for=\"node\" attr.name=\"type\" "
-            "attr.type=\"string\"/>\n  <graph id=\"testGraph\" "
-            "edgedefault=\"directed\">\n"
-            "    <node id=\"testConst\">\n"
-            "      <data key=\"t\">x</data>\n"
-            "    </node>\n"
-            "  </graph>\n"
-            "</graphml>\n");
-}
+  const auto wrapperInstances = topGraph->getVerticesByType(VertexTypes::subGraph);
+  const auto leafInstances = wrapperGraph->getVerticesByType(VertexTypes::subGraph);
 
-TEST(TestCalculateHash_SubGraph, Test) {
-  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("testGraph");
-  graphPtr1->addConst('x', "testConst");
-  GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph1(graphPtr1, "Anything", graphPtr2);
+  ASSERT_EQ(wrapperInstances.size(), 2u);
+  ASSERT_EQ(leafInstances.size(), 1u);
 
-  GraphPtr graphPtr3 = std::make_shared<OrientedGraph>("testGraph");
-  graphPtr1->addConst('x', "testConst");
-  GraphPtr graphPtr4 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph2(graphPtr1, "Anything", graphPtr2);
+  ASSERT_TRUE(topGraph->toVerilog(tempDir.path().string(), "topGraph.v"));
 
-  EXPECT_EQ(subGraph1.calculateHash(), subGraph2.calculateHash());
-}
+  const fs::path topFile = tempDir.path() / "topGraph.v";
+  const fs::path submodulesDir = tempDir.path() / "submodules";
+  const fs::path wrapperFile = submodulesDir / "wrapperGraph.v";
+  const fs::path leafFile = submodulesDir / "leafGraph.v";
 
-TEST(TestSetSubGrahGetSubgraph, Test) {
-  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("testGraph");
-  graphPtr1->addConst('x', "testConst");
-  GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph1(graphPtr1, "Anything", graphPtr2);
+  ASSERT_TRUE(fs::exists(topFile));
+  ASSERT_TRUE(fs::is_regular_file(topFile));
 
-  EXPECT_EQ(subGraph1.getSubGraph(), graphPtr1);
-  subGraph1.setSubGraph(graphPtr2);
-  EXPECT_EQ(subGraph1.getSubGraph(), graphPtr2);
-}
+  ASSERT_TRUE(fs::exists(submodulesDir));
+  ASSERT_TRUE(fs::is_directory(submodulesDir));
 
-// -------------------------------------
+  ASSERT_TRUE(fs::exists(wrapperFile));
+  ASSERT_TRUE(fs::is_regular_file(wrapperFile));
 
-TEST(TestSetName_SubGraph, InputCorrectName) {
-  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
-  GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSubGr);
-  subGraph1.setName("Anything");
-  EXPECT_EQ(subGraph1.getRawName(), "Anything");
-}
+  ASSERT_TRUE(fs::exists(leafFile));
+  ASSERT_TRUE(fs::is_regular_file(leafFile));
 
-TEST(PortsParsing_SubGraph, ParseVerilogPortsSimple) {
-  const std::filesystem::path tmpPath =
-      std::filesystem::current_path() / "tmp_ports_subgraph_test.v";
-  {
-    std::ofstream file(tmpPath);
-    file << "module m(a, b, c, y, z);\n";
-    file << "input wire a, b, c; // comment\n";
-    file << "output reg y, z;\n";
-    file << "endmodule\n";
+  EXPECT_FALSE(fs::exists(submodulesDir / "submodules"))
+      << "Nested submodules directory must not be created";
+
+  size_t submoduleFilesCount = 0;
+  for (const auto &entry: fs::directory_iterator(submodulesDir)) {
+    EXPECT_TRUE(entry.is_regular_file())
+        << "Only Verilog files are expected inside submodules, got: "
+        << entry.path();
+
+    if (entry.is_regular_file()) {
+      ++submoduleFilesCount;
+    }
   }
 
-  const VerilogPorts ports = parseVerilogPorts(tmpPath.string());
-  std::filesystem::remove(tmpPath);
+  EXPECT_EQ(submoduleFilesCount, 2u);
 
-  const std::set<std::string> inputs(ports.inputs.begin(), ports.inputs.end());
-  const std::set<std::string> outputs(ports.outputs.begin(),
-                                      ports.outputs.end());
+  const std::string topVerilog = loadTextFile(topFile);
+  const std::string wrapperVerilog = loadTextFile(wrapperFile);
+  const std::string leafVerilog = loadTextFile(leafFile);
 
-  EXPECT_EQ(inputs, (std::set<std::string>{"a", "b", "c"}));
-  EXPECT_EQ(outputs, (std::set<std::string>{"y", "z"}));
+  EXPECT_EQ(wrapperInstances.at(0)->getName(), "wrapperGraph_inst_0");
+  EXPECT_EQ(wrapperInstances.at(1)->getName(), "wrapperGraph_inst_1");
+
+  EXPECT_TRUE(contains(topVerilog, "wrapperGraph wrapperGraph_inst_0"));
+  EXPECT_TRUE(contains(topVerilog, "wrapperGraph wrapperGraph_inst_1"));
+
+  EXPECT_EQ(leafInstances.at(0)->getName(), "leafGraph_inst_0");
+  EXPECT_TRUE(contains(wrapperVerilog, "leafGraph leafGraph_inst_0"));
+
+  EXPECT_FALSE(contains(topVerilog, "leafGraph "))
+      << "topGraph.v should instantiate only its direct subgraphs";
 }
-
-TEST(PortsParsing_SubGraph, ParseVerilogPortsAnsiStyle) {
-  const std::filesystem::path tmpPath =
-      std::filesystem::current_path() / "tmp_ansi_ports.v";
-  {
-    std::ofstream file(tmpPath);
-    file << "module m (\n";
-    file << "  input wire a, b,\n";
-    file << "  output reg y, z\n";
-    file << ");\n";
-    file << "endmodule\n";
-  }
-  const VerilogPorts ports = parseVerilogPorts(tmpPath.string());
-  std::filesystem::remove(tmpPath);
-
-  const std::set<std::string> inputs(ports.inputs.begin(), ports.inputs.end());
-  const std::set<std::string> outputs(ports.outputs.begin(),
-                                      ports.outputs.end());
-  EXPECT_EQ(inputs, (std::set<std::string>{"a", "b"}));
-  EXPECT_EQ(outputs, (std::set<std::string>{"y", "z"}));
-}
-
-TEST(PortsParsing_SubGraph, ParseVerilogPortsIgnoresDataTypeKeywords) {
-  const std::filesystem::path tmpPath =
-      std::filesystem::current_path() / "tmp_type_keywords.v";
-  {
-    std::ofstream file(tmpPath);
-    file << "module m (\n";
-    file << "  input logic a, b,\n";
-    file << "  output signed y,\n";
-    file << "  input unsigned c\n";
-    file << ");\n";
-    file << "endmodule\n";
-  }
-  const VerilogPorts ports = parseVerilogPorts(tmpPath.string());
-  std::filesystem::remove(tmpPath);
-
-  const std::set<std::string> inputs(ports.inputs.begin(), ports.inputs.end());
-  const std::set<std::string> outputs(ports.outputs.begin(),
-                                      ports.outputs.end());
-
-  EXPECT_EQ(inputs, (std::set<std::string>{"a", "b", "c"}));
-  EXPECT_EQ(outputs, (std::set<std::string>{"y"}));
-}
-
-TEST(PortsParsing_SubGraph, ParseVerilogPortsThrowsWhenFileMissing) {
-  EXPECT_THROW(parseVerilogPorts("definitely_missing_ports_file.v"),
-               std::runtime_error);
-}
-
-TEST(PortsMatching_SubGraph, CheckPortsMatchGraphPtrSuccess) {
-  GraphPtr graph = std::make_shared<OrientedGraph>("PortsGraph");
-  graph->addInput("a");
-  graph->addInput("b");
-  graph->addOutput("y");
-
-  VerilogPorts verilogPorts = {{"b", "a"}, {"y"}};
-  std::string errorMsg;
-
-  EXPECT_TRUE(checkPortsMatch(graph, verilogPorts, errorMsg));
-  EXPECT_TRUE(errorMsg.empty());
-}
-
-TEST(PortsMatching_SubGraph, CheckPortsMatchGraphPtrFail) {
-  GraphPtr graph = std::make_shared<OrientedGraph>("PortsGraph");
-  graph->addInput("a");
-  graph->addOutput("y");
-
-  VerilogPorts verilogPorts = {{"a", "b"}, {"y"}};
-  std::string errorMsg;
-
-  EXPECT_FALSE(checkPortsMatch(graph, verilogPorts, errorMsg));
-  EXPECT_FALSE(errorMsg.empty());
-}
-
-TEST(VerilogParameters_SubGraph, ParseAndStoreParametersFromVerilogFile) {
-  const std::filesystem::path cwd = std::filesystem::current_path();
-  const std::filesystem::path verilogInPath = cwd / "tmp_verilog_params_src.v";
-  const std::filesystem::path verilogOutPath = cwd / "tmp_verilog_params_out.v";
-
-  {
-    std::ofstream file(verilogInPath);
-    file << "module m #(\n";
-    file << "  parameter WIDTH = 8,\n";
-    file << "  parameter signed [3:0] MODE = 4'd2\n";
-    file << ") (\n";
-    file << "  input wire a,\n";
-    file << "  output wire y\n";
-    file << ");\n";
-    file << "localparam integer LATENCY = WIDTH + 1;\n";
-    file << "endmodule\n";
-  }
-
-  GraphPtr subGraph = std::make_shared<OrientedGraph>("ParamsGraph");
-  GraphPtr owner = std::make_shared<OrientedGraph>("ParamsOwner");
-  GraphVertexSubGraph subGraphVertex(subGraph, owner);
-  subGraphVertex.setVerilogPath(verilogInPath.string());
-
-  EXPECT_TRUE(subGraphVertex.toVerilog(cwd.string(),
-                                       verilogOutPath.filename().string()));
-
-  const auto &parameters = subGraph->getVerilogParameters();
-  ASSERT_EQ(parameters.size(), 3);
-  EXPECT_EQ(parameters[0],
-            std::make_pair(std::string("WIDTH"), std::string("8")));
-  EXPECT_EQ(parameters[1],
-            std::make_pair(std::string("MODE"), std::string("4'd2")));
-  EXPECT_EQ(parameters[2],
-            std::make_pair(std::string("LATENCY"), std::string("WIDTH + 1")));
-
-  const std::string generatedVerilog = loadStringFileSubGraph(verilogOutPath);
-  EXPECT_NE(generatedVerilog.find("parameter WIDTH = 8;"), std::string::npos);
-  EXPECT_NE(generatedVerilog.find("parameter MODE = 4'd2;"), std::string::npos);
-  EXPECT_NE(generatedVerilog.find("parameter LATENCY = WIDTH + 1;"),
-            std::string::npos);
-
-  std::filesystem::remove(verilogInPath);
-  std::filesystem::remove(verilogOutPath);
-}
-
-// Do not know what to do with it
-
-// TEST(TestAddInConnections, AddConnections) {
-//   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
-//   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
-//   GraphPtr graphPtr3 = std::make_shared<OrientedGraph>();
-//   GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSubGr);
-//   EXPECT_EQ(subGraph1.getInConnections().size(), 0);
-
-//   VertexPtr subGraphPtr1 = memoryOwnerSubGr->addSubGraph(graphPtr2);
-//   EXPECT_EQ(subGraph1.addVertexToInConnections(subGraphPtr1), 1);
-//   EXPECT_EQ(subGraph1.addVertexToInConnections(subGraphPtr1), 2);
-//   EXPECT_EQ(subGraph1.getInConnections()[0], subGraphPtr1);
-//   EXPECT_EQ(subGraph1.getInConnections()[1], subGraphPtr1);
-
-//   VertexPtr subGraphPtr2 =
-//       memoryOwnerSubGr->addSubGraph(graphPtr3, memoryOwnerSubGr);
-//   subGraph1.addVertexToInConnections(subGraphPtr2);
-//   EXPECT_EQ(subGraph1.getInConnections()[2], subGraphPtr2);
-// }
-
-// Do not know what to do with it
-
-// TEST(TestAddOutConnections, SubGraphAddConnections) {
-//   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
-//   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
-//   GraphPtr graphPtr3 = std::make_shared<OrientedGraph>();
-//   GraphVertexSubGraph subGraph1(graphPtr1, memoryOwnerSubGr);
-//   EXPECT_EQ(subGraph1.getOutConnections().size(), 0);
-
-//   VertexPtr subGraphPtr1 =
-//       memoryOwnerSubGr->addSubGraph(graphPtr2, memoryOwnerSubGr);
-//   EXPECT_EQ(subGraph1.addVertexToOutConnections(subGraphPtr1), true);
-//   EXPECT_EQ(subGraph1.addVertexToOutConnections(subGraphPtr1), false);
-//   EXPECT_EQ(subGraph1.getOutConnections()[0], subGraphPtr1);
-
-//   VertexPtr subGraphPtr2 =
-//       memoryOwnerSubGr->addSubGraph(graphPtr3, memoryOwnerSubGr);
-//   subGraph1.addVertexToOutConnections(subGraphPtr2);
-//   EXPECT_EQ(subGraph1.getOutConnections()[1], subGraphPtr2);
-// }
-
-// Do not know what to do with it
-
-// TEST(TestRemoveVertexToInConnections, SubGraphRemoveConnections) {
-//   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
-//   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
-//   GraphPtr graphPtr3 = std::make_shared<OrientedGraph>();
-//   VertexPtr subGraphPtr1 = memoryOwnerSubGr->addSubGraph(graphPtr1);
-//   EXPECT_EQ(subGraphPtr1->removeVertexToInConnections(nullptr), false);
-
-//   subGraphPtr1->addVertexToInConnections(
-//       memoryOwnerSubGr->addSubGraph(graphPtr2));
-//   subGraphPtr1->addVertexToInConnections(
-//       memoryOwnerSubGr->addSubGraph(graphPtr3));
-//   EXPECT_EQ(subGraphPtr1->getInConnections().size(), 2);
-//   EXPECT_EQ(subGraphPtr1->removeVertexToInConnections(nullptr), true);
-//   EXPECT_EQ(subGraphPtr1->getInConnections().size(), 1);
-// }
-
-// @todo Need to fix
-// TEST(TestUpdateLevel, UpdateLevelCorrect) {
-//   GraphPtr            graphPtr1 = std::make_shared<OrientedGraph>();
-//   GraphVertexSubGraph subGraph1(graphPtr1);
-//   VertexPtr           subGraphPtr1 =
-//       memoryOwnerSubGr->create<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
-//   subGraphPtr1->setLevel(1);
-//   subGraph1.addVertexToInConnections(subGraphPtr1);
-//   subGraph1.updateLevel();
-//   EXPECT_EQ(subGraph1.getLevel(), 2);
-
-//   VertexPtr subGraphPtr2 =
-//       memoryOwnerSubGr->create<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
-//   VertexPtr subGraphPtr3 =
-//       memoryOwnerSubGr->create<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
-//   subGraphPtr2->setLevel(3);
-//   subGraphPtr3->setLevel(2);
-//   subGraph1.addVertexToInConnections(subGraphPtr2);
-//   subGraph1.addVertexToInConnections(subGraphPtr3);
-//   subGraph1.updateLevel();
-//   EXPECT_EQ(subGraph1.getLevel(), 4);
-
-//   VertexPtr subGraphPtr4 =
-//       memoryOwnerSubGr->create<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
-//   subGraph1.addVertexToInConnections(subGraphPtr4);
-//   subGraph1.updateLevel();
-//   EXPECT_EQ(subGraph1.getLevel(), 4);
-// }
-
-// TEST(TestUpdateLevel, ThrowInvalidArgumentIfDInconnectionsNIsNullptr) {
-//   GraphPtr            graphPtr1 = std::make_shared<OrientedGraph>();
-//   GraphVertexSubGraph subGraph1(graphPtr1);
-
-//   VertexPtr           subGraphPtr1 =
-//       memoryOwnerSubGr->create<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
-//   VertexPtr subGraphPtr2 =
-//       memoryOwnerSubGr->create<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
-//   subGraph1.addVertexToInConnections(subGraphPtr1);
-//   subGraph1.addVertexToInConnections(subGraphPtr2);
-//   EXPECT_NO_THROW(subGraph1.updateLevel());
-
-//   subGraph1.addVertexToInConnections(nullptr);
-//   EXPECT_THROW(subGraph1.updateLevel(), std::invalid_argument);
-
-//   VertexPtr subGraphPtr3 =
-//       memoryOwnerSubGr->create<GraphVertexSubGraph>(std::make_shared<OrientedGraph>());
-//   subGraph1.addVertexToInConnections(subGraphPtr3);
-//   EXPECT_THROW(subGraph1.updateLevel(), std::invalid_argument);
-// }
