@@ -114,19 +114,29 @@ TEST(TestConstructorWithIName_SubGraph, SubGraphWithDefaultInputParametrs) {
 
 TEST(TestToVerilog, TestReturnPairCreateCorrectFile) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("testGraph");
-  graphPtr1->addConst('x', "testConst");
+  graphPtr1->addInput("testInput");
   GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
+  GraphPtr graphPtr3 = std::make_shared<OrientedGraph>("topGraph");
   GraphVertexSubGraph subGraph1(graphPtr1, "Anything", graphPtr2);
+  graphPtr3->addSubGraph(graphPtr1, {graphPtr3->addConst('x', "testConst")});
   std::string curPath = std::filesystem::current_path();
   std::string fileName = "testGraph.v";
   EXPECT_TRUE(subGraph1.toVerilog(curPath, fileName));
+  EXPECT_TRUE(graphPtr3->toVerilog(curPath, "graphWithSubgraph.v"));
   std::string loadFile = loadStringFileSubGraph(curPath + '/' + fileName);
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
   // LOG(INFO) << loadFile;
   EXPECT_EQ(loadFile,
             "module testGraph(\n\t\n\t);\n\t// Writing consts\n\twire "
             "testConst;\n\n\tassign testConst = 1'bx;\n\nendmodule\n");
+  std::string loadSubgraph =
+      loadStringFileSubGraph(curPath + "submodules/testGraph.v");
+  std::string loadTopgraph = loadStringFileSubGraph(curPath + "/topGraph.v");
+  EXPECT_EQ(loadSubgraph, "");
+  EXPECT_EQ(loadTopgraph, "");
   std::filesystem::remove(curPath + '/' + fileName);
+  std::filesystem::remove(curPath + "submodules/testGraph.v");
+  std::filesystem::remove(curPath + "/topGraph.v");
 }
 
 TEST(TestToGraphML, Test) {

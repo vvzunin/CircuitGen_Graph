@@ -107,7 +107,6 @@ bool GraphVertexSubGraph::toVerilog(std::string i_path,
   } else {
     throw std::invalid_argument("Dead pointer!");
   }
-
   return d_subGraph->toVerilog(i_path, i_filename);
 }
 bool GraphVertexSubGraph::toVerilogBusEnabled(std::string i_path,
@@ -181,7 +180,7 @@ std::string GraphVertexSubGraph::toVerilogCommon(
   uint64_t verilogCount = base->getGraphInstVerilog(d_subGraph->getID());
 
   std::string verilogTab = "  ";
-  std::string nameSub = base->getName();
+  std::string nameSub = d_subGraph->getName();
   // module_name module_name_inst_1 (
   module_ver =
       fmt::format("  {} {}_inst_{} (\n", nameSub, nameSub, verilogCount);
