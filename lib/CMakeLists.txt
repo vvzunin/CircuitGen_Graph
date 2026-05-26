@@ -22,7 +22,14 @@ target_link_libraries(Lorina INTERFACE
 set(LORINA_EXAMPLES OFF CACHE BOOL "Disable examples build")
 add_subdirectory(lorina)
 
-if(ENABLE_LOGGING)
+include(GNUInstallDirs)
+install(
+  TARGETS Lorina
+  EXPORT CircuitGenGraphTargets
+  INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+)
+
+if(ENABLE_LOGGING AND NOT TARGET easylogging++)
   add_library(
     easylogging++ STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/easyloggingpp/easylogging++.cc

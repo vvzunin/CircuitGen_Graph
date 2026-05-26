@@ -71,8 +71,8 @@ target_link_libraries(${TEST_NAME} PUBLIC
   fmt
 )
 
-if(ENABLE_LOGGING)
-  target_link_libraries(${TEST_NAME} PRIVATE easylogging++)
+if(ENABLE_LOGGING AND NOT TARGET easylogging++)
+  target_link_libraries(${TEST_NAME} PUBLIC easylogging++)
 endif()
 
 if(ENABLE_COVERAGE)

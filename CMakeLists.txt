@@ -12,12 +12,19 @@ project(
 list(APPEND PROJECT_SUPPORTED_SYSTEMS "Linux")
 
 include(cmake/project-is-top-level.cmake)
+
 include(cmake/utils.cmake)
 include(cmake/checks.cmake)
 include(cmake/folders.cmake)
 include(cmake/variables.cmake)
-include(cmake/lint-targets.cmake)
-include(cmake/spell-targets.cmake)
+
+if(PROJECT_IS_TOP_LEVEL)
+  include(cmake/lint-targets.cmake)
+  include(cmake/spell-targets.cmake)
+endif()
+
+include(cmake/CMakeGraphVizOptions.cmake)
+include(cmake/project-is-top-level.cmake)
 include(cmake/CMakeGraphVizOptions.cmake)
 include(GNUInstallDirs)
 include(CheckIPOSupported)
@@ -64,7 +71,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 find_program(CLANG_TIDY NAMES clang-tidy)
 
 if(PROJECT_IS_TOP_LEVEL)
-  option(CircuitGenGraph_ENABLE_CLANG_TIDY "Run clang-tidy during build" OFF)
+  option(CircuitGenGraph_ENABLE_CLANG_TIDY "Run clang-tidy during build" ON)
 endif()
 
 if(CLANG_TIDY AND CircuitGenGraph_ENABLE_CLANG_TIDY)
@@ -80,6 +87,10 @@ elseif(CLANG_TIDY)
 else()
   message(STATUS "clang-tidy not found")
 endif()
+
+target_link_libraries(${PROJECT_NAME} PUBLIC
+  Lorina
+  fmt::fmt)
 
 if(ENABLE_LOGGING)
   message(STATUS "Logs enabled")

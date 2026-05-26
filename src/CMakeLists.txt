@@ -41,6 +41,14 @@ add_library(CircuitGenGraph::CircuitGenGraph ALIAS ${PROJECT_NAME})
 include_directories(${PROJECT_SOURCE_DIR}/lib)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 
+if(ENABLE_LOGGING AND NOT TARGET easylogging++)
+  add_library(
+    easylogging++ STATIC
+    ${PROJECT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.cc
+    ${PROJECT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.h
+  )
+endif()
+
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
 # add_compile_options(-fno-rtti)

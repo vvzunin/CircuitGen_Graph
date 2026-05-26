@@ -927,8 +927,7 @@ bool prepareVerilogOutputPath(const std::string &i_path, bool i_isSubGraph,
 
   if (ec) {
 #ifdef LOGFLAG
-    LOG(ERROR) << "cannot create directory " << outputDirectory.string() << ": "
-               << ec.message();
+    LOG(ERROR) << "cannot write file to " << i_path;
 #else
     std::cerr << fmt::format("cannot create directory {}: {}\n",
                              outputDirectory.string(), ec.message());
