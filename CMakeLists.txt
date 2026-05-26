@@ -12,12 +12,37 @@ project(
 list(APPEND PROJECT_SUPPORTED_SYSTEMS "Linux")
 
 include(cmake/project-is-top-level.cmake)
+
+option(CircuitGenGraph_ENABLE_LINTING
+  "Create formatting targets for CircuitGenGraph"
+  ON
+)
+
+option(CircuitGenGraph_ENABLE_SPELL_CHECK
+  "Create spell-check targets for CircuitGenGraph"
+  ON
+)
+
+option(CircuitGenGraph_ENABLE_CLANG_TIDY
+  "Run clang-tidy during build"
+  OFF
+)
+
 include(cmake/utils.cmake)
 include(cmake/checks.cmake)
 include(cmake/folders.cmake)
 include(cmake/variables.cmake)
-include(cmake/lint-targets.cmake)
-include(cmake/spell-targets.cmake)
+
+if(PROJECT_IS_TOP_LEVEL AND CircuitGenGraph_ENABLE_LINTING)
+  include(cmake/lint-targets.cmake)
+endif()
+
+if(PROJECT_IS_TOP_LEVEL AND CircuitGenGraph_ENABLE_SPELL_CHECK)
+  include(cmake/spell-targets.cmake)
+endif()
+
+include(cmake/CMakeGraphVizOptions.cmake)
+include(cmake/project-is-top-level.cmake)
 include(cmake/CMakeGraphVizOptions.cmake)
 include(GNUInstallDirs)
 include(CheckIPOSupported)
@@ -81,7 +106,6 @@ elseif(CLANG_TIDY)
 else()
   message(STATUS "clang-tidy not found")
 endif()
-
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
   Lorina

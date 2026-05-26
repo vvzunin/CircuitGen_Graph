@@ -842,7 +842,7 @@ bool OrientedGraph::verilogFileCreating(GraphPtr i_graph, std::string i_path,
   }
   if (!i_fileStream) {
 #ifdef LOGFLAG
-    LOG(ERROR) << "cannot write file to " << correctPath;
+    LOG(ERROR) << "cannot write file to " << i_path;
 #else
     std::cerr << fmt::format("cannot write file to {}\n", i_path);
 #endif

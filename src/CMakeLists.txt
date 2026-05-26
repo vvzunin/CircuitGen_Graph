@@ -45,7 +45,7 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/lib)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 
-if(ENABLE_LOGGING)
+if(ENABLE_LOGGING AND NOT TARGET easylogging++)
   add_library(
     easylogging++ STATIC
     ${PROJECT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.cc

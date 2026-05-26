@@ -18,7 +18,7 @@ install(
   INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
 )
 
-if(ENABLE_LOGGING)
+if(ENABLE_LOGGING AND NOT TARGET easylogging++)
   add_library(
     easylogging++ STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/easyloggingpp/easylogging++.cc
