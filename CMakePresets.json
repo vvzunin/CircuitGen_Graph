@@ -58,7 +58,8 @@
       "cacheVariables": {
         "CircuitGenGraph_DEVELOPER_MODE": "ON",
         "CircuitGenGraph_BUILD_EXAMPLES": "ON",
-        "CMAKE_CXX_FLAGS": "-fPIC"
+        "CMAKE_CXX_FLAGS": "-fPIC",
+        "BUILD_TESTING_Graph": "ON"
       }
     },
     {
@@ -126,7 +127,8 @@
       "hidden": true,
       "inherits": ["graph-ninja", "ci-std"],
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
+        "CMAKE_BUILD_TYPE": "Release",
+        "BUILD_TESTING_Graph": "ON"
       }
     },
     {

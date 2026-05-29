@@ -420,7 +420,8 @@ static std::string trimWhitespace(const std::string &s) {
   return s.substr(begin, end - begin + 1);
 }
 
-static std::string readVerilogFileWithoutLineComments(const std::string &filepath) {
+static std::string
+readVerilogFileWithoutLineComments(const std::string &filepath) {
   std::ifstream file(filepath);
   if (!file.is_open()) {
     throw std::runtime_error("Cannot open Verilog file: " + filepath);
@@ -443,7 +444,8 @@ static std::string readVerilogFileWithoutLineComments(const std::string &filepat
   return clean;
 }
 
-static void appendPortNames(const std::string &text, std::vector<std::string> &ports) {
+static void appendPortNames(const std::string &text,
+                            std::vector<std::string> &ports) {
   const std::regex nameRegex(R"([a-zA-Z_][a-zA-Z0-9_]*)");
   for (auto it = std::sregex_iterator(text.begin(), text.end(), nameRegex);
        it != std::sregex_iterator(); ++it) {
@@ -455,7 +457,7 @@ static void appendPortNames(const std::string &text, std::vector<std::string> &p
 }
 
 static void collectPortsFromANSIDeclaration(const std::string &decl,
-                                     VerilogPorts &ports) {
+                                            VerilogPorts &ports) {
   const std::regex inputWord(R"(\binput\b)");
   const std::regex outputWord(R"(\boutput\b)");
   std::vector<std::string> *currentPortList = nullptr;
@@ -488,8 +490,9 @@ static void collectPortsFromANSIDeclaration(const std::string &decl,
   }
 }
 
-static void collectPortNamesByType(const GraphPtr &graph, const VertexTypes i_type,
-                                    std::set<std::string> &ports) {
+static void collectPortNamesByType(const GraphPtr &graph,
+                                   const VertexTypes i_type,
+                                   std::set<std::string> &ports) {
   const auto vertices = graph->getVerticesByType(i_type);
   for (const auto *vertex: vertices) {
     ports.insert(std::string(vertex->getRawName()));
@@ -626,7 +629,7 @@ parseVerilogParametersFromText(const std::string &clean) {
 
 // TODO: and for what is it????
 static void parseAndStoreVerilogParameters(const GraphPtr &graph,
-                                    const std::string &filepath) {
+                                           const std::string &filepath) {
   if (!graph || filepath.empty()) {
     return;
   }
