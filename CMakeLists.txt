@@ -38,6 +38,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 option(ENABLE_LOGGING "Enable logging" OFF)
 option(ENABLE_COVERAGE "Enable code coverage analysis" OFF)
 
+find_package(fmt CONFIG REQUIRED)
+
 # Подключаем папку с исходниками (новый формат)
 
 # Подключаем папку с исходниками (новый формат)
@@ -65,8 +67,6 @@ include_directories(lib)
 link_directories(lib)
 
 add_subdirectory(lib)
-target_link_libraries(${PROJECT_NAME} PUBLIC Lorina)
-target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 
 find_program(CLANG_TIDY NAMES clang-tidy)
 

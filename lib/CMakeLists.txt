@@ -1,33 +1,24 @@
-add_library(Lorina INTERFACE)
+include(GNUInstallDirs)
 
-target_include_directories(Lorina SYSTEM INTERFACE
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lorina/include>
-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-)
-
-if(TARGET fmt::fmt)
-  set(CIRCUITGENGRAPH_FMT_TARGET fmt::fmt)
-elseif(TARGET fmt)
-  set(CIRCUITGENGRAPH_FMT_TARGET fmt)
-else()
+if(NOT TARGET fmt::fmt)
   find_package(fmt CONFIG REQUIRED)
-  set(CIRCUITGENGRAPH_FMT_TARGET fmt::fmt)
 endif()
 
-target_link_libraries(Lorina INTERFACE
-  $<BUILD_INTERFACE:${CIRCUITGENGRAPH_FMT_TARGET}>
-  $<INSTALL_INTERFACE:fmt::fmt>
-)
+if(NOT TARGET Lorina)
+  add_library(Lorina INTERFACE)
 
-set(LORINA_EXAMPLES OFF CACHE BOOL "Disable examples build")
-add_subdirectory(lorina)
+  target_include_directories(Lorina SYSTEM INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/lorina/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+  )
 
-include(GNUInstallDirs)
-install(
-  TARGETS Lorina
-  EXPORT CircuitGenGraphTargets
-  INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
-)
+  target_link_libraries(Lorina INTERFACE
+    fmt::fmt
+  )
+endif()
+
+set(LORINA_EXAMPLES OFF CACHE BOOL "Disable examples build" FORCE)
+add_subdirectory(lorina EXCLUDE_FROM_ALL)
 
 if(ENABLE_LOGGING AND NOT TARGET easylogging++)
   add_library(

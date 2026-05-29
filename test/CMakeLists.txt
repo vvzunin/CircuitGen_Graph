@@ -68,7 +68,7 @@ target_link_libraries(${TEST_NAME} PUBLIC
   GTest::gtest_main
   CircuitGenGraph::CircuitGenGraph
   Lorina
-  fmt
+  fmt::fmt
 )
 
 if(ENABLE_LOGGING AND NOT TARGET easylogging++)

@@ -30,7 +30,7 @@ namespace CG_Graph {
 namespace {
 void parseAndStoreVerilogParameters(const GraphPtr &graph,
                                     const std::string &filepath);
-}
+} // namespace
 
 GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
                                          GraphPtr i_baseGraph) :
@@ -416,7 +416,7 @@ const std::set<std::string> ignoredParameterKeywords = {
     "longint",    "integer", "time",    "signed",  "unsigned", "parameter",
     "localparam", "real",    "realtime"};
 
-std::string trimWhitespace(const std::string &s) {
+static std::string trimWhitespace(const std::string &s) {
   const auto begin = s.find_first_not_of(" \t\n\r");
   if (begin == std::string::npos) {
     return "";
@@ -425,7 +425,7 @@ std::string trimWhitespace(const std::string &s) {
   return s.substr(begin, end - begin + 1);
 }
 
-std::string readVerilogFileWithoutLineComments(const std::string &filepath) {
+static std::string readVerilogFileWithoutLineComments(const std::string &filepath) {
   std::ifstream file(filepath);
   if (!file.is_open()) {
     throw std::runtime_error("Cannot open Verilog file: " + filepath);
@@ -448,7 +448,7 @@ std::string readVerilogFileWithoutLineComments(const std::string &filepath) {
   return clean;
 }
 
-void appendPortNames(const std::string &text, std::vector<std::string> &ports) {
+static void appendPortNames(const std::string &text, std::vector<std::string> &ports) {
   const std::regex nameRegex(R"([a-zA-Z_][a-zA-Z0-9_]*)");
   for (auto it = std::sregex_iterator(text.begin(), text.end(), nameRegex);
        it != std::sregex_iterator(); ++it) {
@@ -459,7 +459,7 @@ void appendPortNames(const std::string &text, std::vector<std::string> &ports) {
   }
 }
 
-void collectPortsFromANSIDeclaration(const std::string &decl,
+static void collectPortsFromANSIDeclaration(const std::string &decl,
                                      VerilogPorts &ports) {
   const std::regex inputWord(R"(\binput\b)");
   const std::regex outputWord(R"(\boutput\b)");
@@ -493,15 +493,15 @@ void collectPortsFromANSIDeclaration(const std::string &decl,
   }
 }
 
-void collectPortNamesByType(const GraphPtr &graph, const VertexTypes i_type,
-                            std::set<std::string> &ports) {
+static void collectPortNamesByType(const GraphPtr &graph, const VertexTypes i_type,
+                                    std::set<std::string> &ports) {
   const auto vertices = graph->getVerticesByType(i_type);
   for (const auto *vertex: vertices) {
     ports.insert(std::string(vertex->getRawName()));
   }
 }
 
-std::vector<std::string> splitTopLevelByComma(const std::string &text) {
+static std::vector<std::string> splitTopLevelByComma(const std::string &text) {
   std::vector<std::string> chunks;
   size_t chunkBegin = 0;
   int roundDepth = 0;
@@ -555,7 +555,7 @@ std::vector<std::string> splitTopLevelByComma(const std::string &text) {
   return chunks;
 }
 
-std::string extractParameterName(const std::string &text) {
+static std::string extractParameterName(const std::string &text) {
   const std::regex nameRegex(R"([a-zA-Z_][a-zA-Z0-9_]*)");
   std::string parameterName;
 
@@ -571,7 +571,7 @@ std::string extractParameterName(const std::string &text) {
   return parameterName;
 }
 
-void collectParameterAssignments(
+static void collectParameterAssignments(
     const std::string &declaration,
     std::vector<std::pair<std::string, std::string>> &parameters) {
   for (const auto &segment: splitTopLevelByComma(declaration)) {
@@ -600,7 +600,7 @@ void collectParameterAssignments(
   }
 }
 
-std::vector<std::pair<std::string, std::string>>
+static std::vector<std::pair<std::string, std::string>>
 parseVerilogParametersFromText(const std::string &clean) {
   std::vector<std::pair<std::string, std::string>> parameters;
   std::string bodyClean = clean;
@@ -629,7 +629,8 @@ parseVerilogParametersFromText(const std::string &clean) {
   return parameters;
 }
 
-void parseAndStoreVerilogParameters(const GraphPtr &graph,
+// TODO: and for what is it????
+static void parseAndStoreVerilogParameters(const GraphPtr &graph,
                                     const std::string &filepath) {
   if (!graph || filepath.empty()) {
     return;
