@@ -22,6 +22,6 @@ RUN if [ -f /circuitgen/graph/CMakeUserPresets.json ]; then \
       cp /circuitgen/graph/CMakeUserPresets.json.example /circuitgen/graph/CMakeUserPresets.json; \
     fi
 
-# Production build: executable only (BUILD_TESTING=OFF), no docs/lint targets.
+# Production build: executable only (BUILD_TESTING_Graph=OFF), no docs/lint targets.
 RUN cmake --preset=release && \
     cmake --build --preset=release -j "$(nproc)"

@@ -144,7 +144,7 @@ install(FILES
 
 include(CTest)
 
-if(BUILD_TESTING)
+if(BUILD_TESTING_Graph)
   add_subdirectory(test)
 endif()
 

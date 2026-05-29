@@ -27,11 +27,6 @@
 
 namespace CG_Graph {
 
-namespace {
-void parseAndStoreVerilogParameters(const GraphPtr &graph,
-                                    const std::string &filepath);
-} // namespace
-
 GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
                                          GraphPtr i_baseGraph) :
     GraphVertexBase(VertexTypes::subGraph, i_baseGraph) {
