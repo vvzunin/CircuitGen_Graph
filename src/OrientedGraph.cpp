@@ -17,7 +17,9 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
+
 #include <system_error>
+#include <type_traits>
 #include <unordered_set>
 #include <utility>
 #include <vector>
@@ -1166,16 +1168,15 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename,
     i_fileStream << vertex->getRawName();
   };
 
+
   auto lambdaSubgraphs = [&](VertexPtr subPtr) -> bool {
     auto *sub = static_cast<GraphVertexSubGraph *>(subPtr);
-
     if (!sub->toVerilog(i_path)) {
       return false;
     }
     i_fileStream << sub->toVerilog();
     return static_cast<bool>(i_fileStream);
   };
-
   auto lambdaDefining = [&](const VertexPtr vertex) {
     i_fileStream << "\t" << *vertex;
   };
@@ -1312,7 +1313,6 @@ bool OrientedGraph::toVerilogBusEnabled(std::string i_path,
     if (!sub->toVerilogBusEnabled(i_path)) {
       return false;
     }
-
     i_fileStream << sub->toVerilog();
     return static_cast<bool>(i_fileStream);
   };
@@ -1465,8 +1465,8 @@ bool OrientedGraph::toVerilogBusEnabledAsOneBit(std::string i_path,
     if (!sub->toVerilogBusEnabledAsOneBit(i_path)) {
       return false;
     }
-
     i_fileStream << sub->toVerilog();
+    
     return static_cast<bool>(i_fileStream);
   };
 
@@ -2086,10 +2086,23 @@ bool OrientedGraph::isConnected(bool i_recalculate) {
 //     }
 //   }
 // }
+struct NoCollector {
+  static constexpr bool enabled = false;
+};
 
-void OrientedGraph::dfs(VertexPtr i_startVertex,
-                        std::unordered_set<VertexPtr> &i_visited,
-                        std::unordered_set<VertexPtr> &i_dsg) {
+struct VectorCollector {
+  static constexpr bool enabled = true;
+
+  std::vector<VertexPtr> &out;
+
+  void add(VertexPtr v) { out.push_back(v); }
+};
+
+template<typename SaveOrderOfInsert>
+void OrientedGraph::dfsImplementation(VertexPtr i_startVertex,
+                                      std::unordered_set<VertexPtr> &i_visited,
+                                      std::unordered_set<VertexPtr> &i_dsg,
+                                      SaveOrderOfInsert &optionalSaver) {
   std::stack<VertexPtr> stck;
   stck.push(i_startVertex);
 
@@ -2099,6 +2112,9 @@ void OrientedGraph::dfs(VertexPtr i_startVertex,
 
     if (i_visited.find(current) == i_visited.end()) {
       i_visited.insert(current);
+      if constexpr (std::remove_reference_t<SaveOrderOfInsert>::enabled) {
+        optionalSaver.add(current);
+      }
 
       for (auto *vert: current->getOutConnections()) {
         if (vert->getType() != VertexTypes::subGraph ||
@@ -2126,7 +2142,95 @@ void OrientedGraph::dfs(VertexPtr i_startVertex,
     }
   }
 }
+void OrientedGraph::dfs(VertexPtr i_startVertex,
+                        std::unordered_set<VertexPtr> &i_visited,
+                        std::unordered_set<VertexPtr> &i_dsg,
+                        std::vector<VertexPtr> &i_insertOrder) {
+  VectorCollector collector{i_insertOrder};
+  dfsImplementation(i_startVertex, i_visited, i_dsg, collector);
+}
 
+void OrientedGraph::dfs(VertexPtr i_startVertex,
+                        std::unordered_set<VertexPtr> &i_visited,
+                        std::unordered_set<VertexPtr> &i_dsg) {
+  NoCollector collector{};
+  dfsImplementation(i_startVertex, i_visited, i_dsg, collector);
+}
+std::vector<VertexPtr> OrientedGraph::topologicalSort() {
+  std::vector<VertexPtr> sortedVertices;
+  for (VertexPtr inp: d_vertices[VertexTypes::input]) {
+    std::unordered_set<VertexPtr> visited;
+    std::unordered_set<VertexPtr> dsg;
+    dfs(inp, visited, dsg, sortedVertices);
+  }
+  std::reverse(sortedVertices.begin(), sortedVertices.end());
+  return sortedVertices;
+}
+void OrientedGraph::insertSequential(VertexPtr in, VertexPtr out,
+                                     SequentialTypes type,
+                                     std::vector<VertexPtr> &signals) {
+  if (std::find(in->getOutConnections().begin(), in->getOutConnections().end(),
+                out) != in->getOutConnections().end()) {
+    removeEdge(in, out);
+  }
+  VertexPtr seq = addSequential(type, signals[0], in);
+  addEdge(seq, out);
+  switch (signals.size()) {
+    case 2:
+      addEdge(signals[1], seq);
+      break;
+    case 3:
+      addEdge(signals[1], seq);
+      addEdge(signals[2], seq);
+      break;
+    case 4:
+      addEdge(signals[1], seq);
+      addEdge(signals[2], seq);
+      addEdge(signals[3], seq);
+      break;
+  }
+}
+
+// void OrientedGraph::dfs(VertexPtr i_startVertex,
+//                         std::unordered_set<VertexPtr> &i_visited,
+//                         std::unordered_set<VertexPtr> &i_dsg) {
+//   std::stack<VertexPtr> stck;
+//   stck.push(i_startVertex);
+
+//   while (!stck.empty()) {
+//     VertexPtr current = stck.top();
+//     stck.pop();
+
+//     if (i_visited.find(current) == i_visited.end()) {
+//       i_visited.insert(current);
+
+//       for (auto *vert: current->getOutConnections()) {
+//         if (vert->getType() != VertexTypes::subGraph ||
+//             i_dsg.find(vert) == i_dsg.end()) {
+//           stck.push(vert);
+//         } else {
+//           auto *subGraphPtr = static_cast<GraphVertexSubGraph *>(vert);
+//           for (auto *buf: subGraphPtr->getOutputBuffersByOuterInput(current))
+//           {
+//             stck.push(buf);
+//           }
+//         }
+//       }
+//       for (auto *ptr: current->getInConnections()) {
+//         if (ptr->getType() != VertexTypes::subGraph ||
+//             i_dsg.find(ptr) == i_dsg.end()) {
+//           stck.push(ptr);
+//         } else {
+//           auto *subGraphPtr = static_cast<GraphVertexSubGraph *>(ptr);
+//           for (auto *input:
+//                subGraphPtr->getOuterInputsByOutputBuffer(current)) {
+//             stck.push(input);
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
 #ifdef LOGFLAG
 void OrientedGraph::log(el::base::type::ostream_t &osStream) const {
   //   osStream << "\n";
@@ -2135,10 +2239,11 @@ void OrientedGraph::log(el::base::type::ostream_t &osStream) const {
   //   osStream << "Number of Edges: " << d_edgesCount << "\n";
   //   osStream << "Need Level Update: " << (d_needLevelUpdate ? "Yes" : "No")
   //   <<
-  //   "\n"; osStream << "Already Parsed Verilog: " << (d_alreadyParsedVerilog ?
-  //   "Yes" : "No")
+  //   "\n"; osStream << "Already Parsed Verilog: " << (d_alreadyParsedVerilog
+  //   ? "Yes" : "No")
   //      << "\n";
-  //   osStream << "Already Parsed DOT: " << (d_alreadyParsedDot ? "Yes" : "No")
+  //   osStream << "Already Parsed DOT: " << (d_alreadyParsedDot ? "Yes" :
+  //   "No")
   //   <<
   //   "\n"; osStream << "Graph hash: " << d_hashed << "\n";
 
