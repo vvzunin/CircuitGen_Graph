@@ -12,6 +12,7 @@
  */
 #pragma once
 
+#include "GraphUtils.hpp"
 #include <array>
 #include <atomic>
 #include <cstddef>
@@ -21,6 +22,7 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <stack>
 #include <string>
 #include <string_view>
 #include <unordered_set>
@@ -1463,7 +1465,7 @@ public:
    * @return Указатель на вершину сгенерированного мажоритарного выхода
    */
   VertexPtr generateMajority(VertexPtr a, VertexPtr b, VertexPtr c);
-
+  GraphPtr graphToPlain();
 #ifdef LOGFLAG
   /**
    * @author Vladimir Zunin <vzunin@hse.ru>
@@ -1521,7 +1523,21 @@ protected:
   void dfs(VertexPtr i_startVertex, std::unordered_set<VertexPtr> &i_visited,
            std::unordered_set<VertexPtr> &i_dsg);
 
+  std::vector<VertexPtr> topologicalSort();
+
+  void dfs(VertexPtr i_startVertex, std::unordered_set<VertexPtr> &i_visited,
+           std::unordered_set<VertexPtr> &i_dsg,
+           std::vector<VertexPtr> &i_insertOrder);
+  void insertSequential(VertexPtr in, VertexPtr out, SequentialTypes type,
+                        std::vector<VertexPtr> &signals);
+
 private:
+  template<typename SaveOrderOfInsert>
+  void dfsImplementation(VertexPtr i_startVertex,
+                         std::unordered_set<VertexPtr> &i_visited,
+                         std::unordered_set<VertexPtr> &i_dsg,
+                         SaveOrderOfInsert &optionalSaver = {});
+
   static bool printSequentialModules(GraphPtr i_graph,
                                      std::ofstream &i_fileStream);
 
