@@ -1,3 +1,4 @@
+#include "CircuitGenGraph/GraphUtils.hpp"
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -847,11 +848,14 @@ TEST(TestToVerilog, Simple) {
   graphPtr->addEdge(gateOr1, out);
   graphPtr->toVerilog(".", "testSimple.v");
   std::string curPath = std::filesystem::current_path();
-  std::string loadFile = loadStringFileOrientedGraph(curPath + "/testSimple.v");
+  std::string filename = curPath + "/testSimple.v";
+  std::string loadFile = loadStringFileOrientedGraph(filename);
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
   LOG(INFO) << "Printing Verilog file: " << "" << "\n" << loadFile;
 #endif
+  ASSERT_EQ(std::remove(filename.c_str()), 0)
+      << "Не удалось удалить файл: " << "testSimple.v";
 }
 
 TEST(TestToVerilog, SubGraph) {
@@ -881,12 +885,14 @@ TEST(TestToVerilog, SubGraph) {
   std::filesystem::create_directories("./submodules");
   graphPtr->toVerilog(".", "testSubGraph.v");
   std::string curPath = std::filesystem::current_path();
-  std::string loadFile =
-      loadStringFileOrientedGraph(curPath + "/testSubGraph.v");
+  std::string filename = curPath + "/testSubGraph.v";
+  std::string loadFile = loadStringFileOrientedGraph(filename);
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
 #ifdef LOGFLAG
   LOG(INFO) << "Printing DOT file: " << "" << "\n" << loadFile;
 #endif
+  ASSERT_EQ(std::remove(filename.c_str()), 0)
+      << "Не удалось удалить файл: " << "testSubGraph.v";
 }
 
 TEST(TestToVerilog, SubGraphBus) {
@@ -1399,4 +1405,27 @@ TEST(GraphTest, MajorityLogicTestSimple) {
   VertexPtr r2 = graph->generateMajority(a, b, c);
   EXPECT_TRUE(r2 != nullptr);
   EXPECT_EQ(graph->getSubGraphs().size(), 1);
+}
+TEST(TestUtils, TriggerInserting) {
+  auto graph = std::make_shared<OrientedGraph>("MajorityTest");
+  VertexPtr input = graph->addInput("inp");
+  VertexPtr clk = graph->addInput("clk");
+  VertexPtr gate = graph->addGate(GateAnd, "and");
+  graph->addEdge(input, gate);
+  VertexPtr gateWithoutEdge = graph->addGate(GateAnd, "and2");
+  VertexPtr seq = graph->insertSequential(input, gate, ff, {clk});
+  VertexPtr seq2 = graph->insertSequential(seq, gateWithoutEdge, ff, {clk});
+
+  EXPECT_EQ(input->getOutConnections().size(), 1);
+  EXPECT_EQ(input->getOutConnections().back()->getName(), seq->getName());
+  EXPECT_EQ(gate->getInConnections().size(), 1);
+  EXPECT_EQ(gate->getInConnections().back()->getName(), seq->getName());
+
+  EXPECT_EQ(seq->getOutConnections().size(), 2);
+
+  EXPECT_EQ(seq2->getOutConnections().back()->getName(),
+            gateWithoutEdge->getName());
+  EXPECT_EQ(gateWithoutEdge->getInConnections().size(), 1);
+  EXPECT_EQ(gateWithoutEdge->getInConnections().back()->getName(),
+            seq2->getName());
 }

@@ -1593,6 +1593,8 @@ public:
    */
   virtual void log(el::base::type::ostream_t &os) const;
 #endif
+  VertexPtr insertSequential(VertexPtr in, VertexPtr out, SequentialTypes type,
+                             std::vector<VertexPtr> &&signals);
 
 protected:
   /* memory management block */
@@ -1642,8 +1644,6 @@ protected:
   void dfs(VertexPtr i_startVertex, std::unordered_set<VertexPtr> &i_visited,
            std::unordered_set<VertexPtr> &i_dsg,
            std::vector<VertexPtr> &i_insertOrder);
-  void insertSequential(VertexPtr in, VertexPtr out, SequentialTypes type,
-                        std::vector<VertexPtr> &signals);
 
 private:
   template<typename SaveOrderOfInsert>

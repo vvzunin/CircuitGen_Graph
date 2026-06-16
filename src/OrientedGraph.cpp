@@ -2166,9 +2166,9 @@ std::vector<VertexPtr> OrientedGraph::topologicalSort() {
   std::reverse(sortedVertices.begin(), sortedVertices.end());
   return sortedVertices;
 }
-void OrientedGraph::insertSequential(VertexPtr in, VertexPtr out,
-                                     SequentialTypes type,
-                                     std::vector<VertexPtr> &signals) {
+VertexPtr OrientedGraph::insertSequential(VertexPtr in, VertexPtr out,
+                                          SequentialTypes type,
+                                          std::vector<VertexPtr> &&signals) {
   if (std::find(in->getOutConnections().begin(), in->getOutConnections().end(),
                 out) != in->getOutConnections().end()) {
     removeEdge(in, out);
@@ -2189,6 +2189,7 @@ void OrientedGraph::insertSequential(VertexPtr in, VertexPtr out,
       addEdge(signals[3], seq);
       break;
   }
+  return seq;
 }
 
 // void OrientedGraph::dfs(VertexPtr i_startVertex,
