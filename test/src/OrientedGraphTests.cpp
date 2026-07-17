@@ -1444,3 +1444,23 @@ TEST(GraphTest, MajoritySubGraphSimulation) {
   EXPECT_EQ(graph->graphSimulation({'1', '0', '1'}), (std::vector<char>{'1'}));
   EXPECT_EQ(graph->graphSimulation({'0', '1', '0'}), (std::vector<char>{'0'}));
 }
+
+TEST(GraphTest, SubGraphRemoveValueDoesNotClearParentInputs) {
+  auto graph = std::make_shared<OrientedGraph>("SubRemove");
+  VertexPtr a = graph->addInput("a");
+  VertexPtr b = graph->addInput("b");
+  VertexPtr c = graph->addInput("c");
+  VertexPtr maj = graph->generateMajority(a, b, c);
+  graph->addEdge(maj, graph->addOutput("y"));
+
+  ASSERT_EQ(graph->graphSimulation({'1', '1', '0'}), (std::vector<char>{'1'}));
+  EXPECT_EQ(a->getValue(), '1');
+  EXPECT_EQ(b->getValue(), '1');
+  EXPECT_EQ(c->getValue(), '0');
+
+  graph->simulationRemove();
+  // Nested graph is cleared, but parent inputs must stay (shared outer wires).
+  EXPECT_EQ(a->getValue(), '1');
+  EXPECT_EQ(b->getValue(), '1');
+  EXPECT_EQ(c->getValue(), '0');
+}

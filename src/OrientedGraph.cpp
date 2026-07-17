@@ -143,12 +143,12 @@ bool OrientedGraph::needToUpdateLevel() const {
 }
 
 void OrientedGraph::updateLevels() {
-  CG_LOG_INFO << "Starting level update for graph '" << d_name << "'.";
-  CG_LOG_INFO << "Outputs for update: "
-              << d_vertices.at(VertexTypes::output).size();
+  CG_VLOG(1) << "Starting level update for graph '" << d_name << "'.";
+  CG_VLOG(1) << "Outputs for update: "
+             << d_vertices.at(VertexTypes::output).size();
   int counter = 0;
   for (VertexPtr vert: d_vertices.at(VertexTypes::output)) {
-    CG_VLOG(1) << counter++ << ". " << vert->getRawName() << " ("
+    CG_VLOG(2) << counter++ << ". " << vert->getRawName() << " ("
                << vert->getTypeName() << ")";
     vert->updateLevel();
   }

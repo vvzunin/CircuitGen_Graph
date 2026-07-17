@@ -216,8 +216,8 @@ void GraphVertexBase::updateLevel() {
   }
   d_needUpdate = VS_IN_PROGRESS;
   for (VertexPtr vert: d_inConnections) {
-    CG_LOG_INFO << counter++ << ". " << vert->getName() << " ("
-                << vert->getTypeName() << ")";
+    CG_VLOG(2) << counter++ << ". " << vert->getRawName() << " ("
+               << vert->getTypeName() << ")";
     vert->updateLevel();
     d_level = (vert->getLevel() >= d_level) ? vert->getLevel() + 1 : d_level;
   }

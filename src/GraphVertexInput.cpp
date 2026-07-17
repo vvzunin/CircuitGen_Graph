@@ -37,7 +37,7 @@ void GraphVertexInput::updateLevel() {
   if (d_needUpdate != VS_NOT_CALC) {
     return;
   }
-  CG_LOG_INFO << "0. " << d_name << " (" << getTypeName() << ")";
+  CG_VLOG(2) << "0. " << d_name << " (" << getTypeName() << ")";
   d_level = 0;
   d_needUpdate = VS_CALC;
 }

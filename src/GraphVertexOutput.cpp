@@ -44,8 +44,8 @@ void GraphVertexOutput::updateLevel() {
   }
   int counter = 0;
   for (VertexPtr ptr: d_inConnections) {
-    CG_LOG_INFO << counter++ << ". " << ptr->getName() << " ("
-                << ptr->getTypeName() << ")";
+    CG_VLOG(2) << counter++ << ". " << ptr->getRawName() << " ("
+               << ptr->getTypeName() << ")";
     ptr->updateLevel();
     uint32_t lvl = ptr->getLevel() + 1;
     d_level = (lvl > d_level) ? lvl : d_level;

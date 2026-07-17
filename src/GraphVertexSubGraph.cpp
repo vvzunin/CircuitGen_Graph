@@ -77,16 +77,15 @@ char GraphVertexSubGraph::updateValue() {
 }
 
 void GraphVertexSubGraph::removeValue() {
-  if (d_inConnections.size() > 0) {
-    d_subGraph->simulationRemove();
-    for (VertexPtr ptr: d_inConnections) {
-      if (ptr->getValue() != ValueStates::UndefinedState) {
-        ptr->removeValue();
-      }
-    }
-  } else {
-    CG_LOG_ERROR << "Error, SubGraph without inputs" << std::endl;
+  d_value = ValueStates::UndefinedState;
+  if (!d_subGraph) {
+    CG_LOG_ERROR << "Error, SubGraph without nested graph" << std::endl;
+    return;
   }
+  // Only clear the nested simulation. Parent drivers in d_inConnections are
+  // shared wires of the outer graph and must not be cleared here — that
+  // orphaned values for other fanouts of the same inputs.
+  d_subGraph->simulationRemove();
 }
 
 void GraphVertexSubGraph::updateLevel() {
