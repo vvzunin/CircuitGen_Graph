@@ -64,7 +64,7 @@ int main() {
   std::cout << "=== CircuitGenGraph Testbench Generator Demo ===" << std::endl;
   std::cout << std::endl;
 
-  // ===== Пример 1: Полусумматор с полным перебором =====
+  // --- Пример 1: Полусумматор с полным перебором ---
   std::cout << "--- Example 1: Half Adder with Exhaustive Testing ---"
             << std::endl;
   {
@@ -104,7 +104,7 @@ int main() {
   }
   std::cout << std::endl;
 
-  // ===== Пример 2: Полный сумматор со случайными тестами =====
+  // --- Пример 2: Полный сумматор со случайными тестами ---
   std::cout << "--- Example 2: Full Adder with Random Testing ---" << std::endl;
   {
     auto graph = createFullAdder();
@@ -152,7 +152,7 @@ int main() {
   }
   std::cout << std::endl;
 
-  // ===== Пример 3: Пользовательские тестовые векторы =====
+  // --- Пример 3: Пользовательские тестовые векторы ---
   std::cout << "--- Example 3: Custom Test Vectors ---" << std::endl;
   {
     auto graph = createHalfAdder();
@@ -172,7 +172,7 @@ int main() {
   }
   std::cout << std::endl;
 
-  // ===== Пример 4: Получение кода тестбенча как строки =====
+  // --- Пример 4: Получение кода тестбенча как строки ---
   std::cout << "--- Example 4: Get Testbench as String ---" << std::endl;
   {
     auto graph = createHalfAdder();

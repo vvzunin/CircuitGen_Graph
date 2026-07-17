@@ -287,8 +287,7 @@ public:
                        const std::string &goldenModelPath,
                        const std::string &outputTbPath);
 
-  // ==================== Test-vector generation / Генерация тестовых векторов
-  // ====================
+  // --- Test-vector generation / Генерация тестовых векторов ---
 
   /// \~english
   /// @brief Generates all possible input combinations (exhaustive mode).
@@ -335,8 +334,7 @@ public:
   /// @brief Очищает все тестовые векторы.
   void clearTestVectors();
 
-  // ==================== Sequential tests / Последовательностные тесты
-  // ====================
+  // --- Sequential tests / Последовательностные тесты ---
 
   /// \~english
   /// @brief Generates random sequential test vectors (one per cycle).
@@ -400,8 +398,7 @@ public:
     return d_testVectors;
   }
 
-  // ==================== Testbench generation / Генерация тестбенча
-  // ====================
+  // --- Testbench generation / Генерация тестбенча ---
 
   /// \~english
   /// @brief Generates Verilog testbench.
@@ -426,8 +423,7 @@ public:
   /// @return Verilog код тестбенча.
   std::string getTestbenchCode() const;
 
-  // ==================== Simulation and verification / Симуляция и верификация
-  // ====================
+  // --- Simulation and verification / Симуляция и верификация ---
 
   /// \~english
   /// @brief Runs simulation using internal graph simulator.
@@ -467,7 +463,7 @@ public:
   /// @return Результат сравнения.
   VerificationResult compareSimulations(const std::string &i_workDir);
 
-  // ==================== Configuration / Конфигурация ====================
+  // --- Configuration / Конфигурация ---
 
   /// \~english
   /// @brief Sets generator configuration.
@@ -487,7 +483,7 @@ public:
   /// @return Конфигурация.
   const TestbenchConfig &getConfig() const { return d_config; }
 
-  // ==================== Utilities / Утилиты ====================
+  // --- Utilities / Утилиты ---
 
   /// \~english
   /// @brief Checks whether the circuit contains sequential elements.
@@ -637,8 +633,7 @@ private:
   static std::vector<PortInfo> parseGoldenModel(const std::string &filepath,
                                                 std::string &moduleName);
 
-  // ==================== Sequential generation / Последовательностная генерация
-  // ====================
+  // --- Sequential generation / Последовательностная генерация ---
 
   /// \~english
   /// @brief Detects clock and reset signals from the graph.

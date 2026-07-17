@@ -25,7 +25,7 @@
 
 namespace CG_Graph {
 
-// ==================== Конструктор ====================
+// --- Конструктор ---
 
 TestbenchGenerator::TestbenchGenerator(GraphPtr i_graph,
                                        const TestbenchConfig &i_config) :
@@ -60,7 +60,7 @@ TestbenchGenerator::TestbenchGenerator(GraphPtr i_graph,
               << " inputs and " << d_outputNames.size() << " outputs";
 }
 
-// ==================== Генерация тестовых векторов ====================
+// --- Генерация тестовых векторов ---
 
 size_t TestbenchGenerator::generateExhaustiveVectors() {
   size_t numInputs = d_inputNames.size();
@@ -139,7 +139,7 @@ void TestbenchGenerator::clearTestVectors() {
   d_testVectors.clear();
 }
 
-// ==================== Генерация тестбенча ====================
+// --- Генерация тестбенча ---
 
 std::string TestbenchGenerator::generateHeader() const {
   std::ostringstream ss;
@@ -431,7 +431,7 @@ bool TestbenchGenerator::toVerilogTestbench(const std::string &i_path,
   return true;
 }
 
-// ==================== Симуляция и верификация ====================
+// --- Симуляция и верификация ---
 
 std::vector<char>
 TestbenchGenerator::computeExpectedOutputs(const std::vector<char> &i_inputs) {
@@ -853,7 +853,7 @@ TestbenchGenerator::compareSimulations(const std::string &i_workDir) {
   return result;
 }
 
-// ==================== Утилиты ====================
+// --- Утилиты ---
 
 std::string
 TestbenchGenerator::toVerilogLiteral(const std::vector<char> &i_values) {
@@ -1048,7 +1048,7 @@ bool TestbenchGenerator::generate(std::shared_ptr<OrientedGraph> graph,
   return true;
 }
 
-// ==================== Последовательностная генерация ====================
+// --- Последовательностная генерация ---
 
 void TestbenchGenerator::detectClockSignals() {
   auto vertices = d_graph->getBaseVertexes();
