@@ -305,7 +305,10 @@ GraphVertexBusSlice::GraphVertexBusSlice(std::string_view i_name,
 }
 
 std::string GraphVertexBusSlice::getSliceSuffix() const {
-  return fmt::format("[{}:{}];\n", d_begin + d_width, d_begin);
+  // Width W starting at begin maps to [begin+W-1 : begin] (W bits).
+  if (d_width <= 1)
+    return fmt::format("[{}];\n", d_begin);
+  return fmt::format("[{}:{}];\n", d_begin + d_width - 1, d_begin);
 }
 
 std::string GraphVertexBusSlice::toVerilog() const {
@@ -330,11 +333,13 @@ std::string GraphVertexBusSlice::toOneBitVerilog() const {
 #endif
     return "";
   }
+  // Slice wires are declared as name_0 .. name_{W-1}; source bits are absolute.
   std::stringstream stream;
-  for (size_t i = d_begin; i < d_begin + d_width; ++i)
-    stream << "assign " << getRawName() << "_" << i << " = "
-           << getInConnections()[0]->getRawName() << "_" << i;
-
+  for (size_t j = 0; j < d_width; ++j) {
+    stream << "assign " << getRawName() << "_" << j << " = "
+           << getInConnections()[0]->getRawName() << "_" << (d_begin + j)
+           << ";\n\t";
+  }
   return stream.str();
 }
 std::string GraphVertexBusGate::toVerilog() const {

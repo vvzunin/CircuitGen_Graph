@@ -156,7 +156,7 @@ TEST(BusTest, SliceToVerilog) {
   VertexPtr v = graph->addInputBus("inputBus", 5);
   VertexPtr v1 = graph->addSliceBus(v, 0, 2, "sliceBus");
   EXPECT_NO_THROW(graph->toVerilog("./", "micro_to_verilog_test.v"));
-  EXPECT_EQ(v1->toVerilog(), "assign sliceBus = inputBus[2:0];\n");
+  EXPECT_EQ(v1->toVerilog(), "assign sliceBus = inputBus[1:0];\n");
   testFile("micro_to_verilog_test.v", "module sliceTestGraph(\n"
                                       "\tinputBus, \n"
                                       "\t);\n"
@@ -164,8 +164,18 @@ TEST(BusTest, SliceToVerilog) {
                                       "\tinput inputBus;\n"
                                       "\t// Writing gates for main graph\n"
                                       "\twire sliceBus;\n\t\n"
-                                      "\tassign sliceBus = inputBus[2:0];\n\n\n"
+                                      "\tassign sliceBus = inputBus[1:0];\n\n\n"
                                       "endmodule\n");
+}
+
+TEST(BusTest, SliceOneBitVerilogUsesLocalIndices) {
+  GraphPtr graph = std::make_shared<OrientedGraph>("sliceOneBit");
+  VertexPtr bus = graph->addInputBus("bus", 5);
+  VertexPtr slice = graph->addSliceBus(bus, 2, 3, "sl");
+  EXPECT_EQ(GraphVertexBus::getBusPointer(slice)->toOneBitVerilog(),
+            "assign sl_0 = bus_2;\n\t"
+            "assign sl_1 = bus_3;\n\t"
+            "assign sl_2 = bus_4;\n\t");
 }
 TEST(BusTest, SliceErrorsWhenIncorrect) {
   std::stringstream buffer;
