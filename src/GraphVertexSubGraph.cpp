@@ -121,8 +121,7 @@ void GraphVertexSubGraph::updateLevel() {
     // underflow from the former `+ max_inLevel - 2` formula.
     const size_t nested = output_vert->getLevel();
     const size_t rel = nested > 0 ? nested : 1;
-    out_connectionVert->d_level =
-        static_cast<uint32_t>(max_inLevel + rel);
+    out_connectionVert->d_level = static_cast<uint32_t>(max_inLevel + rel);
   }
   d_needUpdate = VS_CALC;
 }
@@ -195,8 +194,7 @@ std::string GraphVertexSubGraph::toVerilog() const {
   const std::string moduleName = d_subGraph->getName();
   const std::string instName =
       moduleName + "_inst_" + std::to_string(verilogCount);
-  std::string module_ver =
-      verilogTab + moduleName + " " + instName + " (\n";
+  std::string module_ver = verilogTab + moduleName + " " + instName + " (\n";
 
   auto &&inputs = d_subGraph->getVerticesByType(VertexTypes::input);
   auto &&outputs = d_subGraph->getVerticesByType(VertexTypes::output);

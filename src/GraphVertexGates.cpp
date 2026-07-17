@@ -412,8 +412,8 @@ std::string GraphVertexBusGate::toOneBitVerilog() const {
     for (size_t j = 1; j < getWidth(); ++j) {
       names.clear();
       getNamesVector(names, d_inConnections, j);
-      stream << fmt::format("assign {}_{} = {}{}{};\n\t", getRawName(), j, begin,
-                            fmt::join(names, " " + oper + " "), end);
+      stream << fmt::format("assign {}_{} = {}{}{};\n\t", getRawName(), j,
+                            begin, fmt::join(names, " " + oper + " "), end);
     }
     return stream.str();
   };

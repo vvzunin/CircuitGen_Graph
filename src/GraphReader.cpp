@@ -33,29 +33,29 @@ GraphReader::GraphReader(Context &i_context)
 void LogDiagnosticConsumer::handle_diagnostic(
     lorina::diagnostic_level level, const std::string &message) const {
   switch (level) {
-  case lorina::diagnostic_level::fatal:
-    CG_LOG_FATAL << "Lorina: " << message;
-    break;
-  case lorina::diagnostic_level::error:
-    CG_LOG_ERROR << "Lorina: " << message;
-    break;
-  case lorina::diagnostic_level::warning:
-    CG_LOG_WARNING << "Lorina: " << message;
-    break;
-  case lorina::diagnostic_level::note:
-  case lorina::diagnostic_level::remark:
-  case lorina::diagnostic_level::ignore:
-  default:
-    CG_VLOG(1) << "Lorina: " << message;
-    break;
+    case lorina::diagnostic_level::fatal:
+      CG_LOG_FATAL << "Lorina: " << message;
+      break;
+    case lorina::diagnostic_level::error:
+      CG_LOG_ERROR << "Lorina: " << message;
+      break;
+    case lorina::diagnostic_level::warning:
+      CG_LOG_WARNING << "Lorina: " << message;
+      break;
+    case lorina::diagnostic_level::note:
+    case lorina::diagnostic_level::remark:
+    case lorina::diagnostic_level::ignore:
+    default:
+      CG_VLOG(1) << "Lorina: " << message;
+      break;
   }
 }
 
 void GraphReader::on_module_header(
     const std::string &module_name,
     const std::vector<std::string> &inouts) const {
-  CG_LOG_INFO << "Parsing module '" << module_name << "' with "
-              << inouts.size() << " ports";
+  CG_LOG_INFO << "Parsing module '" << module_name << "' with " << inouts.size()
+              << " ports";
   d_context.d_currentGraph = std::make_shared<OrientedGraph>(module_name);
   if (d_context.d_currentGraphNamesList.max_load_factor() != 1)
     d_context.d_currentGraphNamesList.max_load_factor(1);
@@ -148,7 +148,9 @@ std::pair<size_t, std::string> parseConstValue(const std::string &input) {
              std::all_of(input.begin(), input.end(), ::isdigit)) {
     length = input.size();
     const char last = input.back();
-    digits.assign(1, (last == '0' || last == '1') ? last : ((last - '0') & 1) ? '1' : '0');
+    digits.assign(1, (last == '0' || last == '1') ? last
+                     : ((last - '0') & 1)         ? '1'
+                                                  : '0');
   } else if (!input.empty()) {
     length = 1;
     const char c = input.front();

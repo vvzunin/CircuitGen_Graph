@@ -224,8 +224,7 @@ void GraphVertexSequential::stageValue() {
   char nextPrevClk = d_prevClk;
 
   const auto captureData = [&]() {
-    nextVal =
-        (data == '0' || data == '1') ? data : ValueStates::NoSignal;
+    nextVal = (data == '0' || data == '1') ? data : ValueStates::NoSignal;
   };
 
   // Apply rst/clr then set into nextVal. Returns true if Q was forced.
@@ -604,7 +603,8 @@ std::string GraphVertexBusSequential::toVerilog() const {
 void GraphVertexBusSequential::commitStagedValue() {
   GraphVertexSequential::commitStagedValue();
   // Keep bus string in sync with the scalar Q (broadcast). Distinct per-bit
-  // stimulus needs a multi-bit graphSimulation API; until then all bits match Q.
+  // stimulus needs a multi-bit graphSimulation API; until then all bits match
+  // Q.
   const char v = getValue();
   if (v == ValueStates::UndefinedState)
     updateValueBus(std::string(getWidth(), ValueStates::NoSignal));

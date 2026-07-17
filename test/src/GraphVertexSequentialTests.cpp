@@ -505,10 +505,13 @@ TEST(SequentialTests, FlipFlopEnXHoldsAndAsyncRstWins) {
   auto *q2 = g2->addSequential(affre, clk2, data2, en2, rst2, "q");
   g2->addEdge(q2, g2->addOutput("y"));
 
-  EXPECT_EQ(g2->graphSimulation({'0', '1', '1', '1'}), (std::vector<char>{'x'}));
-  EXPECT_EQ(g2->graphSimulation({'1', '1', '1', '1'}), (std::vector<char>{'1'}));
+  EXPECT_EQ(g2->graphSimulation({'0', '1', '1', '1'}),
+            (std::vector<char>{'x'}));
+  EXPECT_EQ(g2->graphSimulation({'1', '1', '1', '1'}),
+            (std::vector<char>{'1'}));
   // Async RST still clears when EN is X.
-  EXPECT_EQ(g2->graphSimulation({'1', '1', 'x', '0'}), (std::vector<char>{'0'}));
+  EXPECT_EQ(g2->graphSimulation({'1', '1', 'x', '0'}),
+            (std::vector<char>{'0'}));
 }
 
 TEST(SequentialTests, FlipFlopChainSamplesPreEdgeQ) {

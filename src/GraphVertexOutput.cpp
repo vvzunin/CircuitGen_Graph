@@ -104,8 +104,8 @@ std::string GraphVertexBusOutput::toOneBitVerilog() const {
                    << " drivers; one-bit Verilog uses the first connection";
   }
   for (size_t i = 0; i < std::min(minWidth, getWidth()); ++i)
-    res << "assign " << getRawName() << "_" << i << " = " << driver->getRawName()
-        << "_" << i << ";\n\t";
+    res << "assign " << getRawName() << "_" << i << " = "
+        << driver->getRawName() << "_" << i << ";\n\t";
   return res.str();
 }
 
