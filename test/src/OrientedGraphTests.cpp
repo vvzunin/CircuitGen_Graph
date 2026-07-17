@@ -485,7 +485,8 @@ TEST(TestGetVerticesByType, FiltersByNameAndSearchesSubGraphs) {
   GraphPtr sub = std::make_shared<OrientedGraph>("sub");
   sub->addInput("keep");
   sub->addOutput("so");
-  auto *outerKeep = graph->getVerticesByType(VertexTypes::input, "keep").front();
+  auto *outerKeep =
+      graph->getVerticesByType(VertexTypes::input, "keep").front();
   graph->addSubGraph(sub, {outerKeep});
 
   auto nested = graph->getVerticesByType(VertexTypes::input, "keep",
@@ -1464,6 +1465,27 @@ TEST(GraphTest, MultiOutputSubGraphSimulation) {
 
   EXPECT_EQ(top->graphSimulation({'0', '1'}), (std::vector<char>{'0', '1'}));
   EXPECT_EQ(top->graphSimulation({'1', '0'}), (std::vector<char>{'1', '0'}));
+}
+
+TEST(GraphTest, RemoveEmptyLogicVerticesCascades) {
+  OrientedGraph::resetCounter();
+  auto g = std::make_shared<OrientedGraph>("empty_cascade");
+  auto *b = g->addGate(GateBuf, "B");
+  auto *a = g->addGate(GateBuf, "A");
+  g->addEdge(a, b);
+  EXPECT_EQ(g->removeEmptyLogicVertices(), 2u);
+  EXPECT_TRUE(g->getVerticesByType(VertexTypes::gate).empty());
+}
+
+TEST(GraphTest, RemoveWasteUnlinksWasteChain) {
+  OrientedGraph::resetCounter();
+  auto g = std::make_shared<OrientedGraph>("waste_chain");
+  auto *a = g->addGate(GateBuf, "A");
+  auto *b = g->addGate(GateBuf, "B");
+  g->addEdge(a, b);
+  g->addOutput("y");
+  EXPECT_NO_THROW(g->removeWasteVertices());
+  EXPECT_TRUE(g->getVerticesByType(VertexTypes::gate).empty());
 }
 
 TEST(GraphTest, RemoveWasteKeepsLiveSubGraph) {

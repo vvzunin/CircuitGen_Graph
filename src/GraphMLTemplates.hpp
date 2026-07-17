@@ -202,6 +202,9 @@ std::map<Gates, std::string> gateToABCDType = {
     {Gates::GateOr, "13"},        {Gates::GateNor, "14"},
     {Gates::GateNot, "12"},       {Gates::GateBuf, "11"},
     {Gates::GateXor, "15"},       {Gates::GateXnor, "16"},
+    // Bus-only ops (avoid std::out_of_range in Pseudo/OpenABCD export).
+    // 17/18 are used for sequential ff/latch in those exporters.
+    {Gates::GateSlice, "19"},     {Gates::GateConcatenation, "20"},
     {Gates::GateDefault, "ERROR"}};
 
 } // namespace CG_Graph

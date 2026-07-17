@@ -557,7 +557,8 @@ void OrientedGraph::updateEdgesGatesCount(VertexPtr vertex, Gates type) {
 
 size_t OrientedGraph::removeEmptyLogicVertices() {
   size_t removed = 0;
-  auto scrub = [this, &removed](VertexTypes type) {
+  auto scrubOnce = [this](VertexTypes type) -> size_t {
+    size_t n = 0;
     auto &bucket = d_vertices[type];
     size_t write = 0;
     for (size_t i = 0; i < bucket.size(); ++i) {
@@ -579,13 +580,18 @@ size_t OrientedGraph::removeEmptyLogicVertices() {
                      << GraphUtils::parseVertexToString(type) << " vertex '"
                      << vert->getRawName() << "'";
       vert->~GraphVertexBase();
-      ++removed;
+      ++n;
     }
     bucket.resize(write);
+    return n;
   };
 
-  scrub(gate);
-  scrub(sequential);
+  // Repeat until stable: removing an empty driver can empty its consumers.
+  size_t pass;
+  do {
+    pass = scrubOnce(gate) + scrubOnce(sequential);
+    removed += pass;
+  } while (pass > 0);
   return removed;
 }
 
@@ -598,33 +604,28 @@ void OrientedGraph::removeWasteVertices() {
          iter != d_vertices[type].end() - counterForResize;) {
       VertexPtr vert = *iter;
       if (!vert->getLevel()) {
-        if (vert->getType() != input && vert->getType() != constant) {
-          // Copy: removeEdge mutates adjacency; cannot iterate the live vector.
-          const std::vector<VertexPtr> inConns = vert->getInConnections();
-          for (auto *inConnVert: inConns) {
-            if (inConnVert->getLevel() != 0 ||
-                inConnVert->getType() == constant ||
-                inConnVert->getType() == input) {
-              removeEdge(inConnVert, vert);
-            } else if (inConnVert->getLevel() == 0) {
-              this->d_edgesCount -= 1;
-              if (type == gate && inConnVert->getType() == gate)
-                this->d_edgesGatesCount[inConnVert->getGate()]
-                                       [vert->getGate()] -= 1;
-            }
-          }
-        }
-        if (vert->getOutConnections().empty() ||
-            !(vert->getType() == constant || vert->getType() == input)) {
-          if (type == gate) {
-            this->d_gatesCount[vert->getGate()] -= 1;
-          }
-          // IMPORTANT. do not use rbegin
-          std::swap(*iter, *(d_vertices[type].end() - 1 - counterForResize));
-          vert->~GraphVertexBase();
-          ++counterForResize;
-        } else
+        const bool isIOConst =
+            (vert->getType() == input || vert->getType() == constant);
+        // Orphan inputs/constants with fanout are kept (level 0 is normal).
+        if (isIOConst && !vert->getOutConnections().empty()) {
           ++iter;
+          continue;
+        }
+        // Fully unlink before destroy so waste→waste edges cannot UAF.
+        const std::vector<VertexPtr> inConns = vert->getInConnections();
+        for (auto *inConnVert: inConns)
+          removeEdge(inConnVert, vert);
+        const std::vector<VertexPtr> outConns = vert->getOutConnections();
+        for (auto *outConnVert: outConns)
+          removeEdge(vert, outConnVert);
+
+        if (type == gate) {
+          this->d_gatesCount[vert->getGate()] -= 1;
+        }
+        // IMPORTANT. do not use rbegin
+        std::swap(*iter, *(d_vertices[type].end() - 1 - counterForResize));
+        vert->~GraphVertexBase();
+        ++counterForResize;
       } else
         ++iter;
     }
@@ -992,20 +993,25 @@ void OrientedGraph::verilogInoutsWriting(
   std::string verilogTab = "\t";
   i_fileStream << "module " << i_graph->d_name << "(\n" << verilogTab;
 
-  // here we are parsing inputs by their wire size
-  for (auto *inp: i_graph->d_vertices[VertexTypes::input]) {
-    i_printPin(inp);
-    i_fileStream << ", ";
-  }
-  i_fileStream << '\n' << verilogTab;
+  const auto &inputs = i_graph->d_vertices[VertexTypes::input];
+  const auto &outputs = i_graph->d_vertices[VertexTypes::output];
 
-  // and outputs
-  for (auto *outVert: i_graph->d_vertices[VertexTypes::output]) {
-    i_printPin(outVert);
-    i_fileStream << ((outVert ==
-                      i_graph->d_vertices[VertexTypes::output].back())
-                         ? "\n"
-                         : ", ");
+  for (size_t i = 0; i < inputs.size(); ++i) {
+    i_printPin(inputs[i]);
+    if (i + 1 < inputs.size())
+      i_fileStream << ", ";
+  }
+  if (!inputs.empty() && !outputs.empty())
+    i_fileStream << ", ";
+  if (!outputs.empty() || !inputs.empty())
+    i_fileStream << '\n' << verilogTab;
+
+  for (size_t i = 0; i < outputs.size(); ++i) {
+    i_printPin(outputs[i]);
+    if (i + 1 < outputs.size())
+      i_fileStream << ", ";
+    else
+      i_fileStream << '\n';
   }
   i_fileStream << ");\n";
 
@@ -1421,10 +1427,9 @@ DotReturn OrientedGraph::toDOT() {
           subGraph->getBaseVertexes()[VertexTypes::input][i]->getName();
 
       // External driver → nested input port inside the cluster.
-      dot.push_back(
-          {DotTypes::DotEdge,
-           {{"from", inp->getName()},
-            {"to", val[0].second["instName"] + "_" + inp_name}}});
+      dot.push_back({DotTypes::DotEdge,
+                     {{"from", inp->getName()},
+                      {"to", val[0].second["instName"] + "_" + inp_name}}});
     }
   }
 
@@ -1886,11 +1891,11 @@ GraphPtr OrientedGraph::unrollGraph() {
                     newGraph->addSequential(st, clk, data, mapIn(2), name);
               else if (ins.size() == 4)
                 newVertex = newGraph->addSequential(st, clk, data, mapIn(2),
-                                                   mapIn(3), name);
+                                                    mapIn(3), name);
               else if (ins.size() >= 5)
                 // API order (rst, set, en); connections are en, rst, set.
                 newVertex = newGraph->addSequential(st, clk, data, mapIn(3),
-                                                   mapIn(4), mapIn(2), name);
+                                                    mapIn(4), mapIn(2), name);
             } else {
               // Latch: constructor "clk" slot is EN.
               VertexPtr en = mapIn(1);
@@ -1903,7 +1908,7 @@ GraphPtr OrientedGraph::unrollGraph() {
                     newGraph->addSequential(st, en, data, mapIn(2), name);
               else if (ins.size() >= 4)
                 newVertex = newGraph->addSequential(st, en, data, mapIn(2),
-                                                   mapIn(3), name);
+                                                    mapIn(3), name);
             }
             if (newVertex)
               vPairs[v] = newVertex;

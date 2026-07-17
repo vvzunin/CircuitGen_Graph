@@ -32,6 +32,7 @@ inline void testFile(const std::string &fileName, std::string_view text) {
       << "Не удалось удалить файл: " << fileName;
 }
 TEST(BusTest, SimpleBusPrintedSeparate) {
+  OrientedGraph::resetCounter();
   GraphPtr graph = std::make_shared<OrientedGraph>();
   VertexPtr inputBus = graph->addInputBus("inputBus", 5);
   VertexPtr anotherInputBus = graph->addInputBus("anotherInputBus", 3);
@@ -52,7 +53,7 @@ TEST(BusTest, SimpleBusPrintedSeparate) {
   EXPECT_NO_THROW(graph->toVerilogBusEnabledAsOneBit("./", "oneBitVerilog.v"));
   testFile(
       "./oneBitVerilog.v",
-      "module graph_5(\n\tinputBus_0, inputBus_1, inputBus_2, inputBus_3, "
+      "module graph_0(\n\tinputBus_0, inputBus_1, inputBus_2, inputBus_3, "
       "inputBus_4, anotherInputBus_0, anotherInputBus_1, anotherInputBus_2, "
       "inputVertex, \n\tresAnd_0, resAnd_1, resAnd_2, resAnd_3, resNot_0, "
       "resNot_1, resNot_2, resNot_3, resNot_4, outputVertex\n);\n\t// Writing "
@@ -130,6 +131,7 @@ TEST(BusTest, oneBitVerilogForSequentials) {
   testFile("./sequentialTest.v", TestData::SEQ_8_TEST);
 }
 TEST(BusTest, severalBusModulePrintedToVerilog) {
+  OrientedGraph::resetCounter();
   GraphPtr graph = std::make_shared<OrientedGraph>();
   VertexPtr inputBus = graph->addInputBus("inputBus", 5);
   VertexPtr inputVertex = graph->addInput("inputVertex");
@@ -144,7 +146,7 @@ TEST(BusTest, severalBusModulePrintedToVerilog) {
   EXPECT_NO_THROW(graph->toVerilogBusEnabled("./", "lalala.v"));
   testFile(
       "./lalala.v",
-      "module graph_5(\n\tinputBus, inputVertex, \n\tres, "
+      "module graph_0(\n\tinputBus, inputVertex, \n\tres, "
       "outputVertex\n);\n\t// Writing inputs\n\tinput inputVertex;\n\tinput "
       "[4:0] inputBus;\n\n\t// Writing outputs\n\toutput "
       "outputVertex;\n\toutput [4:0] res;\n\n\t// Writing gates for main "
@@ -159,7 +161,7 @@ TEST(BusTest, SliceToVerilog) {
   EXPECT_NO_THROW(graph->toVerilog("./", "micro_to_verilog_test.v"));
   EXPECT_EQ(v1->toVerilog(), "assign sliceBus = inputBus[1:0];\n");
   testFile("micro_to_verilog_test.v", "module sliceTestGraph(\n"
-                                      "\tinputBus, \n"
+                                      "\tinputBus\n"
                                       "\t);\n"
                                       "\t// Writing inputs\n"
                                       "\tinput inputBus;\n"
@@ -202,13 +204,14 @@ TEST(BusTest, SliceErrorsWhenIncorrect) {
       "(name is not defined) is connected with vertex, which is not a bus\n");
 }
 TEST(BusTest, ConcatenationToVerilog) {
+  OrientedGraph::resetCounter();
   GraphPtr graph = std::make_shared<OrientedGraph>();
   VertexPtr v = graph->addInputBus("input_", 5);
   VertexPtr v2 = graph->addGateBus(GateNot, "not", 5);
-  VertexPtr v3 = graph->addGateBus(GateConcatenation);
+  VertexPtr v3 = graph->addGateBus(GateConcatenation, "concat", 5);
   VertexPtr v4 = graph->addConst('1', "const_");
   graph->addEdge(v, v3);
   graph->addEdge(v2, v3);
   graph->addEdge(v4, v3);
-  EXPECT_EQ(v3->toVerilog(), "assign gate_0 = { input_ , not , const_ };");
+  EXPECT_EQ(v3->toVerilog(), "assign concat = { input_ , not , const_ };");
 }

@@ -102,19 +102,24 @@ struct MultiLinearAllocator {
    */
   template<typename T>
   T *allocate() {
-    bytea *current = offset;
-    offset += sizeof(T);
+    // Align for T *before* claiming space (previous code advanced then
+    // aligned for the next allocation, which could return a misaligned T*).
     align<T>();
-    if (offset > blocks.back() + buf_size) {
-      // bad alloc - memory was taken, but allocation is impossible, and we try
-      // to allocate more memory, than is located in buffer
-      if (current == blocks.back()) {
+    if (offset + sizeof(T) > blocks.back() + buf_size) {
+      // Object does not fit even in a fresh chunk.
+      if (sizeof(T) > chunk_size) {
+        return nullptr;
+      }
+      // Still at the start of the current block after align → cannot grow.
+      if (offset == blocks.back()) {
         return nullptr;
       }
       blocks.push_back(offset = new bytea[chunk_size]);
       buf_size = chunk_size;
       return allocate<T>();
     }
+    bytea *current = offset;
+    offset += sizeof(T);
     return reinterpret_cast<T *>(current);
   }
 

@@ -1015,12 +1015,14 @@ bool TestbenchGenerator::generate(std::shared_ptr<OrientedGraph> graph,
   tbFile << "    // --- Graph Model ---\n";
   tbFile << "    " << graph->getName() << " graph_inst (\n";
   for (size_t i = 0; i < graphInputs.size(); ++i) {
+    const bool last =
+        (i + 1 == graphInputs.size()) && graphOutputs.empty();
     tbFile << "        ." << graphInputs[i]->getName() << "(test_in[" << i
-           << "]),\n";
+           << "])" << (last ? "\n" : ",\n");
   }
   for (size_t i = 0; i < graphOutputs.size(); ++i) {
     tbFile << "        ." << graphOutputs[i]->getName() << "(graph_out[" << i
-           << "])" << ((i == graphOutputs.size() - 1) ? "" : ",\n");
+           << "])" << ((i == graphOutputs.size() - 1) ? "\n" : ",\n");
   }
   tbFile << "    );\n\n";
 
