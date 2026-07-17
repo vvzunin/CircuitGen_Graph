@@ -40,7 +40,7 @@ std::string AuxMethodsGraph::dotReturnToString(DotReturn dot) {
   std::string dotTab = "  ";
   std::string s = "";
 
-  bool printingSubGraph = false;
+  int printingSubGraph = 0;
 
   for (size_t i = 0; i < dot.size(); i++) {
     switch (dot[i].first) {
@@ -74,12 +74,15 @@ std::string AuxMethodsGraph::dotReturnToString(DotReturn dot) {
       case DotTypes::DotSubGraph:
         s += (dotTab * tab++) + "subgraph cluster_" +
              dot[i].second["instName"] + " {\n";
-        printingSubGraph = true;
+        ++printingSubGraph;
         break;
       case DotTypes::DotExit:
         CG_LOG_INFO << "tab: " << tab;
-        if (printingSubGraph)
+        // Close one cluster per nested DotExit; top Digraph close is below.
+        if (printingSubGraph > 0) {
           s += dotTab * --tab + "}\n";
+          --printingSubGraph;
+        }
         break;
     }
   }
