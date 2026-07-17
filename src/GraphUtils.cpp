@@ -116,11 +116,22 @@ std::string parseGateToString(Gates gate) {
   return std::string(pair->second);
 }
 std::string parseSequentialToString(SequentialTypes type) {
-  return std::string(findPairByKey(sequentialToString, type)->second);
+  auto *pair = findPairByKey(sequentialToString, type);
+  if (!pair) {
+    CG_LOG_ERROR << "Failed to parse SequentialType enum to string: "
+                 << static_cast<int>(type);
+    return "ERROR";
+  }
+  return std::string(pair->second);
 }
 std::vector<std::string_view> parseSequentialToInputs(SequentialTypes type) {
-  return std::vector<std::string_view>(
-      findPairByKey(sequentialToInputList, type)->second);
+  auto *pair = findPairByKey(sequentialToInputList, type);
+  if (!pair) {
+    CG_LOG_ERROR << "Failed to parse SequentialType enum to inputs: "
+                 << static_cast<int>(type);
+    return {};
+  }
+  return std::vector<std::string_view>(pair->second);
 }
 std::string parseVertexToString(VertexTypes vertex) {
   auto *pair = findPairByKey(vertexToString, vertex);

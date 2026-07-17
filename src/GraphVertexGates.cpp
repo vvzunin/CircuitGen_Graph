@@ -383,10 +383,11 @@ std::string GraphVertexBusGate::toOneBitVerilog() const {
                            ? getBusPointer(d_inConnections.back())->getWidth()
                            : 1));
   auto printUnaryOperators = [&]() {
-    std::string temporaryName;
+    const VertexPtr in = getInConnections().back();
     for (size_t j = 0; j < n; ++j) {
-      temporaryName =
-          fmt::format("{}_{}", getInConnections().back()->getRawName(), j);
+      const std::string temporaryName =
+          in->isBus() ? fmt::format("{}_{}", in->getRawName(), j)
+                      : std::string(in->getRawName());
       stream << fmt::format("assign {}_{} = {}{}{};\n\t", getRawName(), j, oper,
                             temporaryName, "");
     }

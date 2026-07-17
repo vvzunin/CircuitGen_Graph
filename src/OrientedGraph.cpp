@@ -328,7 +328,14 @@ VertexPtr OrientedGraph::addSliceBus(VertexPtr i_bus, size_t i_begin,
              i_begin + i_width >
                  GraphVertexBus::getBusPointer(i_bus)->getWidth()) {
     std::cerr << "Width of slice is out of range of bus\n";
-    correctWidth = GraphVertexBus::getBusPointer(i_bus)->getWidth() - i_begin;
+    const size_t busWidth =
+        GraphVertexBus::getBusPointer(i_bus)->getWidth();
+    if (i_begin >= busWidth) {
+      correctBegin = busWidth > 0 ? busWidth - 1 : 0;
+      correctWidth = 1;
+    } else {
+      correctWidth = busWidth - i_begin;
+    }
   }
   newVertex = create<GraphVertexBusSlice>(
       i_name.empty() ? "" : internalize(i_name), shared_from_this(),

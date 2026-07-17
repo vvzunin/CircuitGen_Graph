@@ -720,7 +720,7 @@ static std::pair<T, M> *findPairByKey(std::pair<T, M> (&iterable)[N],
                                       const T &key) {
   auto *iter = std::find_if(std::begin(iterable), std::end(iterable),
                             [key](const auto &x) { return x.first == key; });
-  return iter;
+  return iter == std::end(iterable) ? nullptr : iter;
 }
 
 /*!
@@ -805,11 +805,17 @@ static std::pair<VertexTypes, std::string_view> vertexToString[] = {
  * @note Текущая реализация требует линейного поиска через findPairByKey
  */
 static std::pair<Gates, std::string_view> gateToString[] = {
-    {Gates::GateAnd, "and"},        {Gates::GateNand, "nand"},
-    {Gates::GateOr, "or"},          {Gates::GateNor, "nor"},
-    {Gates::GateXor, "xor"},        {Gates::GateXnor, "xnor"},
-    {Gates::GateNot, "not"},        {Gates::GateBuf, "buf"},
-    {Gates::GateSlice, "busSlice"}, {Gates::GateDefault, "ERROR"}};
+    {Gates::GateAnd, "and"},
+    {Gates::GateNand, "nand"},
+    {Gates::GateOr, "or"},
+    {Gates::GateNor, "nor"},
+    {Gates::GateXor, "xor"},
+    {Gates::GateXnor, "xnor"},
+    {Gates::GateNot, "not"},
+    {Gates::GateBuf, "buf"},
+    {Gates::GateSlice, "busSlice"},
+    {Gates::GateConcatenation, "concat"},
+    {Gates::GateDefault, "ERROR"}};
 static std::pair<SequentialTypes, std::string_view> sequentialToString[]{
     {affr, "affr"},       {affre, "affre"},   {affrs, "affrs"},
     {affrse, "affrse"},   {latch, "latch"},   {latchr, "latchr"},

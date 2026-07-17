@@ -1,4 +1,5 @@
 #include <CircuitGenGraph/GraphUtils.hpp>
+#include <CircuitGenGraph/GraphVertex.hpp>
 #include <CircuitGenGraph/GraphVertexBase.hpp>
 #include <CircuitGenGraph/GraphVertexBus.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
@@ -204,6 +205,10 @@ TEST(BusTest, SliceErrorsWhenIncorrect) {
   EXPECT_EQ(GraphVertexBus::getBusPointer(s1)->getWidth(), 1);
   VertexPtr s2 = graph->addSliceBus(input, 2, 6);
   EXPECT_EQ(GraphVertexBus::getBusPointer(s2)->getWidth(), 3);
+  VertexPtr sBeginPastEnd = graph->addSliceBus(input, 6, 1);
+  EXPECT_EQ(GraphVertexBus::getBusPointer(sBeginPastEnd)->getWidth(), 1);
+  EXPECT_EQ(static_cast<GraphVertexBusSlice *>(sBeginPastEnd)->getSliceSuffix(),
+            "[4];\n");
   VertexPtr gate = graph->addGate(GateNor);
   VertexPtr s3 = graph->addSliceBus(gate, 2, 6);
   EXPECT_EQ(GraphVertexBus::getBusPointer(s3)->getWidth(), 1);
@@ -213,8 +218,42 @@ TEST(BusTest, SliceErrorsWhenIncorrect) {
   EXPECT_EQ(
       output,
       "Width of bus must be an positive value\n"
-      "Width of slice is out of range of bus\nCreated slice with name "
+      "Width of slice is out of range of bus\n"
+      "Width of slice is out of range of bus\n"
+      "Created slice with name "
       "(name is not defined) is connected with vertex, which is not a bus\n");
+}
+
+TEST(BusTest, BusConstantVerilogInstanceAndOneBitLiterals) {
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+  VertexPtr constBus = graph->addConstBus("const_0", 3);
+  auto *busConst = static_cast<GraphVertexBusConstant *>(
+      GraphVertexBus::getBusPointer(constBus));
+  EXPECT_EQ(busConst->getVerilogInstance(), "wire [2:0] const_0;");
+  EXPECT_EQ(busConst->toOneBitVerilog(),
+            "assign const_0_0 = 1'bx;\n\t"
+            "assign const_0_1 = 1'bx;\n\t"
+            "assign const_0_2 = 1'bx;\n\t\n");
+}
+
+TEST(BusTest, UnaryBusGateOneBitKeepsScalarInputName) {
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+  VertexPtr bit = graph->addInput("bit");
+  VertexPtr notBus = graph->addGateBus(GateNot, "notGate", 1);
+  graph->addEdge(bit, notBus);
+  EXPECT_EQ(GraphVertexBus::getBusPointer(notBus)->toOneBitVerilog(),
+            "assign notGate_0 = ~bit;\n\t");
+}
+
+TEST(BusTest, BusOutputOneBitKeepsScalarDriverName) {
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+  VertexPtr bit = graph->addInput("bit");
+  VertexPtr buf = graph->addGate(GateBuf, "buf");
+  VertexPtr out = graph->addOutputBus("out", 2);
+  graph->addEdge(bit, buf);
+  graph->addEdge(buf, out);
+  EXPECT_EQ(GraphVertexBus::getBusPointer(out)->toOneBitVerilog(),
+            "assign out_0 = buf;\n\t");
 }
 TEST(BusTest, ConcatenationToVerilog) {
   OrientedGraph::resetCounter();

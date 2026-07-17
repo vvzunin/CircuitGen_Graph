@@ -90,12 +90,9 @@ GraphVertexBusOutput::GraphVertexBusOutput(std::string_view i_name,
 
 std::string GraphVertexBusOutput::toOneBitVerilog() const {
   std::stringstream res;
-  size_t minWidth = -1;
-  if (!d_inConnections.empty())
-    minWidth = getBusPointer(
-                   (*std::min_element(d_inConnections.begin(),
-                                      d_inConnections.end(), hasSmallerWidth)))
-                   ->getWidth();
+  if (d_inConnections.empty())
+    return res.str();
+
   // Match scalar output / updateValue: first driver is the source.
   const VertexPtr driver = d_inConnections.front();
   if (d_inConnections.size() > 1) {
@@ -103,9 +100,16 @@ std::string GraphVertexBusOutput::toOneBitVerilog() const {
                    << d_inConnections.size()
                    << " drivers; one-bit Verilog uses the first connection";
   }
-  for (size_t i = 0; i < std::min(minWidth, getWidth()); ++i)
+
+  const size_t driverWidth =
+      driver->isBus() ? getBusPointer(driver)->getWidth() : 1;
+  for (size_t i = 0; i < std::min(driverWidth, getWidth()); ++i) {
     res << "assign " << getRawName() << "_" << i << " = "
-        << driver->getRawName() << "_" << i << ";\n\t";
+        << driver->getRawName();
+    if (driver->isBus())
+      res << "_" << i;
+    res << ";\n\t";
+  }
   return res.str();
 }
 
