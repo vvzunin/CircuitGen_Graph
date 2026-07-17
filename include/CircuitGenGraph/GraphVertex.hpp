@@ -575,7 +575,11 @@ public:
 
 private:
   GraphPtr d_subGraph;
-  std::string d_verilogPath = ""; /// Путь к внешнему Verilog файлу
+  /*!
+   * \~english Path to an external Verilog file
+   * \~russian Путь к внешнему Verilog-файлу
+   */
+  std::string d_verilogPath = "";
 };
 
 /**

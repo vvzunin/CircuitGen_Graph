@@ -103,17 +103,33 @@ enum VertexTypes : uint8_t {
    */
   sequential = 4,
   /*!
-   * \~english Bus variants of base types (`type | d_busInType`). Prefer
-   * `GraphVertexBus*` classes and `OrientedGraph::add*Bus` over a dedicated
-   * bus-only enum value.
-   * \~russian Шинные варианты базовых типов (`type | d_busInType`).
-   * Предпочтительны классы `GraphVertexBus*` и `OrientedGraph::add*Bus`, а не
-   * отдельное значение enum только для шины.
+   * \~english Bus variant of `input` (`input | d_busInType`). Prefer
+   * `GraphVertexBus*` and `OrientedGraph::add*Bus` over a dedicated bus-only
+   * enum value.
+   * \~russian Шинный вариант `input` (`input | d_busInType`). Предпочтительны
+   * классы `GraphVertexBus*` и `OrientedGraph::add*Bus`, а не отдельное
+   * значение enum только для шины.
    */
   inputBus = input | d_busInType,
+  /*!
+   * \~english Bus variant of `constant` (`constant | d_busInType`)
+   * \~russian Шинный вариант `constant` (`constant | d_busInType`)
+   */
   constantBus = constant | d_busInType,
+  /*!
+   * \~english Bus variant of `gate` (`gate | d_busInType`)
+   * \~russian Шинный вариант `gate` (`gate | d_busInType`)
+   */
   gateBus = gate | d_busInType,
+  /*!
+   * \~english Bus variant of `sequential` (`sequential | d_busInType`)
+   * \~russian Шинный вариант `sequential` (`sequential | d_busInType`)
+   */
   sequentialBus = sequential | d_busInType,
+  /*!
+   * \~english Bus variant of `output` (`output | d_busInType`)
+   * \~russian Шинный вариант `output` (`output | d_busInType`)
+   */
   outputBus = output | d_busInType
 };
 
@@ -290,11 +306,16 @@ enum Gates : uint8_t {
    * \~russian Логический элемент - Буфер (BUF)
    */
   GateBuf,
-  GateConcatenation, /// logical element - concatenation of several vertices or
-                     /**
-                      * buses
-                      */
-  GateSlice,         /// logical element - slice of bus
+  /*!
+   * \~english Logical element - concatenation of several vertices or buses
+   * \~russian Логический элемент - конкатенация нескольких вершин или шин
+   */
+  GateConcatenation,
+  /*!
+   * \~english Logical element - slice of a bus
+   * \~russian Логический элемент - срез шины
+   */
+  GateSlice,
   /*!
    * \~english Default logical element (error state)
    * \~russian Логический элемент по умолчанию (состояние ошибки)
