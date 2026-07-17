@@ -1261,10 +1261,10 @@ bool OrientedGraph::toVerilogBusEnabled(std::string i_path,
       if (it->first != length) {
         if (length != static_cast<size_t>(-1))
           i_fileStream << ";\n\t";
-        i_fileStream << typeStr << " "
-                     << GraphVertexBus::getBusPointer(it->second)
-                            ->getBusNameSuffix()
-                     << " " << it->second->getRawName();
+        i_fileStream
+            << typeStr << " "
+            << GraphVertexBus::getBusPointer(it->second)->getBusNameSuffix()
+            << " " << it->second->getRawName();
         length = it->first;
       } else {
         i_fileStream << ", " << it->second->getRawName();
