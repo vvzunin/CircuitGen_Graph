@@ -284,6 +284,14 @@ public:
    */
   virtual std::string getVerilogInstance();
 
+  /**
+   * \~english
+   * @brief Constants keep their fixed value across simulation clears.
+   * \~russian
+   * @brief Константы сохраняют фиксированное значение при очистке симуляции.
+   */
+  void removeValue() override;
+
 #ifdef LOGFLAG
   /**
    * @author Vladimir Zunin
@@ -299,6 +307,7 @@ public:
 #endif
 
 private:
+  char d_constValue = ValueStates::FalseValue;
 };
 
 /**

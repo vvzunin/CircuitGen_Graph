@@ -196,6 +196,10 @@ void GraphVertexBase::removeValue() {
   }
 }
 
+void GraphVertexBase::invalidateValue() {
+  d_value = ValueStates::UndefinedState;
+}
+
 bool GraphVertexBase::isBus() const {
   return d_type & d_busInType;
 }

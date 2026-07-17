@@ -478,6 +478,17 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
 std::vector<char>
 OrientedGraph::graphSimulation(std::vector<char> inputsValues) {
   std::vector<char> outputsValues;
+  // Force recompute of multi-level cones. Vertices are constructed with
+  // NoSignal ('x'), while updateValue only recurses on UndefinedState ('n').
+  for (VertexPtr v: d_vertices[VertexTypes::gate])
+    v->invalidateValue();
+  for (VertexPtr v: d_vertices[VertexTypes::output])
+    v->invalidateValue();
+  for (VertexPtr v: d_vertices[VertexTypes::subGraph])
+    v->invalidateValue();
+  for (VertexPtr v: d_vertices[VertexTypes::sequential])
+    v->invalidateValue();
+
   for (size_t i = 0; i < d_vertices[VertexTypes::input].size(); ++i) {
     GraphVertexInput *inputVert =
         static_cast<GraphVertexInput *>(d_vertices[VertexTypes::input].at(i));

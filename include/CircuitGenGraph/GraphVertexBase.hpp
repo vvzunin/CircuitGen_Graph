@@ -574,6 +574,16 @@ public:
   virtual void removeValue();
 
   /**
+   * \~english
+   * @brief Marks the vertex value as undefined without walking connections.
+   * Used by `OrientedGraph::graphSimulation` before evaluating a new vector.
+   * \~russian
+   * @brief Помечает значение вершины как неопределённое без обхода связей.
+   * Используется в `OrientedGraph::graphSimulation` перед новым вектором.
+   */
+  void invalidateValue();
+
+  /**
    * @author Fuuulkrum7
    *
    * \~english

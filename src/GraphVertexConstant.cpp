@@ -19,15 +19,21 @@ namespace CG_Graph {
 GraphVertexConstant::GraphVertexConstant(char i_const, GraphPtr i_baseGraph,
                                          bool i_isBus) :
     GraphVertexInput(i_baseGraph,
-                     i_isBus ? constantBus : VertexTypes::constant) {
+                     i_isBus ? constantBus : VertexTypes::constant),
+    d_constValue(i_const) {
   d_value = i_const;
 }
 
 GraphVertexConstant::GraphVertexConstant(char i_const, std::string_view i_name,
                                          GraphPtr i_baseGraph, bool i_isBus) :
     GraphVertexInput(i_name, i_baseGraph,
-                     i_isBus ? constantBus : VertexTypes::constant) {
+                     i_isBus ? constantBus : VertexTypes::constant),
+    d_constValue(i_const) {
   d_value = i_const;
+}
+
+void GraphVertexConstant::removeValue() {
+  d_value = d_constValue;
 }
 
 size_t GraphVertexConstant::calculateHash() {
