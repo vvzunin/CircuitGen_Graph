@@ -751,6 +751,8 @@ TEST(SequentialTestbench, SequentialTestbenchCodeGeneration) {
       << "Module name must contain _tb suffix";
   EXPECT_NE(code.find("dut"), std::string::npos)
       << "DUT instance must be present";
+  EXPECT_NE(code.find("Number of test vectors: 5"), std::string::npos)
+      << "Header must report sequential vector count";
 }
 
 // Тест 5: Тестбенч с сигналом сброса
@@ -795,6 +797,11 @@ TEST(SequentialTestbench, SequentialTestbenchWithLatch) {
       << "Latch should not have clock signals";
   EXPECT_NE(code.find("SeqTestLatch_tb"), std::string::npos);
   EXPECT_NE(code.find("$finish"), std::string::npos);
+  // EN must be pulsed high so the latch captures data
+  EXPECT_NE(code.find("en = 1'b1"), std::string::npos)
+      << "Latch enable must be asserted during stimulus cycles";
+  EXPECT_NE(code.find("en = 1'b0"), std::string::npos)
+      << "Latch enable must be deasserted between cycles";
 }
 
 // Тест 7: Запись тестбенча в файл

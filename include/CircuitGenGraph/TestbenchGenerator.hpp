@@ -714,10 +714,15 @@ private:
    */
   std::vector<std::string> d_resetNames;
   /*!
-   * \~english Data input names (excluding clk/rst)
-   * \~russian Имена входов данных (без clk/rst)
+   * \~english Data input names (excluding clk/rst/enable)
+   * \~russian Имена входов данных (без clk/rst/enable)
    */
   std::vector<std::string> d_dataInputNames;
+  /*!
+   * \~english Latch enable signal names (asserted while applying data)
+   * \~russian Имена сигналов разрешения защелки (поднимаются при подаче данных)
+   */
+  std::vector<std::string> d_enableNames;
 };
 
 } // namespace CG_Graph
