@@ -1,3 +1,11 @@
+/**
+ * @file GraphVertexBus.hpp
+ * \~english
+ * @brief Bus mixin and helpers for multi-bit vertices.
+ *
+ * \~russian
+ * @brief Mixin шины и вспомогательные методы для многобитных вершин.
+ */
 #pragma once
 
 #include <cstddef>
@@ -15,10 +23,39 @@ class GraphVertexBusSlice;
  * @param d_width Bus width.
  * @param d_value Bus value during simulation.
  *
+ * Current model: a bus is a typed graph vertex (`GraphVertexBusInput`,
+ * `GraphVertexBusGate`, …) that stores width and participates in
+ * Verilog/simulation as a single object. Bus variants are created via
+ * `OrientedGraph::add*Bus`.
+ *
+ * @todo Possible future extensions (ideas from the former DataBus prototype;
+ * redesign on top of this API, do not revive a separate `dataBus` vertex type):
+ * - Bit indexing: `operator[]` / `getBit(i)` returning a view or proxy for bit
+ *   `i` without forcing callers to rebuild the bus.
+ * - Assemble a bus from existing same-type one-bit vertices already in the
+ *   graph (post-factum grouping), with validation that all bits share type and
+ *   that subgraphs are rejected.
+ * - Optional DOT export annotation with per-bit `index` when expanding a bus
+ *   into bit-level nodes for visualization.
+ *
  * \~russian
  * @brief Предоставляет методы, специфичные для вершин типа шина.
  * @param d_width Ширина шины.
  * @param d_value Значение шины в ходе симуляции.
+ *
+ * Текущая модель: шина — типизированная вершина графа
+ * (`GraphVertexBusInput`, `GraphVertexBusGate`, …) с шириной; создаётся через
+ * `OrientedGraph::add*Bus`.
+ *
+ * @todo Возможные расширения (идеи из прототипа DataBus; проектировать поверх
+ * текущего API, не возвращать отдельный тип вершины `dataBus`):
+ * - Индексация битов: `operator[]` / `getBit(i)` — доступ к биту `i` без
+ *   пересборки шины.
+ * - Сборка шины из уже существующих однобитных вершин одного типа в графе
+ *   (группировка post-factum) с проверкой единообразия типов и запретом
+ *   подграфов.
+ * - Опциональная аннотация DOT полем `index` при развёртке шины в биты для
+ *   визуализации.
  */
 class GraphVertexBus {
   friend class GraphVertexBusSlice;

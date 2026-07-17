@@ -449,11 +449,32 @@ public:
    * @param width Bus width.
    * @return Pointer to created bus input vertex.
    *
+   * Bus factories on this graph (`addInputBus`, `addOutputBus`, `addConstBus`,
+   * `addGateBus`, `addSliceBus`, `addSequentialBus`) create typed bus vertices
+   * with an explicit width. See `GraphVertexBus` for the mixin API.
+   *
+   * @todo Consider factory helpers that build a bus from an existing sequence
+   * of same-type one-bit vertices already present in the graph (e.g.
+   * `addBusFromVertices` / view over `VertexPtr` range), instead of only
+   * allocating a new bus of a given width. Any such API should reuse
+   * `GraphVertexBus*` types and must not introduce a separate `dataBus`
+   * `VertexTypes` value.
+   *
    * \~russian
    * @brief Добавляет входную шинную вершину в текущий граф.
    * @param i_name Имя входной шины.
    * @param width Ширина шины.
    * @return Указатель на созданную входную шинную вершину.
+   *
+   * Фабрики шин (`addInputBus`, `addOutputBus`, `addConstBus`, `addGateBus`,
+   * `addSliceBus`, `addSequentialBus`) создают типизированные шинные вершины
+   * с явной шириной. См. `GraphVertexBus`.
+   *
+   * @todo Рассмотреть фабрики, собирающие шину из уже существующих в графе
+   * однобитных вершин одного типа (например `addBusFromVertices` / view по
+   * диапазону `VertexPtr`), а не только создание новой шины заданной ширины.
+   * Такой API должен опираться на типы `GraphVertexBus*` и не вводить
+   * отдельное значение `VertexTypes::dataBus`.
    */
   VertexPtr addInputBus(const std::string &i_name = "", size_t width = 1);
 

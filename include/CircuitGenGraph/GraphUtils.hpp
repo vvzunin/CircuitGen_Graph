@@ -93,8 +93,8 @@ enum VertexTypes : uint8_t {
    */
   gate = 2,
   /*!
-   * \~english Bus vertex type. Not supported yet
-   * \~russian Тип вершины шины. Пока не поддерживается
+   * \~english Subgraph vertex (nested `OrientedGraph`)
+   * \~russian Вершина-подграф (вложенный `OrientedGraph`)
    */
   subGraph = 3,
   /*!
@@ -102,6 +102,14 @@ enum VertexTypes : uint8_t {
    * \~russian Последовательностный тип вершины (D-защелка или D-триггер)
    */
   sequential = 4,
+  /*!
+   * \~english Bus variants of base types (`type | d_busInType`). Prefer
+   * `GraphVertexBus*` classes and `OrientedGraph::add*Bus` over a dedicated
+   * bus-only enum value.
+   * \~russian Шинные варианты базовых типов (`type | d_busInType`). Предпочтительны
+   * классы `GraphVertexBus*` и `OrientedGraph::add*Bus`, а не отдельное
+   * значение enum только для шины.
+   */
   inputBus = input | d_busInType,
   constantBus = constant | d_busInType,
   gateBus = gate | d_busInType,
