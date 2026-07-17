@@ -535,11 +535,12 @@ TEST(TestCalulateHash_Gate, PseudoBistableCell) {
   graph1->addEdge(gateVertB1, gateVertA1);
   graph1->addEdge(gateVertA1, gateVertB1);
 
-  // outputs are sorted, so connection to the same as before gives equal hash
+  // Output hashes are sorted at graph level, so swapped output wiring is
+  // isomorphic and yields the same graph hash.
   graph1->addEdge(gateVertA1, outputVertB1);
   graph1->addEdge(gateVertB1, outputVertA1);
 
-  EXPECT_NE(graph->calculateHash(), graph1->calculateHash());
+  EXPECT_EQ(graph->calculateHash(), graph1->calculateHash());
 }
 
 // TEST(TestRemoveVertexToInConnections, GatesRemoveConnections) {

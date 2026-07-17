@@ -63,6 +63,11 @@ TestbenchGenerator::TestbenchGenerator(GraphPtr i_graph,
 // --- Генерация тестовых векторов ---
 
 size_t TestbenchGenerator::generateExhaustiveVectors() {
+  if (d_hasSequential) {
+    throw std::invalid_argument(
+        "TestbenchGenerator: exhaustive vectors are not supported for "
+        "sequential circuits; use generateSequentialTestVectors() instead");
+  }
   size_t numInputs = d_inputNames.size();
 
   if (numInputs > 20) {
@@ -467,11 +472,11 @@ VerificationResult TestbenchGenerator::runInternalSimulation() {
         break;
       }
     }
+    tv.actual = computeExpectedOutputs(tv.inputs);
     if (hasUndefined || tv.expected.empty()) {
-      tv.expected = computeExpectedOutputs(tv.inputs);
+      tv.expected = tv.actual;
     }
 
-    tv.actual = computeExpectedOutputs(tv.inputs);
     tv.passed = (tv.actual == tv.expected);
 
     if (tv.passed) {

@@ -197,8 +197,8 @@ TEST(TestCalculateHash_Output, SameHashWhenEqualInputs) {
   EXPECT_NE(output1.calculateHash(), 0);
 
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>();
-  GraphVertexInput output2(graphPtr1);
-  GraphVertexInput output3(graphPtr1);
+  GraphVertexInput output2("in_a", graphPtr1);
+  GraphVertexInput output3("in_a", graphPtr1);
 
   output2.addVertexToOutConnections(memoryOwnerOutputGr->addOutput());
   output2.resetHashState();
@@ -209,6 +209,12 @@ TEST(TestCalculateHash_Output, SameHashWhenEqualInputs) {
   output2.resetHashState();
   output3.resetHashState();
   EXPECT_EQ(output2.calculateHash(), output3.calculateHash());
+
+  GraphVertexInput output4("in_b", graphPtr1);
+  output4.addVertexToOutConnections(memoryOwnerOutputGr->addOutput());
+  output2.resetHashState();
+  output4.resetHashState();
+  EXPECT_NE(output2.calculateHash(), output4.calculateHash());
 }
 
 // need to remake realisition of method

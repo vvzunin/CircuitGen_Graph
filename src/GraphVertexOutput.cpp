@@ -25,6 +25,10 @@ GraphVertexOutput::GraphVertexOutput(std::string_view i_name,
 }
 
 char GraphVertexOutput::updateValue() {
+  UpdateValueCycleGuard cycleGuard(this);
+  if (cycleGuard.onCycle()) {
+    return d_value = ValueStates::NoSignal;
+  }
   if (d_inConnections.empty()) {
     return (d_value = ValueStates::NoSignal);
   }

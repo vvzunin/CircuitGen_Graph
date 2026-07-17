@@ -34,10 +34,10 @@ TEST(VerilogReadingTest, SimplestGraphsIsRead) {
   EXPECT_EQ(graph->getGatesCount()[GateAnd], 1);
   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
 
-  VertexPtr clk = graphCreated->addInput();
-  VertexPtr someInput = graphCreated->addInput();
+  VertexPtr clk = graphCreated->addInput("clk");
+  VertexPtr someInput = graphCreated->addInput("someInput");
   VertexPtr gate = graphCreated->addGate(GateAnd);
-  VertexPtr output = graphCreated->addOutput();
+  VertexPtr output = graphCreated->addOutput("q");
 
   graphCreated->addEdge(clk, gate);
   graphCreated->addEdge(someInput, gate);
@@ -60,15 +60,15 @@ TEST(VerilogReadingTest, VerticesSequenceCreated) {
 
   GraphPtr graphCreated = std::make_shared<OrientedGraph>();
 
-  VertexPtr inputA = graphCreated->addInput();
-  VertexPtr inputB = graphCreated->addInput();
-  VertexPtr inputC = graphCreated->addInput();
+  VertexPtr inputA = graphCreated->addInput("a");
+  VertexPtr inputB = graphCreated->addInput("b");
+  VertexPtr inputC = graphCreated->addInput("c");
   VertexPtr gateXnor = graphCreated->addGate(GateXnor);
   VertexPtr gateOr = graphCreated->addGate(GateOr);
   VertexPtr gateAnd = graphCreated->addGate(GateAnd);
   VertexPtr gateNot = graphCreated->addGate(GateNot);
-  VertexPtr outputQ = graphCreated->addOutput();
-  VertexPtr outputQ2 = graphCreated->addOutput();
+  VertexPtr outputQ = graphCreated->addOutput("q");
+  VertexPtr outputQ2 = graphCreated->addOutput("q2");
 
   graphCreated->addEdge(inputB, gateNot);
   graphCreated->addEdge(inputA, gateOr);

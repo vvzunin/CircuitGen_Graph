@@ -37,8 +37,11 @@ void GraphVertexConstant::removeValue() {
 }
 
 size_t GraphVertexConstant::calculateHash() {
-  if (d_hasHash) {
+  if (d_hasHash == HC_CALC) {
     return d_hashed;
+  }
+  if (d_hasHash == HC_IN_PROGRESS) {
+    return kStructuralHashCycleSentinel;
   }
   size_t h = 0;
   hashCombine(h, static_cast<size_t>(getType()));

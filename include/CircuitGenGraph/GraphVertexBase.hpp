@@ -34,6 +34,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 #include <CircuitGenGraph/enums.hpp>
@@ -1070,6 +1071,36 @@ private:
 };
 
 static_assert(sizeof(GraphVertexBase) <= 104u);
+
+/**
+ * \~english
+ * @brief Detects combinational cycles during updateValue() recursion.
+ */
+class UpdateValueCycleGuard {
+public:
+  explicit UpdateValueCycleGuard(const GraphVertexBase *vertex) :
+      d_vertex(vertex), d_onCycle(false) {
+    auto &active = activeSet();
+    if (!active.insert(vertex).second)
+      d_onCycle = true;
+  }
+
+  ~UpdateValueCycleGuard() {
+    if (!d_onCycle)
+      activeSet().erase(d_vertex);
+  }
+
+  bool onCycle() const { return d_onCycle; }
+
+private:
+  const GraphVertexBase *d_vertex;
+  bool d_onCycle;
+
+  static std::unordered_set<const GraphVertexBase *> &activeSet() {
+    thread_local std::unordered_set<const GraphVertexBase *> stack;
+    return stack;
+  }
+};
 
 /**
  * @author Fuuulkrum7
