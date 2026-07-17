@@ -365,13 +365,24 @@ std::ostream &operator<<(std::ostream &stream, const GraphVertexBase &vertex) {
   return stream;
 }
 VertexPtr GraphVertexBase::minWidthVertex() const {
-  VertexPtr minVertex = d_inConnections.back();
+  if (d_inConnections.empty())
+    return nullptr;
+
+  auto widthOf = [](VertexPtr vertex) -> size_t {
+    if (!vertex || !vertex->isBus())
+      return 1;
+    const GraphVertexBus *bus = GraphVertexBus::getBusPointer(vertex);
+    return bus ? bus->getWidth() : 1;
+  };
+
+  VertexPtr minVertex = d_inConnections.front();
+  size_t minWidth = widthOf(minVertex);
   for (auto *connection: d_inConnections) {
-    if (!connection->isBus())
-      return connection;
-    if (GraphVertexBus::getBusPointer(connection)->getWidth() <
-        GraphVertexBus::getBusPointer(connection)->getWidth())
+    const size_t width = widthOf(connection);
+    if (width < minWidth) {
+      minWidth = width;
       minVertex = connection;
+    }
   }
   return minVertex;
 }
