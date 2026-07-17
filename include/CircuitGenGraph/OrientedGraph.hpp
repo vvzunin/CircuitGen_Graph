@@ -24,6 +24,7 @@
 #include <functional>
 #include <map>
 #include <memory>
+#include <new>
 #include <set>
 #include <string>
 #include <string_view>
@@ -1637,7 +1638,10 @@ protected:
    */
   template<typename T, typename... Args>
   T *create(Args &&...args) {
-    return new (allocate<T>()) T(std::forward<Args>(args)...);
+    T *storage = allocate<T>();
+    if (!storage)
+      throw std::bad_alloc();
+    return new (storage) T(std::forward<Args>(args)...);
   }
 
   /**
