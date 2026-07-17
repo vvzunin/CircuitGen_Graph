@@ -13,7 +13,8 @@
 
 /// \~english
 /// @file TestbenchGenerator.hpp
-/// @brief Testbench generation and verification subsystem (combinational and sequential).
+/// @brief Testbench generation and verification subsystem (combinational and
+/// sequential).
 ///
 /// \~russian
 /// @brief Система генерации тестбенчей и верификации для сгенерированных схем
@@ -286,7 +287,8 @@ public:
                        const std::string &goldenModelPath,
                        const std::string &outputTbPath);
 
-  // ==================== Test-vector generation / Генерация тестовых векторов ====================
+  // ==================== Test-vector generation / Генерация тестовых векторов
+  // ====================
 
   /// \~english
   /// @brief Generates all possible input combinations (exhaustive mode).
@@ -333,7 +335,8 @@ public:
   /// @brief Очищает все тестовые векторы.
   void clearTestVectors();
 
-  // ==================== Sequential tests / Последовательностные тесты ====================
+  // ==================== Sequential tests / Последовательностные тесты
+  // ====================
 
   /// \~english
   /// @brief Generates random sequential test vectors (one per cycle).
@@ -342,7 +345,8 @@ public:
   /// @return Number of generated cycles.
   ///
   /// \~russian
-  /// @brief Генерирует случайные тестовые векторы для последовательностной схемы.
+  /// @brief Генерирует случайные тестовые векторы для последовательностной
+  /// схемы.
   /// @param i_numCycles Количество тактов симуляции.
   /// @param i_seed Seed для генератора (`0` = случайный).
   /// @return Количество сгенерированных тактов.
@@ -355,7 +359,8 @@ public:
   /// @param i_checkOutputs Whether to check outputs on this cycle.
   ///
   /// \~russian
-  /// @brief Добавляет тестовый вектор для одного такта последовательностной схемы.
+  /// @brief Добавляет тестовый вектор для одного такта последовательностной
+  /// схемы.
   /// @param i_dataInputs Входные значения (без clk/rst).
   /// @param i_expectedOutputs Ожидаемые выходы (опционально).
   /// @param i_checkOutputs Проверять ли выходы на этом такте.
@@ -395,7 +400,8 @@ public:
     return d_testVectors;
   }
 
-  // ==================== Testbench generation / Генерация тестбенча ====================
+  // ==================== Testbench generation / Генерация тестбенча
+  // ====================
 
   /// \~english
   /// @brief Generates Verilog testbench.
@@ -420,7 +426,8 @@ public:
   /// @return Verilog код тестбенча.
   std::string getTestbenchCode() const;
 
-  // ==================== Simulation and verification / Симуляция и верификация ====================
+  // ==================== Simulation and verification / Симуляция и верификация
+  // ====================
 
   /// \~english
   /// @brief Runs simulation using internal graph simulator.
@@ -630,7 +637,8 @@ private:
   static std::vector<PortInfo> parseGoldenModel(const std::string &filepath,
                                                 std::string &moduleName);
 
-  // ==================== Sequential generation / Последовательностная генерация ====================
+  // ==================== Sequential generation / Последовательностная генерация
+  // ====================
 
   /// \~english
   /// @brief Detects clock and reset signals from the graph.

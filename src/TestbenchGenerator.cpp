@@ -397,8 +397,8 @@ std::string TestbenchGenerator::getTestbenchCode() const {
 
 bool TestbenchGenerator::toVerilogTestbench(const std::string &i_path,
                                             const std::string &i_filename) {
-  bool hasVectors = d_hasSequential ? !d_seqTestVectors.empty()
-                                    : !d_testVectors.empty();
+  bool hasVectors =
+      d_hasSequential ? !d_seqTestVectors.empty() : !d_testVectors.empty();
   if (!hasVectors) {
     CG_LOG_WARNING
         << "TestbenchGenerator: no test vectors to generate testbench";
@@ -1059,7 +1059,7 @@ void TestbenchGenerator::detectClockSignals() {
   std::set<std::string> enableSet;
   std::set<std::string> controlSet; // clk + rst + latch-en + set
 
-  for (auto *seqVertex : vertices[VertexTypes::sequential]) {
+  for (auto *seqVertex: vertices[VertexTypes::sequential]) {
     auto *seq = static_cast<GraphVertexSequential *>(seqVertex);
 
     if (auto *clk = seq->getClk()) {
@@ -1096,21 +1096,20 @@ void TestbenchGenerator::detectClockSignals() {
 
   // Входы данных — все входы минус управляющие сигналы
   d_dataInputNames.clear();
-  for (const auto &inputName : d_inputNames) {
+  for (const auto &inputName: d_inputNames) {
     if (controlSet.find(inputName) == controlSet.end()) {
       d_dataInputNames.push_back(inputName);
     }
   }
 
   CG_LOG_INFO << "TestbenchGenerator: detected " << d_clockNames.size()
-              << " clock signals, " << d_resetNames.size()
-              << " reset signals, " << d_enableNames.size()
-              << " enable signals, " << d_dataInputNames.size()
-              << " data inputs";
+              << " clock signals, " << d_resetNames.size() << " reset signals, "
+              << d_enableNames.size() << " enable signals, "
+              << d_dataInputNames.size() << " data inputs";
 }
 
 size_t TestbenchGenerator::generateSequentialTestVectors(size_t i_numCycles,
-                                                        uint32_t i_seed) {
+                                                         uint32_t i_seed) {
   size_t numDataInputs = d_dataInputNames.size();
 
   std::mt19937 gen;
@@ -1169,7 +1168,7 @@ std::string TestbenchGenerator::generateSequentialSignalDeclarations() const {
   // Тактовые сигналы
   if (!d_clockNames.empty()) {
     ss << "  // Clock signals\n";
-    for (const auto &name : d_clockNames) {
+    for (const auto &name: d_clockNames) {
       ss << "  reg " << name << ";\n";
     }
     ss << "\n";
@@ -1178,7 +1177,7 @@ std::string TestbenchGenerator::generateSequentialSignalDeclarations() const {
   // Сигналы сброса
   if (!d_resetNames.empty()) {
     ss << "  // Reset signals\n";
-    for (const auto &name : d_resetNames) {
+    for (const auto &name: d_resetNames) {
       ss << "  reg " << name << ";\n";
     }
     ss << "\n";
@@ -1187,7 +1186,7 @@ std::string TestbenchGenerator::generateSequentialSignalDeclarations() const {
   // Входные данные (без clk/rst)
   if (!d_dataInputNames.empty()) {
     ss << "  // Data input signals\n";
-    for (const auto &name : d_dataInputNames) {
+    for (const auto &name: d_dataInputNames) {
       ss << "  reg " << name << ";\n";
     }
     ss << "\n";
@@ -1196,7 +1195,7 @@ std::string TestbenchGenerator::generateSequentialSignalDeclarations() const {
   // Latch enable signals
   if (!d_enableNames.empty()) {
     ss << "  // Enable signals (latches)\n";
-    for (const auto &name : d_enableNames) {
+    for (const auto &name: d_enableNames) {
       ss << "  reg " << name << ";\n";
     }
     ss << "\n";
@@ -1204,13 +1203,17 @@ std::string TestbenchGenerator::generateSequentialSignalDeclarations() const {
 
   // Прочие управляющие входы (set и т.п.), не clk/rst/en/data
   std::set<std::string> declared;
-  for (const auto &n : d_clockNames) declared.insert(n);
-  for (const auto &n : d_resetNames) declared.insert(n);
-  for (const auto &n : d_enableNames) declared.insert(n);
-  for (const auto &n : d_dataInputNames) declared.insert(n);
+  for (const auto &n: d_clockNames)
+    declared.insert(n);
+  for (const auto &n: d_resetNames)
+    declared.insert(n);
+  for (const auto &n: d_enableNames)
+    declared.insert(n);
+  for (const auto &n: d_dataInputNames)
+    declared.insert(n);
 
   std::vector<std::string> otherInputs;
-  for (const auto &name : d_inputNames) {
+  for (const auto &name: d_inputNames) {
     if (declared.find(name) == declared.end()) {
       otherInputs.push_back(name);
     }
@@ -1218,7 +1221,7 @@ std::string TestbenchGenerator::generateSequentialSignalDeclarations() const {
 
   if (!otherInputs.empty()) {
     ss << "  // Other control signals\n";
-    for (const auto &name : otherInputs) {
+    for (const auto &name: otherInputs) {
       ss << "  reg " << name << ";\n";
     }
     ss << "\n";
@@ -1226,7 +1229,7 @@ std::string TestbenchGenerator::generateSequentialSignalDeclarations() const {
 
   // Выходные провода
   ss << "  // Output signals\n";
-  for (const auto &name : d_outputNames) {
+  for (const auto &name: d_outputNames) {
     ss << "  wire " << name << "_dut;\n";
   }
   ss << "\n";
@@ -1244,10 +1247,10 @@ std::string TestbenchGenerator::generateSequentialSignalDeclarations() const {
 std::string TestbenchGenerator::generateClockBlock() const {
   std::ostringstream ss;
 
-  for (const auto &clkName : d_clockNames) {
+  for (const auto &clkName: d_clockNames) {
     ss << "  // Clock generation for " << clkName << "\n";
-    ss << "  always #" << (d_config.clockPeriod / 2) << " " << clkName
-       << " = ~" << clkName << ";\n\n";
+    ss << "  always #" << (d_config.clockPeriod / 2) << " " << clkName << " = ~"
+       << clkName << ";\n\n";
   }
 
   return ss.str();
@@ -1289,7 +1292,7 @@ std::string TestbenchGenerator::generateSequentialStimulusBlock() const {
   // По умолчанию posedge, но проверяем через GraphVertexSequential
   bool useNegedge = false;
   auto vertices = d_graph->getBaseVertexes();
-  for (auto *seqVertex : vertices[VertexTypes::sequential]) {
+  for (auto *seqVertex: vertices[VertexTypes::sequential]) {
     auto *seq = static_cast<GraphVertexSequential *>(seqVertex);
     if (seq->isFF() && seq->isNegedge()) {
       useNegedge = true;
@@ -1307,12 +1310,12 @@ std::string TestbenchGenerator::generateSequentialStimulusBlock() const {
   ss << "\n";
 
   // Инициализация clk
-  for (const auto &clkName : d_clockNames) {
+  for (const auto &clkName: d_clockNames) {
     ss << "    " << clkName << " = 1'b0;\n";
   }
 
   // Инициализация сигналов сброса — начинаем с активного состояния
-  for (const auto &rstName : d_resetNames) {
+  for (const auto &rstName: d_resetNames) {
     if (d_config.resetActiveValue == 0) {
       // Active-low reset: начинаем со сброса (= 0)
       ss << "    " << rstName << " = 1'b0;\n";
@@ -1323,22 +1326,26 @@ std::string TestbenchGenerator::generateSequentialStimulusBlock() const {
   }
 
   // Инициализация data-входов
-  for (const auto &name : d_dataInputNames) {
+  for (const auto &name: d_dataInputNames) {
     ss << "    " << name << " = 1'b0;\n";
   }
 
   // Latch enable — начинаем закрытыми
-  for (const auto &enName : d_enableNames) {
+  for (const auto &enName: d_enableNames) {
     ss << "    " << enName << " = 1'b0;\n";
   }
 
   // Инициализация прочих управляющих входов
   std::set<std::string> declaredSet;
-  for (const auto &n : d_clockNames) declaredSet.insert(n);
-  for (const auto &n : d_resetNames) declaredSet.insert(n);
-  for (const auto &n : d_enableNames) declaredSet.insert(n);
-  for (const auto &n : d_dataInputNames) declaredSet.insert(n);
-  for (const auto &name : d_inputNames) {
+  for (const auto &n: d_clockNames)
+    declaredSet.insert(n);
+  for (const auto &n: d_resetNames)
+    declaredSet.insert(n);
+  for (const auto &n: d_enableNames)
+    declaredSet.insert(n);
+  for (const auto &n: d_dataInputNames)
+    declaredSet.insert(n);
+  for (const auto &name: d_inputNames) {
     if (declaredSet.find(name) == declaredSet.end()) {
       ss << "    " << name << " = 1'b0;\n";
     }
@@ -1348,8 +1355,8 @@ std::string TestbenchGenerator::generateSequentialStimulusBlock() const {
   ss << "    $display(\"========================================\");\n";
   ss << "    $display(\"Starting sequential testbench for "
      << d_graph->getName() << "\");\n";
-  ss << "    $display(\"Total test cycles: "
-     << d_seqTestVectors.size() << "\");\n";
+  ss << "    $display(\"Total test cycles: " << d_seqTestVectors.size()
+     << "\");\n";
   ss << "    $display(\"========================================\");\n";
   ss << "\n";
 
@@ -1358,7 +1365,7 @@ std::string TestbenchGenerator::generateSequentialStimulusBlock() const {
   ss << "    #" << d_config.resetDuration << ";\n";
 
   // Снимаем сброс
-  for (const auto &rstName : d_resetNames) {
+  for (const auto &rstName: d_resetNames) {
     if (d_config.resetActiveValue == 0) {
       // Active-low: снимаем сброс, устанавливаем 1
       ss << "    " << rstName << " = 1'b1;\n";
@@ -1388,7 +1395,7 @@ std::string TestbenchGenerator::generateSequentialStimulusBlock() const {
     }
 
     // Для защелок поднимаем EN, иначе данные не защёлкиваются
-    for (const auto &enName : d_enableNames) {
+    for (const auto &enName: d_enableNames) {
       ss << "    " << enName << " = 1'b1;\n";
     }
 
@@ -1402,7 +1409,7 @@ std::string TestbenchGenerator::generateSequentialStimulusBlock() const {
 
     // Вывод текущего состояния
     ss << "    $display(\"Cycle %0d: \", test_num";
-    for (const auto &outName : d_outputNames) {
+    for (const auto &outName: d_outputNames) {
       ss << ", \" " << outName << "=%b\", " << outName << "_dut";
     }
     ss << ");\n";
@@ -1428,7 +1435,7 @@ std::string TestbenchGenerator::generateSequentialStimulusBlock() const {
     }
 
     // Закрываем защелку до следующего цикла
-    for (const auto &enName : d_enableNames) {
+    for (const auto &enName: d_enableNames) {
       ss << "    " << enName << " = 1'b0;\n";
     }
 
@@ -1439,8 +1446,7 @@ std::string TestbenchGenerator::generateSequentialStimulusBlock() const {
   ss << "    // Final report\n";
   ss << "    $display(\"========================================\");\n";
   ss << "    $display(\"Test Summary:\");\n";
-  ss << "    $display(\"  Total:  %0d\", "
-     << d_seqTestVectors.size() << ");\n";
+  ss << "    $display(\"  Total:  %0d\", " << d_seqTestVectors.size() << ");\n";
   ss << "    $display(\"  Passed: %0d\", passed);\n";
   ss << "    $display(\"  Failed: %0d\", errors);\n";
   ss << "    if (errors == 0) begin\n";

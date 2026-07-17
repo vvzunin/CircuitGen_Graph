@@ -2,7 +2,8 @@
  * @file TestbenchGeneratorTests.cpp
  *
  * \~english
- * @brief Unit tests for `TestbenchGenerator` and golden-model verification helpers.
+ * @brief Unit tests for `TestbenchGenerator` and golden-model verification
+ * helpers.
  *
  * \~russian
  * @brief Юнит-тесты для `TestbenchGenerator` и вспомогательных средств
@@ -146,7 +147,8 @@ GraphPtr createXorFromNand() {
 
 } // namespace
 
-// ==================== Constructor tests / Тесты конструктора ====================
+// ==================== Constructor tests / Тесты конструктора
+// ====================
 
 TEST(TestbenchGeneratorTests, ConstructorWithValidGraph) {
   auto graph = createSimpleAndGate();
@@ -170,7 +172,8 @@ TEST(TestbenchGeneratorTests, ConstructorWithConfig) {
   EXPECT_FALSE(tbGen.getConfig().generateVCD);
 }
 
-// ==================== Test-vector generation / Генерация тестовых векторов ====================
+// ==================== Test-vector generation / Генерация тестовых векторов
+// ====================
 
 TEST(TestbenchGeneratorTests, GenerateExhaustiveVectorsSimple) {
   auto graph = createSimpleAndGate();
@@ -274,7 +277,8 @@ TEST(TestbenchGeneratorTests, ClearTestVectors) {
   EXPECT_EQ(tbGen.getTestVectorCount(), 0);
 }
 
-// ==================== Test-vector correctness / Корректность тестовых векторов ====================
+// ==================== Test-vector correctness / Корректность тестовых векторов
+// ====================
 
 TEST(TestbenchGeneratorTests, AndGateVectorsCorrectness) {
   auto graph = createSimpleAndGate();
@@ -329,7 +333,8 @@ TEST(TestbenchGeneratorTests, HalfAdderVectorsCorrectness) {
   }
 }
 
-// ==================== Testbench generation / Генерация тестбенча ====================
+// ==================== Testbench generation / Генерация тестбенча
+// ====================
 
 TEST(TestbenchGeneratorTests, GenerateTestbenchCode) {
   auto graph = createSimpleAndGate();
@@ -408,7 +413,8 @@ TEST(TestbenchGeneratorTests, WriteTestbenchWithoutVectors) {
   EXPECT_FALSE(result);
 }
 
-// ==================== Internal simulation / Внутренняя симуляция ====================
+// ==================== Internal simulation / Внутренняя симуляция
+// ====================
 
 TEST(TestbenchGeneratorTests, InternalSimulationAndGate) {
   auto graph = createSimpleAndGate();
@@ -476,7 +482,8 @@ TEST(TestbenchGeneratorTests, ConfigSetterGetter) {
   EXPECT_TRUE(tbGen.getConfig().verbose);
 }
 
-// ==================== Icarus Verilog (conditional) / Icarus Verilog (условные) ====================
+// ==================== Icarus Verilog (conditional) / Icarus Verilog (условные)
+// ====================
 // Если iverilog/vvp нет в PATH, тесты ниже помечаются как skipped (GTEST_SKIP),
 // а не падают — это нормально для CI без Icarus.
 
@@ -559,7 +566,8 @@ TEST(TestbenchGeneratorTests, IcarusNotAvailable) {
   EXPECT_FALSE(result.errorMessage.empty());
 }
 
-// ==================== Graph vs golden Verilog model / Граф и эталонная модель ====================
+// ==================== Graph vs golden Verilog model / Граф и эталонная модель
+// ====================
 
 class TestbenchGeneratorGoldenTests : public ::testing::Test {
 protected:
