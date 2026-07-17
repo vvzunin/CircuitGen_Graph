@@ -448,6 +448,35 @@ TEST(TestWasteVerticesRemoving, VerticesWithoutPathToOutputDestroyed) {
   EXPECT_EQ(graphPtr->getVerticesByType(input).size(), 2);
   EXPECT_EQ(graphPtr->getVerticesByType(sequential).size(), 0);
 }
+
+TEST(TestGetVerticesByType, FiltersByNameAndSearchesSubGraphs) {
+  GraphPtr graph = std::make_shared<OrientedGraph>("top");
+  graph->addInput("keep");
+  graph->addInput("drop");
+  graph->addGate(Gates::GateAnd, "g_and");
+  graph->addGate(Gates::GateOr, "g_or");
+
+  auto byName = graph->getVerticesByType(VertexTypes::input, "keep");
+  ASSERT_EQ(byName.size(), 1u);
+  EXPECT_EQ(byName.front()->getRawName(), "keep");
+
+  EXPECT_EQ(graph->getVerticesByType(VertexTypes::gate, "g_or").size(), 1u);
+  EXPECT_TRUE(graph->getVerticesByType(VertexTypes::gate, "missing").empty());
+  EXPECT_EQ(graph->getVerticesByType(VertexTypes::input).size(), 2u);
+
+  GraphPtr sub = std::make_shared<OrientedGraph>("sub");
+  sub->addInput("keep");
+  sub->addOutput("so");
+  auto *outerKeep = graph->getVerticesByType(VertexTypes::input, "keep").front();
+  graph->addSubGraph(sub, {outerKeep});
+
+  auto nested = graph->getVerticesByType(VertexTypes::input, "keep",
+                                         /*i_addSubGraphs=*/true);
+  EXPECT_EQ(nested.size(), 2u);
+  EXPECT_EQ(graph->getVerticesByType(VertexTypes::input, "keep", false).size(),
+            1u);
+}
+
 TEST(TestWasteVerticesRemoving, DontChangeCorrectGraph) {
   GraphPtr graphPtr = std::make_shared<OrientedGraph>("Graph");
   graphPtr->updateLevels();

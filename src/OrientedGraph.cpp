@@ -778,21 +778,23 @@ std::vector<VertexPtr>
 OrientedGraph::getVerticesByType(const VertexTypes &i_type,
                                  std::string_view i_name,
                                  const bool &i_addSubGraphs) const {
-  if (i_name.size()) {
-    return d_vertices.at(i_type);
+  std::vector<VertexPtr> resVert;
+  if (i_name.empty()) {
+    resVert = d_vertices.at(i_type);
+  } else {
+    for (VertexPtr vert: d_vertices.at(i_type)) {
+      if (vert->getRawName() == i_name)
+        resVert.push_back(vert);
+    }
   }
 
-  std::vector<VertexPtr> resVert;
-  for (VertexPtr vert: d_vertices.at(i_type))
-    if ((i_name == "") || (vert->getRawName() == i_name))
-      resVert.push_back(vert);
-
-  if (i_addSubGraphs)
-    for (GraphPtr vert: d_subGraphs) {
+  if (i_addSubGraphs) {
+    for (GraphPtr sub: d_subGraphs) {
       std::vector<VertexPtr> subResVert =
-          vert->getVerticesByType(i_type, i_name, i_addSubGraphs);
+          sub->getVerticesByType(i_type, i_name, i_addSubGraphs);
       resVert.insert(resVert.end(), subResVert.begin(), subResVert.end());
     }
+  }
   return resVert;
 }
 
