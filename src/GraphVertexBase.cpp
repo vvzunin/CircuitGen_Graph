@@ -295,7 +295,7 @@ void GraphVertexBase::reserveOutConnections(size_t i_size) {
   d_outConnections.reserve(d_outConnections.size() + i_size);
 }
 
-std::vector<VertexPtr> GraphVertexBase::getInConnections() const {
+const std::vector<VertexPtr> &GraphVertexBase::getInConnections() const {
   return d_inConnections;
 }
 
@@ -312,7 +312,7 @@ uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
   return n;
 }
 
-std::vector<VertexPtr> GraphVertexBase::getOutConnections() const {
+const std::vector<VertexPtr> &GraphVertexBase::getOutConnections() const {
   return d_outConnections;
 }
 

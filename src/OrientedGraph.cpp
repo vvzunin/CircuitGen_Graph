@@ -526,7 +526,8 @@ size_t OrientedGraph::removeEmptyLogicVertices() {
         continue;
       }
 
-      const auto outs = vert->getOutConnections();
+      // Copy: removeEdge mutates the adjacency vectors.
+      const std::vector<VertexPtr> outs = vert->getOutConnections();
       for (VertexPtr consumer: outs)
         removeEdge(vert, consumer);
 
@@ -557,7 +558,9 @@ void OrientedGraph::removeWasteVertices() {
       VertexPtr vert = *iter;
       if (!vert->getLevel()) {
         if (vert->getType() != input && vert->getType() != constant) {
-          for (auto *inConnVert: vert->getInConnections()) {
+          // Copy: removeEdge mutates adjacency; cannot iterate the live vector.
+          const std::vector<VertexPtr> inConns = vert->getInConnections();
+          for (auto *inConnVert: inConns) {
             if (inConnVert->getLevel() != 0 ||
                 inConnVert->getType() == constant ||
                 inConnVert->getType() == input) {

@@ -721,7 +721,7 @@ public:
    * VertexPtr gate = graph->addGate(Gates::GateBuf, "buf");
    * graph->addEdge(input, gate);
    *
-   * std::vector<VertexPtr> inConnections = gate->getInConnections();
+   * const auto &inConnections = gate->getInConnections();
    * for (VertexPtr connection : inConnections) {
    *   if (connection != nullptr) {
    *     std::cout << connection->getName() << std::endl;
@@ -731,9 +731,9 @@ public:
    *
    * \~russian
    * @brief getInConnections
-   * @return Вектор указателей на входные соединения этой вершины.
+   * @return Константная ссылка на вектор указателей на входные соединения.
    */
-  std::vector<VertexPtr> getInConnections() const;
+  const std::vector<VertexPtr> &getInConnections() const;
 
   /**
    * @author rainbowkittensss
@@ -786,7 +786,7 @@ public:
    * // Adding the second vertex to the output connections of the first
    * vertex.addVertexToOutConnections(anotherVertex);
    * // get the vector of the output connections of the first vertex
-   * auto& outConnections = vertex.getOutConnections();
+   * const auto &outConnections = vertex.getOutConnections();
    * // output information about the output connections
    * std::cout << "Output connections of the first vertex:" << std::endl;
    * for (const auto& connection : outConnections)
@@ -797,9 +797,9 @@ public:
    *
    * \~russian
    * @brief getOutConnections
-   * @return Вектор указателей на выходные соединения этой вершины.
+   * @return Константная ссылка на вектор указателей на выходные соединения.
    */
-  std::vector<VertexPtr> getOutConnections() const;
+  const std::vector<VertexPtr> &getOutConnections() const;
 
   /**
    * @author Fuuulkrum7
