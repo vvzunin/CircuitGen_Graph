@@ -91,6 +91,19 @@ TEST(TestUpdateValue, OutputReturnDValueIfDInConnectionsSizeZero) {
   EXPECT_EQ(output.updateValue(), c);
 }
 
+TEST(TestToVerilog_Output, UsesFirstDriverWhenMultipleInputs) {
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+  auto *first = graph->addConst('0', "drv0");
+  auto *second = graph->addConst('1', "drv1");
+  auto *out = graph->addOutput("y");
+  graph->addEdge(first, out);
+  graph->addEdge(second, out);
+
+  // Simulation reads front(); Verilog must export the same driver.
+  EXPECT_EQ(out->updateValue(), 'x'); // drivers disagree → NoSignal/'x'
+  EXPECT_EQ(out->toVerilog(), "assign y = drv0;");
+}
+
 // TEST(TestUpdateValue, ThrowInvalidArgumentIfDInConnectionsZeroIsNullptr) {
 //   GraphVertexOutput output1(memoryOwnerOutputGr);
 //   output1.addVertexToInConnections(nullptr);

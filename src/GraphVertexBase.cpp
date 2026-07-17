@@ -332,13 +332,18 @@ bool GraphVertexBase::addVertexToOutConnections(VertexPtr i_vert) {
   return false;
 }
 
-// @todo what if some (more than 1) connected to output?
 std::string GraphVertexBase::toVerilog() const {
   if (getType() == VertexTypes::output) {
-    if (!d_inConnections.empty()) {
-      return "assign " + getName() + " = " + d_inConnections.back()->getName() +
-             ";";
+    if (d_inConnections.empty())
+      return "";
+    // Match GraphVertexOutput::updateValue, which drives from front().
+    if (d_inConnections.size() > 1) {
+      CG_LOG_WARNING << "Output '" << getName() << "' has "
+                     << d_inConnections.size()
+                     << " drivers; Verilog uses the first connection";
     }
+    return "assign " + getName() + " = " +
+           d_inConnections.front()->getName() + ";";
   }
   return "";
 }
