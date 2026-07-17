@@ -151,10 +151,10 @@ void OrientedGraph::updateLevels() {
 }
 
 uint32_t OrientedGraph::getMaxLevel() {
-  this->updateLevels();
+  updateLevels();
   uint32_t mx = 0;
   for (VertexPtr vert: d_vertices.at(VertexTypes::output)) {
-    mx = mx > vert->getLevel() ? mx : vert->getLevel();
+    mx = std::max(mx, vert->getLevel());
   }
   return mx;
 }
@@ -789,9 +789,15 @@ std::vector<VertexPtr> OrientedGraph::getVerticesByLevel(uint32_t i_level) {
     a.insert(a.end(), d_vertices[input].begin(), d_vertices[input].end());
     a.insert(a.end(), d_vertices[constant].begin(), d_vertices[constant].end());
   } else {
-    // maxLevel / 2 <= i_level -> output is more close to level target
+    // Reuse levels from updateLevels() above — do not call getMaxLevel(),
+    // which would run updateLevels() a second time.
+    uint32_t maxLevel = 0;
+    for (VertexPtr vert: d_vertices[output]) {
+      maxLevel = std::max(maxLevel, vert->getLevel());
+    }
+    // maxLevel / 2 <= i_level -> start from outputs (closer to target)
     // ( maxLevel / 2 <= i_level ) * 2 = maxLevel <= i_level << 1
-    if (getMaxLevel() <= (i_level << 1u)) {
+    if (maxLevel <= (i_level << 1u)) {
       for (VertexPtr vertex: d_vertices[output]) {
         vertex->getVerticesByLevel(i_level, a);
       }
