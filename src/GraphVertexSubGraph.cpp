@@ -47,8 +47,13 @@ GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
 char GraphVertexSubGraph::updateValue() {
   if (d_inConnections.empty()) {
     CG_LOG_ERROR << "Error, SubGraph without inputs" << std::endl;
+    d_simOutputs.clear();
     return (d_value = ValueStates::NoSignal);
   }
+
+  // Already evaluated this vector (parent invalidateValue sets Undefined).
+  if (d_value != ValueStates::UndefinedState)
+    return d_value;
 
   // Always collect every driver. Skipping non-Undefined values left
   // inputsValues shorter than the nested graph's inputs (parent
@@ -58,26 +63,30 @@ char GraphVertexSubGraph::updateValue() {
   for (VertexPtr in: d_inConnections)
     inputsValues.push_back(in->updateValue());
 
-  std::vector<char> outputsValues =
-      d_subGraph->graphSimulation(std::move(inputsValues));
-  if (outputsValues.empty()) {
+  d_simOutputs = d_subGraph->graphSimulation(std::move(inputsValues));
+  if (d_simOutputs.empty()) {
     CG_LOG_ERROR << "Error, SubGraph without outputs" << std::endl;
     return (d_value = ValueStates::NoSignal);
   }
 
-  // Extra output buffers are filled here; the first buffer reads d_value /
-  // the return value through GateBuf::updateValue.
-  for (size_t i = 1; i < d_outConnections.size() && i < outputsValues.size();
-       ++i) {
-    GraphVertexGates *out_connectionVert =
-        static_cast<GraphVertexGates *>(d_outConnections.at(i));
-    out_connectionVert->d_value = outputsValues.at(i);
+  // GateBufs read per-buffer values via bufferedOutputValue (not getValue()).
+  return (d_value = d_simOutputs.front());
+}
+
+char GraphVertexSubGraph::bufferedOutputValue(VertexPtr i_buffer) const {
+  for (size_t i = 0; i < d_outConnections.size(); ++i) {
+    if (d_outConnections[i] != i_buffer)
+      continue;
+    if (i < d_simOutputs.size())
+      return d_simOutputs[i];
+    return ValueStates::NoSignal;
   }
-  return (d_value = outputsValues.front());
+  return ValueStates::NoSignal;
 }
 
 void GraphVertexSubGraph::removeValue() {
   d_value = ValueStates::UndefinedState;
+  d_simOutputs.clear();
   if (!d_subGraph) {
     CG_LOG_ERROR << "Error, SubGraph without nested graph" << std::endl;
     return;
@@ -101,12 +110,19 @@ void GraphVertexSubGraph::updateLevel() {
     max_inLevel =
         (vert->getLevel() > max_inLevel) ? vert->getLevel() : max_inLevel;
   }
+  // Instance level must be > 0 so removeWasteVertices keeps live subgraphs.
+  d_level = static_cast<uint32_t>(max_inLevel + 1);
   for (size_t i = 0; i < d_outConnections.size(); ++i) {
     assert(d_outConnections.at(i)->getType() == gate);
     GraphVertexGates *out_connectionVert =
         static_cast<GraphVertexGates *>(d_outConnections.at(i));
     VertexPtr output_vert = output_verts.at(i);
-    out_connectionVert->d_level = output_vert->getLevel() + max_inLevel - 2;
+    // Nested output level is relative to nested inputs at 0; avoid unsigned
+    // underflow from the former `+ max_inLevel - 2` formula.
+    const size_t nested = output_vert->getLevel();
+    const size_t rel = nested > 0 ? nested : 1;
+    out_connectionVert->d_level =
+        static_cast<uint32_t>(max_inLevel + rel);
   }
   d_needUpdate = VS_CALC;
 }
@@ -175,33 +191,39 @@ std::string GraphVertexSubGraph::toVerilog() const {
   uint64_t verilogCount = base->getGraphInstVerilog(d_subGraph->getID());
 
   std::string verilogTab = "  ";
-  std::string nameSub = base->getName();
-  // module_name module_name_inst_1 (
-  std::string module_ver = verilogTab + nameSub + " " + nameSub + "_inst_" +
-                           std::to_string(verilogCount) + " (\n";
+  // Instantiate the nested module, not the parent graph name.
+  const std::string moduleName = d_subGraph->getName();
+  const std::string instName =
+      moduleName + "_inst_" + std::to_string(verilogCount);
+  std::string module_ver =
+      verilogTab + moduleName + " " + instName + " (\n";
 
   auto &&inputs = d_subGraph->getVerticesByType(VertexTypes::input);
   auto &&outputs = d_subGraph->getVerticesByType(VertexTypes::output);
+  if (outputs.empty()) {
+    CG_LOG_ERROR << "Error, SubGraph without outputs in toVerilog" << std::endl;
+    return "";
+  }
   for (size_t i = 0; i < inputs.size(); ++i) {
     VertexPtr inp = d_inConnections[i];
-    std::string inp_name = inputs[i]->getName();
+    const std::string inp_name(inputs[i]->getRawName());
 
     module_ver += verilogTab + verilogTab + "." + inp_name + "( ";
-    module_ver += inp->getName() + " ),\n";
+    module_ver += std::string(inp->getRawName()) + " ),\n";
   }
 
-  for (size_t i = 0; i < outputs.size() - 1; ++i) {
+  for (size_t i = 0; i + 1 < outputs.size(); ++i) {
     VertexPtr out = d_outConnections[i];
-    std::string out_name = outputs[i]->getName();
+    const std::string out_name(outputs[i]->getRawName());
 
     module_ver += verilogTab + verilogTab + "." + out_name + "( ";
-    module_ver += out->getName() + " ),\n";
+    module_ver += std::string(out->getRawName()) + " ),\n";
   }
 
-  std::string out_name = outputs.back()->getName();
+  const std::string out_name(outputs.back()->getRawName());
 
   module_ver += verilogTab + verilogTab + "." + out_name + "( ";
-  module_ver += d_outConnections.back()->getName() + " )\n";
+  module_ver += std::string(d_outConnections.back()->getRawName()) + " )\n";
   module_ver += verilogTab + "); \n";
 
   return module_ver;

@@ -1445,6 +1445,46 @@ TEST(GraphTest, MajoritySubGraphSimulation) {
   EXPECT_EQ(graph->graphSimulation({'0', '1', '0'}), (std::vector<char>{'0'}));
 }
 
+TEST(GraphTest, MultiOutputSubGraphSimulation) {
+  OrientedGraph::resetCounter();
+  auto sub = std::make_shared<OrientedGraph>("inner");
+  auto *sa = sub->addInput("a");
+  auto *sb = sub->addInput("b");
+  auto *sy0 = sub->addOutput("y0");
+  auto *sy1 = sub->addOutput("y1");
+  sub->addEdge(sa, sy0);
+  sub->addEdge(sb, sy1);
+
+  auto top = std::make_shared<OrientedGraph>("top");
+  auto *a = top->addInput("a");
+  auto *b = top->addInput("b");
+  auto bufs = top->addSubGraph(sub, {a, b});
+  top->addEdge(bufs[0], top->addOutput("o0"));
+  top->addEdge(bufs[1], top->addOutput("o1"));
+
+  EXPECT_EQ(top->graphSimulation({'0', '1'}), (std::vector<char>{'0', '1'}));
+  EXPECT_EQ(top->graphSimulation({'1', '0'}), (std::vector<char>{'1', '0'}));
+}
+
+TEST(GraphTest, RemoveWasteKeepsLiveSubGraph) {
+  OrientedGraph::resetCounter();
+  auto sub = std::make_shared<OrientedGraph>("sub");
+  auto *si = sub->addInput("a");
+  auto *so = sub->addOutput("y");
+  sub->addEdge(si, so);
+
+  auto g = std::make_shared<OrientedGraph>("top");
+  auto *in = g->addInput("a");
+  auto *out = g->addOutput("y");
+  auto bufs = g->addSubGraph(sub, {in});
+  g->addEdge(bufs[0], out);
+
+  ASSERT_EQ(g->getVerticesByType(VertexTypes::subGraph).size(), 1u);
+  g->removeWasteVertices();
+  EXPECT_EQ(g->getVerticesByType(VertexTypes::subGraph).size(), 1u);
+  EXPECT_EQ(g->graphSimulation({'1'}), (std::vector<char>{'1'}));
+}
+
 TEST(GraphTest, SubGraphRemoveValueDoesNotClearParentInputs) {
   auto graph = std::make_shared<OrientedGraph>("SubRemove");
   VertexPtr a = graph->addInput("a");

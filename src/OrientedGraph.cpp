@@ -1143,13 +1143,13 @@ bool OrientedGraph::printSequentialModules(GraphPtr i_graph,
   }
 
   for (SequentialTypes type: typesToPrint) {
+    // Body must assign to port `q`, not the module type name (`ff`, …).
     i_fileStream << fmt::format(
         module, GraphUtils::parseSequentialToString(type),
         fmt::join(GraphUtils::parseSequentialToInputs(type), ", "), "",
         fmt::join(GraphUtils::parseSequentialToInputs(type), ", "), "",
         GraphVertexSequential::getSequentialString(
-            type, GraphUtils::parseSequentialToString(type),
-            GraphUtils::parseSequentialToInputs(type)));
+            type, "q", GraphUtils::parseSequentialToInputs(type)));
   }
   return true;
 }
@@ -1420,9 +1420,11 @@ DotReturn OrientedGraph::toDOT() {
       std::string inp_name =
           subGraph->getBaseVertexes()[VertexTypes::input][i]->getName();
 
-      dot.push_back({DotTypes::DotEdge,
-                     {{"to", val[0].second["instName"] + "_" + inp->getName()},
-                      {"from", inp_name}}});
+      // External driver → nested input port inside the cluster.
+      dot.push_back(
+          {DotTypes::DotEdge,
+           {{"from", inp->getName()},
+            {"to", val[0].second["instName"] + "_" + inp_name}}});
     }
   }
 
@@ -1857,6 +1859,54 @@ GraphPtr OrientedGraph::unrollGraph() {
               }
             }
 
+            break;
+          }
+          case VertexTypes::sequential: {
+            auto *seq = static_cast<GraphVertexSequential *>(v);
+            const auto &ins = v->getInConnections();
+            auto mapIn = [&](size_t idx) -> VertexPtr {
+              if (idx >= ins.size())
+                return nullptr;
+              auto it = vPairs.find(ins[idx]);
+              return it == vPairs.end() ? nullptr : it->second;
+            };
+            VertexPtr data = mapIn(0);
+            if (!data)
+              break;
+            const SequentialTypes st = seq->getSeqType();
+            const std::string name = v->getName(prefix);
+            if (seq->isFF()) {
+              VertexPtr clk = mapIn(1);
+              if (!clk)
+                break;
+              if (ins.size() == 2)
+                newVertex = newGraph->addSequential(st, clk, data, name);
+              else if (ins.size() == 3)
+                newVertex =
+                    newGraph->addSequential(st, clk, data, mapIn(2), name);
+              else if (ins.size() == 4)
+                newVertex = newGraph->addSequential(st, clk, data, mapIn(2),
+                                                   mapIn(3), name);
+              else if (ins.size() >= 5)
+                // API order (rst, set, en); connections are en, rst, set.
+                newVertex = newGraph->addSequential(st, clk, data, mapIn(3),
+                                                   mapIn(4), mapIn(2), name);
+            } else {
+              // Latch: constructor "clk" slot is EN.
+              VertexPtr en = mapIn(1);
+              if (!en)
+                break;
+              if (ins.size() == 2)
+                newVertex = newGraph->addSequential(st, en, data, name);
+              else if (ins.size() == 3)
+                newVertex =
+                    newGraph->addSequential(st, en, data, mapIn(2), name);
+              else if (ins.size() >= 4)
+                newVertex = newGraph->addSequential(st, en, data, mapIn(2),
+                                                   mapIn(3), name);
+            }
+            if (newVertex)
+              vPairs[v] = newVertex;
             break;
           }
           default:

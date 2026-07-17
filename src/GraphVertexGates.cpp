@@ -54,9 +54,20 @@ char GraphVertexGates::updateValue() {
   if (d_inConnections.empty())
     return d_value;
 
-  if (d_inConnections.front()->getValue() == ValueStates::UndefinedState)
-    d_inConnections.front()->updateValue();
-  d_value = d_inConnections.front()->getValue();
+  VertexPtr src = d_inConnections.front();
+  // Multi-output subgraph: each instance GateBuf must read its own nested
+  // output. SubGraph::getValue() is only the first output.
+  if (d_gate == Gates::GateBuf && src->getType() == VertexTypes::subGraph) {
+    if (src->getValue() == ValueStates::UndefinedState)
+      src->updateValue();
+    auto *sub = static_cast<GraphVertexSubGraph *>(src);
+    d_value = sub->bufferedOutputValue(this);
+    return d_value;
+  }
+
+  if (src->getValue() == ValueStates::UndefinedState)
+    src->updateValue();
+  d_value = src->getValue();
 
   // Unary gates: lookup without copying the truth-table map.
   if (d_gate == Gates::GateNot) {

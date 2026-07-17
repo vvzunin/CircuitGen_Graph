@@ -568,6 +568,15 @@ public:
   std::vector<VertexPtr>
   getOuterInputsByOutputBuffer(VertexPtr i_outputBuffer) const;
 
+  /**
+   * \~english
+   * @brief Value of the nested output that drives this instance GateBuf.
+   * Requires `updateValue()` to have run for the current simulation vector.
+   * \~russian
+   * @brief Значение вложенного выхода, питающего этот instance GateBuf.
+   */
+  char bufferedOutputValue(VertexPtr i_buffer) const;
+
 #ifdef LOGFLAG
   /**
    * @author Vladimir Zunin
@@ -589,6 +598,8 @@ private:
    * \~russian Путь к внешнему Verilog-файлу
    */
   std::string d_verilogPath = "";
+  /// Cached nested outputs for the current `graphSimulation` vector.
+  std::vector<char> d_simOutputs;
 };
 
 /**
