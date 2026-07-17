@@ -179,6 +179,81 @@ VertexPtr GraphVertexSequential::getSet() const {
   return nullptr;
 }
 
+char GraphVertexSequential::updateValue() {
+  auto eval = [](VertexPtr vert) -> char {
+    if (!vert)
+      return ValueStates::NoSignal;
+    return vert->updateValue();
+  };
+
+  const char data = eval(getData());
+
+  // RST/CLR are active-low; force Q=0 when asserted.
+  if (VertexPtr rst = getRst()) {
+    const char rstVal = eval(rst);
+    if (rstVal == '0')
+      return (d_value = ValueStates::FalseValue);
+    if (rstVal != '1')
+      return (d_value = ValueStates::NoSignal);
+  }
+
+  // SET is active-high; force Q=1 when asserted.
+  if (VertexPtr set = getSet()) {
+    const char setVal = eval(set);
+    if (setVal == '1')
+      return (d_value = ValueStates::TrueValue);
+    if (setVal != '0')
+      return (d_value = ValueStates::NoSignal);
+  }
+
+  const auto captureData = [&]() {
+    if (data == '0' || data == '1')
+      d_value = data;
+    else
+      d_value = ValueStates::NoSignal;
+  };
+
+  if (isFF()) {
+    const char clk = eval(getClk());
+    bool enabled = true;
+    if (VertexPtr en = getEn()) {
+      const char enVal = eval(en);
+      if (enVal == '0')
+        enabled = false;
+      else if (enVal != '1') {
+        d_prevClk = clk;
+        return (d_value = ValueStates::NoSignal);
+      }
+    }
+
+    const bool rising = (d_prevClk == '0' && clk == '1');
+    const bool falling = (d_prevClk == '1' && clk == '0');
+    const bool tick = isNegedge() ? falling : rising;
+    d_prevClk = clk;
+
+    if (tick && enabled)
+      captureData();
+    else if (d_value == ValueStates::UndefinedState)
+      d_value = ValueStates::NoSignal;
+    return d_value;
+  }
+
+  // Latch: EN is level-sensitive (constructor stores it as the "clk" wire).
+  const char enVal = eval(getEn());
+  if (enVal == '1')
+    captureData();
+  else if (enVal != '0')
+    d_value = ValueStates::NoSignal;
+  else if (d_value == ValueStates::UndefinedState)
+    d_value = ValueStates::NoSignal;
+  return d_value;
+}
+
+void GraphVertexSequential::removeValue() {
+  d_prevClk = ValueStates::NoSignal;
+  GraphVertexBase::removeValue();
+}
+
 size_t GraphVertexSequential::calculateHash() {
   if (d_hasHash) {
     return d_hashed;

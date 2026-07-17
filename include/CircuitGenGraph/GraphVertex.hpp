@@ -1122,7 +1122,23 @@ public:
    * вершины. Реализация предоставляется в производных классах
    * @return значение вершины после ее обновления
    */
-  char updateValue() override { return ValueStates::FalseValue; };
+  /**
+   * \~english
+   * @brief Updates sequential state for combinational-style simulation.
+   * Latches are level-sensitive on EN; flip-flops capture on a clk edge
+   * (posedge by default, negedge if `NEGEDGE` is set), using the previous
+   * clock sample stored in the cell. Async RST/CLR are active-low; SET is
+   * active-high.
+   * \~russian
+   * @brief Обновляет состояние sequential при симуляции.
+   * Защёлки чувствительны к уровню EN; триггеры захватывают по фронту clk
+   * (posedge по умолчанию, negedge при `NEGEDGE`), используя предыдущий
+   * отсчёт такта. Async RST/CLR — активный 0; SET — активный 1.
+   */
+  char updateValue() override;
+
+  /** @author Theossr */
+  void removeValue() override;
 
   /**
    * \~english
@@ -1158,6 +1174,8 @@ protected:
 
 protected:
   SequentialTypes d_seqType;
+  /// Previous clock sample for edge detection in `updateValue` (FF only).
+  char d_prevClk = ValueStates::NoSignal;
 };
 
 /**

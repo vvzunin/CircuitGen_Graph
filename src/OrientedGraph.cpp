@@ -490,13 +490,20 @@ OrientedGraph::graphSimulation(std::vector<char> inputsValues) {
     v->invalidateValue();
   for (VertexPtr v: d_vertices[VertexTypes::subGraph])
     v->invalidateValue();
-  for (VertexPtr v: d_vertices[VertexTypes::sequential])
-    v->invalidateValue();
+  // Do not invalidate sequential cells: their d_value / d_prevClk are state
+  // that must persist across graphSimulation vectors until simulationRemove.
 
   for (size_t i = 0; i < d_vertices[VertexTypes::input].size(); ++i) {
     GraphVertexInput *inputVert =
         static_cast<GraphVertexInput *>(d_vertices[VertexTypes::input].at(i));
     inputVert->setValue(inputsValues.at(i));
+  }
+  // Gates only recurse into inputs that are UndefinedState ('n'). Sequential
+  // cells keep a defined Q between vectors, so a path like FF → GateBuf → out
+  // would otherwise skip updateValue and freeze the flop. Tick sequentials
+  // explicitly after inputs are applied (pulling any combinational D cones).
+  for (VertexPtr seqVert: d_vertices[VertexTypes::sequential]) {
+    seqVert->updateValue();
   }
   for (VertexPtr outputVert: d_vertices[VertexTypes::output]) {
     outputsValues.push_back(outputVert->updateValue());

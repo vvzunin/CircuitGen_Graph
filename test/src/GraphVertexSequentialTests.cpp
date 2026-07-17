@@ -297,6 +297,112 @@ TEST(SequentialTests, TestTriggerAsyncRstN_En) {
   EXPECT_TRUE(graph->calculateHash().size());
 }
 
+TEST(SequentialTests, LatchUpdateValueLevelSensitive) {
+  OrientedGraph::resetCounter();
+  auto graph = std::make_shared<OrientedGraph>("latch_sim");
+  auto *en = graph->addInput("en");
+  auto *data = graph->addInput("data");
+  auto *q = graph->addSequential(latch, en, data, "q");
+  graph->addEdge(q, graph->addOutput("y"));
+
+  // Transparent: en=1 captures data=1
+  EXPECT_EQ(graph->graphSimulation({'1', '1'}), (std::vector<char>{'1'}));
+  // Hold: en=0 keeps Q even if data changes
+  EXPECT_EQ(graph->graphSimulation({'0', '0'}), (std::vector<char>{'1'}));
+  // Transparent again
+  EXPECT_EQ(graph->graphSimulation({'1', '0'}), (std::vector<char>{'0'}));
+}
+
+TEST(SequentialTests, FlipFlopUpdateValuePosedge) {
+  OrientedGraph::resetCounter();
+  auto graph = std::make_shared<OrientedGraph>("ff_sim");
+  auto *clk = graph->addInput("clk");
+  auto *data = graph->addInput("data");
+  auto *q = graph->addSequential(ff, clk, data, "q");
+  graph->addEdge(q, graph->addOutput("y"));
+
+  // clk=0: no edge yet → X
+  EXPECT_EQ(graph->graphSimulation({'0', '1'}), (std::vector<char>{'x'}));
+  // posedge with data=1 → capture
+  EXPECT_EQ(graph->graphSimulation({'1', '1'}), (std::vector<char>{'1'}));
+  // clk stays 1, data flips → hold
+  EXPECT_EQ(graph->graphSimulation({'1', '0'}), (std::vector<char>{'1'}));
+  // negedge then posedge with data=0 → capture 0
+  EXPECT_EQ(graph->graphSimulation({'0', '0'}), (std::vector<char>{'1'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '0'}), (std::vector<char>{'0'}));
+}
+
+TEST(SequentialTests, FlipFlopFirstVectorNoFalseEdge) {
+  OrientedGraph::resetCounter();
+  auto graph = std::make_shared<OrientedGraph>("ff_first");
+  auto *clk = graph->addInput("clk");
+  auto *data = graph->addInput("data");
+  auto *q = graph->addSequential(ff, clk, data, "q");
+  graph->addEdge(q, graph->addOutput("y"));
+
+  // d_prevClk starts as 'x'; clk=1 alone is not a 0→1 edge
+  EXPECT_EQ(graph->graphSimulation({'1', '1'}), (std::vector<char>{'x'}));
+}
+
+TEST(SequentialTests, FlipFlopEnableHoldsOnPosedge) {
+  OrientedGraph::resetCounter();
+  auto graph = std::make_shared<OrientedGraph>("ffe_sim");
+  auto *clk = graph->addInput("clk");
+  auto *data = graph->addInput("data");
+  auto *en = graph->addInput("en");
+  auto *q = graph->addSequential(ffe, clk, data, en, "q");
+  graph->addEdge(q, graph->addOutput("y"));
+
+  EXPECT_EQ(graph->graphSimulation({'0', '1', '1'}), (std::vector<char>{'x'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '1', '1'}), (std::vector<char>{'1'}));
+  EXPECT_EQ(graph->graphSimulation({'0', '0', '0'}), (std::vector<char>{'1'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '0', '0'}), (std::vector<char>{'1'}));
+}
+
+TEST(SequentialTests, LatchRstForcesZero) {
+  OrientedGraph::resetCounter();
+  auto graph = std::make_shared<OrientedGraph>("latchr_sim");
+  auto *en = graph->addInput("en");
+  auto *data = graph->addInput("data");
+  auto *rst = graph->addInput("rst");
+  auto *q = graph->addSequential(latchr, en, data, rst, "q");
+  graph->addEdge(q, graph->addOutput("y"));
+
+  EXPECT_EQ(graph->graphSimulation({'1', '1', '1'}), (std::vector<char>{'1'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '1', '0'}), (std::vector<char>{'0'}));
+}
+
+TEST(SequentialTests, SimulationRemoveClearsPrevClk) {
+  OrientedGraph::resetCounter();
+  auto graph = std::make_shared<OrientedGraph>("ff_rm");
+  auto *clk = graph->addInput("clk");
+  auto *data = graph->addInput("data");
+  auto *q = graph->addSequential(ff, clk, data, "q");
+  graph->addEdge(q, graph->addOutput("y"));
+
+  EXPECT_EQ(graph->graphSimulation({'0', '1'}), (std::vector<char>{'x'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '1'}), (std::vector<char>{'1'}));
+  graph->simulationRemove();
+  // Fresh edge detector: clk=1 without a prior 0 must not capture
+  EXPECT_EQ(graph->graphSimulation({'1', '0'}), (std::vector<char>{'x'}));
+}
+
+TEST(SequentialTests, FlipFlopThroughGateBufUpdates) {
+  OrientedGraph::resetCounter();
+  auto graph = std::make_shared<OrientedGraph>("ff_buf");
+  auto *clk = graph->addInput("clk");
+  auto *data = graph->addInput("data");
+  auto *q = graph->addSequential(ff, clk, data, "q");
+  auto *buf = graph->addGate(GateBuf);
+  graph->addEdge(q, buf);
+  graph->addEdge(buf, graph->addOutput("y"));
+
+  EXPECT_EQ(graph->graphSimulation({'0', '1'}), (std::vector<char>{'x'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '1'}), (std::vector<char>{'1'}));
+  EXPECT_EQ(graph->graphSimulation({'0', '0'}), (std::vector<char>{'1'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '0'}), (std::vector<char>{'0'}));
+}
+
 #ifdef LOGFLAG
 TEST(ErrorOutputTest, CapturesLog) {
   std::stringstream buffer;
