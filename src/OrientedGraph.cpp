@@ -1486,9 +1486,9 @@ std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
     const std::string sgI_prefix = sgvBase->getName(actI_prefix);
     const GraphPtr &sg = sgv->getSubGraph();
 
-    nodes += fmt::format(nodeTemplate, sgI_prefix, "subGraph", "\n",
-                         sgv->toGraphML(static_cast<uint16_t>(i_indent + 6),
-                                        sgI_prefix));
+    nodes += fmt::format(
+        nodeTemplate, sgI_prefix, "subGraph", "\n",
+        sgv->toGraphML(static_cast<uint16_t>(i_indent + 6), sgI_prefix));
 
     const auto &gInputs = sg->d_vertices.at(VertexTypes::input);
     const auto &gOutputs = sg->d_vertices.at(VertexTypes::output);
@@ -1503,8 +1503,9 @@ std::string OrientedGraph::toGraphMLClassic(uint16_t i_indent,
 
     const size_t outputCount = std::min(gOutputs.size(), vOutputs.size());
     for (size_t i = 0; i < outputCount; ++i) {
-      edges += fmt::format(edgeTemplate, gOutputs[i]->getName(sgI_prefix + "::"),
-                           vOutputs[i]->getName(actI_prefix));
+      edges +=
+          fmt::format(edgeTemplate, gOutputs[i]->getName(sgI_prefix + "::"),
+                      vOutputs[i]->getName(actI_prefix));
     }
   }
 

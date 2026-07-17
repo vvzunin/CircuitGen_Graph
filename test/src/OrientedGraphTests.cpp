@@ -522,8 +522,9 @@ TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreSubGraphs) {
   EXPECT_NE(emptyNested.find("<data key=\"t\">subGraph</data>"),
             std::string::npos)
       << emptyNested;
-  EXPECT_NE(emptyNested.find("<graph id=\"subGraph_0:\" edgedefault=\"directed\">"),
-            std::string::npos)
+  EXPECT_NE(
+      emptyNested.find("<graph id=\"subGraph_0:\" edgedefault=\"directed\">"),
+      std::string::npos)
       << emptyNested;
 
   subGraphPtr1->addGate(Gates::GateAnd, "gate1");
