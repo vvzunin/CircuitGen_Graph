@@ -12,6 +12,7 @@
  */
 #pragma once
 #include <map>
+#include <tuple>
 
 /**
  * @namespace CG_Graph
@@ -135,5 +136,99 @@ const std::map<char, char> tableBuf{
  */
 const std::map<char, char> tableNot{
     {'0', '1'}, {'1', '0'}, {'x', 'x'}, {'z', 'x'}};
+
+/**
+ * \~english
+ * @brief tableBufIf0 Lookup table for BUFIF0 (buffer if control is 0).
+ * First key is data, second key is control. L means 0 or z; H means 1 or z.
+ *
+ * \~russian
+ * @brief Таблица поиска для BUFIF0 (буфер, если управление равно 0).
+ * Первый ключ — данные, второй — управление. L — 0 или z; H — 1 или z.
+ */
+const std::map<char, std::map<char, char>> tableBufIf0{
+    {'0', {{'0', '0'}, {'1', 'z'}, {'x', 'L'}, {'z', 'L'}}},
+    {'1', {{'0', '1'}, {'1', 'z'}, {'x', 'H'}, {'z', 'H'}}},
+    {'x', {{'0', 'x'}, {'1', 'z'}, {'x', 'x'}, {'z', 'x'}}},
+    {'z', {{'0', 'x'}, {'1', 'z'}, {'x', 'x'}, {'z', 'x'}}},
+};
+
+/**
+ * \~english
+ * @brief tableBufIf1 Lookup table for BUFIF1 (buffer if control is 1).
+ * First key is data, second key is control. L means 0 or z; H means 1 or z.
+ *
+ * \~russian
+ * @brief Таблица поиска для BUFIF1 (буфер, если управление равно 1).
+ * Первый ключ — данные, второй — управление. L — 0 или z; H — 1 или z.
+ */
+const std::map<char, std::map<char, char>> tableBufIf1{
+    {'0', {{'0', 'z'}, {'1', '0'}, {'x', 'L'}, {'z', 'L'}}},
+    {'1', {{'0', 'z'}, {'1', '1'}, {'x', 'H'}, {'z', 'H'}}},
+    {'x', {{'0', 'z'}, {'1', 'x'}, {'x', 'x'}, {'z', 'x'}}},
+    {'z', {{'0', 'z'}, {'1', 'x'}, {'x', 'x'}, {'z', 'x'}}},
+};
+
+/**
+ * \~english
+ * @brief tableNotIf0 Lookup table for NOTIF0 (inverter if control is 0).
+ * First key is data, second key is control. L means 0 or z; H means 1 or z.
+ *
+ * \~russian
+ * @brief Таблица поиска для NOTIF0 (инвертор, если управление равно 0).
+ * Первый ключ — данные, второй — управление. L — 0 или z; H — 1 или z.
+ */
+const std::map<char, std::map<char, char>> tableNotIf0{
+    {'0', {{'0', '1'}, {'1', 'z'}, {'x', 'H'}, {'z', 'H'}}},
+    {'1', {{'0', '0'}, {'1', 'z'}, {'x', 'L'}, {'z', 'L'}}},
+    {'x', {{'0', 'x'}, {'1', 'z'}, {'x', 'x'}, {'z', 'x'}}},
+    {'z', {{'0', 'x'}, {'1', 'z'}, {'x', 'x'}, {'z', 'x'}}},
+};
+
+/**
+ * \~english
+ * @brief tableNotIf1 Lookup table for NOTIF1 (inverter if control is 1).
+ * First key is data, second key is control. L means 0 or z; H means 1 or z.
+ *
+ * \~russian
+ * @brief Таблица поиска для NOTIF1 (инвертор, если управление равно 1).
+ * Первый ключ — данные, второй — управление. L — 0 или z; H — 1 или z.
+ */
+const std::map<char, std::map<char, char>> tableNotIf1{
+    {'0', {{'0', 'z'}, {'1', '1'}, {'x', 'H'}, {'z', 'H'}}},
+    {'1', {{'0', 'z'}, {'1', '0'}, {'x', 'L'}, {'z', 'L'}}},
+    {'x', {{'0', 'z'}, {'1', 'x'}, {'x', 'x'}, {'z', 'x'}}},
+    {'z', {{'0', 'z'}, {'1', 'x'}, {'x', 'x'}, {'z', 'x'}}},
+};
+
+/**
+ * \~english
+ * @brief tableMAJ3 Lookup table for 3-input majority. Key is (a, b, c).
+ * Defined for 0/1 inputs only.
+ *
+ * \~russian
+ * @brief Таблица поиска для majority на 3 входа. Ключ — (a, b, c).
+ * Определена только для входов 0/1.
+ */
+const std::map<std::tuple<char, char, char>, char> tableMAJ3{
+    {{'0', '0', '0'}, '0'}, {{'0', '0', '1'}, '0'}, {{'0', '1', '0'}, '0'},
+    {{'0', '1', '1'}, '1'}, {{'1', '0', '0'}, '0'}, {{'1', '0', '1'}, '1'},
+    {{'1', '1', '0'}, '1'}, {{'1', '1', '1'}, '1'},
+};
+
+/**
+ * \~english
+ * @brief tableNMAJ3 Lookup table for 3-input not-majority. Key is (a, b, c).
+ * Defined for 0/1 inputs only.
+ *
+ * \~russian
+ * @brief Таблица поиска для not-majority на 3 входа. Ключ — (a, b, c).
+ * Определена только для входов 0/1.
+ */
+const std::map<std::tuple<char, char, char>, char> tableNMAJ3{
+    {{'0', '0', '0'}, '1'}, {{'0', '0', '1'}, '1'}, {{'0', '1', '0'}, '1'},
+    {{'0', '1', '1'}, '0'}, {{'1', '0', '0'}, '1'}, {{'1', '0', '1'}, '0'},
+    {{'1', '1', '0'}, '0'}, {{'1', '1', '1'}, '0'},
+};
 
 } // namespace CG_Graph
