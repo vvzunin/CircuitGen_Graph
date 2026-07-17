@@ -134,6 +134,10 @@ std::string OrientedGraph::getName() const {
   return d_name;
 }
 
+std::string_view OrientedGraph::getRawName() const {
+  return d_name;
+}
+
 bool OrientedGraph::needToUpdateLevel() const {
   return d_needLevelUpdate;
 }
@@ -1284,7 +1288,7 @@ bool OrientedGraph::toVerilogBusEnabledAsOneBit(std::string i_path,
     std::vector<std::string> singleVertices;
     for (auto *value: eachVertex) {
       if (!value->isBus())
-        singleVertices.push_back(value->getName());
+        singleVertices.emplace_back(value->getRawName());
       else
         busSet.emplace(std::make_pair(
             GraphVertexBus::getBusPointer(value)->getWidth(), value));
@@ -1317,14 +1321,11 @@ bool OrientedGraph::toVerilogBusEnabledAsOneBit(std::string i_path,
 
   auto lambdaInouts = [&](VertexPtr vertex) {
     if (vertex->isBus()) {
-      for (size_t i = 0;
-           i < GraphVertexBus::getBusPointer(vertex)->getWidth() - 1; ++i) {
-        i_fileStream << vertex->getName() << "_" << std::to_string(i) << ", ";
+      const size_t width = GraphVertexBus::getBusPointer(vertex)->getWidth();
+      for (size_t i = 0; i + 1 < width; ++i) {
+        i_fileStream << vertex->getRawName() << "_" << i << ", ";
       }
-      i_fileStream << vertex->getName() << "_"
-                   << std::to_string(
-                          GraphVertexBus::getBusPointer(vertex)->getWidth() -
-                          1);
+      i_fileStream << vertex->getRawName() << "_" << (width - 1);
     } else
       i_fileStream << vertex->getRawName();
   };

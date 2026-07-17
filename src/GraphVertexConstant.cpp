@@ -51,11 +51,11 @@ size_t GraphVertexConstant::calculateHash() {
 }
 
 std::string GraphVertexConstant::getVerilogInstance() {
-  return "wire " + getName() + ";";
+  return fmt::format("wire {};", getRawName());
 }
 
 std::string GraphVertexConstant::toVerilog() const {
-  return "assign " + getName() + " = 1'b" + d_value + ";";
+  return fmt::format("assign {} = 1'b{};", getRawName(), d_value);
 }
 DotReturn GraphVertexConstant::toDOT() {
   DotReturn dot;

@@ -340,12 +340,12 @@ std::string GraphVertexBase::toVerilog() const {
       return "";
     // Match GraphVertexOutput::updateValue, which drives from front().
     if (d_inConnections.size() > 1) {
-      CG_LOG_WARNING << "Output '" << getName() << "' has "
+      CG_LOG_WARNING << "Output '" << d_name << "' has "
                      << d_inConnections.size()
                      << " drivers; Verilog uses the first connection";
     }
-    return "assign " + getName() + " = " +
-           d_inConnections.front()->getName() + ";";
+    return fmt::format("assign {} = {};", getRawName(),
+                       d_inConnections.front()->getRawName());
   }
   return "";
 }

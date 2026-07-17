@@ -99,13 +99,13 @@ std::string GraphVertexBusOutput::toOneBitVerilog() const {
   // Match scalar output / updateValue: first driver is the source.
   const VertexPtr driver = d_inConnections.front();
   if (d_inConnections.size() > 1) {
-    CG_LOG_WARNING << "Bus output '" << getName() << "' has "
+    CG_LOG_WARNING << "Bus output '" << d_name << "' has "
                    << d_inConnections.size()
                    << " drivers; one-bit Verilog uses the first connection";
   }
   for (size_t i = 0; i < std::min(minWidth, getWidth()); ++i)
-    res << "assign " << getName() << "_" << std::to_string(i) << " = "
-        << driver->getName() << "_" << std::to_string(i) << ";\n\t";
+    res << "assign " << getRawName() << "_" << i << " = " << driver->getRawName()
+        << "_" << i << ";\n\t";
   return res.str();
 }
 

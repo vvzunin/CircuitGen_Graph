@@ -237,7 +237,7 @@ std::string GraphVertexSequential::toVerilog() const {
   std::vector<std::string_view> names;
   for (auto *v: d_inConnections)
     names.push_back(v->getRawName());
-  return getSequentialString(d_seqType, getName(), names);
+  return getSequentialString(d_seqType, getRawName(), names);
   // std::string verilog;
   // formatAlwaysBegin(verilog);
   // std::string_view toFormat;
@@ -271,7 +271,8 @@ std::string GraphVertexSequential::getVerilogInstance() {
   std::vector<std::string_view> inputNames;
   for (auto *v: d_inConnections)
     inputNames.push_back(v->getRawName());
-  return getVerilogInstance(this, d_inConnections[0]->getName(), getName());
+  return getVerilogInstance(this, d_inConnections[0]->getRawName(),
+                            getRawName());
 }
 std::string GraphVertexSequential::getVerilogInstance(
     const VertexPtr vertex, std::string_view i_inputDataName,
@@ -286,39 +287,39 @@ std::string GraphVertexSequential::getVerilogInstance(
     case 2:
       inouts = fmt::format(".{}({}), .{}({}), .{}({})", i_dataName,
                            i_inputDataName, inputsInstance[1],
-                           vertex->getInConnections()[1]->getName(), i_qName,
+                           vertex->getInConnections()[1]->getRawName(), i_qName,
                            i_qOutputName);
       break;
     case 3:
       inouts = fmt::format(
           ".{}({}), .{}({}), .{}({}), .{}({})", i_dataName, i_inputDataName,
-          inputsInstance[1], vertex->getInConnections()[1]->getName(),
-          inputsInstance[2], vertex->getInConnections()[2]->getName(), i_qName,
-          i_qOutputName);
+          inputsInstance[1], vertex->getInConnections()[1]->getRawName(),
+          inputsInstance[2], vertex->getInConnections()[2]->getRawName(),
+          i_qName, i_qOutputName);
       break;
     case 4:
       inouts = fmt::format(
           ".{}({}), .{}({}), .{}({}), .{}({}), .{}({})", i_dataName,
           i_inputDataName, inputsInstance[1],
-          vertex->getInConnections()[1]->getName(), inputsInstance[2],
-          vertex->getInConnections()[2]->getName(), inputsInstance[3],
-          vertex->getInConnections()[3]->getName(), i_qName, i_qOutputName);
+          vertex->getInConnections()[1]->getRawName(), inputsInstance[2],
+          vertex->getInConnections()[2]->getRawName(), inputsInstance[3],
+          vertex->getInConnections()[3]->getRawName(), i_qName, i_qOutputName);
       break;
     case 5:
       inouts = fmt::format(
           ".{}({}), .{}({}), .{}({}), .{}({}), .{}({}), .{}({})", i_dataName,
           i_inputDataName, inputsInstance[1],
-          vertex->getInConnections()[1]->getName(), inputsInstance[2],
-          vertex->getInConnections()[2]->getName(), inputsInstance[3],
-          vertex->getInConnections()[3]->getName(), inputsInstance[4],
-          vertex->getInConnections()[4]->getName(), i_qName, i_qOutputName);
+          vertex->getInConnections()[1]->getRawName(), inputsInstance[2],
+          vertex->getInConnections()[2]->getRawName(), inputsInstance[3],
+          vertex->getInConnections()[3]->getRawName(), inputsInstance[4],
+          vertex->getInConnections()[4]->getRawName(), i_qName, i_qOutputName);
       break;
   }
   return fmt::format(
       "{} {} ({});",
       GraphUtils::parseSequentialToString(
           static_cast<const GraphVertexSequential *>(vertex)->getSeqType()),
-      i_instanceName == "" ? fmt::format("{}_ins", vertex->getName())
+      i_instanceName == "" ? fmt::format("{}_ins", vertex->getRawName())
                            : i_instanceName,
       inouts);
 }
@@ -412,12 +413,13 @@ std::string GraphVertexBusSequential::toOneBitVerilog() const {
   std::vector<std::string> instances;
   for (size_t i = 0; i < getWidth(); ++i) {
     dataName = GraphUtils::sequentialToInputList[getSeqType()].second[0];
-    dataInputName = fmt::format("{}_{}", d_inConnections[0]->getName(), i);
-    outputName = fmt::format("{}_{}", getName(), i);
+    dataInputName = fmt::format("{}_{}", d_inConnections[0]->getRawName(), i);
+    outputName = fmt::format("{}_{}", getRawName(), i);
     qName = "q";
     instances.push_back(getVerilogInstance(
         static_cast<const GraphVertexSequential *>(this), dataInputName,
-        outputName, dataName, qName, fmt::format("{}_{}_ins", getName(), i)));
+        outputName, dataName, qName,
+        fmt::format("{}_{}_ins", getRawName(), i)));
   }
   return fmt::format("{}\n\n", fmt::join(instances, "\n\t"));
 }

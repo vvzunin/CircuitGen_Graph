@@ -326,6 +326,14 @@ public:
   std::string getName() const;
 
   /**
+   * \~english
+   * @brief Returns graph name without copying (for hot export paths).
+   * \~russian
+   * @brief Возвращает имя графа без копирования (для горячих путей экспорта).
+   */
+  std::string_view getRawName() const;
+
+  /**
    * @author Fuuulkrum7
    *
    * \~english

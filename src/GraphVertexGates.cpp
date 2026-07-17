@@ -140,7 +140,17 @@ size_t GraphVertexGates::calculateHash() {
 }
 
 std::string GraphVertexGates::getVerilogString() const {
-  std::string s = "";
+  std::string s;
+
+  auto appendDriverName = [this](std::string &out, VertexPtr ptr) {
+    if (this->d_baseGraph.lock() == ptr->getBaseGraph().lock()) {
+      out.append(ptr->getRawName());
+    } else {
+      out.append(ptr->getBaseGraph().lock()->getRawName());
+      out.push_back('_');
+      out.append(ptr->getRawName());
+    }
+  };
 
   if (d_inConnections.size() > 0) {
     VertexPtr ptr = d_inConnections.at(0);
@@ -149,13 +159,10 @@ std::string GraphVertexGates::getVerilogString() const {
           "Cannot use nullptr for printing it to verilog");
     }
 
-    if (this->d_baseGraph.lock() == ptr->getBaseGraph().lock())
-      s = ptr->getName();
-    else
-      s = ptr->getBaseGraph().lock()->getName() + "_" + ptr->getName();
+    appendDriverName(s, ptr);
 
     if (d_gate == Gates::GateNot)
-      s = "~" + s;
+      s.insert(s.begin(), '~');
     if ((d_gate == Gates::GateNand) || (d_gate == Gates::GateNor) ||
         (d_gate == Gates::GateXnor))
       s = "~(" + s;
@@ -167,13 +174,10 @@ std::string GraphVertexGates::getVerilogString() const {
             "Cannot use nullptr for printing it to verilog");
       }
 
-      std::string name;
-      if (this->d_baseGraph.lock() == ptr->getBaseGraph().lock())
-        name = ptr->getName();
-      else
-        name = ptr->getBaseGraph().lock()->getName() + "_" + ptr->getName();
-
-      s += " " + VertexUtils::gateToString(d_gate) + " " + name;
+      s.push_back(' ');
+      s += VertexUtils::gateToString(d_gate);
+      s.push_back(' ');
+      appendDriverName(s, ptr);
       if (d_gate == GateDefault)
         CG_LOG_ERROR << "GraphVertexGates: Default gate used in "
                         "getVerilogString for vertex '"
@@ -197,11 +201,11 @@ std::string GraphVertexGates::toVerilog() const {
   std::string end;
   std::string oper = VertexUtils::gateToString(d_gate);
   auto printUnaryOperators = [&]() {
-    return "assign " + getName() + " = " + oper +
-           d_inConnections.back()->getName() + ";";
+    return fmt::format("assign {} = {}{};", getRawName(), oper,
+                       d_inConnections.back()->getRawName());
   };
   auto printBinaryOperators = [&]() {
-    std::string basic = "assign " + getName() + " = ";
+    std::string basic = fmt::format("assign {} = ", getRawName());
     if (d_gate == Gates::GateNand || d_gate == Gates::GateNor ||
         d_gate == Gates::GateXnor) {
       basic += "~ ( ";
@@ -211,9 +215,14 @@ std::string GraphVertexGates::toVerilog() const {
       end = " }";
     }
     for (size_t i = 0; i < d_inConnections.size() - 1; ++i) {
-      basic += d_inConnections.at(i)->getName() + " " + oper + " ";
+      basic.append(d_inConnections.at(i)->getRawName());
+      basic.push_back(' ');
+      basic += oper;
+      basic.push_back(' ');
     }
-    basic += d_inConnections.back()->getName() + end + ";";
+    basic.append(d_inConnections.back()->getRawName());
+    basic += end;
+    basic.push_back(';');
 
     return basic;
   };
@@ -306,8 +315,8 @@ std::string GraphVertexBusSlice::toVerilog() const {
               << std::endl;
     return "";
   }
-  return fmt::format("assign {} = {}{}", getName(),
-                     getInConnections()[0]->getName(), getSliceSuffix());
+  return fmt::format("assign {} = {}{}", getRawName(),
+                     getInConnections()[0]->getRawName(), getSliceSuffix());
 }
 std::string GraphVertexBusSlice::toOneBitVerilog() const {
   if (d_inConnections.size() > 1) {
@@ -323,8 +332,8 @@ std::string GraphVertexBusSlice::toOneBitVerilog() const {
   }
   std::stringstream stream;
   for (size_t i = d_begin; i < d_begin + d_width; ++i)
-    stream << "assign " << getName() << "_" << std::to_string(i) << " = "
-           << getInConnections()[0]->getName() << "_" << std::to_string(i);
+    stream << "assign " << getRawName() << "_" << i << " = "
+           << getInConnections()[0]->getRawName() << "_" << i;
 
   return stream.str();
 }
@@ -334,8 +343,8 @@ std::string GraphVertexBusGate::toVerilog() const {
 void getNamesVectorFirst(std::vector<std::string> &names,
                          const std::vector<VertexPtr> &inConnections) {
   for (auto *vertex: inConnections)
-    names.push_back(
-        fmt::format("{}{}", vertex->getName(), (vertex->isBus() ? "_0" : "")));
+    names.push_back(fmt::format("{}{}", vertex->getRawName(),
+                                (vertex->isBus() ? "_0" : "")));
 }
 
 void getNamesVector(std::vector<std::string> &names,
@@ -344,7 +353,7 @@ void getNamesVector(std::vector<std::string> &names,
   for (auto *vertex: inConnections) {
     if (vertex->isBus() &&
         CG_Graph::GraphVertexBus::getBusPointer(vertex)->getWidth() > number)
-      names.push_back(fmt::format("{}_{}", vertex->getName(), number));
+      names.push_back(fmt::format("{}_{}", vertex->getRawName(), number));
     else
       names.push_back(filler);
   }
@@ -361,8 +370,8 @@ std::string GraphVertexBusGate::toOneBitVerilog() const {
     std::string temporaryName;
     for (size_t j = 0; j < n; ++j) {
       temporaryName =
-          fmt::format("{}_{}", getInConnections().back()->getName(), j);
-      stream << fmt::format("assign {}_{} = {}{}{};\n\t", getName(), j, oper,
+          fmt::format("{}_{}", getInConnections().back()->getRawName(), j);
+      stream << fmt::format("assign {}_{} = {}{}{};\n\t", getRawName(), j, oper,
                             temporaryName, "");
     }
     return stream.str();
@@ -381,13 +390,13 @@ std::string GraphVertexBusGate::toOneBitVerilog() const {
     }
     names.clear();
     getNamesVectorFirst(names, d_inConnections);
-    stream << fmt::format("assign {}_0 = {}{}{};\n\t", getName(), begin,
+    stream << fmt::format("assign {}_0 = {}{}{};\n\t", getRawName(), begin,
                           fmt::join(names, " " + oper + " "), end);
 
     for (size_t j = 1; j < getWidth(); ++j) {
       names.clear();
       getNamesVector(names, d_inConnections, j);
-      stream << fmt::format("assign {}_{} = {}{}{};\n\t", getName(), j, begin,
+      stream << fmt::format("assign {}_{} = {}{}{};\n\t", getRawName(), j, begin,
                             fmt::join(names, " " + oper + " "), end);
     }
     return stream.str();
