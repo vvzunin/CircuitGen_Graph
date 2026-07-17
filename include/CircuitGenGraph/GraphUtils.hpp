@@ -805,16 +805,11 @@ static std::pair<VertexTypes, std::string_view> vertexToString[] = {
  * @note Текущая реализация требует линейного поиска через findPairByKey
  */
 static std::pair<Gates, std::string_view> gateToString[] = {
-    {Gates::GateAnd, "and"},
-    {Gates::GateNand, "nand"},
-    {Gates::GateOr, "or"},
-    {Gates::GateNor, "nor"},
-    {Gates::GateXor, "xor"},
-    {Gates::GateXnor, "xnor"},
-    {Gates::GateNot, "not"},
-    {Gates::GateBuf, "buf"},
-    {Gates::GateSlice, "busSlice"},
-    {Gates::GateConcatenation, "concat"},
+    {Gates::GateAnd, "and"},        {Gates::GateNand, "nand"},
+    {Gates::GateOr, "or"},          {Gates::GateNor, "nor"},
+    {Gates::GateXor, "xor"},        {Gates::GateXnor, "xnor"},
+    {Gates::GateNot, "not"},        {Gates::GateBuf, "buf"},
+    {Gates::GateSlice, "busSlice"}, {Gates::GateConcatenation, "concat"},
     {Gates::GateDefault, "ERROR"}};
 static std::pair<SequentialTypes, std::string_view> sequentialToString[]{
     {affr, "affr"},       {affre, "affre"},   {affrs, "affrs"},

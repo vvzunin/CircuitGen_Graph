@@ -109,8 +109,8 @@ std::string GraphVertexBusConstant::getVerilogInstanceSeparate() {
 std::string GraphVertexBusConstant::toOneBitVerilog() const {
   std::vector<std::string> res;
   for (size_t i = 0; i < getWidth(); ++i) {
-    res.push_back(fmt::format("assign {}_{} = 1'b{};\n\t", getName(), i,
-                              d_valueBus[i]));
+    res.push_back(
+        fmt::format("assign {}_{} = 1'b{};\n\t", getName(), i, d_valueBus[i]));
   }
   return fmt::format("{}\n", fmt::join(res, ""));
 }

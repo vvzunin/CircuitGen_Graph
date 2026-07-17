@@ -230,10 +230,9 @@ TEST(BusTest, BusConstantVerilogInstanceAndOneBitLiterals) {
   auto *busConst = static_cast<GraphVertexBusConstant *>(
       GraphVertexBus::getBusPointer(constBus));
   EXPECT_EQ(busConst->getVerilogInstance(), "wire [2:0] const_0;");
-  EXPECT_EQ(busConst->toOneBitVerilog(),
-            "assign const_0_0 = 1'bx;\n\t"
-            "assign const_0_1 = 1'bx;\n\t"
-            "assign const_0_2 = 1'bx;\n\t\n");
+  EXPECT_EQ(busConst->toOneBitVerilog(), "assign const_0_0 = 1'bx;\n\t"
+                                         "assign const_0_1 = 1'bx;\n\t"
+                                         "assign const_0_2 = 1'bx;\n\t\n");
 }
 
 TEST(BusTest, UnaryBusGateOneBitKeepsScalarInputName) {
