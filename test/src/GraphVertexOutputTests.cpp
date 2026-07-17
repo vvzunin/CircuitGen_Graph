@@ -164,7 +164,8 @@ TEST(TestAddInConnections, OutputAddConnections) {
 
   VertexPtr outputPtr1 = memoryOwnerOutputGr->addOutput();
   EXPECT_EQ(output1.addVertexToInConnections(outputPtr1), 1);
-  EXPECT_EQ(output1.addVertexToInConnections(outputPtr1), 2);
+  EXPECT_EQ(output1.addVertexToInConnections(outputPtr1), 1);
+  EXPECT_EQ(output1.getInConnections().size(), 2);
   EXPECT_EQ(output1.getInConnections()[0], outputPtr1);
   EXPECT_EQ(output1.getInConnections()[1], outputPtr1);
 

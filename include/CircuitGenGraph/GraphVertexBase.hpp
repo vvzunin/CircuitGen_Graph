@@ -750,33 +750,25 @@ public:
    *
    * \~english
    * @brief addVertexToInConnections
-   * Adds a vertex to the input connections of this vertex and returns the
-   * count of occurrences of the given vertex in the input connections
+   * Appends a driver to the input connections of this vertex.
    * @param i_vert The vertex to be added to the input connections
-   * @return The count of occurrences of the given vertex in the input
-   * connections after adding it
+   * @return `1` for the connection just added (duplicates are allowed at this
+   * API level; use `getInConnections()` to inspect multiplicity)
    * @par Example
    * @code
-   * // Creating an instance of the GraphVertexBase class
-   * GraphVertexBase vertex(VertexTypes::input, "vertex1");
-   * // Creating another vertex
-   * VertexPtr anotherVertex =
-   * std::make_shared<GraphVertexInput>(VertexTypes::input, "vertex2");
-   * // Adding a second vertex to the input connections of the first vertex
-   * // and getting the number of occurrences
-   * uint32_t occurrences = vertex.addVertexToInConnections(anotherVertex);
-   * // Output of the result
-   * std::cout << "Occurrences in input connections: " << occurrences
-   * << std::endl;
+   * GraphPtr graph = std::make_shared<OrientedGraph>();
+   * VertexPtr sink = graph->addGate(Gates::GateAnd, "sink");
+   * VertexPtr src = graph->addInput("src");
+   * uint32_t added = sink->addVertexToInConnections(src);
+   * std::cout << "Added in-connections: " << added << std::endl;
    * @endcode
    *
    * \~russian
    * @brief addVertexToInConnections
-   * Добавляет вершину во входные соединения этой вершины и возвращает
-   * количество вхождений данной вершины во входных соединениях
+   * Добавляет драйвер во входные соединения этой вершины.
    * @param i_vert Вершина, которая будет добавлена во входные соединения
-   * @return Количество вхождений данной вершины во входных соединениях
-   * после ее добавления
+   * @return `1` для только что добавленной связи (дубликаты на этом уровне API
+   * допускаются; кратность смотрите через `getInConnections()`)
    */
   virtual uint32_t addVertexToInConnections(VertexPtr i_vert);
 

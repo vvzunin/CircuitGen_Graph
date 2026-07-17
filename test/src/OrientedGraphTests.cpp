@@ -200,27 +200,16 @@ TEST(TestGetEdgesCount, ReturnCorrectCount) {
   graphPtr1->addEdges({input1, input2}, gate1);
   EXPECT_EQ(graphPtr1->getEdgesCount(), 3);
 
-  // there is no check for edge being already exist
-  // graph1.addEdge(gate, output);
-  // EXPECT_EQ(graph1.getEdgesCount(), 3);
-  // EXPECT_THROW()
+  // Repeated addEdge is a no-op: out-side rejects duplicates and in-side
+  // must not grow with an orphan connection.
+  EXPECT_FALSE(graphPtr1->addEdge(gate1, output1));
+  EXPECT_EQ(graphPtr1->getEdgesCount(), 3);
+  EXPECT_EQ(output1->getInConnections().size(), 1);
+  EXPECT_EQ(gate1->getOutConnections().size(), 1);
 
-  // there is no check for edges being already exist
-  // graph1.addEdges({input1, input2}, gate);
-  // EXPECT_EQ(graph1.getEdgesCount(), 3);
-  // EXPECT_THROW()
-
-  GraphPtr graphPtr2 = std::make_shared<OrientedGraph>();
-  // VertexPtr gate2 = graphPtr2->addGate(Gates::GateAnd, "And");
-  // VertexPtr gate3 = graphPtr2->addGate(Gates::GateAnd, "And");
-
-  // There is no check to the same objects in Edge
-  // graph2.addEdge(gate2, gate2);
-  // EXPECT_EQ(graph2.getEdgesCount(), 0);
-  // EXPECT_TRHOW();
-  // graph2.addEdges({gate2, gate2, gate3, gate3}, gate2);
-  // EXPECT_EQ(graph2.getEdgesCount(), 1);
-  // EXPECT_TRHOW();
+  EXPECT_FALSE(graphPtr1->addEdges({input1, input2}, gate1));
+  EXPECT_EQ(graphPtr1->getEdgesCount(), 3);
+  EXPECT_EQ(gate1->getInConnections().size(), 2);
 }
 
 TEST(TestGetSubGraphs, ReturnCorrectSubGraphs) {

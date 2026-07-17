@@ -406,7 +406,8 @@ TEST(TestAddInConnections, GatesAddConnections) {
   GraphVertexGates *ptr1 = static_cast<GraphVertexGates *>(
       memoryOwnerGateGr->addGate(Gates::GateOr));
   EXPECT_EQ(gate1->addVertexToInConnections(ptr1), 1);
-  EXPECT_EQ(gate1->addVertexToInConnections(ptr1), 2);
+  EXPECT_EQ(gate1->addVertexToInConnections(ptr1), 1);
+  EXPECT_EQ(gate1->getInConnections().size(), 2);
   EXPECT_EQ(gate1->getInConnections()[0], ptr1);
   EXPECT_EQ(gate1->getInConnections()[1], ptr1);
 

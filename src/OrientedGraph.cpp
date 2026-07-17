@@ -675,10 +675,13 @@ bool OrientedGraph::addEdge(VertexPtr from, VertexPtr to) {
   CG_VLOG(2) << "Adding edge from " << (from ? from->getName() : "nullptr")
              << " to " << (to ? to->getName() : "nullptr");
   bool f;
-  uint32_t n;
+  uint32_t n = 0;
   if (from && to && from->getBaseGraph().lock() == to->getBaseGraph().lock()) {
+    // Out-side rejects duplicates; only then append the matching in-edge.
+    // Otherwise a repeated addEdge would leave an orphan in-connection.
     f = from->addVertexToOutConnections(to);
-    n = to->addVertexToInConnections(from);
+    if (f)
+      n = to->addVertexToInConnections(from);
   } else {
     CG_LOG_ERROR << "Attempted to add edge between different graphs/subgraphs "
                     "(or null pointers): "
@@ -689,7 +692,7 @@ bool OrientedGraph::addEdge(VertexPtr from, VertexPtr to) {
   }
   d_edgesCount += f && (n > 0);
 
-  if (from->getType() == VertexTypes::gate &&
+  if (f && n > 0 && from->getType() == VertexTypes::gate &&
       to->getType() == VertexTypes::gate)
     ++d_edgesGatesCount[from->getGate()][to->getGate()];
 

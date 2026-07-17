@@ -309,11 +309,9 @@ uint32_t GraphVertexBase::addVertexToInConnections(VertexPtr i_vert) {
   CG_VLOG(3) << "Vertex " << getName() << ": adding in connection from "
              << (i_vert ? i_vert->getName() : "nullptr");
   d_inConnections.push_back(i_vert);
-  uint32_t n = 0;
-  // @todo is rly needed?
-  for (VertexPtr vert: d_inConnections)
-    n += (vert == i_vert);
-  return n;
+  // Always append; return 1 for the connection just added (O(1)).
+  // Callers that need total multiplicity can scan getInConnections().
+  return 1;
 }
 
 const std::vector<VertexPtr> &GraphVertexBase::getOutConnections() const {

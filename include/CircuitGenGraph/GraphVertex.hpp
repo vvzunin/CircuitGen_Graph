@@ -806,10 +806,9 @@ public:
    * d_inConnections, so realization for GraphVertexGates has a check
    * before adding
    * @param i_vert Vertex that will be added to d_inConnections of this
-   * @return The count of occurrences of the given vertex in the input
-   * connections after adding it
-   * @throws{std::overflow_error} in case of connecting more than one
-   * vertex in d_inConnections
+   * @return `1` for the connection just added
+   * @throws{std::length_error} in case of connecting more than one
+   * vertex in d_inConnections for Buf/Not
    *
    * \~russian
    * @brief addVertexToInConnections
@@ -818,10 +817,8 @@ public:
    * содержит проверку перед добавлением
    * @param i_vert Вершина, которая будет добавлена в d_inConnections
    * этой вершины
-   * @return Количество вхождений данной вершины во входные соединения
-   * после ее добавления
-   * @throws{std::overflow_error} в случае подключения более одной
-   * вершины в d_inConnections
+   * @return `1` для только что добавленной связи
+   * @throws{std::length_error} при подключении более одного входа к Buf/Not
    */
   uint32_t addVertexToInConnections(VertexPtr i_vert) override;
 
