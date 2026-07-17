@@ -26,8 +26,20 @@ namespace CG_Graph {
 /// \~russian
 /// @brief Информация о порте эталонной Verilog-модели (для сравнения с графом).
 struct PortInfo {
+  /*!
+   * \~english Port name
+   * \~russian Имя порта
+   */
   std::string name;
-  int width; ///< 1 для однобитных, N для векторов [N-1:0]
+  /*!
+   * \~english `1` for single-bit ports, `N` for vectors `[N-1:0]`
+   * \~russian `1` для однобитных портов, `N` для векторов `[N-1:0]`
+   */
+  int width;
+  /*!
+   * \~english `true` if the port is an input
+   * \~russian `true`, если порт является входом
+   */
   bool is_input = false;
 };
 
@@ -37,10 +49,26 @@ struct PortInfo {
 /// \~russian
 /// @brief Результат симуляции одного тестового вектора.
 struct TestVector {
-  std::vector<char> inputs; ///< Входные значения
-  std::vector<char> expected; ///< Ожидаемые выходные значения
-  std::vector<char> actual; ///< Фактические выходные значения (после симуляции)
-  bool passed = false;      ///< Прошел ли тест
+  /*!
+   * \~english Input values
+   * \~russian Входные значения
+   */
+  std::vector<char> inputs;
+  /*!
+   * \~english Expected output values
+   * \~russian Ожидаемые выходные значения
+   */
+  std::vector<char> expected;
+  /*!
+   * \~english Actual output values (after simulation)
+   * \~russian Фактические выходные значения (после симуляции)
+   */
+  std::vector<char> actual;
+  /*!
+   * \~english `true` if the test passed
+   * \~russian `true`, если тест пройден
+   */
+  bool passed = false;
 };
 
 /// \~english
@@ -49,14 +77,46 @@ struct TestVector {
 /// \~russian
 /// @brief Результат верификации схемы.
 struct VerificationResult {
-  bool success = false; ///< Общий результат верификации
-  size_t totalTests = 0; ///< Общее количество тестов
-  size_t passedTests = 0; ///< Количество пройденных тестов
-  size_t failedTests = 0; ///< Количество проваленных тестов
-  std::vector<TestVector> vectors; ///< Все тестовые векторы
-  std::string errorMessage; ///< Сообщение об ошибке (если есть)
-  std::string simulatorOutput; ///< Вывод симулятора
-  int simulatorExitCode = 0;   ///< Код возврата симулятора
+  /*!
+   * \~english Overall verification result
+   * \~russian Общий результат верификации
+   */
+  bool success = false;
+  /*!
+   * \~english Total number of tests
+   * \~russian Общее количество тестов
+   */
+  size_t totalTests = 0;
+  /*!
+   * \~english Number of passed tests
+   * \~russian Количество пройденных тестов
+   */
+  size_t passedTests = 0;
+  /*!
+   * \~english Number of failed tests
+   * \~russian Количество проваленных тестов
+   */
+  size_t failedTests = 0;
+  /*!
+   * \~english All test vectors
+   * \~russian Все тестовые векторы
+   */
+  std::vector<TestVector> vectors;
+  /*!
+   * \~english Error message (if any)
+   * \~russian Сообщение об ошибке (если есть)
+   */
+  std::string errorMessage;
+  /*!
+   * \~english Simulator output
+   * \~russian Вывод симулятора
+   */
+  std::string simulatorOutput;
+  /*!
+   * \~english Simulator exit code
+   * \~russian Код возврата симулятора
+   */
+  int simulatorExitCode = 0;
 };
 
 /// \~english
@@ -65,15 +125,46 @@ struct VerificationResult {
 /// \~russian
 /// @brief Конфигурация генератора тестбенчей.
 struct TestbenchConfig {
-  std::string timescale = "1ns/1ps"; ///< Timescale для Verilog
-  uint32_t clockPeriod =
-      10; ///< Период тактового сигнала (в единицах timescale)
-  uint32_t resetDuration = 20; ///< Длительность сброса
-  uint32_t stimulusDelay = 5; ///< Задержка между стимулами
-  bool generateVCD = true; ///< Генерировать VCD файл для GTKWave
-  std::string vcdFilename = "dump.vcd"; ///< Имя VCD файла
-  bool verbose = false;                 ///< Подробный вывод
-  uint32_t timeout = 1000; ///< Таймаут симуляции (в единицах timescale)
+  /*!
+   * \~english Verilog timescale
+   * \~russian Timescale для Verilog
+   */
+  std::string timescale = "1ns/1ps";
+  /*!
+   * \~english Clock period (in timescale units)
+   * \~russian Период тактового сигнала (в единицах timescale)
+   */
+  uint32_t clockPeriod = 10;
+  /*!
+   * \~english Reset duration
+   * \~russian Длительность сброса
+   */
+  uint32_t resetDuration = 20;
+  /*!
+   * \~english Delay between stimuli
+   * \~russian Задержка между стимулами
+   */
+  uint32_t stimulusDelay = 5;
+  /*!
+   * \~english Generate a VCD file for GTKWave
+   * \~russian Генерировать VCD-файл для GTKWave
+   */
+  bool generateVCD = true;
+  /*!
+   * \~english VCD file name
+   * \~russian Имя VCD-файла
+   */
+  std::string vcdFilename = "dump.vcd";
+  /*!
+   * \~english Verbose output
+   * \~russian Подробный вывод
+   */
+  bool verbose = false;
+  /*!
+   * \~english Simulation timeout (in timescale units)
+   * \~russian Таймаут симуляции (в единицах timescale)
+   */
+  uint32_t timeout = 1000;
 };
 
 /// \~english
@@ -82,9 +173,21 @@ struct TestbenchConfig {
 /// \~russian
 /// @brief Стратегия генерации тестовых векторов.
 enum class TestVectorStrategy {
-  Exhaustive, ///< Полный перебор всех комбинаций (для малого числа входов)
-  Random,     ///< Случайные тестовые векторы
-  Custom ///< Пользовательские тестовые векторы
+  /*!
+   * \~english Exhaustive enumeration of all combinations (small input count)
+   * \~russian Полный перебор всех комбинаций (для малого числа входов)
+   */
+  Exhaustive,
+  /*!
+   * \~english Random test vectors
+   * \~russian Случайные тестовые векторы
+   */
+  Random,
+  /*!
+   * \~english User-provided test vectors
+   * \~russian Пользовательские тестовые векторы
+   */
+  Custom
 };
 
 /**
@@ -135,11 +238,13 @@ public:
   /// @brief Деструктор.
   ~TestbenchGenerator() = default;
 
-  // Запрет копирования
+  /// \~english Copying is disabled.
+  /// \~russian Копирование запрещено.
   TestbenchGenerator(const TestbenchGenerator &) = delete;
   TestbenchGenerator &operator=(const TestbenchGenerator &) = delete;
 
-  // Разрешение перемещения
+  /// \~english Move operations are enabled.
+  /// \~russian Перемещение разрешено.
   TestbenchGenerator(TestbenchGenerator &&) = default;
   TestbenchGenerator &operator=(TestbenchGenerator &&) = default;
 
@@ -152,7 +257,7 @@ public:
                        const std::string &goldenModelPath,
                        const std::string &outputTbPath);
 
-  // ==================== Генерация тестовых векторов ====================
+  // ==================== Test-vector generation / Генерация тестовых векторов ====================
 
   /// \~english
   /// @brief Generates all possible input combinations (exhaustive mode).
@@ -215,7 +320,7 @@ public:
     return d_testVectors;
   }
 
-  // ==================== Генерация тестбенча ====================
+  // ==================== Testbench generation / Генерация тестбенча ====================
 
   /// \~english
   /// @brief Generates Verilog testbench.
@@ -240,7 +345,7 @@ public:
   /// @return Verilog код тестбенча.
   std::string getTestbenchCode() const;
 
-  // ==================== Симуляция и верификация ====================
+  // ==================== Simulation and verification / Симуляция и верификация ====================
 
   /// \~english
   /// @brief Runs simulation using internal graph simulator.
@@ -280,7 +385,7 @@ public:
   /// @return Результат сравнения.
   VerificationResult compareSimulations(const std::string &i_workDir);
 
-  // ==================== Конфигурация ====================
+  // ==================== Configuration / Конфигурация ====================
 
   /// \~english
   /// @brief Sets generator configuration.
@@ -300,7 +405,7 @@ public:
   /// @return Конфигурация.
   const TestbenchConfig &getConfig() const { return d_config; }
 
-  // ==================== Утилиты ====================
+  // ==================== Utilities / Утилиты ====================
 
   /// \~english
   /// @brief Checks whether Icarus Verilog is available.
@@ -404,15 +509,50 @@ private:
   std::pair<int, std::string>
   executeCommandSafe(const std::vector<std::string> &i_argv);
 
+  /// \~english
+  /// @brief Parses ports of a golden Verilog model.
+  /// @param filepath Path to the golden `.v` file.
+  /// @param[out] moduleName Detected module name.
+  /// @return Parsed port list.
+  ///
+  /// \~russian
+  /// @brief Разбирает порты эталонной Verilog-модели.
+  /// @param filepath Путь к эталонному `.v` файлу.
+  /// @param[out] moduleName Обнаруженное имя модуля.
+  /// @return Список портов.
   static std::vector<PortInfo> parseGoldenModel(const std::string &filepath,
                                                 std::string &moduleName);
 
-  GraphPtr d_graph; ///< Shared-указатель на граф схемы
-  TestbenchConfig d_config; ///< Конфигурация генератора
-  std::vector<TestVector> d_testVectors;  ///< Тестовые векторы
-  std::vector<std::string> d_inputNames;  ///< Имена входов
-  std::vector<std::string> d_outputNames; ///< Имена выходов
-  bool d_hasSequential = false; ///< Есть ли последовательностные элементы
+  /*!
+   * \~english Shared pointer to the circuit graph
+   * \~russian Shared-указатель на граф схемы
+   */
+  GraphPtr d_graph;
+  /*!
+   * \~english Generator configuration
+   * \~russian Конфигурация генератора
+   */
+  TestbenchConfig d_config;
+  /*!
+   * \~english Test vectors
+   * \~russian Тестовые векторы
+   */
+  std::vector<TestVector> d_testVectors;
+  /*!
+   * \~english Input port names
+   * \~russian Имена входов
+   */
+  std::vector<std::string> d_inputNames;
+  /*!
+   * \~english Output port names
+   * \~russian Имена выходов
+   */
+  std::vector<std::string> d_outputNames;
+  /*!
+   * \~english `true` if the circuit contains sequential elements
+   * \~russian `true`, если в схеме есть последовательностные элементы
+   */
+  bool d_hasSequential = false;
 };
 
 } // namespace CG_Graph

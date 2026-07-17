@@ -1,3 +1,14 @@
+/**
+ * @file TestbenchGeneratorTests.cpp
+ *
+ * \~english
+ * @brief Unit tests for `TestbenchGenerator` and golden-model verification helpers.
+ *
+ * \~russian
+ * @brief Юнит-тесты для `TestbenchGenerator` и вспомогательных средств
+ * верификации по эталонной модели.
+ */
+
 #include <gtest/gtest.h>
 
 #include <CircuitGenGraph/GraphVertexBase.hpp>
@@ -17,7 +28,15 @@ using namespace CG_Graph;
 
 namespace {
 
-/// @brief Вспомогательная функция для чтения файла
+/// \~english
+/// @brief Reads a whole file into a string.
+/// @param path Path to the file.
+/// @return File contents, or an empty string if the file cannot be opened.
+///
+/// \~russian
+/// @brief Читает весь файл в строку.
+/// @param path Путь к файлу.
+/// @return Содержимое файла или пустая строка, если файл не удалось открыть.
 std::string readFile(const std::string &path) {
   std::ifstream file(path);
   if (!file) {
@@ -28,7 +47,13 @@ std::string readFile(const std::string &path) {
   return buffer.str();
 }
 
-/// @brief Создает простую комбинационную схему (AND gate)
+/// \~english
+/// @brief Builds a simple combinational AND-gate circuit.
+/// @return Shared pointer to the created graph.
+///
+/// \~russian
+/// @brief Создаёт простую комбинационную схему (AND).
+/// @return Shared-указатель на созданный граф.
 GraphPtr createSimpleAndGate() {
   auto graph = std::make_shared<OrientedGraph>("simple_and");
   auto *inA = graph->addInput("a");
@@ -43,7 +68,13 @@ GraphPtr createSimpleAndGate() {
   return graph;
 }
 
-/// @brief Создает полусумматор
+/// \~english
+/// @brief Builds a half-adder circuit.
+/// @return Shared pointer to the created graph.
+///
+/// \~russian
+/// @brief Создаёт полусумматор.
+/// @return Shared-указатель на созданный граф.
 GraphPtr createHalfAdder() {
   auto graph = std::make_shared<OrientedGraph>("half_adder");
   auto *inA = graph->addInput("a");
@@ -62,7 +93,13 @@ GraphPtr createHalfAdder() {
   return graph;
 }
 
-/// @brief Создает схему с NOT gate
+/// \~english
+/// @brief Builds a circuit with a single NOT gate.
+/// @return Shared pointer to the created graph.
+///
+/// \~russian
+/// @brief Создаёт схему с вентилем NOT.
+/// @return Shared-указатель на созданный граф.
 GraphPtr createNotGate() {
   auto graph = std::make_shared<OrientedGraph>("not_gate");
   auto *in = graph->addInput("a");
@@ -76,7 +113,13 @@ GraphPtr createNotGate() {
   return graph;
 }
 
-/// @brief Создает более сложную схему (XOR через NAND)
+/// \~english
+/// @brief Builds an XOR circuit implemented with NAND gates.
+/// @return Shared pointer to the created graph.
+///
+/// \~russian
+/// @brief Создаёт схему XOR, собранную из вентилей NAND.
+/// @return Shared-указатель на созданный граф.
 GraphPtr createXorFromNand() {
   auto graph = std::make_shared<OrientedGraph>("xor_nand");
   auto *a = graph->addInput("a");
@@ -102,7 +145,7 @@ GraphPtr createXorFromNand() {
 
 } // namespace
 
-// ==================== Тесты конструктора ====================
+// ==================== Constructor tests / Тесты конструктора ====================
 
 TEST(TestbenchGeneratorTests, ConstructorWithValidGraph) {
   auto graph = createSimpleAndGate();
@@ -126,7 +169,7 @@ TEST(TestbenchGeneratorTests, ConstructorWithConfig) {
   EXPECT_FALSE(tbGen.getConfig().generateVCD);
 }
 
-// ==================== Тесты генерации тестовых векторов ====================
+// ==================== Test-vector generation / Генерация тестовых векторов ====================
 
 TEST(TestbenchGeneratorTests, GenerateExhaustiveVectorsSimple) {
   auto graph = createSimpleAndGate();
@@ -230,8 +273,7 @@ TEST(TestbenchGeneratorTests, ClearTestVectors) {
   EXPECT_EQ(tbGen.getTestVectorCount(), 0);
 }
 
-// ==================== Тесты корректности тестовых векторов
-// ====================
+// ==================== Test-vector correctness / Корректность тестовых векторов ====================
 
 TEST(TestbenchGeneratorTests, AndGateVectorsCorrectness) {
   auto graph = createSimpleAndGate();
@@ -286,7 +328,7 @@ TEST(TestbenchGeneratorTests, HalfAdderVectorsCorrectness) {
   }
 }
 
-// ==================== Тесты генерации тестбенча ====================
+// ==================== Testbench generation / Генерация тестбенча ====================
 
 TEST(TestbenchGeneratorTests, GenerateTestbenchCode) {
   auto graph = createSimpleAndGate();
@@ -365,7 +407,7 @@ TEST(TestbenchGeneratorTests, WriteTestbenchWithoutVectors) {
   EXPECT_FALSE(result);
 }
 
-// ==================== Тесты внутренней симуляции ====================
+// ==================== Internal simulation / Внутренняя симуляция ====================
 
 TEST(TestbenchGeneratorTests, InternalSimulationAndGate) {
   auto graph = createSimpleAndGate();
@@ -407,7 +449,7 @@ TEST(TestbenchGeneratorTests, InternalSimulationXorFromNand) {
   EXPECT_GE(result.passedTests, 2);
 }
 
-// ==================== Тесты утилит ====================
+// ==================== Utilities / Утилиты ====================
 
 TEST(TestbenchGeneratorTests, ToVerilogLiteral) {
   EXPECT_EQ(TestbenchGenerator::toVerilogLiteral({'0'}), "1'b0");
@@ -433,7 +475,7 @@ TEST(TestbenchGeneratorTests, ConfigSetterGetter) {
   EXPECT_TRUE(tbGen.getConfig().verbose);
 }
 
-// ==================== Тесты Icarus Verilog (условные) ====================
+// ==================== Icarus Verilog (conditional) / Icarus Verilog (условные) ====================
 // Если iverilog/vvp нет в PATH, тесты ниже помечаются как skipped (GTEST_SKIP),
 // а не падают — это нормально для CI без Icarus.
 
@@ -501,7 +543,7 @@ TEST(TestbenchGeneratorTests, CompareSimulations) {
   std::filesystem::remove_all(testDir);
 }
 
-// ==================== Тесты обработки ошибок ====================
+// ==================== Error handling / Обработка ошибок ====================
 
 TEST(TestbenchGeneratorTests, IcarusNotAvailable) {
   auto graph = createSimpleAndGate();
@@ -516,8 +558,7 @@ TEST(TestbenchGeneratorTests, IcarusNotAvailable) {
   EXPECT_FALSE(result.errorMessage.empty());
 }
 
-// ==================== Сравнение графа с эталонной Verilog-моделью
-// ====================
+// ==================== Graph vs golden Verilog model / Граф и эталонная модель ====================
 
 class TestbenchGeneratorGoldenTests : public ::testing::Test {
 protected:
