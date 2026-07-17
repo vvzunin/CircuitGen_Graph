@@ -154,6 +154,19 @@ TEST(BusTest, severalBusModulePrintedToVerilog) {
       "~inputBus;\n\tassign buf = inputVertex;\n\n\tassign res = "
       "not;\n\tassign outputVertex = buf;\nendmodule\n");
 }
+
+TEST(BusTest, MixedWidthBusDeclarationsAreSeparateStatements) {
+  OrientedGraph::resetCounter();
+  GraphPtr graph = std::make_shared<OrientedGraph>("mixedWidths");
+  graph->addInputBus("wide", 5);
+  graph->addInputBus("narrow", 3);
+  graph->addInput("bit");
+  EXPECT_NO_THROW(graph->toVerilogBusEnabled("./", "mixed_widths.v"));
+  testFile("./mixed_widths.v",
+           "module mixedWidths(\n\twide, narrow, bit\n\t);\n\t// Writing "
+           "inputs\n\tinput bit;\n\tinput [2:0] narrow;\n\tinput [4:0] "
+           "wide;\n\n\t\nendmodule\n");
+}
 TEST(BusTest, SliceToVerilog) {
   GraphPtr graph = std::make_shared<OrientedGraph>("sliceTestGraph");
   VertexPtr v = graph->addInputBus("inputBus", 5);

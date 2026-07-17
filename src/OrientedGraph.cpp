@@ -1237,37 +1237,41 @@ bool OrientedGraph::toVerilogBusEnabled(std::string i_path,
   };
   auto lambdaDeclaration = [&](std::vector<GraphVertexBase *> eachVertex,
                                VertexTypes usedType) {
-    size_t length = -1;
     std::multimap<size_t, VertexPtr> busSet;
+    std::vector<std::string> singleVertices;
     for (auto *value: eachVertex) {
-      if (value->isBus())
+      if (!value->isBus())
+        singleVertices.emplace_back(value->getRawName());
+      else
         busSet.emplace(std::make_pair(
             GraphVertexBus::getBusPointer(value)->getWidth(), value));
     }
 
-    if (busSet.size() < eachVertex.size()) {
-      i_fileStream << ((usedType == sequential) && i_sequentialByInstance
-                           ? "wire"
-                           : VertexUtils::vertexTypeToVerilog(usedType))
-                   << " ";
-      for (auto *value: eachVertex) {
-        if (!value->isBus())
-          i_fileStream << value->getRawName()
-                       << (value != eachVertex.back() ? ", " : ";\n\t");
+    const std::string typeStr =
+        ((usedType == sequential) && i_sequentialByInstance
+             ? "wire"
+             : VertexUtils::vertexTypeToVerilog(usedType));
+    if (!singleVertices.empty()) {
+      i_fileStream << fmt::format("{} {};\n\t", typeStr,
+                                  fmt::join(singleVertices, ", "));
+    }
+
+    size_t length = static_cast<size_t>(-1);
+    for (auto it = busSet.begin(); it != busSet.end(); ++it) {
+      if (it->first != length) {
+        if (length != static_cast<size_t>(-1))
+          i_fileStream << ";\n\t";
+        i_fileStream << typeStr << " "
+                     << GraphVertexBus::getBusPointer(it->second)
+                            ->getBusNameSuffix()
+                     << " " << it->second->getRawName();
+        length = it->first;
+      } else {
+        i_fileStream << ", " << it->second->getRawName();
       }
     }
-    for (auto value: busSet) {
-      if (GraphVertexBus::getBusPointer(value.second)->getWidth() == length)
-        i_fileStream << value.second->getRawName()
-                     << (value != *busSet.rbegin() ? ", " : ";\n");
-      else
-        i_fileStream
-            << VertexUtils::vertexTypeToVerilog(usedType) << " "
-            << GraphVertexBus::getBusPointer(value.second)->getBusNameSuffix()
-            << " " << value.second->getRawName()
-            << (value != *busSet.rbegin() ? ", " : ";\n");
-      length = value.first;
-    }
+    if (!busSet.empty())
+      i_fileStream << ";\n";
     i_fileStream << "\n";
   };
   auto lambdaInouts = [&](VertexPtr vertex) {
