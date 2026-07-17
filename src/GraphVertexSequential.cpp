@@ -229,6 +229,11 @@ std::string GraphVertexSequential::getSequentialString(
   }
 }
 std::string GraphVertexSequential::toVerilog() const {
+  if (d_inConnections.empty()) {
+    CG_LOG_WARNING << "GraphVertexSequential: empty vertex '" << d_name
+                   << "' skipped in Verilog";
+    return "";
+  }
   std::vector<std::string_view> names;
   for (auto *v: d_inConnections)
     names.push_back(v->getRawName());
@@ -318,8 +323,9 @@ std::string GraphVertexSequential::getVerilogInstance(
       inouts);
 }
 DotReturn GraphVertexSequential::toDOT() {
-  if (!d_inConnections.size()) {
-    CG_LOG_ERROR << "TODO: delete empty vertices: " << d_name << std::endl;
+  if (d_inConnections.empty()) {
+    CG_LOG_WARNING << "GraphVertexSequential: empty vertex '" << d_name
+                   << "' skipped in DOT";
     return {};
   }
 

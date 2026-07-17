@@ -449,6 +449,35 @@ TEST(TestWasteVerticesRemoving, VerticesWithoutPathToOutputDestroyed) {
   EXPECT_EQ(graphPtr->getVerticesByType(sequential).size(), 0);
 }
 
+TEST(TestRemoveEmptyLogicVertices, DropsGatesWithoutInputs) {
+  GraphPtr graph = std::make_shared<OrientedGraph>("g");
+  auto *emptyAnd = graph->addGate(Gates::GateAnd, "empty_and");
+  auto *inp = graph->addInput("a");
+  auto *realNot = graph->addGate(Gates::GateNot, "real_not");
+  auto *out = graph->addOutput("y");
+  graph->addEdge(inp, realNot);
+  graph->addEdge(realNot, out);
+  // Intentionally leave emptyAnd without inputs but wire it to output too.
+  graph->addEdge(emptyAnd, out);
+
+  EXPECT_EQ(graph->getVerticesByType(gate).size(), 2u);
+  EXPECT_EQ(graph->removeEmptyLogicVertices(), 1u);
+  EXPECT_EQ(graph->getVerticesByType(gate).size(), 1u);
+  EXPECT_EQ(graph->getVerticesByName("empty_and").size(), 0u);
+  EXPECT_EQ(graph->getVerticesByName("real_not").size(), 1u);
+
+  // Export must not resurrect / declare the removed empty gate.
+  ASSERT_TRUE(graph->toVerilog("./", "empty_logic_check.v"));
+  std::ifstream file("./empty_logic_check.v");
+  ASSERT_TRUE(file.is_open());
+  std::stringstream buffer;
+  buffer << file.rdbuf();
+  file.close();
+  std::remove("./empty_logic_check.v");
+  EXPECT_EQ(buffer.str().find("empty_and"), std::string::npos);
+  EXPECT_NE(buffer.str().find("real_not"), std::string::npos);
+}
+
 TEST(TestGetVerticesByType, FiltersByNameAndSearchesSubGraphs) {
   GraphPtr graph = std::make_shared<OrientedGraph>("top");
   graph->addInput("keep");

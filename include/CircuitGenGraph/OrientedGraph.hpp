@@ -867,6 +867,22 @@ public:
    * также будут удалены.
    */
   void removeWasteVertices();
+
+  /**
+   * \~english
+   * @brief Removes gate and sequential vertices that have no input connections.
+   * @details Also disconnects their outgoing edges and updates gate counters.
+   * Called automatically before Verilog/DOT export.
+   * @return Number of removed vertices.
+   *
+   * \~russian
+   * @brief Удаляет вентили и последовательностные вершины без входных связей.
+   * @details Также разрывает их исходящие рёбра и обновляет счётчики вентилей.
+   * Вызывается автоматически перед экспортом Verilog/DOT.
+   * @return Число удалённых вершин.
+   */
+  size_t removeEmptyLogicVertices();
+
   /**
    * \~english
    * @brief Updates edge counters grouped by gate types.

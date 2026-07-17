@@ -514,7 +514,41 @@ void OrientedGraph::updateEdgesGatesCount(VertexPtr vertex, Gates type) {
   }
 }
 
+size_t OrientedGraph::removeEmptyLogicVertices() {
+  size_t removed = 0;
+  auto scrub = [this, &removed](VertexTypes type) {
+    auto &bucket = d_vertices[type];
+    size_t write = 0;
+    for (size_t i = 0; i < bucket.size(); ++i) {
+      VertexPtr vert = bucket[i];
+      if (!vert->getInConnections().empty()) {
+        bucket[write++] = vert;
+        continue;
+      }
+
+      const auto outs = vert->getOutConnections();
+      for (VertexPtr consumer: outs)
+        removeEdge(vert, consumer);
+
+      if (type == gate)
+        d_gatesCount[vert->getGate()] -= 1;
+
+      CG_LOG_WARNING << "Removing empty "
+                     << GraphUtils::parseVertexToString(type) << " vertex '"
+                     << vert->getRawName() << "'";
+      vert->~GraphVertexBase();
+      ++removed;
+    }
+    bucket.resize(write);
+  };
+
+  scrub(gate);
+  scrub(sequential);
+  return removed;
+}
+
 void OrientedGraph::removeWasteVertices() {
+  removeEmptyLogicVertices();
   updateLevels();
   auto removingForType = [this](VertexTypes type) {
     uint8_t counterForResize = 0;
@@ -1069,6 +1103,7 @@ bool OrientedGraph::printSequentialModules(GraphPtr i_graph,
 
 bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename,
                               bool i_sequentialByInstance) {
+  removeEmptyLogicVertices();
   std::string path = i_path + (d_isSubGraph ? "/submodules" : "");
   auto correctPath = path + "/" + i_filename;
   std::ofstream i_fileStream(correctPath);
@@ -1126,6 +1161,7 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename,
 bool OrientedGraph::toVerilogBusEnabled(std::string i_path,
                                         std::string i_filename,
                                         bool i_sequentialByInstance) {
+  removeEmptyLogicVertices();
   std::string path = i_path + (d_isSubGraph ? "/submodules" : "");
   auto correctPath = path + "/" + i_filename;
   std::ofstream i_fileStream(correctPath);
@@ -1205,6 +1241,7 @@ bool OrientedGraph::toVerilogBusEnabled(std::string i_path,
 
 bool OrientedGraph::toVerilogBusEnabledAsOneBit(std::string i_path,
                                                 std::string i_filename) {
+  removeEmptyLogicVertices();
   std::string path = i_path + (d_isSubGraph ? "/submodules" : "");
   auto correctPath = path + "/" + i_filename;
   std::ofstream i_fileStream(correctPath);
@@ -1288,6 +1325,7 @@ bool OrientedGraph::toVerilogBusEnabledAsOneBit(std::string i_path,
   return verilogFinalOperations(shared_from_this(), i_fileStream);
 }
 DotReturn OrientedGraph::toDOT() {
+  removeEmptyLogicVertices();
   DotReturn dot = {{DotTypes::DotGraph, {{"name", d_name}}}};
 
   CG_LOG_INFO << "      DotGraph(" << d_name << ") added to DOT";

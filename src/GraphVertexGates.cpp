@@ -185,10 +185,9 @@ std::string GraphVertexGates::getVerilogString() const {
 }
 
 std::string GraphVertexGates::toVerilog() const {
-  if (!(d_inConnections.size())) {
-    CG_LOG_ERROR
-        << "GraphVertexGates: Attempted to generate Verilog for empty vertex '"
-        << d_name << "'";
+  if (d_inConnections.empty()) {
+    CG_LOG_WARNING << "GraphVertexGates: empty vertex '" << d_name
+                   << "' skipped in Verilog";
     return "";
   }
   std::string end;
@@ -218,10 +217,9 @@ std::string GraphVertexGates::toVerilog() const {
 }
 
 DotReturn GraphVertexGates::toDOT() {
-  if (!d_inConnections.size()) {
-    CG_LOG_ERROR
-        << "GraphVertexGates: Attempted to generate DOT for empty vertex '"
-        << d_name << "'";
+  if (d_inConnections.empty()) {
+    CG_LOG_WARNING << "GraphVertexGates: empty vertex '" << d_name
+                   << "' skipped in DOT";
     return {};
   }
 
@@ -248,12 +246,9 @@ bool GraphVertexGates::isSubgraphBuffer() const {
 std::string GraphVertexGates::toVerilogCommon(
     std::function<std::string()> printBinaryOperators,
     std::function<std::string()> printUnaryOperators) const {
-  if (!(d_inConnections.size())) {
-#ifdef LOGFLAG
-    LOG(ERROR) << "TODO: delete empty vertices: " << d_name << std::endl;
-#else
-    std::cerr << "TODO: delete empty vertices: " << d_name << std::endl;
-#endif
+  if (d_inConnections.empty()) {
+    CG_LOG_WARNING << "GraphVertexGates: empty vertex '" << d_name
+                   << "' skipped in Verilog (call removeEmptyLogicVertices)";
     return "";
   }
   if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
