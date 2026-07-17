@@ -29,6 +29,24 @@ Within each group, sort includes alphabetically.
 - All compiler warnings must be fixed before merging into the main branch.
 - Style-only edits must not change behavior.
 
+## Section separators in source code
+
+To visually separate logical blocks, use a single-line comment:
+
+```cpp
+// --- Section name ---
+```
+
+In Python:
+
+```python
+# --- Section name ---
+```
+
+Do not use long `=` banners (for example `// =====...=====` or multi-line `=`
+frames). Do not use `#pragma region` for this purpose in cross-platform code:
+those pragmas are IDE-specific and provide no benefit under GCC/Clang builds.
+
 ## Documentation rules (Doxygen)
 
 The rules below expand rule 9 from the core list.
