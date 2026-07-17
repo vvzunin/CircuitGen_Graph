@@ -117,15 +117,15 @@ TEST(BusTest, oneBitVerilogForSequentials) {
   graph->addEdge(secondFF, gateBus);
   EXPECT_EQ(GraphVertexBus::getBusPointer(firstFF)->toOneBitVerilog(),
             "ff firstFF_0_ins (.data(inputBus_0), .clk(inputVertex), "
-            ".q(firstFF_0));\n"
+            ".q(firstFF_0))\n"
             "\tff firstFF_1_ins (.data(inputBus_1), .clk(inputVertex), "
-            ".q(firstFF_1));\n"
+            ".q(firstFF_1))\n"
             "\tff firstFF_2_ins (.data(inputBus_2), .clk(inputVertex), "
-            ".q(firstFF_2));\n"
+            ".q(firstFF_2))\n"
             "\tff firstFF_3_ins (.data(inputBus_3), .clk(inputVertex), "
-            ".q(firstFF_3));\n"
+            ".q(firstFF_3))\n"
             "\tff firstFF_4_ins (.data(inputBus_4), .clk(inputVertex), "
-            ".q(firstFF_4));\n\n");
+            ".q(firstFF_4))\n\n");
   EXPECT_NO_THROW(graph->toVerilogBusEnabledAsOneBit("./", "sequentialTest.v"));
   testFile("./sequentialTest.v", TestData::SEQ_8_TEST);
 }

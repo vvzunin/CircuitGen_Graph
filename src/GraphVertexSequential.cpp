@@ -8,6 +8,7 @@
 #include <CircuitGenGraph/Logging.hpp>
 #include <CircuitGenGraph/SequentialVerilogStorage.hpp>
 
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 #include <string>
@@ -623,17 +624,41 @@ void GraphVertexBusSequential::removeValue() {
 }
 
 std::string GraphVertexBusSequential::toOneBitVerilog() const {
-  std::string dataName, dataInputName, outputName, qName;
+  const SequentialTypes type = getSeqType();
+  const auto ports = GraphUtils::parseSequentialToInputs(type);
+  const std::string typeName = GraphUtils::parseSequentialToString(type);
+  if (ports.empty() || d_inConnections.size() < ports.size())
+    return "";
+
+  size_t bits = getWidth();
+  if (d_inConnections[0]->isBus()) {
+    const GraphVertexBus *dataBus =
+        GraphVertexBus::getBusPointer(d_inConnections[0]);
+    if (dataBus)
+      bits = std::min(bits, dataBus->getWidth());
+  }
+
+  auto netFor = [&](size_t portIdx, size_t bit) -> std::string {
+    VertexPtr v = d_inConnections.at(portIdx);
+    if (v->isBus()) {
+      const GraphVertexBus *bus = GraphVertexBus::getBusPointer(v);
+      if (bus && bit < bus->getWidth())
+        return fmt::format("{}_{}", v->getRawName(), bit);
+      return "1'bx";
+    }
+    return std::string(v->getRawName());
+  };
+
   std::vector<std::string> instances;
-  for (size_t i = 0; i < getWidth(); ++i) {
-    dataName = GraphUtils::sequentialToInputList[getSeqType()].second[0];
-    dataInputName = fmt::format("{}_{}", d_inConnections[0]->getRawName(), i);
-    outputName = fmt::format("{}_{}", getRawName(), i);
-    qName = "q";
-    instances.push_back(getVerilogInstance(
-        static_cast<const GraphVertexSequential *>(this), dataInputName,
-        outputName, dataName, qName,
-        fmt::format("{}_{}_ins", getRawName(), i)));
+  instances.reserve(bits);
+  for (size_t i = 0; i < bits; ++i) {
+    std::vector<std::string> binds;
+    binds.reserve(ports.size() + 1);
+    for (size_t p = 0; p < ports.size(); ++p)
+      binds.push_back(fmt::format(".{}({})", ports[p], netFor(p, i)));
+    binds.push_back(fmt::format(".q({}_{})", getRawName(), i));
+    instances.push_back(fmt::format("{} {}_{}_ins ({})", typeName, getRawName(),
+                                    i, fmt::join(binds, ", ")));
   }
   return fmt::format("{}\n\n", fmt::join(instances, "\n\t"));
 }
