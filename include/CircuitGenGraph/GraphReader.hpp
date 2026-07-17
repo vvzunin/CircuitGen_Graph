@@ -282,4 +282,18 @@ public:
 private:
   Context &d_context;
 };
+
+/**
+ * \~english
+ * @brief Lorina diagnostic consumer that forwards messages to `CG_LOG_*`.
+ *
+ * \~russian
+ * @brief Consumer диагностики lorina, перенаправляющий сообщения в `CG_LOG_*`.
+ */
+class LogDiagnosticConsumer : public lorina::diagnostic_consumer {
+public:
+  void handle_diagnostic(lorina::diagnostic_level level,
+                         const std::string &message) const override;
+};
+
 } // namespace CG_Graph

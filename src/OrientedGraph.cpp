@@ -682,7 +682,10 @@ void OrientedGraph::readVerilog(std::string i_path, Context &context) {
     in >> word;
   }
   in.seekg(-6, std::ios::cur);
-  lorina::return_code returnCode = lorina::read_verilog(in, *reader);
+  // Redirect lorina diagnostics into CG_LOG_*.
+  LogDiagnosticConsumer diagnosticConsumer;
+  lorina::diagnostic_engine diag(&diagnosticConsumer);
+  lorina::return_code returnCode = lorina::read_verilog(in, *reader, &diag);
   if (returnCode == lorina::return_code::parse_error)
     throw std::runtime_error("File is incorrect\n");
   in.close();
