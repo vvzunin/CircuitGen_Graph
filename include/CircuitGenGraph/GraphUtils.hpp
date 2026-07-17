@@ -106,9 +106,9 @@ enum VertexTypes : uint8_t {
    * \~english Bus variants of base types (`type | d_busInType`). Prefer
    * `GraphVertexBus*` classes and `OrientedGraph::add*Bus` over a dedicated
    * bus-only enum value.
-   * \~russian Шинные варианты базовых типов (`type | d_busInType`). Предпочтительны
-   * классы `GraphVertexBus*` и `OrientedGraph::add*Bus`, а не отдельное
-   * значение enum только для шины.
+   * \~russian Шинные варианты базовых типов (`type | d_busInType`).
+   * Предпочтительны классы `GraphVertexBus*` и `OrientedGraph::add*Bus`, а не
+   * отдельное значение enum только для шины.
    */
   inputBus = input | d_busInType,
   constantBus = constant | d_busInType,

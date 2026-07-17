@@ -41,7 +41,7 @@ Supports `parameter` and `localparam` parsing (`GraphVertexSubGraph`).
 
 ## Export and GraphML
 
-- **Classic** skips `subGraph` vertices as standalone nodes; use it for flat graphs or top-level views that do not need flattened hierarchy.
+- **Classic GraphML** exports each subgraph instance as a `subGraph` node with a nested `<graph>` and edges binding parent and subgraph ports. Use `unrollGraph()` for a flat export without hierarchy.
 - **PseudoABCD** and **OpenABCD** call `unrollGraph()` before serialization when the graph contains subgraphs.
 
 See [GraphML.md](GraphML.md).
