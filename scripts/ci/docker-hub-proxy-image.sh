@@ -5,9 +5,9 @@ set -euo pipefail
 # If DOCKER_HUB_PROXY_PROJECT or REGISTRY_URL is not set, returns input as-is.
 #
 # Example:
-#   REGISTRY_URL=vvzunin.me:5201 DOCKER_HUB_PROXY_PROJECT=proxy_cache_docker_hub \
+#   REGISTRY_URL=harbor.vvzunin.me DOCKER_HUB_PROXY_PROJECT=proxy_cache_docker_hub \
 #     docker-hub-proxy-image.sh ubuntu:24.04
-#   -> vvzunin.me:5201/proxy_cache_docker_hub/library/ubuntu:24.04
+#   -> harbor.vvzunin.me/proxy_cache_docker_hub/library/ubuntu:24.04
 
 ref="${1:?image reference required}"
 

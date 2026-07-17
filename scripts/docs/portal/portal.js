@@ -197,7 +197,7 @@
     const d = Object.assign({}, registry.dockerDefaults || {}, reg.docker || {});
     if (!d.imageRepo) return [];
 
-    const host = d.registryHost || "vvzunin.me:5201";
+    const host = d.registryHost || "harbor.vvzunin.me";
     const group = d.group || "circuitgen";
     const osList = d.osList || DEFAULT_DOCKER_OS_LIST;
     const devTag = d.devTag || "main";

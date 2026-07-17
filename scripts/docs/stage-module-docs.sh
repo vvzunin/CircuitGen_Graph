@@ -32,7 +32,7 @@ stage_module_docs() {
   local built_at registry_host group_name image_repo dev_tag release_tag harbor_base os_list_json
   local docs_kind docs_label
   built_at="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-  registry_host="${REGISTRY_URL:-vvzunin.me:5201}"
+  registry_host="${REGISTRY_URL:-harbor.vvzunin.me}"
   group_name="${GROUP_NAME:-circuitgen}"
   image_repo="${REPO_NAME:-${DOCS_MODULE_SLUG}}"
   dev_tag="${DOCKER_DEV_TAG:-main}"

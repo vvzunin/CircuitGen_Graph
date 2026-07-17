@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "dockerDefaults": {
-    "registryHost": "vvzunin.me:5201",
+    "registryHost": "harbor.vvzunin.me",
     "group": "circuitgen",
     "osList": ["ubuntu-22.04", "ubuntu-24.04", "fedora-43"],
     "devTag": "main",

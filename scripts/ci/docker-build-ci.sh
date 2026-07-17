@@ -9,7 +9,7 @@ source "${ROOT_DIR}/scripts/docker/docker-paths.sh"
 DOCKERFILE_CI_NAME="${DOCKERFILE_CI_NAME:-dockerfile/Dockerfile.ci}"
 DOCKER_CI_SYSTEM="${DOCKER_CI_SYSTEM:-ubuntu:24.04}"
 DOCKER_CI_TAG="${DOCKER_CI_TAG:-latest}"
-REGISTRY_URL="${REGISTRY_URL:-vvzunin.me:5201}"
+REGISTRY_URL="${REGISTRY_URL:-harbor.vvzunin.me}"
 GROUP_NAME="${GROUP_NAME:-circuitgen}"
 REPO_NAME="${REPO_NAME:-generator}"
 docker_paths_load_registry
