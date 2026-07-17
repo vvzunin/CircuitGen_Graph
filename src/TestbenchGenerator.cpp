@@ -1015,8 +1015,7 @@ bool TestbenchGenerator::generate(std::shared_ptr<OrientedGraph> graph,
   tbFile << "    // --- Graph Model ---\n";
   tbFile << "    " << graph->getName() << " graph_inst (\n";
   for (size_t i = 0; i < graphInputs.size(); ++i) {
-    const bool last =
-        (i + 1 == graphInputs.size()) && graphOutputs.empty();
+    const bool last = (i + 1 == graphInputs.size()) && graphOutputs.empty();
     tbFile << "        ." << graphInputs[i]->getName() << "(test_in[" << i
            << "])" << (last ? "\n" : ",\n");
   }

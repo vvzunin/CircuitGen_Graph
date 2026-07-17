@@ -991,29 +991,32 @@ void OrientedGraph::verilogInoutsWriting(
     GraphPtr i_graph, std::ofstream &i_fileStream,
     std::function<void(VertexPtr i_usedType)> i_printPin) {
   std::string verilogTab = "\t";
-  i_fileStream << "module " << i_graph->d_name << "(\n" << verilogTab;
-
   const auto &inputs = i_graph->d_vertices[VertexTypes::input];
   const auto &outputs = i_graph->d_vertices[VertexTypes::output];
 
-  for (size_t i = 0; i < inputs.size(); ++i) {
-    i_printPin(inputs[i]);
-    if (i + 1 < inputs.size())
+  i_fileStream << "module " << i_graph->d_name << "(";
+  if (inputs.empty() && outputs.empty()) {
+    i_fileStream << ");\n";
+  } else {
+    i_fileStream << "\n" << verilogTab;
+    for (size_t i = 0; i < inputs.size(); ++i) {
+      i_printPin(inputs[i]);
+      if (i + 1 < inputs.size())
+        i_fileStream << ", ";
+    }
+    if (!inputs.empty() && !outputs.empty())
       i_fileStream << ", ";
-  }
-  if (!inputs.empty() && !outputs.empty())
-    i_fileStream << ", ";
-  if (!outputs.empty() || !inputs.empty())
     i_fileStream << '\n' << verilogTab;
 
-  for (size_t i = 0; i < outputs.size(); ++i) {
-    i_printPin(outputs[i]);
-    if (i + 1 < outputs.size())
-      i_fileStream << ", ";
-    else
-      i_fileStream << '\n';
+    for (size_t i = 0; i < outputs.size(); ++i) {
+      i_printPin(outputs[i]);
+      if (i + 1 < outputs.size())
+        i_fileStream << ", ";
+      else
+        i_fileStream << '\n';
+    }
+    i_fileStream << ");\n";
   }
-  i_fileStream << ");\n";
 
   for (const auto &parameter: i_graph->d_verilogParameters) {
     i_fileStream << verilogTab << "parameter " << parameter.first << " = "

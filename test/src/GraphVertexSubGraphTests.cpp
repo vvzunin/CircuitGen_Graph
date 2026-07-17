@@ -125,7 +125,7 @@ TEST(TestToVerilog, TestReturnPairCreateCorrectFile) {
   loadFile = loadFile.substr(loadFile.find("\n") + 2);
   // LOG(INFO) << loadFile;
   EXPECT_EQ(loadFile,
-            "module testGraph(\n\t\n\t);\n\t// Writing consts\n\twire "
+            "module testGraph();\n\t// Writing consts\n\twire "
             "testConst;\n\n\tassign testConst = 1'bx;\n\nendmodule\n");
   std::filesystem::remove(curPath + '/' + fileName);
 }
