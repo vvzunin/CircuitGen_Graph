@@ -6,9 +6,12 @@
 #include <CircuitGenGraph/Logging.hpp>
 #include <CircuitGenGraph/OrientedGraph.hpp>
 
+#include <algorithm>
 #include <cassert>
+#include <cctype>
 #include <cstddef>
 #include <regex>
+#include <stdexcept>
 #include <string>
 #include <utility>
 
@@ -96,30 +99,72 @@ void GraphReader::on_wires(const std::vector<std::string> &wires,
 }
 
 std::pair<size_t, std::string> parseConstValue(const std::string &input) {
-  // It is a mock, will be reworked
+  // Returns (bitwidth, canonical 0/1/x digit string for simulation).
+  // Multi-bit literals are collapsed to a single scalar char for the current
+  // GraphVertexConstant model (one char); prefer LSB of the numeric value.
+  size_t length = 1;
+  std::string digits;
 
-  size_t length;
-  std::string value;
-
-  if (input.find("\'") < input.length()) {
-    length = std::stoi(input.substr(0, input.find("\'")));
-    value = input.substr(input.find("\'") + 2,
-                         input.length() - input.find("\'") - 2);
+  const auto q = input.find('\'');
+  if (q != std::string::npos && q + 1 < input.size()) {
+    try {
+      length = static_cast<size_t>(std::stoul(input.substr(0, q)));
+    } catch (...) {
+      length = 1;
+    }
+    if (length == 0)
+      length = 1;
+    const char baseCh = input[q + 1];
+    const std::string body = input.substr(q + 2);
+    unsigned long long num = 0;
+    int base = 2;
+    switch (baseCh) {
+      case 'h':
+      case 'H':
+        base = 16;
+        break;
+      case 'd':
+      case 'D':
+        base = 10;
+        break;
+      case 'o':
+      case 'O':
+        base = 8;
+        break;
+      case 'b':
+      case 'B':
+      default:
+        base = 2;
+        break;
+    }
+    try {
+      if (!body.empty())
+        num = std::stoull(body, nullptr, base);
+    } catch (...) {
+      num = 0;
+    }
+    digits.assign(1, (num & 1ull) ? '1' : '0');
+  } else if (!input.empty() &&
+             std::all_of(input.begin(), input.end(), ::isdigit)) {
+    length = input.size();
+    const char last = input.back();
+    digits.assign(1, (last == '0' || last == '1') ? last : ((last - '0') & 1) ? '1' : '0');
+  } else if (!input.empty()) {
+    length = 1;
+    const char c = input.front();
+    digits.assign(1, (c == '0' || c == '1') ? c : 'x');
+  } else {
+    digits.assign(1, 'x');
   }
 
-  else {
-    length = input.length();
-    value = input;
-  }
-
-  return std::make_pair(length, value);
+  return std::make_pair(length, digits);
 }
 
 void GraphReader::on_parameter(const std::string &name,
                                const std::string &value) const {
-  VertexPtr vertex;
   std::pair<size_t, std::string> data = parseConstValue(value);
-  vertex = d_context.d_currentGraph->addConst(data.second[0], name);
+  const char bit = data.second.empty() ? 'x' : data.second.front();
+  VertexPtr vertex = d_context.d_currentGraph->addConst(bit, name);
   d_context.d_currentGraphNamesList[name] = vertex;
 }
 
@@ -131,8 +176,8 @@ void GraphReader::on_assign(const std::string &lhs,
       std::regex_match(rhs.first, isSimpleConstant)) {
     on_parameter(lhs, rhs.first);
   } else {
-    if (d_context.d_currentGraphNamesList[lhs]->getType() != output) {
-      VertexPtr leftVertex = d_context.d_currentGraphNamesList[lhs];
+    VertexPtr leftVertex = get_vertex_by_name(lhs);
+    if (leftVertex->getType() != output) {
       if (!rhs.second) {
         static_cast<GraphVertexGates *>(leftVertex)->setGateIfDefault(GateBuf);
         d_context.d_currentGraph->addEdge(getRightHS(rhs.first), leftVertex);
@@ -148,7 +193,7 @@ void GraphReader::on_assign(const std::string &lhs,
       }
     } else {
       d_context.d_currentGraph->addEdge(getRightHS(rhs.first, rhs.second),
-                                        get_vertex_by_name(lhs));
+                                        leftVertex);
     }
   }
 };
@@ -161,6 +206,9 @@ VertexPtr GraphReader::getRightHS(const std::string &i_name,
 VertexPtr GraphReader::getLeftHS(const std::string &i_name,
                                  bool i_isInverted) const {
   auto temp = d_context.d_currentGraphNamesList.find(i_name);
+  if (temp == d_context.d_currentGraphNamesList.end() || !temp->second) {
+    throw std::runtime_error("GraphReader: unknown net on LHS: " + i_name);
+  }
   // create assert for calling for each vertex ONCE incorrect verilog otherwise
   if (temp->second->getType() == output) {
     if (d_context.d_currentGraphNamesList.find(i_name + SUFFIX_OUTPUT_GATE) ==
@@ -178,7 +226,11 @@ VertexPtr GraphReader::getLeftHS(const std::string &i_name,
 
 VertexPtr GraphReader::get_vertex_by_name(const std::string &i_name,
                                           bool i_isInverted) const {
-  VertexPtr res = d_context.d_currentGraphNamesList[i_name];
+  auto it = d_context.d_currentGraphNamesList.find(i_name);
+  if (it == d_context.d_currentGraphNamesList.end() || !it->second) {
+    throw std::runtime_error("GraphReader: unknown net: " + i_name);
+  }
+  VertexPtr res = it->second;
   if (i_isInverted) {
     return get_or_create_inversion(i_name, res);
   }
