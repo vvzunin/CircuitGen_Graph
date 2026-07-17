@@ -97,6 +97,7 @@ TEST(BusTest, oneBitVerilogForGates) {
             "\tassign andGate_2 = anotherInputBus_2 & 1'bx & const_0_2;\n\t");
 }
 TEST(BusTest, oneBitVerilogForSequentials) {
+  OrientedGraph::resetCounter();
   GraphPtr graph = std::make_shared<OrientedGraph>();
   VertexPtr inputBus = graph->addInputBus("inputBus", 5);
   VertexPtr anotherInputBus = graph->addInputBus("anotherInputBus", 3);

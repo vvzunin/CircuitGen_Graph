@@ -947,8 +947,8 @@ public:
    * @param i_type type of sequential vertex
    * @param i_clk EN for latch and CLK for ff
    * @param i_data data value
-   * @param i_wire1 RST or CLR or SET
-   * @param i_wire2 SET or EN
+   * @param i_wire1 For `*re`/`*ce` types: EN; otherwise RST/CLR/SET
+   * @param i_wire2 For `*re`/`*ce` types: RST/CLR; otherwise SET or EN
    * @param i_baseGraph Shared pointer to the base graph.
    * @param i_name name of the vertex
    *
@@ -957,8 +957,8 @@ public:
    * @param i_type тип последовательностной вершины
    * @param i_clk EN для защелки и CLK для триггера
    * @param i_data значение данных
-   * @param i_wire1 RST или CLR или SET
-   * @param i_wire2 SET или EN
+   * @param i_wire1 Для `*re`/`*ce`: EN; иначе RST/CLR/SET
+   * @param i_wire2 Для `*re`/`*ce`: RST/CLR; иначе SET или EN
    * @param i_baseGraph Shared-указатель на базовый граф.
    * @param i_name имя вершины
    */
@@ -1127,15 +1127,36 @@ public:
    * @brief Updates sequential state for combinational-style simulation.
    * Latches are level-sensitive on EN; flip-flops capture on a clk edge
    * (posedge by default, negedge if `NEGEDGE` is set), using the previous
-   * clock sample stored in the cell. Async RST/CLR are active-low; SET is
-   * active-high.
+   * clock sample stored in the cell. `RST` is active-low, `CLR`/`SET` are
+   * active-high. With `ASYNC`, only reset/clear apply immediately; `SET`
+   * still waits for the clock edge (matching exported Verilog sensitivity).
+   * `EN` is sampled only when capturing (`if (en)`); `EN=X/Z` holds Q.
    * \~russian
    * @brief Обновляет состояние sequential при симуляции.
    * Защёлки чувствительны к уровню EN; триггеры захватывают по фронту clk
-   * (posedge по умолчанию, negedge при `NEGEDGE`), используя предыдущий
-   * отсчёт такта. Async RST/CLR — активный 0; SET — активный 1.
+   * (posedge по умолчанию, negedge при `NEGEDGE`). `RST` — активный 0,
+   * `CLR`/`SET` — активный 1. При `ASYNC` сразу только сброс/очистка;
+   * `SET` — по фронту clk. `EN=X/Z` удерживает Q.
    */
   char updateValue() override;
+
+  /**
+   * \~english
+   * @brief Computes next FF state without committing (NBA-style).
+   * Used by `OrientedGraph::graphSimulation` so multi-FF chains sample
+   * pre-edge Q. Latches should use `updateValue()` instead.
+   * \~russian
+   * @brief Считает следующее состояние FF без записи (стиль NBA).
+   */
+  virtual void stageValue();
+
+  /**
+   * \~english
+   * @brief Commits state previously computed by `stageValue`.
+   * \~russian
+   * @brief Записывает состояние, посчитанное в `stageValue`.
+   */
+  virtual void commitStagedValue();
 
   /** @author Theossr */
   void removeValue() override;
@@ -1176,6 +1197,10 @@ protected:
   SequentialTypes d_seqType;
   /// Previous clock sample for edge detection in `updateValue` (FF only).
   char d_prevClk = ValueStates::NoSignal;
+  /// Staged next state for NBA-style FF updates in `graphSimulation`.
+  char d_stagedValue = ValueStates::UndefinedState;
+  char d_stagedPrevClk = ValueStates::NoSignal;
+  bool d_hasStaged = false;
 };
 
 /**
@@ -1430,8 +1455,8 @@ public:
    * @param i_type Sequential type.
    * @param i_clk EN for latch and CLK for FF.
    * @param i_data Data signal.
-   * @param i_wire1 RST or CLR or SET.
-   * @param i_wire2 SET or EN.
+   * @param i_wire1 For `*re`/`*ce` types: EN; otherwise RST/CLR/SET.
+   * @param i_wire2 For `*re`/`*ce` types: RST/CLR; otherwise SET or EN.
    * @param i_baseGraph Shared pointer to the base graph.
    *
    * \~russian
@@ -1439,8 +1464,8 @@ public:
    * @param i_type Тип sequential.
    * @param i_clk EN для latch и CLK для FF.
    * @param i_data Сигнал данных.
-   * @param i_wire1 RST или CLR или SET.
-   * @param i_wire2 SET или EN.
+   * @param i_wire1 Для `*re`/`*ce`: EN; иначе RST/CLR/SET.
+   * @param i_wire2 Для `*re`/`*ce`: RST/CLR; иначе SET или EN.
    * @param i_baseGraph Shared-указатель на базовый граф.
    */
   GraphVertexBusSequential(SequentialTypes i_type, VertexPtr i_clk,
@@ -1475,7 +1500,9 @@ public:
                            std::string_view i_name, size_t i_width);
 
   //  size_t calculateHash() override final;
-  //  std::string updateValueBus() override final;
+  char updateValue() override;
+  void commitStagedValue() override;
+  void removeValue() override;
   /**
    * \~english
    * @brief Generates Verilog for bus sequential vertex.

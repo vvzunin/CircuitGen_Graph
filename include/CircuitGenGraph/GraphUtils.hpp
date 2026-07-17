@@ -198,9 +198,10 @@ enum SequentialTypes : uint8_t {
    */
   RST = 1 << 1,
   /*!
-   * \~english Reset signal, writes 1'b0 to output if is equal to 1'b0
-   * \~russian Сигнал сброса (Reset), записывает 1'b0 на выход,
-   * если равен 1'b0
+   * \~english Clear signal, writes 1'b0 to output if is equal to 1'b1
+   * (active-high; contrast with `RST`, which is active-low)
+   * \~russian Сигнал очистки (Clear), записывает 1'b0 на выход,
+   * если равен 1'b1 (активный 1; в отличие от `RST` с активным 0)
    */
   CLR = 1 << 2,
   /*!

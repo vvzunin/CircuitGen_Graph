@@ -32,7 +32,7 @@ bool GraphVertexSequential::isNegedge() const {
 
 inline std::string convertSequentialFlag(SequentialTypes i_type) {
   static std::pair<SequentialTypes, std::string_view> types_seq[] = {
-      {EN, "EN"},   {RST, "RST"},     {RST, "CLR"},
+      {EN, "EN"},   {RST, "RST"},     {CLR, "CLR"},
       {SET, "SET"}, {ASYNC, "ASYNC"}, {NEGEDGE, "NEGEDGE"}};
   return std::string(GraphUtils::findPairByKey(types_seq, i_type)->second);
 }
@@ -179,78 +179,192 @@ VertexPtr GraphVertexSequential::getSet() const {
   return nullptr;
 }
 
-char GraphVertexSequential::updateValue() {
+void GraphVertexSequential::stageValue() {
+  // Sample other sequentials via getValue (NBA / same-cycle safety). Combo
+  // cones still recurse with updateValue.
   auto eval = [](VertexPtr vert) -> char {
     if (!vert)
       return ValueStates::NoSignal;
+    if (vert->getType() == VertexTypes::sequential)
+      return vert->getValue();
     return vert->updateValue();
   };
 
   const char data = eval(getData());
 
-  // RST/CLR are active-low; force Q=0 when asserted.
-  if (VertexPtr rst = getRst()) {
-    const char rstVal = eval(rst);
-    if (rstVal == '0')
-      return (d_value = ValueStates::FalseValue);
-    if (rstVal != '1')
-      return (d_value = ValueStates::NoSignal);
-  }
+  // RST: active-low. CLR: active-high (matches SequentialVerilogStorage).
+  // Returns 1 = force Q=0, -1 = X, 0 = inactive.
+  auto clearEffect = [this](char v) -> int {
+    if (d_seqType & CLR) {
+      if (v == '1')
+        return 1;
+      if (v != '0')
+        return -1;
+      return 0;
+    }
+    if (d_seqType & RST) {
+      if (v == '0')
+        return 1;
+      if (v != '1')
+        return -1;
+      return 0;
+    }
+    return 0;
+  };
+  auto setEffect = [](char v) -> int {
+    if (v == '1')
+      return 1;
+    if (v != '0')
+      return -1;
+    return 0;
+  };
 
-  // SET is active-high; force Q=1 when asserted.
-  if (VertexPtr set = getSet()) {
-    const char setVal = eval(set);
-    if (setVal == '1')
-      return (d_value = ValueStates::TrueValue);
-    if (setVal != '0')
-      return (d_value = ValueStates::NoSignal);
-  }
+  char nextVal = d_value;
+  char nextPrevClk = d_prevClk;
 
   const auto captureData = [&]() {
-    if (data == '0' || data == '1')
-      d_value = data;
-    else
-      d_value = ValueStates::NoSignal;
+    nextVal =
+        (data == '0' || data == '1') ? data : ValueStates::NoSignal;
+  };
+
+  // Apply rst/clr then set into nextVal. Returns true if Q was forced.
+  const auto applyResetSet = [&]() -> bool {
+    if (VertexPtr rst = getRst()) {
+      const int c = clearEffect(eval(rst));
+      if (c == 1) {
+        nextVal = ValueStates::FalseValue;
+        return true;
+      }
+      if (c < 0) {
+        nextVal = ValueStates::NoSignal;
+        return true;
+      }
+    }
+    if (VertexPtr set = getSet()) {
+      const int s = setEffect(eval(set));
+      if (s == 1) {
+        nextVal = ValueStates::TrueValue;
+        return true;
+      }
+      if (s < 0) {
+        nextVal = ValueStates::NoSignal;
+        return true;
+      }
+    }
+    return false;
   };
 
   if (isFF()) {
     const char clk = eval(getClk());
+    // Verilog `if (en)`: only '1' enables capture; X/Z/0 hold Q.
     bool enabled = true;
-    if (VertexPtr en = getEn()) {
-      const char enVal = eval(en);
-      if (enVal == '0')
-        enabled = false;
-      else if (enVal != '1') {
-        d_prevClk = clk;
-        return (d_value = ValueStates::NoSignal);
+    if (VertexPtr en = getEn())
+      enabled = (eval(en) == '1');
+
+    // Async RST/CLR apply immediately; SET follows the clock edge.
+    if (isAsync()) {
+      if (VertexPtr rst = getRst()) {
+        const int c = clearEffect(eval(rst));
+        if (c == 1) {
+          nextVal = ValueStates::FalseValue;
+          nextPrevClk = clk;
+          d_stagedValue = nextVal;
+          d_stagedPrevClk = nextPrevClk;
+          d_hasStaged = true;
+          return;
+        }
+        if (c < 0) {
+          nextVal = ValueStates::NoSignal;
+          nextPrevClk = clk;
+          d_stagedValue = nextVal;
+          d_stagedPrevClk = nextPrevClk;
+          d_hasStaged = true;
+          return;
+        }
       }
     }
 
     const bool rising = (d_prevClk == '0' && clk == '1');
     const bool falling = (d_prevClk == '1' && clk == '0');
     const bool tick = isNegedge() ? falling : rising;
-    d_prevClk = clk;
+    nextPrevClk = clk;
 
-    if (tick && enabled)
-      captureData();
-    else if (d_value == ValueStates::UndefinedState)
-      d_value = ValueStates::NoSignal;
-    return d_value;
+    if (tick) {
+      if (!isAsync() && applyResetSet()) {
+        d_stagedValue = nextVal;
+        d_stagedPrevClk = nextPrevClk;
+        d_hasStaged = true;
+        return;
+      }
+      if (isAsync()) {
+        if (VertexPtr set = getSet()) {
+          const int s = setEffect(eval(set));
+          if (s == 1) {
+            nextVal = ValueStates::TrueValue;
+            d_stagedValue = nextVal;
+            d_stagedPrevClk = nextPrevClk;
+            d_hasStaged = true;
+            return;
+          }
+          if (s < 0) {
+            nextVal = ValueStates::NoSignal;
+            d_stagedValue = nextVal;
+            d_stagedPrevClk = nextPrevClk;
+            d_hasStaged = true;
+            return;
+          }
+        }
+      }
+      if (enabled)
+        captureData();
+    } else if (nextVal == ValueStates::UndefinedState) {
+      nextVal = ValueStates::NoSignal;
+    }
+
+    d_stagedValue = nextVal;
+    d_stagedPrevClk = nextPrevClk;
+    d_hasStaged = true;
+    return;
   }
 
-  // Latch: EN is level-sensitive (constructor stores it as the "clk" wire).
+  // Latch: all controls are level-sensitive (always @*).
+  if (applyResetSet()) {
+    d_stagedValue = nextVal;
+    d_stagedPrevClk = nextPrevClk;
+    d_hasStaged = true;
+    return;
+  }
   const char enVal = eval(getEn());
   if (enVal == '1')
     captureData();
-  else if (enVal != '0')
-    d_value = ValueStates::NoSignal;
-  else if (d_value == ValueStates::UndefinedState)
-    d_value = ValueStates::NoSignal;
+  else if (nextVal == ValueStates::UndefinedState)
+    nextVal = ValueStates::NoSignal;
+  // EN=X/Z: hold (Verilog `if (en)` does not take the true branch).
+
+  d_stagedValue = nextVal;
+  d_stagedPrevClk = nextPrevClk;
+  d_hasStaged = true;
+}
+
+void GraphVertexSequential::commitStagedValue() {
+  if (!d_hasStaged)
+    return;
+  d_value = d_stagedValue;
+  d_prevClk = d_stagedPrevClk;
+  d_hasStaged = false;
+}
+
+char GraphVertexSequential::updateValue() {
+  stageValue();
+  commitStagedValue();
   return d_value;
 }
 
 void GraphVertexSequential::removeValue() {
   d_prevClk = ValueStates::NoSignal;
+  d_hasStaged = false;
+  d_stagedValue = ValueStates::UndefinedState;
+  d_stagedPrevClk = ValueStates::NoSignal;
   GraphVertexBase::removeValue();
 }
 
@@ -451,8 +565,8 @@ GraphVertexBusSequential::GraphVertexBusSequential(
 /// @param i_type
 /// @param i_clk EN for latch and CLK for ff
 /// @param i_data
-/// @param i_wire1 RST or CLR or SET
-/// @param i_wire2 SET or EN
+/// @param i_wire1 EN for *re/*ce, else RST/CLR/SET
+/// @param i_wire2 RST/CLR for *re/*ce, else SET or EN
 /// @param i_baseGraph
 GraphVertexBusSequential::GraphVertexBusSequential(
     SequentialTypes i_type, VertexPtr i_clk, VertexPtr i_data,
@@ -481,8 +595,33 @@ GraphVertexBusSequential::GraphVertexBusSequential(
 }
 
 std::string GraphVertexBusSequential::toVerilog() const {
-  return "";
+  // Same always-block templates as scalar; bus nets use vector widths.
+  // `1'b0`/`1'b1` on a multi-bit LHS zero-/sign-extends in Verilog.
+  return GraphVertexSequential::toVerilog();
 }
+
+void GraphVertexBusSequential::commitStagedValue() {
+  GraphVertexSequential::commitStagedValue();
+  // Keep bus string in sync with the scalar Q (broadcast). Distinct per-bit
+  // stimulus needs a multi-bit graphSimulation API; until then all bits match Q.
+  const char v = getValue();
+  if (v == ValueStates::UndefinedState)
+    updateValueBus(std::string(getWidth(), ValueStates::NoSignal));
+  else
+    updateValueBus(std::string(getWidth(), v));
+}
+
+char GraphVertexBusSequential::updateValue() {
+  stageValue();
+  commitStagedValue();
+  return getValue();
+}
+
+void GraphVertexBusSequential::removeValue() {
+  GraphVertexSequential::removeValue();
+  updateValueBus(std::string(getWidth(), ValueStates::NoSignal));
+}
+
 std::string GraphVertexBusSequential::toOneBitVerilog() const {
   std::string dataName, dataInputName, outputName, qName;
   std::vector<std::string> instances;

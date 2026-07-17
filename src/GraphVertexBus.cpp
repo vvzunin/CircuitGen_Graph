@@ -83,6 +83,10 @@ void GraphVertexBus::updateValueBus(std::string i_value) {
     d_value = i_value;
 }
 
+const std::string &GraphVertexBus::getValueBus() const {
+  return d_value;
+}
+
 bool GraphVertexBus::hasSmallerWidth(const VertexPtr i_left,
                                      const VertexPtr i_right) {
   if (!i_left->isBus())

@@ -252,7 +252,11 @@ TEST(SequentialTests, TestTriggerHash) {
   auto *data1 = graph1->addInput("data");
   auto *rst_n1 = graph1->addInput("rst_n");
   auto *en1 = graph1->addInput("en");
-  auto *seq1 = graph1->addSequential(affre, clk1, data1, rst_n1, en1, "q");
+  // affre wire order: EN then RST (see OrientedGraph::addSequential note)
+  auto *seq1 = static_cast<GraphVertexSequential *>(
+      graph1->addSequential(affre, clk1, data1, en1, rst_n1, "q"));
+  EXPECT_EQ(seq1->getEn(), en1);
+  EXPECT_EQ(seq1->getRst(), rst_n1);
 
   auto *out1 = graph1->addOutput("res");
   graph1->addEdge(seq1, out1);
@@ -283,8 +287,14 @@ TEST(SequentialTests, TestTriggerAsyncRstN_En) {
   graph->addEdge(en, en_or);
   graph->addEdge(en, en_and);
 
-  auto *seq1 = graph->addSequential(affre, clk, data, rst_n, en_or, "q2");
-  auto *seq2 = graph->addSequential(affre, clk, data, rst_n, en_and, "q2");
+  auto *seq1 = static_cast<GraphVertexSequential *>(
+      graph->addSequential(affre, clk, data, en_or, rst_n, "q2"));
+  auto *seq2 = static_cast<GraphVertexSequential *>(
+      graph->addSequential(affre, clk, data, en_and, rst_n, "q2"));
+  EXPECT_EQ(seq1->getEn(), en_or);
+  EXPECT_EQ(seq1->getRst(), rst_n);
+  EXPECT_EQ(seq2->getEn(), en_and);
+  EXPECT_EQ(seq2->getRst(), rst_n);
 
   graph->addEdge(seq2, en_or);
   graph->addEdge(seq1, en_and);
@@ -372,6 +382,75 @@ TEST(SequentialTests, LatchRstForcesZero) {
   EXPECT_EQ(graph->graphSimulation({'1', '1', '0'}), (std::vector<char>{'0'}));
 }
 
+TEST(SequentialTests, LatchClrActiveHigh) {
+  OrientedGraph::resetCounter();
+  auto graph = std::make_shared<OrientedGraph>("latchc_sim");
+  auto *en = graph->addInput("en");
+  auto *data = graph->addInput("data");
+  auto *clr = graph->addInput("clr");
+  auto *q = graph->addSequential(latchc, en, data, clr, "q");
+  graph->addEdge(q, graph->addOutput("y"));
+
+  EXPECT_EQ(graph->graphSimulation({'1', '1', '0'}), (std::vector<char>{'1'}));
+  // CLR is active-high (unlike RST)
+  EXPECT_EQ(graph->graphSimulation({'1', '1', '1'}), (std::vector<char>{'0'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '0', '0'}), (std::vector<char>{'0'}));
+}
+
+TEST(SequentialTests, SyncFfrClearsOnlyOnPosedge) {
+  OrientedGraph::resetCounter();
+  auto graph = std::make_shared<OrientedGraph>("ffr_sync");
+  auto *clk = graph->addInput("clk");
+  auto *data = graph->addInput("data");
+  auto *rst = graph->addInput("rst");
+  auto *q = graph->addSequential(ffr, clk, data, rst, "q");
+  graph->addEdge(q, graph->addOutput("y"));
+
+  EXPECT_EQ(graph->graphSimulation({'0', '1', '1'}), (std::vector<char>{'x'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '1', '1'}), (std::vector<char>{'1'}));
+  // Sync RST asserted while clk is stable → hold
+  EXPECT_EQ(graph->graphSimulation({'1', '1', '0'}), (std::vector<char>{'1'}));
+  // Negedge then posedge with RST=0 → clear
+  EXPECT_EQ(graph->graphSimulation({'0', '1', '0'}), (std::vector<char>{'1'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '1', '0'}), (std::vector<char>{'0'}));
+}
+
+TEST(SequentialTests, AsyncAffrClearsImmediately) {
+  OrientedGraph::resetCounter();
+  auto graph = std::make_shared<OrientedGraph>("affr_async");
+  auto *clk = graph->addInput("clk");
+  auto *data = graph->addInput("data");
+  auto *rst = graph->addInput("rst");
+  auto *q = graph->addSequential(affr, clk, data, rst, "q");
+  graph->addEdge(q, graph->addOutput("y"));
+
+  EXPECT_EQ(graph->graphSimulation({'0', '1', '1'}), (std::vector<char>{'x'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '1', '1'}), (std::vector<char>{'1'}));
+  // Async RST while clk stable → clear immediately
+  EXPECT_EQ(graph->graphSimulation({'1', '1', '0'}), (std::vector<char>{'0'}));
+}
+
+TEST(SequentialTests, AsyncRstStillSamplesClk) {
+  OrientedGraph::resetCounter();
+  auto graph = std::make_shared<OrientedGraph>("affr_prevclk");
+  auto *clk = graph->addInput("clk");
+  auto *data = graph->addInput("data");
+  auto *rst = graph->addInput("rst");
+  auto *q = graph->addSequential(affr, clk, data, rst, "q");
+  graph->addEdge(q, graph->addOutput("y"));
+
+  // Load Q=1
+  EXPECT_EQ(graph->graphSimulation({'0', '1', '1'}), (std::vector<char>{'x'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '1', '1'}), (std::vector<char>{'1'}));
+  // Async reset while clk rises: must still update d_prevClk so the next
+  // 0→1 after release is a real edge.
+  EXPECT_EQ(graph->graphSimulation({'0', '0', '0'}), (std::vector<char>{'0'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '0', '0'}), (std::vector<char>{'0'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '0', '1'}), (std::vector<char>{'0'}));
+  EXPECT_EQ(graph->graphSimulation({'0', '0', '1'}), (std::vector<char>{'0'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '0', '1'}), (std::vector<char>{'0'}));
+}
+
 TEST(SequentialTests, SimulationRemoveClearsPrevClk) {
   OrientedGraph::resetCounter();
   auto graph = std::make_shared<OrientedGraph>("ff_rm");
@@ -401,6 +480,68 @@ TEST(SequentialTests, FlipFlopThroughGateBufUpdates) {
   EXPECT_EQ(graph->graphSimulation({'1', '1'}), (std::vector<char>{'1'}));
   EXPECT_EQ(graph->graphSimulation({'0', '0'}), (std::vector<char>{'1'}));
   EXPECT_EQ(graph->graphSimulation({'1', '0'}), (std::vector<char>{'0'}));
+}
+
+TEST(SequentialTests, FlipFlopEnXHoldsAndAsyncRstWins) {
+  OrientedGraph::resetCounter();
+  auto graph = std::make_shared<OrientedGraph>("ffe_enx");
+  auto *clk = graph->addInput("clk");
+  auto *data = graph->addInput("data");
+  auto *en = graph->addInput("en");
+  auto *q = graph->addSequential(ffe, clk, data, en, "q");
+  graph->addEdge(q, graph->addOutput("y"));
+
+  EXPECT_EQ(graph->graphSimulation({'0', '1', '1'}), (std::vector<char>{'x'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '1', '1'}), (std::vector<char>{'1'}));
+  // Mid-cycle EN=X must not corrupt Q (Verilog `if (en)` is not taken).
+  EXPECT_EQ(graph->graphSimulation({'1', '0', 'x'}), (std::vector<char>{'1'}));
+
+  OrientedGraph::resetCounter();
+  auto g2 = std::make_shared<OrientedGraph>("affre_enx");
+  auto *clk2 = g2->addInput("clk");
+  auto *data2 = g2->addInput("data");
+  auto *en2 = g2->addInput("en");
+  auto *rst2 = g2->addInput("rst");
+  auto *q2 = g2->addSequential(affre, clk2, data2, en2, rst2, "q");
+  g2->addEdge(q2, g2->addOutput("y"));
+
+  EXPECT_EQ(g2->graphSimulation({'0', '1', '1', '1'}), (std::vector<char>{'x'}));
+  EXPECT_EQ(g2->graphSimulation({'1', '1', '1', '1'}), (std::vector<char>{'1'}));
+  // Async RST still clears when EN is X.
+  EXPECT_EQ(g2->graphSimulation({'1', '1', 'x', '0'}), (std::vector<char>{'0'}));
+}
+
+TEST(SequentialTests, FlipFlopChainSamplesPreEdgeQ) {
+  OrientedGraph::resetCounter();
+  auto graph = std::make_shared<OrientedGraph>("ff_chain");
+  auto *clk = graph->addInput("clk");
+  auto *d0 = graph->addInput("d0");
+  auto *q0 = graph->addSequential(ff, clk, d0, "q0");
+  auto *q1 = graph->addSequential(ff, clk, q0, "q1");
+  graph->addEdge(q1, graph->addOutput("y"));
+
+  EXPECT_EQ(graph->graphSimulation({'0', '1'}), (std::vector<char>{'x'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '1'}), (std::vector<char>{'x'}));
+  // q0=1, q1 still x after first posedge (sampled old q0=x)
+  EXPECT_EQ(graph->graphSimulation({'0', '0'}), (std::vector<char>{'x'}));
+  // Second posedge: q1 captures pre-edge q0=1 even though d0=0 updates q0.
+  EXPECT_EQ(graph->graphSimulation({'1', '0'}), (std::vector<char>{'1'}));
+}
+
+TEST(SequentialTests, BusSequentialToVerilogNonEmpty) {
+  OrientedGraph::resetCounter();
+  auto graph = std::make_shared<OrientedGraph>("bus_ff_v");
+  auto *clk = graph->addInput("clk");
+  auto *data = graph->addInputBus("data", 4);
+  auto *q = graph->addSequentialBus(ff, clk, data, "q", 4);
+  EXPECT_EQ(q->toVerilog(), "always @(posedge clk) begin\n"
+                            "\t\tq <= data;\n"
+                            "\tend\n");
+  graph->addEdge(q, graph->addOutputBus("y", 4));
+  // Scalar stimulus still drives broadcast Q into the bus string.
+  graph->graphSimulation({'0', '1'});
+  graph->graphSimulation({'1', '1'});
+  EXPECT_EQ(GraphVertexBus::getBusPointer(q)->getValueBus(), "1111");
 }
 
 #ifdef LOGFLAG

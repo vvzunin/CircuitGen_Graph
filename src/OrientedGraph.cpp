@@ -502,8 +502,23 @@ OrientedGraph::graphSimulation(std::vector<char> inputsValues) {
   // cells keep a defined Q between vectors, so a path like FF → GateBuf → out
   // would otherwise skip updateValue and freeze the flop. Tick sequentials
   // explicitly after inputs are applied (pulling any combinational D cones).
+  //
+  // NBA-style: latches settle first (level-sensitive), then all FFs stage from
+  // pre-edge Q, then all FFs commit — so FF→FF chains match `q <= d`.
   for (VertexPtr seqVert: d_vertices[VertexTypes::sequential]) {
-    seqVert->updateValue();
+    auto *seq = static_cast<GraphVertexSequential *>(seqVert);
+    if (!seq->isFF())
+      seq->updateValue();
+  }
+  for (VertexPtr seqVert: d_vertices[VertexTypes::sequential]) {
+    auto *seq = static_cast<GraphVertexSequential *>(seqVert);
+    if (seq->isFF())
+      seq->stageValue();
+  }
+  for (VertexPtr seqVert: d_vertices[VertexTypes::sequential]) {
+    auto *seq = static_cast<GraphVertexSequential *>(seqVert);
+    if (seq->isFF())
+      seq->commitStagedValue();
   }
   for (VertexPtr outputVert: d_vertices[VertexTypes::output]) {
     outputsValues.push_back(outputVert->updateValue());
@@ -513,6 +528,10 @@ OrientedGraph::graphSimulation(std::vector<char> inputsValues) {
 
 void OrientedGraph::simulationRemove() {
   for (VertexPtr ptr: d_vertices[VertexTypes::output]) {
+    ptr->removeValue();
+  }
+  // Also clear sequentials not reachable from any output fan-in.
+  for (VertexPtr ptr: d_vertices[VertexTypes::sequential]) {
     ptr->removeValue();
   }
 }

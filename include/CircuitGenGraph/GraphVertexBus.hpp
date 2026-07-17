@@ -191,6 +191,15 @@ public:
    */
   virtual void updateValueBus(std::string i_value = "");
 
+  /**
+   * \~english
+   * @brief Returns the stored multi-bit simulation value (may be empty).
+   * \~russian
+   * @brief Возвращает сохранённое многобитное значение симуляции (может быть
+   * пустым).
+   */
+  const std::string &getValueBus() const;
+
 private:
   /**
    * \~english
