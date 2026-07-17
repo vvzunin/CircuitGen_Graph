@@ -54,7 +54,7 @@ variables:
   REGISTRY_URL: harbor.vvzunin.me
   DOCKER_HUB_PROXY_PROJECT: proxy_cache_docker_hub
   DOCKER_GITLAB_PROXY_PROJECT: proxy_cache_gitlab
-  # Optional CI/CD variable: HARBOR_WEB_UI_URL — HTTPS URL of Harbor web UI (not the Docker endpoint on :5201); used by release-from-tag.
+  # Optional CI/CD variable: HARBOR_WEB_UI_URL — HTTPS URL of Harbor web UI (not the Docker endpoint); used by release-from-tag.
   GROUP_NAME: circuitgen
   REPO_NAME: graph
   DOCKER_URL: $REGISTRY_URL/$GROUP_NAME/$REPO_NAME
