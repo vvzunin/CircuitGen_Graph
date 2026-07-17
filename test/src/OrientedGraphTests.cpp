@@ -1,6 +1,8 @@
+#include <cstdio>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -509,18 +511,51 @@ TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreNodes) {
       "id=\"gate2\">\n      <data key=\"t\">not</data>\n    </node>\n  "
       "</graph>\n</graphml>\n");
 }
-// Unknown error
-// TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreSubGraphs) {
-//   GraphPtr graphPtr1    = std::make_shared<OrientedGraph>("Graph1");
-//   GraphPtr subGraphPtr1 = std::make_shared<OrientedGraph>("SubGraph1");
-//   graphPtr1->addSubGraph(
-//       subGraphPtr1, graphPtr1->getVerticesByType(VertexTypes::input)
-//   );
-//   EXPECT_EQ(graphPtr1->toGraphMLClassic(0), "");
+TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreSubGraphs) {
+  OrientedGraph::resetCounter();
+  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("Graph1");
+  GraphPtr subGraphPtr1 = std::make_shared<OrientedGraph>("SubGraph1");
+  graphPtr1->addSubGraph(subGraphPtr1,
+                         graphPtr1->getVerticesByType(VertexTypes::input));
 
-//   subGraphPtr1->addGate(Gates::GateAnd, "gate1");
-//   EXPECT_EQ(graphPtr1->toGraphMLClassic(0), "");
-// }
+  const std::string emptyNested = graphPtr1->toGraphMLClassic();
+  EXPECT_NE(emptyNested.find("<data key=\"t\">subGraph</data>"),
+            std::string::npos)
+      << emptyNested;
+  EXPECT_NE(emptyNested.find("<graph id=\"subGraph_0:\" edgedefault=\"directed\">"),
+            std::string::npos)
+      << emptyNested;
+
+  subGraphPtr1->addGate(Gates::GateAnd, "gate1");
+  const std::string withGate = graphPtr1->toGraphMLClassic();
+  EXPECT_NE(withGate.find("id=\"subGraph_0::gate1\""), std::string::npos)
+      << withGate;
+  EXPECT_NE(withGate.find("<data key=\"t\">and</data>"), std::string::npos)
+      << withGate;
+}
+
+TEST(TestToGraphMLStringReturn, SubGraphExportsParentPortEdges) {
+  OrientedGraph::resetCounter();
+  GraphPtr top = std::make_shared<OrientedGraph>("Top");
+  GraphPtr sub = std::make_shared<OrientedGraph>("Inner");
+  auto *subIn = sub->addInput("sin");
+  auto *subOut = sub->addOutput("sout");
+  auto *gate = sub->addGate(Gates::GateBuf, "buf");
+  sub->addEdge(subIn, gate);
+  sub->addEdge(gate, subOut);
+
+  auto *topIn = top->addInput("tin");
+  auto buffers = top->addSubGraph(sub, {topIn});
+  ASSERT_EQ(buffers.size(), 1u);
+  top->addEdge(buffers[0], top->addOutput("tout"));
+
+  const std::string xml = top->toGraphMLClassic();
+  EXPECT_NE(xml.find("source=\"tin\" target=\"subGraph_0::sin\""),
+            std::string::npos)
+      << xml;
+  EXPECT_NE(xml.find("source=\"subGraph_0::sout\" target="), std::string::npos)
+      << xml;
+}
 
 TEST(TestToGraphMLStringReturn, ReturnCorrectStringWhenThereAreSubEdges) {
   GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("Graph1");
@@ -597,30 +632,41 @@ TEST(TestToGraphMLSequential, ExportTypesInClassicPseudoOpenABCD) {
   }
 }
 
-// Unknown error
-// TEST(TestToGraphMLBoolReturn, CorrectWriteToFile) {
-//   std::string   filename = "ToGraphMLTest.txt";
-//   std::ofstream outF(filename);
-//   GraphPtr      graphPtr1    = std::make_shared<OrientedGraph>("Graph1");
-//   VertexPtr          gate1        = graphPtr1->addGate(Gates::GateAnd,
-//   "gate1"); VertexPtr          input1       = graphPtr1->addInput("input1");
-//   VertexPtr          input2       = graphPtr1->addInput("input2");
-//   GraphPtr      subGraphPtr1 = std::make_shared<OrientedGraph>("SubGraph1");
-//   graphPtr1->addSubGraph(
-//       subGraphPtr1, subGraphPtr1->getVerticesByType(VertexTypes::input)
-//   );
-//   graphPtr1->addEdges({input1, input2}, gate1);
-//   subGraphPtr1->addGate(Gates::GateAnd, "gate1");
-//   EXPECT_EQ(graphPtr1->toGraphMLClassic(outF), true);
+TEST(TestToGraphMLBoolReturn, CorrectWriteToFile) {
+  OrientedGraph::resetCounter();
+  const std::string filename = "ToGraphMLTest.txt";
+  std::ofstream outF(filename);
+  ASSERT_TRUE(outF.is_open());
 
-//   std::ifstream inF(filename);
-//   outF.close();
-//   std::ostringstream contentStream;
-//   contentStream << inF.rdbuf();
-//   std::string stringF = contentStream.str();
-//   inF.close();
-//   EXPECT_EQ(stringF, graphPtr1->toGraphMLClassic(0));
-// }
+  GraphPtr graphPtr1 = std::make_shared<OrientedGraph>("Graph1");
+  VertexPtr gate1 = graphPtr1->addGate(Gates::GateAnd, "gate1");
+  VertexPtr input1 = graphPtr1->addInput("input1");
+  VertexPtr input2 = graphPtr1->addInput("input2");
+  GraphPtr subGraphPtr1 = std::make_shared<OrientedGraph>("SubGraph1");
+  graphPtr1->addSubGraph(subGraphPtr1,
+                         subGraphPtr1->getVerticesByType(VertexTypes::input));
+  graphPtr1->addEdges({input1, input2}, gate1);
+  subGraphPtr1->addGate(Gates::GateAnd, "gate1");
+
+  EXPECT_TRUE(graphPtr1->toGraphMLClassic(outF));
+  outF.close();
+
+  std::ifstream inF(filename);
+  ASSERT_TRUE(inF.is_open());
+  std::ostringstream contentStream;
+  contentStream << inF.rdbuf();
+  inF.close();
+  const std::string stringF = contentStream.str();
+  std::remove(filename.c_str());
+
+  EXPECT_EQ(stringF.find("<!-- This file was generated automatically using "
+                         "CircuitGen_Graph at "),
+            0u)
+      << stringF;
+  const auto xmlPos = stringF.find("<?xml");
+  ASSERT_NE(xmlPos, std::string::npos) << stringF;
+  EXPECT_EQ(stringF.substr(xmlPos), graphPtr1->toGraphMLClassic());
+}
 
 #define RESET_HASH() \
   graphPtr1->clearHashStates(); \

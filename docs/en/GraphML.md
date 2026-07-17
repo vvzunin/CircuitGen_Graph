@@ -22,7 +22,7 @@ Each node has attribute `type` (key `t`):
 | Constant | value character (`0`, `1`, …) |
 | Gate | `GraphUtils::parseGateToString` name (`and`, `nand`, …) |
 | Sequential | `sequential/ff` or `sequential/latch` |
-| Subgraph | `subGraph` vertices are skipped; use ABCD formats when flattened subgraph connectivity is required |
+| Subgraph | nested `<graph>` under a `subGraph` node, plus edges to parent ports; for a flat export without hierarchy prefer ABCD formats (`unrollGraph`) |
 
 Edges are directed `<edge source="…" target="…"/>`. Sequential details: [Sequential.md](Sequential.md).
 
