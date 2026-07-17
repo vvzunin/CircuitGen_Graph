@@ -1429,3 +1429,18 @@ TEST(GraphTest, MajorityLogicTestSimple) {
   EXPECT_TRUE(r2 != nullptr);
   EXPECT_EQ(graph->getSubGraphs().size(), 1);
 }
+
+TEST(GraphTest, MajoritySubGraphSimulation) {
+  auto graph = std::make_shared<OrientedGraph>("MajoritySim");
+  VertexPtr a = graph->addInput("a");
+  VertexPtr b = graph->addInput("b");
+  VertexPtr c = graph->addInput("c");
+  VertexPtr maj = graph->generateMajority(a, b, c);
+  graph->addEdge(maj, graph->addOutput("y"));
+
+  // maj(0,0,0)=0, maj(1,1,0)=1, maj(1,0,1)=1, maj(0,1,0)=0
+  EXPECT_EQ(graph->graphSimulation({'0', '0', '0'}), (std::vector<char>{'0'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '1', '0'}), (std::vector<char>{'1'}));
+  EXPECT_EQ(graph->graphSimulation({'1', '0', '1'}), (std::vector<char>{'1'}));
+  EXPECT_EQ(graph->graphSimulation({'0', '1', '0'}), (std::vector<char>{'0'}));
+}

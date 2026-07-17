@@ -45,26 +45,35 @@ GraphVertexSubGraph::GraphVertexSubGraph(GraphPtr i_subGraph,
 }
 
 char GraphVertexSubGraph::updateValue() {
-  if (d_inConnections.size() > 0) {
-    std::vector<char> inputsValues, outputsValues;
-    if (d_inConnections.front()->getValue() == ValueStates::UndefinedState) {
-      inputsValues.push_back(d_inConnections.front()->updateValue());
-    }
-    for (size_t i = 1; i < d_inConnections.size(); ++i) {
-      if (d_inConnections.at(i)->getValue() == ValueStates::UndefinedState) {
-        inputsValues.push_back(d_inConnections.at(i)->updateValue());
-      }
-    }
-    outputsValues = d_subGraph->graphSimulation(inputsValues);
-    for (size_t i = 1; i < d_outConnections.size(); ++i) {
-      GraphVertexGates *out_connectionVert =
-          static_cast<GraphVertexGates *>(d_outConnections.at(i));
-      out_connectionVert->d_value = outputsValues.at(i);
-    }
-    return outputsValues.at(0);
+  if (d_inConnections.empty()) {
+    CG_LOG_ERROR << "Error, SubGraph without inputs" << std::endl;
+    return (d_value = ValueStates::NoSignal);
   }
-  CG_LOG_ERROR << "Error, SubGraph without inputs" << std::endl;
-  return ValueStates::NoSignal;
+
+  // Always collect every driver. Skipping non-Undefined values left
+  // inputsValues shorter than the nested graph's inputs (parent
+  // graphSimulation already set 0/1 on wires), so nested simulation broke.
+  std::vector<char> inputsValues;
+  inputsValues.reserve(d_inConnections.size());
+  for (VertexPtr in: d_inConnections)
+    inputsValues.push_back(in->updateValue());
+
+  std::vector<char> outputsValues =
+      d_subGraph->graphSimulation(std::move(inputsValues));
+  if (outputsValues.empty()) {
+    CG_LOG_ERROR << "Error, SubGraph without outputs" << std::endl;
+    return (d_value = ValueStates::NoSignal);
+  }
+
+  // Extra output buffers are filled here; the first buffer reads d_value /
+  // the return value through GateBuf::updateValue.
+  for (size_t i = 1; i < d_outConnections.size() && i < outputsValues.size();
+       ++i) {
+    GraphVertexGates *out_connectionVert =
+        static_cast<GraphVertexGates *>(d_outConnections.at(i));
+    out_connectionVert->d_value = outputsValues.at(i);
+  }
+  return (d_value = outputsValues.front());
 }
 
 void GraphVertexSubGraph::removeValue() {
