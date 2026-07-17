@@ -768,10 +768,10 @@ static constexpr std::array<
  * @brief Массив для преобразования строк в значения перечисления Gates
  */
 static std::pair<std::string, Gates> stringToGate[] = {
-    {"and", Gates::GateAnd},       {"nand", Gates::GateNand},
-    {"or", Gates::GateOr},         {"nor", Gates::GateNor},
-    {"not", Gates::GateNot},       {"buf", Gates::GateBuf},
-    {"xor", Gates::GateXor},       {"xnor", Gates::GateXnor},
+    {"and", Gates::GateAnd},        {"nand", Gates::GateNand},
+    {"or", Gates::GateOr},          {"nor", Gates::GateNor},
+    {"not", Gates::GateNot},        {"buf", Gates::GateBuf},
+    {"xor", Gates::GateXor},        {"xnor", Gates::GateXnor},
     {"busSlice", Gates::GateSlice}, {"concat", Gates::GateConcatenation}};
 
 /*!
