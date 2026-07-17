@@ -4,6 +4,7 @@
  */
 
 #include "CircuitGenGraph/GraphVertexBase.hpp"
+#include <CircuitGenGraph/GraphUtils.hpp>
 #include <CircuitGenGraph/GraphVertex.hpp>
 
 #include <algorithm>
@@ -210,10 +211,6 @@ size_t GraphVertexSubGraph::calculateHash() {
   if (d_hasHash) {
     return d_hashed;
   }
-  // calc hash from subgraph
-  std::string hashedStr =
-      d_subGraph->calculateHash() + std::to_string(d_outConnections.size());
-
   d_hasHash = HC_IN_PROGRESS;
   std::vector<size_t> hashed_data;
   hashed_data.reserve(d_inConnections.size());
@@ -223,12 +220,23 @@ size_t GraphVertexSubGraph::calculateHash() {
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
-  hashedStr.reserve(sizeof(decltype(hashed_data)::value_type) *
-                    hashed_data.size());
-  for (const auto &sub: hashed_data) {
-    hashedStr += sub;
+  // OrientedGraph::calculateHash returns a decimal string of the size_t hash.
+  const std::string subGraphHash = d_subGraph->calculateHash();
+  size_t nested = 0;
+  try {
+    nested = static_cast<size_t>(std::stoull(subGraphHash));
+  } catch (const std::exception &) {
+    nested = std::hash<std::string>{}(subGraphHash);
   }
-  d_hashed = std::hash<std::string>{}(hashedStr);
+
+  size_t h = 0;
+  hashCombine(h, static_cast<size_t>(getType()));
+  hashCombine(h, nested);
+  hashCombine(h, d_outConnections.size());
+  for (const auto &sub: hashed_data) {
+    hashCombine(h, sub);
+  }
+  d_hashed = h;
   d_hasHash = HC_CALC;
 
   return d_hashed;

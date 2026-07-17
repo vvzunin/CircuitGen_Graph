@@ -34,8 +34,11 @@ size_t GraphVertexConstant::calculateHash() {
   if (d_hasHash) {
     return d_hashed;
   }
-  d_hashed = std::hash<std::string>{}(std::to_string(d_value) +
-                                      std::to_string(d_outConnections.size()));
+  size_t h = 0;
+  hashCombine(h, static_cast<size_t>(getType()));
+  hashCombine(h, static_cast<size_t>(static_cast<unsigned char>(d_value)));
+  hashCombine(h, d_outConnections.size());
+  d_hashed = h;
   d_hasHash = HC_CALC;
 
   return d_hashed;

@@ -113,9 +113,6 @@ size_t GraphVertexGates::calculateHash() {
   if (d_hasHash) {
     return d_hashed;
   }
-  std::string hashedStr =
-      std::to_string(d_outConnections.size()) + std::to_string(d_gate);
-
   d_hasHash = HC_IN_PROGRESS;
   std::vector<size_t> hashed_data;
   hashed_data.reserve(d_inConnections.size());
@@ -125,12 +122,14 @@ size_t GraphVertexGates::calculateHash() {
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
-  hashedStr.reserve(sizeof(decltype(hashed_data)::value_type) *
-                    hashed_data.size());
+  size_t h = 0;
+  hashCombine(h, static_cast<size_t>(getType()));
+  hashCombine(h, static_cast<size_t>(d_gate));
+  hashCombine(h, d_outConnections.size());
   for (const auto &sub: hashed_data) {
-    hashedStr += sub;
+    hashCombine(h, sub);
   }
-  d_hashed = std::hash<std::string>{}(hashedStr);
+  d_hashed = h;
   d_hasHash = HC_CALC;
 
   return d_hashed;

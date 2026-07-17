@@ -30,6 +30,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cstddef>
 #include <cstdint>
 #include <fmt/core.h>
 #include <map>
@@ -39,6 +40,21 @@
 #include <vector>
 
 namespace CG_Graph {
+
+/**
+ * \~english
+ * @brief Mix @p value into @p seed (Boost-style hash combine).
+ * @details Used for structural fingerprints of vertices/graphs: same structure
+ * yields the same hash; different structures almost always differ.
+ *
+ * \~russian
+ * @brief Смешивает @p value в @p seed (hash combine в стиле Boost).
+ * @details Для структурных отпечатков вершин/графов: одинаковая структура даёт
+ * один хеш, разная — почти всегда другой.
+ */
+inline void hashCombine(std::size_t &seed, std::size_t value) noexcept {
+  seed ^= value + 0x9e3779b9u + (seed << 6) + (seed >> 2);
+}
 
 #ifndef DotReturn
 /*!

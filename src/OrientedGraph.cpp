@@ -842,19 +842,18 @@ std::string OrientedGraph::calculateHash() {
 
   d_hashState = HC_IN_PROGRESS;
   std::vector<size_t> hashed_data;
-  std::string hashedStr = "";
+  hashed_data.reserve(d_vertices[VertexTypes::output].size());
 
   for (auto *vertex: d_vertices[VertexTypes::output]) {
     hashed_data.push_back(vertex->calculateHash());
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
-  hashedStr.reserve(sizeof(decltype(hashed_data)::value_type) *
-                    hashed_data.size());
+  size_t h = 0;
   for (const auto &sub: hashed_data) {
-    hashedStr += sub;
+    hashCombine(h, sub);
   }
-  d_hashed = std::hash<std::string>{}(hashedStr);
+  d_hashed = h;
   d_hashState = HC_CALC;
 
   return std::to_string(d_hashed);

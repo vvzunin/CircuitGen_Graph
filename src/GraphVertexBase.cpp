@@ -260,26 +260,28 @@ size_t GraphVertexBase::calculateHash() {
     return d_hashed;
   }
   if (getType() == VertexTypes::input) {
-    d_hashed = std::hash<size_t>{}(d_outConnections.size());
+    size_t h = 0;
+    hashCombine(h, static_cast<size_t>(getType()));
+    hashCombine(h, d_outConnections.size());
+    d_hashed = h;
     d_hasHash = HC_CALC;
     return d_hashed;
   }
   d_hasHash = HC_IN_PROGRESS;
   std::vector<size_t> hashed_data;
   hashed_data.reserve(d_inConnections.size());
-  std::string hashedStr;
 
   for (auto *child: d_inConnections) {
     hashed_data.push_back(child->calculateHash());
   }
   std::sort(hashed_data.begin(), hashed_data.end());
 
-  hashedStr.reserve(sizeof(decltype(hashed_data)::value_type) *
-                    hashed_data.size());
+  size_t h = 0;
+  hashCombine(h, static_cast<size_t>(getType()));
   for (const auto &sub: hashed_data) {
-    hashedStr += sub;
+    hashCombine(h, sub);
   }
-  d_hashed = std::hash<std::string>{}(hashedStr);
+  d_hashed = h;
   d_hasHash = HC_CALC;
 
   return d_hashed;
