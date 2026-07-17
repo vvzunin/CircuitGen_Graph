@@ -50,49 +50,53 @@ uint32_t GraphVertexGates::addVertexToInConnections(VertexPtr i_vert) {
 }
 
 char GraphVertexGates::updateValue() {
-  std::map<char, char> table;
   d_value = ValueStates::NoSignal;
-  if (d_inConnections.size() > 0) {
-    if (d_inConnections.front()->getValue() == ValueStates::UndefinedState) {
-      d_inConnections.front()->updateValue();
-    }
-    d_value = d_inConnections.front()->getValue();
-    if (d_gate == Gates::GateNot || d_gate == Gates::GateBuf) {
-      if (d_gate == Gates::GateNot)
-        table = tableNot;
-      else
-        table = tableBuf;
-      d_value = table.at(d_value);
-    }
-    for (size_t i = 1; i < d_inConnections.size(); i++) {
-      if (d_inConnections.at(i)->getValue() == ValueStates::UndefinedState) {
-        d_inConnections.at(i)->updateValue();
-      }
-      switch (d_gate) {
-        case (Gates::GateAnd):
-          table = tableAnd.at(d_value);
-          break;
-        case (Gates::GateNand):
-          table = tableNand.at(d_value);
-          break;
-        case (Gates::GateOr):
-          table = tableOr.at(d_value);
-          break;
-        case (Gates::GateNor):
-          table = tableNor.at(d_value);
-          break;
-        case (Gates::GateXor):
-          table = tableXor.at(d_value);
-          break;
-        case (Gates::GateXnor):
-          table = tableXnor.at(d_value);
-          break;
-        default:
-          CG_LOG_ERROR << "GraphVertexGates: Unknown gate type in updateValue "
-                          "for vertex '"
-                       << d_name << "'";
-      }
-      d_value = table.at(d_inConnections.at(i)->getValue());
+  if (d_inConnections.empty())
+    return d_value;
+
+  if (d_inConnections.front()->getValue() == ValueStates::UndefinedState)
+    d_inConnections.front()->updateValue();
+  d_value = d_inConnections.front()->getValue();
+
+  // Unary gates: lookup without copying the truth-table map.
+  if (d_gate == Gates::GateNot) {
+    d_value = tableNot.at(d_value);
+    return d_value;
+  }
+  if (d_gate == Gates::GateBuf) {
+    d_value = tableBuf.at(d_value);
+    return d_value;
+  }
+
+  for (size_t i = 1; i < d_inConnections.size(); ++i) {
+    if (d_inConnections.at(i)->getValue() == ValueStates::UndefinedState)
+      d_inConnections.at(i)->updateValue();
+    const char rhs = d_inConnections.at(i)->getValue();
+    // Nested .at() avoids copying the inner std::map row each step.
+    switch (d_gate) {
+      case Gates::GateAnd:
+        d_value = tableAnd.at(d_value).at(rhs);
+        break;
+      case Gates::GateNand:
+        d_value = tableNand.at(d_value).at(rhs);
+        break;
+      case Gates::GateOr:
+        d_value = tableOr.at(d_value).at(rhs);
+        break;
+      case Gates::GateNor:
+        d_value = tableNor.at(d_value).at(rhs);
+        break;
+      case Gates::GateXor:
+        d_value = tableXor.at(d_value).at(rhs);
+        break;
+      case Gates::GateXnor:
+        d_value = tableXnor.at(d_value).at(rhs);
+        break;
+      default:
+        CG_LOG_ERROR << "GraphVertexGates: Unknown gate type in updateValue "
+                        "for vertex '"
+                     << d_name << "'";
+        break;
     }
   }
   return d_value;
