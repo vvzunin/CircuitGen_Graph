@@ -89,7 +89,13 @@ GraphVertexBusConstant::GraphVertexBusConstant(std::string_view i_name,
   d_valueBus = std::string(i_width, 'x');
 }
 void GraphVertexBusConstant::setValue(std::string i_value) {
-  d_valueBus = i_value;
+  // Verilog 'b literals are MSB-first; pad/truncate on the left so the string
+  // length always matches the bus width before indexing.
+  if (i_value.size() < getWidth())
+    i_value.insert(i_value.begin(), getWidth() - i_value.size(), 'x');
+  else if (i_value.size() > getWidth())
+    i_value = i_value.substr(i_value.size() - getWidth());
+  d_valueBus = std::move(i_value);
 }
 
 std::string GraphVertexBusConstant::toVerilog() const {
@@ -108,9 +114,10 @@ std::string GraphVertexBusConstant::getVerilogInstanceSeparate() {
 }
 std::string GraphVertexBusConstant::toOneBitVerilog() const {
   std::vector<std::string> res;
+  // name_i is LSB-aligned ([W-1:0]); d_valueBus is MSB-first like 'b literals.
   for (size_t i = 0; i < getWidth(); ++i) {
-    res.push_back(
-        fmt::format("assign {}_{} = 1'b{};\n\t", getName(), i, d_valueBus[i]));
+    res.push_back(fmt::format("assign {}_{} = 1'b{};\n\t", getName(), i,
+                              d_valueBus[getWidth() - 1 - i]));
   }
   return fmt::format("{}\n", fmt::join(res, ""));
 }

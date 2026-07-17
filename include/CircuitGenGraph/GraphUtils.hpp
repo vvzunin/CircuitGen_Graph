@@ -772,7 +772,7 @@ static std::pair<std::string, Gates> stringToGate[] = {
     {"or", Gates::GateOr},         {"nor", Gates::GateNor},
     {"not", Gates::GateNot},       {"buf", Gates::GateBuf},
     {"xor", Gates::GateXor},       {"xnor", Gates::GateXnor},
-    {"busSlice", Gates::GateSlice}};
+    {"busSlice", Gates::GateSlice}, {"concat", Gates::GateConcatenation}};
 
 /*!
  * @var vertexToString

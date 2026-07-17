@@ -378,16 +378,18 @@ void getNamesVector(std::vector<std::string> &names,
 std::string GraphVertexBusGate::toOneBitVerilog() const {
   std::string oper = VertexUtils::gateToString(d_gate);
   std::stringstream stream;
-  size_t n = std::min(getWidth(),
-                      (d_inConnections.back()->isBus()
-                           ? getBusPointer(d_inConnections.back())->getWidth()
-                           : 1));
   auto printUnaryOperators = [&]() {
+    if (d_inConnections.empty())
+      return stream.str();
     const VertexPtr in = getInConnections().back();
-    for (size_t j = 0; j < n; ++j) {
-      const std::string temporaryName =
-          in->isBus() ? fmt::format("{}_{}", in->getRawName(), j)
-                      : std::string(in->getRawName());
+    for (size_t j = 0; j < getWidth(); ++j) {
+      std::string temporaryName;
+      if (in->isBus() && getBusPointer(in)->getWidth() > j)
+        temporaryName = fmt::format("{}_{}", in->getRawName(), j);
+      else if (!in->isBus() && j == 0)
+        temporaryName = std::string(in->getRawName());
+      else
+        temporaryName = "1'bx";
       stream << fmt::format("assign {}_{} = {}{}{};\n\t", getRawName(), j, oper,
                             temporaryName, "");
     }

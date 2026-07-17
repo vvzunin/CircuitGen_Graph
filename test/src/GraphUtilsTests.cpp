@@ -61,4 +61,6 @@ TEST(GraphUtTests, ConvertsAllGatesCorrectly) {
   EXPECT_EQ(GraphUtils::parseStringToGate("buf"), Gates::GateBuf);
   EXPECT_EQ(GraphUtils::parseGateToString(Gates::GateConcatenation), "concat");
   EXPECT_EQ(GraphUtils::parseGateToString(Gates::GateSlice), "busSlice");
+  EXPECT_EQ(GraphUtils::parseStringToGate("concat"), Gates::GateConcatenation);
+  EXPECT_EQ(GraphUtils::parseStringToGate("busSlice"), Gates::GateSlice);
 }

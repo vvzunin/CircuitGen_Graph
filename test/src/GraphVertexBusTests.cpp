@@ -233,6 +233,12 @@ TEST(BusTest, BusConstantVerilogInstanceAndOneBitLiterals) {
   EXPECT_EQ(busConst->toOneBitVerilog(), "assign const_0_0 = 1'bx;\n\t"
                                          "assign const_0_1 = 1'bx;\n\t"
                                          "assign const_0_2 = 1'bx;\n\t\n");
+
+  busConst->setValue("10");
+  EXPECT_EQ(busConst->toVerilog(), "assign const_0 = 3'bx10;");
+  EXPECT_EQ(busConst->toOneBitVerilog(), "assign const_0_0 = 1'b0;\n\t"
+                                         "assign const_0_1 = 1'b1;\n\t"
+                                         "assign const_0_2 = 1'bx;\n\t\n");
 }
 
 TEST(BusTest, UnaryBusGateOneBitKeepsScalarInputName) {
@@ -242,6 +248,18 @@ TEST(BusTest, UnaryBusGateOneBitKeepsScalarInputName) {
   graph->addEdge(bit, notBus);
   EXPECT_EQ(GraphVertexBus::getBusPointer(notBus)->toOneBitVerilog(),
             "assign notGate_0 = ~bit;\n\t");
+}
+
+TEST(BusTest, UnaryBusGateOneBitPadsMissingInputBits) {
+  GraphPtr graph = std::make_shared<OrientedGraph>();
+  VertexPtr narrow = graph->addInputBus("narrow", 2);
+  VertexPtr notBus = graph->addGateBus(GateNot, "notGate", 4);
+  graph->addEdge(narrow, notBus);
+  EXPECT_EQ(GraphVertexBus::getBusPointer(notBus)->toOneBitVerilog(),
+            "assign notGate_0 = ~narrow_0;\n\t"
+            "assign notGate_1 = ~narrow_1;\n\t"
+            "assign notGate_2 = ~1'bx;\n\t"
+            "assign notGate_3 = ~1'bx;\n\t");
 }
 
 TEST(BusTest, BusOutputOneBitKeepsScalarDriverName) {
