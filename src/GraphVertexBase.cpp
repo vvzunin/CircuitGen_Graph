@@ -7,6 +7,7 @@
 #include "CircuitGenGraph/OrientedGraph.hpp"
 #include <algorithm>
 #include <cstdint>
+#include <functional>
 #include <iostream>
 #include <string>
 
@@ -260,12 +261,30 @@ GraphPtrWeak GraphVertexBase::getBaseGraph() const {
 }
 
 size_t GraphVertexBase::calculateHash() {
-  if (d_hasHash) {
+  if (d_hasHash == HC_CALC) {
     return d_hashed;
+  }
+  if (d_hasHash == HC_IN_PROGRESS) {
+    return kStructuralHashCycleSentinel;
   }
   if (getType() == VertexTypes::input) {
     size_t h = 0;
     hashCombine(h, static_cast<size_t>(getType()));
+    if (GraphPtr graph = getBaseGraph().lock()) {
+      const auto &inputs = graph->getVerticesByType(VertexTypes::input);
+      for (size_t i = 0; i < inputs.size(); ++i) {
+        if (inputs[i] == this) {
+          hashCombine(h, i);
+          break;
+        }
+      }
+    }
+    const std::string typePrefix = getTypeName() + "_";
+    const std::string_view name = d_name;
+    if (name.size() < typePrefix.size() ||
+        name.compare(0, typePrefix.size(), typePrefix) != 0) {
+      hashCombine(h, std::hash<std::string_view>{}(name));
+    }
     hashCombine(h, d_outConnections.size());
     d_hashed = h;
     d_hasHash = HC_CALC;

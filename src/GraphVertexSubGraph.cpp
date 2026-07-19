@@ -236,8 +236,11 @@ GraphPtr GraphVertexSubGraph::getSubGraph() const {
 }
 
 size_t GraphVertexSubGraph::calculateHash() {
-  if (d_hasHash) {
+  if (d_hasHash == HC_CALC) {
     return d_hashed;
+  }
+  if (d_hasHash == HC_IN_PROGRESS) {
+    return kStructuralHashCycleSentinel;
   }
   d_hasHash = HC_IN_PROGRESS;
   std::vector<size_t> hashed_data;

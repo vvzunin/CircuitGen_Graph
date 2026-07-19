@@ -50,6 +50,10 @@ uint32_t GraphVertexGates::addVertexToInConnections(VertexPtr i_vert) {
 }
 
 char GraphVertexGates::updateValue() {
+  UpdateValueCycleGuard cycleGuard(this);
+  if (cycleGuard.onCycle()) {
+    return d_value = ValueStates::NoSignal;
+  }
   d_value = ValueStates::NoSignal;
   if (d_inConnections.empty())
     return d_value;
@@ -125,8 +129,11 @@ void GraphVertexGates::removeValue() {
 }
 
 size_t GraphVertexGates::calculateHash() {
-  if (d_hasHash) {
+  if (d_hasHash == HC_CALC) {
     return d_hashed;
+  }
+  if (d_hasHash == HC_IN_PROGRESS) {
+    return kStructuralHashCycleSentinel;
   }
   d_hasHash = HC_IN_PROGRESS;
   std::vector<size_t> hashed_data;

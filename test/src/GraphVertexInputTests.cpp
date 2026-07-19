@@ -182,8 +182,8 @@ TEST(TestAddOutConnections, InputAddConnections) {
 }
 
 TEST(TestCalculateHash_Input, SameHashWhenEqualInputs) {
-  GraphVertexInput input1(memoryOwnerInputGr);
-  GraphVertexInput input2(memoryOwnerInputGr);
+  GraphVertexInput input1("in_a", memoryOwnerInputGr);
+  GraphVertexInput input2("in_a", memoryOwnerInputGr);
   EXPECT_EQ(input1.calculateHash(), input2.calculateHash());
 
   input1.addVertexToOutConnections(memoryOwnerInputGr->addOutput());
@@ -195,6 +195,12 @@ TEST(TestCalculateHash_Input, SameHashWhenEqualInputs) {
   input1.resetHashState();
   input2.resetHashState();
   EXPECT_EQ(input1.calculateHash(), input2.calculateHash());
+
+  GraphVertexInput input3("in_b", memoryOwnerInputGr);
+  input3.addVertexToOutConnections(memoryOwnerInputGr->addOutput());
+  input1.resetHashState();
+  input3.resetHashState();
+  EXPECT_NE(input1.calculateHash(), input3.calculateHash());
 }
 
 // TEST(TestRemoveVertexToInConnections, RemoveConnections) {

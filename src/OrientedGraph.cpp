@@ -13,6 +13,7 @@
 #include <iomanip>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <set>
 #include <stack>
 #include <stdexcept>
@@ -71,9 +72,13 @@ OrientedGraph::OrientedGraph(const std::string &i_name, size_t buffer_size,
   CG_LOG_INFO << "Creating OrientedGraph '" << d_name << "' (ID: " << d_graphID
               << ")";
 
-  // filling edges
+  // Pre-size inner maps: one slot per gate type, counts start at zero.
+  std::map<Gates, size_t> zeroEdgeRow;
+  for (auto to_gate: GraphUtils::getLogicOperationsKeys()) {
+    zeroEdgeRow[to_gate] = 0;
+  }
   for (auto cur_gate: GraphUtils::getLogicOperationsKeys()) {
-    d_edgesGatesCount[cur_gate] = d_gatesCount;
+    d_edgesGatesCount[cur_gate] = zeroEdgeRow;
   }
 
   d_vertices = {std::vector<VertexPtr>(), std::vector<VertexPtr>(),
@@ -487,6 +492,14 @@ OrientedGraph::addSubGraph(GraphPtr i_subGraph,
 
 std::vector<char>
 OrientedGraph::graphSimulation(std::vector<char> inputsValues) {
+  const size_t numInputs = d_vertices[VertexTypes::input].size();
+  if (inputsValues.size() != numInputs) {
+    throw std::invalid_argument(
+        "OrientedGraph::graphSimulation: inputsValues size (" +
+        std::to_string(inputsValues.size()) +
+        ") does not match graph input count (" + std::to_string(numInputs) +
+        ")");
+  }
   std::vector<char> outputsValues;
   // Force recompute of multi-level cones. Vertices are constructed with
   // NoSignal ('x'), while updateValue only recurses on UndefinedState ('n').
@@ -625,6 +638,20 @@ void OrientedGraph::removeWasteVertices() {
         for (auto *outConnVert: outConns)
           removeEdge(vert, outConnVert);
 
+        if (type == subGraph) {
+          for (VertexPtr buf : outConns) {
+            auto bufIt = std::find(d_allSubGraphsOutputs.begin(),
+                                   d_allSubGraphsOutputs.end(), buf);
+            if (bufIt == d_allSubGraphsOutputs.end())
+              continue;
+            const std::vector<VertexPtr> bufOut = buf->getOutConnections();
+            for (auto *bufOutVert: bufOut)
+              removeEdge(buf, bufOutVert);
+            buf->~GraphVertexBase();
+            d_allSubGraphsOutputs.erase(bufIt);
+          }
+        }
+
         if (type == gate) {
           this->d_gatesCount[vert->getGate()] -= 1;
         }
@@ -758,7 +785,7 @@ bool OrientedGraph::removeEdge(VertexPtr from1, VertexPtr to) {
 }
 
 void OrientedGraph::readVerilog(std::string i_path, Context &context) {
-  GraphReader *reader = new GraphReader(context);
+  auto reader = std::make_unique<GraphReader>(context);
   std::ifstream in(i_path.c_str(), std::ifstream::in);
   if (!in.is_open())
     throw std::runtime_error("File do not exist. Current path:" + i_path +
@@ -777,7 +804,6 @@ void OrientedGraph::readVerilog(std::string i_path, Context &context) {
   if (returnCode == lorina::return_code::parse_error)
     throw std::runtime_error("File is incorrect\n");
   in.close();
-  delete reader;
 }
 
 CG_Graph::Context OrientedGraph::readVerilog(std::string i_path) {
@@ -933,10 +959,31 @@ void OrientedGraph::reserve(VertexTypes i_type, size_t i_capacity) {
 }
 
 std::string OrientedGraph::calculateHash() {
-  if (d_hashState)
+  if (d_hashState == HC_CALC)
     return std::to_string(d_hashed);
 
+  if (d_hashState == HC_IN_PROGRESS)
+    return std::to_string(kStructuralHashCycleSentinel);
+
   d_hashState = HC_IN_PROGRESS;
+
+  // Combinational cycles need a fixpoint: first pass may cache back-edges
+  // with cycle sentinels; a second pass sees fully computed neighbors.
+  for (VertexPtr v: d_vertices[VertexTypes::gate])
+    v->resetHashState();
+  for (VertexPtr v: d_vertices[VertexTypes::sequential])
+    v->resetHashState();
+  for (VertexPtr v: d_vertices[VertexTypes::subGraph])
+    v->resetHashState();
+  for (int pass = 0; pass < 2; ++pass) {
+    for (VertexPtr v: d_vertices[VertexTypes::gate])
+      v->calculateHash();
+    for (VertexPtr v: d_vertices[VertexTypes::sequential])
+      v->calculateHash();
+    for (VertexPtr v: d_vertices[VertexTypes::subGraph])
+      v->calculateHash();
+  }
+
   std::vector<size_t> hashed_data;
   hashed_data.reserve(d_vertices[VertexTypes::output].size());
 
@@ -956,7 +1003,11 @@ std::string OrientedGraph::calculateHash() {
 }
 
 bool OrientedGraph::operator==(const OrientedGraph &rhs) {
-  return d_hashed == rhs.d_hashed && d_hashed;
+  if (d_hashState == HC_CALC && rhs.d_hashState == HC_CALC) {
+    return d_hashed == rhs.d_hashed;
+  }
+  auto &other = const_cast<OrientedGraph &>(rhs);
+  return calculateHash() == other.calculateHash();
 }
 
 void OrientedGraph::setCurrentParent(GraphPtr i_parent) {

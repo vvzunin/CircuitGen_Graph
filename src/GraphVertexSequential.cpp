@@ -369,8 +369,11 @@ void GraphVertexSequential::removeValue() {
 }
 
 size_t GraphVertexSequential::calculateHash() {
-  if (d_hasHash) {
+  if (d_hasHash == HC_CALC) {
     return d_hashed;
+  }
+  if (d_hasHash == HC_IN_PROGRESS) {
+    return kStructuralHashCycleSentinel;
   }
   d_hasHash = HC_IN_PROGRESS;
   std::vector<size_t> hashed_data;

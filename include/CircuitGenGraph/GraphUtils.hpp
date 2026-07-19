@@ -56,6 +56,10 @@ inline void hashCombine(std::size_t &seed, std::size_t value) noexcept {
   seed ^= value + 0x9e3779b9u + (seed << 6) + (seed >> 2);
 }
 
+/// Returned when structural hash hits a combinational cycle mid-walk.
+inline constexpr std::size_t kStructuralHashCycleSentinel =
+    static_cast<std::size_t>(-1);
+
 #ifndef DotReturn
 /*!
  * \def DotReturn
