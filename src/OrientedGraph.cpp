@@ -894,16 +894,17 @@ bool pathEndsWithSubmodules(const fs::path &i_path) {
     normalized = normalized.parent_path();
   }
 
-  return normalized.filename() == "submodules";
+  return normalized.filename() ==
+         "submodules"; // ПОМЕНЯТЬ ПРОВЕРКУ НА КОРРЕКТНУЮ
 }
 
 fs::path getVerilogOutputDirectory(const std::string &i_path,
-                                   bool i_isSubGraph) {
+                                   std::string_view i_folderSuffix = "") {
   fs::path outputDirectory = i_path.empty() ? fs::path(".") : fs::path(i_path);
   outputDirectory = outputDirectory.lexically_normal();
 
-  if (i_isSubGraph && !pathEndsWithSubmodules(outputDirectory)) {
-    outputDirectory /= "submodules";
+  if (i_folderSuffix != "" && !pathEndsWithSubmodules(outputDirectory)) {
+    outputDirectory /= fmt::format("submodules_{}", i_folderSuffix);
   }
 
   return outputDirectory;
@@ -920,8 +921,10 @@ std::string getVerilogOutputFilename(std::string i_filename,
 
 bool prepareVerilogOutputPath(const std::string &i_path, bool i_isSubGraph,
                               const std::string &i_graphName,
-                              std::string &io_filename, fs::path &o_filePath) {
-  fs::path outputDirectory = getVerilogOutputDirectory(i_path, i_isSubGraph);
+                              std::string &io_filename, fs::path &o_filePath,
+                              const std::string &i_parentGraphName = "") {
+  fs::path outputDirectory =
+      getVerilogOutputDirectory(i_path, i_parentGraphName);
   io_filename = getVerilogOutputFilename(std::move(io_filename), i_graphName);
 
   std::error_code ec;
@@ -1138,8 +1141,9 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename,
   }
 
   std::filesystem::path correctPath;
-  if (!prepareVerilogOutputPath(i_path, d_isSubGraph, d_name, i_filename,
-                                correctPath)) {
+  if (!prepareVerilogOutputPath(
+          i_path, d_isSubGraph, d_name, i_filename, correctPath,
+          d_isSubGraph ? d_currentParentGraph.lock()->getName() : "")) {
     return false;
   }
 
@@ -1167,7 +1171,6 @@ bool OrientedGraph::toVerilog(std::string i_path, std::string i_filename,
   auto lambdaInouts = [&](VertexPtr vertex) {
     i_fileStream << vertex->getRawName();
   };
-
 
   auto lambdaSubgraphs = [&](VertexPtr subPtr) -> bool {
     auto *sub = static_cast<GraphVertexSubGraph *>(subPtr);
@@ -1238,8 +1241,9 @@ bool OrientedGraph::toVerilogBusEnabled(std::string i_path,
   }
 
   std::filesystem::path correctPath;
-  if (!prepareVerilogOutputPath(i_path, d_isSubGraph, d_name, i_filename,
-                                correctPath)) {
+  if (!prepareVerilogOutputPath(
+          i_path, d_isSubGraph, d_name, i_filename, correctPath,
+          d_isSubGraph ? d_currentParentGraph.lock()->getName() : "")) {
     return false;
   }
 
@@ -1372,8 +1376,9 @@ bool OrientedGraph::toVerilogBusEnabledAsOneBit(std::string i_path,
   }
 
   std::filesystem::path correctPath;
-  if (!prepareVerilogOutputPath(i_path, d_isSubGraph, d_name, i_filename,
-                                correctPath)) {
+  if (!prepareVerilogOutputPath(
+          i_path, d_isSubGraph, d_name, i_filename, correctPath,
+          d_isSubGraph ? d_currentParentGraph.lock()->getName() : "")) {
     return false;
   }
 
@@ -1466,7 +1471,7 @@ bool OrientedGraph::toVerilogBusEnabledAsOneBit(std::string i_path,
       return false;
     }
     i_fileStream << sub->toVerilog();
-    
+
     return static_cast<bool>(i_fileStream);
   };
 
